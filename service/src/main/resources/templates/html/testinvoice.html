@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+	<title>Citruspay Invoice</title>
+	<link rel="stylesheet" type="text/css" href="{{baseUrl}}/css/default.css">
+	<script src="{{baseUrl}}/js/jquery-1.12.2.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#btnSub').click(function() {
+				$.ajax({
+					url: '{{baseUrl}}/test/signature',
+					type: 'GET',
+					headers : {
+						'vanity':$("#vanity").val(),
+						'data':$("#vanity").val()+$("#amount").val()+"INR"
+					},
+					async: false,
+					success: function(data) {
+						$("#signature").val(data);
+					},
+					error: function(data) {
+						$("#response").html(JSON.stringify(data));
+					}
+				});
+				var jsonString = JSON.stringify({
+					"consumerDetail" : {
+						"firstName":$("#fName").val(),
+						"lastName":$("#lName").val(),
+						"email":$("#email").val(),
+						"phoneNumber":{
+							"phoneNumber":$("#mobile").val(),
+							"type":"Mobile"
+						},
+						"contactAddress":{
+							"addressStreet1":"G-306, Sahil Heights",
+							"addressStreet2":"Pimple Nilakh",
+							"addressCity":"Pune",
+							"addressState":"Maharashtra",
+							"addressCountry":"India",
+							"addressZip":"411027"
+						}
+					},
+					"orderAmount":{
+						"currency":"INR",
+						"amount":$("#amount").val()
+					},
+					"customParamsMap":{
+						"Email":$("#email").val(),
+						"Mobile":$("#mobile").val()
+					},
+					"maxPayAllowed":$("#maxPay").val(),
+					"createSmsInvoice":$("#sendSms").is(":checked"),
+					"createEmailInvoice":$("#sendEmail").is(":checked"),
+					"notifyThirdParties":false,
+					"invoiceThirdParties" : [
+						{
+							"name":"Vikash Travels",
+							"phoneNumber":{
+								"phoneNumber":"9970197591",
+								"type":"Mobile"
+							}
+						},
+						{
+							"name":"Vikash Enterprises",
+							"phoneNumber":{
+								"phoneNumber":"9970197591",
+								"type":"Mobile"
+							}
+						}
+					],
+					"vanityUrl":$("#vanity").val(),
+					"signature":$("#signature").val()
+	        	});
+				$.ajax({
+					url: '{{baseUrl}}/invoices/standalone',
+					data: jsonString,
+					type: 'POST',
+					contentType: 'application/json',
+					async: false,
+					success: function(data) {
+						var payUrl = "SUCCESS<br>Payment Url : "+data.specialMsg;
+						$("#response").html(payUrl);
+					},
+					error: function(data) {
+						$("#response").html(JSON.stringify(data));
+					}
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="page-header">
+		<div class="page-wrap">
+			<div class="logo-wrapper">
+				<a href="/citruspay-admin-site/"> <img height="32" width="81" src="/images/logo_citrus.png" alt="Citrus" />
+				</a>
+			</div>
+		</div>
+	</div>
+	<div id="page-client-logo">&#160;</div>
+	<div id="page-wrapper">
+		<div class="box-white">
+			<div class="page-content">
+				<form name="invoiceForm">
+					<div>
+						<h2>Citruspay Invoice Test</h2>
+					</div>
+					<input id="signature" type="hidden" value=""/>
+					<div>
+						<ul class="form-wrapper add-merchant clearfix">
+							<li>
+								<label>Vanity: </label>
+								<input type="text" class="text" id="vanity" value="ravisandbox" placeholder="VanityUrl"/>
+							</li>
+							<li>
+								<label>Secret Key: </label>
+								<input type="text" class="text" id="secretKey" value="cae747c30709f99a008ee7dda97cebf1f21b5893" placeholder="SecretKey"/>
+							</li>
+							<li>
+								<label>Name: </label>
+								<input type="text" class="text" id="fName" value="Vikash" placeholder="First Name" style="width:120px"/>
+								<input type="text" class="text" id="lName" value="Kumar" placeholder="Last Name" style="width:120px"/>
+							</li>
+							<li>
+								<label>Email: </label>
+								<input type="text" class="text" id="email" placeholder="Email" value="sharma.vikashkr@gmail.com"/>
+							</li>
+							<li>
+								<label>Mobile: </label>
+								<input type="text" class="text" id="mobile" placeholder="Mobile" value="9970197591"/>
+							</li>
+							<li>
+								<label>Amount: </label>
+								<input type="text" class="text" id="amount" placeholder="Amount" value="10.00"/>
+							</li>
+							<li>
+								<label>Max Pay: </label>
+								<input type="text" class="text" id="maxPay" placeholder="Max Pay Allowed" value="1"/>
+							</li>
+							<li>
+								<label>Notify: </label>
+								<input type="checkbox" class="checkbox" id="sendSms" style="margin-top:6px" checked></input>
+								<label> sms</label>
+								<input type="checkbox" class="checkbox" id="sendEmail" style="margin-top:6px" checked></input>
+								<label> email</label>
+							</li>
+							<li>
+								<label>&nbsp;</label>
+								<input id="btnSub" type="button" class="btn-orange" value="Submit">
+							</li>
+						</ul>
+					</div>
+				</form>
+				<div>
+					<pre id="response"></pre>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="padding-left: 800px; padding-bottom: 20px; padding-top: 20px;">
+		<div>Copyrights © 2012 Citrus.</div>
+	</div>
+</body>
+
+</html>
