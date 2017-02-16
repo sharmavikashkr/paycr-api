@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.repository.InvoiceRepository;
+import com.payme.common.util.CommonUtil;
 import com.payme.pgclient.client.SSLCheckoutInitiator;
 
 @RestController
@@ -21,8 +22,12 @@ public class PaymentController {
 	private InvoiceRepository invRepo;
 
 	@RequestMapping(value = "{invoiceCode}", method = RequestMethod.GET)
-	public ModelAndView payInvoice(@PathVariable String invoiceCode) {
+	public ModelAndView payInvoice(@PathVariable(value = "invoiceCode") String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		return checkoutService.initiate(invoice);
+		if (CommonUtil.isNotNull(invoice)) {
+			return checkoutService.initiate(invoice);
+		} else {
+			return new ModelAndView("html/errorpage");
+		}
 	}
 }

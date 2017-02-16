@@ -20,10 +20,20 @@ public class RandomIdGenerator {
 
 	public static String generateInvoiceCode(char[] charset) {
 		Random number = new Random();
-		int length = number.nextInt(5) + 8;
+		int length = number.nextInt(5) + 10;
 		Random random = new Random();
 		String randomCode = "";
 		for (int i = 0; i < length; i++) {
+			int idx = random.nextInt(charset.length);
+			randomCode += charset[idx];
+		}
+		return randomCode;
+	}
+
+	public static String generateAccessKey(char[] charset) {
+		Random random = new Random();
+		String randomCode = "";
+		for (int i = 0; i < 10; i++) {
 			int idx = random.nextInt(charset.length);
 			randomCode += charset[idx];
 		}
