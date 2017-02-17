@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,7 @@ public class MerchantController {
 	@Autowired
 	private HmacSignerUtil hmacSigner;
 
+	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping("new")
 	public void newMerchant() {
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),

@@ -10,9 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Document(collection = "payme_user")
 public class User implements UserDetails {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -21,6 +18,8 @@ public class User implements UserDetails {
 	private String name;
 	private String email;
 	private String password;
+	private String mobile;
+	private String[] roles;
 
 	public String getPassword() {
 		return password;
@@ -78,6 +77,22 @@ public class User implements UserDetails {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String[] getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String[] roles) {
+		this.roles = roles;
 	}
 
 }
