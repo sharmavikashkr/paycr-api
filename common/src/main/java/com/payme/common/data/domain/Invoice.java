@@ -2,11 +2,13 @@ package com.payme.common.data.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "invoice")
 public class Invoice implements Serializable {
 
 	private static final long serialVersionUID = -8798244987005274799L;
@@ -18,8 +20,16 @@ public class Invoice implements Serializable {
 	private String invoiceCode;
 	private String amount;
 	private String currency;
-	private String merchant;
-	
+	private String merchantId;
+	private Date expiry;
+	private Payment payment;
+
+	@Transient
+	List<ItemDetail> itemDetails;
+
+	@Transient
+	ConsumerDetail consumerDetail;
+
 	public String getId() {
 		return id;
 	}
@@ -56,11 +66,43 @@ public class Invoice implements Serializable {
 		this.currency = currency;
 	}
 
-	public String getMerchant() {
-		return merchant;
+	public String getMerchantId() {
+		return merchantId;
 	}
 
-	public void setMerchant(String merchant) {
-		this.merchant = merchant;
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public Date getExpiry() {
+		return expiry;
+	}
+
+	public void setExpiry(Date expiry) {
+		this.expiry = expiry;
+	}
+
+	public List<ItemDetail> getItemDetails() {
+		return itemDetails;
+	}
+
+	public void setItemDetails(List<ItemDetail> itemDetails) {
+		this.itemDetails = itemDetails;
+	}
+
+	public ConsumerDetail getConsumerDetail() {
+		return consumerDetail;
+	}
+
+	public void setConsumerDetail(ConsumerDetail consumerDetail) {
+		this.consumerDetail = consumerDetail;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
 	}
 }

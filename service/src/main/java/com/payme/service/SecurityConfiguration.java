@@ -11,8 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 
-import com.payme.dashboard.controller.CustomUserDetailsService;
+import com.payme.common.service.CustomUserDetailsService;
+import com.payme.common.service.MySimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,9 +25,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public CustomUserDetailsService userDetailsService;
 
+	@Autowired
+	public MySimpleUrlAuthenticationSuccessHandler successHandler;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public RedirectStrategy redirectStrategy() {
+		return new DefaultRedirectStrategy();
 	}
 
 	@Bean
@@ -37,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin().loginPage("/login");
+		http.formLogin().loginPage("/login").successHandler(successHandler);
 		http.headers().frameOptions().disable();
 		http.csrf().disable();
 	}

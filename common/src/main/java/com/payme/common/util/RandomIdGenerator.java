@@ -33,7 +33,7 @@ public class RandomIdGenerator {
 	public static String generateAccessKey(char[] charset) {
 		Random random = new Random();
 		String randomCode = "";
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 12; i++) {
 			int idx = random.nextInt(charset.length);
 			randomCode += charset[idx];
 		}

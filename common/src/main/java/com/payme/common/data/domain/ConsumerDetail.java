@@ -3,25 +3,18 @@ package com.payme.common.data.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "user")
-public class User {
+@Document(collection = "consumer")
+public class ConsumerDetail {
 
 	@Id
 	private String id;
 
 	private String name;
 	private String email;
-	private String password;
 	private String mobile;
-	private String[] roles;
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	private Address address;
+	private String invoiceId;
+	private String merchantId;
 
 	public String getName() {
 		return name;
@@ -39,10 +32,6 @@ public class User {
 		this.email = email;
 	}
 
-	public String getId() {
-		return id;
-	}
-
 	public String getMobile() {
 		return mobile;
 	}
@@ -51,12 +40,32 @@ public class User {
 		this.mobile = mobile;
 	}
 
-	public String[] getRoles() {
-		return roles;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setRoles(String[] roles) {
-		this.roles = roles;
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public String getInvoiceId() {
+		return invoiceId;
+	}
+
+	public void setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
 }

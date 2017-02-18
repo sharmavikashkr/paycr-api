@@ -9,5 +9,5 @@ import com.payme.common.data.domain.Merchant;
 public interface MerchantRepository extends MongoRepository<Merchant, String> {
 
 	public Merchant findByAccessKey(String accessKey);
-
+	
 }
