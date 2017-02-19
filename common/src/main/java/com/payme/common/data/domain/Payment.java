@@ -1,10 +1,41 @@
 package com.payme.common.data.domain;
 
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "pm_payment")
 public class Payment {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	private Date created;
 	private String paymentRefNo;
 	private String payMode;
-	private String amount;
+	private String status;
+
+	@ManyToOne
+	private Invoice invoice;
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
+
+	public Integer getId() {
+		return id;
+	}
 
 	public String getPaymentRefNo() {
 		return paymentRefNo;
@@ -22,12 +53,20 @@ public class Payment {
 		this.payMode = payMode;
 	}
 
-	public String getAmount() {
-		return amount;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 
 }

@@ -1,4 +1,4 @@
-package compayme.common.email;
+package com.payme.common.email;
 
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;

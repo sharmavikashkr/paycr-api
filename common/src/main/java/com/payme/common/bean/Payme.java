@@ -1,15 +1,18 @@
 package com.payme.common.bean;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties
-@ConfigurationProperties(prefix = "payme")
 public class Payme {
+
+	@Value("${payme.baseUrl}")
 	private String baseUrl;
+
+	@Value("${payme.contact}")
 	private String contact;
+
+	@Value("${payme.env}")
 	private String env;
 
 	public String getContact() {

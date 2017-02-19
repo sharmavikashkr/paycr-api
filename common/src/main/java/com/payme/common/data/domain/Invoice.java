@@ -1,36 +1,52 @@
 package com.payme.common.data.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-@Document(collection = "invoice")
+import com.payme.common.type.Currency;
+
+@Entity
+@Table(name = "pm_invoice")
 public class Invoice implements Serializable {
 
 	private static final long serialVersionUID = -8798244987005274799L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 	private Date created;
 	private String invoiceCode;
-	private String amount;
-	private String currency;
-	private String merchantId;
+	private Integer merchant;
+	private BigDecimal amount;
 	private Date expiry;
-	private Payment payment;
 
-	@Transient
-	List<ItemDetail> itemDetails;
+	@Enumerated(EnumType.STRING)
+	private Currency currency;
 
-	@Transient
-	ConsumerDetail consumerDetail;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Consumer consumer;
 
-	public String getId() {
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+	private List<Item> items;
+
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+	private List<Payment> payment;
+
+	public Integer getId() {
 		return id;
 	}
 
@@ -50,28 +66,20 @@ public class Invoice implements Serializable {
 		this.invoiceCode = invoiceCode;
 	}
 
-	public String getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
-	public String getCurrency() {
+	public Currency getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(String currency) {
+	public void setCurrency(Currency currency) {
 		this.currency = currency;
-	}
-
-	public String getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(String merchantId) {
-		this.merchantId = merchantId;
 	}
 
 	public Date getExpiry() {
@@ -82,27 +90,35 @@ public class Invoice implements Serializable {
 		this.expiry = expiry;
 	}
 
-	public List<ItemDetail> getItemDetails() {
-		return itemDetails;
+	public List<Item> getItems() {
+		return items;
 	}
 
-	public void setItemDetails(List<ItemDetail> itemDetails) {
-		this.itemDetails = itemDetails;
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
-	public ConsumerDetail getConsumerDetail() {
-		return consumerDetail;
+	public Consumer getConsumer() {
+		return consumer;
 	}
 
-	public void setConsumerDetail(ConsumerDetail consumerDetail) {
-		this.consumerDetail = consumerDetail;
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
 	}
 
-	public Payment getPayment() {
+	public List<Payment> getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Payment payment) {
+	public void setPayment(List<Payment> payment) {
 		this.payment = payment;
+	}
+
+	public Integer getMerchant() {
+		return merchant;
+	}
+
+	public void setMerchant(Integer merchant) {
+		this.merchant = merchant;
 	}
 }

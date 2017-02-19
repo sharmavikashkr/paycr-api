@@ -1,4 +1,4 @@
-package compayme.common.email;
+package com.payme.common.email;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

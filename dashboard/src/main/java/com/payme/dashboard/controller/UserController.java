@@ -40,6 +40,7 @@ public class UserController {
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public void createUser() {
 		User user = new User();
+		user.setCreated(new Date());
 		user.setName("Test Merchant Admin");
 		user.setEmail("merchant@payme.com");
 		user.setPassword(bcPassEncode.encode("password@123"));
@@ -52,6 +53,7 @@ public class UserController {
 		String accessKey = secretKey + secretKey.toLowerCase() + secretKey.toUpperCase();
 		accessKey = RandomIdGenerator.generateAccessKey(accessKey.toCharArray());
 		Merchant merchant = new Merchant();
+		merchant.setCreated(new Date());
 		merchant.setAccessKey(accessKey);
 		merchant.setSecretKey(secretKey);
 		merchant.setName("Test Merchant");
@@ -65,6 +67,7 @@ public class UserController {
 		merUserRepo.save(merUser);
 
 		user = new User();
+		user.setCreated(new Date());
 		user.setName("Test Admin");
 		user.setEmail("admin@payme.com");
 		user.setPassword(bcPassEncode.encode("password@123"));

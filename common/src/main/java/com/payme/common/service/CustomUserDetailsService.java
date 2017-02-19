@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.payme.common.data.domain.MongoUserDetails;
+import com.payme.common.data.domain.CustomUserDetails;
 import com.payme.common.data.domain.User;
 import com.payme.common.data.repository.UserRepository;
 
@@ -22,8 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if (user != null) {
 			String password = user.getPassword();
 			String[] roles = user.getRoles();
-			MongoUserDetails mongoUserDetails = new MongoUserDetails(email, password, roles);
-			return mongoUserDetails;
+			CustomUserDetails customUserDetails = new CustomUserDetails(email, password, roles);
+			return customUserDetails;
 		}
 		return null;
 	}

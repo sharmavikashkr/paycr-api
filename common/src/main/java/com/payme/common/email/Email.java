@@ -1,4 +1,4 @@
-package compayme.common.email;
+package com.payme.common.email;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

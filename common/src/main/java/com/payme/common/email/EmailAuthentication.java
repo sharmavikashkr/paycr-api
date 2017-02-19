@@ -1,25 +1,36 @@
-package compayme.common.email;
+package com.payme.common.email;
 
 import java.util.Properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 @Email
 @Component
-@EnableConfigurationProperties
-@ConfigurationProperties(prefix = "netcore.mail")
 public class EmailAuthentication extends JavaMailSenderImpl {
 
 	private Properties javaMailProperties = new Properties();
+	
+	@Value("${netcore.mail.host}")
 	private String host;
+	
+	@Value("${netcore.mail.username}")
 	private String username;
+	
+	@Value("${netcore.mail.password}")
 	private String password;
+	
+	@Value("${netcore.mail.debug}")
 	private String debug;
+	
+	@Value("${netcore.mail.smtpAuth}")
 	private String smtpAuth;
+	
+	@Value("${netcore.mail.smtpStarttlsEnable}")
 	private String smtpStarttlsEnable;
+	
+	@Value("${netcore.mail.smtpPort}")
 	private String smtpPort;
 
 	public EmailAuthentication() {

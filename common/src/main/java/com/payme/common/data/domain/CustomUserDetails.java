@@ -7,14 +7,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class MongoUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private String username;
 	private String password;
 	private List<GrantedAuthority> grantedAuthorities;
 
-	public MongoUserDetails(String username, String password, String[] authorities) {
+	public CustomUserDetails(String username, String password, String[] authorities) {
 		this.username = username;
 		this.password = password;
 		this.grantedAuthorities = AuthorityUtils.createAuthorityList(authorities);

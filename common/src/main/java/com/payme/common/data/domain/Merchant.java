@@ -1,40 +1,39 @@
 package com.payme.common.data.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.Date;
 
-@Document(collection = "merchant")
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "pm_merchant")
 public class Merchant {
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
+	private Date created;
 	private String name;
 	private String email;
 	private String mobile;
 	private String accessKey;
 	private String secretKey;
-	private Address address;
 	private String razorPayId;
+
+	@Embedded
+	private Address address;
 
 	@Transient
 	private String adminName;
 
-	public String getAdminName() {
-		return adminName;
-	}
-
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
-	}
-
-	public String getId() {
+	public Integer getId() {
 		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -93,4 +92,19 @@ public class Merchant {
 		this.secretKey = secretKey;
 	}
 
+	public String getAdminName() {
+		return adminName;
+	}
+
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 }

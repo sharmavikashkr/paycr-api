@@ -1,0 +1,6 @@
+{
+  "name": "PayMe",
+  "description": "Pay Me",
+  "image": "heroku/java",
+  "addons": [ "heroku-postgresql" ]
+}

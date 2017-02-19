@@ -1,5 +1,8 @@
 package com.payme.common.data.domain;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Address {
 
 	private String addressLine1;
@@ -7,6 +10,7 @@ public class Address {
 	private String city;
 	private String district;
 	private String state;
+	private String country;
 	private String pincode;
 
 	public String getAddressLine1() {
@@ -55,5 +59,13 @@ public class Address {
 
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

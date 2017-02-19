@@ -11,9 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.domain.User;
-import com.payme.common.data.repository.ConsumerDetailRepository;
 import com.payme.common.data.repository.InvoiceRepository;
-import com.payme.common.data.repository.ItemDetailRepository;
 import com.payme.common.service.SecurityService;
 
 @RestController
@@ -24,12 +22,6 @@ public class DashboardController {
 
 	@Autowired
 	private InvoiceRepository invRepo;
-
-	@Autowired
-	private ItemDetailRepository itemRepo;
-
-	@Autowired
-	private ConsumerDetailRepository consRepo;
 
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -46,11 +38,7 @@ public class DashboardController {
 	public ModelAndView dashboard() {
 		User user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		List<Invoice> invoices = invRepo.findByMerchantId(merchant.getId());
-		for (Invoice invoice : invoices) {
-			invoice.setItemDetails(itemRepo.findByInvoiceId(invoice.getId()));
-			invoice.setConsumerDetail(consRepo.findByInvoiceId(invoice.getId()));
-		}
+		List<Invoice> invoices = invRepo.findByMerchant(merchant.getId());
 		ModelAndView mv = new ModelAndView("html/dashboard");
 		mv.addObject("user", user);
 		mv.addObject("merchant", merchant);

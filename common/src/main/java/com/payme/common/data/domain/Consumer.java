@@ -7,11 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pm_user")
-public class User {
+@Table(name = "pm_consumer")
+public class Consumer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,27 +21,20 @@ public class User {
 	private Date created;
 	private String name;
 	private String email;
-	private String password;
 	private String mobile;
-	private String[] roles;
 
 	@Embedded
 	private Address address;
 
-	public Address getAddress() {
-		return address;
+	@OneToOne(mappedBy = "consumer")
+	private Invoice invoice;
+
+	public Invoice getInvoice() {
+		return invoice;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
 	}
 
 	public String getName() {
@@ -59,10 +53,6 @@ public class User {
 		this.email = email;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
 	public String getMobile() {
 		return mobile;
 	}
@@ -71,12 +61,16 @@ public class User {
 		this.mobile = mobile;
 	}
 
-	public String[] getRoles() {
-		return roles;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setRoles(String[] roles) {
-		this.roles = roles;
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public Integer getId() {
+		return id;
 	}
 
 	public Date getCreated() {
