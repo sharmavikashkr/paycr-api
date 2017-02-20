@@ -1,4 +1,4 @@
-package com.payme;
+package com.payme.service;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
