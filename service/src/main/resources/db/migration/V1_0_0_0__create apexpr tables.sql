@@ -58,6 +58,14 @@ CREATE TABLE if not exists pm_merchatnt_user(
 	user_id int NOT NULL
 );
 
+CREATE TABLE if not exists pm_payment (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	payment_ref_no varchar(50) NOT NULL,
+	pay_mode varchar(15) NOT NULL,
+	status varchar(20) NOT NULL
+);
+
 CREATE TABLE if not exists pm_invoice(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -71,7 +79,9 @@ CREATE TABLE if not exists pm_invoice(
 	send_sms BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
 	expiry timestamp NOT NULL,
-	consumer int REFERENCES pm_consumer
+	consumer int REFERENCES pm_consumer,
+	payment int REFERENCES pm_payment,
+	status varchar(20) NOT NULL
 );
 
 CREATE TABLE if not exists pm_item (
@@ -81,13 +91,4 @@ CREATE TABLE if not exists pm_item (
 	rate float NOT NULL,
 	price float NOT NULL,
     invoice integer REFERENCES pm_invoice
-);
-
-CREATE TABLE if not exists pm_payment (
-	id SERIAL PRIMARY KEY NOT NULL,
-	created timestamp NOT NULL,
-	payment_ref_no varchar(50) NOT NULL,
-	pay_mode varchar(15) NOT NULL,
-	status varchar(20) NOT NULL,
-	invoice int REFERENCES pm_invoice
 );

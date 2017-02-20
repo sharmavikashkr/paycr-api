@@ -10,6 +10,27 @@ $(document).ready(function() {
 				"mobile" : mobile
 		};
 		
+		var item0 = {
+			"name" : $("#item-name0").val(),
+			"rate" : $("#item-rate0").val(),
+			"quantity" : $("#item-quantity0").val(),
+			"price" : $("#item-price0").val()
+		};
+		var item1 = {
+			"name" : $("#item-name1").val(),
+			"rate" : $("#item-rate1").val(),
+			"quantity" : $("#item-quantity1").val(),
+			"price" : $("#item-price1").val()
+		};
+		var item2 = {
+			"name" : $("#item-name2").val(),
+			"rate" : $("#item-rate2").val(),
+			"quantity" : $("#item-quantity2").val(),
+			"price" : $("#item-price2").val()
+		};
+		
+		var items = [item0, item1, item2];
+		
 		var billNo = $("#inv-billNo").val();
 		var invoiceCode = $("#inv-code").val();
 		var sendEmail = $("#inv-sendEmail").is(":checked");
@@ -22,6 +43,7 @@ $(document).ready(function() {
 				"invoiceCode" : invoiceCode,
 				"billNo" : billNo,
 				"consumer" : consumer,
+				"items" : items,
 				"sendEmail" : sendEmail,
 				"sendSms" : sendSms,
 				"shipping" : shipping,

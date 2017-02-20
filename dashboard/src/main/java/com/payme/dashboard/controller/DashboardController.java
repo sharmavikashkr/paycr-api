@@ -39,6 +39,15 @@ public class DashboardController {
 		PmUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		List<Invoice> invoices = invRepo.findByMerchant(merchant.getId());
+		for (Invoice invoice : invoices) {
+			invoice.getItems();
+			invoice.getPayment();
+			if ("SUCCESS".equals(invoice.getStatus())) {
+				invoice.setPaid(true);
+			} else {
+				invoice.setPaid(false);
+			}
+		}
 		ModelAndView mv = new ModelAndView("html/dashboard");
 		mv.addObject("user", user);
 		mv.addObject("merchant", merchant);

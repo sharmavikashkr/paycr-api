@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.payme.common.bean.Payme;
 import com.payme.common.data.domain.Invoice;
+import com.payme.common.data.domain.Item;
 import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.repository.InvoiceRepository;
 import com.payme.common.service.SecurityService;
@@ -51,6 +52,10 @@ public class InvoiceController {
 		invoice.setExpiry(new Date());
 		invoice.getConsumer().setCreated(new Date());
 		invoice.getConsumer().setInvoice(invoice);
+		invoice.setStatus("Unpaid");
+		for (Item item : invoice.getItems()) {
+			item.setInvoice(invoice);
+		}
 		invRepo.save(invoice);
 		return payme.getBaseUrl() + "/" + invoiceCode;
 	}

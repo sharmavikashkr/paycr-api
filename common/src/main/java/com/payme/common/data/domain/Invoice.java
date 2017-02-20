@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.payme.common.type.Currency;
 
@@ -49,8 +50,13 @@ public class Invoice implements Serializable {
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<Item> items;
 
-	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-	private List<Payment> payment;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Payment payment;
+
+	private String status;
+
+	@Transient
+	private boolean isPaid;
 
 	public Integer getId() {
 		return id;
@@ -112,11 +118,11 @@ public class Invoice implements Serializable {
 		this.consumer = consumer;
 	}
 
-	public List<Payment> getPayment() {
+	public Payment getPayment() {
 		return payment;
 	}
 
-	public void setPayment(List<Payment> payment) {
+	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
 
@@ -166,5 +172,21 @@ public class Invoice implements Serializable {
 
 	public void setBillNo(String billNo) {
 		this.billNo = billNo;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public boolean isPaid() {
+		return isPaid;
+	}
+
+	public void setPaid(boolean isPaid) {
+		this.isPaid = isPaid;
 	}
 }
