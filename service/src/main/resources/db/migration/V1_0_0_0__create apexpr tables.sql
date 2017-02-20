@@ -61,9 +61,14 @@ CREATE TABLE if not exists pm_merchatnt_user(
 CREATE TABLE if not exists pm_invoice(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
-	invoice_code int NOT NULL,
+	invoice_code varchar(20) NOT NULL,
+	bill_no varchar(10) DEFAULT NULL,
 	merchant int NOT NULL,
 	amount float NOT NULL,
+	shipping float DEFAULT NULL,
+	discount float DEFAULT NULL,
+	send_email BOOLEAN NOT NULL,
+	send_sms BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
 	expiry timestamp NOT NULL,
 	consumer int REFERENCES pm_consumer

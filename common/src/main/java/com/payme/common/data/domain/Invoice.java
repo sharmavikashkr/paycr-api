@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,14 +31,19 @@ public class Invoice implements Serializable {
 
 	private Date created;
 	private String invoiceCode;
+	private String billNo;
 	private Integer merchant;
 	private BigDecimal amount;
+	private BigDecimal shipping;
+	private BigDecimal discount;
+	private boolean sendEmail;
+	private boolean sendSms;
 	private Date expiry;
 
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Consumer consumer;
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
@@ -120,5 +126,45 @@ public class Invoice implements Serializable {
 
 	public void setMerchant(Integer merchant) {
 		this.merchant = merchant;
+	}
+
+	public BigDecimal getShipping() {
+		return shipping;
+	}
+
+	public void setShipping(BigDecimal shipping) {
+		this.shipping = shipping;
+	}
+
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
+	}
+
+	public boolean isSendEmail() {
+		return sendEmail;
+	}
+
+	public void setSendEmail(boolean sendEmail) {
+		this.sendEmail = sendEmail;
+	}
+
+	public boolean isSendSms() {
+		return sendSms;
+	}
+
+	public void setSendSms(boolean sendSms) {
+		this.sendSms = sendSms;
+	}
+
+	public String getBillNo() {
+		return billNo;
+	}
+
+	public void setBillNo(String billNo) {
+		this.billNo = billNo;
 	}
 }
