@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Pay Me</title>
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="vendor/device-mockups/device-mockups.min.css">
+    <link href="/css/new-age.min.css" rel="stylesheet">
+    <style>
+    	#newInvoice input {border:none;text-size:6px;}
+    </style>
+</head>
+<body>
+	<section id="download" class="download bg-primary text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h2 class="section-heading"><span style="color:red;">{{merchant.name}}</span> has requested you to pay <span style="color:red;">INR {{invoice.amount}}</span></h2>
+                    <p>Proceed to make payment</p>
+                    <div class="badges">
+                        <a class="badge-link" href="#"><button type="button" class="btn btn-info">Pay</button></a>
+                        <a class="badge-link" href="#"><button type="button" class="btn btn-warning">Abort</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

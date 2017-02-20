@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	$("#dashboardTab").click();
 	$("#createInvoiceBtn").click(function() {
 		var invoice;
 		var name = $("#con-name").val();
