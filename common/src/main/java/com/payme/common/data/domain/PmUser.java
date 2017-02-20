@@ -1,17 +1,21 @@
 package com.payme.common.data.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "pm_user")
-public class User {
+public class PmUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +26,9 @@ public class User {
 	private String email;
 	private String password;
 	private String mobile;
-	private String[] roles;
+
+	@OneToMany(mappedBy = "pmUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<UserRole> userRoles;
 
 	@Embedded
 	private Address address;
@@ -71,20 +77,20 @@ public class User {
 		this.mobile = mobile;
 	}
 
-	public String[] getRoles() {
-		return roles;
-	}
-
-	public void setRoles(String[] roles) {
-		this.roles = roles;
-	}
-
 	public Date getCreated() {
 		return created;
 	}
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
 }

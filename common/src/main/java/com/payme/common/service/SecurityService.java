@@ -12,10 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.domain.MerchantUser;
-import com.payme.common.data.domain.User;
+import com.payme.common.data.domain.PmUser;
 import com.payme.common.data.repository.MerchantRepository;
 import com.payme.common.data.repository.MerchantUserRepository;
 import com.payme.common.data.repository.UserRepository;
+import com.payme.common.type.Role;
 
 @Service
 public class SecurityService {
@@ -34,7 +35,10 @@ public class SecurityService {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	public User findLoggedInUser() {
+	@Autowired
+	private UserService userService;
+
+	public PmUser findLoggedInUser() {
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
 			return userRepo.findByEmail(((UserDetails) userDetails).getUsername());
@@ -43,16 +47,18 @@ public class SecurityService {
 	}
 
 	public boolean isMerchantUser() {
-		User user = findLoggedInUser();
-		if (Arrays.asList(user.getRoles()).contains("ROLE_MERCHANT")) {
+		PmUser user = findLoggedInUser();
+		String[] roles = userService.getUserRoles(user);
+		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
 			return true;
 		}
 		return false;
 	}
 
 	public Merchant getMerchantForLoggedInUser() {
-		User user = findLoggedInUser();
-		if (Arrays.asList(user.getRoles()).contains("ROLE_MERCHANT")) {
+		PmUser user = findLoggedInUser();
+		String[] roles = userService.getUserRoles(user);
+		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
 			return merRepo.findOne(merUser.getMerchantId());
 		}

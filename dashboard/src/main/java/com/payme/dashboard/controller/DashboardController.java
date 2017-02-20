@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.domain.Merchant;
-import com.payme.common.data.domain.User;
+import com.payme.common.data.domain.PmUser;
 import com.payme.common.data.repository.InvoiceRepository;
 import com.payme.common.service.SecurityService;
 
@@ -36,7 +36,7 @@ public class DashboardController {
 	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping("/dashboard")
 	public ModelAndView dashboard() {
-		User user = secSer.findLoggedInUser();
+		PmUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		List<Invoice> invoices = invRepo.findByMerchant(merchant.getId());
 		ModelAndView mv = new ModelAndView("html/dashboard");
@@ -49,7 +49,7 @@ public class DashboardController {
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping("/admin")
 	public ModelAndView admin() {
-		User user = secSer.findLoggedInUser();
+		PmUser user = secSer.findLoggedInUser();
 		ModelAndView mv = new ModelAndView("html/blank");
 		mv.addObject("user", user);
 		return mv;
