@@ -12,13 +12,18 @@
     <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <link href="/vendor/morrisjs/morris.css" rel="stylesheet">
     <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet">
     <style>
     	#newInvoice input {border:none;text-size:6px;}
     </style>
 </head>
 <body>
     <div id="wrapper">
+    	<div id="serverRespAlert" class="alert alert-dismissible">
+		    <a href="#" id="dismissServerRespAlertBtn" class="close" aria-label="close">&times;</a>
+		    <div class="text-center">
+		    	<strong id="serverRespStatus"></strong>&nbsp;<span id="serverRespMsg"></span>
+		    </div>
+		</div>
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -637,24 +642,6 @@
 	      <div class="modal-footer">
 	      	<button type="button" class="btn btn-info" id="createInvoiceBtn">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<div id="serverRespModal" class="modal fade" role="dialog">
-	  <div class="modal-dialog">
-	    <div id="newInvoice" class="modal-content" style="min-width:150%; margin-left:-25%;">
-	      <div class="modal-body">
-		    <div class="row">
-		        <div class="col-xs-12">
-		            <div class="text-center">
-		                <h3 id="serverRespMsg"></h3>
-		            </div>
-		        </div>
-		    </div>
-	      </div>
-	      <div class="modal-footer">
-	        <button id="dismissServerRespModalBtn" type="button" class="btn btn-default">Close</button>
 	      </div>
 	    </div>
 	  </div>

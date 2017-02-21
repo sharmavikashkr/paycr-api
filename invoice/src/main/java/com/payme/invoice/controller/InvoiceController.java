@@ -1,5 +1,7 @@
 package com.payme.invoice.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,10 +29,11 @@ public class InvoiceController {
 
 	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public String single(@RequestBody Invoice invoice) {
+	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
 			invValidator.validate(invoice);
 		} catch (Exception ex) {
+			response.setStatus(500);
 			return ex.getMessage();
 		}
 		invRepo.save(invoice);

@@ -1,8 +1,8 @@
 $(document).ready(function() {
 	$("#dashboardTab").click();
-	$("#dismissServerRespModalBtn").click(function() {
-		$("#serverRespModal").modal('hide');
-		window.location.reload();
+	$("#serverRespAlert").hide();
+	$("#dismissServerRespAlertBtn").click(function() {
+		$("#serverRespAlert").hide();
 	});
 	$("#createInvoiceBtn").click(function() {
 		var invoice;
@@ -67,13 +67,21 @@ $(document).ready(function() {
 			async : false,
 			success : function(data) {
 				$("#createInvoice").modal('hide')
-				$("#serverRespModal").modal('show');
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").addClass('alert-success');
 				$("#serverRespMsg").html(data);
+				$("#serverRespStatus").html("SUCCESS!");
 			},
 			error : function(data) {
 				$("#createInvoice").modal('hide')
-				$("#serverRespModal").modal('show');
-				$("#serverRespMsg").html(data);
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html(data.responseText);
+				$("#serverRespStatus").html("FAILURE!");
 			}
 		});
 	});
