@@ -57,6 +57,9 @@ public class Invoice implements Serializable {
 
 	@Transient
 	private boolean isPaid;
+	
+	@Transient
+	private int expiresIn;
 
 	public Integer getId() {
 		return id;
@@ -188,5 +191,13 @@ public class Invoice implements Serializable {
 
 	public void setPaid(boolean isPaid) {
 		this.isPaid = isPaid;
+	}
+
+	public int getExpiresIn() {
+		return expiresIn;
+	}
+
+	public void setExpiresIn(int expiresIn) {
+		this.expiresIn = expiresIn;
 	}
 }

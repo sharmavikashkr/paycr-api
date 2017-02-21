@@ -1,5 +1,9 @@
 $(document).ready(function() {
 	$("#dashboardTab").click();
+	$("#dismissServerRespModalBtn").click(function() {
+		$("#serverRespModal").modal('hide');
+		window.location.reload();
+	});
 	$("#createInvoiceBtn").click(function() {
 		var invoice;
 		var name = $("#con-name").val();
@@ -40,6 +44,7 @@ $(document).ready(function() {
 		var discount = $("#inv-discount").val();
 		var amount = $("#inv-final").val();
 		var currency = 'INR';
+		var expiresIn = $("#inv-expiresIn").val();
 		var invoice = {
 				"invoiceCode" : invoiceCode,
 				"billNo" : billNo,
@@ -50,7 +55,8 @@ $(document).ready(function() {
 				"shipping" : shipping,
 				"discount" : discount,
 				"amount" : amount,
-				"currency" : currency
+				"currency" : currency,
+				"expiresIn" : expiresIn
 		}
 		
 		$.ajax({
@@ -60,10 +66,14 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			async : false,
 			success : function(data) {
-				window.location.reload();
+				$("#createInvoice").modal('hide')
+				$("#serverRespModal").modal('show');
+				$("#serverRespMsg").html(data);
 			},
 			error : function(data) {
-				window.location.reload();s
+				$("#createInvoice").modal('hide')
+				$("#serverRespModal").modal('show');
+				$("#serverRespMsg").html(data);
 			}
 		});
 	});
