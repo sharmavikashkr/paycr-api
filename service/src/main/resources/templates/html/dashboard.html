@@ -18,20 +18,14 @@
 </head>
 <body>
     <div id="wrapper">
-    	<div id="serverRespAlert" class="alert alert-dismissible">
+    	<div id="serverRespAlert" class="alert alert-success alert-dismissible">
 		    <a href="#" id="dismissServerRespAlertBtn" class="close" aria-label="close">&times;</a>
 		    <div class="text-center">
-		    	<strong id="serverRespStatus"></strong>&nbsp;<span id="serverRespMsg"></span>
+		    	<strong id="serverRespStatus">Welcome!</strong>&nbsp;<span id="serverRespMsg">{{user.name}}</span>
 		    </div>
 		</div>
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a class="navbar-brand" href="/dashboard">{{merchant.name}}</a>
             </div>
             <ul class="nav navbar-top-links navbar-right">
@@ -127,10 +121,24 @@
                             <a id="dashboardTab" href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="#contacts" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Contacts</a>
+                            <a href="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a>
                         </li>
                         <li>
-                            <a href="#inventory" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Inventory Items</a>
+                            <a href="#contactsTab" data-toggle="tab"><i class="fa fa-group fa-fw"></i> Contacts</a>
+                        </li>
+                        <li>
+                            <a href="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory Items</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> Account<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -150,36 +158,21 @@
 	            <!-- /.row -->
 	            <div class="row">
 	                <div class="col-lg-12">
-	                    <div class="panel panel-default">
-	                        <div class="panel-heading">
-	                            My Invoices
-	                        </div>
+	                    <div class="panel">
 	                        <div class="panel-body col-lg-3">
 	                        	<table style="width: 100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
 	                        		<tbody>
 	                        			<tr>
-	                        				<td>Created : <input/></td>
+	                        				<td>Created : <input style="width:70%" placeholder="21-02-2017"/></td>
 	                        			</tr>
 	                        			<tr>
-	                        				<td>Expiry : <input/></td>
+	                        				<td>Expiry : <input style="width:76%" placeholder="11-02-2017"/></td>
 	                        			</tr>
 	                        			<tr>
-	                        				<td>Invoice Code : <input/></td>
+	                        				<td>Consumer Email : <input style="width:100%" placeholder="name@email.com"/></td>
 	                        			</tr>
 	                        			<tr>
-	                        				<td>Bill No : <input/></td>
-	                        			</tr>
-	                        			<tr>
-	                        				<td>Amount : <input/></td>
-	                        			</tr>
-	                        			<tr>
-	                        				<td>Consumer Name : <input/></td>
-	                        			</tr>
-	                        			<tr>
-	                        				<td>Consumer Email : <input/></td>
-	                        			</tr>
-	                        			<tr>
-	                        				<td>COnsumer Mobile : <input/></td>
+	                        				<td>Consumer Mobile : <input style="width:100%" placeholder="9876543210"/></td>
 	                        			</tr>
 	                        			<tr>
 	                        				<td><button type="button" class="btn btn-info">Search</button></td>
@@ -188,7 +181,16 @@
 	                        	</table>
 	                        </div>
 	                        <div class="panel-body col-lg-9">
-	                            <table style="width: 100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
+	                            <table style="width:100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
+	                                <thead>
+	                                    <tr>
+	                                        <th><input style="width:100%" placeholder="Invoice Code"/></th>
+	                                        <th><input style="width:100%" placeholder="Consumer Name"/></th>
+	                                        <th><input style="width:100%" placeholder="Bill No"/></th>
+	                                        <th><input style="width:100%" placeholder="Amount"/></th>
+	                                        <th><input style="width:100%" placeholder="Status"/></th>
+	                                    </tr>
+	                                </thead>
 	                                <thead>
 	                                    <tr>
 	                                        <th>Invoice Code</th>

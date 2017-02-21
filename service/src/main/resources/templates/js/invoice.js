@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	$("#dashboardTab").click();
-	$("#serverRespAlert").hide();
 	$("#dismissServerRespAlertBtn").click(function() {
 		$("#serverRespAlert").hide();
 	});
