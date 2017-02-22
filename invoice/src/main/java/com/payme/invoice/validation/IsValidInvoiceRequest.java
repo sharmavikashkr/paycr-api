@@ -37,9 +37,13 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	public void validate(Invoice invoice) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		invoice.setMerchant(merchant.getId());
-		if (CommonUtil.isEmpty(invoice.getBillNo())) {
-			throw new PaymeException(Constants.FAILURE, "Invalid Bill No");
+		if (CommonUtil.isNull(invoice.getPayAmount())) {
+			throw new PaymeException(Constants.FAILURE, "Amount cannot be null or blank");
 		}
+		if (invoice.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+			throw new PaymeException(Constants.FAILURE, "Amount should be greated than 0");
+		}
+		invoice.setOriginalAmount(invoice.getPayAmount());
 		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(new Date().getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
 		String invoiceCode = invoice.getInvoiceCode();

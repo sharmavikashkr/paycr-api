@@ -26,6 +26,7 @@ public class PmUser {
 	private String email;
 	private String password;
 	private String mobile;
+	private boolean active;
 
 	@OneToMany(mappedBy = "pmUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<UserRole> userRoles;
@@ -91,6 +92,14 @@ public class PmUser {
 
 	public void setUserRoles(List<UserRole> userRoles) {
 		this.userRoles = userRoles;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

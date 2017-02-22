@@ -32,9 +32,9 @@ public class Invoice implements Serializable {
 
 	private Date created;
 	private String invoiceCode;
-	private String billNo;
 	private Integer merchant;
-	private BigDecimal amount;
+	private BigDecimal originalAmount;
+	private BigDecimal payAmount;
 	private BigDecimal shipping;
 	private BigDecimal discount;
 	private boolean sendEmail;
@@ -57,7 +57,7 @@ public class Invoice implements Serializable {
 
 	@Transient
 	private boolean isPaid;
-	
+
 	@Transient
 	private int expiresIn;
 
@@ -79,14 +79,6 @@ public class Invoice implements Serializable {
 
 	public void setInvoiceCode(String invoiceCode) {
 		this.invoiceCode = invoiceCode;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
 	}
 
 	public Currency getCurrency() {
@@ -169,14 +161,6 @@ public class Invoice implements Serializable {
 		this.sendSms = sendSms;
 	}
 
-	public String getBillNo() {
-		return billNo;
-	}
-
-	public void setBillNo(String billNo) {
-		this.billNo = billNo;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -199,5 +183,21 @@ public class Invoice implements Serializable {
 
 	public void setExpiresIn(int expiresIn) {
 		this.expiresIn = expiresIn;
+	}
+
+	public BigDecimal getOriginalAmount() {
+		return originalAmount;
+	}
+
+	public void setOriginalAmount(BigDecimal originalAmount) {
+		this.originalAmount = originalAmount;
+	}
+
+	public BigDecimal getPayAmount() {
+		return payAmount;
+	}
+
+	public void setPayAmount(BigDecimal payAmount) {
+		this.payAmount = payAmount;
 	}
 }

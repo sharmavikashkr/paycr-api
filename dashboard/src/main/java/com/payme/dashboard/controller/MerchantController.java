@@ -51,6 +51,7 @@ public class MerchantController {
 		accessKey = RandomIdGenerator.generateAccessKey(accessKey.toCharArray());
 		merchant.setAccessKey(accessKey);
 		merchant.setSecretKey(secretKey);
+		merchant.setActive(true);
 		merRepo.save(merchant);
 
 		PmUser user = new PmUser();
@@ -64,6 +65,7 @@ public class MerchantController {
 		userRole.setPmUser(user);
 		user.setUserRoles(userRoles);
 		userRoles.add(userRole);
+		user.setActive(true);
 		userRepo.save(user);
 
 		MerchantUser merUser = new MerchantUser();

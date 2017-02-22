@@ -1,12 +1,16 @@
 package com.payme.common.data.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -25,9 +29,13 @@ public class Merchant {
 	private String accessKey;
 	private String secretKey;
 	private String razorPayId;
+	private boolean active;
 
 	@Embedded
 	private Address address;
+
+	@OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<MerchantPricing> pricings;
 
 	@Transient
 	private String adminName;
@@ -106,5 +114,21 @@ public class Merchant {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public List<MerchantPricing> getPricings() {
+		return pricings;
+	}
+
+	public void setPricings(List<MerchantPricing> pricings) {
+		this.pricings = pricings;
 	}
 }

@@ -22,6 +22,7 @@ public class Consumer {
 	private String name;
 	private String email;
 	private String mobile;
+	private boolean active;
 
 	@Embedded
 	private Address address;
@@ -79,6 +80,14 @@ public class Consumer {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

@@ -53,7 +53,7 @@ $(document).ready(function() {
 				"sendSms" : sendSms,
 				"shipping" : shipping,
 				"discount" : discount,
-				"amount" : amount,
+				"payAmount" : amount,
 				"currency" : currency,
 				"expiresIn" : expiresIn
 		}

@@ -4,13 +4,14 @@ CREATE TABLE if not exists pm_consumer (
 	name varchar(50) DEFAULT NULL,
     email varchar(50) DEFAULT NULL,
     mobile varchar(15) DEFAULT NULL,
-    address_line_1 varchar(255) DEFAULT NULL,
-    address_line_2 varchar(255) DEFAULT NULL,
+    address_line1 varchar(255) DEFAULT NULL,
+    address_line2 varchar(255) DEFAULT NULL,
     city varchar(30) DEFAULT NULL,
     district varchar(30) DEFAULT NULL,
     state varchar(50) DEFAULT NULL,
     country varchar(50) DEFAULT NULL,
-    pincode varchar(10) DEFAULT NULL
+    pincode varchar(10) DEFAULT NULL,
+    active boolean NOT NULL
 );
 
 CREATE TABLE if not exists pm_merchant (
@@ -21,13 +22,14 @@ CREATE TABLE if not exists pm_merchant (
     mobile varchar(15) DEFAULT NULL,
     access_key varchar(50) DEFAULT NULL,
     secret_key varchar(50) DEFAULT NULL,
-    address_line_1 varchar(255) DEFAULT NULL,
-    address_line_2 varchar(255) DEFAULT NULL,
+    address_line1 varchar(255) DEFAULT NULL,
+    address_line2 varchar(255) DEFAULT NULL,
     city varchar(30) DEFAULT NULL,
     district varchar(30) DEFAULT NULL,
     state varchar(50) DEFAULT NULL,
     country varchar(50) DEFAULT NULL,
-    pincode varchar(10) DEFAULT NULL
+    pincode varchar(10) DEFAULT NULL,
+    active boolean NOT NULL
 );
 
 CREATE TABLE if not exists pm_user (
@@ -37,13 +39,14 @@ CREATE TABLE if not exists pm_user (
     email varchar(50) DEFAULT NULL,
     mobile varchar(15) NOT NULL,
     password varchar(100) NOT NULL,
-    address_line_1 varchar(255) DEFAULT NULL,
-    address_line_2 varchar(255) DEFAULT NULL,
+    address_line1 varchar(255) DEFAULT NULL,
+    address_line2 varchar(255) DEFAULT NULL,
     city varchar(30) DEFAULT NULL,
     district varchar(30) DEFAULT NULL,
     state varchar(50) DEFAULT NULL,
     country varchar(50) DEFAULT NULL,
-    pincode varchar(10) DEFAULT NULL
+    pincode varchar(10) DEFAULT NULL,
+    active boolean NOT NULL
 );
 
 CREATE TABLE if not exists pm_user_role(
@@ -72,15 +75,16 @@ CREATE TABLE if not exists pm_invoice(
 	invoice_code varchar(20) NOT NULL,
 	bill_no varchar(10) DEFAULT NULL,
 	merchant int NOT NULL,
-	amount float NOT NULL,
+	original_amount float NOT NULL,
+	pay_amount float NOT NULL,
 	shipping float DEFAULT NULL,
 	discount float DEFAULT NULL,
 	send_email BOOLEAN NOT NULL,
 	send_sms BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
 	expiry timestamp NOT NULL,
-	consumer int REFERENCES pm_consumer,
-	payment int REFERENCES pm_payment,
+	consumer_id int REFERENCES pm_consumer,
+	payment_id int REFERENCES pm_payment,
 	status varchar(20) NOT NULL
 );
 
@@ -90,5 +94,31 @@ CREATE TABLE if not exists pm_item (
 	quantity int NOT NULL,
 	rate float NOT NULL,
 	price float NOT NULL,
-    invoice integer REFERENCES pm_invoice
+    invoice_id int REFERENCES pm_invoice
 );
+
+CREATE TABLE if not exists pm_pricing (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	name varchar(50) NOT NULL,
+	description varchar(255) NOT NULL,
+	rate float NOT NULL,
+	invoice_limit int NOT NULL,
+    start_amount float NOT NULL,
+    end_amount float NOT NULL,
+    duration int NOT NULL,
+    active boolean NOT NULL
+);
+
+CREATE TABLE if not exists pm_merchant_pricing (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	start_date timestamp NOT NULL,
+	end_date timestamp NOT NULL,
+	status varchar(20) NOT NULL,
+	no_of_invoice int NOT NULL,
+    merchant_id int REFERENCES pm_merchant,
+    pricing_id int REFERENCES pm_pricing
+);
+
+insert into pm_pricing (created,name,description,rate,invoice_limit,start_amount,end_amount,duration,active) values(now(),'FREE TRIAL','2 Momths free trial',0.00,100,1.00,10000.00,90,true);

@@ -17,7 +17,7 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 
 	@Override
 	public void validate(Invoice invoice) {
-		if(CommonUtil.isNull(invoice.getConsumer())) {
+		if (CommonUtil.isNull(invoice.getConsumer())) {
 			throw new PaymeException(Constants.FAILURE, "Invalid Consumer");
 		}
 		if (CommonUtil.isEmpty(invoice.getConsumer().getEmail())) {
@@ -29,6 +29,7 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 		if (CommonUtil.isEmpty(invoice.getConsumer().getMobile())) {
 			throw new PaymeException(Constants.FAILURE, "Invalid Consumer Mobile");
 		}
+		invoice.getConsumer().setActive(true);
 		invoice.getConsumer().setCreated(new Date());
 		invoice.getConsumer().setInvoice(invoice);
 	}
