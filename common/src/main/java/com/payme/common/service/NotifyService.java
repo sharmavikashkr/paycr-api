@@ -45,6 +45,7 @@ public class NotifyService {
 			List<String> to = new ArrayList<String>();
 			to.add(invoice.getConsumer().getEmail());
 			List<String> cc = new ArrayList<String>();
+			cc.add("sharma.vikashkr@gmail.com");
 			Email email = new Email("sharma.vikashkr@gmail.com", to, cc);
 			email.setSubject("Payment for your order");
 			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
