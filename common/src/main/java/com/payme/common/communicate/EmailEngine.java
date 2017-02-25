@@ -32,6 +32,9 @@ public class EmailEngine {
 	@Value("${email.mailgun.host}")
 	private String mailgunHost;
 
+	@Value("${email.mailgun.domain}")
+	private String mailgunDomain;
+
 	@SuppressWarnings("deprecation")
 	public boolean send(Email email) {
 		try {
@@ -43,15 +46,16 @@ public class EmailEngine {
 			HttpHeaders header = new HttpHeaders();
 			header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> dataMap = new LinkedMultiValueMap<String, String>();
-			dataMap.add("from", email.getFrom());
+			dataMap.add("from", "Paykr <" + email.getFrom() + ">");
 			dataMap.add("to", email.getTo().get(0));
-			dataMap.add("cc", email.getCc().get(0));
+			dataMap.add("cc", "");
 			dataMap.add("subject", email.getSubject());
-			dataMap.add("html", email.getMessage());
+			dataMap.add("text", email.getMessage());
 			HttpEntity<Object> input = new HttpEntity<Object>(dataMap, header);
 			RestTemplate rest = RestTemplateUtil.getRestTemplate();
 			rest.setRequestFactory(rf);
-			ResponseEntity<Map> resp = rest.exchange(URI.create(mailgunHost), HttpMethod.POST, input, Map.class);
+			ResponseEntity<Map> resp = rest.exchange(URI.create(mailgunHost + mailgunDomain + "/messages"),
+					HttpMethod.POST, input, Map.class);
 			if (HttpStatus.OK.equals(resp.getStatusCode())) {
 				return true;
 			}
