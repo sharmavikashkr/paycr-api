@@ -73,7 +73,6 @@ CREATE TABLE if not exists pm_invoice(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	invoice_code varchar(20) NOT NULL,
-	bill_no varchar(10) DEFAULT NULL,
 	merchant int NOT NULL,
 	original_amount float NOT NULL,
 	pay_amount float NOT NULL,

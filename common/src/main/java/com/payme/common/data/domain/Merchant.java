@@ -40,6 +40,17 @@ public class Merchant {
 	@Transient
 	private String adminName;
 
+	@Transient
+	private int pricingId;
+
+	public int getPricingId() {
+		return pricingId;
+	}
+
+	public void setPricingId(int pricingId) {
+		this.pricingId = pricingId;
+	}
+
 	public Integer getId() {
 		return id;
 	}

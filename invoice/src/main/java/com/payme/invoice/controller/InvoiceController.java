@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.payme.common.bean.Payme;
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.repository.InvoiceRepository;
+import com.payme.common.service.NotifyService;
 import com.payme.invoice.validation.InvoiceValidator;
 
 @RestController
@@ -27,6 +28,9 @@ public class InvoiceController {
 	@Autowired
 	private InvoiceValidator invValidator;
 
+	@Autowired
+	private NotifyService notifyService;
+
 	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "new", method = RequestMethod.POST)
 	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
@@ -37,6 +41,7 @@ public class InvoiceController {
 			return ex.getMessage();
 		}
 		invRepo.save(invoice);
+		notifyService.notify(invoice);
 		return "Invoice Generated : " + payme.getBaseUrl() + "/" + invoice.getInvoiceCode();
 	}
 

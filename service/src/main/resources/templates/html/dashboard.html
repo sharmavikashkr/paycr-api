@@ -118,7 +118,7 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a id="dashboardTab" href="#dashboard" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a id="dashboardTabLink" href="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
                             <a href="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a>
@@ -145,7 +145,7 @@
             </div>
         </nav>
         <div class="tab-content" id="page-wrapper">
-	        <div id="dashboard" class="tab-pane fade active">
+	        <div id="dashboardTab" class="tab-pane fade active">
 	        	<br>
 	            <div class="row">
 	                <div class="col-lg-2" style="float:right;">
@@ -206,7 +206,7 @@
 	                                    <tr>
 	                                        <th><input style="width:100%" placeholder="Invoice Code"/></th>
 	                                        <th><input style="width:100%" placeholder="Consumer Name"/></th>
-	                                        <th><input style="width:100%" placeholder="Bill No"/></th>
+	                                        <th><input style="width:100%" placeholder="Email"/></th>
 	                                        <th><input style="width:100%" placeholder="Amount"/></th>
 	                                        <th><input style="width:100%" placeholder="Status"/></th>
 	                                    </tr>
@@ -215,7 +215,7 @@
 	                                    <tr>
 	                                        <th>Invoice Code</th>
 	                                        <th>Name</th>
-	                                        <th>Bill No</th>
+	                                        <th>Email</th>
 	                                        <th>Amount</th>
 	                                        <th>Status</th>
 	                                    </tr>
@@ -230,8 +230,8 @@
 	                                    {{/isPaid}}
 	                                        <td>{{invoiceCode}}</td>
 	                                        <td>{{consumer.name}}</td>
-	                                        <td>{{billNo}}</td>
-	                                        <td>{{amount}}</td>
+	                                        <td>{{consumer.email}}</td>
+	                                        <td>{{payAmount}}</td>
 	                                        <td>{{status}}</td>
 	                                    </tr>
 	                                    <tr>
@@ -288,7 +288,7 @@
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Pay Amount</strong></td>
-								                                            <td>{{amount}}</td>
+								                                            <td>{{payAmount}}</td>
 								                                        </tr>
 								                                    </tbody>
 								                                </table>
@@ -550,7 +550,7 @@
 			    <div class="row">
 			        <div class="col-xs-12">
 			            <div class="text-center">
-			                <h3>Invoice for purchase #<span><input style="max-width:150px;" id="inv-billNo" maxlength="10" value="123"/></span></h3>
+			                <h3>Invoice for purchase</h3>
 			            </div>
 			            <hr>
 			            <div class="row">
@@ -582,12 +582,6 @@
 			                        </div>
 			                    </div>
 			                </div>
-			            </div>
-			            <hr>
-			            <div class="row">
-			            	<div class="col-lg-12">
-			            		<p>Hi <span id="con-name-copy">consumer</span>, this is an invoice for your order #<span id="inv-billNo-copy">123</span>. Please proceed to pay and send accross the successful payment receipt.</p>
-			            	</div>
 			            </div>
 			            <hr>
 			        </div>

@@ -1,10 +1,9 @@
 $(document).ready(function() {
-	$("#dashboardTab").click();
+	$("#dashboardTabLink").click();
 	$("#dismissServerRespAlertBtn").click(function() {
 		$("#serverRespAlert").hide();
 	});
 	$("#createInvoiceBtn").click(function() {
-		var invoice;
 		var name = $("#con-name").val();
 		var email = $("#con-email").val();
 		var mobile = $("#con-mobile").val();
@@ -35,7 +34,6 @@ $(document).ready(function() {
 		
 		var items = [item0, item1, item2];
 		
-		var billNo = $("#inv-billNo").val();
 		var invoiceCode = $("#inv-code").val();
 		var sendEmail = $("#inv-sendEmail").is(":checked");
 		var sendSms = $("#inv-sendSms").is(":checked");
@@ -46,7 +44,6 @@ $(document).ready(function() {
 		var expiresIn = $("#inv-expiresIn").val();
 		var invoice = {
 				"invoiceCode" : invoiceCode,
-				"billNo" : billNo,
 				"consumer" : consumer,
 				"items" : items,
 				"sendEmail" : sendEmail,

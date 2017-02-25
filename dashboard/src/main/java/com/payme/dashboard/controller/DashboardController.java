@@ -11,7 +11,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.domain.PmUser;
+import com.payme.common.data.domain.Pricing;
 import com.payme.common.data.repository.InvoiceRepository;
+import com.payme.common.data.repository.MerchantRepository;
+import com.payme.common.data.repository.PricingRepository;
 import com.payme.common.service.SecurityService;
 
 @RestController
@@ -22,6 +25,12 @@ public class DashboardController {
 
 	@Autowired
 	private InvoiceRepository invRepo;
+
+	@Autowired
+	private PricingRepository priceRepo;
+
+	@Autowired
+	private MerchantRepository merRepo;
 
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -61,6 +70,10 @@ public class DashboardController {
 		PmUser user = secSer.findLoggedInUser();
 		ModelAndView mv = new ModelAndView("html/blank");
 		mv.addObject("user", user);
+		List<Pricing> pricings = priceRepo.findAll();
+		mv.addObject("pricings", pricings);
+		List<Merchant> merchants = merRepo.findAll();
+		mv.addObject("merchants", merchants);
 		return mv;
 	}
 }
