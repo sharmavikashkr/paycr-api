@@ -1,10 +1,13 @@
 package com.payme.common.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.payme.common.bean.Payme;
 import com.payme.common.communicate.Email;
@@ -14,6 +17,8 @@ import com.payme.common.communicate.SmsEngine;
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.repository.MerchantRepository;
+
+import freemarker.template.Configuration;
 
 @Service
 public class NotifyService {
@@ -29,6 +34,9 @@ public class NotifyService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private Configuration fmConfiguration;
 
 	public void notify(Invoice invoice) {
 		String invoiceUrl = payme.getBaseUrl() + "/" + invoice.getInvoiceCode();
@@ -50,8 +58,24 @@ public class NotifyService {
 			email.setSubject("Payment for your order");
 			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
+			try {
+				email.setMessage(getEmail(invoice));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			emailEngine.send(email);
 		}
+	}
+
+	public String getEmail(Invoice invoice) throws Exception {
+		invoice.getItems();
+		Merchant merchant = merRepo.findOne(invoice.getMerchant());
+		Map<String, Object> templateProps = new HashMap<String, Object>();
+		templateProps.put("invoice", invoice);
+		templateProps.put("merchant", merchant);
+		templateProps.put("invoiceUrl", payme.getBaseUrl() + "/" + invoice.getInvoiceCode());
+		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
+				templateProps);
 	}
 
 }

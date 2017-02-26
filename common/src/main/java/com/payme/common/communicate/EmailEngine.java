@@ -50,7 +50,7 @@ public class EmailEngine {
 			dataMap.add("to", email.getTo().get(0));
 			dataMap.add("cc", email.getCc().get(0));
 			dataMap.add("subject", email.getSubject());
-			dataMap.add("text", email.getMessage());
+			dataMap.add("html", email.getMessage());
 			HttpEntity<Object> input = new HttpEntity<Object>(dataMap, header);
 			RestTemplate rest = RestTemplateUtil.getRestTemplate();
 			rest.setRequestFactory(rf);
