@@ -81,4 +81,71 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$("[id = enquireBtn]").click(function() {
+		var invoiceCode = $(this).attr('ref');
+		$.ajax({
+			url : '/invoice/enquire/'+invoiceCode,
+			type : 'GET',
+			async : false,
+			success : function(data) {
+				window.location.reload();
+			},
+			error : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html("Invoice not found");
+				$("#serverRespStatus").html("FAILURE!");
+			}
+		});
+	});
+	$("[id = expireBtn]").click(function() {
+		var invoiceCode = $(this).attr('ref');
+		$.ajax({
+			url : '/invoice/expire/'+invoiceCode,
+			type : 'GET',
+			async : false,
+			success : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").addClass('alert-success');
+				$("#serverRespMsg").html(data);
+				$("#serverRespStatus").html("SUCCESS!");
+			},
+			error : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html("Invoice not found");
+				$("#serverRespStatus").html("FAILURE!");
+			}
+		});
+	});
+	$("[id = notifyBtn]").click(function() {
+		var invoiceCode = $(this).attr('ref');
+		$.ajax({
+			url : '/invoice/notify/'+invoiceCode,
+			type : 'GET',
+			async : false,
+			success : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").addClass('alert-success');
+				$("#serverRespMsg").html(data);
+				$("#serverRespStatus").html("SUCCESS!");
+			},
+			error : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html("Invoice not found");
+				$("#serverRespStatus").html("FAILURE!");
+			}
+		});
+	});
 });

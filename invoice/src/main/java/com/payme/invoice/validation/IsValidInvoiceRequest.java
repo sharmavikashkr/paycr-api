@@ -35,6 +35,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 
 	@Override
 	public void validate(Invoice invoice) {
+		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		invoice.setMerchant(merchant.getId());
 		if (CommonUtil.isNull(invoice.getPayAmount())) {
@@ -44,7 +45,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			throw new PaymeException(Constants.FAILURE, "Amount should be greated than 0");
 		}
 		invoice.setOriginalAmount(invoice.getPayAmount());
-		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(new Date().getTime()));
+		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
 		String invoiceCode = invoice.getInvoiceCode();
 		if (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode))) {
@@ -57,7 +58,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		if (CommonUtil.isNull(invoice.getShipping())) {
 			invoice.setShipping(new BigDecimal(0));
 		}
-		invoice.setCreated(new Date());
+		invoice.setCreated(timeNow);
 		invoice.setExpiry(DateUtil.getExpiry(invoice.getExpiresIn()));
 		invoice.setStatus("Unpaid");
 	}

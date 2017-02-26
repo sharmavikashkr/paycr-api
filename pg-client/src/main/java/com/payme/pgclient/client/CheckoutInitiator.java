@@ -9,7 +9,7 @@ import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.repository.MerchantRepository;
 
 @Service
-public class SSLCheckoutInitiator {
+public class CheckoutInitiator {
 
 	@Autowired
 	private MerchantRepository merRepo;

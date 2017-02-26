@@ -15,5 +15,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
 	public List<Invoice> findByMerchant(Integer merchant);
 
+	public Invoice findByInvoiceCodeAndMerchant(String invoiceCode, Integer merchant);
+
 	public List<Invoice> findByMerchantOrderByIdDesc(Integer merchant, Pageable page);
 }

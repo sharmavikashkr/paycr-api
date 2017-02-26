@@ -10,13 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.repository.InvoiceRepository;
 import com.payme.common.util.CommonUtil;
-import com.payme.pgclient.client.SSLCheckoutInitiator;
+import com.payme.pgclient.client.CheckoutInitiator;
 
 @RestController
 public class PaymentController {
 
 	@Autowired
-	private SSLCheckoutInitiator checkoutService;
+	private CheckoutInitiator checkoutService;
 
 	@Autowired
 	private InvoiceRepository invRepo;
