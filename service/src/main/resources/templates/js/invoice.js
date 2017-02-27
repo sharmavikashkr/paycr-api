@@ -119,7 +119,7 @@ $(document).ready(function() {
 				$("#serverRespAlert").removeClass('alert-danger');
 				$("#serverRespAlert").removeClass('alert-success');
 				$("#serverRespAlert").addClass('alert-danger');
-				$("#serverRespMsg").html("Invoice not found");
+				$("#serverRespMsg").html(data.responseText);
 				$("#serverRespStatus").html("FAILURE!");
 			}
 		});
@@ -143,7 +143,7 @@ $(document).ready(function() {
 				$("#serverRespAlert").removeClass('alert-danger');
 				$("#serverRespAlert").removeClass('alert-success');
 				$("#serverRespAlert").addClass('alert-danger');
-				$("#serverRespMsg").html("Invoice not found");
+				$("#serverRespMsg").html(data.responseText);
 				$("#serverRespStatus").html("FAILURE!");
 			}
 		});
