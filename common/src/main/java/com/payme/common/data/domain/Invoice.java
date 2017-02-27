@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -33,10 +34,19 @@ public class Invoice implements Serializable {
 	private Date created;
 	private String invoiceCode;
 	private Integer merchant;
+
+	@Column(precision = 10, scale = 2)
 	private BigDecimal originalAmount;
+
+	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
+
+	@Column(precision = 10, scale = 2)
 	private BigDecimal shipping;
+
+	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
+
 	private boolean sendEmail;
 	private boolean sendSms;
 	private Date expiry;
