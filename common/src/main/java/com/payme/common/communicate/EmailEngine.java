@@ -53,7 +53,7 @@ public class EmailEngine {
 			MultiValueMap<String, String> dataMap = new LinkedMultiValueMap<String, String>();
 			dataMap.add("from", company.getName() + " <" + email.getFrom() + ">");
 			dataMap.add("to", email.getTo().get(0));
-			dataMap.add("cc", email.getCc().get(0));
+			//dataMap.add("cc", email.getCc().get(0));
 			dataMap.add("subject", email.getSubject());
 			dataMap.add("html", email.getMessage());
 			HttpEntity<Object> input = new HttpEntity<Object>(dataMap, header);
