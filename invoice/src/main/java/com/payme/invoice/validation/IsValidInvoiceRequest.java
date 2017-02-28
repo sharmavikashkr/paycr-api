@@ -59,7 +59,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoice.setShipping(new BigDecimal(0));
 		}
 		invoice.setCreated(timeNow);
-		invoice.setExpiry(DateUtil.getExpiry(invoice.getExpiresIn()));
+		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		invoice.setStatus("Unpaid");
 	}
 

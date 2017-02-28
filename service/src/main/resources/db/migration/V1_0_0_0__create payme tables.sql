@@ -61,6 +61,29 @@ CREATE TABLE if not exists pm_merchatnt_user(
 	user_id int NOT NULL
 );
 
+CREATE TABLE if not exists pm_pricing (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	name varchar(50) NOT NULL,
+	description varchar(255) NOT NULL,
+	rate float NOT NULL,
+	invoice_limit int NOT NULL,
+    start_amount float NOT NULL,
+    end_amount float NOT NULL,
+    duration int NOT NULL,
+    active boolean NOT NULL
+);
+
+CREATE TABLE if not exists pm_merchant_pricing (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	start_date timestamp NOT NULL,
+	end_date timestamp NOT NULL,
+	status varchar(20) NOT NULL,
+    merchant_id int REFERENCES pm_merchant,
+    pricing_id int REFERENCES pm_pricing
+);
+
 CREATE TABLE if not exists pm_payment (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -83,6 +106,7 @@ CREATE TABLE if not exists pm_invoice(
 	currency varchar(10) NOT NULL,
 	expiry timestamp NOT NULL,
 	consumer_id int REFERENCES pm_consumer,
+	merchant_pricing_id int REFERENCES pm_merchant_pricing,
 	payment_id int REFERENCES pm_payment,
 	status varchar(20) NOT NULL
 );
@@ -96,28 +120,12 @@ CREATE TABLE if not exists pm_item (
     invoice_id int REFERENCES pm_invoice
 );
 
-CREATE TABLE if not exists pm_pricing (
+CREATE TABLE if not exists pm_reset_password (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
-	name varchar(50) NOT NULL,
-	description varchar(255) NOT NULL,
-	rate float NOT NULL,
-	invoice_limit int NOT NULL,
-    start_amount float NOT NULL,
-    end_amount float NOT NULL,
-    duration int NOT NULL,
-    active boolean NOT NULL
-);
-
-CREATE TABLE if not exists pm_merchant_pricing (
-	id SERIAL PRIMARY KEY NOT NULL,
-	created timestamp NOT NULL,
-	start_date timestamp NOT NULL,
-	end_date timestamp NOT NULL,
-	status varchar(20) NOT NULL,
-	no_of_invoice int NOT NULL,
-    merchant_id int REFERENCES pm_merchant,
-    pricing_id int REFERENCES pm_pricing
+	reset_code varchar(50) NOT NULL,
+	email varchar(50) NOT NULL,
+	status varchar(20) NOT NULL
 );
 
 insert into pm_pricing (created,name,description,rate,invoice_limit,start_amount,end_amount,duration,active) values(now(),'FREE TRIAL','2 Momths free trial',0.00,100,1.00,10000.00,90,true);

@@ -27,9 +27,6 @@ public class IsValidMerchantPricing implements RequestValidator<Invoice> {
 	public void validate(Invoice invoice) {
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
 		List<MerchantPricing> merPricings = merchant.getPricings();
-		if (merPricings.isEmpty()) {
-			throw new PaymeException(Constants.FAILURE, "No active Pricing plan found");
-		}
 		MerchantPricing selectedMerPricing = null;
 		boolean amountNotAllowed = true;
 		boolean noActivePlan = true;
@@ -42,7 +39,7 @@ public class IsValidMerchantPricing implements RequestValidator<Invoice> {
 				Pricing pricing = merPricing.getPricing();
 				if (invoice.getPayAmount().compareTo(pricing.getStartAmount()) > 0
 						&& invoice.getPayAmount().compareTo(pricing.getEndAmount()) <= 0) {
-					if (merPricing.getNoOfInvoice() < pricing.getInvoiceLimit()) {
+					if (merPricing.getInvoices().size() < pricing.getInvoiceLimit()) {
 						amountNotAllowed = false;
 						selectedMerPricing = merPricing;
 						break;
@@ -56,8 +53,7 @@ public class IsValidMerchantPricing implements RequestValidator<Invoice> {
 		if (amountNotAllowed) {
 			throw new PaymeException(Constants.FAILURE, "No active pricing plan for this amount found");
 		}
-		selectedMerPricing.setNoOfInvoice(selectedMerPricing.getNoOfInvoice() + 1);
+		invoice.setMerchantPricing(selectedMerPricing);
 		merRepo.save(merchant);
 	}
-
 }

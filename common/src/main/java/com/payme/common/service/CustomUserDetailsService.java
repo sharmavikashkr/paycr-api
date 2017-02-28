@@ -17,14 +17,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private UserRepository userRepo;
 
 	@Autowired
-	private UserService userService;
+	private UserRoleService userRoleService;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		PmUser user = userRepo.findByEmail(email);
 		if (user != null) {
 			String password = user.getPassword();
-			String[] roles = userService.getUserRoles(user);
+			String[] roles = userRoleService.getUserRoles(user);
 			CustomUserDetails customUserDetails = new CustomUserDetails(email, password, roles);
 			return customUserDetails;
 		}

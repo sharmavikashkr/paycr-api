@@ -1,6 +1,7 @@
 package com.payme.common.data.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,7 +27,6 @@ public class MerchantPricing {
 	private Date created;
 	private Date startDate;
 	private Date endDate;
-	private int noOfInvoice;
 
 	@Enumerated(EnumType.STRING)
 	private PricingStatus status;
@@ -35,6 +36,9 @@ public class MerchantPricing {
 
 	@OneToOne
 	private Pricing pricing;
+
+	@OneToMany(mappedBy = "merchantPricing")
+	private List<Invoice> invoices;
 
 	public Integer getId() {
 		return id;
@@ -88,12 +92,12 @@ public class MerchantPricing {
 		this.endDate = endDate;
 	}
 
-	public int getNoOfInvoice() {
-		return noOfInvoice;
+	public List<Invoice> getInvoices() {
+		return invoices;
 	}
 
-	public void setNoOfInvoice(int noOfInvoice) {
-		this.noOfInvoice = noOfInvoice;
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
 	}
 
 }

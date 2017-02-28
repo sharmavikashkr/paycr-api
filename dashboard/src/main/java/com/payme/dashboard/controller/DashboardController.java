@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,6 +43,23 @@ public class DashboardController {
 	@RequestMapping("/login")
 	public ModelAndView login() {
 		return new ModelAndView("html/login");
+	}
+
+	@RequestMapping("/forgotPassword")
+	public ModelAndView forgotPasssword(@RequestParam(value = "error", required = false) String code) {
+		ModelAndView mv = new ModelAndView("html/forgot-password");
+		String message = "Enter Email to send reset password link";
+		boolean isError = false;
+		if ("1".equals(code)) {
+			message = "User not registered";
+			isError = true;
+		} else if ("2".equals(code)) {
+			message = "Reset already requested 3 times in 24 hours";
+			isError = true;
+		}
+		mv.addObject("message", message);
+		mv.addObject("isError", isError);
+		return mv;
 	}
 
 	@Secured({ "ROLE_MERCHANT" })

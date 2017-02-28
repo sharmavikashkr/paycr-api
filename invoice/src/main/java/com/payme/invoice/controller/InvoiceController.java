@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.payme.common.bean.Payme;
+import com.payme.common.bean.Company;
 import com.payme.common.data.domain.Invoice;
 import com.payme.common.data.domain.Merchant;
 import com.payme.common.data.repository.InvoiceRepository;
@@ -30,7 +30,7 @@ public class InvoiceController {
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private Payme payme;
+	private Company company;
 
 	@Autowired
 	private NotifyService notSer;
@@ -58,7 +58,7 @@ public class InvoiceController {
 		}
 		invRepo.save(invoice);
 		notifyService.notify(invoice);
-		return "Invoice Generated : " + payme.getBaseUrl() + "/" + invoice.getInvoiceCode();
+		return "Invoice Generated : " + company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 	}
 
 	@Secured({ "ROLE_MERCHANT" })

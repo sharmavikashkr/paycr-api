@@ -36,7 +36,7 @@ public class SecurityService {
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-	private UserService userService;
+	private UserRoleService userRoleService;
 
 	public PmUser findLoggedInUser() {
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,7 +48,7 @@ public class SecurityService {
 
 	public boolean isMerchantUser() {
 		PmUser user = findLoggedInUser();
-		String[] roles = userService.getUserRoles(user);
+		String[] roles = userRoleService.getUserRoles(user);
 		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
 			return true;
 		}
@@ -57,7 +57,7 @@ public class SecurityService {
 
 	public Merchant getMerchantForLoggedInUser() {
 		PmUser user = findLoggedInUser();
-		String[] roles = userService.getUserRoles(user);
+		String[] roles = userRoleService.getUserRoles(user);
 		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
 			return merRepo.findOne(merUser.getMerchantId());

@@ -10,4 +10,6 @@ public interface MerchantRepository extends JpaRepository<Merchant, Integer> {
 
 	public Merchant findByAccessKey(String accessKey);
 
+	public Merchant findByEmail(String email);
+
 }

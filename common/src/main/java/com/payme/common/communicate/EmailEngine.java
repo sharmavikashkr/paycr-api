@@ -7,6 +7,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.payme.common.bean.Company;
 import com.payme.common.bean.RestTemplateUtil;
 
 @Component
@@ -35,6 +37,9 @@ public class EmailEngine {
 	@Value("${email.mailgun.domain}")
 	private String mailgunDomain;
 
+	@Autowired
+	private Company company;
+
 	@SuppressWarnings("deprecation")
 	public boolean send(Email email) {
 		try {
@@ -46,7 +51,7 @@ public class EmailEngine {
 			HttpHeaders header = new HttpHeaders();
 			header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> dataMap = new LinkedMultiValueMap<String, String>();
-			dataMap.add("from", "Paykr <" + email.getFrom() + ">");
+			dataMap.add("from", company.getName() + " <" + email.getFrom() + ">");
 			dataMap.add("to", email.getTo().get(0));
 			dataMap.add("cc", email.getCc().get(0));
 			dataMap.add("subject", email.getSubject());

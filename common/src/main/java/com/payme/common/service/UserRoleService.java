@@ -8,7 +8,7 @@ import com.payme.common.data.domain.PmUser;
 import com.payme.common.data.domain.UserRole;
 
 @Service
-public class UserService {
+public class UserRoleService {
 
 	public String[] getUserRoles(PmUser user) {
 		List<UserRole> userRoles = user.getUserRoles();

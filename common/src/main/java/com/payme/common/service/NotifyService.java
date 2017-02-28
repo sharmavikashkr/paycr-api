@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import com.payme.common.bean.Payme;
+import com.payme.common.bean.Company;
 import com.payme.common.communicate.Email;
 import com.payme.common.communicate.EmailEngine;
 import com.payme.common.communicate.Sms;
@@ -30,7 +30,7 @@ public class NotifyService {
 	private EmailEngine emailEngine;
 
 	@Autowired
-	private Payme payme;
+	private Company company;
 
 	@Autowired
 	private MerchantRepository merRepo;
@@ -39,7 +39,7 @@ public class NotifyService {
 	private Configuration fmConfiguration;
 
 	public void notify(Invoice invoice) {
-		String invoiceUrl = payme.getBaseUrl() + "/" + invoice.getInvoiceCode();
+		String invoiceUrl = company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
 		if (invoice.isSendSms()) {
 			Sms sms = new Sms();
@@ -73,7 +73,7 @@ public class NotifyService {
 		Map<String, Object> templateProps = new HashMap<String, Object>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("merchant", merchant);
-		templateProps.put("invoiceUrl", payme.getBaseUrl() + "/" + invoice.getInvoiceCode());
+		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
 				templateProps);
 	}

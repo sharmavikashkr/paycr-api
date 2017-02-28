@@ -25,12 +25,20 @@ public class DateUtil {
 		return sdf.format(date);
 	}
 
-	public static Date getExpiry(int validityDays) {
+	public static Date getExpiry(Date date, int validityDays) {
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
 		calendar.add(Calendar.DATE, validityDays);
 		calendar.set(Calendar.HOUR_OF_DAY, 23);
 		calendar.set(Calendar.MINUTE, 59);
 		calendar.set(Calendar.SECOND, 59);
+		return calendar.getTime();
+	}
+
+	public static Date addDays(Date date, int days) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, days);
 		return calendar.getTime();
 	}
 

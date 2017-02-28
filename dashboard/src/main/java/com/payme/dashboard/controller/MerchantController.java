@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +29,8 @@ import com.payme.common.type.Role;
 import com.payme.common.util.DateUtil;
 import com.payme.common.util.HmacSignerUtil;
 import com.payme.common.util.RandomIdGenerator;
+import com.payme.dashboard.service.UserService;
+import com.payme.dashboard.validation.MerchantValidator;
 
 @RestController
 @RequestMapping("merchant")
@@ -43,16 +47,28 @@ public class MerchantController {
 
 	@Autowired
 	private BCryptPasswordEncoder bcPassEncode;
-	
+
 	@Autowired
 	private PricingRepository priceRepo;
 
 	@Autowired
 	private HmacSignerUtil hmacSigner;
 
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private MerchantValidator merValidator;
+
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping("new")
-	public void newMerchant(@RequestBody Merchant merchant) {
+	public String newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
+		try {
+			merValidator.validate(merchant);
+		} catch (Exception ex) {
+			response.setStatus(500);
+			return ex.getMessage();
+		}
 		Date timeNow = new Date();
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
 				String.valueOf(timeNow.getTime()));
@@ -62,21 +78,20 @@ public class MerchantController {
 		merchant.setSecretKey(secretKey);
 		merchant.setCreated(timeNow);
 		merchant.setActive(true);
-		
+
 		Pricing pricing = priceRepo.findOne(merchant.getPricingId());
 
 		List<MerchantPricing> merPricings = new ArrayList<MerchantPricing>();
 		MerchantPricing merPricing = new MerchantPricing();
 		merPricing.setCreated(timeNow);
 		merPricing.setStartDate(timeNow);
-		merPricing.setEndDate(DateUtil.getExpiry(pricing.getDuration()));
+		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
 		merPricing.setPricing(pricing);
 		merPricing.setStatus(PricingStatus.ACTIVE);
 		merPricing.setMerchant(merchant);
-		merPricing.setNoOfInvoice(0);
 		merPricings.add(merPricing);
 		merchant.setPricings(merPricings);
-		
+
 		merRepo.save(merchant);
 
 		PmUser user = new PmUser();
@@ -98,6 +113,8 @@ public class MerchantController {
 		merUser.setMerchantId(merchant.getId());
 		merUser.setUserId(user.getId());
 		merUserRepo.save(merUser);
+		userService.sendResetLink(user);
+		return "Merchant Created";
 	}
 
 }

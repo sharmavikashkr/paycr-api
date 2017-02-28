@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -59,6 +60,9 @@ public class Invoice implements Serializable {
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<Item> items;
+
+	@ManyToOne
+	private MerchantPricing merchantPricing;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Payment payment;
@@ -209,5 +213,13 @@ public class Invoice implements Serializable {
 
 	public void setPayAmount(BigDecimal payAmount) {
 		this.payAmount = payAmount;
+	}
+
+	public MerchantPricing getMerchantPricing() {
+		return merchantPricing;
+	}
+
+	public void setMerchantPricing(MerchantPricing merchantPricing) {
+		this.merchantPricing = merchantPricing;
 	}
 }
