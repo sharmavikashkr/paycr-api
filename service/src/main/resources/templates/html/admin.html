@@ -274,6 +274,66 @@
 	                <!-- /.col-lg-12 -->
 	            </div>
         </div>
+        <div id="pricingTab" class="tab-pane fade active">
+	        	<br>
+	            <div class="row">
+	                <div class="col-lg-2" style="float:right;">
+	                    <div class="row">
+	                    	<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createPricing"><i class="fa fa-plus"></i></button>
+	                    </div>
+	                </div>
+	            </div>
+	            <br>
+	            <!-- /.row -->
+	            <div class="row">
+	                <div class="col-lg-12">
+	                    <div class="panel">
+	                        <div class="panel-body col-lg-12">
+	                            <table style="width:100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
+	                                <thead>
+	                                    <tr>
+	                                        <th><input style="width:100%" placeholder="Name"/></th>
+	                                        <th><input style="width:100%" placeholder="Duration"/></th>
+	                                        <th><input style="width:100%" placeholder="Rate"/></th>
+	                                        <th><input style="width:100%" placeholder="Invoice Limit"/></th>
+	                                        <th><input style="width:100%" placeholder="Start Amount"/></th>
+	                                        <th><input style="width:100%" placeholder="End Amount"/></th>
+	                                        <th><input style="width:100%" placeholder="Active"/></th>
+	                                    </tr>
+	                                </thead>
+	                                <thead>
+	                                    <tr>
+	                                        <th>Name</th>
+	                                        <th>Duration</th>
+	                                        <th>Rate</th>
+	                                        <th>Invoice Limit</th>
+	                                        <th>Start Amount</th>
+	                                        <th>End Amount</th>
+	                                        <th>Active</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody id="invoiceGroup">
+	                                	{{#pricings}}
+	                                    <tr>
+	                                        <td>{{name}}</td>
+	                                        <td>{{duration}}</td>
+	                                        <td>{{rate}}</td>
+	                                        <td>{{invoiceLimit}}</td>
+	                                        <td>{{startAmount}}</td>
+	                                        <td>{{endAmount}}</td>
+	                                        <td>{{active}}</td>
+	                                    </tr>
+								        {{/pricings}}
+	                                </tbody>
+	                            </table>
+	                        </div>
+	                        <!-- /.panel-body -->
+	                    </div>
+	                    <!-- /.panel -->
+	                </div>
+	                <!-- /.col-lg-12 -->
+	            </div>
+        </div>
     </div>
     <div id="createMerchant" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
@@ -346,6 +406,94 @@
 	      </div>
 	      <div class="modal-footer">
 	      	<button type="button" class="btn btn-info" id="createMerchantBtn">Create</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div id="createPricing" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div id="newInvoice" class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Create New Pricing</h4>
+	      </div>
+	      <div class="modal-body" style="padding:20px;">
+	      	<form>
+			    <div class="row">
+			        <div class="col-md-12">
+			            <div class="panel panel-default">
+			                <div class="panel-body">
+			                    <div class="table-responsive">
+			                        <table class="table table-bordered">
+			                            <tbody>
+			                            	<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-name">Name</label>
+		                        					<input class="form-control" id="pri-name" placeholder="Pricing Name"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-desc">Description</label>
+		                        					<input class="form-control" id="pri-desc" placeholder="Pricing Description"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-limit">Invoice Limit</label>
+		                        					<input class="form-control" id="pri-limit" placeholder="Invoice limit"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-start">Start Amount</label>
+		                        					<input class="form-control" id="pri-start" placeholder="Start Amount"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-end">End Amount</label>
+		                        					<input class="form-control" id="pri-end" placeholder="End Amount"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-dura">Duration</label>
+		                        					<input class="form-control" id="pri-dura" placeholder="Duration"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="pri-rate">Rate</label>
+		                        					<input class="form-control" id="pri-rate" placeholder="Rate"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+			                            </tbody>
+			                        </table>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+	      	</form>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-info" id="createPricingBtn">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>

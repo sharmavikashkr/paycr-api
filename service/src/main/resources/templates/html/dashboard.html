@@ -245,21 +245,11 @@
 								                                    <tbody>
 								                                        <tr>
 								                                            <td><strong>Send Email</strong></td>
-								                                            {{#sendEmail}}
-								                                            <td>true</td>
-								                                            {{/sendEmail}}
-								                                            {{^sendEmail}}
-								                                            <td>false</td>
-								                                            {{/sendEmail}}
+								                                            <td>{{sendEmail}}</td>
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Send Sms</strong></td>
-								                                            {{#sendSms}}
-								                                            <td>true</td>
-								                                            {{/sendSms}}
-								                                            {{^sendSms}}
-								                                            <td>false</td>
-								                                            {{/sendSms}}
+								                                            <td>{{sendSms}}</td>
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Created</strong></td>

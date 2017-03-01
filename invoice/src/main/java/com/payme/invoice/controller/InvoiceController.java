@@ -52,11 +52,11 @@ public class InvoiceController {
 	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
 			invValidator.validate(invoice);
+			invRepo.save(invoice);
 		} catch (Exception ex) {
 			response.setStatus(500);
 			return ex.getMessage();
 		}
-		invRepo.save(invoice);
 		notifyService.notify(invoice);
 		return "Invoice Generated : " + company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 	}

@@ -89,7 +89,7 @@ public class DashboardController {
 	@RequestMapping("/admin")
 	public ModelAndView admin() {
 		PmUser user = secSer.findLoggedInUser();
-		ModelAndView mv = new ModelAndView("html/blank");
+		ModelAndView mv = new ModelAndView("html/admin");
 		mv.addObject("user", user);
 		List<Pricing> pricings = priceRepo.findAll();
 		mv.addObject("pricings", pricings);
