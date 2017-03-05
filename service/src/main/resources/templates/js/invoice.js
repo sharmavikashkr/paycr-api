@@ -12,27 +12,32 @@ $(document).ready(function() {
 				"email" : email,
 				"mobile" : mobile
 		};
-		
-		var item0 = {
-			"name" : $("#item-name0").val(),
-			"rate" : $("#item-rate0").val(),
-			"quantity" : $("#item-quantity0").val(),
-			"price" : $("#item-price0").val()
-		};
-		var item1 = {
-			"name" : $("#item-name1").val(),
-			"rate" : $("#item-rate1").val(),
-			"quantity" : $("#item-quantity1").val(),
-			"price" : $("#item-price1").val()
-		};
-		var item2 = {
-			"name" : $("#item-name2").val(),
-			"rate" : $("#item-rate2").val(),
-			"quantity" : $("#item-quantity2").val(),
-			"price" : $("#item-price2").val()
-		};
-		
-		var items = [item0, item1, item2];
+		var items = [];
+		$("[id = itemRow]").each(function() {
+			var name = $(this).find("#item-name").val();
+			var rate = $(this).find("#item-rate").val();
+			var quantity = $(this).find("#item-quantity").val();
+			var price = $(this).find("#item-price").val();
+			var item = {
+				"name" : name,
+				"rate" : rate,
+				"quantity" : quantity,
+				"price" : price
+			}
+			items.push(item);
+		});
+		var customParams = [];
+		$("[name = inv-customParam]").each(function() {
+			var name = $(this).attr('ref');
+			var value = $(this).val();
+			var provider = $(this).attr('provider');
+			var customParam = {
+				"paramName" : name,
+				"paramValue" : value,
+				"provider" : provider
+			}
+			customParams.push(customParam);
+		});
 		
 		var invoiceCode = $("#inv-code").val();
 		var sendEmail = $("#inv-sendEmail").is(":checked");
@@ -52,7 +57,8 @@ $(document).ready(function() {
 				"discount" : discount,
 				"payAmount" : amount,
 				"currency" : currency,
-				"expiresIn" : expiresIn
+				"expiresIn" : expiresIn,
+				"customParams" : customParams
 		}
 		
 		$.ajax({
@@ -62,13 +68,7 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			async : false,
 			success : function(data) {
-				$("#createInvoice").modal('hide')
-				$("#serverRespAlert").show();
-				$("#serverRespAlert").removeClass('alert-success');
-				$("#serverRespAlert").removeClass('alert-danger');
-				$("#serverRespAlert").addClass('alert-success');
-				$("#serverRespMsg").html(data);
-				$("#serverRespStatus").html("SUCCESS!");
+				window.location.reload();
 			},
 			error : function(data) {
 				$("#createInvoice").modal('hide')
@@ -147,5 +147,16 @@ $(document).ready(function() {
 				$("#serverRespStatus").html("FAILURE!");
 			}
 		});
+	});
+	$("[id = itemBody]").on("click", "#addTr", function() {
+		if($("[id = itemRow]").length < 5) {
+			var $newTr = $(this).parent().parent().parent().clone();
+			$newTr.insertAfter($(this).parent().parent().parent());
+		}
+	});
+	$("[id = itemBody]").on("click", "#delTr", function() {
+		if($("[id = itemRow]").length > 1) {
+			$(this).parent().parent().parent().remove();
+		}
 	});
 });

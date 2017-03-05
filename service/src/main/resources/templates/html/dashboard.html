@@ -331,251 +331,107 @@
 	            </div>
 	        </div>
 	        <div id="contactsTab" class="tab-pane fade">
-	            <div class="row">
-	                <div class="col-lg-12">
-	                    <h1 class="page-header">Forms</h1>
-	                </div>
-	                <!-- /.col-lg-12 -->
-	            </div>
-	            <!-- /.row -->
-	            <div class="row">
-	                <div class="col-lg-12">
+	        </div>
+	        <div id="invoiceSettingTab" class="tab-pane fade">
+	        	<br>
+	        	<div class="row">
+	        		<div class="col-xs-12 col-md-4 col-lg-3">
 	                    <div class="panel panel-default">
-	                        <div class="panel-heading">
-	                            Basic Form Elements
-	                        </div>
+	                        <div class="panel-heading">Notify Preference</div>
 	                        <div class="panel-body">
-	                            <div class="row">
-	                                <div class="col-lg-6">
-	                                    <form role="form">
-	                                        <div class="form-group">
-	                                            <label>Text Input</label>
-	                                            <input class="form-control">
-	                                            <p class="help-block">Example block-level help text here.</p>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Text Input with Placeholder</label>
-	                                            <input class="form-control" placeholder="Enter text">
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Static Control</label>
-	                                            <p class="form-control-static">email@example.com</p>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>File input</label>
-	                                            <input type="file">
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Text area</label>
-	                                            <textarea class="form-control" rows="3"></textarea>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Checkboxes</label>
-	                                            <div class="checkbox">
-	                                                <label>
-	                                                    <input type="checkbox" value="">Checkbox 1
-	                                                </label>
-	                                            </div>
-	                                            <div class="checkbox">
-	                                                <label>
-	                                                    <input type="checkbox" value="">Checkbox 2
-	                                                </label>
-	                                            </div>
-	                                            <div class="checkbox">
-	                                                <label>
-	                                                    <input type="checkbox" value="">Checkbox 3
-	                                                </label>
-	                                            </div>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Inline Checkboxes</label>
-	                                            <label class="checkbox-inline">
-	                                                <input type="checkbox">1
-	                                            </label>
-	                                            <label class="checkbox-inline">
-	                                                <input type="checkbox">2
-	                                            </label>
-	                                            <label class="checkbox-inline">
-	                                                <input type="checkbox">3
-	                                            </label>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Radio Buttons</label>
-	                                            <div class="radio">
-	                                                <label>
-	                                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Radio 1
-	                                                </label>
-	                                            </div>
-	                                            <div class="radio">
-	                                                <label>
-	                                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio 2
-	                                                </label>
-	                                            </div>
-	                                            <div class="radio">
-	                                                <label>
-	                                                    <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">Radio 3
-	                                                </label>
-	                                            </div>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Inline Radio Buttons</label>
-	                                            <label class="radio-inline">
-	                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
-	                                            </label>
-	                                            <label class="radio-inline">
-	                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
-	                                            </label>
-	                                            <label class="radio-inline">
-	                                                <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
-	                                            </label>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Selects</label>
-	                                            <select class="form-control">
-	                                                <option>1</option>
-	                                                <option>2</option>
-	                                                <option>3</option>
-	                                                <option>4</option>
-	                                                <option>5</option>
-	                                            </select>
-	                                        </div>
-	                                        <div class="form-group">
-	                                            <label>Multiple Selects</label>
-	                                            <select multiple class="form-control">
-	                                                <option>1</option>
-	                                                <option>2</option>
-	                                                <option>3</option>
-	                                                <option>4</option>
-	                                                <option>5</option>
-	                                            </select>
-	                                        </div>
-	                                        <button type="submit" class="btn btn-default">Submit Button</button>
-	                                        <button type="reset" class="btn btn-default">Reset Button</button>
-	                                    </form>
-	                                </div>
-	                                <!-- /.col-lg-6 (nested) -->
-	                                <div class="col-lg-6">
-	                                    <h1>Disabled Form States</h1>
-	                                    <form role="form">
-	                                        <fieldset disabled>
-	                                            <div class="form-group">
-	                                                <label for="disabledSelect">Disabled input</label>
-	                                                <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
-	                                            </div>
-	                                            <div class="form-group">
-	                                                <label for="disabledSelect">Disabled select menu</label>
-	                                                <select id="disabledSelect" class="form-control">
-	                                                    <option>Disabled select</option>
-	                                                </select>
-	                                            </div>
-	                                            <div class="checkbox">
-	                                                <label>
-	                                                    <input type="checkbox">Disabled Checkbox
-	                                                </label>
-	                                            </div>
-	                                            <button type="submit" class="btn btn-primary">Disabled Button</button>
-	                                        </fieldset>
-	                                    </form>
-	                                    <h1>Form Validation States</h1>
-	                                    <form role="form">
-	                                        <div class="form-group has-success">
-	                                            <label class="control-label" for="inputSuccess">Input with success</label>
-	                                            <input type="text" class="form-control" id="inputSuccess">
-	                                        </div>
-	                                        <div class="form-group has-warning">
-	                                            <label class="control-label" for="inputWarning">Input with warning</label>
-	                                            <input type="text" class="form-control" id="inputWarning">
-	                                        </div>
-	                                        <div class="form-group has-error">
-	                                            <label class="control-label" for="inputError">Input with error</label>
-	                                            <input type="text" class="form-control" id="inputError">
-	                                        </div>
-	                                    </form>
-	                                    <h1>Input Groups</h1>
-	                                    <form role="form">
-	                                        <div class="form-group input-group">
-	                                            <span class="input-group-addon">@</span>
-	                                            <input type="text" class="form-control" placeholder="Username">
-	                                        </div>
-	                                        <div class="form-group input-group">
-	                                            <input type="text" class="form-control">
-	                                            <span class="input-group-addon">.00</span>
-	                                        </div>
-	                                        <div class="form-group input-group">
-	                                            <span class="input-group-addon"><i class="fa fa-eur"></i>
-	                                            </span>
-	                                            <input type="text" class="form-control" placeholder="Font Awesome Icon">
-	                                        </div>
-	                                        <div class="form-group input-group">
-	                                            <span class="input-group-addon">$</span>
-	                                            <input type="text" class="form-control">
-	                                            <span class="input-group-addon">.00</span>
-	                                        </div>
-	                                        <div class="form-group input-group">
-	                                            <input type="text" class="form-control">
-	                                            <span class="input-group-btn">
-	                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
-	                                                </button>
-	                                            </span>
-	                                        </div>
-	                                    </form>
-	                                </div>
-	                            </div>
+	                            <input type="checkbox" id="set-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}} value="">&nbsp;<strong>Send Email</strong></input><br>
+	                            <input type="checkbox" id="set-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}} value="">&nbsp;<strong>Send Sms</strong></input><br>
 	                        </div>
 	                    </div>
 	                </div>
-	            </div>
+	        	</div>
+	        	<div class="row panel panel-body">
+	        		<button id="updateMerchantSettingBtn" class="btn btn-info">Save</button>
+	        	</div>
+	        	<hr>
+	        	<div class="row">
+	        		<div class="col-xs-12 col-md-8 col-lg-6">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">Custom Params</div>
+	                        <div class="panel-body">
+		                        <div class="panel col-lg-2" style="float:right;">
+				                    <button type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#createCustomParam"><i class="fa fa-plus"></i></button>
+				                </div>
+	                        	<table style="width:100%; border-collapse:collapse; font-size:16px;" class="table table-striped table-bordered table-hover">
+	                                <thead>
+	                                    <tr>
+	                                        <th>Param Name</th>
+	                                        <th>Provider</th>
+	                                        <th>Action</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+	                                	{{#merchant.customParams}}
+	                                	<tr>
+	                                        <td>{{paramName}}</td>
+	                                        <td>{{provider}}</td>
+	                                        <td><button id="deleteCustomParamBtn" ref="{{id}}" type="button" class="btn btn-danger btn-circle btn-md"><i class="fa fa-minus"></i></button></td>
+	                                    </tr>
+	                                    {{/merchant.customParams}}
+	                                </tbody>
+	                            </table>
+	                        </div>
+	                    </div>
+	                </div>
+	        	</div>
 	        </div>
 		</div>
     </div>
     <div id="createInvoice" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
-	    <div id="newInvoice" class="modal-content" style="min-width:150%; margin-left:-25%;">
+	    <div id="newInvoice" class="modal-content" style="min-width:160%; margin-left:-30%;">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">{{merchant.name}}</h4>
+	        <h4 class="modal-title">Invoice for purchase</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
 	      	<form>
 			    <div class="row">
-			        <div class="col-xs-12">
-			            <div class="text-center">
-			                <h3>Invoice for purchase</h3>
-			            </div>
-			            <hr>
-			            <div class="row">
-			                <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
-			                    <div class="panel panel-default height">
-			                        <div class="panel-heading">Consumer Details</div>
-			                        <div class="panel-body">
-			                            <strong>Name:</strong>&nbsp;<input id="con-name" placeholder="Consumer Name" value=""/><br>
-			                            <strong>Email:</strong>&nbsp;<input id="con-email" placeholder="Consumer Email" value=""/><br>
-			                            <strong>Mobile:</strong>&nbsp;<input id="con-mobile" placeholder="Consumer Mobile" value=""/><br>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-xs-12 col-md-4 col-lg-3">
-			                    <div class="panel panel-default height">
-			                        <div class="panel-heading">Notify Preference</div>
-			                        <div class="panel-body">
-			                            <input type="checkbox" id="inv-sendEmail" value="">&nbsp;<strong>Send Email</strong></input><br>
-			                            <input type="checkbox" id="inv-sendSms" value="">&nbsp;<strong>Send Sms</strong></input><br>
-			                        </div>
-			                    </div>
-			                </div>
-			                <div class="col-xs-12 col-md-4 col-lg-5">
-			                    <div class="panel panel-default height">
-			                        <div class="panel-heading">Invoice Preferences</div>
-			                        <div class="panel-body">
-			                            <strong>Code:</strong>&nbsp;<input id="inv-code" placeholder="inv-001" value=""/><br>
-			                            <strong>Expires In(days):</strong>&nbsp;<input id="inv-expiresIn" placeholder="7" value="" maxlength="3"/><br>
-			                        </div>
-			                    </div>
-			                </div>
-			            </div>
-			            <hr>
-			        </div>
-			    </div>
+	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                    <div class="panel panel-default height">
+	                        <div class="panel-heading">Consumer Details</div>
+	                        <div class="panel-body">
+	                            <strong>Name:</strong>&nbsp;<input id="con-name" placeholder="Consumer Name" value=""/><br>
+	                            <strong>Email:</strong>&nbsp;<input id="con-email" placeholder="Consumer Email" value=""/><br>
+	                            <strong>Mobile:</strong>&nbsp;<input id="con-mobile" placeholder="Consumer Mobile" value=""/><br>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                    <div class="panel panel-default height">
+	                        <div class="panel-heading">Notify Preference</div>
+	                        <div class="panel-body">
+	                            <input type="checkbox" id="inv-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}}>&nbsp;<strong>Send Email</strong></input><br>
+	                            <input type="checkbox" id="inv-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}}>&nbsp;<strong>Send Sms</strong></input><br>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                    <div class="panel panel-default height">
+	                        <div class="panel-heading">Invoice Preferences</div>
+	                        <div class="panel-body">
+	                            <strong>Code:</strong>&nbsp;<input id="inv-code" placeholder="inv-001" value=""/><br>
+	                            <strong>Expires In(days):</strong>&nbsp;<input id="inv-expiresIn" placeholder="7" value="" maxlength="3"/><br>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                    <div class="panel panel-default height">
+	                        <div class="panel-heading">Custom Params</div>
+	                        <div class="panel-body">
+	                        	{{#merchant.customParams}}
+	                            <strong>{{paramName}}:</strong>&nbsp;<input name="inv-customParam" provider="{{provider}}" ref="{{paramName}}" id="{{id}}" placeholder="value" value=""/><br>
+	                            {{/merchant.customParams}}
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	            <hr>
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
@@ -584,53 +440,52 @@
 			                </div>
 			                <div class="panel-body">
 			                    <div class="table-responsive">
-			                        <table class="table table-bordered">
+			                        <table id="itemsTable" class="table table-bordered">
 			                            <thead>
 			                                <tr>
-			                                    <td><strong>Item Name</strong></td>
+			                                	<td class="text-center"><strong>Actions</strong></td>
+			                                    <td class="text-center"><strong>Item Name</strong></td>
 			                                    <td class="text-center"><strong>Item Rate</strong></td>
 			                                    <td class="text-center"><strong>Item Quantity</strong></td>
 			                                    <td class="text-right"><strong>Total</strong></td>
 			                                </tr>
 			                            </thead>
-			                            <tbody>
-			                                <tr>
-			                                    <td><input id="item-name0" placeholder="Samsung Galaxy S5" value=""/></td>
-			                                    <td><input class="text-center" id="item-rate0" placeholder="29000.00" value=""/></td>
-			                                    <td><input class="text-center" id="item-quantity0" placeholder="2" value=""/></td>
-			                                    <td><input class="text-right" id="item-price0" placeholder="58000.00" value=""/></td>
+			                            <tbody id="itemBody">
+			                                <tr id="itemRow">
+			                                	<td>
+			                                	<div class="panel text-center">
+			                                		<button id="delTr" type="button" class="col-lg-6 btn btn-danger btn-circle btn-md"><i class="fa fa-minus"></i></button>
+			                                		<button id="addTr" type="button" class="col-lg-6 btn btn-success btn-circle btn-md"><i class="fa fa-plus"></i></button>
+			                                	</div>
+			                                	</td>
+			                                    <td><input class="text-center" id="item-name" placeholder="Samsung Galaxy S5" value=""/></td>
+			                                    <td><input class="text-center" id="item-rate" placeholder="29000.00" value=""/></td>
+			                                    <td><input class="text-center" id="item-quantity" placeholder="2" value=""/></td>
+			                                    <td><input class="text-right" id="item-price" placeholder="58000.00" value=""/></td>
 			                                </tr>
 			                                <tr>
-			                                	<td><input id="item-name1" placeholder="Samsung Galaxy S5 Extra Battery" value=""/></td>
-			                                    <td><input class="text-center" id="item-rate1" placeholder="2000.00" value=""/></td>
-			                                    <td><input class="text-center" id="item-quantity1" placeholder="1" value=""/></td>
-			                                    <td><input class="text-right" id="item-price1" placeholder="2000.00" value=""/></td>
-			                                </tr>
-			                                <tr>
-			                                	<td><input id="item-name2" placeholder="Screen protector" value=""/></td>
-			                                    <td><input class="text-center" id="item-rate2" placeholder="200.00" value=""/></td>
-			                                    <td><input class="text-center" id="item-quantity2" placeholder="3" value=""/></td>
-			                                    <td><input class="text-right" id="item-price2" placeholder="600.00" value=""/></td>
-			                                </tr>
-			                                <tr>
+			                                	<td class="highrow"></td>
 			                                    <td class="highrow"></td>
 			                                    <td class="highrow"></td>
 			                                    <td class="highrow text-center"><strong>Subtotal</strong></td>
 			                                    <td class="highrow"><input class="text-right" id="inv-total" placeholder="60600.00" value=""/></td>
 			                                </tr>
 			                                <tr>
+			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Shipping</strong></td>
 			                                    <td class="emptyrow"><input class="text-right" id="inv-shipping" placeholder="400.00" value=""/></td>
 			                                </tr>
 			                                <tr>
+			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Discount</strong></td>
 			                                    <td class="emptyrow"><input class="text-right" id="inv-discount" placeholder="40.00" value=""/></td>
 			                                </tr>
 			                                <tr>
+			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Final</strong></td>
@@ -652,6 +507,58 @@
 	    </div>
 	  </div>
 	</div>
+	<div id="createCustomParam" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div id="newCustomParam" class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Create New Custom Param</h4>
+	      </div>
+	      <div class="modal-body" style="padding:20px;">
+	      	<form>
+			    <div class="row">
+			        <div class="col-md-12">
+			            <div class="panel panel-default">
+			                <div class="panel-body">
+			                    <div class="table-responsive">
+			                        <table class="table table-bordered">
+			                            <tbody>
+			                            	<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="cus-paramName">Param Name</label>
+		                        					<input class="form-control" id="cus-paramName" placeholder="Param Name"/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="cus-provider">Provider</label>
+		                        					<select class="form-control" id="cus-provider">
+		                        						{{#provider}}
+		                        						<option value="{{.}}">{{.}}</option>
+		                        						{{/provider}}
+		                        					</select>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+			                            </tbody>
+			                        </table>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+	      	</form>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-info" id="createCustomParamBtn">Create</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/metisMenu/metisMenu.min.js"></script>
@@ -660,5 +567,6 @@
     <script src="/data/morris-data.js"></script>
     <script src="/dist/js/sb-admin-2.js"></script>
     <script src="/js/invoice.js"></script>
+    <script src="/js/mer-setting.js"></script>
 </body>
 </html>
