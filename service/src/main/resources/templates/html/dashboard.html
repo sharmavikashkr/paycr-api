@@ -339,8 +339,16 @@
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading">Notify Preference</div>
 	                        <div class="panel-body">
-	                            <input type="checkbox" id="set-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}} value="">&nbsp;<strong>Send Email</strong></input><br>
-	                            <input type="checkbox" id="set-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}} value="">&nbsp;<strong>Send Sms</strong></input><br>
+	                            <input type="checkbox" id="set-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}}>&nbsp;<strong>Send Email</strong></input><br>
+	                            <input type="checkbox" id="set-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}}>&nbsp;<strong>Send Sms</strong></input><br>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-xs-12 col-md-4 col-lg-3">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">Expiry Preference</div>
+	                        <div class="panel-body">
+	                            <strong>Expiry Days</strong>&nbsp;<input type="text" id="set-expiry" value="{{merchant.setting.expiryDays}}">
 	                        </div>
 	                    </div>
 	                </div>
@@ -370,7 +378,7 @@
 	                                	<tr>
 	                                        <td>{{paramName}}</td>
 	                                        <td>{{provider}}</td>
-	                                        <td><button id="deleteCustomParamBtn" ref="{{id}}" type="button" class="btn btn-danger btn-circle btn-md"><i class="fa fa-minus"></i></button></td>
+	                                        <td><button id="deleteCustomParamBtn" ref="{{id}}" type="button" class="btn btn-danger btn-circle btn-xs"><i class="fa fa-minus"></i></button></td>
 	                                    </tr>
 	                                    {{/merchant.customParams}}
 	                                </tbody>
@@ -392,7 +400,7 @@
 	      <div class="modal-body" style="padding:20px;">
 	      	<form>
 			    <div class="row">
-	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                <div class="col-xs-12 col-md-6 col-lg-4">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Consumer Details</div>
 	                        <div class="panel-body">
@@ -402,7 +410,7 @@
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                <div class="col-xs-12 col-md-6 col-lg-2">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Notify Preference</div>
 	                        <div class="panel-body">
@@ -416,7 +424,7 @@
 	                        <div class="panel-heading">Invoice Preferences</div>
 	                        <div class="panel-body">
 	                            <strong>Code:</strong>&nbsp;<input id="inv-code" placeholder="inv-001" value=""/><br>
-	                            <strong>Expires In(days):</strong>&nbsp;<input id="inv-expiresIn" placeholder="7" value="" maxlength="3"/><br>
+	                            <strong>Expires In(days):</strong>&nbsp;<input id="inv-expiresIn" value="{{merchant.setting.expiryDays}}" maxlength="3"/><br>
 	                        </div>
 	                    </div>
 	                </div>

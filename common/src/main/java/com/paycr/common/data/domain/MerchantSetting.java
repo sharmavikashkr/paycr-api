@@ -17,6 +17,7 @@ public class MerchantSetting {
 
 	private boolean sendSms;
 	private boolean sendEmail;
+	private int expiryDays;
 
 	@OneToOne(mappedBy = "setting")
 	private Merchant merchant;
@@ -47,6 +48,14 @@ public class MerchantSetting {
 
 	public void setSendEmail(boolean sendEmail) {
 		this.sendEmail = sendEmail;
+	}
+
+	public int getExpiryDays() {
+		return expiryDays;
+	}
+
+	public void setExpiryDays(int expiryDays) {
+		this.expiryDays = expiryDays;
 	}
 
 }

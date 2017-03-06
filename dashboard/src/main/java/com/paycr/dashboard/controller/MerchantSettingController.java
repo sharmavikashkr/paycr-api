@@ -91,6 +91,7 @@ public class MerchantSettingController {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merchant.getSetting().setSendSms(setting.isSendSms());
 			merchant.getSetting().setSendEmail(setting.isSendEmail());
+			merchant.getSetting().setExpiryDays(setting.getExpiryDays());
 			merRepo.save(merchant);
 			return "Custom Param deleted";
 		} catch (Exception ex) {

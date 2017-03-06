@@ -25,13 +25,7 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			async : false,
 			success : function(data) {
-				$("#createMerchant").modal('hide')
-				$("#serverRespAlert").show();
-				$("#serverRespAlert").removeClass('alert-success');
-				$("#serverRespAlert").removeClass('alert-danger');
-				$("#serverRespAlert").addClass('alert-success');
-				$("#serverRespMsg").html(data);
-				$("#serverRespStatus").html("SUCCESS!");
+				window.location.reload();
 			},
 			error : function(data) {
 				$("#createMerchant").modal('hide')
@@ -70,13 +64,7 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			async : false,
 			success : function(data) {
-				$("#createPricing").modal('hide')
-				$("#serverRespAlert").show();
-				$("#serverRespAlert").removeClass('alert-success');
-				$("#serverRespAlert").removeClass('alert-danger');
-				$("#serverRespAlert").addClass('alert-success');
-				$("#serverRespMsg").html(data);
-				$("#serverRespStatus").html("SUCCESS!");
+				window.location.reload();
 			},
 			error : function(data) {
 				$("#createPricing").modal('hide')

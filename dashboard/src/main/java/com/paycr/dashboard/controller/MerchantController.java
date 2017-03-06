@@ -96,6 +96,7 @@ public class MerchantController {
 		MerchantSetting setting = new MerchantSetting();
 		setting.setSendEmail(true);
 		setting.setSendSms(false);
+		setting.setExpiryDays(7);
 		setting.setMerchant(merchant);
 		merchant.setSetting(setting);
 

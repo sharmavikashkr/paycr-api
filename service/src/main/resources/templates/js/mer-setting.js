@@ -48,9 +48,11 @@ $(document).ready(function() {
 	$("#updateMerchantSettingBtn").click(function() {
 		var isSendSms = $("#set-sendSms").is(':checked');
 		var isSendEmail = $("#set-sendEmail").is(':checked');
+		var expiryDays = $("#set-expiry").val();
 		var setting = {
 				"sendSms" : isSendSms,
-				"sendEmail" : isSendEmail
+				"sendEmail" : isSendEmail,
+				"expiryDays" : expiryDays
 		}
 		$.ajax({
 			url : '/merchant/setting/update',
