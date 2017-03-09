@@ -296,7 +296,7 @@
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Pay Mode</strong></td>
-								                                            <td>{{payMode}}</td>
+								                                            <td>{{method}}</td>
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Status</strong></td>
@@ -349,6 +349,16 @@
 	                        <div class="panel-heading">Expiry Preference</div>
 	                        <div class="panel-body">
 	                            <strong>Expiry Days</strong>&nbsp;<input type="text" id="set-expiry" value="{{merchant.setting.expiryDays}}">
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-xs-12 col-md-4 col-lg-3">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">Expiry Preference</div>
+	                        <div class="panel-body">
+	                            <strong>RazorPay Merchant Id</strong>&nbsp;<input type="text" id="set-rzpmi" value="{{merchant.setting.rzpMerchantId}}">
+	                            <strong>RazorPay Key Id</strong>&nbsp;<input type="text" id="set-rzpki" value="{{merchant.setting.rzpKeyId}}">
+	                            <strong>RazorPay Secret Id</strong>&nbsp;<input type="text" id="set-rzpsi" value="{{merchant.setting.rzpKeyId}}">
 	                        </div>
 	                    </div>
 	                </div>

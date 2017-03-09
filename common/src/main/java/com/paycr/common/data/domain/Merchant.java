@@ -28,7 +28,6 @@ public class Merchant {
 	private String mobile;
 	private String accessKey;
 	private String secretKey;
-	private String razorPayId;
 	private boolean active;
 
 	@Embedded
@@ -83,14 +82,6 @@ public class Merchant {
 
 	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public String getRazorPayId() {
-		return razorPayId;
-	}
-
-	public void setRazorPayId(String razorPayId) {
-		this.razorPayId = razorPayId;
 	}
 
 	public String getEmail() {

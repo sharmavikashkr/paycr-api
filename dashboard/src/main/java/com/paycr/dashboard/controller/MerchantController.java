@@ -97,6 +97,9 @@ public class MerchantController {
 		setting.setSendEmail(true);
 		setting.setSendSms(false);
 		setting.setExpiryDays(7);
+		setting.setRzpMerchantId("");
+		setting.setRzpKeyId("");
+		setting.setRzpSecretId("");
 		setting.setMerchant(merchant);
 		merchant.setSetting(setting);
 

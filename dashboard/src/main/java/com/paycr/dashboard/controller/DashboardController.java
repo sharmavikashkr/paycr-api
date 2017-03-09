@@ -75,7 +75,7 @@ public class DashboardController {
 		for (Invoice invoice : invoices) {
 			invoice.getItems();
 			invoice.getPayment();
-			if ("SUCCESS".equals(invoice.getStatus())) {
+			if ("Paid".equals(invoice.getStatus())) {
 				invoice.setPaid(true);
 			} else {
 				invoice.setPaid(false);

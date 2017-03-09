@@ -19,8 +19,10 @@ public class Payment {
 
 	private Date created;
 	private String paymentRefNo;
-	private String payMode;
 	private String status;
+	private String method;
+	private String bank;
+	private String wallet;
 
 	@OneToOne(mappedBy = "payment")
 	private Invoice invoice;
@@ -45,14 +47,6 @@ public class Payment {
 		this.paymentRefNo = paymentRefNo;
 	}
 
-	public String getPayMode() {
-		return payMode;
-	}
-
-	public void setPayMode(String payMode) {
-		this.payMode = payMode;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -67,6 +61,30 @@ public class Payment {
 
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getWallet() {
+		return wallet;
+	}
+
+	public void setWallet(String wallet) {
+		this.wallet = wallet;
 	}
 
 }

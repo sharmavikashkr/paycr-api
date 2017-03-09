@@ -20,7 +20,6 @@ import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.invoice.validation.InvoiceValidator;
-import com.paycr.pgclient.client.EnquiryInitiator;
 
 @RestController
 @RequestMapping("invoice")
@@ -37,9 +36,6 @@ public class InvoiceController {
 
 	@Autowired
 	private SecurityService secSer;
-
-	@Autowired
-	private EnquiryInitiator enqSer;
 
 	@Autowired
 	private InvoiceValidator invValidator;
@@ -99,7 +95,6 @@ public class InvoiceController {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
 		if (CommonUtil.isNotNull(invoice)) {
-			enqSer.initiate(invoice);
 		} else {
 			response.setStatus(500);
 		}

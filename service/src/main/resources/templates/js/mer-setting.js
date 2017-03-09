@@ -49,10 +49,16 @@ $(document).ready(function() {
 		var isSendSms = $("#set-sendSms").is(':checked');
 		var isSendEmail = $("#set-sendEmail").is(':checked');
 		var expiryDays = $("#set-expiry").val();
+		var rzpMerchantId = $("#set-rzpmi").val();
+		var rzpKeyId = $("#set-rzpki").val();
+		var rzpSecretId = $("#set-rzpsi").val();
 		var setting = {
 				"sendSms" : isSendSms,
 				"sendEmail" : isSendEmail,
-				"expiryDays" : expiryDays
+				"expiryDays" : expiryDays,
+				"rzpMerchantId" : rzpMerchantId,
+				"rzpKeyId" : rzpKeyId,
+				"rzpSecretId" : rzpSecretId
 		}
 		$.ajax({
 			url : '/merchant/setting/update',

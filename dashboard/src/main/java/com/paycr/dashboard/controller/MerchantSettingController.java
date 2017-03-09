@@ -92,6 +92,9 @@ public class MerchantSettingController {
 			merchant.getSetting().setSendSms(setting.isSendSms());
 			merchant.getSetting().setSendEmail(setting.isSendEmail());
 			merchant.getSetting().setExpiryDays(setting.getExpiryDays());
+			merchant.getSetting().setRzpMerchantId(setting.getRzpMerchantId());
+			merchant.getSetting().setRzpKeyId(setting.getRzpKeyId());
+			merchant.getSetting().setRzpSecretId(setting.getRzpSecretId());
 			merRepo.save(merchant);
 			return "Custom Param deleted";
 		} catch (Exception ex) {

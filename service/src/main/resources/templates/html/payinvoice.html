@@ -23,15 +23,36 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <h2 class="section-heading"><span style="color:red;">{{merchant.name}}</span> has requested you to pay <span style="color:red;">INR {{invoice.payAmount}}</span></h2>
+                    <h2 class="section-heading">Hi {{consumer.name}}, <span style="color:red;">{{merchant.name}}</span> has requested you to pay <span style="color:red;">INR {{invoice.payAmount}}</span></h2>
                     <p>Proceed to make payment</p>
                     <div class="badges">
-                        <a class="badge-link" href="#"><button type="button" class="btn btn-info">Pay</button></a>
+                    	<form action="/return/{{invoice.invoiceCode}}" method="POST">
+						<script
+						    src="https://checkout.razorpay.com/v1/checkout.js"
+						    data-key="{{rzpKeyId}}"
+						    data-amount="{{payAmount}}"
+						    data-buttontext="Pay"
+						    data-name="{{merchant.name}}"
+						    data-description="Invoice Request"
+						    data-image="https://your-awesome-site.com/your_logo.jpg"
+						    data-prefill.name="{{consumer.name}}"
+						    data-prefill.email="{{consumer.email}}"
+						    data-prefill.contact="{{consumer.mobile}}"
+						    data-theme.color="#013487"
+						></script>
+						<input type="hidden" value="{{invoice.invoiceCode}}" name="invoiceCode">
+						</form>
                         <a class="badge-link" href="#"><button type="button" class="btn btn-warning">Abort</button></a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+    	$(".razorpay-payment-button").addClass('btn btn-info');
+    });
+    </script>
 </body>
 </html>

@@ -18,6 +18,9 @@ public class MerchantSetting {
 	private boolean sendSms;
 	private boolean sendEmail;
 	private int expiryDays;
+	private String rzpMerchantId;
+	private String rzpKeyId;
+	private String rzpSecretId;
 
 	@OneToOne(mappedBy = "setting")
 	private Merchant merchant;
@@ -56,6 +59,30 @@ public class MerchantSetting {
 
 	public void setExpiryDays(int expiryDays) {
 		this.expiryDays = expiryDays;
+	}
+
+	public String getRzpMerchantId() {
+		return rzpMerchantId;
+	}
+
+	public void setRzpMerchantId(String rzpMerchantId) {
+		this.rzpMerchantId = rzpMerchantId;
+	}
+
+	public String getRzpKeyId() {
+		return rzpKeyId;
+	}
+
+	public void setRzpKeyId(String rzpKeyId) {
+		this.rzpKeyId = rzpKeyId;
+	}
+
+	public String getRzpSecretId() {
+		return rzpSecretId;
+	}
+
+	public void setRzpSecretId(String rzpSecretId) {
+		this.rzpSecretId = rzpSecretId;
 	}
 
 }
