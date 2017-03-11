@@ -73,6 +73,7 @@ public class DashboardController {
 		Pageable topTwenty = new PageRequest(0, 20);
 		List<Invoice> invoices = invRepo.findByMerchantOrderByIdDesc(merchant.getId(), topTwenty);
 		for (Invoice invoice : invoices) {
+			invoice.getConsumer();
 			invoice.getItems();
 			invoice.getPayment();
 			if ("Paid".equals(invoice.getStatus())) {

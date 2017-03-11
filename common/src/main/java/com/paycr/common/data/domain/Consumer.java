@@ -1,13 +1,14 @@
 package com.paycr.common.data.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -27,15 +28,15 @@ public class Consumer {
 	@Embedded
 	private Address address;
 
-	@OneToOne(mappedBy = "consumer")
-	private Invoice invoice;
+	@OneToMany(mappedBy = "consumer")
+	private List<Invoice> invoices;
 
-	public Invoice getInvoice() {
-		return invoice;
+	public List<Invoice> getInvoices() {
+		return invoices;
 	}
 
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
+	public void setInvoices(List<Invoice> invoices) {
+		this.invoices = invoices;
 	}
 
 	public String getName() {

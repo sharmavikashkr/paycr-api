@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -38,6 +39,7 @@ public class NotifyService {
 	@Autowired
 	private Configuration fmConfiguration;
 
+	@Async
 	public void notify(Invoice invoice) {
 		String invoiceUrl = company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());

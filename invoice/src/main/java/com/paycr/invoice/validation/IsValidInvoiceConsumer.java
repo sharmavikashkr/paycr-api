@@ -2,10 +2,13 @@ package com.paycr.invoice.validation;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -14,6 +17,9 @@ import com.paycr.common.validation.RequestValidator;
 @Component
 @Order(1)
 public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
+
+	@Autowired
+	private ConsumerRepository consRepo;
 
 	@Override
 	public void validate(Invoice invoice) {
@@ -29,9 +35,14 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 		if (CommonUtil.isEmpty(invoice.getConsumer().getMobile())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Consumer Mobile");
 		}
-		invoice.getConsumer().setActive(true);
-		invoice.getConsumer().setCreated(new Date());
-		invoice.getConsumer().setInvoice(invoice);
+		Consumer consumer = consRepo.findByEmailAndMobile(invoice.getConsumer().getEmail(),
+				invoice.getConsumer().getMobile());
+		if (CommonUtil.isNull(consumer)) {
+			invoice.getConsumer().setActive(true);
+			invoice.getConsumer().setCreated(new Date());
+			consumer = consRepo.save(invoice.getConsumer());
+		}
+		invoice.setConsumer(consumer);
 	}
 
 }
