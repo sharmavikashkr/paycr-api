@@ -4,6 +4,9 @@ $(document).ready(function() {
 		$("#serverRespAlert").hide();
 	});
 	$("#createInvoiceBtn").click(function() {
+		if(!$("#createInvoiceForm")[0].checkValidity()) {
+			return false;
+		}
 		var name = $("#con-name").val();
 		var email = $("#con-email").val();
 		var mobile = $("#con-mobile").val();
@@ -39,7 +42,7 @@ $(document).ready(function() {
 			customParams.push(customParam);
 		});
 		
-		var invoiceCode = $("#inv-code").val();
+		var invoiceCode = "";
 		var sendEmail = $("#inv-sendEmail").is(":checked");
 		var sendSms = $("#inv-sendSms").is(":checked");
 		var shipping = $("#inv-shipping").val();
@@ -148,15 +151,47 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$("#inv-shipping, #inv-discount, [id = itemBody]").on("change", "#item-rate, #item-quantity, #inv-shipping, #inv-discount", function() {
+		updatePrice();
+	});
+	function updatePrice() {
+		$("[id = itemRow]").each(function() {
+			if($(this).find("#item-rate").val().trim() == '') {
+				$(this).find("#item-rate").val('0');
+			}
+			if($(this).find("#item-quantity").val().trim() == '') {
+				$(this).find("#item-quantity").val('0');
+			}
+			var rate = parseFloat($(this).find("#item-rate").val());
+			var quantity = parseFloat($(this).find("#item-quantity").val());
+			$(this).find("#item-price").val(rate * quantity);
+		});
+		var total = 0;
+		$("[id = item-price]").each(function() {
+			total = total + parseFloat($(this).val());
+		});
+		$("#inv-total").val(total);
+		if($("#inv-shipping").val().trim() == '') {
+			$("#inv-shipping").val('0');
+		}
+		if($("#inv-discount").val().trim() == '') {
+			$("#inv-discount").val('0');
+		}
+		var shipping = parseFloat($("#inv-shipping").val());
+		var discount = parseFloat($("#inv-discount").val());
+		$("#inv-final").val(total + shipping - discount);
+	}
 	$("[id = itemBody]").on("click", "#addTr", function() {
 		if($("[id = itemRow]").length < 5) {
 			var $newTr = $(this).parent().parent().parent().clone();
+			$newTr.find('input').val('');
 			$newTr.insertAfter($(this).parent().parent().parent());
 		}
 	});
 	$("[id = itemBody]").on("click", "#delTr", function() {
 		if($("[id = itemRow]").length > 1) {
 			$(this).parent().parent().parent().remove();
+			updatePrice();
 		}
 	});
 });

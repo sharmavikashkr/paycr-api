@@ -335,30 +335,36 @@
 	        <div id="invoiceSettingTab" class="tab-pane fade">
 	        	<br>
 	        	<div class="row">
-	        		<div class="col-xs-12 col-md-4 col-lg-3">
+	        		<div class="col-xs-12 col-md-6 col-lg-3">
 	                    <div class="panel panel-default">
-	                        <div class="panel-heading">Notify Preference</div>
+	                        <div class="panel-heading">Invoice Preference</div>
 	                        <div class="panel-body">
 	                            <input type="checkbox" id="set-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}}>&nbsp;<strong>Send Email</strong></input><br>
 	                            <input type="checkbox" id="set-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}}>&nbsp;<strong>Send Sms</strong></input><br>
+	                        	<hr>
+	                        	<div class="form-group">
+	               					<label class="control-label" for="set-expiry">Expiry Days</label>
+	               					<input class="form-control" id="set-expiry" value="{{merchant.setting.expiryDays}}"/>
+               					</div>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-xs-12 col-md-4 col-lg-3">
+	                <div class="col-xs-12 col-md-12 col-lg-3">
 	                    <div class="panel panel-default">
-	                        <div class="panel-heading">Expiry Preference</div>
+	                        <div class="panel-heading">Payment Preference</div>
 	                        <div class="panel-body">
-	                            <strong>Expiry Days</strong>&nbsp;<input type="text" id="set-expiry" value="{{merchant.setting.expiryDays}}">
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-xs-12 col-md-4 col-lg-3">
-	                    <div class="panel panel-default">
-	                        <div class="panel-heading">Expiry Preference</div>
-	                        <div class="panel-body">
-	                            <strong>RazorPay Merchant Id</strong>&nbsp;<input type="text" id="set-rzpmi" value="{{merchant.setting.rzpMerchantId}}">
-	                            <strong>RazorPay Key Id</strong>&nbsp;<input type="text" id="set-rzpki" value="{{merchant.setting.rzpKeyId}}">
-	                            <strong>RazorPay Secret Id</strong>&nbsp;<input type="text" id="set-rzpsi" value="{{merchant.setting.rzpKeyId}}">
+	                        	<div class="form-group">
+	               					<label class="control-label" for="set-rzpmi">RazorPay Merchant Id</label>
+	               					<input class="form-control" id="set-rzpmi" value="{{merchant.setting.rzpMerchantId}}"/>
+               					</div>
+               					<div class="form-group">
+	               					<label class="control-label" for="set-rzpki">RazorPay Key Id</label>
+	               					<input class="form-control" id="set-rzpki" value="{{merchant.setting.rzpKeyId}}"/>
+               					</div>
+               					<div class="form-group">
+	               					<label class="control-label" for="set-rzpsi">RazorPay Secret Id</label>
+	               					<input class="form-control" id="set-rzpsi" value="{{merchant.setting.rzpSecretId}}"/>
+               					</div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -366,7 +372,6 @@
 	        	<div class="row panel panel-body">
 	        		<button id="updateMerchantSettingBtn" class="btn btn-info">Save</button>
 	        	</div>
-	        	<hr>
 	        	<div class="row">
 	        		<div class="col-xs-12 col-md-8 col-lg-6">
 	                    <div class="panel panel-default">
@@ -408,42 +413,35 @@
 	        <h4 class="modal-title">Invoice for purchase</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form>
+	      	<form id="createInvoiceForm">
 			    <div class="row">
 	                <div class="col-xs-12 col-md-6 col-lg-4">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Consumer Details</div>
 	                        <div class="panel-body">
-	                            <strong>Name:</strong>&nbsp;<input id="con-name" placeholder="Consumer Name" value=""/><br>
-	                            <strong>Email:</strong>&nbsp;<input id="con-email" placeholder="Consumer Email" value=""/><br>
-	                            <strong>Mobile:</strong>&nbsp;<input id="con-mobile" placeholder="Consumer Mobile" value=""/><br>
+	                            <strong>Name:</strong>&nbsp;<input style="width:200px;" id="con-name" placeholder="Consumer Name" type="text" pattern="[a-zA-Z ]{1,50}" oninvalid="setCustomValidity('Plz enter Name')" required/><br>
+	                            <strong>Email:</strong>&nbsp;<input style="width:200px;" id="con-email" placeholder="Consumer Email" type="email" required/><br>
+	                            <strong>Mobile:</strong>&nbsp;<input id="con-mobile" placeholder="Consumer Mobile" type="number" pattern="\d[10]" required/><br>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-xs-12 col-md-6 col-lg-2">
-	                    <div class="panel panel-default height">
-	                        <div class="panel-heading">Notify Preference</div>
-	                        <div class="panel-body">
-	                            <input type="checkbox" id="inv-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}}>&nbsp;<strong>Send Email</strong></input><br>
-	                            <input type="checkbox" id="inv-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}}>&nbsp;<strong>Send Sms</strong></input><br>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                <div class="col-xs-12 col-md-6 col-lg-4">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Invoice Preferences</div>
 	                        <div class="panel-body">
-	                            <strong>Code:</strong>&nbsp;<input id="inv-code" placeholder="inv-001" value=""/><br>
-	                            <strong>Expires In(days):</strong>&nbsp;<input id="inv-expiresIn" value="{{merchant.setting.expiryDays}}" maxlength="3"/><br>
+	                            <input type="checkbox" id="inv-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}}>&nbsp;<strong>Send Email</strong><br>
+	                            <input type="checkbox" id="inv-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}}>&nbsp;<strong>Send Sms</strong><br>
+	                            <hr>
+	                        	<strong>Expires in (days):</strong>&nbsp;<input style="width:100px;" type="number" id="inv-expiresIn" value="{{merchant.setting.expiryDays}}" pattern="[0-9]{1,3}" required/><br>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-xs-12 col-md-6 col-lg-3">
+	                <div class="col-xs-12 col-md-6 col-lg-4">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Custom Params</div>
 	                        <div class="panel-body">
 	                        	{{#merchant.customParams}}
-	                            <strong>{{paramName}}:</strong>&nbsp;<input name="inv-customParam" provider="{{provider}}" ref="{{paramName}}" id="{{id}}" placeholder="value" value=""/><br>
+	                            <strong>{{paramName}}:</strong>&nbsp;<input name="inv-customParam" provider="{{provider}}" ref="{{paramName}}" id="{{id}}" placeholder="value" required/><br>
 	                            {{/merchant.customParams}}
 	                        </div>
 	                    </div>
@@ -476,38 +474,38 @@
 			                                		<button id="addTr" type="button" class="col-lg-6 btn btn-success btn-circle btn-md"><i class="fa fa-plus"></i></button>
 			                                	</div>
 			                                	</td>
-			                                    <td><input class="text-center" id="item-name" placeholder="Samsung Galaxy S5" value=""/></td>
-			                                    <td><input class="text-center" id="item-rate" placeholder="29000.00" value=""/></td>
-			                                    <td><input class="text-center" id="item-quantity" placeholder="2" value=""/></td>
-			                                    <td><input class="text-right" id="item-price" placeholder="58000.00" value=""/></td>
+			                                    <td><input class="text-center" id="item-name" placeholder="Item Name" type="text" required/></td>
+			                                    <td><input class="text-center" id="item-rate" placeholder="2000.00" type="number" step="1.00" required/></td>
+			                                    <td><input class="text-center" id="item-quantity" placeholder="2" type="number" pattern="[0-9]{1-3}" required/></td>
+			                                    <td><input class="text-right" id="item-price" placeholder="4000.00" type="number" step="1.00" readonly required/></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="highrow"></td>
 			                                    <td class="highrow"></td>
-			                                    <td class="highrow text-center"><strong>Subtotal</strong></td>
-			                                    <td class="highrow"><input class="text-right" id="inv-total" placeholder="60600.00" value=""/></td>
+			                                    <td class="highrow text-center"><strong>Total</strong></td>
+			                                    <td class="highrow"><input class="text-right" id="inv-total" placeholder="4000.00" type="number" step="1.00" readonly required/></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Shipping</strong></td>
-			                                    <td class="emptyrow"><input class="text-right" id="inv-shipping" placeholder="400.00" value=""/></td>
+			                                    <td class="emptyrow"><input class="text-right" id="inv-shipping" placeholder="400.00" type="number" step="1.00" required/></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Discount</strong></td>
-			                                    <td class="emptyrow"><input class="text-right" id="inv-discount" placeholder="40.00" value=""/></td>
+			                                    <td class="emptyrow"><input class="text-right" id="inv-discount" placeholder="40.00" type="number" step="1.00" required/></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Final</strong></td>
-			                                    <td class="emptyrow"><input class="text-right" id="inv-final" placeholder="60960.00" value=""/></td>
+			                                    <td class="emptyrow"><input class="text-right" id="inv-final" placeholder="4360.00" type="number" step="1.00" readonly required/></td>
 			                                </tr>
 			                            </tbody>
 			                        </table>
