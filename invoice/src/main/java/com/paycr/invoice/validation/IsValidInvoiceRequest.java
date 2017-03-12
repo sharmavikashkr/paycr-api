@@ -13,6 +13,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
@@ -60,7 +61,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		}
 		invoice.setCreated(timeNow);
 		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
-		invoice.setStatus("Unpaid");
+		invoice.setStatus(InvoiceStatus.UNPAID);
 	}
 
 }

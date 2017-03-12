@@ -28,14 +28,16 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
 		List<MerchantCustomParam> merchantCustomParams = merchant.getCustomParams();
 		for (MerchantCustomParam mcp : merchantCustomParams) {
-			if (ParamValueProvider.MERCHANT.equals(mcp.getProvider())) {
-				boolean mandatoryParamMissing = true;
-				for (InvoiceCustomParam icp : invoice.getCustomParams()) {
+			boolean mandatoryParamMissing = true;
+			for (InvoiceCustomParam icp : invoice.getCustomParams()) {
+				if (ParamValueProvider.MERCHANT.equals(mcp.getProvider())) {
 					if (icp.getParamName().equalsIgnoreCase(mcp.getParamName())) {
 						mandatoryParamMissing = false;
-						icp.setInvoice(invoice);
 					}
+				} else {
+					mandatoryParamMissing = false;
 				}
+				icp.setInvoice(invoice);
 				if (mandatoryParamMissing) {
 					throw new PaycrException(Constants.FAILURE, "Mandatory Custom Params missing");
 				}

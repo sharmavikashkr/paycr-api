@@ -18,6 +18,7 @@ import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
+import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.util.CommonUtil;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -35,6 +36,8 @@ public class PaymentController {
 	public ModelAndView payInvoice(@PathVariable(value = "invoiceCode") String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNotNull(invoice)) {
+			invoice.getItems();
+			invoice.getCustomParams();
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
 			ModelAndView mv = new ModelAndView("html/payinvoice");
 			mv.addObject("merchantTxnId", "mtx");
@@ -88,11 +91,11 @@ public class PaymentController {
 		}
 	}
 
-	private String getStatus(String rzpStatus) {
+	private InvoiceStatus getStatus(String rzpStatus) {
 		if ("captured".equals(rzpStatus)) {
-			return "Paid";
+			return InvoiceStatus.PAID;
 		} else {
-			return "Unpaid";
+			return InvoiceStatus.UNPAID;
 		}
 	}
 }

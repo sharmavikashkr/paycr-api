@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.paycr.common.type.Currency;
+import com.paycr.common.type.InvoiceStatus;
 
 @Entity
 @Table(name = "pc_invoice")
@@ -69,7 +70,8 @@ public class Invoice implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Payment payment;
 
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private InvoiceStatus status;
 
 	@Transient
 	private boolean isPaid;
@@ -177,11 +179,11 @@ public class Invoice implements Serializable {
 		this.sendSms = sendSms;
 	}
 
-	public String getStatus() {
+	public InvoiceStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(InvoiceStatus status) {
 		this.status = status;
 	}
 

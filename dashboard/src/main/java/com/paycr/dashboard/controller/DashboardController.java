@@ -19,6 +19,7 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
 
 @RestController
@@ -76,7 +77,7 @@ public class DashboardController {
 			invoice.getConsumer();
 			invoice.getItems();
 			invoice.getPayment();
-			if ("Paid".equals(invoice.getStatus())) {
+			if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
 				invoice.setPaid(true);
 			} else {
 				invoice.setPaid(false);
