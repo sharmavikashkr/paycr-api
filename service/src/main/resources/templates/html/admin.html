@@ -31,57 +31,6 @@
             	</li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>Read All Messages</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-messages -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
@@ -267,11 +216,8 @@
 	                                </tbody>
 	                            </table>
 	                        </div>
-	                        <!-- /.panel-body -->
 	                    </div>
-	                    <!-- /.panel -->
 	                </div>
-	                <!-- /.col-lg-12 -->
 	            </div>
         </div>
         <div id="pricingTab" class="tab-pane fade active">
@@ -317,10 +263,10 @@
 	                                    <tr>
 	                                        <td>{{name}}</td>
 	                                        <td>{{duration}}</td>
-	                                        <td>{{rate}}</td>
+	                                        <td>&#8377; {{rate}}</td>
 	                                        <td>{{invoiceLimit}}</td>
-	                                        <td>{{startAmount}}</td>
-	                                        <td>{{endAmount}}</td>
+	                                        <td>&#8377; {{startAmount}}</td>
+	                                        <td>&#8377; {{endAmount}}</td>
 	                                        <td>{{active}}</td>
 	                                    </tr>
 								        {{/pricings}}
@@ -431,7 +377,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-name">Name</label>
-		                        					<input class="form-control" id="pri-name" placeholder="Pricing Name"/>
+		                        					<input class="form-control" id="pri-name" placeholder="Pricing Name" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -439,7 +385,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-desc">Description</label>
-		                        					<input class="form-control" id="pri-desc" placeholder="Pricing Description"/>
+		                        					<input class="form-control" id="pri-desc" placeholder="Pricing Description" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -447,7 +393,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-limit">Invoice Limit</label>
-		                        					<input class="form-control" id="pri-limit" placeholder="Invoice limit"/>
+		                        					<input class="form-control" type="number" id="pri-limit" placeholder="Invoice limit" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -455,7 +401,12 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-start">Start Amount</label>
-		                        					<input class="form-control" id="pri-start" placeholder="Start Amount"/>
+		                        					<div class="input-group">
+													    <div class="input-group-addon">
+													    	&#8377; 
+													    </div>
+													    <input class="form-control" id="pri-start" type="number" placeholder="Start Amount" required/>
+													</div>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -463,7 +414,12 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-end">End Amount</label>
-		                        					<input class="form-control" id="pri-end" placeholder="End Amount"/>
+		                        					<div class="input-group">
+													    <div class="input-group-addon">
+													    	&#8377; 
+													    </div>
+													    <input class="form-control" id="pri-end" type="number" placeholder="End Amount" required/>
+													</div>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -471,7 +427,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-dura">Duration</label>
-		                        					<input class="form-control" id="pri-dura" placeholder="Duration"/>
+		                        					<input class="form-control" id="pri-dura" type="number" placeholder="Duration" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -479,7 +435,12 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-rate">Rate</label>
-		                        					<input class="form-control" id="pri-rate" placeholder="Rate"/>
+		                        					<div class="input-group">
+													    <div class="input-group-addon">
+													    	&#8377; 
+													    </div>
+													    <input class="form-control" id="pri-rate" type="number" placeholder="Rate" required/>
+													</div>
 		                        					</div>
 		                        				</td>
 		                        			</tr>

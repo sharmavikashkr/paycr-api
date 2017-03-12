@@ -34,55 +34,6 @@
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-messages">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <strong>John Smith</strong>
-                                    <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                                </div>
-                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>Read All Messages</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
@@ -231,7 +182,7 @@
 	                                        <td>{{invoiceCode}}</td>
 	                                        <td>{{consumer.name}}</td>
 	                                        <td>{{consumer.email}}</td>
-	                                        <td>{{payAmount}}</td>
+	                                        <td>&#8377; {{payAmount}}</td>
 	                                        <td>{{status}}</td>
 	                                    </tr>
 	                                    <tr>
@@ -270,15 +221,15 @@
 								                                    <tbody>
 								                                        <tr>
 								                                            <td><strong>Shipping</strong></td>
-								                                            <td>{{shipping}}</td>
+								                                            <td>&#8377; {{shipping}}</td>
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Discount</strong></td>
-								                                            <td>{{discount}}</td>
+								                                            <td>&#8377; {{discount}}</td>
 								                                        </tr>
 								                                        <tr>
 								                                            <td><strong>Pay Amount</strong></td>
-								                                            <td>{{payAmount}}</td>
+								                                            <td>&#8377; {{payAmount}}</td>
 								                                        </tr>
 								                                    </tbody>
 								                                </table>
