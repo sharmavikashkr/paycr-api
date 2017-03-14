@@ -13,14 +13,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
+import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
+import com.paycr.common.util.DateUtil;
 
 @RestController
 public class DashboardController {
@@ -36,6 +39,9 @@ public class DashboardController {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private NotificationRepository notiRepo;
 
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -69,25 +75,25 @@ public class DashboardController {
 	public ModelAndView dashboard() {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		merchant.getSetting();
-		merchant.getCustomParams();
 		Pageable topTwenty = new PageRequest(0, 20);
 		List<Invoice> invoices = invRepo.findByMerchantOrderByIdDesc(merchant.getId(), topTwenty);
 		for (Invoice invoice : invoices) {
-			invoice.getConsumer();
-			invoice.getItems();
-			invoice.getPayment();
 			if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
 				invoice.setPaid(true);
 			} else {
 				invoice.setPaid(false);
 			}
 		}
+		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(null, merchant.getId());
+		for (Notification notice : notices) {
+			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
+		}
 		ModelAndView mv = new ModelAndView("html/dashboard");
 		mv.addObject("user", user);
 		mv.addObject("merchant", merchant);
 		mv.addObject("provider", ParamValueProvider.values());
 		mv.addObject("invoices", invoices);
+		mv.addObject("notices", notices);
 		return mv;
 	}
 
@@ -97,10 +103,15 @@ public class DashboardController {
 		PcUser user = secSer.findLoggedInUser();
 		ModelAndView mv = new ModelAndView("html/admin");
 		mv.addObject("user", user);
+		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(user.getId(), null);
+		for (Notification notice : notices) {
+			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
+		}
 		List<Pricing> pricings = priceRepo.findAll();
 		mv.addObject("pricings", pricings);
 		List<Merchant> merchants = merRepo.findAll();
 		mv.addObject("merchants", merchants);
+		mv.addObject("notices", notices);
 		return mv;
 	}
 }

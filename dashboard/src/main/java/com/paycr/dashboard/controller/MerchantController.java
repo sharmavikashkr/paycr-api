@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +19,13 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.MerchantUser;
+import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
+import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.PricingStatus;
@@ -61,13 +64,16 @@ public class MerchantController {
 	@Autowired
 	private MerchantValidator merValidator;
 
+	@Autowired
+	private NotificationRepository notiRepo;
+
 	@Secured({ "ROLE_ADMIN" })
 	@RequestMapping("new")
 	public String newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
 		try {
 			merValidator.validate(merchant);
 		} catch (Exception ex) {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
 		}
 		Date timeNow = new Date();
@@ -125,6 +131,15 @@ public class MerchantController {
 		merUser.setUserId(user.getId());
 		merUserRepo.save(merUser);
 		userService.sendResetLink(user);
+		
+		Notification noti = new Notification();
+		noti.setMerchantId(merchant.getId());
+		noti.setMessage("Take a tour of the features..");
+		noti.setSubject("Welcome to Paycr");
+		noti.setCreated(timeNow);
+		noti.setRead(false);
+		notiRepo.save(noti);
+		
 		return "Merchant Created";
 	}
 

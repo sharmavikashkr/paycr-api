@@ -2,6 +2,7 @@ package com.paycr.dashboard.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class PricingController {
 			pricingRepo.save(pricing);
 			return "Pricing created";
 		} catch (Exception ex) {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
 		}
 	}

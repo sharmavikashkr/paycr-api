@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,9 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
 @RestController
@@ -43,6 +46,9 @@ public class InvoiceController {
 	@Autowired
 	private NotifyService notifyService;
 
+	@Autowired
+	private PaymentService payService;
+
 	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "new", method = RequestMethod.POST)
 	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
@@ -50,7 +56,7 @@ public class InvoiceController {
 			invValidator.validate(invoice);
 			invRepo.save(invoice);
 		} catch (Exception ex) {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
 		}
 		notifyService.notify(invoice);
@@ -68,7 +74,7 @@ public class InvoiceController {
 			invRepo.save(invoice);
 			return "Invoice Expired";
 		} else {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return "Invalid invoice or the invoice has already expired";
 		}
 	}
@@ -84,7 +90,7 @@ public class InvoiceController {
 			invRepo.save(invoice);
 			return "Invoice notification sent";
 		} else {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return "Invalid invoice or the invoice has already expired";
 		}
 	}
@@ -94,9 +100,10 @@ public class InvoiceController {
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
-		if (CommonUtil.isNotNull(invoice)) {
+		if (CommonUtil.isNotNull(invoice) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			payService.enquire(invoice);
 		} else {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		}
 	}
 

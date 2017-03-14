@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +54,7 @@ public class MerchantSettingController {
 			merRepo.save(merchant);
 			return "Custom Param added";
 		} catch (Exception ex) {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
 		}
 	}
@@ -79,7 +80,7 @@ public class MerchantSettingController {
 			merRepo.save(merchant);
 			return "Custom Param deleted";
 		} catch (Exception ex) {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
 		}
 	}
@@ -98,7 +99,7 @@ public class MerchantSettingController {
 			merRepo.save(merchant);
 			return "Custom Param deleted";
 		} catch (Exception ex) {
-			response.setStatus(500);
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
 		}
 	}

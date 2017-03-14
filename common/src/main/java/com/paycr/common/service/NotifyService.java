@@ -57,7 +57,7 @@ public class NotifyService {
 			List<String> cc = new ArrayList<String>();
 			cc.add("sharma.vikashkr@gmail.com");
 			Email email = new Email(company.getContact(), to, cc);
-			email.setSubject("Payment for your order");
+			email.setSubject("Invoice for your order");
 			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
 			try {

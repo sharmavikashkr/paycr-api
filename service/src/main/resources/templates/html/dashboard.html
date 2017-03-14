@@ -37,19 +37,28 @@
                         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
+                    	{{#notices}}
                         <li>
+                        	{{#read}}<strong>{{/read}}
                             <a href="#">
                                 <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                    <i class="fa fa-comment fa-fw"></i> {{subject}}
+                                    <span class="pull-right text-muted small">{{createdStr}}</span>
+                                </div>
+                                <hr style="margin:0px;">
+                                <div>
+                                	<p>{{message}}</p>
                                 </div>
                             </a>
+                            {{#read}}</strong>{{/read}}
                         </li>
                         <li class="divider"></li>
+                        {{/notices}}
+                        <li>
+                        	<a href="#">View all..</a>
+                        </li>
                     </ul>
-                    <!-- /.dropdown-alerts -->
                 </li>
-                <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>

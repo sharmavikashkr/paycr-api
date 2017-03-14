@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
 import com.paycr.common.data.domain.UserRole;
+import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.ResetPasswordRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.ResetStatus;
@@ -43,6 +45,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private NotificationRepository notiRepo;
+
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public void createUser(HttpServletResponse response) throws IOException {
 		Date timeNow = new Date();
@@ -51,7 +56,7 @@ public class UserController {
 		}
 		PcUser user = new PcUser();
 		user.setCreated(timeNow);
-		user.setName("Vikash Kumar");
+		user.setName("Paycr Admin");
 		user.setEmail("admin@paycr.in");
 		user.setPassword(bcPassEncode.encode("password@123"));
 		user.setMobile("9970197591");
@@ -63,6 +68,14 @@ public class UserController {
 		user.setUserRoles(userRoles);
 		user.setActive(true);
 		userRepo.save(user);
+
+		Notification noti = new Notification();
+		noti.setUserId(user.getId());
+		noti.setMessage("Hope you manage the product well :)");
+		noti.setSubject("Welcome to Paycr");
+		noti.setCreated(timeNow);
+		noti.setRead(false);
+		notiRepo.save(noti);
 	}
 
 	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)

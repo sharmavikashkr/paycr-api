@@ -9,6 +9,7 @@ public class DateUtil {
 	public final static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	public final static String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	private final static String MS_DATE_FORMAT = "yy-MM-dd HH:mm:ss";
+	private final static String DASHBOARD_DATE_FORMATE = "dd MMM, yyyy";
 
 	public static String getMSDateString(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(MS_DATE_FORMAT);
@@ -22,6 +23,11 @@ public class DateUtil {
 
 	public static String getDefaultDate(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+		return sdf.format(date);
+	}
+
+	public static String getDashboardDate(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat(DASHBOARD_DATE_FORMATE);
 		return sdf.format(date);
 	}
 
