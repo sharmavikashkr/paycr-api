@@ -16,6 +16,7 @@ public class CommonController implements ErrorController {
 	@RequestMapping(value = PATH)
 	public ModelAndView error(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView("html/errorpage");
+		mv.addObject("message", "Requested Resource is not found");
 		return mv;
 	}
 

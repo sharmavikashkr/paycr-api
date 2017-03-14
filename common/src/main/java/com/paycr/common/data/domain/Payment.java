@@ -18,6 +18,7 @@ public class Payment {
 	private Integer id;
 
 	private Date created;
+	private String invoiceCode;
 	private String paymentRefNo;
 	private String status;
 	private String method;
@@ -85,6 +86,14 @@ public class Payment {
 
 	public void setWallet(String wallet) {
 		this.wallet = wallet;
+	}
+
+	public String getInvoiceCode() {
+		return invoiceCode;
+	}
+
+	public void setInvoiceCode(String invoiceCode) {
+		this.invoiceCode = invoiceCode;
 	}
 
 }

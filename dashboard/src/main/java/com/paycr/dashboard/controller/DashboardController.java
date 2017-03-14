@@ -84,7 +84,8 @@ public class DashboardController {
 				invoice.setPaid(false);
 			}
 		}
-		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(null, merchant.getId());
+		Pageable topFour = new PageRequest(0, 4);
+		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(null, merchant.getId(), topFour);
 		for (Notification notice : notices) {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}
@@ -103,7 +104,8 @@ public class DashboardController {
 		PcUser user = secSer.findLoggedInUser();
 		ModelAndView mv = new ModelAndView("html/admin");
 		mv.addObject("user", user);
-		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(user.getId(), null);
+		Pageable topFour = new PageRequest(0, 4);
+		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(user.getId(), null, topFour);
 		for (Notification notice : notices) {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}

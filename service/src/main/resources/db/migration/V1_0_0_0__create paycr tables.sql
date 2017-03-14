@@ -98,6 +98,7 @@ CREATE TABLE if not exists pc_merchant_pricing (
 CREATE TABLE if not exists pc_payment (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
+	invoice_code varchar(20) NOT NULL,
 	payment_ref_no varchar(50) NOT NULL,
 	status varchar(20) NOT NULL,
 	method varchar(20) NOT NULL,

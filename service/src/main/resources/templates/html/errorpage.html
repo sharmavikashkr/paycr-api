@@ -18,15 +18,15 @@
     	#newInvoice input {border:none;text-size:6px;}
     </style>
 </head>
-<body>
-	<section id="download" class="download bg-primary text-center">
+<body style="background:cadetblue;">
+	<section id="download" class="download text-center">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <h2 class="section-heading">Requested Resource is not found</h2>
+                    <h3 class="section-heading">{{message}}</h3>
                     <p>Please try again later</p>
                     <div class="badges">
-                        <a class="badge-link" href="/"><button type="button" class="btn btn-info">Ok</button></a>
+                        <a class="badge-link" href="/"><button type="button" class="btn btn-warning">Ok</button></a>
                     </div>
                 </div>
             </div>

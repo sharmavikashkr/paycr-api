@@ -20,8 +20,10 @@ import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 
@@ -39,10 +41,9 @@ public class PaymentController {
 
 	@RequestMapping(value = "{invoiceCode}", method = RequestMethod.GET)
 	public ModelAndView payInvoice(@PathVariable(value = "invoiceCode") String invoiceCode) {
-		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		if (CommonUtil.isNotNull(invoice)) {
-			invoice.getItems();
-			invoice.getCustomParams();
+		try {
+			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+			validate(invoice);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
 			ModelAndView mv = new ModelAndView("html/payinvoice");
 			mv.addObject("merchantTxnId", "mtx");
@@ -52,8 +53,23 @@ public class PaymentController {
 			mv.addObject("payAmount", invoice.getPayAmount().multiply(new BigDecimal(100)));
 			mv.addObject("consumer", invoice.getConsumer());
 			return mv;
-		} else {
-			return new ModelAndView("html/errorpage");
+		} catch (PaycrException pex) {
+			ModelAndView mv = new ModelAndView("html/errorpage");
+			mv.addObject("message", pex.getMessage());
+			return mv;
+		}
+	}
+
+	private void validate(Invoice invoice) {
+		if (CommonUtil.isNull(invoice)) {
+			throw new PaycrException(Constants.FAILURE, "Requested Resource is not found");
+		}
+		Date timeNow = new Date();
+		if (invoice.getExpiry().before(timeNow)) {
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+		}
+		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "This invoice is already paid");
 		}
 	}
 
@@ -67,6 +83,7 @@ public class PaymentController {
 			Payment payment = new Payment();
 			payment.setCreated(new Date());
 			payment.setInvoice(invoice);
+			payment.setInvoiceCode(invoiceCode);
 			payment.setPaymentRefNo(rzpPayId);
 
 			RazorpayClient razorpay = new RazorpayClient(setting.getRzpKeyId(), setting.getRzpSecretId());
