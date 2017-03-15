@@ -247,8 +247,8 @@
 								            		<div class="row">
 								            			<div class="col-xs-12 col-md-8 col-lg-6" style="float:right;">
 								            				<button id="infoBtn" ref="{{invoiceCode}}" type="button" data-toggle="modal" data-target="#invoiceInfo-{{invoiceCode}}" class="btn btn-default">Info</button>
-								            				&nbsp;&nbsp;<button id="enquireBtn" ref="{{invoiceCode}}" type="button" class="btn btn-info">Enquire</button>
-								            				&nbsp;&nbsp;<button id="notifyBtn" ref="{{invoiceCode}}" type="button" class="btn btn-warning">Notify</button>
+								            				{{^isPaid}}&nbsp;&nbsp;<button id="enquireBtn" ref="{{invoiceCode}}" type="button" class="btn btn-info">Enquire</button>{{/isPaid}}
+								            				{{^isPaid}}&nbsp;&nbsp;<button id="notifyBtn" ref="{{invoiceCode}}" type="button" class="btn btn-warning">Notify</button>{{/isPaid}}
 								            				&nbsp;&nbsp;<button id="expireBtn" ref="{{invoiceCode}}" type="button" class="btn btn-danger">Expire</button>
 								            			</div>
 								            		</div>

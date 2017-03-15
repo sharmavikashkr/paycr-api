@@ -100,8 +100,10 @@ public class InvoiceController {
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
-		if (CommonUtil.isNotNull(invoice) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
-			payService.enquire(invoice);
+		if (CommonUtil.isNotNull(invoice)) {
+			if (!InvoiceStatus.PAID.equals(invoice.getStatus())) {
+				payService.enquire(invoice);
+			}
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		}
