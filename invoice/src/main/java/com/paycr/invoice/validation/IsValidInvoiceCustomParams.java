@@ -38,9 +38,9 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 					mandatoryParamMissing = false;
 				}
 				icp.setInvoice(invoice);
-				if (mandatoryParamMissing) {
-					throw new PaycrException(Constants.FAILURE, "Mandatory Custom Params missing");
-				}
+			}
+			if (mandatoryParamMissing) {
+				throw new PaycrException(Constants.FAILURE, "Mandatory Custom Params missing");
 			}
 		}
 	}
