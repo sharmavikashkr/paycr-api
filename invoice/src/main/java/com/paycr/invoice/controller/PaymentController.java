@@ -1,7 +1,10 @@
 package com.paycr.invoice.controller;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +77,10 @@ public class PaymentController {
 	}
 
 	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)
-	public String purchase(@RequestParam("razorpay_payment_id") String rzpPayId,
-			@PathVariable(value = "invoiceCode") String invoiceCode) {
-		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		if (CommonUtil.isNotNull(invoice)) {
+	public void purchase(@RequestParam("razorpay_payment_id") String rzpPayId,
+			@PathVariable(value = "invoiceCode") String invoiceCode, HttpServletResponse response) throws IOException {
+		try {
+			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
 			MerchantSetting setting = merchant.getSetting();
 			Payment payment = new Payment();
@@ -85,37 +88,33 @@ public class PaymentController {
 			payment.setInvoice(invoice);
 			payment.setInvoiceCode(invoiceCode);
 			payment.setPaymentRefNo(rzpPayId);
-
 			RazorpayClient razorpay = new RazorpayClient(setting.getRzpKeyId(), setting.getRzpSecretId());
-			try {
-				com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
-				JSONObject request = new JSONObject();
-				request.put("amount", rzpPayment.get("amount").toString());
+			com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
+			JSONObject request = new JSONObject();
+			request.put("amount", rzpPayment.get("amount").toString());
+			if ("authorized".equals(rzpPayment.get("status"))) {
 				rzpPayment = razorpay.Payments.capture(rzpPayId, request);
-				payment.setStatus(rzpPayment.get("status"));
-				invoice.setStatus(getStatus(rzpPayment.get("status")));
-				payment.setMethod(rzpPayment.get("method"));
-				payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
-				payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
-				invoice.setPayment(payment);
-				invRepo.save(invoice);
-				if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
-					Notification noti = new Notification();
-					noti.setMerchantId(merchant.getId());
-					noti.setMessage("Payment received for Invoice# " + invoiceCode);
-					noti.setSubject("Invoice Paid");
-					noti.setCreated(new Date());
-					noti.setRead(false);
-					notiRepo.save(noti);
-				}
-				return "SUCCESS";
-			} catch (RazorpayException e) {
-				System.out.println(e.getMessage());
-				return "FAILURE";
 			}
-		} else {
-			return "FAILURE";
+			payment.setStatus(rzpPayment.get("status"));
+			invoice.setStatus(getStatus(rzpPayment.get("status")));
+			payment.setMethod(rzpPayment.get("method"));
+			payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
+			payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
+			invoice.setPayment(payment);
+			invRepo.save(invoice);
+			if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
+				Notification noti = new Notification();
+				noti.setMerchantId(merchant.getId());
+				noti.setMessage("Payment received for Invoice# " + invoiceCode);
+				noti.setSubject("Invoice Paid");
+				noti.setCreated(new Date());
+				noti.setRead(false);
+				notiRepo.save(noti);
+			}
+		} catch (RazorpayException e) {
+			System.out.println(e.getMessage());
 		}
+		response.sendRedirect("/response/" + invoiceCode);
 	}
 
 	private InvoiceStatus getStatus(String rzpStatus) {

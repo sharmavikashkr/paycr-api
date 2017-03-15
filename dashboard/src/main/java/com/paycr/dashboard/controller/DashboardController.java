@@ -19,6 +19,7 @@ import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
+import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
@@ -42,6 +43,9 @@ public class DashboardController {
 
 	@Autowired
 	private NotificationRepository notiRepo;
+
+	@Autowired
+	private PaymentRepository payRepo;
 
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -83,6 +87,7 @@ public class DashboardController {
 			} else {
 				invoice.setPaid(false);
 			}
+			invoice.setAllPayments(payRepo.findByInvoiceCode(invoice.getInvoiceCode()));
 		}
 		Pageable topFour = new PageRequest(0, 4);
 		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(null, merchant.getId(), topFour);

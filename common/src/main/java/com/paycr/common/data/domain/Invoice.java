@@ -72,6 +72,9 @@ public class Invoice implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
+	
+	@Transient
+	private List<Payment> allPayments;
 
 	@Transient
 	private boolean isPaid;
@@ -233,5 +236,13 @@ public class Invoice implements Serializable {
 
 	public void setCustomParams(List<InvoiceCustomParam> customParams) {
 		this.customParams = customParams;
+	}
+
+	public List<Payment> getAllPayments() {
+		return allPayments;
+	}
+
+	public void setAllPayments(List<Payment> allPayments) {
+		this.allPayments = allPayments;
 	}
 }
