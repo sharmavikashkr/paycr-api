@@ -12,7 +12,7 @@
     </style>
 </head>
 <body style="background:cadetblue;">
-	<section id="paySection" style="margin-top:120px; font-size:16px;">
+	<section id="paySection" style="margin-top:120px; font-size:14px;">
         <div class="container text-center">
 			<div class="col-xs-12 col-sm-8">
 				<div class="panel-group" role="tab">
@@ -68,7 +68,7 @@
 	                    <h3 class="section-heading">Hi {{consumer.name}}, <span style="color:white;">{{merchant.name}}</span> has requested you to pay <span style="color:white;">&#8377; {{invoice.payAmount}}</span></h3>
 	                    <p>Proceed to make payment</p>
 	                    <div class="row">
-	                    	<form class="col-sm-6" action="/return/{{invoice.invoiceCode}}" method="POST">
+	                    	<form id="payForm" class="col-sm-6" action="/return/{{invoice.invoiceCode}}" method="POST">
 							<script
 							    src="https://checkout.razorpay.com/v1/checkout.js"
 							    data-key="{{rzpKeyId}}"
@@ -83,6 +83,9 @@
 							    data-theme.color="#013487"
 							></script>
 							<input type="hidden" value="{{invoice.invoiceCode}}" name="invoiceCode">
+							{{#invoice.customParams}}
+                                <input type="hidden" name="{{paramName}}" value="{{paramValue}}">
+                            {{/invoice.customParams}}
 							</form>
 	                        <a class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
 	                    </div>
@@ -108,8 +111,8 @@
 	                            <tbody class="text-center">
 	                            	{{#invoice.customParams}}
 	                                <tr id="itemRow">
-	                                    <td><label>{{paramName}}</label></td>
-	                                    <td><input class="text-center" value="{{paramValue}}"></td>
+	                                    <td><label class="control-label">{{paramName}}</label></td>
+	                                    <td><div class="form-group" style="margin:0px;"><input id="paramValue" ref="{{paramName}}" provider="{{provider}}" class="form-control text-center" value="{{paramValue}}"></div></td>
 	                                </tr>
 	                                {{/invoice.customParams}}
 	                             </tbody>
@@ -125,6 +128,42 @@
     <script type="text/javascript">
     $(document).ready(function() {
     	$(".razorpay-payment-button").addClass('btn btn-info');
+    	var req = 0;
+    	$("[id = paramValue]").each(function() {
+    		var provider = $(this).attr("provider");
+    		if(provider == 'MERCHANT') {
+    			$(this).prop('disabled', true);
+    		}
+    		if(provider == 'CONSUMER' & $(this).val().trim() == '') {
+    			req = req + 1;
+    			$(this).parent().addClass(' has-error');
+    		}
+    	});
+    	if(req > 0) {
+			$(".razorpay-payment-button").prop('disabled', true);
+			$(".razorpay-payment-button").attr('title', 'Set proper param values');
+		}
+    	$("[id = paramValue]").on("change",function() {
+    		var paramValue = $(this).val();
+    		var paramName = $(this).attr('ref');
+    		$('[name = '+paramName+']').val(paramValue);
+    		$(this).parent().removeClass(' has-error');
+    		req = 0;
+    		$("[id = paramValue]").each(function() {
+        		var provider = $(this).attr("provider");
+        		if(provider == 'CONSUMER' & $(this).val().trim() == '') {
+        			req = req + 1;
+        			$(this).parent().addClass(' has-error');
+        		}
+        	});
+    		if(req > 0) {
+    			$(".razorpay-payment-button").prop('disabled', true);
+    			$(".razorpay-payment-button").attr('title', 'Set proper param values');
+    		} else {
+    			$(".razorpay-payment-button").prop('disabled', false);
+    			$(".razorpay-payment-button").attr('title', 'Pay');
+    		}
+    	});
     });
     </script>
 </body>

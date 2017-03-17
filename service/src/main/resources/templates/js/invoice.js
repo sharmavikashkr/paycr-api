@@ -3,13 +3,45 @@ $(document).ready(function() {
 	$("#dismissServerRespAlertBtn").click(function() {
 		$("#serverRespAlert").hide();
 	});
+	$("[name = inv-customParam]").each(function() {
+		var provider = $(this).attr('provider');
+		if(provider == 'MERCHANT') {
+			$(this).prop('required', true);
+			$(this).addClass("error");
+		}
+	});
 	$("#createInvoiceBtn").click(function() {
-		if(!$("#createInvoiceForm")[0].checkValidity()) {
+		var errors = 0;
+		$('#createInvoiceForm :input').each(function() {
+			if($(this).prop('required')) {
+				if($(this).attr('type') == 'email') {
+					var filter = /^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-zA-Z]{2,6}(?:\.[a-zA-Z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/;
+					if(!filter.test($(this).val().trim())) {
+						errors = errors + 1;
+						$(this).parent().addClass('has-error');
+					} else {
+						$(this).parent().removeClass('has-error');
+					}
+				} else {
+					var pattern = $(this).attr('pattern');
+					if(pattern != undefined) {
+						var regex = new RegExp(pattern);
+						if(!regex.test($(this).val().trim())) {
+							errors = errors + 1;
+							$(this).parent().addClass('has-error');
+						} else {
+							$(this).parent().removeClass('has-error');
+						}
+					}
+				}
+			}
+		});
+		if(errors > 0) {
 			return false;
 		}
-		var name = $("#con-name").val();
-		var email = $("#con-email").val();
-		var mobile = $("#con-mobile").val();
+		var name = $("#con-name").val().trim();
+		var email = $("#con-email").val().trim();
+		var mobile = $("#con-mobile").val().trim();
 		var consumer = {
 				"name" : name,
 				"email" : email,
@@ -17,10 +49,10 @@ $(document).ready(function() {
 		};
 		var items = [];
 		$("[id = itemRow]").each(function() {
-			var name = $(this).find("#item-name").val();
-			var rate = $(this).find("#item-rate").val();
-			var quantity = $(this).find("#item-quantity").val();
-			var price = $(this).find("#item-price").val();
+			var name = $(this).find("#item-name").val().trim();
+			var rate = $(this).find("#item-rate").val().trim();
+			var quantity = $(this).find("#item-quantity").val().trim();
+			var price = $(this).find("#item-price").val().trim();
 			var item = {
 				"name" : name,
 				"rate" : rate,
@@ -31,9 +63,9 @@ $(document).ready(function() {
 		});
 		var customParams = [];
 		$("[name = inv-customParam]").each(function() {
-			var name = $(this).attr('ref');
-			var value = $(this).val();
-			var provider = $(this).attr('provider');
+			var name = $(this).attr('ref').trim();
+			var value = $(this).val().trim();
+			var provider = $(this).attr('provider').trim();
 			var customParam = {
 				"paramName" : name,
 				"paramValue" : value,
@@ -45,11 +77,11 @@ $(document).ready(function() {
 		var invoiceCode = "";
 		var sendEmail = $("#inv-sendEmail").is(":checked");
 		var sendSms = $("#inv-sendSms").is(":checked");
-		var shipping = $("#inv-shipping").val();
-		var discount = $("#inv-discount").val();
-		var amount = $("#inv-final").val();
+		var shipping = $("#inv-shipping").val().trim();
+		var discount = $("#inv-discount").val().trim();
+		var amount = $("#inv-final").val().trim();
 		var currency = 'INR';
-		var expiresIn = $("#inv-expiresIn").val();
+		var expiresIn = $("#inv-expiresIn").val().trim();
 		var invoice = {
 				"invoiceCode" : invoiceCode,
 				"consumer" : consumer,

@@ -1,7 +1,14 @@
 $(document).ready(function() {
 	$("#createCustomParamBtn").click(function() {
-		var name = $("#cus-paramName").val();
-		var provider = $("#cus-provider").val();
+		var name = $("#cus-paramName").val().trim();
+		var regex = new RegExp('[a-zA-Z0-9_ ]{1,20}');
+		if(!regex.test(name)) {
+			$("#cus-paramName").parent().addClass('has-error');
+			return false;
+		} else {
+			$("#cus-paramName").parent().removeClass('has-error');
+		}
+		var provider = $("#cus-provider").val().trim();
 		var customParam = {
 			"paramName" : name,
 			"provider" : provider
@@ -48,10 +55,17 @@ $(document).ready(function() {
 	$("#updateMerchantSettingBtn").click(function() {
 		var isSendSms = $("#set-sendSms").is(':checked');
 		var isSendEmail = $("#set-sendEmail").is(':checked');
-		var expiryDays = $("#set-expiry").val();
-		var rzpMerchantId = $("#set-rzpmi").val();
-		var rzpKeyId = $("#set-rzpki").val();
-		var rzpSecretId = $("#set-rzpsi").val();
+		var expiryDays = $("#set-expiry").val().trim();
+		var regex = new RegExp('[0-9]{1,5}');
+		if(!regex.test(expiryDays)) {
+			$("#set-expiry").parent().addClass('has-error');
+			return false;
+		} else {
+			$("#set-expiry").parent().removeClass('has-error');
+		}
+		var rzpMerchantId = $("#set-rzpmi").val().trim();
+		var rzpKeyId = $("#set-rzpki").val().trim();
+		var rzpSecretId = $("#set-rzpsi").val().trim();
 		var setting = {
 				"sendSms" : isSendSms,
 				"sendEmail" : isSendEmail,

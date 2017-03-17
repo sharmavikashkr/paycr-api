@@ -3,6 +3,7 @@ package com.paycr.invoice.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Notification;
@@ -25,6 +27,7 @@ import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.razorpay.RazorpayClient;
@@ -77,11 +80,19 @@ public class PaymentController {
 	}
 
 	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)
-	public void purchase(@RequestParam("razorpay_payment_id") String rzpPayId,
-			@PathVariable(value = "invoiceCode") String invoiceCode, HttpServletResponse response) throws IOException {
+	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws IOException {
+		String invoiceCode = null;
 		try {
+			String rzpPayId = formData.get("razorpay_payment_id");
+			invoiceCode = formData.get("invoiceCode");
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
+			for(InvoiceCustomParam param : invoice.getCustomParams()) {
+				if(ParamValueProvider.CONSUMER.equals(param.getProvider())) {
+					String paramValue = formData.get(param.getParamName());
+					param.setParamValue(paramValue);
+				}
+			}
 			MerchantSetting setting = merchant.getSetting();
 			Payment payment = new Payment();
 			payment.setCreated(new Date());

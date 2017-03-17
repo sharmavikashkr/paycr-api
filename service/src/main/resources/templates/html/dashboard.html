@@ -12,9 +12,6 @@
     <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <link href="/vendor/morrisjs/morris.css" rel="stylesheet">
     <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <style>
-    	#newInvoice input {border:none;text-size:6px;}
-    </style>
 </head>
 <body>
     <div id="wrapper">
@@ -280,7 +277,7 @@
 	                        	<hr>
 	                        	<div class="form-group">
 	               					<label class="control-label" for="set-expiry">Expiry Days</label>
-	               					<input class="form-control" id="set-expiry" value="{{merchant.setting.expiryDays}}"/>
+	               					<input class="form-control" id="set-expiry" value="{{merchant.setting.expiryDays}}" type="number" pattern="[0-9]{1,5}" required/>
                					</div>
 	                        </div>
 	                    </div>
@@ -351,24 +348,24 @@
 	      <div class="modal-body" style="padding:20px;">
 	      	<form id="createInvoiceForm">
 			    <div class="row">
-	                <div class="col-xs-12 col-md-6 col-lg-4">
+	                <div class="col-xs-12 col-md-6 col-lg-5">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Consumer Details</div>
 	                        <div class="panel-body">
-	                            <strong>Name:</strong>&nbsp;<input style="width:200px;" id="con-name" placeholder="Consumer Name" type="text" pattern="[a-zA-Z ]{1,50}" required/><br>
-	                            <strong>Email:</strong>&nbsp;<input style="width:200px;" id="con-email" placeholder="Consumer Email" type="email" required/><br>
-	                            <strong>Mobile:</strong>&nbsp;<input id="con-mobile" placeholder="Consumer Mobile" type="number" pattern="\d[10]" required/><br>
+	                            <div class="form-group"><label class="control-label">Name:</label>&nbsp;<input class="form-control" id="con-name" placeholder="Consumer Name" type="text" pattern="[a-zA-Z ]{1,50}" required/></div>
+	                            <div class="form-group"><label class="control-label">Email:</label>&nbsp;<input class="form-control" id="con-email" placeholder="Consumer Email" type="email" pattern="" required/></div>
+	                            <div class="form-group"><label class="control-label">Mobile:</label>&nbsp;<input class="form-control" id="con-mobile" placeholder="Consumer Mobile" type="number" pattern="\d[10]" required/></div>
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-xs-12 col-md-6 col-lg-4">
+	                <div class="col-xs-12 col-md-6 col-lg-3">
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Invoice Preferences</div>
 	                        <div class="panel-body">
 	                            <input type="checkbox" id="inv-sendEmail" {{#merchant.setting.sendEmail}}checked{{/merchant.setting.sendEmail}}>&nbsp;<strong>Send Email</strong><br>
 	                            <input type="checkbox" id="inv-sendSms" {{#merchant.setting.sendSms}}checked{{/merchant.setting.sendSms}}>&nbsp;<strong>Send Sms</strong><br>
 	                            <hr>
-	                        	<strong>Expires in (days):</strong>&nbsp;<input style="width:100px;" type="number" id="inv-expiresIn" value="{{merchant.setting.expiryDays}}" pattern="[0-9]{1,3}" required/><br>
+	                        	<div class="form-group"><label class="control-label">Expires in (days):</label><input class="form-control" style="width:100px;" type="number" id="inv-expiresIn" value="{{merchant.setting.expiryDays}}" pattern="[0-9]{1,3}" required/></div>
 	                        </div>
 	                    </div>
 	                </div>
@@ -377,18 +374,17 @@
 	                        <div class="panel-heading">Custom Params</div>
 	                        <div class="panel-body">
 	                        	{{#merchant.customParams}}
-	                            <strong>{{paramName}}:</strong>&nbsp;<input name="inv-customParam" provider="{{provider}}" ref="{{paramName}}" id="{{id}}" placeholder="value" required/><br>
+	                            <div class="form-group"><label class="control-label">{{paramName}}:</label><input class="form-control" name="inv-customParam" provider="{{provider}}" ref="{{paramName}}" id="{{id}}" placeholder="value" pattern="[a-zA-Z0-9 ]{1,50}"/></div>
 	                            {{/merchant.customParams}}
 	                        </div>
 	                    </div>
 	                </div>
 	            </div>
-	            <hr>
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
 			                <div class="panel-heading">
-			                    <h3 class="text-center"><strong>Order summary</strong></h3>
+			                    <h5 class="text-center"><strong>Order summary</strong></h5>
 			                </div>
 			                <div class="panel-body">
 			                    <div class="table-responsive">
@@ -405,43 +401,43 @@
 			                            <tbody id="itemBody">
 			                                <tr id="itemRow">
 			                                	<td>
-			                                	<div class="panel text-center">
+			                                	<div class="panel text-center" style="width:65px;">
 			                                		<button id="delTr" type="button" class="col-lg-6 btn btn-danger btn-circle btn-md"><i class="fa fa-minus"></i></button>
 			                                		<button id="addTr" type="button" class="col-lg-6 btn btn-success btn-circle btn-md"><i class="fa fa-plus"></i></button>
 			                                	</div>
 			                                	</td>
-			                                    <td><input class="text-center" id="item-name" placeholder="Item Name" type="text" required/></td>
-			                                    <td>&#8377; <input class="text-center" id="item-rate" placeholder="2000.00" type="number" step="1.00" required/></td>
-			                                    <td><input class="text-center" id="item-quantity" placeholder="2" type="number" pattern="[0-9]{1-3}" required/></td>
-			                                    <td>&#8377; <input class="text-right" id="item-price" placeholder="4000.00" type="number" step="1.00" readonly required/></td>
+			                                    <td><div class="form-group"><input class="form-control text-center" id="item-name" placeholder="Item Name" type="text" pattern="[a-zA-Z ]{1,50}" required/></div></td>
+			                                    <td><div class="input-group"><div class="input-group-addon">&#8377;</div><div class="form-group"><input class="form-control text-center" id="item-rate" placeholder="2000.00" type="number" step="1.00" pattern="[0-9]{1,8}" required/></div></div></td>
+			                                    <td><div class="form-group"><input class="form-control text-center" id="item-quantity" placeholder="2" type="number" pattern="[0-9]{1,3}" required/></div></td>
+			                                    <td><div class="input-group"><div class="input-group-addon">&#8377;</div><div class="form-group"><input class="form-control text-right" id="item-price" placeholder="4000.00" type="number" step="1.00" readonly required/></div></div></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="highrow"></td>
 			                                    <td class="highrow"></td>
 			                                    <td class="highrow text-center"><strong>Total</strong></td>
-			                                    <td class="highrow">&#8377; <input class="text-right" id="inv-total" placeholder="4000.00" type="number" step="1.00" readonly required/></td>
+			                                    <td class="highrow"><div class="input-group"><div class="input-group-addon">&#8377;</div><div class="form-group"><input class="form-control text-right" id="inv-total" placeholder="4000.00" type="number" step="1.00" readonly required/></div></div></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Shipping</strong></td>
-			                                    <td class="emptyrow">&#8377; <input class="text-right" id="inv-shipping" placeholder="400.00" type="number" step="1.00" required/></td>
+			                                    <td class="emptyrow"><div class="input-group"><div class="input-group-addon">&#8377;</div><div class="form-group"><input class="form-control text-right" id="inv-shipping" placeholder="400.00" type="number" step="1.00"/></div></div></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Discount</strong></td>
-			                                    <td class="emptyrow">&#8377; <input class="text-right" id="inv-discount" placeholder="40.00" type="number" step="1.00" required/></td>
+			                                    <td class="emptyrow"><div class="input-group"><div class="input-group-addon">&#8377;</div><div class="form-group"><input class="form-control text-right" id="inv-discount" placeholder="40.00" type="number" step="1.00"/></div></div></td>
 			                                </tr>
 			                                <tr>
 			                                	<td class="highrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow"></td>
 			                                    <td class="emptyrow text-center"><strong>Final</strong></td>
-			                                    <td class="emptyrow">&#8377; <input class="text-right" id="inv-final" placeholder="4360.00" type="number" step="1.00" readonly required/></td>
+			                                    <td class="emptyrow"><div class="input-group"><div class="input-group-addon">&#8377;</div><div class="form-group"><input class="form-control text-right" id="inv-final" placeholder="4360.00" type="number" step="1.00" readonly required/></div></div></td>
 			                                </tr>
 			                            </tbody>
 			                        </table>
@@ -479,7 +475,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="cus-paramName">Param Name</label>
-		                        					<input class="form-control" id="cus-paramName" placeholder="Param Name"/>
+		                        					<input class="form-control" id="cus-paramName" placeholder="Param Name" pattern="[a-zA-Z]{1,10}" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
