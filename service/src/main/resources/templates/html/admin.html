@@ -258,7 +258,7 @@
 	        <h4 class="modal-title">Create New Merchant</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form>
+	      	<form id="createMerchantForm">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
@@ -270,7 +270,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="mer-name">Name</label>
-		                        					<input class="form-control" id="mer-name" placeholder="Merchant Name"/>
+		                        					<input class="form-control" id="mer-name" placeholder="Merchant Name" pattern="[a-zA-Z0-9 ]" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -278,7 +278,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="mer-email">Email</label>
-		                        					<input class="form-control" id="mer-email" type="email" placeholder="Merchant Email"/>
+		                        					<input class="form-control" id="mer-email" type="email" placeholder="Merchant Email" type="email" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -286,7 +286,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="mer-mobile">Mobile</label>
-		                        					<input class="form-control" id="mer-mobile" type="number" placeholder="Merchant Mobile"/>
+		                        					<input class="form-control" id="mer-mobile" type="number" placeholder="Merchant Mobile" pattern="^[7-9]{1}[0-9]{9}$" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -294,7 +294,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="mer-admin">Admin</label>
-		                        					<input class="form-control" id="mer-admin" placeholder="Merchant Admin"/>
+		                        					<input class="form-control" id="mer-admin" placeholder="Merchant Admin" pattern="[a-zA-Z0-9 ]" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -334,7 +334,7 @@
 	        <h4 class="modal-title">Create New Pricing</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form>
+	      	<form id="createPricingForm">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
@@ -346,7 +346,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-name">Name</label>
-		                        					<input class="form-control" id="pri-name" placeholder="Pricing Name" required/>
+		                        					<input class="form-control" id="pri-name" placeholder="Pricing Name" pattern="[a-zA-Z0-9_ ]{1,30}" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -354,7 +354,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-desc">Description</label>
-		                        					<input class="form-control" id="pri-desc" placeholder="Pricing Description" required/>
+		                        					<input class="form-control" id="pri-desc" placeholder="Pricing Description" pattern="[a-zA-Z0-9_ ]{1,30}" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -362,7 +362,7 @@
 		                        				<td>
 		                        					<div class="form-group">
 		                        					<label class="control-label" for="pri-limit">Invoice Limit</label>
-		                        					<input class="form-control" type="number" id="pri-limit" placeholder="Invoice limit" required/>
+		                        					<input class="form-control" type="number" id="pri-limit" placeholder="Invoice limit" pattern="[0-9]{1,5}" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -374,7 +374,7 @@
 													    <div class="input-group-addon">
 													    	&#8377; 
 													    </div>
-													    <input class="form-control" id="pri-start" type="number" placeholder="Start Amount" required/>
+													    <input class="form-control" id="pri-start" type="number" placeholder="Start Amount" pattern="[0-9]{1,8}" required/>
 													</div>
 		                        					</div>
 		                        				</td>
@@ -387,7 +387,7 @@
 													    <div class="input-group-addon">
 													    	&#8377; 
 													    </div>
-													    <input class="form-control" id="pri-end" type="number" placeholder="End Amount" required/>
+													    <input class="form-control" id="pri-end" type="number" placeholder="End Amount" pattern="[0-9]{1,8}" required/>
 													</div>
 		                        					</div>
 		                        				</td>
@@ -395,8 +395,8 @@
 		                        			<tr>
 		                        				<td>
 		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-dura">Duration</label>
-		                        					<input class="form-control" id="pri-dura" type="number" placeholder="Duration" required/>
+		                        					<label class="control-label" for="pri-dura">Duration (Days)</label>
+		                        					<input class="form-control" id="pri-dura" type="number" placeholder="Duration" pattern="[0-9]{1,5}" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -408,7 +408,7 @@
 													    <div class="input-group-addon">
 													    	&#8377; 
 													    </div>
-													    <input class="form-control" id="pri-rate" type="number" placeholder="Rate" required/>
+													    <input class="form-control" id="pri-rate" type="number" placeholder="Rate" pattern="[0-9]{1,8}" required/>
 													</div>
 		                        					</div>
 		                        				</td>

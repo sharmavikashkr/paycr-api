@@ -49,7 +49,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
 		String invoiceCode = invoice.getInvoiceCode();
-		if (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode))) {
+		while (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode))) {
 			invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 			invoice.setInvoiceCode(invoiceCode);
 		}

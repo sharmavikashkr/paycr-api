@@ -4,11 +4,39 @@ $(document).ready(function() {
 		$("#serverRespAlert").hide();
 	});
 	$("#createMerchantBtn").click(function() {
-		var name = $("#mer-name").val();
-		var email = $("#mer-email").val();
-		var mobile = $("#mer-mobile").val();
-		var admin = $("#mer-admin").val();
-		var pricingId = $("#mer-price").val()
+		var errors = 0;
+		$('#createMerchantForm :input').each(function() {
+			if($(this).prop('required')) {
+				if($(this).attr('type') == 'email') {
+					var filter = /^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-zA-Z]{2,6}(?:\.[a-zA-Z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/;
+					if(!filter.test($(this).val().trim())) {
+						errors = errors + 1;
+						$(this).parent().addClass('has-error');
+					} else {
+						$(this).parent().removeClass('has-error');
+					}
+				} else {
+					var pattern = $(this).attr('pattern');
+					if(pattern != undefined) {
+						var regex = new RegExp(pattern);
+						if(!regex.test($(this).val().trim())) {
+							errors = errors + 1;
+							$(this).parent().addClass('has-error');
+						} else {
+							$(this).parent().removeClass('has-error');
+						}
+					}
+				}
+			}
+		});
+		if(errors > 0) {
+			return false;
+		}
+		var name = $("#mer-name").val().trim();
+		var email = $("#mer-email").val().trim();
+		var mobile = $("#mer-mobile").val().trim();
+		var admin = $("#mer-admin").val().trim();
+		var pricingId = $("#mer-price").val();
 		
 		var merchant = {
 				"name" : name,
@@ -39,13 +67,31 @@ $(document).ready(function() {
 		});
 	});
 	$("#createPricingBtn").click(function() {
-		var name = $("#pri-name").val();
-		var desc = $("#pri-desc").val();
-		var limit = $("#pri-limit").val();
-		var start = $("#pri-start").val();
-		var end = $("#pri-end").val();
-		var rate = $("#pri-rate").val();
-		var dura = $("#pri-dura").val();
+		var errors = 0;
+		$('#createPricingForm :input').each(function() {
+			if($(this).prop('required')) {
+				var pattern = $(this).attr('pattern');
+				if(pattern != undefined) {
+					var regex = new RegExp(pattern);
+					if(!regex.test($(this).val().trim())) {
+						errors = errors + 1;
+						$(this).parent().addClass('has-error');
+					} else {
+						$(this).parent().removeClass('has-error');
+					}
+				}
+			}
+		});
+		if(errors > 0) {
+			return false;
+		}
+		var name = $("#pri-name").val().trim();
+		var desc = $("#pri-desc").val().trim();
+		var limit = $("#pri-limit").val().trim();
+		var start = $("#pri-start").val().trim();
+		var end = $("#pri-end").val().trim();
+		var rate = $("#pri-rate").val().trim();
+		var dura = $("#pri-dura").val().trim();
 		
 		var merchant = {
 				"name" : name,
