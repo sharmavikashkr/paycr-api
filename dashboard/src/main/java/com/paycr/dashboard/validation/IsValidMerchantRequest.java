@@ -37,7 +37,7 @@ public class IsValidMerchantRequest implements RequestValidator<Merchant> {
 		}
 		PcUser extUser = userRepo.findByEmailOrMobile(merchant.getEmail(), merchant.getMobile());
 		if (CommonUtil.isNotNull(extUser)) {
-			throw new PaycrException(Constants.FAILURE, "User already exists with this email");
+			throw new PaycrException(Constants.FAILURE, "User already exists with this email/mobile");
 		}
 	}
 
