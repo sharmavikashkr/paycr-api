@@ -10,4 +10,6 @@ public interface UserRepository extends JpaRepository<PcUser, Integer> {
 
 	public PcUser findByEmail(String email);
 
+	public PcUser findByEmailOrMobile(String email, String mobile);
+
 }
