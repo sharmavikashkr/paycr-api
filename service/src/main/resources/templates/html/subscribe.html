@@ -1,0 +1,91 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>PayCr</title>
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    	#paySection {border:none;text-size:6px;}
+    </style>
+</head>
+<body style="background:cadetblue;">
+	<section id="paySection" style="margin-top:120px; font-size:14px;">
+        <div class="container text-center">
+			<div class="col-xs-12 col-sm-8">
+				<div class="row panel-default">
+	                <div class="col-md-8 col-md-offset-2">
+	                    <h3 class="section-heading">Hi {{merchant.name}}, <span style="color:white;">PayCr</span> has requested you to pay <span style="color:white;">&#8377; {{pricing.rate}}</span></h3>
+	                    <p>Proceed to make payment</p>
+	                    <div class="row">
+	                    	<form id="payForm" class="col-sm-6" action="/subscription/return" method="POST">
+							<script
+							    src="https://checkout.razorpay.com/v1/checkout.js"
+							    data-key="{{rzpKeyId}}"
+							    data-amount="{{payAmount}}"
+							    data-buttontext="Pay &#8377; {{pricing.rate}}"
+							    data-name="PayCr"
+							    data-description="Subscription Request"
+							    data-image="https://your-awesome-site.com/your_logo.jpg"
+							    data-prefill.name="{{merchant.name}}"
+							    data-prefill.email="{{merchant.email}}"
+							    data-prefill.contact="{{merchant.mobile}}"
+							    data-theme.color="#013487"
+							></script>
+							<input type="hidden" value="{{subsCode}}" name="subsCode">
+							</form>
+	                        <a class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
+	                    </div>
+	                </div>
+	            </div>
+	            <hr>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="panel-group" role="tab">
+					<div class="panel">
+						<div class="panel-heading text-left">
+							<a class="accordion-toggle" role="button" data-toggle="collapse"
+								href="#" data-target="#collapseParams"> Subscription Information </a>
+						</div>
+						<div id="collapseParams" class="accordion-body collapse in">
+							<table id="paramsTable" class="table table-bordered">
+	                            <tbody class="text-center">
+	                                <tr>
+	                                    <td><label class="control-label">Name</label></td>
+	                                    <td><div class="form-group" style="margin:0px;">{{pricing.name}}</div></td>
+	                                </tr>
+	                                <tr>
+	                                    <td><label class="control-label">Duration</label></td>
+	                                    <td><div class="form-group" style="margin:0px;">{{pricing.duration}}</div></td>
+	                                </tr>
+	                                <tr>
+	                                    <td><label class="control-label">Start Amount</label></td>
+	                                    <td><div class="form-group" style="margin:0px;">{{pricing.startAmount}}</div></td>
+	                                </tr>
+	                                <tr>
+	                                    <td><label class="control-label">End Amount</label></td>
+	                                    <td><div class="form-group" style="margin:0px;">{{pricing.endAmount}}</div></td>
+	                                </tr>
+	                                <tr>
+	                                    <td><label class="control-label">Rate</label></td>
+	                                    <td><div class="form-group" style="margin:0px;">{{pricing.rate}}</div></td>
+	                                </tr>
+	                             </tbody>
+	                         </table>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </section>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+    	$(".razorpay-payment-button").addClass('btn btn-info');
+    });
+    </script>
+</body>
+</html>

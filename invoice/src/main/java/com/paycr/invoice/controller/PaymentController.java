@@ -52,7 +52,6 @@ public class PaymentController {
 			validate(invoice);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
 			ModelAndView mv = new ModelAndView("html/payinvoice");
-			mv.addObject("merchantTxnId", "mtx");
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
 			mv.addObject("rzpKeyId", merchant.getSetting().getRzpKeyId());

@@ -94,9 +94,11 @@ public class DashboardController {
 		for (Notification notice : notices) {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}
+		List<Pricing> pricings = priceRepo.findAll();
 		ModelAndView mv = new ModelAndView("html/dashboard");
 		mv.addObject("user", user);
 		mv.addObject("merchant", merchant);
+		mv.addObject("pricings", pricings);
 		mv.addObject("provider", ParamValueProvider.values());
 		mv.addObject("invoices", invoices);
 		mv.addObject("notices", notices);

@@ -90,10 +90,10 @@
                             <a href="#"><i class="fa fa-user fa-fw"></i> Account<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                                    <a href="#" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Settings</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
+                                    <a href="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
                                 </li>
                             </ul>
                         </li>
@@ -263,8 +263,6 @@
 	                <!-- /.col-lg-12 -->
 	            </div>
 	        </div>
-	        <div id="contactsTab" class="tab-pane fade">
-	        </div>
 	        <div id="invoiceSettingTab" class="tab-pane fade">
 	        	<br>
 	        	<div class="row">
@@ -333,6 +331,72 @@
 	                            </table>
 	                        </div>
 	                    </div>
+	                </div>
+	        	</div>
+	        </div>
+	        <div id="contactsTab" class="tab-pane fade">
+	        </div>
+	        <div id="subscriptionTab" class="tab-pane fade">
+	        	<br>
+	        	<div class="row text-center">
+	        		<div class="col-md-10 col-md-offset-1">
+		        		<h4>My Subscriptions</h4>
+		        		<table class="table table-bordered">
+		                    <thead>
+		                        <tr>
+		                            <td class="text-center"><strong>Name</strong></td>
+		                            <td class="text-center"><strong>Start Date</strong></td>
+		                            <td class="text-center"><strong>End Date</strong></td>
+		                            <td class="text-center"><strong>Limit</strong></td>
+		                            <td class="text-right"><strong>Status</strong></td>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="itemBody">
+		                    	{{#merchant.pricings}}
+		                        <tr id="itemRow">
+		                            <td class="text-center">{{pricing.name}}</td>
+		                            <td class="text-center">{{startDate}}</td>
+		                            <td class="text-center">{{endDate}}</td>
+		                            <td class="text-center">{{pricing.invoiceLimit}}</td>
+		                            <td class="text-right">{{status}}</td>
+		                        </tr>
+		                        {{/merchant.pricings}}
+		                    </tbody>
+		                </table>
+	                </div>
+	        	</div>
+	        	<hr>
+	        	<div class="row text-center">
+	        		<div class="col-md-10 col-md-offset-1">
+		        		<h4>Buy new Subscription</h4>
+		        		<table class="table table-bordered">
+		                    <thead>
+		                        <tr>
+		                            <td class="text-center"><strong>Name</strong></td>
+		                            <td class="text-center"><strong>Duration</strong></td>
+		                            <td class="text-center"><strong>Start Amount</strong></td>
+		                            <td class="text-center"><strong>End Amount</strong></td>
+		                            <td class="text-center"><strong>Limit</strong></td>
+		                            <td class="text-center"><strong>Rate</strong></td>
+		                            <td class="text-center"><strong>Action</strong></td>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="itemBody">
+		                    	{{#pricings}}
+		                    	{{#active}}
+		                        <tr id="itemRow">
+		                            <td class="text-center">{{name}}</td>
+		                            <td class="text-center">{{duration}}</td>
+		                            <td class="text-center">{{startAmount}}</td>
+		                            <td class="text-center">{{endAmount}}</td>
+		                            <td class="text-center">{{invoiceLimit}}</td>
+		                            <td class="text-center">{{rate}}</td>
+		                            <td class="text-center"><a href="/subscription/new/{{id}}" target="_blank" type="button" class="btn btn-warning">Buy</a></td>
+		                        </tr>
+		                        {{/active}}
+		                        {{/pricings}}
+		                    </tbody>
+		                </table>
 	                </div>
 	        	</div>
 	        </div>
