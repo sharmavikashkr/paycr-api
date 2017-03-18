@@ -226,4 +226,5 @@ $(document).ready(function() {
 			updatePrice();
 		}
 	});
+	$("#dismissServerRespAlertBtn").click();
 });

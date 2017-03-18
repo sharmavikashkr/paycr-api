@@ -59,7 +59,7 @@ public class UserController {
 		user.setName("Paycr Admin");
 		user.setEmail("admin@paycr.in");
 		user.setPassword(bcPassEncode.encode("password@123"));
-		user.setMobile("9970197591");
+		user.setMobile("9977553311");
 		List<UserRole> userRoles = new ArrayList<UserRole>();
 		UserRole userRole = new UserRole();
 		userRole.setRole(Role.ROLE_ADMIN);

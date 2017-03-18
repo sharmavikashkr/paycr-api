@@ -123,4 +123,5 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$("#dismissServerRespAlertBtn").click();
 });
