@@ -123,5 +123,24 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$("[id = togglePricingBtn]").click(function() {
+		var pricingId = $(this).attr('ref');
+		$.ajax({
+			url : '/pricing/toggle/'+pricingId,
+			type : 'GET',
+			async : false,
+			success : function(data) {
+				window.location.reload();
+			},
+			error : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html("FAILURE");
+				$("#serverRespStatus").html("FAILURE!");
+			}
+		});
+	});
 	$("#dismissServerRespAlertBtn").click();
 });

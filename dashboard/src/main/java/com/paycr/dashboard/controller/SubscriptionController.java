@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,10 +60,16 @@ public class SubscriptionController {
 	@Autowired
 	private NotificationRepository notiRepo;
 
+	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping("/new/{pricingId}")
 	public ModelAndView newSubscription(@PathVariable Integer pricingId) {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
+		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1) {
+			ModelAndView mv = new ModelAndView("html/errorpage");
+			mv.addObject("message", "Requested Resource not found");
+			return mv;
+		}
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Subscription subs = new Subscription();
 		subs.setAmount(pricing.getRate());
@@ -99,7 +106,7 @@ public class SubscriptionController {
 			String rzpPayId = formData.get("razorpay_payment_id");
 			subsCode = formData.get("subsCode");
 			Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
-			if("captured".equals(subs.getStatus())) {
+			if ("captured".equals(subs.getStatus())) {
 				return mv;
 			}
 			Merchant merchant = subs.getMerchant();
