@@ -35,6 +35,10 @@ $(document).ready(function() {
 	});
 	$("[id = deleteCustomParamBtn]").click(function() {
 		var merchantCustomParamId = $(this).attr('ref');
+		var paramName = $(this).attr('name');
+		if(!confirm('Delete '+paramName+' ?')) {
+			return false;
+		}
 		$.ajax({
 			url : '/merchant/setting/customParam/delete/'+merchantCustomParamId,
 			type : 'GET',

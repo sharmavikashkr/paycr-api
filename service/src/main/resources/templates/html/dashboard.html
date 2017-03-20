@@ -87,15 +87,10 @@
                             <a href="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory Items</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Account<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#settingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                                </li>
-                                <li>
-                                    <a href="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
-                                </li>
-                            </ul>
+                            <a href="#settingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li>
+                            <a href="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
                         </li>
                     </ul>
                 </div>
@@ -324,7 +319,7 @@
 	                                	<tr>
 	                                        <td>{{paramName}}</td>
 	                                        <td>{{provider}}</td>
-	                                        <td><button id="deleteCustomParamBtn" ref="{{id}}" type="button" class="btn btn-danger btn-circle btn-xs"><i class="fa fa-minus"></i></button></td>
+	                                        <td><button id="deleteCustomParamBtn" ref="{{id}}" name="{{paramName}}" type="button" class="btn btn-danger btn-circle btn-xs"><i class="fa fa-minus"></i></button></td>
 	                                    </tr>
 	                                    {{/merchant.customParams}}
 	                                </tbody>

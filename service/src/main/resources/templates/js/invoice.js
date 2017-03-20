@@ -137,6 +137,9 @@ $(document).ready(function() {
 	});
 	$("[id = expireBtn]").click(function() {
 		var invoiceCode = $(this).attr('ref');
+		if(!confirm('Expire '+invoiceCode+' ?')) {
+			return false;
+		}
 		$.ajax({
 			url : '/invoice/expire/'+invoiceCode,
 			type : 'GET',
