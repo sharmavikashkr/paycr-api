@@ -6,24 +6,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
+import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
+import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 
 @RestController
@@ -31,6 +40,9 @@ public class DashboardController {
 
 	@Autowired
 	private SecurityService secSer;
+
+	@Autowired
+	private UserRepository userRepo;
 
 	@Autowired
 	private InvoiceRepository invRepo;
@@ -42,10 +54,16 @@ public class DashboardController {
 	private MerchantRepository merRepo;
 
 	@Autowired
+	private MerchantUserRepository merUserRepo;
+
+	@Autowired
 	private NotificationRepository notiRepo;
 
 	@Autowired
 	private PaymentRepository payRepo;
+
+	@Autowired
+	private BCryptPasswordEncoder bcPassEncode;
 
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -55,6 +73,31 @@ public class DashboardController {
 	@RequestMapping("/login")
 	public ModelAndView login() {
 		return new ModelAndView("html/login");
+	}
+
+	@RequestMapping(value = "/app/login", method = RequestMethod.POST)
+	public String appLogin(@RequestParam(value = "username", required = true) String email,
+			@RequestParam(value = "password", required = true) String password,
+			@RequestHeader(value = "accessKey", required = true) String accessKey) {
+		PcUser user = userRepo.findByEmail(email);
+		if (CommonUtil.isNull(user)) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
+		if (!bcPassEncode.encode(password).equals(user.getPassword())) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
+		MerchantUser merUser = merUserRepo.findByUserId(user.getId());
+		if (CommonUtil.isNull(merUser)) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
+		Merchant merchant = merRepo.findOne(merUser.getMerchantId());
+		if (CommonUtil.isNull(merchant)) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
+		if(!accessKey.equals(merchant.getAccessKey())) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
+		return merchant.getSecretKey();
 	}
 
 	@RequestMapping("/forgotPassword")
