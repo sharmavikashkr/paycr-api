@@ -1,4 +1,4 @@
-package com.paycr.common.bean;
+package com.paycr.common.util;
 
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.PaycrResponse;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantUser;
@@ -31,7 +32,6 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
-import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 
@@ -76,28 +76,29 @@ public class DashboardController {
 	}
 
 	@RequestMapping(value = "/app/login", method = RequestMethod.POST)
-	public String appLogin(@RequestParam(value = "username", required = true) String email,
+	public PaycrResponse appLogin(@RequestParam(value = "username", required = true) String email,
 			@RequestParam(value = "password", required = true) String password,
 			@RequestHeader(value = "accessKey", required = true) String accessKey) {
-		PcUser user = userRepo.findByEmail(email);
-		if (CommonUtil.isNull(user)) {
-			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		PaycrResponse resp = new PaycrResponse();
+		try {
+			PcUser user = userRepo.findByEmail(email);
+			if (!bcPassEncode.matches(password, user.getPassword())) {
+				throw new PaycrException(Constants.FAILURE, "");
+			}
+			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
+			Merchant merchant = merRepo.findOne(merUser.getMerchantId());
+			if (!accessKey.equals(merchant.getAccessKey())) {
+				throw new PaycrException(Constants.FAILURE, "");
+			}
+			resp.setRespCode(0);
+			resp.setRespMsg("SUCCESS");
+			resp.setData(merchant.getSecretKey() + "," + merchant.getName() + "," + merchant.getMobile());
+			return resp;
+		} catch (Exception ex) {
+			resp.setRespCode(1);
+			resp.setRespMsg("We do not recognize you");
+			return resp;
 		}
-		if (!bcPassEncode.encode(password).equals(user.getPassword())) {
-			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
-		}
-		MerchantUser merUser = merUserRepo.findByUserId(user.getId());
-		if (CommonUtil.isNull(merUser)) {
-			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
-		}
-		Merchant merchant = merRepo.findOne(merUser.getMerchantId());
-		if (CommonUtil.isNull(merchant)) {
-			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
-		}
-		if(!accessKey.equals(merchant.getAccessKey())) {
-			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
-		}
-		return merchant.getSecretKey();
 	}
 
 	@RequestMapping("/forgotPassword")

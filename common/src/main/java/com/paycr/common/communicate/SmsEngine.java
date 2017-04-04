@@ -15,7 +15,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.paycr.common.bean.RestTemplateUtil;
+import com.paycr.common.util.RestTemplateUtil;
 
 @Component
 public class SmsEngine {
