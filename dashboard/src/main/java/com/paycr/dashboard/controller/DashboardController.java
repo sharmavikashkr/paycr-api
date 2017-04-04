@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.JsonObject;
 import com.paycr.common.bean.PaycrResponse;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
@@ -92,7 +93,11 @@ public class DashboardController {
 			}
 			resp.setRespCode(0);
 			resp.setRespMsg("SUCCESS");
-			resp.setData(merchant.getSecretKey() + "," + merchant.getName() + "," + merchant.getMobile());
+			JsonObject json = new JsonObject();
+			json.addProperty("secret_key", merchant.getSecretKey());
+			json.addProperty("name", merchant.getName());
+			json.addProperty("mobile", merchant.getMobile());
+			resp.setData(json.toString());
 			return resp;
 		} catch (Exception ex) {
 			resp.setRespCode(1);
