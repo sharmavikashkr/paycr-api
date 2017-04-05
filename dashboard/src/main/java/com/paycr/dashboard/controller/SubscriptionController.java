@@ -77,6 +77,7 @@ public class SubscriptionController {
 		subs.setCreated(timeNow);
 		subs.setMerchant(merchant);
 		subs.setPricing(pricing);
+		subs.setStatus("initiated");
 
 		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
