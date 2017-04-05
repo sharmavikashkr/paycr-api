@@ -1,6 +1,6 @@
 CREATE TABLE if not exists pc_subscription(
 	id SERIAL PRIMARY KEY NOT NULL,
-	subscription_code int NOT NULL,
+	subscription_code varchar(20) NOT NULL,
 	amount float NOT NULL,
 	currency varchar(10) NOT NULL,
 	created timestamp NOT NULL,
