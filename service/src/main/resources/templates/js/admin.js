@@ -47,7 +47,7 @@ $(document).ready(function() {
 		}
 		
 		$.ajax({
-			url : '/merchant/new',
+			url : '/admin/merchant/new',
 			data : JSON.stringify(merchant),
 			type : 'POST',
 			contentType : 'application/json',
@@ -104,7 +104,7 @@ $(document).ready(function() {
 		}
 		
 		$.ajax({
-			url : '/pricing/new',
+			url : '/admin/pricing/new',
 			data : JSON.stringify(merchant),
 			type : 'POST',
 			contentType : 'application/json',
@@ -126,7 +126,7 @@ $(document).ready(function() {
 	$("[id = togglePricingBtn]").click(function() {
 		var pricingId = $(this).attr('ref');
 		$.ajax({
-			url : '/pricing/toggle/'+pricingId,
+			url : '/admin/pricing/toggle/'+pricingId,
 			type : 'GET',
 			async : false,
 			success : function(data) {

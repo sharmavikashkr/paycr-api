@@ -53,7 +53,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		if (isAdmin) {
 			return "/admin";
 		} else if (isMerchant) {
-			return "/dashboard";
+			return "/merchant";
 		} else {
 			throw new IllegalStateException();
 		}

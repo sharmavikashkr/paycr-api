@@ -14,7 +14,7 @@ $(document).ready(function() {
 			"provider" : provider
 		}
 		$.ajax({
-			url : '/merchant/setting/customParam/new',
+			url : '/merchant/customParam/new',
 			data : JSON.stringify(customParam),
 			type : 'POST',
 			contentType : 'application/json',
@@ -40,7 +40,7 @@ $(document).ready(function() {
 			return false;
 		}
 		$.ajax({
-			url : '/merchant/setting/customParam/delete/'+merchantCustomParamId,
+			url : '/merchant/customParam/delete/'+merchantCustomParamId,
 			type : 'GET',
 			async : false,
 			success : function(data) {

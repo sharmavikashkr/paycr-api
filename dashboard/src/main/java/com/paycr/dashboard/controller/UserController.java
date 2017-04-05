@@ -30,7 +30,6 @@ import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.UserService;
 
 @RestController
-@RequestMapping("user")
 public class UserController {
 
 	@Autowired
@@ -47,8 +46,35 @@ public class UserController {
 
 	@Autowired
 	private NotificationRepository notiRepo;
+	
+	@RequestMapping("/")
+	public ModelAndView index() {
+		return new ModelAndView("html/index");
+	}
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping("/login")
+	public ModelAndView login() {
+		return new ModelAndView("html/login");
+	}
+
+	@RequestMapping("/forgotPassword")
+	public ModelAndView forgotPasssword(@RequestParam(value = "error", required = false) String code) {
+		ModelAndView mv = new ModelAndView("html/forgot-password");
+		String message = "Enter Email to send reset password link";
+		boolean isError = false;
+		if ("1".equals(code)) {
+			message = "User not registered";
+			isError = true;
+		} else if ("2".equals(code)) {
+			message = "Reset already requested 3 times in 24 hours";
+			isError = true;
+		}
+		mv.addObject("message", message);
+		mv.addObject("isError", isError);
+		return mv;
+	}
+
+	@RequestMapping(value = "/user/admin", method = RequestMethod.GET)
 	public void createUser(HttpServletResponse response) throws IOException {
 		Date timeNow = new Date();
 		if (CommonUtil.isNotNull(userRepo.findByEmail("admin@paycr.in"))) {
