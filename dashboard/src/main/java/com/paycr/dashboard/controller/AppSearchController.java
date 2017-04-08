@@ -12,6 +12,7 @@ import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.dashboard.service.SearchService;
@@ -35,7 +36,7 @@ public class AppSearchController {
 		PaycrResponse resp = new PaycrResponse();
 		try {
 			Merchant merchant = merRepo.findByAccessKey(accessKey);
-			String data = request.getInvoiceCode() + request.getAmount().toString();
+			String data = getValue(request.getInvoiceCode());
 			if (!signature.equals(hmacUtil.signWithSecretKey(merchant.getSecretKey(), data))) {
 				throw new PaycrException(Constants.FAILURE, "Signature mismatch");
 			}
@@ -54,6 +55,10 @@ public class AppSearchController {
 			}
 			return resp;
 		}
+	}
+
+	private String getValue(String val) {
+		return CommonUtil.isEmpty(val) ? "" : val;
 	}
 
 }
