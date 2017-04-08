@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.paycr.common.bean.PaycrResponse;
 import com.paycr.common.data.domain.Merchant;
@@ -109,6 +110,31 @@ public class AppMerchantController {
 		} catch (Exception ex) {
 			return ex.getMessage();
 		}
+	}
+
+	@RequestMapping("/setting")
+	public PaycrResponse resetSendSms(@RequestHeader(value = "accessKey", required = true) String accessKey,
+			@RequestHeader(value = "signature", required = true) String signature) {
+		PaycrResponse resp = new PaycrResponse();
+		try {
+			Merchant merchant = merRepo.findByAccessKey(accessKey);
+			String data = accessKey;
+			if (!signature.equals(hmacUtil.signWithSecretKey(merchant.getSecretKey(), data))) {
+				throw new PaycrException(Constants.FAILURE, "Signature mismatch");
+			}
+			resp.setRespCode(0);
+			resp.setRespMsg("SUCCESS");
+			resp.setData(new Gson().toJson(new Gson().toJson(merchant.getSetting())));
+		} catch (Exception ex) {
+			resp.setRespCode(1);
+			resp.setRespMsg("FAILURE");
+			if (ex instanceof PaycrException) {
+				resp.setData(ex.getMessage());
+			} else {
+				resp.setData("Invalid Merchant");
+			}
+		}
+		return resp;
 	}
 
 	@RequestMapping("/setting/update")

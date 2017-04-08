@@ -44,7 +44,6 @@ public class AppSearchController {
 			resp.setRespCode(0);
 			resp.setRespMsg("SUCCESS");
 			resp.setData(new Gson().toJson(serSer.fetchInvoiceList(request)));
-			return resp;
 		} catch (Exception ex) {
 			resp.setRespCode(1);
 			resp.setRespMsg("FAILURE");
@@ -53,8 +52,8 @@ public class AppSearchController {
 			} else {
 				resp.setData("Invalid Merchant");
 			}
-			return resp;
 		}
+		return resp;
 	}
 
 	private String getValue(String val) {
