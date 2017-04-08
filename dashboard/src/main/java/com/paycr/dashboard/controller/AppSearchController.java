@@ -1,7 +1,5 @@
 package com.paycr.dashboard.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -11,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.paycr.common.bean.PaycrResponse;
 import com.paycr.common.bean.SearchInvoiceRequest;
-import com.paycr.common.data.dao.InvoiceDao;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
@@ -23,9 +19,6 @@ import com.paycr.dashboard.service.SearchService;
 @RestController
 @RequestMapping("/app/search")
 public class AppSearchController {
-
-	@Autowired
-	private InvoiceDao invDao;
 
 	@Autowired
 	private MerchantRepository merRepo;
@@ -47,15 +40,18 @@ public class AppSearchController {
 				throw new PaycrException(Constants.FAILURE, "Signature mismatch");
 			}
 			request.setMerchant(merchant.getId());
-			List<Invoice> invoiceList = invDao.findInvoices(request);
 			resp.setRespCode(0);
 			resp.setRespMsg("SUCCESS");
-			resp.setData(new Gson().toJson(serSer.parseInvoiceList(invoiceList)));
+			resp.setData(new Gson().toJson(serSer.fetchInvoiceList(request)));
 			return resp;
 		} catch (Exception ex) {
 			resp.setRespCode(1);
 			resp.setRespMsg("FAILURE");
-			resp.setData(ex.getMessage());
+			if (ex instanceof PaycrException) {
+				resp.setData(ex.getMessage());
+			} else {
+				resp.setData("Invalid Merchant");
+			}
 			return resp;
 		}
 	}
