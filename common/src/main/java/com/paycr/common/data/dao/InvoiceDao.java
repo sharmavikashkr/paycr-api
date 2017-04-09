@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.DateUtil;
 
 @Component
 public class InvoiceDao {
@@ -38,7 +39,7 @@ public class InvoiceDao {
 			squery.append(" i.payAmount = ?" + pos++ + " AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreated())) {
-			squery.append(" i.created = ?" + pos++ + " AND");
+			squery.append(" i.created between ?" + pos++ + " AND ?" + pos++ + " AND");
 		}
 		squery.append(" i.id > 0 ORDER BY i.id DESC");
 
@@ -61,7 +62,8 @@ public class InvoiceDao {
 			query.setParameter(pos++, searchReq.getAmount());
 		}
 		if (!CommonUtil.isNull(searchReq.getCreated())) {
-			query.setParameter(pos++, searchReq.getCreated());
+			query.setParameter(pos++, DateUtil.getStartOfDay(searchReq.getCreated()));
+			query.setParameter(pos++, DateUtil.getEndOfDay(searchReq.getCreated()));
 		}
 		try {
 			invoices = query.getResultList();

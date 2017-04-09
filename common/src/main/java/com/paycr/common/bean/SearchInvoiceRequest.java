@@ -13,7 +13,7 @@ public class SearchInvoiceRequest {
 	private String mobile;
 	private BigDecimal amount;
 
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date created;
 
 	public String getInvoiceCode() {
