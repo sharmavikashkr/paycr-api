@@ -61,7 +61,9 @@ public class AdminService {
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
 				String.valueOf(timeNow.getTime()));
 		String accessKey = secretKey + secretKey.toLowerCase() + secretKey.toUpperCase();
-		accessKey = RandomIdGenerator.generateAccessKey(accessKey.toCharArray());
+		do {
+			accessKey = RandomIdGenerator.generateAccessKey(accessKey.toCharArray());
+		} while (merRepo.findByAccessKey(accessKey) != null);
 		merchant.setAccessKey(accessKey);
 		merchant.setSecretKey(secretKey);
 		merchant.setCreated(timeNow);

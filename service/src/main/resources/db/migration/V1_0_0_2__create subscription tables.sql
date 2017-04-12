@@ -12,3 +12,11 @@ CREATE TABLE if not exists pc_subscription(
 	merchant_id int REFERENCES pc_merchant,
     pricing_id int REFERENCES pc_pricing
 );
+
+CREATE TABLE if not exists pc_subscription_setting(
+	id SERIAL PRIMARY KEY NOT NULL,
+	rzp_merchant_id varchar(30) DEFAULT NULL,
+	rzp_key_id varchar(30) DEFAULT NULL,
+	rzp_secret_id varchar(30) DEFAULT NULL,
+	active boolean NOT NULL
+);

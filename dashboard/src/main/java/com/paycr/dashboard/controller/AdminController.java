@@ -19,10 +19,15 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.SubscriptionSetting;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.SubscriptionSettingRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -57,6 +62,9 @@ public class AdminController {
 	@Autowired
 	private PricingRepository pricingRepo;
 
+	@Autowired
+	private SubscriptionSettingRepository subsSetRepo;
+
 	@RequestMapping("")
 	public ModelAndView admin() {
 		PcUser user = secSer.findLoggedInUser();
@@ -67,11 +75,13 @@ public class AdminController {
 		for (Notification notice : notices) {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}
+		List<SubscriptionSetting> subsSettings = subsSetRepo.findAll();
 		List<Pricing> pricings = priceRepo.findAll();
 		mv.addObject("pricings", pricings);
 		List<Merchant> merchants = merRepo.findAll();
 		mv.addObject("merchants", merchants);
 		mv.addObject("notices", notices);
+		mv.addObject("subsSettings", subsSettings);
 		return mv;
 	}
 
@@ -88,7 +98,7 @@ public class AdminController {
 	}
 
 	@RequestMapping("/pricing/new")
-	public String create(@RequestBody Pricing pricing, HttpServletResponse response) {
+	public String createPricing(@RequestBody Pricing pricing, HttpServletResponse response) {
 		try {
 			pricingValidator.validate(pricing);
 			pricingRepo.save(pricing);
@@ -100,7 +110,7 @@ public class AdminController {
 	}
 
 	@RequestMapping("/pricing/toggle/{pricingId}")
-	public String create(@PathVariable Integer pricingId, HttpServletResponse response) {
+	public String togglePricing(@PathVariable Integer pricingId, HttpServletResponse response) {
 		try {
 			Pricing pri = pricingRepo.findOne(pricingId);
 			if (pri.isActive()) {
@@ -109,6 +119,45 @@ public class AdminController {
 				pri.setActive(true);
 			}
 			pricingRepo.save(pri);
+			return "SUCCESS";
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return ex.getMessage();
+		}
+	}
+
+	@RequestMapping("/subscription/setting")
+	public String createSubscription(@RequestBody SubscriptionSetting subsSetting, HttpServletResponse response) {
+		try {
+			if (CommonUtil.isNull(subsSetting) || CommonUtil.isEmpty(subsSetting.getRzpMerchantId())
+					|| CommonUtil.isEmpty(subsSetting.getRzpKeyId())
+					|| CommonUtil.isEmpty(subsSetting.getRzpSecretId())) {
+				throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			}
+			SubscriptionSetting existSetting = subsSetRepo.findByActive(true);
+			if (existSetting != null && subsSetting.isActive()) {
+				existSetting.setActive(false);
+				subsSetRepo.save(existSetting);
+			}
+			subsSetRepo.save(subsSetting);
+			return "SUCCESS";
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return ex.getMessage();
+		}
+	}
+
+	@RequestMapping("/subscription/toggle/{settingId}")
+	public String toggleSubscription(@PathVariable Integer settingId, HttpServletResponse response) {
+		try {
+			SubscriptionSetting toggleSetting = subsSetRepo.findOne(settingId);
+			SubscriptionSetting existSetting = subsSetRepo.findByActive(true);
+			if (toggleSetting != null && existSetting != null) {
+				existSetting.setActive(false);
+				subsSetRepo.save(existSetting);
+			}
+			toggleSetting.setActive(true);
+			subsSetRepo.save(toggleSetting);
 			return "SUCCESS";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);

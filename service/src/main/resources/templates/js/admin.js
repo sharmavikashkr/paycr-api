@@ -142,5 +142,75 @@ $(document).ready(function() {
 			}
 		});
 	});
+	$("#addSubscriptionSettingBtn").click(function() {
+		var errors = 0;
+		$('#addSubscriptionSettingForm :input').each(function() {
+			if($(this).prop('required')) {
+				var pattern = $(this).attr('pattern');
+				if(pattern != undefined) {
+					var regex = new RegExp(pattern);
+					if(!regex.test($(this).val().trim())) {
+						errors = errors + 1;
+						$(this).parent().addClass('has-error');
+					} else {
+						$(this).parent().removeClass('has-error');
+					}
+				}
+			}
+		});
+		if(errors > 0) {
+			return false;
+		}
+		var rzpMerchantId = $("#subset-rzpMerchantId").val().trim();
+		var rzpKeyId = $("#subset-rzpKeyId").val().trim();
+		var rzpSecretId = $("#subset-rzpSecretId").val().trim();
+		var active = $("#subset-active").is(":checked");
+		
+		var subscriptionSetting = {
+				"rzpMerchantId" : rzpMerchantId,
+				"rzpKeyId" : rzpKeyId,
+				"rzpSecretId" : rzpSecretId,
+				"active" : active
+		}
+		
+		$.ajax({
+			url : '/admin/subscription/setting',
+			data : JSON.stringify(subscriptionSetting),
+			type : 'POST',
+			contentType : 'application/json',
+			async : false,
+			success : function(data) {
+				window.location.reload();
+			},
+			error : function(data) {
+				$("#addSubscriptionSetting").modal('hide')
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html(data.responseText);
+				$("#serverRespStatus").html("FAILURE!");
+			}
+		});
+	});
+	$("[id = activateSubsSettingBtn]").click(function() {
+		var subsSetId = $(this).attr('ref');
+		$.ajax({
+			url : '/admin/subscription/toggle/'+subsSetId,
+			type : 'GET',
+			async : false,
+			success : function(data) {
+				window.location.reload();
+			},
+			error : function(data) {
+				$("#serverRespAlert").show();
+				$("#serverRespAlert").removeClass('alert-danger');
+				$("#serverRespAlert").removeClass('alert-success');
+				$("#serverRespAlert").addClass('alert-danger');
+				$("#serverRespMsg").html("FAILURE");
+				$("#serverRespStatus").html("FAILURE!");
+			}
+		});
+	});
 	$("#dismissServerRespAlertBtn").click();
 });

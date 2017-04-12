@@ -24,14 +24,18 @@ import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.data.domain.SubscriptionSetting;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
+import com.paycr.common.data.repository.SubscriptionSettingRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
@@ -60,15 +64,16 @@ public class SubscriptionController {
 	@Autowired
 	private NotificationRepository notiRepo;
 
+	@Autowired
+	private SubscriptionSettingRepository subsSetRepo;
+
 	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping("/new/{pricingId}")
 	public ModelAndView newSubscription(@PathVariable Integer pricingId) {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
 		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1) {
-			ModelAndView mv = new ModelAndView("html/errorpage");
-			mv.addObject("message", "Requested Resource not found");
-			return mv;
+			throw new PaycrException(Constants.FAILURE, "Not Allowed");
 		}
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Subscription subs = new Subscription();
@@ -87,12 +92,15 @@ public class SubscriptionController {
 		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
 		subs.setSubscriptionCode(subsCode);
 		subsRepo.save(subs);
-
+		SubscriptionSetting subsSet = subsSetRepo.findByActive(true);
+		if (CommonUtil.isNull(subsSet)) {
+			throw new PaycrException(Constants.FAILURE, "Not Allowed");
+		}
 		ModelAndView mv = new ModelAndView("html/subscribe");
 		mv.addObject("merchant", merchant);
 		mv.addObject("pricing", pricing);
 		mv.addObject("subsCode", subsCode);
-		mv.addObject("rzpKeyId", "rzp_test_KYJpp93xDFSqIh");
+		mv.addObject("rzpKeyId", subsSet.getRzpKeyId());
 		mv.addObject("payAmount", subs.getAmount().multiply(new BigDecimal(100)));
 		return mv;
 	}
@@ -112,7 +120,11 @@ public class SubscriptionController {
 			}
 			Merchant merchant = subs.getMerchant();
 			Pricing pricing = subs.getPricing();
-			RazorpayClient razorpay = new RazorpayClient("rzp_test_KYJpp93xDFSqIh", "okbfOjkb8MivQkpE5Xo9XdbZ");
+			SubscriptionSetting subsSet = subsSetRepo.findByActive(true);
+			if (CommonUtil.isNull(subsSet)) {
+				throw new PaycrException(Constants.FAILURE, "Not Allowed");
+			}
+			RazorpayClient razorpay = new RazorpayClient(subsSet.getRzpKeyId(), subsSet.getRzpSecretId());
 			com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
 			JSONObject request = new JSONObject();
 			request.put("amount", rzpPayment.get("amount").toString());
