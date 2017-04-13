@@ -1,12 +1,11 @@
 package com.paycr.dashboard.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
@@ -56,14 +55,14 @@ public class MerchantService {
 			json.addProperty("rzpKeyId", setting.getRzpKeyId());
 			json.addProperty("rzpSecretId", setting.getRzpSecretId());
 			List<MerchantCustomParam> customParams = setting.getCustomParams();
-			List<JsonObject> jsonList = new ArrayList<JsonObject>();
+			JsonArray jsonArr = new JsonArray();
 			for (MerchantCustomParam cp : customParams) {
 				JsonObject cpJson = new JsonObject();
 				cpJson.addProperty("paramName", cp.getParamName());
 				cpJson.addProperty("provider", cp.getProvider().name());
-				jsonList.add(cpJson);
+				jsonArr.add(cpJson);
 			}
-			json.addProperty("customParams", new Gson().toJson(jsonList));
+			json.add("customParams", jsonArr);
 			return json;
 		} catch (Exception ex) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
