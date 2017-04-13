@@ -92,7 +92,7 @@ public class AppMerchantController {
 			}
 			resp.setRespCode(0);
 			resp.setRespMsg("SUCCESS");
-			resp.setData(new Gson().toJson(new Gson().toJson(merchant.getSetting())));
+			resp.setData(new Gson().toJson(merSer.getSetting(merchant.getSetting())));
 		} catch (Exception ex) {
 			resp.setRespCode(1);
 			resp.setRespMsg("FAILURE");
