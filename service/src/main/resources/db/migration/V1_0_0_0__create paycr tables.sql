@@ -154,5 +154,5 @@ CREATE TABLE if not exists pc_merchant_custom_param (
 	id SERIAL PRIMARY KEY NOT NULL,
 	param_name varchar(20) NOT NULL,
 	provider varchar(20) NOT NULL,
-    merchant_id int REFERENCES pc_merchant
+    merchant_setting_id int REFERENCES pc_merchant_setting
 );

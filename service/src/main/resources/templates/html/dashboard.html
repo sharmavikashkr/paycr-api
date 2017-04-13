@@ -337,13 +337,13 @@
 	                                    </tr>
 	                                </thead>
 	                                <tbody>
-	                                	{{#merchant.customParams}}
+	                                	{{#merchant.setting.customParams}}
 	                                	<tr>
 	                                        <td>{{paramName}}</td>
 	                                        <td>{{provider}}</td>
 	                                        <td><button style="margin-top:-5px;" id="deleteCustomParamBtn" ref="{{id}}" name="{{paramName}}" type="button" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
 	                                    </tr>
-	                                    {{/merchant.customParams}}
+	                                    {{/merchant.setting.customParams}}
 	                                </tbody>
 	                            </table>
 	                        </div>
@@ -454,9 +454,9 @@
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Custom Params</div>
 	                        <div class="panel-body">
-	                        	{{#merchant.customParams}}
+	                        	{{#merchant.setting.customParams}}
 	                            <div class="form-group"><label class="control-label">{{paramName}}:</label><input class="form-control" name="inv-customParam" provider="{{provider}}" ref="{{paramName}}" id="{{id}}" placeholder="value" pattern="[a-zA-Z0-9 ]{1,50}"/></div>
-	                            {{/merchant.customParams}}
+	                            {{/merchant.setting.customParams}}
 	                        </div>
 	                    </div>
 	                </div>

@@ -25,7 +25,7 @@ public class MerchantCustomParam {
 	private ParamValueProvider provider;
 
 	@ManyToOne
-	private Merchant merchant;
+	private MerchantSetting merchantSetting;
 
 	public ParamValueProvider getProvider() {
 		return provider;
@@ -39,20 +39,20 @@ public class MerchantCustomParam {
 		return id;
 	}
 
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
-	}
-
 	public String getParamName() {
 		return paramName;
 	}
 
 	public void setParamName(String paramName) {
 		this.paramName = paramName;
+	}
+
+	public MerchantSetting getMerchantSetting() {
+		return merchantSetting;
+	}
+
+	public void setMerchantSetting(MerchantSetting merchantSetting) {
+		this.merchantSetting = merchantSetting;
 	}
 
 }

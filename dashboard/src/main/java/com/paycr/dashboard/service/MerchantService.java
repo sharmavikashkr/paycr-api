@@ -21,7 +21,7 @@ public class MerchantService {
 
 	public String newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
 		try {
-			List<MerchantCustomParam> customParams = merchant.getCustomParams();
+			List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
 			if (CommonUtil.isNull(customParam) || CommonUtil.isEmpty(customParam.getParamName())
 					|| CommonUtil.isNull(customParam.getProvider())) {
 				throw new PaycrException(Constants.FAILURE, "Invalid Custom Param");
@@ -35,7 +35,7 @@ public class MerchantService {
 				}
 			}
 			customParams.add(customParam);
-			customParam.setMerchant(merchant);
+			customParam.setMerchantSetting(merchant.getSetting());
 			merRepo.save(merchant);
 			return "Custom Param added";
 		} catch (Exception ex) {
@@ -44,12 +44,12 @@ public class MerchantService {
 	}
 
 	public String deleteCustomParam(Merchant merchant, Integer id) {
-		List<MerchantCustomParam> customParams = merchant.getCustomParams();
+		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
 		boolean found = false;
 		for (MerchantCustomParam param : customParams) {
 			if (param.getId() == id) {
 				customParams.remove(param);
-				param.setMerchant(null);
+				param.setMerchantSetting(null);
 				found = true;
 				break;
 			}

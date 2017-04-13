@@ -26,7 +26,7 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 	@Override
 	public void validate(Invoice invoice) {
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
-		List<MerchantCustomParam> merchantCustomParams = merchant.getCustomParams();
+		List<MerchantCustomParam> merchantCustomParams = merchant.getSetting().getCustomParams();
 		for (MerchantCustomParam mcp : merchantCustomParams) {
 			boolean mandatoryParamMissing = true;
 			for (InvoiceCustomParam icp : invoice.getCustomParams()) {

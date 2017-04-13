@@ -85,6 +85,17 @@ public class MerchantController {
 		return mv;
 	}
 
+	@RequestMapping("/setting/update")
+	public String resetSendSms(@RequestBody MerchantSetting setting, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			return merSer.updateSetting(merchant, setting);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return "FAILURE";
+		}
+	}
+
 	@RequestMapping("/customParam/new")
 	public String newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
 		try {
@@ -104,17 +115,6 @@ public class MerchantController {
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
-		}
-	}
-
-	@RequestMapping("/setting/update")
-	public String resetSendSms(@RequestBody MerchantSetting setting, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return merSer.updateSetting(merchant, setting);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return "FAILURE";
 		}
 	}
 

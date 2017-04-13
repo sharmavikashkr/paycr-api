@@ -1,9 +1,13 @@
 package com.paycr.common.data.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,6 +25,9 @@ public class MerchantSetting {
 	private String rzpMerchantId;
 	private String rzpKeyId;
 	private String rzpSecretId;
+
+	@OneToMany(mappedBy = "merchantSetting", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MerchantCustomParam> customParams;
 
 	@OneToOne(mappedBy = "setting")
 	private Merchant merchant;
@@ -83,6 +90,14 @@ public class MerchantSetting {
 
 	public void setRzpSecretId(String rzpSecretId) {
 		this.rzpSecretId = rzpSecretId;
+	}
+
+	public List<MerchantCustomParam> getCustomParams() {
+		return customParams;
+	}
+
+	public void setCustomParams(List<MerchantCustomParam> customParams) {
+		this.customParams = customParams;
 	}
 
 }

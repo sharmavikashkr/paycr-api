@@ -36,9 +36,6 @@ public class Merchant {
 	@OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL)
 	private List<MerchantPricing> pricings;
 
-	@OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<MerchantCustomParam> customParams;
-
 	@OneToOne(cascade = CascadeType.ALL)
 	private MerchantSetting setting;
 
@@ -138,14 +135,6 @@ public class Merchant {
 
 	public void setPricings(List<MerchantPricing> pricings) {
 		this.pricings = pricings;
-	}
-
-	public List<MerchantCustomParam> getCustomParams() {
-		return customParams;
-	}
-
-	public void setCustomParams(List<MerchantCustomParam> customParams) {
-		this.customParams = customParams;
 	}
 
 	public MerchantSetting getSetting() {

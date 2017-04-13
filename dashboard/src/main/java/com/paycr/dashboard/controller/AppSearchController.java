@@ -46,11 +46,10 @@ public class AppSearchController {
 			resp.setData(new Gson().toJson(serSer.fetchInvoiceList(request)));
 		} catch (Exception ex) {
 			resp.setRespCode(1);
-			resp.setRespMsg("FAILURE");
 			if (ex instanceof PaycrException) {
-				resp.setData(ex.getMessage());
+				resp.setRespMsg(ex.getMessage());
 			} else {
-				resp.setData("Invalid Merchant");
+				resp.setRespMsg("Invalid Merchant");
 			}
 		}
 		return resp;
