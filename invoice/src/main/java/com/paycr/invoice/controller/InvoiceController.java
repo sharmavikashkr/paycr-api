@@ -25,7 +25,7 @@ import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
 @RestController
-@RequestMapping("invoice")
+@RequestMapping("/invoice")
 public class InvoiceController {
 
 	@Autowired
@@ -53,6 +53,7 @@ public class InvoiceController {
 	@RequestMapping(value = "new", method = RequestMethod.POST)
 	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
+			invoice.setMer(secSer.getMerchantForLoggedInUser());
 			invValidator.validate(invoice);
 			invRepo.save(invoice);
 		} catch (Exception ex) {

@@ -12,7 +12,6 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -26,9 +25,6 @@ import com.paycr.common.validation.RequestValidator;
 public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 
 	@Autowired
-	private SecurityService secSer;
-
-	@Autowired
 	private InvoiceRepository invRepo;
 
 	@Autowired
@@ -37,7 +33,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	@Override
 	public void validate(Invoice invoice) {
 		Date timeNow = new Date();
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		Merchant merchant = invoice.getMer();
 		invoice.setMerchant(merchant.getId());
 		if (CommonUtil.isNull(invoice.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");

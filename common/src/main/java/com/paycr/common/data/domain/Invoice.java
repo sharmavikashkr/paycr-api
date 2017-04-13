@@ -72,7 +72,7 @@ public class Invoice implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
-	
+
 	@Transient
 	private List<Payment> allPayments;
 
@@ -81,6 +81,9 @@ public class Invoice implements Serializable {
 
 	@Transient
 	private int expiresIn;
+
+	@Transient
+	private Merchant mer;
 
 	public Integer getId() {
 		return id;
@@ -244,5 +247,13 @@ public class Invoice implements Serializable {
 
 	public void setAllPayments(List<Payment> allPayments) {
 		this.allPayments = allPayments;
+	}
+
+	public Merchant getMer() {
+		return mer;
+	}
+
+	public void setMer(Merchant mer) {
+		this.mer = mer;
 	}
 }
