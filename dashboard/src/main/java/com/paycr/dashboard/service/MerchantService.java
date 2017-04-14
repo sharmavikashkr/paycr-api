@@ -58,6 +58,7 @@ public class MerchantService {
 			JsonArray jsonArr = new JsonArray();
 			for (MerchantCustomParam cp : customParams) {
 				JsonObject cpJson = new JsonObject();
+				cpJson.addProperty("id", cp.getId());
 				cpJson.addProperty("paramName", cp.getParamName());
 				cpJson.addProperty("provider", cp.getProvider().name());
 				jsonArr.add(cpJson);
