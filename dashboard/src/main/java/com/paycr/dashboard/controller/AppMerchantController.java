@@ -106,50 +106,83 @@ public class AppMerchantController {
 	}
 
 	@RequestMapping("/setting/update")
-	public String updateSetting(@RequestBody MerchantSetting setting,
+	public PaycrResponse updateSetting(@RequestBody MerchantSetting setting,
 			@RequestHeader(value = "accessKey", required = true) String accessKey,
 			@RequestHeader(value = "signature", required = true) String signature) {
+		PaycrResponse resp = new PaycrResponse();
 		try {
 			Merchant merchant = merRepo.findByAccessKey(accessKey);
 			String data = String.valueOf(setting.getExpiryDays());
 			if (!signature.equals(hmacUtil.signWithSecretKey(merchant.getSecretKey(), data))) {
 				throw new PaycrException(Constants.FAILURE, "Signature mismatch");
 			}
-			return merSer.updateSetting(merchant, setting);
+			merSer.updateSetting(merchant, setting);
+			resp.setRespCode(0);
+			resp.setRespMsg("SUCCESS");
+			resp.setData(new Gson().toJson(merSer.getSetting(merchant.getSetting())));
 		} catch (Exception ex) {
-			return ex.getMessage();
+			resp.setRespCode(1);
+			resp.setRespMsg("FAILURE");
+			if (ex instanceof PaycrException) {
+				resp.setData(ex.getMessage());
+			} else {
+				resp.setData("Invalid Merchant");
+			}
 		}
+		return resp;
 	}
 
 	@RequestMapping("/customParam/new")
-	public String newCustomParam(@Valid @RequestBody MerchantCustomParam customParam,
+	public PaycrResponse newCustomParam(@Valid @RequestBody MerchantCustomParam customParam,
 			@RequestHeader(value = "accessKey", required = true) String accessKey,
 			@RequestHeader(value = "signature", required = true) String signature) {
+		PaycrResponse resp = new PaycrResponse();
 		try {
 			Merchant merchant = merRepo.findByAccessKey(accessKey);
 			String data = customParam.getParamName();
 			if (!signature.equals(hmacUtil.signWithSecretKey(merchant.getSecretKey(), data))) {
 				throw new PaycrException(Constants.FAILURE, "Signature mismatch");
 			}
-			return merSer.newCustomParam(merchant, customParam);
+			merSer.newCustomParam(merchant, customParam);
+			resp.setRespCode(0);
+			resp.setRespMsg("SUCCESS");
+			resp.setData(new Gson().toJson(merSer.getSetting(merchant.getSetting())));
 		} catch (Exception ex) {
-			return "FAILURE";
+			resp.setRespCode(1);
+			resp.setRespMsg("FAILURE");
+			if (ex instanceof PaycrException) {
+				resp.setData(ex.getMessage());
+			} else {
+				resp.setData("Invalid Merchant");
+			}
 		}
+		return resp;
 	}
 
 	@RequestMapping("/customParam/delete/{id}")
-	public String deleteCustomParam(@PathVariable Integer id,
+	public PaycrResponse deleteCustomParam(@PathVariable Integer id,
 			@RequestHeader(value = "accessKey", required = true) String accessKey,
 			@RequestHeader(value = "signature", required = true) String signature) {
+		PaycrResponse resp = new PaycrResponse();
 		try {
 			Merchant merchant = merRepo.findByAccessKey(accessKey);
 			String data = id.toString();
 			if (!signature.equals(hmacUtil.signWithSecretKey(merchant.getSecretKey(), data))) {
 				throw new PaycrException(Constants.FAILURE, "Signature mismatch");
 			}
-			return merSer.deleteCustomParam(merchant, id);
+			merSer.deleteCustomParam(merchant, id);
+			resp.setRespCode(0);
+			resp.setRespMsg("SUCCESS");
+			resp.setData(new Gson().toJson(merSer.getSetting(merchant.getSetting())));
 		} catch (Exception ex) {
-			return ex.getMessage();
+			resp.setRespCode(1);
+			resp.setRespMsg("FAILURE");
+			if (ex instanceof PaycrException) {
+				resp.setData(ex.getMessage());
+			} else {
+				resp.setData("Invalid Merchant");
+			}
 		}
+		return resp;
 	}
 }

@@ -21,28 +21,23 @@ public class MerchantService {
 	@Autowired
 	private MerchantRepository merRepo;
 
-	public String newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
-		try {
-			List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
-			if (CommonUtil.isNull(customParam) || CommonUtil.isEmpty(customParam.getParamName())
-					|| CommonUtil.isNull(customParam.getProvider())) {
-				throw new PaycrException(Constants.FAILURE, "Invalid Custom Param");
-			}
-			if (customParams.size() >= 5) {
-				throw new PaycrException(Constants.FAILURE, "Cannot configure more than 5 custom params");
-			}
-			for (MerchantCustomParam param : customParams) {
-				if (param.getParamName().equalsIgnoreCase(customParam.getParamName())) {
-					throw new PaycrException(Constants.FAILURE, "Custom Param already exists");
-				}
-			}
-			customParams.add(customParam);
-			customParam.setMerchantSetting(merchant.getSetting());
-			merRepo.save(merchant);
-			return "Custom Param added";
-		} catch (Exception ex) {
-			return "FAILURE";
+	public void newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
+		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
+		if (CommonUtil.isNull(customParam) || CommonUtil.isEmpty(customParam.getParamName())
+				|| CommonUtil.isNull(customParam.getProvider())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Custom Param");
 		}
+		if (customParams.size() >= 5) {
+			throw new PaycrException(Constants.FAILURE, "Cannot configure more than 5 custom params");
+		}
+		for (MerchantCustomParam param : customParams) {
+			if (param.getParamName().equalsIgnoreCase(customParam.getParamName())) {
+				throw new PaycrException(Constants.FAILURE, "Custom Param already exists");
+			}
+		}
+		customParams.add(customParam);
+		customParam.setMerchantSetting(merchant.getSetting());
+		merRepo.save(merchant);
 	}
 
 	public JsonObject getSetting(MerchantSetting setting) {
@@ -70,7 +65,7 @@ public class MerchantService {
 		}
 	}
 
-	public String deleteCustomParam(Merchant merchant, Integer id) {
+	public void deleteCustomParam(Merchant merchant, Integer id) {
 		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
 		boolean found = false;
 		for (MerchantCustomParam param : customParams) {
@@ -85,10 +80,9 @@ public class MerchantService {
 			throw new PaycrException(Constants.FAILURE, "Custom Param does not exists");
 		}
 		merRepo.save(merchant);
-		return "Custom Param deleted";
 	}
 
-	public String updateSetting(Merchant merchant, MerchantSetting setting) {
+	public void updateSetting(Merchant merchant, MerchantSetting setting) {
 		merchant.getSetting().setSendSms(setting.isSendSms());
 		merchant.getSetting().setSendEmail(setting.isSendEmail());
 		merchant.getSetting().setExpiryDays(setting.getExpiryDays());
@@ -96,7 +90,6 @@ public class MerchantService {
 		merchant.getSetting().setRzpKeyId(setting.getRzpKeyId());
 		merchant.getSetting().setRzpSecretId(setting.getRzpSecretId());
 		merRepo.save(merchant);
-		return "Settings saved";
 	}
 
 }

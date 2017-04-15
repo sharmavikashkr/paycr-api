@@ -26,6 +26,7 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
@@ -89,7 +90,8 @@ public class MerchantController {
 	public String resetSendSms(@RequestBody MerchantSetting setting, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return merSer.updateSetting(merchant, setting);
+			merSer.updateSetting(merchant, setting);
+			return "Settings Updated";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return "FAILURE";
@@ -100,9 +102,13 @@ public class MerchantController {
 	public String newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return merSer.newCustomParam(merchant, customParam);
+			merSer.newCustomParam(merchant, customParam);
+			return "Custom Param added";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			if (ex instanceof PaycrException) {
+				return ex.getMessage();
+			}
 			return "FAILURE";
 		}
 	}
@@ -111,7 +117,8 @@ public class MerchantController {
 	public String deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return merSer.deleteCustomParam(merchant, id);
+			merSer.deleteCustomParam(merchant, id);
+			return "Custom Param deleted";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return ex.getMessage();
