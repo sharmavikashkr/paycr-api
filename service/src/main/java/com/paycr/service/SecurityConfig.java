@@ -1,12 +1,13 @@
 package com.paycr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,18 +16,17 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 
 import com.paycr.common.service.CustomUserDetailsService;
-import com.paycr.common.service.MySimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public CustomUserDetailsService userDetailsService;
 
 	@Autowired
-	public MySimpleUrlAuthenticationSuccessHandler successHandler;
+	@Qualifier("preAuthProvider")
+	private AuthenticationProvider preAuthProvider;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
+	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService);
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -47,15 +47,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin().loginPage("/login").successHandler(successHandler);
-		http.headers().frameOptions().disable();
-		http.csrf().disable();
+	@Bean(name = "authenticationManagerBean")
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		//auth.userDetailsService(userDetailsService);
-		auth.authenticationProvider(authenticationProvider());
+		auth.authenticationProvider(authenticationProvider()).authenticationProvider(preAuthProvider);
 	}
 }

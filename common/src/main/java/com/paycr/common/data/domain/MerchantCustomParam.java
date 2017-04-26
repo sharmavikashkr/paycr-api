@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.ParamValueProvider;
 
 @Entity
@@ -24,6 +25,7 @@ public class MerchantCustomParam {
 	@Enumerated(EnumType.STRING)
 	private ParamValueProvider provider;
 
+	@JsonIgnore
 	@ManyToOne
 	private MerchantSetting merchantSetting;
 

@@ -8,7 +8,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +33,8 @@ import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.validation.MerchantValidator;
 import com.paycr.dashboard.validation.PricingValidator;
 
-@Secured({ "ROLE_ADMIN" })
 @RestController
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequestMapping("/admin")
 public class AdminController {
 

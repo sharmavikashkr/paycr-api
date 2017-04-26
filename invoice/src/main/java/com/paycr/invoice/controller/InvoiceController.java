@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +25,7 @@ import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
 @RestController
+@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 @RequestMapping("/invoice")
 public class InvoiceController {
 
@@ -49,7 +50,6 @@ public class InvoiceController {
 	@Autowired
 	private PaymentService payService;
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "new", method = RequestMethod.POST)
 	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
@@ -64,7 +64,6 @@ public class InvoiceController {
 		return "Invoice Generated : " + company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 	}
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
 	public String expire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
@@ -80,7 +79,6 @@ public class InvoiceController {
 		}
 	}
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
 	public String notify(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
@@ -96,7 +94,6 @@ public class InvoiceController {
 		}
 	}
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

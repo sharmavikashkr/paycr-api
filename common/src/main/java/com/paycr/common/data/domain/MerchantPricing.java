@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.PricingStatus;
 
 @Entity
@@ -31,12 +32,14 @@ public class MerchantPricing {
 	@Enumerated(EnumType.STRING)
 	private PricingStatus status;
 
+	@JsonIgnore
 	@ManyToOne
 	private Merchant merchant;
 
 	@OneToOne
 	private Pricing pricing;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "merchantPricing")
 	private List<Invoice> invoices;
 

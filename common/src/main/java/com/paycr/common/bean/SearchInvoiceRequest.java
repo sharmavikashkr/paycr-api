@@ -14,7 +14,10 @@ public class SearchInvoiceRequest {
 	private BigDecimal amount;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date created;
+	private Date createdFrom;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date createdTo;
 
 	public String getInvoiceCode() {
 		return invoiceCode;
@@ -48,20 +51,28 @@ public class SearchInvoiceRequest {
 		this.amount = amount;
 	}
 
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
 	public Integer getMerchant() {
 		return merchant;
 	}
 
 	public void setMerchant(Integer merchant) {
 		this.merchant = merchant;
+	}
+
+	public Date getCreatedFrom() {
+		return createdFrom;
+	}
+
+	public void setCreatedFrom(Date createdFrom) {
+		this.createdFrom = createdFrom;
+	}
+
+	public Date getCreatedTo() {
+		return createdTo;
+	}
+
+	public void setCreatedTo(Date createdTo) {
+		this.createdTo = createdTo;
 	}
 
 }

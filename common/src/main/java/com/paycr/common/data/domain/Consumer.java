@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "pc_consumer")
 public class Consumer {
@@ -28,6 +30,7 @@ public class Consumer {
 	@Embedded
 	private Address address;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "consumer")
 	private List<Invoice> invoices;
 

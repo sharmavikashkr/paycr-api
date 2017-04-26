@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,17 +23,6 @@ public class Payment {
 	private String method;
 	private String bank;
 	private String wallet;
-
-	@OneToOne(mappedBy = "payment")
-	private Invoice invoice;
-
-	public Invoice getInvoice() {
-		return invoice;
-	}
-
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
-	}
 
 	public Integer getId() {
 		return id;

@@ -1,20 +1,22 @@
 package com.paycr.dashboard.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.paycr.common.bean.PaycrResponse;
 import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.dashboard.service.SearchService;
 
 @RestController
+@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
 @RequestMapping("/search")
 public class SearchController {
 
@@ -24,18 +26,13 @@ public class SearchController {
 	@Autowired
 	private SearchService serSer;
 
-	@Secured({ "ROLE_MERCHANT, ROLE_ADMIN" })
 	@RequestMapping("/invoice")
-	public PaycrResponse searchInvoices(@RequestBody SearchInvoiceRequest request) {
+	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
 		}
-		PaycrResponse resp = new PaycrResponse();
-		resp.setRespCode(0);
-		resp.setRespMsg("SUCCESS");
-		resp.setData(new Gson().toJson(serSer.fetchInvoiceList(request)));
-		return resp;
+		return serSer.fetchInvoiceList(request);
 	}
 
 }

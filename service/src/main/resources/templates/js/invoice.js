@@ -229,5 +229,30 @@ $(document).ready(function() {
 			updatePrice();
 		}
 	});
-	$("#dismissServerRespAlertBtn").click();
+	function valildateForm() {
+		var errors = 0;
+		if($(this).prop('required')) {
+			if($(this).attr('type') == 'email') {
+				var filter = /^(("[\w-+\s]+")|([\w-+]+(?:\.[\w-+]+)*)|("[\w-+\s]+")([\w-+]+(?:\.[\w-+]+)*))(@((?:[\w-+]+\.)*\w[\w-+]{0,66})\.([a-zA-Z]{2,6}(?:\.[a-zA-Z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][\d]\.|1[\d]{2}\.|[\d]{1,2}\.))((25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\.){2}(25[0-5]|2[0-4][\d]|1[\d]{2}|[\d]{1,2})\]?$)/;
+				if(!filter.test($(this).val().trim())) {
+					errors = errors + 1;
+					$(this).parent().addClass('has-error');
+				} else {
+					$(this).parent().removeClass('has-error');
+				}
+			} else {
+				var pattern = $(this).attr('pattern');
+				if(pattern != undefined) {
+					var regex = new RegExp(pattern);
+					if(!regex.test($(this).val().trim())) {
+						errors = errors + 1;
+						$(this).parent().addClass('has-error');
+					} else {
+						$(this).parent().removeClass('has-error');
+					}
+				}
+			}
+		}
+		return errors;
+	}
 });
