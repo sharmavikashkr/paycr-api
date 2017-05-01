@@ -73,16 +73,6 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </li>
                         <li>
                             <a href="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a>
                         </li>
@@ -128,9 +118,9 @@
 	                        				<td>
 	                        					<div class="form-group">
 	                        					<label class="control-label">Created</label>
-	                        					<input class="form-control" ng-model="searchMerchantReq.createdFrom"/>
+	                        					<input class="form-control" ng-model="searchMerchantReq.createdFrom" placeholder="Created From"/>
 	                        					<span>&nbsp;&nbsp;and</span>
-	                        					<input class="form-control" ng-model="searchMerchantReq.createdTo"/>
+	                        					<input class="form-control" ng-model="searchMerchantReq.createdTo" placeholder="Created To"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
@@ -138,7 +128,7 @@
 	                        				<td>
 	                        					<div class="form-group">
 	                        					<label class="control-label">Name</label>
-	                        					<input class="form-control" ng-model="searchMerchantReq.name"/>
+	                        					<input class="form-control" ng-model="searchMerchantReq.name" placeholder="Merchant Name"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
@@ -146,7 +136,7 @@
 	                        				<td>
 	                        					<div class="form-group">
 	                        					<label class="control-label">Email</label>
-	                        					<input class="form-control" ng-model="searchMerchantReq.email"/>
+	                        					<input class="form-control" ng-model="searchMerchantReq.email" placeholder="Merchant Email"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
@@ -154,7 +144,7 @@
 	                        				<td>
 	                        					<div class="form-group">
 	                        					<label class="control-label">Mobile</label>
-	                        					<input class="form-control" ng-model="searchMerchantReq.mobile"/>
+	                        					<input class="form-control" ng-model="searchMerchantReq.mobile" placeholder="Merchant Mobile"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>

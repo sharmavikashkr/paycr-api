@@ -2,14 +2,14 @@ var app = angular.module('payCrApp', [ "ngRoute", "ngCookies" ]);
 app.controller('MerchantController',
 function($scope, $http, $cookies, $httpParamSerializer) {
 	$scope.server = {
-		"hideMessage" : false,
+		"hideMessage" : true,
 		"respStatus" : "WELCOME!",
 		"respMsg" : ":)",
 		"isSuccess" : true
 	}
 	$scope.patterns = {
 		"paramNamePattern" : "\\w{1,10}",
-		"namePattern" : "[a-zA-Z_ ]{1,50}",
+		"namePattern" : "[0-9a-zA-Z_ ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
@@ -241,7 +241,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchMerchant();
+			$scope.searchInvoice();
 			$scope.serverMessage(data);
 		});
 	}
@@ -271,7 +271,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchMerchant();
+			$scope.searchInvoice();
 			$scope.serverMessage(data);
 		});
 	}

@@ -55,7 +55,7 @@ public class PaymentController {
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
 			mv.addObject("rzpKeyId", merchant.getSetting().getRzpKeyId());
-			mv.addObject("payAmount", invoice.getPayAmount().multiply(new BigDecimal(100)));
+			mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().multiply(new BigDecimal(100))));
 			mv.addObject("consumer", invoice.getConsumer());
 			return mv;
 		} catch (PaycrException pex) {
@@ -86,8 +86,8 @@ public class PaymentController {
 			invoiceCode = formData.get("invoiceCode");
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
-			for(InvoiceCustomParam param : invoice.getCustomParams()) {
-				if(ParamValueProvider.CONSUMER.equals(param.getProvider())) {
+			for (InvoiceCustomParam param : invoice.getCustomParams()) {
+				if (ParamValueProvider.CONSUMER.equals(param.getProvider())) {
 					String paramValue = formData.get(param.getParamName());
 					param.setParamValue(paramValue);
 				}
