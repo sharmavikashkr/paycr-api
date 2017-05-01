@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -33,9 +32,6 @@ public class InvoiceController {
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private Company company;
-
-	@Autowired
 	private NotifyService notSer;
 
 	@Autowired
@@ -51,46 +47,40 @@ public class InvoiceController {
 	private PaymentService payService;
 
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
+	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
 			invoice.setMer(secSer.getMerchantForLoggedInUser());
 			invValidator.validate(invoice);
 			invRepo.save(invoice);
+			notifyService.notify(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
-		notifyService.notify(invoice);
-		return "Invoice Generated : " + company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 	}
 
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
-	public String expire(@PathVariable String invoiceCode, HttpServletResponse response) {
+	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
 		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0) {
 			invoice.setExpiry(timeNow);
 			invRepo.save(invoice);
-			return "Invoice Expired";
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return "Invalid invoice or the invoice has already expired";
 		}
 	}
 
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
-	public String notify(@PathVariable String invoiceCode, HttpServletResponse response) {
+	public void notify(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
 		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0) {
 			notSer.notify(invoice);
 			invRepo.save(invoice);
-			return "Invoice notification sent";
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return "Invalid invoice or the invoice has already expired";
 		}
 	}
 

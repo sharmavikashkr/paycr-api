@@ -1,7 +1,10 @@
 package com.paycr.dashboard.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
@@ -20,7 +23,6 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.SubscriptionSetting;
-import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.SubscriptionSettingRepository;
@@ -34,18 +36,11 @@ import com.paycr.dashboard.validation.MerchantValidator;
 import com.paycr.dashboard.validation.PricingValidator;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
 	private SecurityService secSer;
-
-	@Autowired
-	private MerchantRepository merRepo;
-
-	@Autowired
-	private PricingRepository priceRepo;
 
 	@Autowired
 	private AdminService adminService;
@@ -66,51 +61,69 @@ public class AdminController {
 	private SubscriptionSettingRepository subsSetRepo;
 
 	@RequestMapping("")
-	public ModelAndView admin() {
-		PcUser user = secSer.findLoggedInUser();
+	public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String token = null;
+		for (Cookie cookie : request.getCookies()) {
+			if ("access_token".equals(cookie.getName())) {
+				token = cookie.getValue();
+			}
+		}
+		if (token == null) {
+			response.sendRedirect("/adminlogin");
+		}
+		boolean isAdmin = secSer.isLoggedInUserAdmin(token);
+		if (!isAdmin) {
+			response.sendRedirect("/adminlogin");
+		}
+		PcUser user = secSer.findLoggedInUser(token);
 		ModelAndView mv = new ModelAndView("html/admin");
 		mv.addObject("user", user);
+		return mv;
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/notifications")
+	public List<Notification> getNotifications() {
+		PcUser user = secSer.findLoggedInUser();
 		Pageable topFour = new PageRequest(0, 4);
 		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(user.getId(), null, topFour);
 		for (Notification notice : notices) {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}
-		List<SubscriptionSetting> subsSettings = subsSetRepo.findAll();
-		List<Pricing> pricings = priceRepo.findAll();
-		mv.addObject("pricings", pricings);
-		List<Merchant> merchants = merRepo.findAll();
-		mv.addObject("merchants", merchants);
-		mv.addObject("notices", notices);
-		mv.addObject("subsSettings", subsSettings);
-		return mv;
+		return notices;
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/subscription/settings")
+	public List<SubscriptionSetting> getSubscriptionSettings() {
+		return subsSetRepo.findAll();
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/merchant/new")
-	public String newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
+	public void newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
 		try {
 			merValidator.validate(merchant);
 			adminService.createMerchant(merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
-		return "Merchant Created";
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/pricing/new")
-	public String createPricing(@RequestBody Pricing pricing, HttpServletResponse response) {
+	public void createPricing(@RequestBody Pricing pricing, HttpServletResponse response) {
 		try {
 			pricingValidator.validate(pricing);
 			pricingRepo.save(pricing);
-			return "Pricing created";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/pricing/toggle/{pricingId}")
-	public String togglePricing(@PathVariable Integer pricingId, HttpServletResponse response) {
+	public void togglePricing(@PathVariable Integer pricingId, HttpServletResponse response) {
 		try {
 			Pricing pri = pricingRepo.findOne(pricingId);
 			if (pri.isActive()) {
@@ -119,15 +132,14 @@ public class AdminController {
 				pri.setActive(true);
 			}
 			pricingRepo.save(pri);
-			return "SUCCESS";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
 	}
 
-	@RequestMapping("/subscription/setting")
-	public String createSubscription(@RequestBody SubscriptionSetting subsSetting, HttpServletResponse response) {
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/subscription/setting/new")
+	public void createSubscription(@RequestBody SubscriptionSetting subsSetting, HttpServletResponse response) {
 		try {
 			if (CommonUtil.isNull(subsSetting) || CommonUtil.isEmpty(subsSetting.getRzpMerchantId())
 					|| CommonUtil.isEmpty(subsSetting.getRzpKeyId())
@@ -140,15 +152,14 @@ public class AdminController {
 				subsSetRepo.save(existSetting);
 			}
 			subsSetRepo.save(subsSetting);
-			return "SUCCESS";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
 	}
 
-	@RequestMapping("/subscription/toggle/{settingId}")
-	public String toggleSubscription(@PathVariable Integer settingId, HttpServletResponse response) {
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/subscription/setting/toggle/{settingId}")
+	public void toggleSubscription(@PathVariable Integer settingId, HttpServletResponse response) {
 		try {
 			SubscriptionSetting toggleSetting = subsSetRepo.findOne(settingId);
 			SubscriptionSetting existSetting = subsSetRepo.findByActive(true);
@@ -158,10 +169,8 @@ public class AdminController {
 			}
 			toggleSetting.setActive(true);
 			subsSetRepo.save(toggleSetting);
-			return "SUCCESS";
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
 	}
 

@@ -46,7 +46,7 @@ public class UserController {
 
 	@Autowired
 	private NotificationRepository notiRepo;
-	
+
 	@RequestMapping("/")
 	public ModelAndView index() {
 		return new ModelAndView("html/index");
@@ -54,7 +54,14 @@ public class UserController {
 
 	@RequestMapping("/login")
 	public ModelAndView login() {
-		return new ModelAndView("html/login");
+		ModelAndView mv = new ModelAndView("html/login");
+		return mv;
+	}
+
+	@RequestMapping("/adminlogin")
+	public ModelAndView adminlogin() {
+		ModelAndView mv = new ModelAndView("html/adminlogin");
+		return mv;
 	}
 
 	@RequestMapping("/forgotPassword")

@@ -93,6 +93,18 @@ public class SecurityService {
 		return null;
 	}
 
+	public boolean isLoggedInUserAdmin(String token) {
+		PcUser user = findLoggedInUser(token);
+		if (user == null) {
+			return false;
+		}
+		String[] roles = userRoleService.getUserRoles(user);
+		if (Arrays.asList(roles).contains(Role.ROLE_ADMIN.name())) {
+			return true;
+		}
+		return false;
+	}
+
 	public void autologin(String email, String password) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

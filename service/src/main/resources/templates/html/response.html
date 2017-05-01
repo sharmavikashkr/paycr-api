@@ -18,71 +18,70 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                    	{{#invoice.paid}}
-                        <h3 class="panel-title text-center">Payment for Invoice# <span><strong>{{invoice.invoiceCode}} : </strong></span><span><strong style="color:limegreen;">SUCCESS</strong></span></h3>
-                    	{{/invoice.paid}}
-                    	{{^invoice.paid}}
-                        <h3 class="panel-title text-center">Payment for Invoice# <span><strong>{{invoice.invoiceCode}} : </strong></span><span><strong style="color:red;">FAILURE</strong></span></h3>
-                    	{{/invoice.paid}}
+                    	<#if invoice.paid>
+                        <h3 class="panel-title text-center">Payment for Invoice# <span><strong>${invoice.invoiceCode} : </strong></span><span><strong style="color:limegreen;">SUCCESS</strong></span></h3>
+                    	<#else>
+                        <h3 class="panel-title text-center">Payment for Invoice# <span><strong>${invoice.invoiceCode} : </strong></span><span><strong style="color:red;">FAILURE</strong></span></h3>
+                    	</#if>
                     </div>
                     <div class="panel-body">
                         <table style="width: 100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
                        		<tbody>
                        			<tr>
                        				<td class="text-center"><label>Invoice#</label></td>
-                       				<td class="text-center"><p>{{invoice.invoiceCode}}</p></td>
+                       				<td class="text-center"><p>${invoice.invoiceCode}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Merchant</label></td>
-                       				<td class="text-center"><p>{{merchant.name}}</p></td>
+                       				<td class="text-center"><p>${merchant.name}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Merchant Mobile</label></td>
-                       				<td class="text-center"><p>{{merchant.mobile}}</p></td>
+                       				<td class="text-center"><p>${merchant.mobile}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Merchant Email</label></td>
-                       				<td class="text-center"><p>{{merchant.email}}</p></td>
+                       				<td class="text-center"><p>${merchant.email}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Consumer</label></td>
-                       				<td class="text-center"><p>{{invoice.consumer.name}}</p></td>
+                       				<td class="text-center"><p>${invoice.consumer.name}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Consumer Mobile</label></td>
-                       				<td class="text-center"><p>{{invoice.consumer.mobile}}</p></td>
+                       				<td class="text-center"><p>${invoice.consumer.mobile}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Consumer Email</label></td>
-                       				<td class="text-center"><p>{{invoice.consumer.email}}</p></td>
+                       				<td class="text-center"><p>${invoice.consumer.email}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Amount</label></td>
-                       				<td class="text-center"><p>&#8377; {{invoice.payAmount}}</p></td>
+                       				<td class="text-center"><p>&#8377; ${invoice.payAmount}</p></td>
                        			</tr>
-                       			{{#invoice.payment}}
+                       			<#if invoice.payment != null>
                        			<tr>
                        				<td class="text-center"><label>Payment Reference Number</label></td>
-                       				<td class="text-center"><p>{{invoice.payment.paymentRefNo}}</p></td>
+                       				<td class="text-center"><p>${invoice.payment.paymentRefNo}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Payment Status</label></td>
-                       				<td class="text-center"><p>{{invoice.payment.status}}</p></td>
+                       				<td class="text-center"><p>${invoice.payment.status}</p></td>
                        			</tr>
                        			<tr>
                        				<td class="text-center"><label>Payment Mode</label></td>
-                       				<td class="text-center"><p>{{invoice.payment.method}}</p></td>
+                       				<td class="text-center"><p>${invoice.payment.method}</p></td>
                        			</tr>
-                       			{{/invoice.payment}}
+                       			</#if>
                        		</tbody>
                        	</table>
                        	<div class="text-center">
-                       		{{#invoice.paid}}
+                       		<#if invoice.paid>
                    			<tr>
                    				<td class="text-center"><button type="button" class="btn btn-info">download</button></td>
                    				<td class="text-center"><button type="button" class="btn btn-warning">print</button></td>
                    			</tr>
-                   			{{/invoice.paid}}
+                   			</#if>
                        	</div>
                     </div>
                 </div>

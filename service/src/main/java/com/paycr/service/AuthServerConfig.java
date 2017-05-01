@@ -18,11 +18,16 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import com.paycr.common.bean.Company;
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	private static final String RESOURCE_ID = "paycr-service";
+
+	@Autowired
+	private Company company;
 
 	@Autowired
 	@Qualifier("authenticationManagerBean")
@@ -47,9 +52,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Primary
 	public ClientDetailsService clientDetailsService() {
 		final InMemoryClientDetailsServiceBuilder builder = new InMemoryClientDetailsServiceBuilder();
-		builder.withClient("web-client").secret("secret").resourceIds(RESOURCE_ID)
+		builder.withClient(company.getWebClient()).secret(company.getWebSecret()).resourceIds(RESOURCE_ID)
 				.authorizedGrantTypes("password", "authorization_code", "refresh_token").scopes("read", "write").and()
-				.withClient("mob-client").secret("secret").resourceIds(RESOURCE_ID)
+				.withClient(company.getMobClient()).secret(company.getMobSecret()).resourceIds(RESOURCE_ID)
 				.authorizedGrantTypes("password", "authorization_code", "refresh_token").scopes("read", "write");
 		try {
 			return builder.build();

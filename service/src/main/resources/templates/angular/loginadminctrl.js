@@ -1,4 +1,4 @@
-var app = angular.module('payCrApp', ["ngRoute","ngCookies"]);
+var app = angular.module('payCrAppAdmin', ["ngRoute","ngCookies"]);
 app.controller('LoginController', 
   function($scope, $http, $cookies, $httpParamSerializer) {
 	
@@ -8,7 +8,7 @@ app.controller('LoginController',
         password: ""
     };
     $scope.encoded = "d2ViLWNsaWVudDozYjVlOGViM2ZjZmFmYTJlN2IzMDJmNzVjMGUxODVkMzNkODY5MGMy";
-     
+    
     $scope.login = function() {   
         var req = {
             method: 'POST',
@@ -22,7 +22,7 @@ app.controller('LoginController',
         $http(req).then(function(data){
         	$http.defaults.headers.common.Authorization = 'Bearer ' + data.data.access_token;
             $cookies.put("access_token", data.data.access_token);
-            window.location.href="/merchant";
+            window.location.href="/admin";
         });
    }
 });

@@ -1,16 +1,21 @@
 var app = angular.module('payCrApp', [ "ngRoute", "ngCookies" ]);
 app.controller('MerchantController',
 function($scope, $http, $cookies, $httpParamSerializer) {
+	$scope.server = {
+		"hideMessage" : false,
+		"respStatus" : "WELCOME!",
+		"respMsg" : ":)",
+		"isSuccess" : true
+	}
 	$scope.patterns = {
 		"paramNamePattern" : "\\w{1,10}",
-		"namePattern" : "\\w{1,50}",
+		"namePattern" : "[a-zA-Z_ ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
-		"numberPattern" : "\\d{1,4}",
+		"numberPattern" : "\\d{1,4}"
 	}
-	$scope.invoices = [];
-	$scope.searchRequest = {
+	$scope.searchInvoiceReq = {
 		"invoiceCode" : "",
 		"email" : "",
 		"mobile" : "",
@@ -47,6 +52,21 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			"provider" : ""
 		} ]
 	}
+	$scope.dismissServerAlert = function() {
+		$scope.server.hideMessage = true;
+	}
+	$scope.serverMessage = function(data) {
+		$scope.server.hideMessage = false;
+		if(data.status==200) {
+			$scope.server.isSuccess = true;
+			$scope.server.respStatus = "SUCCESS!";
+			$scope.server.respMsg = "operation successful";
+		} else {
+			$scope.server.isSuccess = false;
+			$scope.server.respStatus = "FAILURE!";
+			$scope.server.respMsg = "something went wrong";
+		}
+	}
 	$scope.fetchMerchant = function() {
 		var req = {
 			method : 'GET',
@@ -69,7 +89,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.searchRequest
+			data : $scope.searchInvoiceReq
 		}
 		$http(req).then(function(invoices) {
 			$scope.invoices = invoices.data;
@@ -88,6 +108,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
+			$scope.serverMessage(setting);
 		});
 	}
 	$scope.addParam = function() {
@@ -106,6 +127,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
+			$scope.serverMessage(setting);
 		});
 	}
 	$scope.deleteParam = function(paramId, paramName) {
@@ -123,6 +145,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
+			$scope.serverMessage(setting);
 		});
 	}
 	$scope.fetchNotifications = function() {
@@ -205,6 +228,51 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			data : $scope.newinvoice
 		}
 		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.enquireInvoice = function(invoiceCode) {
+		var req = {
+			method : 'GET',
+			url : "/invoice/enquire/" + invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.searchMerchant();
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.notifyInvoice = function(invoiceCode) {
+		var req = {
+			method : 'GET',
+			url : "/invoice/notify/" + invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.expireInvoice = function(invoiceCode) {
+		if (!confirm('Expire ' + invoiceCode + ' ?')) {
+			return false;
+		}
+		var req = {
+			method : 'GET',
+			url : "/invoice/expire/" + invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.searchMerchant();
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.refreshSetting = function() {

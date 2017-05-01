@@ -7,11 +7,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,15 +68,26 @@ public class SubscriptionController {
 	@Autowired
 	private SubscriptionSettingRepository subsSetRepo;
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 	@RequestMapping("/new/{pricingId}")
-	public ModelAndView newSubscription(@PathVariable Integer pricingId) {
+	public ModelAndView newSubscription(@PathVariable Integer pricingId, HttpServletRequest request) {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
 		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1) {
 			throw new PaycrException(Constants.FAILURE, "Not Allowed");
 		}
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		String token = null;
+		for (Cookie cookie : request.getCookies()) {
+			if ("access_token".equals(cookie.getName())) {
+				token = cookie.getValue();
+			}
+		}
+		if (CommonUtil.isNull(token)) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser(token);
+		if (CommonUtil.isNull(merchant)) {
+			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
+		}
 		Subscription subs = new Subscription();
 		subs.setAmount(pricing.getRate());
 		subs.setCurrency(Currency.INR);

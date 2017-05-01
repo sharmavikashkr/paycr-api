@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
@@ -16,7 +17,6 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.dashboard.service.SearchService;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
 @RequestMapping("/search")
 public class SearchController {
 
@@ -26,6 +26,7 @@ public class SearchController {
 	@Autowired
 	private SearchService serSer;
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/invoice")
 	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -33,6 +34,12 @@ public class SearchController {
 			request.setMerchant(merchant.getId());
 		}
 		return serSer.fetchInvoiceList(request);
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/merchant")
+	public List<Merchant> searchMerchant(@RequestBody SearchMerchantRequest request) {
+		return serSer.fetchMerchantList(request);
 	}
 
 }

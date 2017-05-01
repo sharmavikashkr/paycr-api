@@ -20,10 +20,10 @@
 </head>
 <body ng-app="payCrApp" ng-controller="MerchantController">
     <div id="wrapper">
-    	<div id="serverRespAlert" class="alert alert-success alert-dismissible">
-		    <a href="#" id="dismissServerRespAlertBtn" class="close" aria-label="close">&times;</a>
+    	<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible">
+		    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>
 		    <div class="text-center">
-		    	<strong id="serverRespStatus">Welcome!</strong>&nbsp;<span id="serverRespMsg">${user.name}</span>
+		    	<strong>{{server.respStatus}}</strong>&nbsp;<span>{{server.respMsg}}</span>
 		    </div>
 		</div>
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -100,7 +100,7 @@
             </div>
         </nav>
         <div class="tab-content" id="page-wrapper">
-	        <div id="dashboardTab" class="tab-pane fade active">
+	        <div id="dashboardTab" class="tab-pane active">
 	        	<br>
 	            <div class="row">
 	                <div class="col-lg-2" style="float:right;">
@@ -110,7 +110,6 @@
 	                </div>
 	            </div>
 	            <br>
-	            <!-- /.row -->
 	            <div class="row">
 	                <div class="col-lg-12">
 	                    <div class="panel">
@@ -120,34 +119,34 @@
 	                        			<tr>
 	                        				<td>
 	                        					<div class="form-group">
-	                        					<label class="control-label" for="createdSearch">Created between</label>
-	                        					<input class="form-control" ng-model="searchRequest.createdFrom"/>
-	                        					<span>and</span>
-	                        					<input class="form-control" ng-model="searchRequest.createdTo"/>
+	                        					<label class="control-label">Created between</label>
+	                        					<input class="form-control" ng-model="searchInvoiceReq.createdFrom"/>
+	                        					<span>&nbsp;&nbsp;and</span>
+	                        					<input class="form-control" ng-model="searchInvoiceReq.createdTo"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
 	                        			<tr>
 	                        				<td>
 	                        					<div class="form-group">
-	                        					<label class="control-label" for="emailSearch">Invoice Code</label>
-	                        					<input class="form-control" ng-model="searchRequest.invoiceCode" placeholder="invoiceCode"/>
+	                        					<label class="control-label">Invoice Code</label>
+	                        					<input class="form-control" ng-model="searchInvoiceReq.invoiceCode" placeholder="invoiceCode"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
 	                        			<tr>
 	                        				<td>
 	                        					<div class="form-group">
-	                        					<label class="control-label" for="emailSearch">Consumer Email</label>
-	                        					<input class="form-control" ng-model="searchRequest.email" placeholder="name@email.com"/>
+	                        					<label class="control-label">Consumer Email</label>
+	                        					<input class="form-control" ng-model="searchInvoiceReq.email" placeholder="name@email.com"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
 	                        			<tr>
 	                        				<td>
 	                        					<div class="form-group">
-	                        					<label class="control-label" for="mobileSearch">Consumer Mobile</label>
-	                        					<input class="form-control" ng-model="searchRequest.mobile" placeholder="9999999999"/>
+	                        					<label class="control-label">Consumer Mobile</label>
+	                        					<input class="form-control" ng-model="searchInvoiceReq.mobile" placeholder="9999999999"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
@@ -178,8 +177,8 @@
 	                                    </tr>
 	                                    <tr>
 								            <td colspan="12" style="padding:0px;">
-								            	<div style="padding:8px;" class="accordion-body collapse" id="details-{{invoice.invoiceCode}}"> 
-								            		<div class="row">
+								            	<div class="accordion-body collapse" id="details-{{invoice.invoiceCode}}"> 
+								            		<div style="padding:10px;" class="row">
 								                        <div class="panel-body col-lg-6">
 								                        	<h4>Amount Details</h4>
 								                            <div class="table-responsive">
@@ -224,7 +223,7 @@
 								                        </div>
 								            		</div>
 								            		<hr>
-								            		<div class="row">
+								            		<div style="padding:10px;" class="row">
 								            			<div class="col-xs-12 col-md-8 col-lg-6" style="float:right;">
 								            				<button id="infoBtn type="button" data-toggle="modal" data-target="#info-{{invoice.invoiceCode}}" class="btn btn-default">Info</button>
 								            				&nbsp;&nbsp;<button ng-if="invoice.status != 'PAID'" ng-click="enquireInvoice(invoice.invoiceCode)" type="button" class="btn btn-info">Enquire</button>
@@ -254,7 +253,7 @@
 	                        	<hr>
 	                        	<div class="form-group">
 	               					<label class="control-label" for="set-expiry">Expiry Days</label>
-	               					<input class="form-control" id="set-expiry" ng-model="merchant.setting.expiryDays" type="number" pattern="[0-9]{1,5}" required/>
+	               					<input class="form-control" id="set-expiry" ng-model="merchant.setting.expiryDays" type="number" ng-pattern="patterns.paramNamePattern" required/>
                					</div>
 	                        </div>
 	                    </div>
@@ -386,7 +385,7 @@
 		                            <td class="text-center">{{pricing.endAmount}}</td>
 		                            <td class="text-center">{{pricing.invoiceLimit}}</td>
 		                            <td class="text-center">{{pricing.rate}}</td>
-		                            <td class="text-center"><a href="/subscription/new/{{pricing.id}}" target="_blank" type="button" class="btn btn-warning">Buy</a></td>
+		                            <td class="text-center"><a href="/subscription/new/{{pricing.id}}" target="_blank">BUY</a></td>
 		                        </tr>
 		                    </tbody>
 		                </table>
@@ -434,8 +433,9 @@
 	                        <div class="panel-heading">Custom Params</div>
 	                        <div class="panel-body">
 	                            <div ng-class="(createInvoiceForm.param{{$index}}.$valid)?'':'has-error'" ng-repeat="param in newinvoice.customParams" class="form-group">
-	                            	<label class="control-label">{{param.paramName}}:</label>
-	                            	<input ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value" ng-pattern="patterns.namePattern" required/>
+	                            	<label ng-if="param.provider != 'CONSUMER'" class="control-label">{{param.paramName}}:</label>
+	                            	<input ng-if="param.provider == 'MERCHANT'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value" ng-pattern="patterns.namePattern" required/>
+	                            	<input ng-if="param.provider == 'OPTIONAL'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value"/>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -669,7 +669,6 @@
     <script src="/vendor/raphael/raphael.min.js"></script>
     <script src="/vendor/morrisjs/morris.min.js"></script>
     <script src="/dist/js/sb-admin-2.js"></script>
-    <script src="/js/invoice.js"></script>
     <script src="/js/mer-setting.js"></script>
 </body>
 </html>
