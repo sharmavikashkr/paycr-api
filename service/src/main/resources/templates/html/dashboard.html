@@ -40,7 +40,6 @@
                     </a>
                     <ul ng-init="fetchNotifications()" class="dropdown-menu dropdown-alerts">
                         <li ng-repeat="notice in notices">
-                        	<!-- {{#read}}<strong>{{/read}} -->
                             <a href="#">
                                 <div>
                                     <i class="fa fa-comment fa-fw"></i> {{notice.subject}}
@@ -51,7 +50,6 @@
                                 	<p>{{notice.message}}</p>
                                 </div>
                             </a>
-                            <!-- {{#read}}</strong>{{/read}} -->
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -78,22 +76,22 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a id="dashboardTabLink" href="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a>
+                            <a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a>
                         </li>
                         <li>
-                            <a href="#contactsTab" data-toggle="tab"><i class="fa fa-group fa-fw"></i> Contacts</a>
+                            <a href="#" data-target="#contactsTab" data-toggle="tab"><i class="fa fa-group fa-fw"></i> Contacts</a>
                         </li>
                         <li>
-                            <a href="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory Items</a>
+                            <a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory Items</a>
                         </li>
                         <li>
-                            <a href="#settingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            <a href="#" data-target="#settingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li>
-                            <a href="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
+                            <a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
                         </li>
                     </ul>
                 </div>

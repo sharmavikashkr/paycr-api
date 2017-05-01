@@ -39,7 +39,6 @@
                     </a>
                     <ul ng-init="fetchNotifications()" class="dropdown-menu dropdown-alerts">
                         <li ng-repeat="notice in notices">
-                        	<!-- {{#read}}<strong>{{/read}} -->
                             <a href="#">
                                 <div>
                                     <i class="fa fa-comment fa-fw"></i> {{notice.subject}}
@@ -50,7 +49,6 @@
                                 	<p>{{notice.message}}</p>
                                 </div>
                             </a>
-                            <!-- {{#read}}</strong>{{/read}} -->
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -74,24 +72,19 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a>
+                            <a href="#" data-target="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a>
                         </li>
                         <li>
-                            <a href="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a>
+                            <a href="#" data-target="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a>
                         </li>
                         <li>
-                            <a href="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a>
+                            <a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a>
                         </li>
                         <li>
-                            <a href="#globalSettingsTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Global Settings</a>
+                            <a href="#" data-target="#globalSettingsTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Global Settings</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Account<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                                </li>
-                            </ul>
+                            <a href="#" data-target="#accountSettingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account Settings</a>
                         </li>
                     </ul>
                 </div>
