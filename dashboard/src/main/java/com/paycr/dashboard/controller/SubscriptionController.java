@@ -113,7 +113,7 @@ public class SubscriptionController {
 		mv.addObject("pricing", pricing);
 		mv.addObject("subsCode", subsCode);
 		mv.addObject("rzpKeyId", subsSet.getRzpKeyId());
-		mv.addObject("payAmount", subs.getAmount().multiply(new BigDecimal(100)));
+		mv.addObject("payAmount", String.valueOf(subs.getAmount().multiply(new BigDecimal(100))));
 		return mv;
 	}
 
