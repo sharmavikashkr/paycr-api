@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -39,7 +38,6 @@ public class NotifyService {
 	@Autowired
 	private Configuration fmConfiguration;
 
-	@Async
 	public void notify(Invoice invoice) {
 		String invoiceUrl = company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
@@ -50,12 +48,10 @@ public class NotifyService {
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
 			smsEngine.send(sms);
 		}
-
 		if (invoice.isSendEmail()) {
 			List<String> to = new ArrayList<String>();
 			to.add(invoice.getConsumer().getEmail());
 			List<String> cc = new ArrayList<String>();
-			cc.add("sharma.vikashkr@gmail.com");
 			Email email = new Email(company.getContact(), to, cc);
 			email.setSubject("Invoice for your order");
 			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
@@ -65,12 +61,11 @@ public class NotifyService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			emailEngine.send(email);
+			emailEngine.sendViaGmail(email);
 		}
 	}
 
 	public String getEmail(Invoice invoice) throws Exception {
-		invoice.getItems();
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
 		Map<String, Object> templateProps = new HashMap<String, Object>();
 		templateProps.put("invoice", invoice);

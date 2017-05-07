@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,10 +59,10 @@ public class Invoice implements Serializable {
 	@ManyToOne
 	private Consumer consumer;
 
-	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Item> items;
 
-	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<InvoiceCustomParam> customParams;
 
 	@ManyToOne
