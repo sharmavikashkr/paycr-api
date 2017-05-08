@@ -29,13 +29,13 @@ import com.paycr.invoice.validation.InvoiceValidator;
 public class InvoiceController {
 
 	@Autowired
+	private SecurityService secSer;
+
+	@Autowired
 	private InvoiceRepository invRepo;
 
 	@Autowired
 	private NotifyService notSer;
-
-	@Autowired
-	private SecurityService secSer;
 
 	@Autowired
 	private InvoiceValidator invValidator;
@@ -49,7 +49,6 @@ public class InvoiceController {
 	@RequestMapping(value = "new", method = RequestMethod.POST)
 	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
-			invoice.setMer(secSer.getMerchantForLoggedInUser());
 			invValidator.validate(invoice);
 			invRepo.save(invoice);
 			notifyService.notify(invoice);

@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
+import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
@@ -68,6 +70,9 @@ public class MerchantController {
 	@RequestMapping("/get")
 	public Merchant getMerchant() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		for (MerchantPricing merPri : merchant.getPricings()) {
+			merPri.setInvNo(merPri.getInvoices().size());
+		}
 		return merchant;
 	}
 
@@ -116,6 +121,18 @@ public class MerchantController {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.deleteCustomParam(merchant, id);
 			return merchant.getSetting();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return null;
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@RequestMapping("/invoices")
+	public List<Invoice> myInvoices(HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			return merSer.myInvoices(merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return null;

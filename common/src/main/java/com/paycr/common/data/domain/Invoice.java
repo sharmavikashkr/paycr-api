@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,10 +58,10 @@ public class Invoice implements Serializable {
 	@ManyToOne
 	private Consumer consumer;
 
-	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<Item> items;
 
-	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<InvoiceCustomParam> customParams;
 
 	@ManyToOne
@@ -78,13 +77,10 @@ public class Invoice implements Serializable {
 	private List<Payment> allPayments;
 
 	@Transient
-	private boolean isPaid;
-
-	@Transient
 	private int expiresIn;
 
 	@Transient
-	private Merchant mer;
+	private String merchantName;
 
 	public Integer getId() {
 		return id;
@@ -194,14 +190,6 @@ public class Invoice implements Serializable {
 		this.status = status;
 	}
 
-	public boolean isPaid() {
-		return isPaid;
-	}
-
-	public void setPaid(boolean isPaid) {
-		this.isPaid = isPaid;
-	}
-
 	public int getExpiresIn() {
 		return expiresIn;
 	}
@@ -250,11 +238,11 @@ public class Invoice implements Serializable {
 		this.allPayments = allPayments;
 	}
 
-	public Merchant getMer() {
-		return mer;
+	public String getMerchantName() {
+		return merchantName;
 	}
 
-	public void setMer(Merchant mer) {
-		this.mer = mer;
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 }

@@ -10,7 +10,6 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
-import com.paycr.common.type.InvoiceStatus;
 
 @RestController
 public class PaymentResponseController {
@@ -26,9 +25,6 @@ public class PaymentResponseController {
 		try {
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
-			if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
-				invoice.setPaid(true);
-			}
 			ModelAndView mv = new ModelAndView("html/response");
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);

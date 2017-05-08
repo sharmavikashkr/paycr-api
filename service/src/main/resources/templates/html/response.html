@@ -18,7 +18,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                    	<#if invoice.paid>
+                    	<#if invoice.status == 'PAID'>
                         <h3 class="panel-title text-center">Payment for Invoice# <span><strong>${invoice.invoiceCode} : </strong></span><span><strong style="color:limegreen;">SUCCESS</strong></span></h3>
                     	<#else>
                         <h3 class="panel-title text-center">Payment for Invoice# <span><strong>${invoice.invoiceCode} : </strong></span><span><strong style="color:red;">FAILURE</strong></span></h3>
@@ -76,7 +76,7 @@
                        		</tbody>
                        	</table>
                        	<div class="text-center">
-                       		<#if invoice.paid>
+                       		<#if invoice.status == 'PAID'>
                    			<tr>
                    				<td class="text-center"><button type="button" class="btn btn-info">download</button></td>
                    				<td class="text-center"><button type="button" class="btn btn-warning">print</button></td>

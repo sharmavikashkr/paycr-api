@@ -245,6 +245,19 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchMyInvoices = function() {
+		var req = {
+			method : 'GET',
+			url : "/merchant/invoices/",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(myInvoices) {
+			$scope.myinvoices = myInvoices.data;
+		});
+	}
 	$scope.notifyInvoice = function(invoiceCode) {
 		var req = {
 			method : 'GET',

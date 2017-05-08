@@ -16,7 +16,7 @@ public interface MerchantRepository extends JpaRepository<Merchant, Integer> {
 
 	public Merchant findByEmail(String email);
 
-	@Query("select i.consumer from Invoice i where i.merchant = ?0")
+	@Query("select i.consumer from Invoice i where i.merchant = ?1")
 	public List<Consumer> findMyConsumers(Integer merchant);
 
 }
