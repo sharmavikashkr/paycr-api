@@ -15,7 +15,6 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 import com.paycr.common.bean.Company;
 
@@ -31,6 +30,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	@Autowired
+	private TokenStore tokenStore;
+
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
 		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
@@ -43,7 +45,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.tokenServices(tokenServices()).tokenStore(tokenStore()).authenticationManager(authenticationManager);
+		endpoints.tokenServices(tokenServices()).tokenStore(tokenStore).authenticationManager(authenticationManager);
 	}
 
 	@Bean(name = "clientDetailsService")
@@ -63,17 +65,12 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	}
 
 	@Bean
-	public TokenStore tokenStore() {
-		return new InMemoryTokenStore();
-	}
-
-	@Bean
 	@Primary
 	public AuthorizationServerTokenServices tokenServices() {
 		final DefaultTokenServices tokenServices = new DefaultTokenServices();
 		tokenServices.setSupportRefreshToken(true);
 		tokenServices.setClientDetailsService(clientDetailsService());
-		tokenServices.setTokenStore(tokenStore());
+		tokenServices.setTokenStore(tokenStore);
 		tokenServices.setAuthenticationManager(authenticationManager);
 		return tokenServices;
 	}
