@@ -22,8 +22,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	private static final String RESOURCE_ID = "paycr-service";
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	/*@Autowired
+	private AuthenticationManager authenticationManager;*/
 
 	@Autowired
 	private TokenStore tokenStore;
@@ -33,7 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) {
-		resources.resourceId(RESOURCE_ID).authenticationManager(authenticationManager).tokenStore(tokenStore);
+		resources.resourceId(RESOURCE_ID).tokenStore(tokenStore);//.authenticationManager(authenticationManager);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		tokenServices.setSupportRefreshToken(true);
 		tokenServices.setClientDetailsService(clientDetailsService);
 		tokenServices.setTokenStore(tokenStore);
-		tokenServices.setAuthenticationManager(authenticationManager);
+		//tokenServices.setAuthenticationManager(authenticationManager);
 		return tokenServices;
 	}
 }
