@@ -167,7 +167,7 @@
 	                                    </tr>
 	                                </thead>
 	                                <tbody ng-repeat="invoice in invoices">
-										<tr ng-class="(invoice.status=='PAID')?'success':'warning'" data-toggle="collapse" data-target="#details-{{invoice.invoiceCode}}" class="accordion-toggle">
+										<tr ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':'warning'" data-toggle="collapse" data-target="#details-{{invoice.invoiceCode}}" class="accordion-toggle">
 	                                        <td>{{invoice.invoiceCode}}</td>
 	                                        <td>&#8377; {{invoice.payAmount}}</td>
 	                                        <td>{{invoice.consumer.email}}</td>
@@ -175,7 +175,7 @@
 	                                        <td>{{invoice.status}}</td>
 	                                    </tr>
 	                                    <tr>
-								            <td colspan="12" style="padding:0px;">
+								            <td colspan="12" style="padding:0px;border:0px;">
 								            	<div class="accordion-body collapse" id="details-{{invoice.invoiceCode}}"> 
 								            		<div style="padding:10px;" class="row">
 								                        <div class="panel-body col-lg-6">
@@ -226,8 +226,8 @@
 								            			<div class="col-xs-12 col-md-8 col-lg-6" style="float:right;">
 								            				<button id="infoBtn type="button" data-toggle="modal" data-target="#info-{{invoice.invoiceCode}}" class="btn btn-default">Info</button>
 								            				&nbsp;&nbsp;<button ng-if="invoice.status != 'PAID'" ng-click="enquireInvoice(invoice.invoiceCode)" type="button" class="btn btn-info">Enquire</button>
-								            				&nbsp;&nbsp;<button ng-if="invoice.status != 'PAID'"  ng-click="notifyInvoice(invoice.invoiceCode)" type="button" class="btn btn-warning">Notify</button>
-								            				&nbsp;&nbsp;<button ng-click="expireInvoice(invoice.invoiceCode)" type="button" class="btn btn-danger">Expire</button>
+								            				&nbsp;&nbsp;<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'" ng-click="notifyInvoice(invoice.invoiceCode)" type="button" class="btn btn-warning">Notify</button>
+								            				&nbsp;&nbsp;<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'" ng-click="expireInvoice(invoice.invoiceCode)" type="button" class="btn btn-danger">Expire</button>
 								            			</div>
 								            		</div>
 								            	</div>
@@ -257,12 +257,17 @@
 	                                    </tr>
 	                                </thead>
 	                                <tbody ng-repeat="myinvoice in myinvoices">
-										<tr ng-class="(myinvoice.status=='PAID')?'success':'warning'"  data-toggle="collapse" data-target="#myinfo-{{myinvoice.invoiceCode}}" class="accordion-toggle">
+										<tr ng-class="(myinvoice.status=='PAID')?'success':(myinvoice.status=='EXPIRED')?'basic':(myinvoice.status=='EXPIRED')?'danger':'warning'"  data-toggle="collapse" data-target="#myinfo-{{myinvoice.invoiceCode}}" class="accordion-toggle">
 	                                        <td>{{myinvoice.invoiceCode}}</td>
 	                                        <td>&#8377; {{myinvoice.payAmount}}</td>
 	                                        <td>{{myinvoice.merchantName}}</td>
 	                                        <td>{{myinvoice.status}}</td>
-	                                        <td><div ng-if="myinvoice.status != 'PAID'"><a href="/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-success">PAY</a></div></td>
+	                                        <td>
+	                                        	<div ng-if="myinvoice.status != 'PAID' && myinvoice.status != 'EXPIRED'">
+	                                        		<a href="/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-success">PAY</a>&nbsp;
+	                                        		<a ng-if="myinvoice.status != 'DECLINED'" href="/decline/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-warning">DECLINE</a>
+	                                        	</div>
+	                                        </td>
 	                                    </tr>
 	                                    <tr>
 								            <td colspan="12" style="padding:0px;">
@@ -645,7 +650,7 @@
 	    <div class="modal-content" style="min-width:120%; margin-left:-15%;">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">Invoice# <span><strong>{{invoice.invoiceCode}}</strong></span></h4>
+	        <h4 class="modal-title">Invoice# <span><strong>{{invoice.invoiceCode}}</strong></span>&nbsp;&nbsp;<span>({{invoice.merchantPricing.pricing.name}})</span></h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
 	      	<div class="row">

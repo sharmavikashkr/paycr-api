@@ -20,7 +20,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-05-01"
+		"createdTo" : "2017-06-30"
 	}
 	$scope.newparam = {
 		"paramName" : "",

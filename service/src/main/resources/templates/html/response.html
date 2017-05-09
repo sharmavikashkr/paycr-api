@@ -32,6 +32,10 @@
                        				<td class="text-center"><p>${invoice.invoiceCode}</p></td>
                        			</tr>
                        			<tr>
+                       				<td class="text-center"><label>Status</label></td>
+                       				<td class="text-center"><p>${invoice.status}</p></td>
+                       			</tr>
+                       			<tr>
                        				<td class="text-center"><label>Merchant</label></td>
                        				<td class="text-center"><p>${merchant.name}</p></td>
                        			</tr>
@@ -59,7 +63,7 @@
                        				<td class="text-center"><label>Amount</label></td>
                        				<td class="text-center"><p>&#8377; ${invoice.payAmount}</p></td>
                        			</tr>
-                       			<#if invoice.payment != null>
+                       			<#if invoice.payment??>
                        			<tr>
                        				<td class="text-center"><label>Payment Reference Number</label></td>
                        				<td class="text-center"><p>${invoice.payment.paymentRefNo}</p></td>

@@ -69,13 +69,30 @@ public class PaymentController {
 		if (CommonUtil.isNull(invoice)) {
 			throw new PaycrException(Constants.FAILURE, "Requested Resource is not found");
 		}
-		Date timeNow = new Date();
-		if (invoice.getExpiry().before(timeNow)) {
-			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
-		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "This invoice is already paid");
 		}
+		if (InvoiceStatus.EXPIRED.equals(invoice.getStatus()) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+		}
+		Date timeNow = new Date();
+		if (invoice.getExpiry().before(timeNow)) {
+			invoice.setStatus(InvoiceStatus.EXPIRED);
+			invRepo.save(invoice);
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+		}
+	}
+
+	@RequestMapping("/decline/{invoiceCode}")
+	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
+		try {
+			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+			invoice.setStatus(InvoiceStatus.DECLINED);
+			invRepo.save(invoice);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		response.sendRedirect("/response/" + invoiceCode);
 	}
 
 	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)

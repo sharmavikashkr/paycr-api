@@ -62,8 +62,10 @@ public class InvoiceController {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
-		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0) {
+		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0
+				&& !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			invoice.setExpiry(timeNow);
+			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);

@@ -1,12 +1,10 @@
 package com.paycr.common.communicate;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;

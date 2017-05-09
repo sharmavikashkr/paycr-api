@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
@@ -41,7 +40,6 @@ public class UserService {
 	@Autowired
 	private HmacSignerUtil hmacSigner;
 
-	@Async
 	public void sendResetLink(PcUser user) {
 		Date timeNow = new Date();
 		List<String> to = new ArrayList<String>();
@@ -66,7 +64,7 @@ public class UserService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		emailEngine.send(email);
+		emailEngine.sendViaGmail(email);
 	}
 
 	public String getEmail(PcUser user, String resetUrl) throws Exception {
