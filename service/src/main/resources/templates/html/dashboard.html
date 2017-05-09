@@ -16,7 +16,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
 	<script src="/angular/merchantctrl.js"></script>
 </head>
-<body ng-app="payCrApp" ng-controller="MerchantController">
+<body ng-app="payCrApp" ng-controller="MerchantController" ng-cloak>
     <div id="wrapper">
     	<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible">
 		    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>

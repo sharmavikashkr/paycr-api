@@ -17,7 +17,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
 	<script src="/angular/adminctrl.js"></script>
 </head>
-<body ng-app="payCrAdminApp" ng-controller="AdminController">
+<body ng-app="payCrAdminApp" ng-controller="AdminController" ng-cloak>
     <div id="wrapper">
     	<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible">
 		    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>
