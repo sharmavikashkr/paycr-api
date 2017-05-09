@@ -1,7 +1,6 @@
 package com.paycr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,7 +23,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private static final String RESOURCE_ID = "paycr-service";
 
 	@Autowired
-	//@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
