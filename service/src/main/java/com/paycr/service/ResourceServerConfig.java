@@ -24,7 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private static final String RESOURCE_ID = "paycr-service";
 
 	@Autowired
-	@Qualifier("authenticationManagerBean")
+	//@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
 
 	@Autowired

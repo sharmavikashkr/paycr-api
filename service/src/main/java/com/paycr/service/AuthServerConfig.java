@@ -30,7 +30,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	private Company company;
 
 	@Autowired
-	@Qualifier("authenticationManagerBean")
+	//@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
 
 	@Override
