@@ -18,6 +18,11 @@
 </head>
 <body ng-app="payCrApp" ng-controller="LoginController">
     <div class="container">
+    	<div ng-hide="!invalidcreds" id="serverRespAlert" class="alert alert-danger alert-dismissible">
+		    <div class="text-center">
+		    	<strong id="serverRespStatus">Invalid Credentials</strong>
+		    </div>
+		</div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">

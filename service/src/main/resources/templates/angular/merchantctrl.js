@@ -1,6 +1,6 @@
 var app = angular.module('payCrApp', [ "ngRoute", "ngCookies" ]);
 app.controller('MerchantController',
-function($scope, $http, $cookies, $httpParamSerializer) {
+function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.server = {
 		"hideMessage" : true,
 		"respStatus" : "WELCOME!",
@@ -61,6 +61,11 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			$scope.server.isSuccess = true;
 			$scope.server.respStatus = "SUCCESS!";
 			$scope.server.respMsg = "operation successful";
+		} else if(data.status==401) {
+			$scope.server.isSuccess = false;
+			$scope.server.respStatus = "FAILURE!";
+			$scope.server.respMsg = "unauthorized request";
+			$scope.logout();
 		} else {
 			$scope.server.isSuccess = false;
 			$scope.server.respStatus = "FAILURE!";
@@ -79,6 +84,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(merchant) {
 			$scope.merchant = merchant.data;
 			$scope.refreshSetting();
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.searchInvoice = function() {
@@ -93,6 +100,23 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(invoices) {
 			$scope.invoices = invoices.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.fetchMyInvoices = function() {
+		var req = {
+			method : 'GET',
+			url : "/merchant/invoices/",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(myInvoices) {
+			$scope.myinvoices = myInvoices.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.saveSetting = function() {
@@ -108,7 +132,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
-			$scope.serverMessage(setting);
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.addParam = function() {
@@ -127,7 +152,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
-			$scope.serverMessage(setting);
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.deleteParam = function(paramId, paramName) {
@@ -145,7 +171,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
-			$scope.serverMessage(setting);
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.fetchNotifications = function() {
@@ -159,6 +186,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(notifications) {
 			$scope.notices = notifications.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.fetchPricings = function() {
@@ -172,6 +201,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(pricings) {
 			$scope.pricings = pricings.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.addItem = function() {
@@ -228,6 +259,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			data : $scope.newinvoice
 		}
 		$http(req).then(function(data) {
+			
+		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
@@ -242,20 +275,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(data) {
 			$scope.searchInvoice();
+		}, function(data) {
 			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchMyInvoices = function() {
-		var req = {
-			method : 'GET',
-			url : "/merchant/invoices/",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(myInvoices) {
-			$scope.myinvoices = myInvoices.data;
 		});
 	}
 	$scope.notifyInvoice = function(invoiceCode) {
@@ -268,6 +289,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			}
 		}
 		$http(req).then(function(data) {
+			
+		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
@@ -285,6 +308,7 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(data) {
 			$scope.searchInvoice();
+		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
@@ -306,5 +330,10 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			"paramName" : "",
 			"provider" : "OPTIONAL"
 		}
+	}
+	$scope.logout = function() {
+		$timeout(function(){
+			window.location.href="/login?logout";
+		}, 1000);
 	}
 });

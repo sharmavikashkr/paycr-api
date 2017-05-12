@@ -245,7 +245,7 @@
 	        	<div class="row">
 	        		<div class="col-xs-12 col-md-12 col-lg-12">
 	                    <div class="panel">
-	                        <div class="panel-body col-lg-9">
+	                        <div class="panel-body col-lg-10 col-lg-offset-1">
 	                            <table ng-init="fetchMyInvoices()" style="width:100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
 	                                <thead>
 	                                    <tr>
@@ -492,7 +492,7 @@
 	                    <div class="panel panel-default height">
 	                        <div class="panel-heading">Consumer Details</div>
 	                        <div class="panel-body">
-	                            <div ng-class="(createInvoiceForm.conname.$valid)?'':'has-error'" class="form-group"><label class="control-label">Name:</label>&nbsp;<input ng-model="newinvoice.consumer.name" name="conname" class="form-control" placeholder="Consumer Name" type="text" ng-pattern="patterns.namePattern" required/></div>
+	                            <div ng-class="(createInvoiceForm.conname.$valid)?'':'has-error'" class="form-group"><label class="control-label">Name:</label>&nbsp;<input ng-model="newinvoice.consumer.name" name="conname" class="form-control" placeholder="Consumer Name" type="text" ng-pattern="patterns.namePattern" required autofocus/></div>
 	                            <div ng-class="(createInvoiceForm.conemail.$valid)?'':'has-error'" class="form-group"><label class="control-label">Email:</label>&nbsp;<input ng-model="newinvoice.consumer.email" name="conemail" class="form-control" placeholder="Consumer Email" type="email" ng-pattern="patterns.emailPattern" required/></div>
 	                            <div ng-class="(createInvoiceForm.conmobile.$valid)?'':'has-error'" class="form-group"><label class="control-label">Mobile:</label>&nbsp;<input ng-model="newinvoice.consumer.mobile" name="conmobile" class="form-control" placeholder="Consumer Mobile" type="number" ng-pattern="patterns.mobilePattern" required/></div>
 	                        </div>

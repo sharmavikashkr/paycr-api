@@ -47,6 +47,9 @@ public class MerchantController {
 	@RequestMapping("")
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
+		if(request.getCookies() == null) {
+			response.sendRedirect("/login");
+		}
 		for (Cookie cookie : request.getCookies()) {
 			if ("access_token".equals(cookie.getName())) {
 				token = cookie.getValue();

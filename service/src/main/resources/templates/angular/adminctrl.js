@@ -1,6 +1,6 @@
 var app = angular.module('payCrAdminApp', [ "ngRoute", "ngCookies" ]);
 app.controller('AdminController',
-function($scope, $http, $cookies, $httpParamSerializer) {
+function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.server = {
 		"hideMessage" : true,
 		"respStatus" : "WELCOME!",
@@ -53,6 +53,11 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			$scope.server.isSuccess = true;
 			$scope.server.respStatus = "SUCCESS!";
 			$scope.server.respMsg = "operation successful";
+		} else if(data.status==401) {
+			$scope.server.isSuccess = false;
+			$scope.server.respStatus = "FAILURE!";
+			$scope.server.respMsg = "unauthorized request";
+			$scope.logout();
 		} else {
 			$scope.server.isSuccess = false;
 			$scope.server.respStatus = "FAILURE!";
@@ -70,6 +75,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(notifications) {
 			$scope.notices = notifications.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.searchMerchant = function() {
@@ -84,6 +91,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(merchants) {
 			$scope.merchants = merchants.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.fetchPricings = function() {
@@ -97,6 +106,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(pricings) {
 			$scope.pricings = pricings.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.createPricing = function() {
@@ -113,8 +124,9 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			data : $scope.newpricing
 		}
 		$http(req).then(function(data) {
-			$scope.serverMessage(data);
 			$scope.fetchPricings();
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.togglePricing = function(pricingId) {
@@ -127,8 +139,9 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.serverMessage(data);
 			$scope.fetchPricings();
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.fetchSubsSettings = function() {
@@ -142,6 +155,8 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 		}
 		$http(req).then(function(subsSettings) {
 			$scope.subsSettings = subsSettings.data;
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.createSubsSetting = function() {
@@ -158,8 +173,9 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			data : $scope.newsubssetting
 		}
 		$http(req).then(function(data) {
-			$scope.serverMessage(data);
 			$scope.fetchSubsSettings();
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.toggleSubsSetting = function(subsSettingId) {
@@ -172,8 +188,9 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.serverMessage(data);
 			$scope.fetchSubsSettings();
+		}, function(data) {
+			$scope.serverMessage(data);
 		});
 	}
 	$scope.createMerchant = function() {
@@ -190,8 +207,14 @@ function($scope, $http, $cookies, $httpParamSerializer) {
 			data : $scope.newmerchant
 		}
 		$http(req).then(function(data) {
+			$scope.searchMerchant();
+		}, function(data) {
 			$scope.serverMessage(data);
-			$scope.seachMerchant();
 		});
+	}
+	$scope.logout = function() {
+		$timeout(function(){
+			window.location.href="/adminlogin?logout";
+		}, 1000); 
 	}
 });
