@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -26,7 +26,8 @@ public class SmsEngine {
 	@Value("${sms.textlocal.host}")
 	private String textlocalHost;
 
-	public boolean send(Sms sms) {
+	@Async
+	public void send(Sms sms) {
 		try {
 			HttpHeaders header = new HttpHeaders();
 			header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -39,12 +40,7 @@ public class SmsEngine {
 			HttpEntity<Object> input = new HttpEntity<Object>(dataMap, header);
 			RestTemplate rest = RestTemplateUtil.getRestTemplate(25, 25);
 			ResponseEntity<Map> resp = rest.exchange(URI.create(textlocalHost), HttpMethod.POST, input, Map.class);
-			if (HttpStatus.OK.equals(resp.getStatusCode())) {
-				return true;
-			}
 		} catch (Exception ex) {
-			return false;
 		}
-		return false;
 	}
 }

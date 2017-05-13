@@ -8,6 +8,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Merchant;
@@ -38,12 +40,25 @@ public class SecurityService {
 	@Autowired
 	private UserRoleService userRoleService;
 
+	@Autowired
+	private TokenStore tokenStore;
+
 	public PcUser findLoggedInUser() {
 		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails instanceof UserDetails) {
 			return userRepo.findByEmail(((UserDetails) userDetails).getUsername());
 		}
 		return null;
+	}
+
+	public PcUser findLoggedInUser(String token) {
+		try {
+			OAuth2Authentication oauth = tokenStore.readAuthentication(tokenStore.readAccessToken(token));
+			UserDetails userDetails = userDetailsService.loadUserByUsername(oauth.getUserAuthentication().getName());
+			return userRepo.findByEmail(((UserDetails) userDetails).getUsername());
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 	public boolean isMerchantUser() {
@@ -63,6 +78,31 @@ public class SecurityService {
 			return merRepo.findOne(merUser.getMerchantId());
 		}
 		return null;
+	}
+
+	public Merchant getMerchantForLoggedInUser(String token) {
+		PcUser user = findLoggedInUser(token);
+		if (user == null) {
+			return null;
+		}
+		String[] roles = userRoleService.getUserRoles(user);
+		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
+			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
+			return merRepo.findOne(merUser.getMerchantId());
+		}
+		return null;
+	}
+
+	public boolean isLoggedInUserAdmin(String token) {
+		PcUser user = findLoggedInUser(token);
+		if (user == null) {
+			return false;
+		}
+		String[] roles = userRoleService.getUserRoles(user);
+		if (Arrays.asList(roles).contains(Role.ROLE_ADMIN.name())) {
+			return true;
+		}
+		return false;
 	}
 
 	public void autologin(String email, String password) {

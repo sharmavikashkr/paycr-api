@@ -55,7 +55,7 @@ public class PaymentController {
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
 			mv.addObject("rzpKeyId", merchant.getSetting().getRzpKeyId());
-			mv.addObject("payAmount", invoice.getPayAmount().multiply(new BigDecimal(100)));
+			mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().multiply(new BigDecimal(100))));
 			mv.addObject("consumer", invoice.getConsumer());
 			return mv;
 		} catch (PaycrException pex) {
@@ -69,13 +69,30 @@ public class PaymentController {
 		if (CommonUtil.isNull(invoice)) {
 			throw new PaycrException(Constants.FAILURE, "Requested Resource is not found");
 		}
-		Date timeNow = new Date();
-		if (invoice.getExpiry().before(timeNow)) {
-			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
-		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "This invoice is already paid");
 		}
+		if (InvoiceStatus.EXPIRED.equals(invoice.getStatus()) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+		}
+		Date timeNow = new Date();
+		if (invoice.getExpiry().before(timeNow)) {
+			invoice.setStatus(InvoiceStatus.EXPIRED);
+			invRepo.save(invoice);
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+		}
+	}
+
+	@RequestMapping("/decline/{invoiceCode}")
+	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
+		try {
+			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+			invoice.setStatus(InvoiceStatus.DECLINED);
+			invRepo.save(invoice);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		response.sendRedirect("/response/" + invoiceCode);
 	}
 
 	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)
@@ -86,8 +103,8 @@ public class PaymentController {
 			invoiceCode = formData.get("invoiceCode");
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
-			for(InvoiceCustomParam param : invoice.getCustomParams()) {
-				if(ParamValueProvider.CONSUMER.equals(param.getProvider())) {
+			for (InvoiceCustomParam param : invoice.getCustomParams()) {
+				if (ParamValueProvider.CONSUMER.equals(param.getProvider())) {
 					String paramValue = formData.get(param.getParamName());
 					param.setParamValue(paramValue);
 				}
@@ -95,7 +112,6 @@ public class PaymentController {
 			MerchantSetting setting = merchant.getSetting();
 			Payment payment = new Payment();
 			payment.setCreated(new Date());
-			payment.setInvoice(invoice);
 			payment.setInvoiceCode(invoiceCode);
 			payment.setPaymentRefNo(rzpPayId);
 			RazorpayClient razorpay = new RazorpayClient(setting.getRzpKeyId(), setting.getRzpSecretId());

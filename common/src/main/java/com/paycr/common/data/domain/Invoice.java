@@ -77,13 +77,10 @@ public class Invoice implements Serializable {
 	private List<Payment> allPayments;
 
 	@Transient
-	private boolean isPaid;
-
-	@Transient
 	private int expiresIn;
 
 	@Transient
-	private Merchant mer;
+	private String merchantName;
 
 	public Integer getId() {
 		return id;
@@ -193,14 +190,6 @@ public class Invoice implements Serializable {
 		this.status = status;
 	}
 
-	public boolean isPaid() {
-		return isPaid;
-	}
-
-	public void setPaid(boolean isPaid) {
-		this.isPaid = isPaid;
-	}
-
 	public int getExpiresIn() {
 		return expiresIn;
 	}
@@ -249,11 +238,11 @@ public class Invoice implements Serializable {
 		this.allPayments = allPayments;
 	}
 
-	public Merchant getMer() {
-		return mer;
+	public String getMerchantName() {
+		return merchantName;
 	}
 
-	public void setMer(Merchant mer) {
-		this.mer = mer;
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 }

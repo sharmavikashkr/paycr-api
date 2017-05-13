@@ -6,14 +6,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -25,20 +24,18 @@ import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
 @RestController
+@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 @RequestMapping("/invoice")
 public class InvoiceController {
+
+	@Autowired
+	private SecurityService secSer;
 
 	@Autowired
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private Company company;
-
-	@Autowired
 	private NotifyService notSer;
-
-	@Autowired
-	private SecurityService secSer;
 
 	@Autowired
 	private InvoiceValidator invValidator;
@@ -49,54 +46,45 @@ public class InvoiceController {
 	@Autowired
 	private PaymentService payService;
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "new", method = RequestMethod.POST)
-	public String single(@RequestBody Invoice invoice, HttpServletResponse response) {
+	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
-			invoice.setMer(secSer.getMerchantForLoggedInUser());
 			invValidator.validate(invoice);
 			invRepo.save(invoice);
+			notifyService.notify(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
 		}
-		notifyService.notify(invoice);
-		return "Invoice Generated : " + company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 	}
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
-	public String expire(@PathVariable String invoiceCode, HttpServletResponse response) {
+	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
-		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0) {
+		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0
+				&& !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			invoice.setExpiry(timeNow);
+			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
-			return "Invoice Expired";
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return "Invalid invoice or the invoice has already expired";
 		}
 	}
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
-	public String notify(@PathVariable String invoiceCode, HttpServletResponse response) {
+	public void notify(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
 		if (CommonUtil.isNotNull(invoice) && timeNow.compareTo(invoice.getExpiry()) < 0) {
 			notSer.notify(invoice);
 			invRepo.save(invoice);
-			return "Invoice notification sent";
 		} else {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return "Invalid invoice or the invoice has already expired";
 		}
 	}
 
-	@Secured({ "ROLE_MERCHANT" })
 	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

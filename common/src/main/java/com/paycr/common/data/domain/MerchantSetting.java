@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -29,19 +28,8 @@ public class MerchantSetting {
 	@OneToMany(mappedBy = "merchantSetting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MerchantCustomParam> customParams;
 
-	@OneToOne(mappedBy = "setting")
-	private Merchant merchant;
-
 	public Integer getId() {
 		return id;
-	}
-
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
 	}
 
 	public boolean isSendSms() {

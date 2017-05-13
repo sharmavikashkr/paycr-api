@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-public class CommonController implements ErrorController {
+public class CommonErrorController implements ErrorController {
 
 	private static final String PATH = "/error";
 

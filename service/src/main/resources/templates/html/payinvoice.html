@@ -32,31 +32,31 @@
 	                                </tr>
 	                            </thead>
 	                            <tbody id="itemBody">
-	                            	{{#invoice.items}}
+	                            	<#list invoice.items as item>
 	                                <tr id="itemRow">
-	                                    <td class="text-center">{{name}}</td>
-	                                    <td class="text-center">{{rate}}</td>
-	                                    <td class="text-center">{{quantity}}</td>
-	                                    <td class="text-right">{{price}}</td>
+	                                    <td class="text-center">${item.name}</td>
+	                                    <td class="text-center">${item.rate}</td>
+	                                    <td class="text-center">${item.quantity}</td>
+	                                    <td class="text-right">${item.price}</td>
 	                                </tr>
-	                                {{/invoice.items}}
+	                                </#list>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="emptyrow text-center"><strong>Shipping</strong></td>
-	                                    <td class="text-right">{{invoice.shipping}}</td>
+	                                    <td class="text-right">${invoice.shipping}</td>
 	                                </tr>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"><strong>Discount</strong></td>
-	                                    <td class="text-right">{{invoice.discount}}</td>
+	                                    <td class="text-right">${invoice.discount}</td>
 	                                </tr>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"><strong>Final</strong></td>
-	                                    <td class="text-right">{{invoice.payAmount}}</td>
+	                                    <td class="text-right">${invoice.payAmount}</td>
 	                                </tr>
 	                            </tbody>
 	                        </table>
@@ -65,29 +65,29 @@
 				</div>
 				<div class="row panel-default">
 	                <div class="col-md-8 col-md-offset-2">
-	                    <h3 class="section-heading">Hi {{consumer.name}}, <span style="color:white;">{{merchant.name}}</span> has requested you to pay <span style="color:white;">&#8377; {{invoice.payAmount}}</span></h3>
+	                    <h3 class="section-heading">Hi ${consumer.name}, <span style="color:white;">${merchant.name}</span> has requested you to pay <span style="color:white;">&#8377; ${invoice.payAmount}</span></h3>
 	                    <p>Proceed to make payment</p>
 	                    <div class="row">
-	                    	<form id="payForm" class="col-sm-6" action="/return/{{invoice.invoiceCode}}" method="POST">
+	                    	<form id="payForm" class="col-sm-6" action="/return/${invoice.invoiceCode}" method="POST">
 							<script
 							    src="https://checkout.razorpay.com/v1/checkout.js"
-							    data-key="{{rzpKeyId}}"
-							    data-amount="{{payAmount}}"
-							    data-buttontext="Pay &#8377; {{invoice.payAmount}}"
-							    data-name="{{merchant.name}}"
+							    data-key="${rzpKeyId}"
+							    data-amount="${payAmount}"
+							    data-buttontext="Pay &#8377; ${invoice.payAmount}"
+							    data-name="${merchant.name}"
 							    data-description="Invoice Request"
 							    data-image="https://your-awesome-site.com/your_logo.jpg"
-							    data-prefill.name="{{consumer.name}}"
-							    data-prefill.email="{{consumer.email}}"
-							    data-prefill.contact="{{consumer.mobile}}"
+							    data-prefill.name="${consumer.name}"
+							    data-prefill.email="${consumer.email}"
+							    data-prefill.contact="${consumer.mobile}"
 							    data-theme.color="#013487"
 							></script>
-							<input type="hidden" value="{{invoice.invoiceCode}}" name="invoiceCode">
-							{{#invoice.customParams}}
-                                <input type="hidden" name="{{paramName}}" value="{{paramValue}}">
-                            {{/invoice.customParams}}
+							<input type="hidden" value="${invoice.invoiceCode}" name="invoiceCode">
+							<#list invoice.customParams as param>
+                                <input type="hidden" name="${param.paramName}" value="${param.paramValue}">
+                            </#list>
 							</form>
-	                        <a class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
+	                        <a href="/decline/${invoice.invoiceCode}" class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
 	                    </div>
 	                </div>
 	            </div>
@@ -109,12 +109,12 @@
 	                                </tr>
 	                            </thead>
 	                            <tbody class="text-center">
-	                            	{{#invoice.customParams}}
+	                            	<#list invoice.customParams as param>
 	                                <tr id="itemRow">
-	                                    <td><label class="control-label">{{paramName}}</label></td>
-	                                    <td><div class="form-group" style="margin:0px;"><input id="paramValue" ref="{{paramName}}" provider="{{provider}}" class="form-control text-center" value="{{paramValue}}"></div></td>
+	                                    <td><label class="control-label">${param.paramName}</label></td>
+	                                    <td><div class="form-group" style="margin:0px;"><input id="paramValue" ref="${param.paramName}" provider="${param.provider}" class="form-control text-center" value="${param.paramValue}"></div></td>
 	                                </tr>
-	                                {{/invoice.customParams}}
+	                                </#list>
 	                             </tbody>
 	                         </table>
 						</div>

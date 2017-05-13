@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.MerchantSetting;
+import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -20,6 +22,9 @@ public class MerchantService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private InvoiceRepository invRepo;
 
 	public void newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
 		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
@@ -90,6 +95,15 @@ public class MerchantService {
 		merchant.getSetting().setRzpKeyId(setting.getRzpKeyId());
 		merchant.getSetting().setRzpSecretId(setting.getRzpSecretId());
 		merRepo.save(merchant);
+	}
+
+	public List<Invoice> myInvoices(Merchant merchant) {
+		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(merchant.getEmail(), merchant.getMobile());
+		for (Invoice invoice : myInvoices) {
+			Merchant invMer = merRepo.findOne(invoice.getMerchant());
+			invoice.setMerchantName(invMer.getName());
+		}
+		return myInvoices;
 	}
 
 }

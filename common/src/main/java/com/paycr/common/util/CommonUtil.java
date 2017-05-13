@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
@@ -19,12 +21,23 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class CommonUtil {
 
-	public static List<String[]> readCSV(InputStream inputStream)
-			throws IOException {
+	public static String base64Decode(String val) throws Exception {
+		try {
+			byte[] decodedBytes = Base64.getDecoder().decode(val.getBytes());
+			return new String(decodedBytes, Charset.forName("UTF-8"));
+		} catch (Exception e) {
+			throw new Exception("Error while decoding string = " + val);
+		}
+	}
+
+	public static String base64Encode(String val) {
+		byte[] encodedBytes = Base64.getEncoder().encode(val.getBytes());
+		return new String(encodedBytes, Charset.forName("UTF-8"));
+	}
+
+	public static List<String[]> readCSV(InputStream inputStream) throws IOException {
 		Reader reader = new InputStreamReader(inputStream);
-		CSVReader csvReader = new CSVReader(reader,
-				CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER,
-				0);
+		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> list = csvReader.readAll();
 		csvReader.close();
 		return list;

@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "pc_item")
 public class Item {
@@ -22,6 +24,7 @@ public class Item {
 	private BigDecimal rate;
 	private BigDecimal price;
 
+	@JsonIgnore
 	@ManyToOne
 	private Invoice invoice;
 

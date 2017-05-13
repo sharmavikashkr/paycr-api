@@ -1,14 +1,17 @@
 package com.paycr.dashboard.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,22 +21,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
+import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.Pricing;
-import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
-import com.paycr.common.data.repository.PaymentRepository;
-import com.paycr.common.data.repository.PricingRepository;
-import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.MerchantService;
 
-@Secured({ "ROLE_MERCHANT" })
 @RestController
 @RequestMapping("/merchant")
 public class MerchantController {
@@ -45,83 +42,103 @@ public class MerchantController {
 	private MerchantService merSer;
 
 	@Autowired
-	private InvoiceRepository invRepo;
-
-	@Autowired
-	private PricingRepository priceRepo;
-
-	@Autowired
 	private NotificationRepository notiRepo;
 
-	@Autowired
-	private PaymentRepository payRepo;
-
 	@RequestMapping("")
-	public ModelAndView dashboard() {
-		PcUser user = secSer.findLoggedInUser();
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		Pageable topTwenty = new PageRequest(0, 20);
-		List<Invoice> invoices = invRepo.findByMerchantOrderByIdDesc(merchant.getId(), topTwenty);
-		for (Invoice invoice : invoices) {
-			if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
-				invoice.setPaid(true);
-			} else {
-				invoice.setPaid(false);
-			}
-			invoice.setAllPayments(payRepo.findByInvoiceCode(invoice.getInvoiceCode()));
+	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String token = null;
+		if(request.getCookies() == null) {
+			response.sendRedirect("/login");
 		}
+		for (Cookie cookie : request.getCookies()) {
+			if ("access_token".equals(cookie.getName())) {
+				token = cookie.getValue();
+			}
+		}
+		if (token == null) {
+			response.sendRedirect("/login");
+		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser(token);
+		if (merchant == null) {
+			response.sendRedirect("/login");
+		}
+		PcUser user = secSer.findLoggedInUser(token);
+		ModelAndView mv = new ModelAndView("html/dashboard");
+		mv.addObject("user", user);
+		mv.addObject("providers", ParamValueProvider.values());
+		return mv;
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@RequestMapping("/get")
+	public Merchant getMerchant() {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		for (MerchantPricing merPri : merchant.getPricings()) {
+			merPri.setInvNo(merPri.getInvoices().size());
+		}
+		return merchant;
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@RequestMapping("/notifications")
+	public List<Notification> getNotifications() {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Pageable topFour = new PageRequest(0, 4);
 		List<Notification> notices = notiRepo.findByUserIdOrMerchantIdOrderByIdDesc(null, merchant.getId(), topFour);
 		for (Notification notice : notices) {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}
-		List<Pricing> pricings = priceRepo.findAll();
-		ModelAndView mv = new ModelAndView("html/dashboard");
-		mv.addObject("user", user);
-		mv.addObject("merchant", merchant);
-		mv.addObject("pricings", pricings);
-		mv.addObject("provider", ParamValueProvider.values());
-		mv.addObject("invoices", invoices);
-		mv.addObject("notices", notices);
-		return mv;
+		return notices;
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 	@RequestMapping("/setting/update")
-	public String resetSendSms(@RequestBody MerchantSetting setting, HttpServletResponse response) {
+	public MerchantSetting updateSetting(@RequestBody MerchantSetting setting, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.updateSetting(merchant, setting);
-			return "Settings Updated";
+			return merchant.getSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return "FAILURE";
+			return null;
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 	@RequestMapping("/customParam/new")
-	public String newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
+	public MerchantSetting newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.newCustomParam(merchant, customParam);
-			return "Custom Param added";
+			return merchant.getSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			if (ex instanceof PaycrException) {
-				return ex.getMessage();
-			}
-			return "FAILURE";
+			return null;
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 	@RequestMapping("/customParam/delete/{id}")
-	public String deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
+	public MerchantSetting deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.deleteCustomParam(merchant, id);
-			return "Custom Param deleted";
+			return merchant.getSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return ex.getMessage();
+			return null;
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@RequestMapping("/invoices")
+	public List<Invoice> myInvoices(HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			return merSer.myInvoices(merchant);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return null;
 		}
 	}
 

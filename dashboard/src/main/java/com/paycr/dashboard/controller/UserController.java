@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,15 +47,24 @@ public class UserController {
 
 	@Autowired
 	private NotificationRepository notiRepo;
-	
+
 	@RequestMapping("/")
 	public ModelAndView index() {
 		return new ModelAndView("html/index");
 	}
 
 	@RequestMapping("/login")
-	public ModelAndView login() {
-		return new ModelAndView("html/login");
+	public ModelAndView login(HttpServletResponse response) {
+		response.addCookie(new Cookie("access_token", ""));
+		ModelAndView mv = new ModelAndView("html/login");
+		return mv;
+	}
+
+	@RequestMapping("/adminlogin")
+	public ModelAndView adminlogin(HttpServletResponse response) {
+		response.addCookie(new Cookie("access_token", ""));
+		ModelAndView mv = new ModelAndView("html/adminlogin");
+		return mv;
 	}
 
 	@RequestMapping("/forgotPassword")

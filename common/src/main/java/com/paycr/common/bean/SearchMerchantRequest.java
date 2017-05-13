@@ -1,17 +1,14 @@
 package com.paycr.common.bean;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class SearchInvoiceRequest {
+public class SearchMerchantRequest {
 
-	private Integer merchant;
-	private String invoiceCode;
+	private String name;
 	private String email;
 	private String mobile;
-	private BigDecimal amount;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdFrom;
@@ -19,12 +16,12 @@ public class SearchInvoiceRequest {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdTo;
 
-	public String getInvoiceCode() {
-		return invoiceCode;
+	public String getName() {
+		return name;
 	}
 
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
@@ -41,22 +38,6 @@ public class SearchInvoiceRequest {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
-	public Integer getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Integer merchant) {
-		this.merchant = merchant;
 	}
 
 	public Date getCreatedFrom() {

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>PayCr</title>
+    <title>PayCr Admin</title>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -14,13 +14,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
-	<script src="/angular/loginctrl.js"></script>
+	<script src="/angular/loginadminctrl.js"></script>
 </head>
-<body ng-app="payCrApp" ng-controller="LoginController">
+<body ng-app="payCrAppAdmin" ng-controller="LoginController">
     <div class="container">
     	<div ng-hide="!invalidcreds" id="serverRespAlert" class="alert alert-danger alert-dismissible">
 		    <div class="text-center">
-		    	<strong id="serverRespStatus">Invalid Credentials</strong>
+		    	<strong>Invalid Credentials</strong>
 		    </div>
 		</div>
         <div class="row">
@@ -39,14 +39,14 @@
                                     <input ng-model="data.password" class="form-control" placeholder="Password" name="password" type="password" value="" required>
                                 </div>
                                 <div class="checkbox">
-                                    <label>
+                                	<label>
                                         <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                     </label>
                                     <div class="panel pull-right">
                                     	<a href="/forgotPassword">Forgot Password</a>
                                     </div>
                                 </div>
-                                <button ng-click="login()" class="btn btn-lg btn-success btn-block">Login</button>
+                                <button ng-click="login()" class="btn btn-lg btn-danger btn-block">Login</button>
                             </fieldset>
                         </form>
                     </div>

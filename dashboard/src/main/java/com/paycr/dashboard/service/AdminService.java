@@ -89,7 +89,6 @@ public class AdminService {
 		setting.setRzpMerchantId("");
 		setting.setRzpKeyId("");
 		setting.setRzpSecretId("");
-		setting.setMerchant(merchant);
 		merchant.setSetting(setting);
 
 		merRepo.save(merchant);

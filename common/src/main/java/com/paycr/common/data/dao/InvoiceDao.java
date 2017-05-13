@@ -38,7 +38,7 @@ public class InvoiceDao {
 		if (!CommonUtil.isNull(searchReq.getAmount())) {
 			squery.append(" i.payAmount = ?" + pos++ + " AND");
 		}
-		if (!CommonUtil.isNull(searchReq.getCreated())) {
+		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			squery.append(" i.created between ?" + pos++ + " AND ?" + pos++ + " AND");
 		}
 		squery.append(" i.id > 0 ORDER BY i.id DESC");
@@ -61,9 +61,9 @@ public class InvoiceDao {
 		if (!CommonUtil.isNull(searchReq.getAmount())) {
 			query.setParameter(pos++, searchReq.getAmount());
 		}
-		if (!CommonUtil.isNull(searchReq.getCreated())) {
-			query.setParameter(pos++, DateUtil.getStartOfDay(searchReq.getCreated()));
-			query.setParameter(pos++, DateUtil.getEndOfDay(searchReq.getCreated()));
+		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
+			query.setParameter(pos++, DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
+			query.setParameter(pos++, DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
 		try {
 			invoices = query.getResultList();

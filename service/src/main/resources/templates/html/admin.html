@@ -11,14 +11,18 @@
     <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
+	<script src="/angular/adminctrl.js"></script>
 </head>
-
-<body>
+<body ng-app="payCrAdminApp" ng-controller="AdminController" ng-cloak>
     <div id="wrapper">
-    	<div id="serverRespAlert" class="alert alert-success alert-dismissible">
-		    <a href="#" id="dismissServerRespAlertBtn" class="close" aria-label="close">&times;</a>
+    	<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible">
+		    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>
 		    <div class="text-center">
-		    	<strong id="serverRespStatus">Welcome!</strong>&nbsp;<span id="serverRespMsg">{{user.name}}</span>
+		    	<strong>{{server.respStatus}}</strong>&nbsp;<span>{{server.respMsg}}</span>
 		    </div>
 		</div>
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -27,30 +31,26 @@
             </div>
             <ul class="nav navbar-top-links navbar-right">
             	<li>
-            		<div><strong>{{user.name}}</strong></div>
+            		<div><strong>${user.name}</strong></div>
             	</li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        {{#notices}}
-                        <li>
-                        	{{#read}}<strong>{{/read}}
+                    <ul ng-init="fetchNotifications()" class="dropdown-menu dropdown-alerts">
+                        <li ng-repeat="notice in notices">
                             <a href="#">
                                 <div>
-                                    <i class="fa fa-comment fa-fw"></i> {{subject}}
-                                    <span class="pull-right text-muted small">{{createdStr}}</span>
+                                    <i class="fa fa-comment fa-fw"></i> {{notice.subject}}
+                                    <span class="pull-right text-muted small">{{notice.createdStr}}</span>
                                 </div>
                                 <hr style="margin:0px;">
                                 <div>
-                                	<p>{{message}}</p>
+                                	<p>{{notice.message}}</p>
                                 </div>
                             </a>
-                            {{#read}}</strong>{{/read}}
                         </li>
                         <li class="divider"></li>
-                        {{/notices}}
                         <li>
                         	<a href="#">View all..</a>
                         </li>
@@ -61,55 +61,37 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
                         <li class="divider"></li>
-                        <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
+                        <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
                     </ul>
                 </li>
             </ul>
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
+                        <li>
+                            <a href="#" data-target="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a>
                         </li>
                         <li>
-                            <a id="merchantsTabLink" href="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a>
+                            <a href="#" data-target="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a>
                         </li>
                         <li>
-                            <a href="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a>
+                            <a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a>
                         </li>
                         <li>
-                            <a href="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a>
+                            <a href="#" data-target="#globalSettingsTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Global Settings</a>
                         </li>
                         <li>
-                            <a href="#globalSettingsTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Global Settings</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> Account<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                                </li>
-                            </ul>
+                            <a href="#" data-target="#accountSettingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account Settings</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
         <div class="tab-content" id="page-wrapper">
-            <div id="merchantsTab" class="tab-pane fade active">
+            <div id="merchantsTab" class="tab-pane active">
 	        	<br>
 	            <div class="row">
 	                <div class="col-lg-2" style="float:right;">
@@ -119,7 +101,6 @@
 	                </div>
 	            </div>
 	            <br>
-	            <!-- /.row -->
 	            <div class="row">
 	                <div class="col-lg-12">
 	                    <div class="panel">
@@ -129,40 +110,45 @@
 	                        			<tr>
 	                        				<td>
 	                        					<div class="form-group">
-	                        					<label class="control-label" for="createdSearch">Created</label>
-	                        					<input class="form-control" id="createdSearch" placeholder="21-02-2017"/>
+	                        					<label class="control-label">Created</label>
+	                        					<input class="form-control" ng-model="searchMerchantReq.createdFrom" placeholder="Created From"/>
+	                        					<span>&nbsp;&nbsp;and</span>
+	                        					<input class="form-control" ng-model="searchMerchantReq.createdTo" placeholder="Created To"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
 	                        			<tr>
 	                        				<td>
 	                        					<div class="form-group">
-	                        					<label class="control-label" for="pricingSearch">Pricing</label>
-	                        					<select class="form-control" id="pricingSearch">
-	                        						{{#pricings}}
-	                        						<option value="{{id}}">{{name}}</option>
-	                        						{{/pricings}}
-	                        					</select>
+	                        					<label class="control-label">Name</label>
+	                        					<input class="form-control" ng-model="searchMerchantReq.name" placeholder="Merchant Name"/>
 	                        					</div>
 	                        				</td>
 	                        			</tr>
 	                        			<tr>
-	                        				<td><button type="button" class="btn btn-info">Search</button></td>
+	                        				<td>
+	                        					<div class="form-group">
+	                        					<label class="control-label">Email</label>
+	                        					<input class="form-control" ng-model="searchMerchantReq.email" placeholder="Merchant Email"/>
+	                        					</div>
+	                        				</td>
+	                        			</tr>
+	                        			<tr>
+	                        				<td>
+	                        					<div class="form-group">
+	                        					<label class="control-label">Mobile</label>
+	                        					<input class="form-control" ng-model="searchMerchantReq.mobile" placeholder="Merchant Mobile"/>
+	                        					</div>
+	                        				</td>
+	                        			</tr>
+	                        			<tr>
+	                        				<td><button ng-click="searchMerchant()" type="button" class="btn btn-info">Search</button></td>
 	                        			</tr>
 	                        		</tbody>
 	                        	</table>
 	                        </div>
-	                        <div class="panel-body col-lg-9">
+	                        <div ng-init="searchMerchant()" class="panel-body col-lg-9">
 	                            <table style="width:100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
-	                                <thead>
-	                                    <tr>
-	                                        <th><input style="width:100%" placeholder="Name"/></th>
-	                                        <th><input style="width:100%" placeholder="Email"/></th>
-	                                        <th><input style="width:100%" placeholder="Mobile"/></th>
-	                                        <th><input style="width:100%" placeholder="Access Key"/></th>
-	                                        <th><input style="width:100%" placeholder="Active"/></th>
-	                                    </tr>
-	                                </thead>
 	                                <thead>
 	                                    <tr>
 	                                        <th>Name</th>
@@ -172,16 +158,14 @@
 	                                        <th>Active</th>
 	                                    </tr>
 	                                </thead>
-	                                <tbody id="invoiceGroup">
-	                                	{{#merchants}}
-	                                    <tr>
-	                                        <td>{{name}}</td>
-	                                        <td>{{email}}</td>
-	                                        <td>{{mobile}}</td>
-	                                        <td>{{accessKey}}</td>
-	                                        <td>{{active}}</td>
+	                                <tbody>
+	                                    <tr ng-class="(merchant.active)?'success':'warning'" ng-repeat="merchant in merchants">
+	                                        <td>{{merchant.name}}</td>
+	                                        <td>{{merchant.email}}</td>
+	                                        <td>{{merchant.mobile}}</td>
+	                                        <td>{{merchant.accessKey}}</td>
+	                                        <td>{{merchant.active}}</td>
 	                                    </tr>
-								        {{/merchants}}
 	                                </tbody>
 	                            </table>
 	                        </div>
@@ -189,7 +173,7 @@
 	                </div>
 	            </div>
         </div>
-        <div id="pricingTab" class="tab-pane fade active">
+        <div ng-init="fetchPricings()" id="pricingTab" class="tab-pane fade">
 	        	<br>
 	            <div class="row">
 	                <div class="col-lg-2" style="float:right;">
@@ -199,7 +183,6 @@
 	                </div>
 	            </div>
 	            <br>
-	            <!-- /.row -->
 	            <div class="row">
 	                <div class="col-lg-12">
 	                    <div class="panel">
@@ -213,69 +196,56 @@
 	                                        <th>Invoice Limit</th>
 	                                        <th>Start Amount</th>
 	                                        <th>End Amount</th>
-	                                        <th>Active</th>
-	                                        <th>Action</th>
-	                                    </tr>
-	                                </thead>
-	                                <tbody id="invoiceGroup">
-	                                	{{#pricings}}
-	                                    <tr>
-	                                        <td>{{name}}</td>
-	                                        <td>{{duration}}</td>
-	                                        <td>&#8377; {{rate}}</td>
-	                                        <td>{{invoiceLimit}}</td>
-	                                        <td>&#8377; {{startAmount}}</td>
-	                                        <td>&#8377; {{endAmount}}</td>
-	                                        <td>{{active}}</td>
-	                                        {{#active}}
-	                                        <th><button id="togglePricingBtn" ref="{{id}}" type="button" class="btn btn-danger">Deactivate</button></th>
-	                                        {{/active}}
-	                                        {{^active}}
-	                                        <th><button id="togglePricingBtn" ref="{{id}}" type="button" class="btn btn-success">Activate</button></th>
-	                                        {{/active}}
-	                                    </tr>
-								        {{/pricings}}
-	                                </tbody>
-	                            </table>
-	                        </div>
-	                        <!-- /.panel-body -->
-	                    </div>
-	                    <!-- /.panel -->
-	                </div>
-	                <!-- /.col-lg-12 -->
-	            </div>
-        </div>
-        <div id="globalSettingsTab" class="tab-pane fade active">
-	        <br>
-	        <div class="row">
-	        		<div class="col-xs-12 col-md-12 col-lg-8">
-	                    <div class="panel panel-default">
-	                        <div class="panel-heading">Subscription Settings<span style="float:right;margin-top:-5px;"><button type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#addSubscriptionSetting"><i class="fa fa-plus"></i></button></span></div>
-	                        <div class="panel-body">
-	                        	<table style="width:100%; border-collapse:collapse; font-size:14px;" class="table table-striped table-bordered table-hover">
-	                                <thead>
-	                                    <tr>
-	                                        <th>Razorpay Merchant Id</th>
-	                                        <th>Razorpay Key Id</th>
-	                                        <th>Razorpay Secret Id</th>
 	                                        <th>Action</th>
 	                                    </tr>
 	                                </thead>
 	                                <tbody>
-	                                	{{#subsSettings}}
-	                                	<tr>
-	                                        <td>{{rzpMerchantId}}</td>
-	                                        <td>{{rzpKeyId}}</td>
-	                                        <td>{{rzpSecretId}}</td>
-	                                        <td>{{^active}}<button style="margin-top:-5px;" id="activateSubsSettingBtn" ref="{{id}}" type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>{{/active}}</td>
+	                                    <tr ng-class="(pricing.active)?'success':'warning'" ng-repeat="pricing in pricings">
+	                                        <td>{{pricing.name}}</td>
+	                                        <td>{{pricing.duration}}</td>
+	                                        <td>&#8377; {{pricing.rate}}</td>
+	                                        <td>{{pricing.invoiceLimit}}</td>
+	                                        <td>&#8377; {{pricing.startAmount}}</td>
+	                                        <td>&#8377; {{pricing.endAmount}}</td>
+	                                        <td ng-if="pricing.active"><button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button></td>
+	                                        <td ng-if="!pricing.active"><button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-success btn-xs">Activate</button></td>
 	                                    </tr>
-	                                    {{/subsSettings}}
-	                                </tbody>
+ 	                                </tbody>
 	                            </table>
 	                        </div>
 	                    </div>
 	                </div>
-	        	</div>
+	            </div>
+        </div>
+        <div ng-init="fetchSubsSettings()" id="globalSettingsTab" class="tab-pane fade">
+	        <br>
+	        <div class="row">
+        		<div class="col-xs-12 col-md-12 col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Subscription Settings<span style="float:right;margin-top:-5px;"><button type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#addSubscriptionSetting"><i class="fa fa-plus"></i></button></span></div>
+                        <div class="panel-body">
+                        	<table style="width:100%; border-collapse:collapse; font-size:14px;" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Razorpay Merchant Id</th>
+                                        <th>Razorpay Key Id</th>
+                                        <th>Razorpay Secret Id</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                	<tr ng-class="(subsSetting.active)?'success':'warning'" ng-repeat="subsSetting in subsSettings">
+                                        <td>{{subsSetting.rzpMerchantId}}</td>
+                                        <td>{{subsSetting.rzpKeyId}}</td>
+                                        <td>{{subsSetting.rzpSecretId}}</td>
+                                        <td><button ng-if="!subsSetting.active" ng-click="toggleSubsSetting(subsSetting.id)" type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        	</div>
 	    </div>
     </div>
     <div id="createMerchant" class="modal fade" role="dialog">
@@ -286,7 +256,7 @@
 	        <h4 class="modal-title">Create New Merchant</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form id="createMerchantForm">
+	      	<form name="createMerchantForm">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
@@ -296,44 +266,42 @@
 			                            <tbody>
 			                            	<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="mer-name">Name</label>
-		                        					<input class="form-control" id="mer-name" placeholder="Merchant Name" pattern="[a-zA-Z0-9 ]" required/>
+		                        					<div ng-class="(createMerchantForm.name.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Name</label>
+		                        					<input class="form-control" ng-model="newmerchant.name" name="name" placeholder="Merchant Name" ng-pattern="patterns.namePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div ng-class="(createMerchantForm.email.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Email</label>
+		                        					<input class="form-control" ng-model="newmerchant.email" name="email" type="email" placeholder="Merchant Email" ng-pattern="patterns.emailPattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div ng-class="(createMerchantForm.mobile.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Mobile</label>
+		                        					<input class="form-control" ng-model="newmerchant.mobile" name="mobile" type="number" placeholder="Merchant Mobile" ng-pattern="patterns.mobilePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div ng-class="(createMerchantForm.adminName.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Admin</label>
+		                        					<input class="form-control" ng-model="newmerchant.adminName" name="adminName" placeholder="Merchant Admin" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
 		                        					<div class="form-group">
-		                        					<label class="control-label" for="mer-email">Email</label>
-		                        					<input class="form-control" id="mer-email" type="email" placeholder="Merchant Email" type="email" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="mer-mobile">Mobile</label>
-		                        					<input class="form-control" id="mer-mobile" type="number" placeholder="Merchant Mobile" pattern="^[7-9]{1}[0-9]{9}$" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="mer-admin">Admin</label>
-		                        					<input class="form-control" id="mer-admin" placeholder="Merchant Admin" pattern="[a-zA-Z0-9 ]" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="mer-price">Pricing</label>
-		                        					<select class="form-control" id="mer-price">
-		                        						{{#pricings}}
-		                        						<option value="{{id}}">{{name}}</option>
-		                        						{{/pricings}}
+		                        					<label class="control-label">Pricing</label>
+		                        					<select class="form-control" ng-model="newmerchant.pricingId">
+		                        						<option ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
 		                        					</select>
 		                        					</div>
 		                        				</td>
@@ -348,7 +316,7 @@
 	      	</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-info" id="createMerchantBtn">Create</button>
+	      	<button type="button" class="btn btn-info" ng-click="createMerchant()">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -362,7 +330,7 @@
 	        <h4 class="modal-title">Create New Pricing</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form id="createPricingForm">
+	      	<form name="createPricingForm">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
@@ -372,71 +340,71 @@
 			                            <tbody>
 			                            	<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-name">Name</label>
-		                        					<input class="form-control" id="pri-name" placeholder="Pricing Name" pattern="[a-zA-Z0-9_ ]{1,30}" required/>
+		                        					<div ng-class="(createPricingForm.name.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Name</label>
+		                        					<input class="form-control" ng-model="newpricing.name" name="name" placeholder="Pricing Name" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-desc">Description</label>
-		                        					<input class="form-control" id="pri-desc" placeholder="Pricing Description" pattern="[a-zA-Z0-9_ ]{1,30}" required/>
+		                        					<div ng-class="(createPricingForm.description.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Description</label>
+		                        					<input class="form-control" ng-model="newpricing.description" name="description" placeholder="Pricing Description" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-limit">Invoice Limit</label>
-		                        					<input class="form-control" type="number" id="pri-limit" placeholder="Invoice limit" pattern="[0-9]{1,5}" required/>
+		                        					<div ng-class="(createPricingForm.invoiceLimit.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Invoice Limit</label>
+		                        					<input class="form-control" ng-model="newpricing.invoiceLimit" type="number" name="invoiceLimit" placeholder="Invoice limit" ng-pattern="patterns.numberPattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-start">Start Amount</label>
+		                        					<div ng-class="(createPricingForm.startAmount.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Start Amount</label>
 		                        					<div class="input-group">
 													    <div class="input-group-addon">
 													    	&#8377; 
 													    </div>
-													    <input class="form-control" id="pri-start" type="number" placeholder="Start Amount" pattern="[0-9]{1,8}" required/>
+													    <input class="form-control" ng-model="newpricing.startAmount" name="startAmount" type="number" placeholder="Start Amount" ng-pattern="patterns.amountPattern" required/>
 													</div>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-end">End Amount</label>
+		                        					<div ng-class="(createPricingForm.endAmount.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">End Amount</label>
 		                        					<div class="input-group">
 													    <div class="input-group-addon">
 													    	&#8377; 
 													    </div>
-													    <input class="form-control" id="pri-end" type="number" placeholder="End Amount" pattern="[0-9]{1,8}" required/>
+													    <input class="form-control" ng-model="newpricing.endAmount" name="endAmount" type="number" placeholder="End Amount" ng-pattern="patterns.amountPattern" required/>
 													</div>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-dura">Duration (Days)</label>
-		                        					<input class="form-control" id="pri-dura" type="number" placeholder="Duration" pattern="[0-9]{1,5}" required/>
+		                        					<div ng-class="(createPricingForm.duration.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Duration (Days)</label>
+		                        					<input class="form-control" ng-model="newpricing.duration" name="duration" type="number" placeholder="Duration" ng-pattern="patterns.numberPattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="pri-rate">Rate</label>
+		                        					<div ng-class="(createPricingForm.rate.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Rate</label>
 		                        					<div class="input-group">
 													    <div class="input-group-addon">
 													    	&#8377; 
 													    </div>
-													    <input class="form-control" id="pri-rate" type="number" placeholder="Rate" pattern="[0-9]{1,8}" required/>
+													    <input class="form-control" ng-model="newpricing.rate" name="rate" type="number" placeholder="Rate" ng-pattern="patterns.amountPattern" required/>
 													</div>
 		                        					</div>
 		                        				</td>
@@ -451,7 +419,7 @@
 	      	</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-info" id="createPricingBtn">Create</button>
+	      	<button type="button" class="btn btn-info" ng-click="createPricing()">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -465,38 +433,38 @@
 	        <h4 class="modal-title">Add New Subscription Setting</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form id="addSubscriptionSettingForm">
+	      	<form name="createSubsSettingForm">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
 			                <div class="panel-body">
 			                    <div class="table-responsive">
 	                            	<div class="form-group">
-		                     			<label class="checkbox-inline"><input type="checkbox" id="subset-active"/>Activate</label>
+		                     			<label class="checkbox-inline"><input type="checkbox" ng-model="newsubssetting.active"/>Activate</label>
 	                     			</div>
 			                        <table class="table table-bordered">
 			                            <tbody>
 			                            	<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="subset-rzpMerchantId">Razorpay Merchant Id</label>
-		                        					<input class="form-control" id="subset-rzpMerchantId" placeholder="Razorpay Merchant Id" pattern="[a-zA-Z]{1,30}" required/>
+		                        					<div ng-class="(createSubsSettingForm.rzpMerchantId.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Razorpay Merchant Id</label>
+		                        					<input class="form-control" ng-model="newsubssetting.rzpMerchantId" name="rzpMerchantId" placeholder="Razorpay Merchant Id" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="subset-rzpKeyId">Razorpay Key Id</label>
-		                        					<input class="form-control" id="subset-rzpKeyId" placeholder="Razorpay Key Id" pattern="[a-zA-Z]{1,30}" required/>
+		                        					<div ng-class="(createSubsSettingForm.rzpKeyId.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Razorpay Key Id</label>
+		                        					<input class="form-control" ng-model="newsubssetting.rzpKeyId" name="rzpKeyId" placeholder="Razorpay Key Id" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label" for="subset-rzpSecretId">Razorpay Secret Id</label>
-		                        					<input class="form-control" id="subset-rzpSecretId" placeholder="Razorpay Secret Id" pattern="[a-zA-Z]{1,30}" required/>
+		                        					<div ng-class="(createSubsSettingForm.rzpSecretId.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Razorpay Secret Id</label>
+		                        					<input class="form-control" ng-model="newsubssetting.rzpSecretId" name="rzpSecretId" placeholder="Razorpay Secret Id" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -510,17 +478,15 @@
 	      	</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-info" id="addSubscriptionSettingBtn">Add</button>
+	      	<button type="button" class="btn btn-info" ng-click="createSubsSetting()">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 	</div>
-    <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/metisMenu/metisMenu.min.js"></script>
     <script src="/dist/js/sb-admin-2.js"></script>
-    <script src="/js/admin.js"></script>
 </body>
 </html>
