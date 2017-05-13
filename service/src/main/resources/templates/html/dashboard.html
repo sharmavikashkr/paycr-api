@@ -434,7 +434,7 @@
 		                        </tr>
 		                    </thead>
 		                    <tbody id="itemBody">
-		                        <tr ng-repeat="merpricing in merchant.pricings">
+		                        <tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings">
 		                            <td class="text-center">{{merpricing.pricing.name}}</td>
 		                            <td class="text-center">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 		                            <td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
