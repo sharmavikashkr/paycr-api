@@ -22,6 +22,13 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"createdFrom" : "2017-01-01",
 		"createdTo" : "2017-06-30"
 	}
+	$scope.searchInvoiceReq = {
+		"invoiceCode" : "",
+		"email" : "",
+		"mobile" : "",
+		"createdFrom" : "2017-01-01",
+		"createdTo" : "2017-06-30"
+	}
 	$scope.newsubssetting = {
 		"rzpMerchantId" : "",
 		"rzpKeyId" : "",
@@ -91,6 +98,22 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(merchants) {
 			$scope.merchants = merchants.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.searchInvoice = function() {
+		var req = {
+			method : 'POST',
+			url : "/search/invoice",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : $scope.searchInvoiceReq
+		}
+		$http(req).then(function(invoices) {
+			$scope.invoices = invoices.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
