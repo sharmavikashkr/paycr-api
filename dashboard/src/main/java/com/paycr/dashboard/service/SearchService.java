@@ -14,6 +14,7 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
@@ -30,6 +31,9 @@ public class SearchService {
 
 	@Autowired
 	private InvoiceRepository invRepo;
+	
+	@Autowired
+	private MerchantRepository merRepo;
 
 	@Autowired
 	private MerchantDao merDao;
@@ -44,6 +48,8 @@ public class SearchService {
 				if (timeNow.compareTo(invoice.getExpiry()) > 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 					invoice.setStatus(InvoiceStatus.EXPIRED);
 				}
+				Merchant merchant = merRepo.findOne(invoice.getMerchant());
+				invoice.setMerchantName(merchant.getName());
 			}
 			invRepo.save(invoiceList);
 			return invoiceList;
