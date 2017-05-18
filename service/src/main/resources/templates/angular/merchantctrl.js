@@ -132,6 +132,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$http(req).then(function(setting) {
 			$scope.merchant.setting = setting.data;
 			$scope.refreshSetting();
+			$scope.serverMessage(setting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -155,6 +156,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#createCustomParam')).modal('hide');
 	}
 	$scope.deleteParam = function(paramId, paramName) {
 		if (!confirm('Delete ' + paramName + ' ?')) {
@@ -259,10 +261,13 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : $scope.newinvoice
 		}
 		$http(req).then(function(data) {
-			
+			$scope.fetchMerchant();
+			$scope.searchInvoice();
+			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#createInvoice')).modal('hide');
 	}
 	$scope.enquireInvoice = function(invoiceCode) {
 		var req = {
@@ -289,7 +294,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			}
 		}
 		$http(req).then(function(data) {
-			
+			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -308,6 +313,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(data) {
 			$scope.searchInvoice();
+			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

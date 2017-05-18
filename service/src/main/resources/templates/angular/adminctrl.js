@@ -148,9 +148,11 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(data) {
 			$scope.fetchPricings();
+			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#createPricing')).modal('hide');
 	}
 	$scope.togglePricing = function(pricingId) {
 		var req = {
@@ -163,6 +165,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(data) {
 			$scope.fetchPricings();
+			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -200,6 +203,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#addSubscriptionSetting')).modal('hide');
 	}
 	$scope.toggleSubsSetting = function(subsSettingId) {
 		var req = {
@@ -231,9 +235,11 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(data) {
 			$scope.searchMerchant();
+			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#createMerchant')).modal('hide');
 	}
 	$scope.logout = function() {
 		$timeout(function(){
