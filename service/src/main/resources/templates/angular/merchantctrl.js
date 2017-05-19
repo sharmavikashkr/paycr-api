@@ -88,6 +88,21 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchRoles = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/roles",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(roles) {
+			$scope.roles = roles.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.updateAccount = function() {
 		var req = {
 			method : 'POST',

@@ -87,18 +87,18 @@ public class UserController {
 	@RequestMapping(value = "/user/admin", method = RequestMethod.GET)
 	public void createUser(HttpServletResponse response) throws IOException {
 		Date timeNow = new Date();
-		if (CommonUtil.isNotNull(userRepo.findByEmail("admin@paycr.in"))) {
+		if (CommonUtil.isNotNull(userRepo.findByEmail("ad@paycr.in"))) {
 			return;
 		}
 		PcUser user = new PcUser();
 		user.setCreated(timeNow);
 		user.setName("Paycr Admin");
-		user.setEmail("admin@paycr.in");
+		user.setEmail("ad@paycr.in");
 		user.setPassword(bcPassEncode.encode("password@123"));
 		user.setMobile("9977553311");
 		List<UserRole> userRoles = new ArrayList<UserRole>();
 		UserRole userRole = new UserRole();
-		userRole.setRole(Role.ROLE_ADMIN);
+		userRole.setRole(Role.ROLE_ADMIN_USER);
 		userRole.setPcUser(user);
 		userRoles.add(userRole);
 		user.setUserRoles(userRoles);

@@ -64,7 +64,8 @@ public class SecurityService {
 	public boolean isMerchantUser() {
 		PcUser user = findLoggedInUser();
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
+		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_USER.name())) {
 			return true;
 		}
 		return false;
@@ -73,7 +74,8 @@ public class SecurityService {
 	public Merchant getMerchantForLoggedInUser() {
 		PcUser user = findLoggedInUser();
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
+		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_USER.name())) {
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
 			return merRepo.findOne(merUser.getMerchantId());
 		}
@@ -86,7 +88,8 @@ public class SecurityService {
 			return null;
 		}
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())) {
+		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_USER.name())) {
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
 			return merRepo.findOne(merUser.getMerchantId());
 		}
@@ -99,7 +102,8 @@ public class SecurityService {
 			return false;
 		}
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_ADMIN.name())) {
+		if (Arrays.asList(roles).contains(Role.ROLE_ADMIN.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_ADMIN_USER.name())) {
 			return true;
 		}
 		return false;

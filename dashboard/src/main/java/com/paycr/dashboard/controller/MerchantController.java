@@ -69,7 +69,7 @@ public class MerchantController {
 		return mv;
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping("/get")
 	public Merchant getMerchant() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -79,7 +79,7 @@ public class MerchantController {
 		return merchant;
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping("/account/update")
 	public Merchant updateAccount(@RequestBody Merchant mer, HttpServletResponse response) {
 		try {
@@ -92,7 +92,7 @@ public class MerchantController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping("/notifications")
 	public List<Notification> getNotifications() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -143,12 +143,12 @@ public class MerchantController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping("/invoices")
 	public List<Invoice> myInvoices(HttpServletResponse response) {
 		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return merSer.myInvoices(merchant);
+			PcUser user = secSer.findLoggedInUser();
+			return merSer.myInvoices(user);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			return null;

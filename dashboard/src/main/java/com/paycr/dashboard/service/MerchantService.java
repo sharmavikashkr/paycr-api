@@ -12,6 +12,7 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.MerchantSetting;
+import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
@@ -26,11 +27,11 @@ public class MerchantService {
 
 	@Autowired
 	private InvoiceRepository invRepo;
-	
+
 	public void updateAccount(Merchant merchant, Merchant mer) {
 		merchant.setName(mer.getName());
 		Address address = merchant.getAddress();
-		if(address == null) {
+		if (address == null) {
 			address = new Address();
 		}
 		address.setAddressLine1(mer.getAddress().getAddressLine1());
@@ -115,8 +116,8 @@ public class MerchantService {
 		merRepo.save(merchant);
 	}
 
-	public List<Invoice> myInvoices(Merchant merchant) {
-		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(merchant.getEmail(), merchant.getMobile());
+	public List<Invoice> myInvoices(PcUser user) {
+		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(user.getEmail(), user.getMobile());
 		for (Invoice invoice : myInvoices) {
 			Merchant invMer = merRepo.findOne(invoice.getMerchant());
 			invoice.setMerchantName(invMer.getName());

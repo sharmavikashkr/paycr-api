@@ -84,7 +84,7 @@ public class AdminController {
 		return mv;
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/notifications")
 	public List<Notification> getNotifications() {
 		PcUser user = secSer.findLoggedInUser();
@@ -142,7 +142,7 @@ public class AdminController {
 
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/subscription/setting/new")
-	public void createSubscription(@RequestBody SubscriptionSetting subsSetting, HttpServletResponse response) {
+	public void createSubscriptionSetting(@RequestBody SubscriptionSetting subsSetting, HttpServletResponse response) {
 		try {
 			if (CommonUtil.isNull(subsSetting) || CommonUtil.isEmpty(subsSetting.getRzpMerchantId())
 					|| CommonUtil.isEmpty(subsSetting.getRzpKeyId())
@@ -162,7 +162,7 @@ public class AdminController {
 
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/subscription/setting/toggle/{settingId}")
-	public void toggleSubscription(@PathVariable Integer settingId, HttpServletResponse response) {
+	public void toggleSubscriptionSetting(@PathVariable Integer settingId, HttpServletResponse response) {
 		try {
 			SubscriptionSetting toggleSetting = subsSetRepo.findOne(settingId);
 			SubscriptionSetting existSetting = subsSetRepo.findByActive(true);
@@ -172,6 +172,21 @@ public class AdminController {
 			}
 			toggleSetting.setActive(true);
 			subsSetRepo.save(toggleSetting);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/subscription/setting/delete/{settingId}")
+	public void deleteSubscriptionSetting(@PathVariable Integer settingId, HttpServletResponse response) {
+		try {
+			SubscriptionSetting setting = subsSetRepo.findOne(settingId);
+			if (!setting.isActive()) {
+				subsSetRepo.delete(setting);
+			} else {
+				response.setStatus(HttpStatus.BAD_REQUEST_400);
+			}
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		}

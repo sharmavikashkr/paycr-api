@@ -24,7 +24,7 @@ import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 @RequestMapping("/invoice")
 public class InvoiceController {
 

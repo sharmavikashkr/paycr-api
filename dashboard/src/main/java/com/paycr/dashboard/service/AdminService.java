@@ -95,7 +95,7 @@ public class AdminService {
 
 		PcUser user = new PcUser();
 		user.setCreated(timeNow);
-		user.setName(merchant.getAdminName());
+		user.setName("Admin");
 		user.setEmail(merchant.getEmail());
 		user.setPassword(bcPassEncode.encode("password@123"));
 		user.setMobile(merchant.getMobile());

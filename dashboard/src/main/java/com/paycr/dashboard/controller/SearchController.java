@@ -27,7 +27,7 @@ public class SearchController {
 	@Autowired
 	private SearchService serSer;
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/invoice")
 	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -37,7 +37,7 @@ public class SearchController {
 		return serSer.fetchInvoiceList(request);
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/merchant")
 	public List<Merchant> searchMerchant(@RequestBody SearchMerchantRequest request) {
 		List<Merchant> merchants = serSer.fetchMerchantList(request);

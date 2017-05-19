@@ -17,7 +17,7 @@
 	<script src="/angular/merchantctrl.js"></script>
 </head>
 <body ng-app="payCrApp" ng-controller="MerchantController" ng-cloak>
-    <div id="wrapper">
+    <div ng-init="fetchRoles()" id="wrapper">
     	<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible">
 		    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>
 		    <div class="text-center">
@@ -88,7 +88,7 @@
                         <li>
                             <a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a>
                         </li>
-                        <li>
+                        <li ng-if="roles.indexOf('ROLE_MERCHANT') > -1">
                             <a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a>
                         </li>
                     </ul>

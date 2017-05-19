@@ -118,6 +118,21 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchRoles = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/roles",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(roles) {
+			$scope.roles = roles.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.fetchPricings = function() {
 		var req = {
 			method : 'GET',
@@ -209,6 +224,24 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		var req = {
 			method : 'GET',
 			url : "/admin/subscription/setting/toggle/" + subsSettingId,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.fetchSubsSettings();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.deleteSubsSetting = function(subsSettingId) {
+		if (!confirm('Delete Subscription Setting?')) {
+			return false;
+		}
+		var req = {
+			method : 'GET',
+			url : "/admin/subscription/setting/delete/" + subsSettingId,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")

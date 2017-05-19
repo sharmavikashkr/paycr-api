@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.exception.PaycrException;
@@ -14,7 +13,7 @@ import com.paycr.common.validation.RequestValidator;
 
 @Component
 @Order(0)
-public class IsValidMerchantRequest implements RequestValidator<Merchant> {
+public class IsValidUserRequest implements RequestValidator<PcUser> {
 
 	@Autowired
 	private UserRepository userRepo;
@@ -27,15 +26,15 @@ public class IsValidMerchantRequest implements RequestValidator<Merchant> {
 	private static final String NAME_PATTERN = "[a-zA-Z ]*";
 
 	@Override
-	public void validate(Merchant merchant) {
-		if (CommonUtil.isNull(merchant)) {
-			throw new PaycrException(Constants.FAILURE, "Invalid create merchant request");
+	public void validate(PcUser user) {
+		if (CommonUtil.isNull(user)) {
+			throw new PaycrException(Constants.FAILURE, "Invalid create user request");
 		}
-		if (!(match(merchant.getEmail(), EMAIL_PATTERN) || match(merchant.getMobile(), MOBILE_PATTERN)
-				|| match(merchant.getName(), NAME_PATTERN))) {
+		if (!(match(user.getEmail(), EMAIL_PATTERN) || match(user.getMobile(), MOBILE_PATTERN)
+				|| match(user.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		PcUser extUser = userRepo.findByEmailOrMobile(merchant.getEmail(), merchant.getMobile());
+		PcUser extUser = userRepo.findByEmailOrMobile(user.getEmail(), user.getMobile());
 		if (CommonUtil.isNotNull(extUser)) {
 			throw new PaycrException(Constants.FAILURE, "User already exists with this email/mobile");
 		}

@@ -40,9 +40,6 @@ public class Merchant {
 	private MerchantSetting setting;
 
 	@Transient
-	private String adminName;
-
-	@Transient
 	private int pricingId;
 
 	public int getPricingId() {
@@ -103,14 +100,6 @@ public class Merchant {
 
 	public void setSecretKey(String secretKey) {
 		this.secretKey = secretKey;
-	}
-
-	public String getAdminName() {
-		return adminName;
-	}
-
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
 	}
 
 	public Date getCreated() {
