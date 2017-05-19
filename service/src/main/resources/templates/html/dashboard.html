@@ -37,7 +37,7 @@
                         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul ng-init="fetchNotifications()" class="dropdown-menu dropdown-alerts">
-                        <li ng-repeat="notice in notices">
+                        <li ng-repeat="notice in notices" class="panel">
                             <a href="#">
                                 <div>
                                     <i class="fa fa-comment fa-fw"></i> {{notice.subject}}
@@ -83,16 +83,13 @@
                             <a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a>
                         </li>
                         <li>
-                            <a href="#" data-target="#contactsTab" data-toggle="tab"><i class="fa fa-group fa-fw"></i> Contacts</a>
-                        </li>
-                        <li>
                             <a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory Items</a>
                         </li>
                         <li>
-                            <a href="#" data-target="#settingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            <a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a>
                         </li>
                         <li>
-                            <a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscription</a>
+                            <a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a>
                         </li>
                     </ul>
                 </div>
@@ -418,7 +415,69 @@
 	                </div>
 	        	</div>
 	        </div>
-	        <div id="contactsTab" class="tab-pane fade">
+	        <div id="accountTab" class="tab-pane fade">
+	        	<br>
+	        	<div class="row">
+	        		<div class="col-xs-12 col-md-12 col-lg-4">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">Account</div>
+	                        <div class="panel-body">
+	                        	<div class="form-group">
+	               					<label class="control-label">Name</label>
+	               					<input class="form-control" ng-model="merchant.name" type="text" ng-pattern="patterns.namePattern" required/>
+               					</div>
+               					<fieldset disabled>
+	               					<div class="form-group">
+		               					<label class="control-label">Email</label>
+		               					<input class="form-control" value="{{merchant.email}}"/>
+	               					</div>
+	               					<div class="form-group">
+		               					<label class="control-label">Mobile</label>
+		               					<input class="form-control" value="{{merchant.mobile}}"/>
+	               					</div>
+               					</fieldset>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-xs-12 col-md-12 col-lg-6">
+	                    <div class="panel panel-default">
+	                        <div class="panel-heading">Address</div>
+	                        <div class="panel-body">
+	                        	<div class="form-group">
+	               					<label class="control-label">Address Line 1</label>
+	               					<input class="form-control" ng-model="merchant.address.addressLine1"/>
+               					</div>
+               					<div class="form-group">
+	               					<label class="control-label">Address Line 2</label>
+	               					<input class="form-control" ng-model="merchant.address.addressLine2"/>
+               					</div>
+               					<div class="form-group col-xs-12 col-md-6 col-lg-6">
+	               					<label class="control-label">City</label>
+	               					<input class="form-control" ng-model="merchant.address.city"/>
+               					</div>
+               					<div class="form-group col-xs-12 col-md-6 col-lg-6">
+	               					<label class="control-label">District</label>
+	               					<input class="form-control" ng-model="merchant.address.district"/>
+               					</div>
+               					<div class="form-group col-xs-12 col-md-6 col-lg-6">
+	               					<label class="control-label">State</label>
+	               					<input class="form-control" ng-model="merchant.address.state"/>
+               					</div>
+               					<div class="form-group col-xs-12 col-md-6 col-lg-6">
+	               					<label class="control-label">Pincode</label>
+	               					<input class="form-control" ng-model="merchant.address.pincode"/>
+               					</div>
+               					<div class="form-group">
+	               					<label class="control-label">Country</label>
+	               					<input class="form-control" ng-model="merchant.address.country"/>
+               					</div>
+	                        </div>
+	                    </div>
+	                </div>
+	        	</div>
+	        	<div class="row panel panel-body">
+	        		<button ng-click="updateAccount()" class="btn btn-info">Save</button>
+	        	</div>
 	        </div>
 	        <div ng-init="fetchPricings()" id="subscriptionTab" class="tab-pane fade">
 	        	<br>

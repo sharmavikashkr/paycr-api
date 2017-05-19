@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
@@ -25,6 +26,23 @@ public class MerchantService {
 
 	@Autowired
 	private InvoiceRepository invRepo;
+	
+	public void updateAccount(Merchant merchant, Merchant mer) {
+		merchant.setName(mer.getName());
+		Address address = merchant.getAddress();
+		if(address == null) {
+			address = new Address();
+		}
+		address.setAddressLine1(mer.getAddress().getAddressLine1());
+		address.setAddressLine2(mer.getAddress().getAddressLine2());
+		address.setCity(mer.getAddress().getCity());
+		address.setDistrict(mer.getAddress().getDistrict());
+		address.setState(mer.getAddress().getState());
+		address.setCountry(mer.getAddress().getCountry());
+		address.setPincode(mer.getAddress().getPincode());
+		merchant.setAddress(address);
+		merRepo.save(merchant);
+	}
 
 	public void newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
 		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();

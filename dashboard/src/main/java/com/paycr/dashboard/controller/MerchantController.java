@@ -47,7 +47,7 @@ public class MerchantController {
 	@RequestMapping("")
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
-		if(request.getCookies() == null) {
+		if (request.getCookies() == null) {
 			response.sendRedirect("/login");
 		}
 		for (Cookie cookie : request.getCookies()) {
@@ -77,6 +77,19 @@ public class MerchantController {
 			merPri.setInvNo(merPri.getInvoices().size());
 		}
 		return merchant;
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@RequestMapping("/account/update")
+	public Merchant updateAccount(@RequestBody Merchant mer, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			merSer.updateAccount(merchant, mer);
+			return getMerchant();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return null;
+		}
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")

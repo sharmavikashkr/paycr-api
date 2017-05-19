@@ -38,7 +38,7 @@
                         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul ng-init="fetchNotifications()" class="dropdown-menu dropdown-alerts">
-                        <li ng-repeat="notice in notices">
+                        <li ng-repeat="notice in notices" class="panel">
                             <a href="#">
                                 <div>
                                     <i class="fa fa-comment fa-fw"></i> {{notice.subject}}
