@@ -23,6 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		PcUser user = userRepo.findByEmail(email);
 		if (user != null) {
+			if (!user.isActive()) {
+				return null;
+			}
 			String password = user.getPassword();
 			String[] roles = userRoleService.getUserRoles(user);
 			CustomUserDetails customUserDetails = new CustomUserDetails(email, password, roles);

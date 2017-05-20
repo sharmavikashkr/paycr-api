@@ -133,6 +133,58 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchMyUsers = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/users",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(myusers) {
+			$scope.myusers = myusers.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.createUser = function() {
+		if(!$scope.addUserForm.$valid) {
+			return false;
+		}
+		var req = {
+			method : 'post',
+			url : "/common/create/user",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : $scope.newuser
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.fetchMyUsers();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#createUser')).modal('hide');
+	}
+	$scope.toggleUser = function(userId) {
+		var req = {
+			method : 'get',
+			url : "/common/toggle/user/" + userId,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.fetchMyUsers();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.fetchPricings = function() {
 		var req = {
 			method : 'GET',

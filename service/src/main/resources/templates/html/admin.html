@@ -444,9 +444,43 @@
 	                </div>
 	        	</div>
 		    </div>
-		    <div id="usersTab" class="tab-pane fade">
-		    
-		    </div>
+		    <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchMyUsers()" id="usersTab" class="tab-pane fade">
+	        	<br>
+	        	<div class="row">
+	                <div class="col-lg-2" style="float:right;">
+	                    <div class="row">
+	                    	<button title="Create User" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createUser"><i class="fa fa-plus"></i></button>
+	                    </div>
+	                </div>
+	            </div>
+	            <br>
+	        	<div class="row text-center">
+	        		<div class="col-md-10 col-md-offset-1">
+		        		<h4>My Users</h4>
+		        		<table class="table table-bordered">
+		                    <thead>
+		                        <tr>
+		                            <td class="text-center"><strong>Name</strong></td>
+		                            <td class="text-center"><strong>Email</strong></td>
+		                            <td class="text-center"><strong>Mobile</strong></td>
+		                            <td class="text-center"><strong>Actions</strong></td>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="itemBody">
+		                        <tr ng-class="(myuser.active)?'success':'danger'" ng-repeat="myuser in myusers" title="{{myusers.active}}">
+		                            <td class="text-center">{{myuser.name}}</td>
+		                            <td class="text-center">{{myuser.email}}</td>
+		                            <td class="text-center">{{myuser.mobile}}</td>
+		                            <td class="text-center">
+		                            	<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
+		                            	<button title="ACTIVATE" ng-if="!myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	        	</div>
+	        </div>
     	</div>
     <div id="createMerchant" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
@@ -684,6 +718,62 @@
 	    </div>
 	  </div>
 	</div>
+	</div>
+	<div id="createUser" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Create New User</h4>
+	      </div>
+	      <div class="modal-body" style="padding:20px;">
+	      	<form name="addUserForm">
+			    <div class="row">
+			        <div class="col-md-12">
+			            <div class="panel panel-default">
+			                <div class="panel-body">
+			                    <div class="table-responsive">
+			                        <table class="table table-bordered">
+			                            <tbody>
+			                            	<tr>
+		                        				<td>
+		                        					<div ng-class="(addUserForm.addUserName.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Name</label>
+		                        					<input name="addUserName" class="form-control" placeholder="Name" ng-model="newuser.name" ng-pattern="patterns.namePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div ng-class="(addUserForm.addUserEmail.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Name</label>
+		                        					<input name="addUserEmail" class="form-control" placeholder="Email" ng-model="newuser.email" ng-pattern="patterns.emailPattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div ng-class="(addUserForm.addUserMobile.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Name</label>
+		                        					<input name="addUserMobile" class="form-control" placeholder="Mobile" ng-model="newuser.mobile" ng-pattern="patterns.mobilePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+			                            </tbody>
+			                        </table>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+	      	</form>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-info" ng-click="createUser()">Add</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	<div ng-repeat="invoice in invoices" id="info-{{invoice.invoiceCode}}" class="modal fade" role="dialog">
 	  <div class="modal-dialog">

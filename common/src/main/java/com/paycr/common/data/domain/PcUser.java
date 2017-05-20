@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,17 +29,6 @@ public class PcUser {
 
 	@OneToMany(mappedBy = "pcUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<UserRole> userRoles;
-
-	@Embedded
-	private Address address;
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
 
 	public String getPassword() {
 		return password;

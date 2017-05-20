@@ -1,12 +1,15 @@
 package com.paycr.dashboard.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +21,7 @@ import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.data.repository.UserRoleRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.service.UserRoleService;
 import com.paycr.common.type.Role;
@@ -30,6 +34,9 @@ public class CommonController {
 
 	@Autowired
 	private UserRepository userRepo;
+
+	@Autowired
+	private UserRoleRepository userRoleRepo;
 
 	@Autowired
 	private PricingRepository priceRepo;
@@ -67,8 +74,30 @@ public class CommonController {
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/users")
+	public List<PcUser> getUsers() {
+		List<PcUser> myUsers = new ArrayList<PcUser>();
+		if (secSer.isMerchantUser()) {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			List<MerchantUser> merUsers = merUserRepo.findByMerchantId(merchant.getId());
+			for (MerchantUser merUser : merUsers) {
+				PcUser user = userRepo.findOne(merUser.getUserId());
+				if (Arrays.asList(urService.getUserRoles(user)).contains("ROLE_MERCHANT_USER")) {
+					myUsers.add(userRepo.findOne(merUser.getUserId()));
+				}
+			}
+		} else {
+			List<UserRole> userRoles = userRoleRepo.findByRole(Role.ROLE_ADMIN_USER);
+			for (UserRole userRole : userRoles) {
+				myUsers.add(userRole.getPcUser());
+			}
+		}
+		return myUsers;
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/create/user")
-	public void createUser(PcUser user) {
+	public void createUser(@RequestBody PcUser user) {
 		userValidator.validate(user);
 		Date timeNow = new Date();
 		if (secSer.isMerchantUser()) {
@@ -99,6 +128,20 @@ public class CommonController {
 			user.setUserRoles(userRoles);
 			userRoles.add(userRole);
 			user.setActive(true);
+			userRepo.save(user);
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
+	@RequestMapping("/toggle/user/{userId}")
+	public void toggleUser(@PathVariable("userId") Integer userId) {
+		PcUser user = userRepo.findOne(userId);
+		if (getUsers().contains(user)) {
+			if (user.isActive()) {
+				user.setActive(false);
+			} else {
+				user.setActive(true);
+			}
 			userRepo.save(user);
 		}
 	}
