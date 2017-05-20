@@ -48,7 +48,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"name" : "",
 		"email" : "",
 		"mobile" : "",
-		"adminName" : "",
 		"pricingId" : 1
 	}
 	$scope.dismissServerAlert = function() {
