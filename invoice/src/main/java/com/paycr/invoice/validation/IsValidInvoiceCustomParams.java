@@ -30,8 +30,9 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 		for (MerchantCustomParam mcp : merchantCustomParams) {
 			boolean mandatoryParamMissing = true;
 			for (InvoiceCustomParam icp : invoice.getCustomParams()) {
-				if (ParamValueProvider.MERCHANT.equals(mcp.getProvider())) {
-					if (icp.getParamName().equalsIgnoreCase(mcp.getParamName())) {
+				if (ParamValueProvider.MERCHANT.equals(mcp.getProvider())
+						&& icp.getParamName().equalsIgnoreCase(mcp.getParamName())) {
+					if (icp.getParamValue() != null) {
 						mandatoryParamMissing = false;
 					}
 				} else {

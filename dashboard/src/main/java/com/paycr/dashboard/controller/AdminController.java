@@ -22,14 +22,10 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
-import com.paycr.common.data.domain.SubscriptionSetting;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
-import com.paycr.common.data.repository.SubscriptionSettingRepository;
-import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
+import com.paycr.common.type.PayType;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -57,9 +53,6 @@ public class AdminController {
 	@Autowired
 	private PricingRepository pricingRepo;
 
-	@Autowired
-	private SubscriptionSettingRepository subsSetRepo;
-
 	@RequestMapping("")
 	public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
@@ -81,6 +74,7 @@ public class AdminController {
 		PcUser user = secSer.findLoggedInUser(token);
 		ModelAndView mv = new ModelAndView("html/admin");
 		mv.addObject("user", user);
+		mv.addObject("payTypes", PayType.values());
 		return mv;
 	}
 
@@ -94,12 +88,6 @@ public class AdminController {
 			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
 		}
 		return notices;
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@RequestMapping("/subscription/settings")
-	public List<SubscriptionSetting> getSubscriptionSettings() {
-		return subsSetRepo.findAll();
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -135,58 +123,6 @@ public class AdminController {
 				pri.setActive(true);
 			}
 			pricingRepo.save(pri);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-		}
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@RequestMapping("/subscription/setting/new")
-	public void createSubscriptionSetting(@RequestBody SubscriptionSetting subsSetting, HttpServletResponse response) {
-		try {
-			if (CommonUtil.isNull(subsSetting) || CommonUtil.isEmpty(subsSetting.getRzpMerchantId())
-					|| CommonUtil.isEmpty(subsSetting.getRzpKeyId())
-					|| CommonUtil.isEmpty(subsSetting.getRzpSecretId())) {
-				throw new PaycrException(Constants.FAILURE, "Invalid Request");
-			}
-			SubscriptionSetting existSetting = subsSetRepo.findByActive(true);
-			if (existSetting != null && subsSetting.isActive()) {
-				existSetting.setActive(false);
-				subsSetRepo.save(existSetting);
-			}
-			subsSetRepo.save(subsSetting);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-		}
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@RequestMapping("/subscription/setting/toggle/{settingId}")
-	public void toggleSubscriptionSetting(@PathVariable Integer settingId, HttpServletResponse response) {
-		try {
-			SubscriptionSetting toggleSetting = subsSetRepo.findOne(settingId);
-			SubscriptionSetting existSetting = subsSetRepo.findByActive(true);
-			if (toggleSetting != null && existSetting != null) {
-				existSetting.setActive(false);
-				subsSetRepo.save(existSetting);
-			}
-			toggleSetting.setActive(true);
-			subsSetRepo.save(toggleSetting);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-		}
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	@RequestMapping("/subscription/setting/delete/{settingId}")
-	public void deleteSubscriptionSetting(@PathVariable Integer settingId, HttpServletResponse response) {
-		try {
-			SubscriptionSetting setting = subsSetRepo.findOne(settingId);
-			if (!setting.isActive()) {
-				subsSetRepo.delete(setting);
-			} else {
-				response.setStatus(HttpStatus.BAD_REQUEST_400);
-			}
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		}

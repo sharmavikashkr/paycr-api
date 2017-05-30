@@ -16,12 +16,18 @@ import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.data.domain.SubscriptionMode;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.SubscriptionModeRepository;
+import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.type.Currency;
+import com.paycr.common.type.PayType;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.type.Role;
 import com.paycr.common.util.DateUtil;
@@ -36,6 +42,9 @@ public class AdminService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private SubscriptionRepository subsRepo;
 
 	@Autowired
 	private MerchantUserRepository merUserRepo;
@@ -54,6 +63,9 @@ public class AdminService {
 
 	@Autowired
 	private NotificationRepository notiRepo;
+	
+	@Autowired
+	private SubscriptionModeRepository subsModeRepo;
 
 	public void createMerchant(Merchant merchant) {
 
@@ -69,7 +81,18 @@ public class AdminService {
 		merchant.setCreated(timeNow);
 		merchant.setActive(true);
 
-		Pricing pricing = priceRepo.findOne(merchant.getPricingId());
+		Pricing pricing = priceRepo.findOne(1);
+		
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayType(true, PayType.CASH);
+		Subscription subs = new Subscription();
+		subs.setAmount(pricing.getRate());
+		subs.setCurrency(Currency.INR);
+		subs.setCreated(timeNow);
+		subs.setPricing(pricing);
+		subs.setStatus("SUCCESS");
+		subs.setSubscriptionCode("OFFLINE");
+		subs.setSubscriptionMode(subsMode);
+		subsRepo.save(subs);
 
 		List<MerchantPricing> merPricings = new ArrayList<MerchantPricing>();
 		MerchantPricing merPricing = new MerchantPricing();
@@ -79,6 +102,7 @@ public class AdminService {
 		merPricing.setPricing(pricing);
 		merPricing.setStatus(PricingStatus.ACTIVE);
 		merPricing.setMerchant(merchant);
+		merPricing.setSubscription(subs);
 		merPricings.add(merPricing);
 		merchant.setPricings(merPricings);
 
@@ -92,6 +116,9 @@ public class AdminService {
 		merchant.setSetting(setting);
 
 		merRepo.save(merchant);
+		
+		subs.setMerchant(merchant);
+		subsRepo.save(subs);
 
 		PcUser user = new PcUser();
 		user.setCreated(timeNow);

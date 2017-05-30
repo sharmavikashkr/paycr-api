@@ -29,10 +29,12 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"createdFrom" : "2017-01-01",
 		"createdTo" : "2017-06-30"
 	}
-	$scope.newsubssetting = {
+	$scope.newsubsmode = {
+		"name" : "",
 		"rzpMerchantId" : "",
 		"rzpKeyId" : "",
 		"rzpSecretId" : "",
+		"payType" : "",
 		"active" : true
 	}
 	$scope.newpricing = {
@@ -44,11 +46,16 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"duration" : 0,
 		"rate" : 0
 	}
+	$scope.offlinesubs = {
+		"subscriptionModeId" : 0,
+		"pricingId" : 0,
+		"merchantId" : 0,
+		"paymentRefNo" : ""
+	}
 	$scope.newmerchant = {
 		"name" : "",
 		"email" : "",
-		"mobile" : "",
-		"pricingId" : 1
+		"mobile" : ""
 	}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
@@ -236,70 +243,85 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchSubsSettings = function() {
+	$scope.fetchSubsModes = function() {
 		var req = {
 			method : 'GET',
-			url : "/admin/subscription/settings",
+			url : "/subscription/modes",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			}
 		}
-		$http(req).then(function(subsSettings) {
-			$scope.subsSettings = subsSettings.data;
+		$http(req).then(function(subsModes) {
+			$scope.subsModes = subsModes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.createSubsSetting = function() {
-		if(!$scope.createSubsSettingForm.$valid) {
+	$scope.createSubsMode = function() {
+		if(!$scope.createSubsModeForm.$valid) {
 			return false;
 		}
 		var req = {
 			method : 'POST',
-			url : "/admin/subscription/setting/new",
+			url : "/subscription/mode/new",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newsubssetting
+			data : $scope.newsubsmode
 		}
 		$http(req).then(function(data) {
-			$scope.fetchSubsSettings();
+			$scope.fetchSubsModes();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#addSubscriptionSetting')).modal('hide');
+		angular.element(document.querySelector('#addSubscriptionMode')).modal('hide');
 	}
-	$scope.toggleSubsSetting = function(subsSettingId) {
+	$scope.toggleSubsMode = function(modeId) {
 		var req = {
 			method : 'GET',
-			url : "/admin/subscription/setting/toggle/" + subsSettingId,
+			url : "/subscription/mode/toggle/" + modeId,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.fetchSubsSettings();
+			$scope.fetchSubsModes();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.deleteSubsSetting = function(subsSettingId) {
-		if (!confirm('Delete Subscription Setting?')) {
-			return false;
+	$scope.createOfflineSubs = function(merchantId) {
+		$scope.offlinesubs.merchantId = merchantId;
+		var req = {
+			method : 'POST',
+			url : "/subscription/new/offline",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : $scope.offlinesubs
 		}
+		$http(req).then(function(data) {
+			$scope.searchMerchant();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#createOfflineSubscription-'+$scope.offlinesubs.merchantId)).modal('hide');
+	}
+	$scope.fetchSubscriptionDetails = function(subscriptionId) {
 		var req = {
 			method : 'GET',
-			url : "/admin/subscription/setting/delete/" + subsSettingId,
+			url : "/subscription/get/" + subscriptionId,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			}
 		}
-		$http(req).then(function(data) {
-			$scope.fetchSubsSettings();
+		$http(req).then(function(subscription) {
+			$scope.subsinfo = subscription.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

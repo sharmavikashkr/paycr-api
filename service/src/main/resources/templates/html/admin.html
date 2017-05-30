@@ -84,7 +84,7 @@
                             <a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a>
                         </li>
                         <li ng-if="roles.indexOf('ROLE_ADMIN') > -1">
-                            <a href="#" data-target="#globalSettingsTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Subscription Settings</a>
+                            <a href="#" data-target="#subscriptionSettingsTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Subscription Settings</a>
                         </li>
                         <li>
                             <a href="#" data-target="#accountSettingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a>
@@ -177,7 +177,12 @@
 								            	<div class="accordion-body collapse" id="details-{{merchant.id}}"> 
 								            		<div style="padding:10px;" class="row">
 								                        <div class="panel-body col-lg-12">
-								                        	<h4>Subscription Details</h4>
+										                    <div class="row">
+											                	<h4 class="col-lg-6">Subscriptions</h4>
+											                	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" class="col-lg-2" style="float:right;">
+										                    		<button title="Add Offline Subscription" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#createOfflineSubscription-{{merchant.id}}"><i class="fa fa-plus"></i></button>
+										                    	</div>
+										                    </div>
 								                            <div class="table-responsive">
 								                                <table class="table table-striped table-bordered">
 								                                    <thead>
@@ -190,7 +195,7 @@
 												                        </tr>
 												                    </thead>
 												                    <tbody id="itemBody">
-												                        <tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" title="{{merpricing.status}}">
+												                        <tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" ng-click="fetchSubscriptionDetails(merpricing.subscription.id)" title="{{merpricing.status}}" data-toggle="modal" data-target="#subsDetails">
 												                            <td class="text-center">{{merpricing.pricing.name}}</td>
 												                            <td class="text-center">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 												                            <td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
@@ -411,30 +416,33 @@
 	                </div>
 	            </div>
         	</div>
-	        <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchSubsSettings()" id="globalSettingsTab" class="tab-pane fade">
+	        <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchSubsModes()" id="subscriptionSettingsTab" class="tab-pane fade">
 		        <br>
 		        <div class="row">
-	        		<div class="col-xs-12 col-md-12 col-lg-8">
+	        		<div class="col-xs-12 col-md-12 col-lg-10 col-md-offset-1">
 	                    <div class="panel panel-default">
-	                        <div class="panel-heading">Subscription Settings<span style="float:right;margin-top:-5px;"><button ng-if="roles.indexOf('ROLE_ADMIN') > -1" title="Add Global Setting" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#addSubscriptionSetting"><i class="fa fa-plus"></i></button></span></div>
+	                        <div class="panel-heading">Subscription Modes<span style="float:right;margin-top:-5px;"><button ng-if="roles.indexOf('ROLE_ADMIN') > -1" title="Add Subscription Mode" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#addSubscriptionMode"><i class="fa fa-plus"></i></button></span></div>
 	                        <div class="panel-body">
 	                        	<table style="width:100%; border-collapse:collapse; font-size:14px;" class="table table-striped table-bordered table-hover">
 	                                <thead>
 	                                    <tr>
+	                                    	<th>Name</th>
 	                                        <th>Razorpay Merchant Id</th>
 	                                        <th>Razorpay Key Id</th>
 	                                        <th>Razorpay Secret Id</th>
+	                                        <th>Pay Type</th>
 	                                        <th ng-if="roles.indexOf('ROLE_ADMIN') > -1">Action</th>
 	                                    </tr>
 	                                </thead>
 	                                <tbody>
-	                                	<tr ng-class="(subsSetting.active)?'success':'warning'" ng-repeat="subsSetting in subsSettings" title="ACTIVE = {{subsSetting.active}}">
-	                                        <td>{{subsSetting.rzpMerchantId}}</td>
-	                                        <td>{{subsSetting.rzpKeyId}}</td>
-	                                        <td>{{subsSetting.rzpSecretId}}</td>
+	                                	<tr ng-class="(subsMode.active)?'success':'warning'" ng-repeat="subsMode in subsModes" title="ACTIVE = {{subsMode.active}}">
+	                                        <td>{{subsMode.name}}</td>
+	                                        <td>{{subsMode.rzpMerchantId}}</td>
+	                                        <td>{{subsMode.rzpKeyId}}</td>
+	                                        <td>{{subsMode.rzpSecretId}}</td>
+	                                        <td>{{subsMode.payType}}</td>
 	                                        <td>
-	                                        	<button title="ACTIVATE" ng-if="!subsSetting.active" ng-click="toggleSubsSetting(subsSetting.id)" type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
-	                                        	<button title="DELETE" ng-if="!subsSetting.active" ng-click="deleteSubsSetting(subsSetting.id)" type="button" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
+	                                        	<button title="ACTIVATE" ng-if="!subsMode.active" ng-click="toggleSubsMode(subsMode.id)" type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
 	                                        </td>
 	                                    </tr>
 	                                </tbody>
@@ -519,16 +527,6 @@
 		                        					<div ng-class="(createMerchantForm.mobile.$valid)?'':'has-error'" class="form-group">
 		                        					<label class="control-label">Mobile</label>
 		                        					<input class="form-control" ng-model="newmerchant.mobile" name="mobile" type="number" placeholder="Merchant Mobile" ng-pattern="patterns.mobilePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label">Pricing</label>
-		                        					<select class="form-control" ng-model="newmerchant.pricingId">
-		                        						<option ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
-		                        					</select>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -651,46 +649,66 @@
 	    </div>
 	  </div>
 	</div>
-	<div id="addSubscriptionSetting" class="modal fade" role="dialog">
+	<div id="addSubscriptionMode" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">Add New Subscription Setting</h4>
+	        <h4 class="modal-title">Add New Subscription Mode</h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
-	      	<form name="createSubsSettingForm">
+	      	<form name="createSubsModeForm">
 			    <div class="row">
 			        <div class="col-md-12">
 			            <div class="panel panel-default">
 			                <div class="panel-body">
 			                    <div class="table-responsive">
 	                            	<div class="form-group">
-		                     			<label class="checkbox-inline"><input type="checkbox" ng-model="newsubssetting.active"/>Activate</label>
+		                     			<label class="checkbox-inline"><input type="checkbox" ng-model="newsubsmode.active"/>Activate</label>
 	                     			</div>
 			                        <table class="table table-bordered">
 			                            <tbody>
 			                            	<tr>
 		                        				<td>
-		                        					<div ng-class="(createSubsSettingForm.rzpMerchantId.$valid)?'':'has-error'" class="form-group">
+		                        					<div ng-class="(createSubsModeForm.name.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Name</label>
+		                        					<input class="form-control" ng-model="newsubsmode.name" name="name" placeholder="Name" ng-pattern="patterns.namePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+			                            	<tr>
+		                        				<td>
+		                        					<div ng-class="(createSubsModeForm.rzpMerchantId.$valid)?'':'has-error'" class="form-group">
 		                        					<label class="control-label">Razorpay Merchant Id</label>
-		                        					<input class="form-control" ng-model="newsubssetting.rzpMerchantId" name="rzpMerchantId" placeholder="Razorpay Merchant Id" ng-pattern="patterns.namePattern" required/>
+		                        					<input class="form-control" ng-model="newsubsmode.rzpMerchantId" name="rzpMerchantId" placeholder="Razorpay Merchant Id" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div ng-class="(createSubsSettingForm.rzpKeyId.$valid)?'':'has-error'" class="form-group">
+		                        					<div ng-class="(createSubsModeForm.rzpKeyId.$valid)?'':'has-error'" class="form-group">
 		                        					<label class="control-label">Razorpay Key Id</label>
-		                        					<input class="form-control" ng-model="newsubssetting.rzpKeyId" name="rzpKeyId" placeholder="Razorpay Key Id" ng-pattern="patterns.namePattern" required/>
+		                        					<input class="form-control" ng-model="newsubsmode.rzpKeyId" name="rzpKeyId" placeholder="Razorpay Key Id" ng-pattern="patterns.namePattern" required/>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
 		                        			<tr>
 		                        				<td>
-		                        					<div ng-class="(createSubsSettingForm.rzpSecretId.$valid)?'':'has-error'" class="form-group">
+		                        					<div ng-class="(createSubsModeForm.rzpSecretId.$valid)?'':'has-error'" class="form-group">
 		                        					<label class="control-label">Razorpay Secret Id</label>
-		                        					<input class="form-control" ng-model="newsubssetting.rzpSecretId" name="rzpSecretId" placeholder="Razorpay Secret Id" ng-pattern="patterns.namePattern" required/>
+		                        					<input class="form-control" ng-model="newsubsmode.rzpSecretId" name="rzpSecretId" placeholder="Razorpay Secret Id" ng-pattern="patterns.namePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label" for="cus-provider">Pay Type</label>
+		                        					<select class="form-control" id="cus-provider" ng-model="newsubsmode.payType">
+		                        						<#list payTypes as payType>
+		                        						<option value="${payType}">${payType}</option>
+		                        						</#list>
+		                        					</select>
 		                        					</div>
 		                        				</td>
 		                        			</tr>
@@ -704,12 +722,71 @@
 	      	</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-info" ng-click="createSubsSetting()">Create</button>
+	      	<button type="button" class="btn btn-info" ng-click="createSubsMode()">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
+	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-repeat="merchant in merchants" id="createOfflineSubscription-{{merchant.id}}" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">New Offline Subscription : <span><strong>{{merchant.name}}</strong></span></h4>
+	      </div>
+	      <div class="modal-body" style="padding:20px;">
+	      	<form name="createOfflineSubsForm">
+			    <div class="row">
+			        <div class="col-md-12">
+			            <div class="panel panel-default">
+			                <div class="panel-body">
+			                    <div class="table-responsive">
+			                        <table class="table table-bordered">
+			                            <tbody>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label">Subscription Mode</label>
+		                        					<select class="form-control" ng-model="offlinesubs.subscriptionModeId">
+		                        						<option ng-if="subsMode.payType != 'ONLINE' && subsMode.active" ng-repeat="subsMode in subsModes" value="{{subsMode.id}}">{{subsMode.name}}</option>
+		                        					</select>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div class="form-group">
+		                        					<label class="control-label">Pricing</label>
+		                        					<select class="form-control" ng-model="offlinesubs.pricingId">
+		                        						<option ng-if="pricing.active" ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
+		                        					</select>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+		                        			<tr>
+		                        				<td>
+		                        					<div ng-class="(createOfflineSubsForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
+		                        					<label class="control-label">Payment Reference Number</label>
+		                        					<input class="form-control" ng-model="offlinesubs.paymentRefNo" name="paymentRefNo" placeholder="Payment Ref No" ng-pattern="patterns.namePattern" required/>
+		                        					</div>
+		                        				</td>
+		                        			</tr>
+			                            </tbody>
+			                        </table>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+	      	</form>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-info" ng-click="createOfflineSubs(merchant.id)">Create</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
 	</div>
 	<div id="createUser" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
@@ -869,6 +946,64 @@
 	      </div>
 	    </div>
 	  </div>
+	</div>
+	<div id="subsDetails" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content" style="min-width:120%; margin-left:-15%;">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Subscription Details</h4>
+	      </div>
+	      <div class="modal-body" style="padding:20px;">
+	      	<div class="row">
+	      		<div class="col-md-12">
+			      	<table style="width: 100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
+			      		<thead>
+			      			<tr>
+			      				<th>Name</th>
+			      				<th>Value</th>
+			      			</tr>
+			      		</thead>
+			      		<tbody>
+			      			<tr>
+			      				<td>Subscription Mode</td>
+			      				<td>{{subsinfo.subscriptionMode.name}}</td>
+			      			</tr>
+			      			<tr>
+			      				<td>Pay Type</td>
+			      				<td>{{subsinfo.subscriptionMode.payType}}</td>
+			      			</tr>
+			      			<tr>
+			      				<td>Payment Reference Number</td>
+			      				<td>{{subsinfo.paymentRefNo}}</td>
+			      			</tr>
+			      			<tr>
+								<td>Status</td>
+								<td>{{subsinfo.status}}</td>
+			      			</tr>
+			      			<tr>
+								<td>Method</td>
+								<td>{{subsinfo.method}}</td>
+			      			</tr>
+			      			<tr>
+								<td>Bank</td>
+								<td>{{subsinfo.method}}</td>
+			      			</tr>
+			      			<tr>
+								<td>Wallet</td>
+								<td>{{subsinfo.wallet}}</td>
+			      			</tr>
+			      		</tbody>
+			      	</table>
+		      	</div>
+	      	</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	</div>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/metisMenu/metisMenu.min.js"></script>

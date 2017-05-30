@@ -40,6 +40,9 @@ public class MerchantPricing {
 	@OneToOne
 	private Pricing pricing;
 
+	@OneToOne
+	private Subscription subscription;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "merchantPricing")
 	private List<Invoice> invoices;
@@ -113,6 +116,14 @@ public class MerchantPricing {
 
 	public void setInvNo(int invNo) {
 		this.invNo = invNo;
+	}
+
+	public Subscription getSubscription() {
+		return subscription;
+	}
+
+	public void setSubscription(Subscription subscription) {
+		this.subscription = subscription;
 	}
 
 }

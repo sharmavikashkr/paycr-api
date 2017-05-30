@@ -410,7 +410,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$scope.newinvoice.expiresIn = angular
 				.copy($scope.merchant.setting.expiryDays);
 		$scope.newinvoice.customParams = [];
-		for ( var param in $scope.merchant.setting.customParams) {
+		for (var param in $scope.merchant.setting.customParams) {
 			var copyParam = angular
 					.copy($scope.merchant.setting.customParams[param]);
 			copyParam.id = null;

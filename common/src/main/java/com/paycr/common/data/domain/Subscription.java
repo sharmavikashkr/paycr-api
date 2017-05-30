@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.Currency;
 
 @Entity
@@ -41,8 +42,12 @@ public class Subscription implements Serializable {
 	@OneToOne
 	private Pricing pricing;
 
+	@JsonIgnore
 	@OneToOne
 	private Merchant merchant;
+
+	@OneToOne
+	private SubscriptionMode subscriptionMode;
 
 	public String getSubscriptionCode() {
 		return subscriptionCode;
@@ -134,6 +139,14 @@ public class Subscription implements Serializable {
 
 	public void setPaymentRefNo(String paymentRefNo) {
 		this.paymentRefNo = paymentRefNo;
+	}
+
+	public SubscriptionMode getSubscriptionMode() {
+		return subscriptionMode;
+	}
+
+	public void setSubscriptionMode(SubscriptionMode subscriptionMode) {
+		this.subscriptionMode = subscriptionMode;
 	}
 
 }
