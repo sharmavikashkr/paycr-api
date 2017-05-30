@@ -180,7 +180,7 @@
 										                    <div class="row">
 											                	<h4 class="col-lg-6">Subscriptions</h4>
 											                	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" class="col-lg-2" style="float:right;">
-										                    		<button title="Add Offline Subscription" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#createOfflineSubscription-{{merchant.id}}"><i class="fa fa-plus"></i></button>
+										                    		<button title="Add Offline Subscription" type="button" class="btn btn-info btn-circle btn-md" ng-click="offSubsmerchant = merchant" data-toggle="modal" data-target="#createOfflineSubscription"><i class="fa fa-plus"></i></button>
 										                    	</div>
 										                    </div>
 								                            <div class="table-responsive">
@@ -356,9 +356,9 @@
 							                        </div>
 								            		<hr>
 								            		<div style="padding:10px;" class="row">
-								            			<div class="col-xs-12 col-md-8 col-md-offset-4 col-lg-6 col-lg-offset-6">
+								            			<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
 								            				<div style="float:right;">
-								            					<button type="button" data-toggle="modal" data-target="#info-{{invoice.invoiceCode}}" class="btn btn-default">Info</button>&nbsp;&nbsp;
+								            					<button type="button" ng-click="getInvoice(invoice.id)" data-toggle="modal" data-target="#invoiceinfo" class="btn btn-default">Info</button>&nbsp;&nbsp;
 								            				</div>
 								            			</div>
 								            		</div>
@@ -728,12 +728,12 @@
 	    </div>
 	  </div>
 	</div>
-	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-repeat="merchant in merchants" id="createOfflineSubscription-{{merchant.id}}" class="modal fade" role="dialog">
+	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" id="createOfflineSubscription" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">New Offline Subscription : <span><strong>{{merchant.name}}</strong></span></h4>
+	        <h4 class="modal-title">New Offline Subscription : <span><strong>{{offSubsmerchant.name}}</strong></span></h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
 	      	<form name="createOfflineSubsForm">
@@ -782,7 +782,7 @@
 	      	</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-info" ng-click="createOfflineSubs(merchant.id)">Create</button>
+	      	<button type="button" class="btn btn-info" ng-click="createOfflineSubs(offSubsmerchant.id)">Create</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>
@@ -844,12 +844,12 @@
 	    </div>
 	  </div>
 	</div>
-	<div ng-repeat="invoice in invoices" id="info-{{invoice.invoiceCode}}" class="modal fade" role="dialog">
+	<div id="invoiceinfo" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content" style="min-width:120%; margin-left:-15%;">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">Invoice# <span><strong>{{invoice.invoiceCode}}</strong></span>&nbsp;&nbsp;<span>({{invoice.merchantPricing.pricing.name}})</span></h4>
+	        <h4 class="modal-title">Invoice# <span><strong>{{invoiceInfo.invoiceCode}}</strong></span>&nbsp;&nbsp;<span>({{invoiceInfo.merchantPricing.pricing.name}})</span></h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
 	      	<div class="row">
@@ -859,19 +859,19 @@
                    		<tbody>
                    			<tr>
                    				<td class="text-center"><label>Send Sms</label></td>
-                   				<td class="text-center"><p>{{invoice.sendSms}}</p></td>
+                   				<td class="text-center"><p>{{invoiceInfo.sendSms}}</p></td>
                    			</tr>
                    			<tr>
                    				<td class="text-center"><label>Expiry</label></td>
-                   				<td class="text-center"><p>{{invoice.sendEmail}}</p></td>
+                   				<td class="text-center"><p>{{invoiceInfo.sendEmail}}</p></td>
                    			</tr>
                    			<tr>
                    				<td class="text-center"><label>Created</label></td>
-                   				<td class="text-center"><p>{{invoice.created | date:'dd-MM-yyyy HH:mm'}}</p></td>
+                   				<td class="text-center"><p>{{invoiceInfo.created | date:'dd-MM-yyyy HH:mm'}}</p></td>
                    			</tr>
                    			<tr>
                    				<td class="text-center"><label>Expiry</label></td>
-                   				<td class="text-center"><p>{{invoice.expiry | date:'dd-MM-yyyy HH:mm'}}</p></td>
+                   				<td class="text-center"><p>{{invoiceInfo.expiry | date:'dd-MM-yyyy HH:mm'}}</p></td>
                    			</tr>
                    		</tbody>
                     </table>
@@ -880,7 +880,7 @@
 	      			<h4 class="text-center">Params Details</h4>
 	      			<table style="width: 100%; border-collapse:collapse;" class="table table-striped table-bordered table-hover">
                    		<tbody>
-                   			<tr ng-repeat="param in invoice.customParams">
+                   			<tr ng-repeat="param in invoiceInfo.customParams">
                    				<td class="text-center"><label>{{param.paramName}}</label></td>
                    				<td class="text-center"><p>{{param.paramValue}}</p></td>
                    			</tr>
@@ -902,7 +902,7 @@
 			      			</tr>
 			      		</thead>
 			      		<tbody>
-			      			<tr ng-repeat="item in invoice.items">
+			      			<tr ng-repeat="item in invoiceInfo.items">
 			      				<td>{{item.name}}</td>
 			      				<td>&#8377; {{item.rate}}</td>
 			      				<td>{{item.quantity}}</td>
@@ -928,7 +928,7 @@
 			      			</tr>
 			      		</thead>
 			      		<tbody>
-			      			<tr ng-repeat="payment in invoice.allPayments">
+			      			<tr ng-repeat="payment in invoiceInfo.allPayments">
 			      				<td>{{payment.paymentRefNo}}</td>
 			      				<td>{{payment.status}}</td>
 			      				<td>{{payment.created | date:'dd-MM-yyyy HH:mm'}}</td>

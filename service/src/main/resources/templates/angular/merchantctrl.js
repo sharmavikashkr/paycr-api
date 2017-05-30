@@ -402,6 +402,43 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.getInvoice = function(invoiceId) {
+		var req = {
+			method : 'GET',
+			url : "/invoice/get/" + invoiceId,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(invoice) {
+			$scope.invoiceInfo = invoice.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.markPaidInvoice = function(invoiceCode) {
+		if(!$scope.markPaidForm.$valid) {
+			return false;
+		}
+		$scope.markpaid.invoiceCode = invoiceCode;
+		var req = {
+			method : 'POST',
+			url : "/invoice/markpaid",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : $scope.markpaid
+		}
+		$http(req).then(function(data) {
+			$scope.searchInvoice();
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#markPaidInvoice')).modal('hide');
+	}
 	$scope.refreshSetting = function() {
 		$scope.newinvoice.sendEmail = angular
 				.copy($scope.merchant.setting.sendEmail);

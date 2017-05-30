@@ -1,6 +1,7 @@
 package com.paycr.invoice.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
@@ -24,7 +27,6 @@ import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 @RequestMapping("/invoice")
 public class InvoiceController {
 
@@ -38,6 +40,9 @@ public class InvoiceController {
 	private NotifyService notSer;
 
 	@Autowired
+	private PaymentRepository payRepo;
+
+	@Autowired
 	private InvoiceValidator invValidator;
 
 	@Autowired
@@ -46,6 +51,7 @@ public class InvoiceController {
 	@Autowired
 	private PaymentService payService;
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping(value = "new", method = RequestMethod.POST)
 	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
@@ -57,6 +63,21 @@ public class InvoiceController {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@RequestMapping(value = "/get/{invoiceId}", method = RequestMethod.GET)
+	public Invoice getInvoice(@PathVariable Integer invoiceId, HttpServletResponse response) {
+		try {
+			Invoice invoice = invRepo.findOne(invoiceId);
+			List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
+			invoice.setAllPayments(payments);
+			return invoice;
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			return null;
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
 	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
@@ -72,6 +93,7 @@ public class InvoiceController {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
 	public void notify(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Date timeNow = new Date();
@@ -85,6 +107,7 @@ public class InvoiceController {
 		}
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
 	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -94,6 +117,22 @@ public class InvoiceController {
 				payService.enquire(invoice);
 			}
 		} else {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
+	public void markPaid(@RequestBody Payment payment, HttpServletResponse response) {
+		try {
+			payment.setCreated(new Date());
+			payment.setStatus("captured");
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant.getId());
+			invoice.setPayment(payment);
+			invoice.setStatus(InvoiceStatus.PAID);
+			invRepo.save(invoice);
+		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		}
 	}
