@@ -225,10 +225,10 @@
 								            		<div style="padding:10px;" class="row">
 								            			<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
 								            			<div style="float:right;">
-									            				<button type="button" ng-click="getInvoice(invoice.id)" data-toggle="modal" data-target="#invoiceinfo" class="btn btn-default">Info</button>&nbsp;&nbsp;
+									            				<button type="button" ng-click="$parent.invoiceInfo = invoice" data-toggle="modal" data-target="#invoiceinfo" class="btn btn-default">Info</button>&nbsp;&nbsp;
 									            				<button ng-if="invoice.status != 'PAID'" ng-click="enquireInvoice(invoice.invoiceCode)" type="button" class="btn btn-info">Enquire</button>&nbsp;&nbsp;
 									            				<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'" ng-click="notifyInvoice(invoice.invoiceCode)" type="button" class="btn btn-warning">Notify</button>&nbsp;&nbsp;
-									            				<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'" ng-click="getInvoice(invoice.id)" data-toggle="modal" data-target="#markPaidInvoice" type="button" class="btn btn-default">Mark Paid</button>&nbsp;&nbsp;
+									            				<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'" ng-click="$parent.$parent.invoiceInfo = invoice" data-toggle="modal" data-target="#markPaidInvoice" type="button" class="btn btn-default">Mark Paid</button>&nbsp;&nbsp;
 									            				<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'" ng-click="expireInvoice(invoice.invoiceCode)" type="button" class="btn btn-danger">Expire</button>&nbsp;&nbsp;
 								            				</div>
 								            			</div>
@@ -752,40 +752,34 @@
 	      	<form name="addUserForm">
 			    <div class="row">
 			        <div class="col-md-12">
-			            <div class="panel panel-default">
-			                <div class="panel-body">
-			                    <div class="table-responsive">
-			                        <table class="table table-bordered">
-			                            <tbody>
-			                            	<tr>
-		                        				<td>
-		                        					<div ng-class="(addUserForm.addUserName.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Name</label>
-		                        					<input name="addUserName" class="form-control" placeholder="Name" ng-model="newuser.name" ng-pattern="patterns.namePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(addUserForm.addUserEmail.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Email</label>
-		                        					<input name="addUserEmail" class="form-control" placeholder="Email" ng-model="newuser.email" ng-pattern="patterns.emailPattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(addUserForm.addUserMobile.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Mobile</label>
-		                        					<input name="addUserMobile" class="form-control" placeholder="Mobile" ng-model="newuser.mobile" ng-pattern="patterns.mobilePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-			                            </tbody>
-			                        </table>
-			                    </div>
-			                </div>
-			            </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                            	<tr>
+                       				<td>
+                       					<div ng-class="(addUserForm.addUserName.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Name</label>
+                       					<input name="addUserName" class="form-control" placeholder="Name" ng-model="newuser.name" ng-pattern="patterns.namePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(addUserForm.addUserEmail.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Email</label>
+                       					<input name="addUserEmail" class="form-control" placeholder="Email" ng-model="newuser.email" ng-pattern="patterns.emailPattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(addUserForm.addUserMobile.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Mobile</label>
+                       					<input name="addUserMobile" class="form-control" placeholder="Mobile" ng-model="newuser.mobile" ng-pattern="patterns.mobilePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                            </tbody>
+                        </table>
 			        </div>
 			    </div>
 	      	</form>
@@ -815,7 +809,7 @@
                    				<td class="text-center"><p>{{invoiceInfo.sendSms}}</p></td>
                    			</tr>
                    			<tr>
-                   				<td class="text-center"><label>Expiry</label></td>
+                   				<td class="text-center"><label>Send Email</label></td>
                    				<td class="text-center"><p>{{invoiceInfo.sendEmail}}</p></td>
                    			</tr>
                    			<tr>
@@ -907,31 +901,33 @@
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	        <h4 class="modal-title"><span>Mark Paid : Invoice# <strong>{{invoiceInfo.invoiceCode}}</strong></span></h4>
 	      </div>
-	      <div class="modal-body" style="padding:30px;">
-			<div class="row">
-				<form name="markPaidForm">
-					<table class="table table-bordered">
-                        <tbody>
-                        	<tr>
-                   				<td>
-                   					<div ng-class="(markPaidForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
-                   					<label class="control-label">Payment Reference Number</label>
-                   					<input name="paymentRefNo" class="form-control" placeholder="Payment Ref No" ng-model="markpaid.paymentRefNo" ng-pattern="patterns.namePattern" required/>
-                   					</div>
-                   				</td>
-                   			</tr>
-                   			<tr>
-                   				<td>
-                   					<div ng-class="(markPaidForm.method.$valid)?'':'has-error'" class="form-group">
-                   					<label class="control-label">Payment Method</label>
-                   					<input name="method" class="form-control" placeholder="Method" ng-model="markpaid.method" ng-pattern="patterns.namePattern" required/>
-                   					</div>
-                   				</td>
-                   			</tr>
-                        </tbody>
-                    </table>
-				</form>
-			</div>
+	      <div class="modal-body" style="padding:20px;">
+			<form name="markPaidForm">
+				<div class="row">
+					<div class="col-md-12">
+						<table class="table table-bordered">
+	                        <tbody>
+	                        	<tr>
+	                   				<td>
+	                   					<div ng-class="(markPaidForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
+	                   					<label class="control-label">Payment Reference Number</label>
+	                   					<input name="paymentRefNo" class="form-control" placeholder="Payment Ref No" ng-model="markpaid.paymentRefNo" ng-pattern="patterns.namePattern" required/>
+	                   					</div>
+	                   				</td>
+	                   			</tr>
+	                   			<tr>
+	                   				<td>
+	                   					<div ng-class="(markPaidForm.method.$valid)?'':'has-error'" class="form-group">
+	                   					<label class="control-label">Payment Method</label>
+	                   					<input name="method" class="form-control" placeholder="Method" ng-model="markpaid.method" ng-pattern="patterns.namePattern" required/>
+	                   					</div>
+	                   				</td>
+	                   			</tr>
+	                        </tbody>
+	                    </table>
+                    </div>
+				</div>
+			</form>
 		  </div>
 	      <div class="modal-footer">
 	      	<button type="button" class="btn btn-info" ng-click="markPaidInvoice(invoiceInfo.invoiceCode)">Mark Paid</button>

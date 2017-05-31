@@ -180,7 +180,7 @@
 										                    <div class="row">
 											                	<h4 class="col-lg-6">Subscriptions</h4>
 											                	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" class="col-lg-2" style="float:right;">
-										                    		<button title="Add Offline Subscription" type="button" class="btn btn-info btn-circle btn-md" ng-click="offSubsmerchant = merchant" data-toggle="modal" data-target="#createOfflineSubscription"><i class="fa fa-plus"></i></button>
+										                    		<button title="Add Offline Subscription" type="button" class="btn btn-info btn-circle btn-md" ng-click="$parent.$parent.offSubsmerchant = merchant" data-toggle="modal" data-target="#createOfflineSubscription"><i class="fa fa-plus"></i></button>
 										                    	</div>
 										                    </div>
 								                            <div class="table-responsive">
@@ -358,7 +358,7 @@
 								            		<div style="padding:10px;" class="row">
 								            			<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
 								            				<div style="float:right;">
-								            					<button type="button" ng-click="getInvoice(invoice.id)" data-toggle="modal" data-target="#invoiceinfo" class="btn btn-default">Info</button>&nbsp;&nbsp;
+								            					<button type="button" ng-click="$parent.invoiceInfo = invoice" data-toggle="modal" data-target="#invoiceinfo" class="btn btn-default">Info</button>&nbsp;&nbsp;
 								            				</div>
 								            			</div>
 								            		</div>
@@ -501,40 +501,34 @@
 	      	<form name="createMerchantForm">
 			    <div class="row">
 			        <div class="col-md-12">
-			            <div class="panel panel-default">
-			                <div class="panel-body">
-			                    <div class="table-responsive">
-			                        <table class="table table-bordered">
-			                            <tbody>
-			                            	<tr>
-		                        				<td>
-		                        					<div ng-class="(createMerchantForm.name.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Name</label>
-		                        					<input class="form-control" ng-model="newmerchant.name" name="name" placeholder="Merchant Name" ng-pattern="patterns.namePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createMerchantForm.email.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Email</label>
-		                        					<input class="form-control" ng-model="newmerchant.email" name="email" type="email" placeholder="Merchant Email" ng-pattern="patterns.emailPattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createMerchantForm.mobile.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Mobile</label>
-		                        					<input class="form-control" ng-model="newmerchant.mobile" name="mobile" type="number" placeholder="Merchant Mobile" ng-pattern="patterns.mobilePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-			                            </tbody>
-			                        </table>
-			                    </div>
-			                </div>
-			            </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                            	<tr>
+                       				<td>
+                       					<div ng-class="(createMerchantForm.name.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Name</label>
+                       					<input class="form-control" ng-model="newmerchant.name" name="name" placeholder="Merchant Name" ng-pattern="patterns.namePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createMerchantForm.email.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Email</label>
+                       					<input class="form-control" ng-model="newmerchant.email" name="email" type="email" placeholder="Merchant Email" ng-pattern="patterns.emailPattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createMerchantForm.mobile.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Mobile</label>
+                       					<input class="form-control" ng-model="newmerchant.mobile" name="mobile" type="number" placeholder="Merchant Mobile" ng-pattern="patterns.mobilePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                            </tbody>
+                        </table>
 			        </div>
 			    </div>
 	      	</form>
@@ -557,87 +551,81 @@
 	      	<form name="createPricingForm">
 			    <div class="row">
 			        <div class="col-md-12">
-			            <div class="panel panel-default">
-			                <div class="panel-body">
-			                    <div class="table-responsive">
-			                        <table class="table table-bordered">
-			                            <tbody>
-			                            	<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.name.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Name</label>
-		                        					<input class="form-control" ng-model="newpricing.name" name="name" placeholder="Pricing Name" ng-pattern="patterns.namePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.description.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Description</label>
-		                        					<input class="form-control" ng-model="newpricing.description" name="description" placeholder="Pricing Description" ng-pattern="patterns.namePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.invoiceLimit.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Invoice Limit</label>
-		                        					<input class="form-control" ng-model="newpricing.invoiceLimit" type="number" name="invoiceLimit" placeholder="Invoice limit" ng-pattern="patterns.numberPattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.startAmount.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Start Amount</label>
-		                        					<div class="input-group">
-													    <div class="input-group-addon">
-													    	&#8377; 
-													    </div>
-													    <input class="form-control" ng-model="newpricing.startAmount" name="startAmount" type="number" placeholder="Start Amount" ng-pattern="patterns.amountPattern" required/>
-													</div>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.endAmount.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">End Amount</label>
-		                        					<div class="input-group">
-													    <div class="input-group-addon">
-													    	&#8377; 
-													    </div>
-													    <input class="form-control" ng-model="newpricing.endAmount" name="endAmount" type="number" placeholder="End Amount" ng-pattern="patterns.amountPattern" required/>
-													</div>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.duration.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Duration (Days)</label>
-		                        					<input class="form-control" ng-model="newpricing.duration" name="duration" type="number" placeholder="Duration" ng-pattern="patterns.numberPattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createPricingForm.rate.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Rate</label>
-		                        					<div class="input-group">
-													    <div class="input-group-addon">
-													    	&#8377; 
-													    </div>
-													    <input class="form-control" ng-model="newpricing.rate" name="rate" type="number" placeholder="Rate" ng-pattern="patterns.amountPattern" required/>
-													</div>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-			                            </tbody>
-			                        </table>
-			                    </div>
-			                </div>
-			            </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                            	<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.name.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Name</label>
+                       					<input class="form-control" ng-model="newpricing.name" name="name" placeholder="Pricing Name" ng-pattern="patterns.namePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.description.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Description</label>
+                       					<input class="form-control" ng-model="newpricing.description" name="description" placeholder="Pricing Description" ng-pattern="patterns.namePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.invoiceLimit.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Invoice Limit</label>
+                       					<input class="form-control" ng-model="newpricing.invoiceLimit" type="number" name="invoiceLimit" placeholder="Invoice limit" ng-pattern="patterns.numberPattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.startAmount.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Start Amount</label>
+                       					<div class="input-group">
+										    <div class="input-group-addon">
+										    	&#8377; 
+										    </div>
+										    <input class="form-control" ng-model="newpricing.startAmount" name="startAmount" type="number" placeholder="Start Amount" ng-pattern="patterns.amountPattern" required/>
+										</div>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.endAmount.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">End Amount</label>
+                       					<div class="input-group">
+										    <div class="input-group-addon">
+										    	&#8377; 
+										    </div>
+										    <input class="form-control" ng-model="newpricing.endAmount" name="endAmount" type="number" placeholder="End Amount" ng-pattern="patterns.amountPattern" required/>
+										</div>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.duration.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Duration (Days)</label>
+                       					<input class="form-control" ng-model="newpricing.duration" name="duration" type="number" placeholder="Duration" ng-pattern="patterns.numberPattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createPricingForm.rate.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Rate</label>
+                       					<div class="input-group">
+										    <div class="input-group-addon">
+										    	&#8377; 
+										    </div>
+										    <input class="form-control" ng-model="newpricing.rate" name="rate" type="number" placeholder="Rate" ng-pattern="patterns.amountPattern" required/>
+										</div>
+                       					</div>
+                       				</td>
+                       			</tr>
+                            </tbody>
+                        </table>
 			        </div>
 			    </div>
 	      	</form>
@@ -739,44 +727,38 @@
 	      	<form name="createOfflineSubsForm">
 			    <div class="row">
 			        <div class="col-md-12">
-			            <div class="panel panel-default">
-			                <div class="panel-body">
-			                    <div class="table-responsive">
-			                        <table class="table table-bordered">
-			                            <tbody>
-		                        			<tr>
-		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label">Subscription Mode</label>
-		                        					<select class="form-control" ng-model="offlinesubs.subscriptionModeId">
-		                        						<option ng-if="subsMode.payType != 'ONLINE' && subsMode.active" ng-repeat="subsMode in subsModes" value="{{subsMode.id}}">{{subsMode.name}}</option>
-		                        					</select>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div class="form-group">
-		                        					<label class="control-label">Pricing</label>
-		                        					<select class="form-control" ng-model="offlinesubs.pricingId">
-		                        						<option ng-if="pricing.active" ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
-		                        					</select>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-		                        			<tr>
-		                        				<td>
-		                        					<div ng-class="(createOfflineSubsForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
-		                        					<label class="control-label">Payment Reference Number</label>
-		                        					<input class="form-control" ng-model="offlinesubs.paymentRefNo" name="paymentRefNo" placeholder="Payment Ref No" ng-pattern="patterns.namePattern" required/>
-		                        					</div>
-		                        				</td>
-		                        			</tr>
-			                            </tbody>
-			                        </table>
-			                    </div>
-			                </div>
-			            </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                       			<tr>
+                       				<td>
+                       					<div class="form-group">
+                       					<label class="control-label">Subscription Mode</label>
+                       					<select class="form-control" ng-model="offlinesubs.subscriptionModeId">
+                       						<option ng-if="subsMode.payType != 'ONLINE' && subsMode.active" ng-repeat="subsMode in subsModes" value="{{subsMode.id}}">{{subsMode.name}}</option>
+                       					</select>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div class="form-group">
+                       					<label class="control-label">Pricing</label>
+                       					<select class="form-control" ng-model="offlinesubs.pricingId">
+                       						<option ng-if="pricing.active" ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
+                       					</select>
+                       					</div>
+                       				</td>
+                       			</tr>
+                       			<tr>
+                       				<td>
+                       					<div ng-class="(createOfflineSubsForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Payment Reference Number</label>
+                       					<input class="form-control" ng-model="offlinesubs.paymentRefNo" name="paymentRefNo" placeholder="Payment Ref No" ng-pattern="patterns.namePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                            </tbody>
+                        </table>
 			        </div>
 			    </div>
 	      	</form>

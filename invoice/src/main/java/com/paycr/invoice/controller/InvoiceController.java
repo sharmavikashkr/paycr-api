@@ -1,7 +1,6 @@
 package com.paycr.invoice.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +17,6 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
@@ -40,9 +38,6 @@ public class InvoiceController {
 	private NotifyService notSer;
 
 	@Autowired
-	private PaymentRepository payRepo;
-
-	@Autowired
 	private InvoiceValidator invValidator;
 
 	@Autowired
@@ -60,20 +55,6 @@ public class InvoiceController {
 			notifyService.notify(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
-		}
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
-	@RequestMapping(value = "/get/{invoiceId}", method = RequestMethod.GET)
-	public Invoice getInvoice(@PathVariable Integer invoiceId, HttpServletResponse response) {
-		try {
-			Invoice invoice = invRepo.findOne(invoiceId);
-			List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
-			invoice.setAllPayments(payments);
-			return invoice;
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			return null;
 		}
 	}
 

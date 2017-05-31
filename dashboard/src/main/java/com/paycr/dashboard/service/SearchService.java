@@ -12,8 +12,10 @@ import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
+import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.util.Constants;
@@ -33,11 +35,16 @@ public class SearchService {
 	@Autowired
 	private MerchantDao merDao;
 
+	@Autowired
+	private PaymentRepository payRepo;
+
 	public List<Invoice> fetchInvoiceList(SearchInvoiceRequest request) {
 		try {
 			Date timeNow = new Date();
 			List<Invoice> invoiceList = invDao.findInvoices(request);
 			for (Invoice invoice : invoiceList) {
+				List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
+				invoice.setAllPayments(payments);
 				if (timeNow.compareTo(invoice.getExpiry()) > 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 					invoice.setStatus(InvoiceStatus.EXPIRED);
 				}

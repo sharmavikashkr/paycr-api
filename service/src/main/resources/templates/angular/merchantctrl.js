@@ -402,21 +402,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.getInvoice = function(invoiceId) {
-		var req = {
-			method : 'GET',
-			url : "/invoice/get/" + invoiceId,
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(invoice) {
-			$scope.invoiceInfo = invoice.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
 	$scope.markPaidInvoice = function(invoiceCode) {
 		if(!$scope.markPaidForm.$valid) {
 			return false;
