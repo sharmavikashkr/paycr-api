@@ -62,6 +62,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		invoice.setCreated(timeNow);
 		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		invoice.setStatus(InvoiceStatus.UNPAID);
+		invoice.setCreatedBy(merchant.getEmail());
 	}
 
 }

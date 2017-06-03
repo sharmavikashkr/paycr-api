@@ -13,6 +13,7 @@ import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ParamValueProvider;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
 
@@ -37,6 +38,9 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 					}
 				} else {
 					mandatoryParamMissing = false;
+				}
+				if(CommonUtil.isNull(icp.getParamValue())) {
+					icp.setParamValue("");
 				}
 				icp.setInvoice(invoice);
 			}

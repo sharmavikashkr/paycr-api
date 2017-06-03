@@ -62,7 +62,6 @@ CREATE TABLE if not exists pc_subscription_mode(
 	rzp_merchant_id varchar(30) DEFAULT NULL,
 	rzp_key_id varchar(30) DEFAULT NULL,
 	rzp_secret_id varchar(30) DEFAULT NULL,
-	pay_type varchar(10) DEFAULT NULL,
 	active boolean NOT NULL
 );
 

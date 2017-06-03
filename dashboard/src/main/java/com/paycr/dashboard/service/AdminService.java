@@ -27,7 +27,6 @@ import com.paycr.common.data.repository.SubscriptionModeRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Currency;
-import com.paycr.common.type.PayType;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.type.Role;
 import com.paycr.common.util.DateUtil;
@@ -63,7 +62,7 @@ public class AdminService {
 
 	@Autowired
 	private NotificationRepository notiRepo;
-	
+
 	@Autowired
 	private SubscriptionModeRepository subsModeRepo;
 
@@ -82,8 +81,8 @@ public class AdminService {
 		merchant.setActive(true);
 
 		Pricing pricing = priceRepo.findOne(1);
-		
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayType(true, PayType.CASH);
+
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, "CASH");
 		Subscription subs = new Subscription();
 		subs.setAmount(pricing.getRate());
 		subs.setCurrency(Currency.INR);
@@ -116,7 +115,7 @@ public class AdminService {
 		merchant.setSetting(setting);
 
 		merRepo.save(merchant);
-		
+
 		subs.setMerchant(merchant);
 		subsRepo.save(subs);
 

@@ -38,7 +38,6 @@ import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.Currency;
-import com.paycr.common.type.PayType;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -87,7 +86,7 @@ public class SubscriptionController {
 					|| CommonUtil.isEmpty(subsMode.getRzpKeyId()) || CommonUtil.isEmpty(subsMode.getRzpSecretId())) {
 				throw new PaycrException(Constants.FAILURE, "Invalid Request");
 			}
-			SubscriptionMode existMode = subsModeRepo.findByActiveAndPayType(true, subsMode.getPayType());
+			SubscriptionMode existMode = subsModeRepo.findByActiveAndName(true, subsMode.getName());
 			if (existMode != null && subsMode.isActive()) {
 				existMode.setActive(false);
 				subsModeRepo.save(existMode);
@@ -97,7 +96,7 @@ public class SubscriptionController {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 		}
 	}
-	
+
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/get/{subscriptionId}")
 	public Subscription getSubscription(@PathVariable Integer subscriptionId, HttpServletResponse response) {
@@ -115,7 +114,7 @@ public class SubscriptionController {
 	public void toggleSubscriptionSetting(@PathVariable Integer modeId, HttpServletResponse response) {
 		try {
 			SubscriptionMode toggleMode = subsModeRepo.findOne(modeId);
-			SubscriptionMode existMode = subsModeRepo.findByActiveAndPayType(true, toggleMode.getPayType());
+			SubscriptionMode existMode = subsModeRepo.findByActiveAndName(true, toggleMode.getName());
 			if (toggleMode != null && existMode != null) {
 				existMode.setActive(false);
 				subsModeRepo.save(existMode);
@@ -200,7 +199,7 @@ public class SubscriptionController {
 			subsCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
 		subs.setSubscriptionCode(subsCode);
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayType(true, PayType.ONLINE);
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, "PAYCR");
 		if (CommonUtil.isNull(subsMode)) {
 			throw new PaycrException(Constants.FAILURE, "Not Allowed");
 		}

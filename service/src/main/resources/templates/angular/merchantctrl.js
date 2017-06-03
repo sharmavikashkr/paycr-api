@@ -402,6 +402,34 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.refundInvoice = function(invoiceCode, refundAmount) {
+		if(refundAmount == undefined) {
+			return false;
+		}
+		if (!confirm('Refund ' + invoiceCode + ' with amount ' + refundAmount + ' ?')) {
+			return false;
+		}
+		var refundRequest = {};
+		refundRequest.amount = refundAmount;
+		refundRequest.invoiceCode = invoiceCode;
+		var req = {
+			method : 'POST',
+			url : "/invoice/refund",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+		        "Content-type": "application/x-www-form-urlencoded; charset=utf-8"
+			},
+			data : $httpParamSerializer(refundRequest)
+		}
+		$http(req).then(function(data) {
+			$scope.searchInvoice();
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		$scope.refundAmount = ''
+		angular.element(document.querySelector('#refundInvoice')).modal('hide');
+	}
 	$scope.markPaidInvoice = function(invoiceCode) {
 		if(!$scope.markPaidForm.$valid) {
 			return false;

@@ -32,10 +32,13 @@ CREATE TABLE if not exists pc_payment (
 	created timestamp NOT NULL,
 	invoice_code varchar(20) NOT NULL,
 	payment_ref_no varchar(50) NOT NULL,
+	amount float NOT NULL,
 	status varchar(20) NOT NULL,
 	method varchar(20) NOT NULL,
 	bank varchar(20) DEFAULT NULL,
-	wallet varchar(20) DEFAULT NULL
+	wallet varchar(20) DEFAULT NULL,
+	pay_mode varchar(20) NOT NULL,
+	pay_type varchar(10) NOT NULL
 );
 
 CREATE TABLE if not exists pc_invoice(
@@ -54,7 +57,8 @@ CREATE TABLE if not exists pc_invoice(
 	consumer_id int REFERENCES pc_consumer,
 	merchant_pricing_id int REFERENCES pc_merchant_pricing,
 	payment_id int REFERENCES pc_payment,
-	status varchar(20) NOT NULL
+	status varchar(20) NOT NULL,
+	created_by varchar(50) NOT NULL
 );
 
 CREATE TABLE if not exists pc_item (

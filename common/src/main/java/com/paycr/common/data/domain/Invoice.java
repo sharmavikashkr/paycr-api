@@ -72,6 +72,8 @@ public class Invoice implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
+	
+	private String createdBy;
 
 	@Transient
 	private List<Payment> allPayments;
@@ -244,5 +246,13 @@ public class Invoice implements Serializable {
 
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 }

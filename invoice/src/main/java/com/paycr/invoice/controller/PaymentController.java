@@ -28,6 +28,8 @@ import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
+import com.paycr.common.type.PayMode;
+import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.razorpay.RazorpayClient;
@@ -124,6 +126,9 @@ public class PaymentController {
 			payment.setStatus(rzpPayment.get("status"));
 			invoice.setStatus(getStatus(rzpPayment.get("status")));
 			payment.setMethod(rzpPayment.get("method"));
+			payment.setAmount(invoice.getPayAmount());
+			payment.setPayMode(PayMode.ONLINE);
+			payment.setPayType(PayType.SALE);
 			payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
 			payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
 			invoice.setPayment(payment);
