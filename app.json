@@ -1,6 +1,6 @@
 {
-  "name": "PayMe",
-  "description": "Pay Me",
+  "name": "PayCr",
+  "description": "Pay Cr",
   "image": "heroku/java",
   "addons": [ "heroku-postgresql" ]
 }
