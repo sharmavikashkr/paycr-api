@@ -25,7 +25,7 @@ import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.PayType;
+import com.paycr.common.type.PayMode;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -74,7 +74,7 @@ public class AdminController {
 		PcUser user = secSer.findLoggedInUser(token);
 		ModelAndView mv = new ModelAndView("html/admin");
 		mv.addObject("user", user);
-		mv.addObject("payTypes", PayType.values());
+		mv.addObject("payModes", PayMode.values());
 		return mv;
 	}
 
@@ -98,6 +98,7 @@ public class AdminController {
 			adminService.createMerchant(merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -109,6 +110,7 @@ public class AdminController {
 			pricingRepo.save(pricing);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -125,6 +127,7 @@ public class AdminController {
 			pricingRepo.save(pri);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 

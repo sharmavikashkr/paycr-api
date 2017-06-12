@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -97,38 +100,43 @@ public class CommonController {
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
 	@RequestMapping("/create/user")
-	public void createUser(@RequestBody PcUser user) {
-		userValidator.validate(user);
-		Date timeNow = new Date();
-		if (secSer.isMerchantUser()) {
-			user.setCreated(timeNow);
-			user.setPassword(bcPassEncode.encode("password@123"));
-			List<UserRole> userRoles = new ArrayList<UserRole>();
-			UserRole userRole = new UserRole();
-			userRole.setRole(Role.ROLE_MERCHANT_USER);
-			userRole.setPcUser(user);
-			user.setUserRoles(userRoles);
-			userRoles.add(userRole);
-			user.setActive(true);
-			userRepo.save(user);
+	public void createUser(@RequestBody PcUser user, HttpServletResponse response) {
+		try {
+			userValidator.validate(user);
+			Date timeNow = new Date();
+			if (secSer.isMerchantUser()) {
+				user.setCreated(timeNow);
+				user.setPassword(bcPassEncode.encode("password@123"));
+				List<UserRole> userRoles = new ArrayList<UserRole>();
+				UserRole userRole = new UserRole();
+				userRole.setRole(Role.ROLE_MERCHANT_USER);
+				userRole.setPcUser(user);
+				user.setUserRoles(userRoles);
+				userRoles.add(userRole);
+				user.setActive(true);
+				userRepo.save(user);
 
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			MerchantUser merUser = new MerchantUser();
-			merUser.setMerchantId(merchant.getId());
-			merUser.setUserId(user.getId());
-			merUserRepo.save(merUser);
-			userService.sendResetLink(user);
-		} else {
-			user.setCreated(timeNow);
-			user.setPassword(bcPassEncode.encode("password@123"));
-			List<UserRole> userRoles = new ArrayList<UserRole>();
-			UserRole userRole = new UserRole();
-			userRole.setRole(Role.ROLE_ADMIN_USER);
-			userRole.setPcUser(user);
-			user.setUserRoles(userRoles);
-			userRoles.add(userRole);
-			user.setActive(true);
-			userRepo.save(user);
+				Merchant merchant = secSer.getMerchantForLoggedInUser();
+				MerchantUser merUser = new MerchantUser();
+				merUser.setMerchantId(merchant.getId());
+				merUser.setUserId(user.getId());
+				merUserRepo.save(merUser);
+				userService.sendResetLink(user);
+			} else {
+				user.setCreated(timeNow);
+				user.setPassword(bcPassEncode.encode("password@123"));
+				List<UserRole> userRoles = new ArrayList<UserRole>();
+				UserRole userRole = new UserRole();
+				userRole.setRole(Role.ROLE_ADMIN_USER);
+				userRole.setPcUser(user);
+				user.setUserRoles(userRoles);
+				userRoles.add(userRole);
+				user.setActive(true);
+				userRepo.save(user);
+			}
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 

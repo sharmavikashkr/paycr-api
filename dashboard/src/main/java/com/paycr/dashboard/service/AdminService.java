@@ -27,6 +27,7 @@ import com.paycr.common.data.repository.SubscriptionModeRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Currency;
+import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.type.Role;
 import com.paycr.common.util.DateUtil;
@@ -82,7 +83,7 @@ public class AdminService {
 
 		Pricing pricing = priceRepo.findOne(1);
 
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, "CASH");
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, PayMode.CASH);
 		Subscription subs = new Subscription();
 		subs.setAmount(pricing.getRate());
 		subs.setCurrency(Currency.INR);

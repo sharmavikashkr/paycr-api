@@ -2,6 +2,7 @@ package com.paycr.invoice.controller;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,11 +20,14 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
+import com.paycr.common.util.Constants;
 import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
@@ -36,6 +40,9 @@ public class InvoiceController {
 
 	@Autowired
 	private InvoiceRepository invRepo;
+
+	@Autowired
+	private PaymentRepository payRepo;
 
 	@Autowired
 	private NotifyService notSer;
@@ -58,6 +65,7 @@ public class InvoiceController {
 			notifyService.notify(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -75,6 +83,7 @@ public class InvoiceController {
 			}
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -91,6 +100,7 @@ public class InvoiceController {
 			}
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -105,6 +115,7 @@ public class InvoiceController {
 			}
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -115,11 +126,21 @@ public class InvoiceController {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
-			if (InvoiceStatus.PAID.equals(invoice.getStatus()) && invoice.getPayAmount().compareTo(amount) >= 0) {
+			List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoiceCode, PayType.REFUND);
+			BigDecimal refundAllowed = invoice.getPayAmount();
+			for (Payment refund : refunds) {
+				if ("refund".equalsIgnoreCase(refund.getStatus())) {
+					refundAllowed = refundAllowed.subtract(refund.getAmount());
+				}
+			}
+			if (InvoiceStatus.PAID.equals(invoice.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
 				payService.refund(invoice, amount);
+			} else {
+				throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
 			}
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -139,6 +160,7 @@ public class InvoiceController {
 			invRepo.save(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 

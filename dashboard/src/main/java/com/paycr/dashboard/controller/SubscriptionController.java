@@ -38,6 +38,7 @@ import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.Currency;
+import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -94,6 +95,7 @@ public class SubscriptionController {
 			subsModeRepo.save(subsMode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -105,6 +107,7 @@ public class SubscriptionController {
 			return subs;
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
 	}
@@ -123,6 +126,7 @@ public class SubscriptionController {
 			subsModeRepo.save(toggleMode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -161,6 +165,7 @@ public class SubscriptionController {
 			merRepo.save(merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 
@@ -199,7 +204,7 @@ public class SubscriptionController {
 			subsCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
 		subs.setSubscriptionCode(subsCode);
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, "PAYCR");
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, PayMode.PAYCR);
 		if (CommonUtil.isNull(subsMode)) {
 			throw new PaycrException(Constants.FAILURE, "Not Allowed");
 		}

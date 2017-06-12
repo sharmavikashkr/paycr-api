@@ -74,7 +74,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		} else {
 			$scope.server.isSuccess = false;
 			$scope.server.respStatus = "FAILURE!";
-			$scope.server.respMsg = "something went wrong";
+			$scope.server.respMsg = data.headers('error_message');
 		}
 	}
 	$scope.fetchNotifications = function() {

@@ -3,10 +3,14 @@ package com.paycr.common.data.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.paycr.common.type.PayMode;
 
 @Entity
 @Table(name = "pc_subscription_mode")
@@ -18,7 +22,9 @@ public class SubscriptionMode implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private String name;
+	@Enumerated(EnumType.STRING)
+	private PayMode name;
+
 	private String rzpMerchantId;
 	private String rzpKeyId;
 	private String rzpSecretId;
@@ -61,11 +67,11 @@ public class SubscriptionMode implements Serializable {
 		this.active = active;
 	}
 
-	public String getName() {
+	public PayMode getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(PayMode name) {
 		this.name = name;
 	}
 

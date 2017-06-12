@@ -88,6 +88,7 @@ public class MerchantController {
 			return getMerchant();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
 	}
@@ -113,6 +114,7 @@ public class MerchantController {
 			return merchant.getSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
 	}
@@ -126,6 +128,7 @@ public class MerchantController {
 			return merchant.getSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
 	}
@@ -139,6 +142,7 @@ public class MerchantController {
 			return merchant.getSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
 	}
@@ -151,6 +155,7 @@ public class MerchantController {
 			return merSer.myInvoices(user);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
 	}

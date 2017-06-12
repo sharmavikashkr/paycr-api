@@ -348,20 +348,22 @@
 	                </div>
 	                <div class="col-xs-12 col-md-12 col-lg-3">
 	                    <div class="panel panel-yellow">
-	                        <div class="panel-heading">Payment Preference</div>
+	                        <div class="panel-heading">Payment Preference <a href="#" ng-click="editPayPrefs = !editPayPrefs"><span class="btn glyphicon glyphicon-edit" style="float:right; padding:0px;"></span></a></div>
 	                        <div class="panel-body">
-	                        	<div class="form-group">
-	               					<label class="control-label" for="set-rzpmi">RazorPay Merchant Id</label>
-	               					<input class="form-control" id="set-rzpmi" ng-model="merchant.setting.rzpMerchantId"/>
-               					</div>
-               					<div class="form-group">
-	               					<label class="control-label" for="set-rzpki">RazorPay Key Id</label>
-	               					<input class="form-control" id="set-rzpki" ng-model="merchant.setting.rzpKeyId"/>
-               					</div>
-               					<div class="form-group">
-	               					<label class="control-label" for="set-rzpsi">RazorPay Secret Id</label>
-	               					<input class="form-control" id="set-rzpsi" ng-model="merchant.setting.rzpSecretId"/>
-               					</div>
+		                		<fieldset ng-disabled="!editPayPrefs">
+		                        	<div class="form-group">
+		               					<label class="control-label" for="set-rzpmi">RazorPay Merchant Id</label>
+		               					<input class="form-control" id="set-rzpmi" ng-model="merchant.setting.rzpMerchantId"/>
+	               					</div>
+	               					<div class="form-group">
+		               					<label class="control-label" for="set-rzpki">RazorPay Key Id</label>
+		               					<input class="form-control" id="set-rzpki" ng-model="merchant.setting.rzpKeyId"/>
+	               					</div>
+	               					<div class="form-group">
+		               					<label class="control-label" for="set-rzpsi">RazorPay Secret Id</label>
+		               					<input class="form-control" id="set-rzpsi" ng-model="merchant.setting.rzpSecretId"/>
+	               					</div>
+		                    	</fieldset>
 	                        </div>
 	                    </div>
 	                </div>
