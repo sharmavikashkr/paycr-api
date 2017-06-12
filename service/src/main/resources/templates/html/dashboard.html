@@ -336,19 +336,21 @@
 	                    <div class="panel panel-yellow">
 	                        <div class="panel-heading">Invoice Preference</div>
 	                        <div class="panel-body">
-	                            <input type="checkbox" id="set-sendEmail" ng-model="merchant.setting.sendEmail">&nbsp;<strong>Send Email</strong></input><br>
-	                            <input type="checkbox" id="set-sendSms" ng-model="merchant.setting.sendSms">&nbsp;<strong>Send Sms</strong></input><br>
-	                        	<hr>
-	                        	<div class="form-group">
-	               					<label class="control-label" for="set-expiry">Expiry Days</label>
-	               					<input class="form-control" id="set-expiry" ng-model="merchant.setting.expiryDays" type="number" ng-pattern="patterns.paramNamePattern" required/>
-               					</div>
+	                        	<fieldset ng-disabled="roles.indexOf('ROLE_MERCHANT') <= -1">
+		                            <input type="checkbox" id="set-sendEmail" ng-model="merchant.setting.sendEmail">&nbsp;<strong>Send Email</strong></input><br>
+		                            <input type="checkbox" id="set-sendSms" ng-model="merchant.setting.sendSms">&nbsp;<strong>Send Sms</strong></input><br>
+		                        	<hr>
+		                        	<div class="form-group">
+		               					<label class="control-label" for="set-expiry">Expiry Days</label>
+		               					<input class="form-control" id="set-expiry" ng-model="merchant.setting.expiryDays" type="number" ng-pattern="patterns.paramNamePattern" required/>
+	               					</div>
+               					</fieldset>
 	                        </div>
 	                    </div>
 	                </div>
 	                <div class="col-xs-12 col-md-12 col-lg-3">
 	                    <div class="panel panel-yellow">
-	                        <div class="panel-heading">Payment Preference <a href="#" ng-click="editPayPrefs = !editPayPrefs"><span class="btn glyphicon glyphicon-edit" style="float:right; padding:0px;"></span></a></div>
+	                        <div class="panel-heading">Payment Preference <a ng-if="roles.indexOf('ROLE_MERCHANT') > -1" href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs"><span class="btn glyphicon glyphicon-edit" style="float:right; padding:0px;"></span></a></div>
 	                        <div class="panel-body">
 		                		<fieldset ng-disabled="!editPayPrefs">
 		                        	<div class="form-group">
