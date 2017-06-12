@@ -54,7 +54,7 @@ public class PaymentService {
 			payment.setMethod(rzpPayment.get("method"));
 			payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
 			payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
-			payment.setPayMode(PayMode.ONLINE);
+			payment.setPayMode(PayMode.PAYCR);
 			payment.setPayType(PayType.SALE);
 			invoice.setPayment(payment);
 			invRepo.save(invoice);
@@ -73,14 +73,14 @@ public class PaymentService {
 
 	public void refund(Invoice invoice, BigDecimal amount) {
 		Payment payment = invoice.getPayment();
-		if (PayMode.OFFLINE.equals(payment.getPayMode())) {
+		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
 			Payment refPay = new Payment();
 			refPay.setAmount(amount);
 			refPay.setCreated(new Date());
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setPaymentRefNo("");
 			refPay.setStatus("refund");
-			refPay.setPayMode(PayMode.OFFLINE);
+			refPay.setPayMode(payment.getPayMode());
 			refPay.setMethod(payment.getMethod());
 			refPay.setPayType(PayType.REFUND);
 			payRepo.save(refPay);
@@ -100,7 +100,7 @@ public class PaymentService {
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setPaymentRefNo(refund.get("id"));
 			refPay.setStatus(refund.get("entity"));
-			refPay.setPayMode(PayMode.ONLINE);
+			refPay.setPayMode(PayMode.PAYCR);
 			refPay.setMethod(payment.getMethod());
 			refPay.setPayType(PayType.REFUND);
 			payRepo.save(refPay);

@@ -127,7 +127,7 @@ public class PaymentController {
 			invoice.setStatus(getStatus(rzpPayment.get("status")));
 			payment.setMethod(rzpPayment.get("method"));
 			payment.setAmount(invoice.getPayAmount());
-			payment.setPayMode(PayMode.ONLINE);
+			payment.setPayMode(PayMode.PAYCR);
 			payment.setPayType(PayType.SALE);
 			payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
 			payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));

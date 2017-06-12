@@ -930,6 +930,20 @@
 	                   					</div>
 	                   				</td>
 	                   			</tr>
+	                   			<tr>
+                       				<td>
+                       					<div class="form-group">
+                       					<label class="control-label">Pay Mode</label>
+                       					<select class="form-control" name="payMode" ng-model="markpaid.payMode">
+                       						<#list payModes as payMode>
+	                       						<#if payMode != 'PAYCR'>
+	                       						<option value="${payMode}" selected="selected">${payMode}</option>
+												</#if>
+                       						</#list>
+                       					</select>
+                       					</div>
+                       				</td>
+                       			</tr>
 	                        </tbody>
 	                    </table>
                     </div>

@@ -25,7 +25,6 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
-import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.Constants;
 import com.paycr.invoice.service.PaymentService;
@@ -150,7 +149,6 @@ public class InvoiceController {
 		try {
 			payment.setCreated(new Date());
 			payment.setStatus("captured");
-			payment.setPayMode(PayMode.OFFLINE);
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant.getId());
 			payment.setAmount(invoice.getPayAmount());
