@@ -9,6 +9,6 @@ import com.paycr.common.type.PayMode;
 @Repository
 public interface SubscriptionModeRepository extends JpaRepository<SubscriptionMode, Integer> {
 
-	public SubscriptionMode findByActiveAndName(boolean active, PayMode name);
+	public SubscriptionMode findByActiveAndPayMode(boolean active, PayMode payMode);
 
 }

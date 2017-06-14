@@ -427,6 +427,7 @@
 	                                <thead>
 	                                    <tr>
 	                                    	<th>Name</th>
+	                                    	<th>Pay Mode</th>
 	                                        <th>Razorpay Merchant Id</th>
 	                                        <th>Razorpay Key Id</th>
 	                                        <th>Razorpay Secret Id</th>
@@ -436,6 +437,7 @@
 	                                <tbody>
 	                                	<tr ng-class="(subsMode.active)?'success':'warning'" ng-repeat="subsMode in subsModes" title="ACTIVE = {{subsMode.active}}">
 	                                        <td>{{subsMode.name}}</td>
+	                                        <td>{{subsMode.payMode}}</td>
 	                                        <td>{{subsMode.rzpMerchantId}}</td>
 	                                        <td>{{subsMode.rzpKeyId}}</td>
 	                                        <td>{{subsMode.rzpSecretId}}</td>
@@ -655,7 +657,15 @@
                        				<td>
                        					<div ng-class="(createSubsModeForm.name.$valid)?'':'has-error'" class="form-group">
                        					<label class="control-label">Name</label>
-                       					<select class="form-control" name="name" ng-model="newsubsmode.name">
+                       					<input class="form-control" ng-model="newsubsmode.name" name="name" placeholder="Name" ng-pattern="patterns.namePattern" required/>
+                       					</div>
+                       				</td>
+                       			</tr>
+                            	<tr>
+                       				<td>
+                       					<div ng-class="(createSubsModeForm.payMode.$valid)?'':'has-error'" class="form-group">
+                       					<label class="control-label">Pay Mode</label>
+                       					<select class="form-control" name="payMode" ng-model="newsubsmode.payMode">
                        						<#list payModes as payMode>
                        						<option value="${payMode}">${payMode}</option>
                        						</#list>
@@ -718,7 +728,7 @@
                        					<div class="form-group">
                        					<label class="control-label">Subscription Mode</label>
                        					<select class="form-control" ng-model="offlinesubs.subscriptionModeId">
-                       						<option ng-if="subsMode.payType != 'ONLINE' && subsMode.active" ng-repeat="subsMode in subsModes" value="{{subsMode.id}}">{{subsMode.name}}</option>
+                       						<option ng-if="subsMode.payMode != 'PAYCR' && subsMode.active" ng-repeat="subsMode in subsModes" value="{{subsMode.id}}">{{subsMode.name}}</option>
                        					</select>
                        					</div>
                        				</td>
@@ -728,7 +738,7 @@
                        					<div class="form-group">
                        					<label class="control-label">Pricing</label>
                        					<select class="form-control" ng-model="offlinesubs.pricingId">
-                       						<option ng-if="pricing.active" ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
+                       						<option ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
                        					</select>
                        					</div>
                        				</td>

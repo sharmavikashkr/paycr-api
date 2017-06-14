@@ -431,10 +431,12 @@
 	                    <div class="panel panel-default">
 	                        <div class="panel-heading">Account</div>
 	                        <div class="panel-body">
-	                        	<div class="form-group">
-	               					<label class="control-label">Name</label>
-	               					<input class="form-control" ng-model="merchant.name" type="text" ng-pattern="patterns.namePattern" required/>
-               					</div>
+	                        	<fieldset ng-disabled="roles.indexOf('ROLE_MERCHANT') <= -1">
+		                        	<div class="form-group">
+		               					<label class="control-label">Name</label>
+		               					<input class="form-control" ng-model="merchant.name" type="text" ng-pattern="patterns.namePattern" required/>
+	               					</div>
+               					</fieldset>
                					<fieldset disabled>
 	               					<div class="form-group">
 		               					<label class="control-label">Email</label>

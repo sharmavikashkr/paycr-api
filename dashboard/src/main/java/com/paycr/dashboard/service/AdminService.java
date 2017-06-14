@@ -83,7 +83,7 @@ public class AdminService {
 
 		Pricing pricing = priceRepo.findOne(1);
 
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, PayMode.CASH);
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayMode(true, PayMode.CASH);
 		Subscription subs = new Subscription();
 		subs.setAmount(pricing.getRate());
 		subs.setCurrency(Currency.INR);

@@ -22,8 +22,10 @@ public class SubscriptionMode implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	private String name;
+
 	@Enumerated(EnumType.STRING)
-	private PayMode name;
+	private PayMode payMode;
 
 	private String rzpMerchantId;
 	private String rzpKeyId;
@@ -67,12 +69,20 @@ public class SubscriptionMode implements Serializable {
 		this.active = active;
 	}
 
-	public PayMode getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(PayMode name) {
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public PayMode getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(PayMode payMode) {
+		this.payMode = payMode;
 	}
 
 }

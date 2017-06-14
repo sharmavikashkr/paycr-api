@@ -9,7 +9,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	}
 	$scope.patterns = {
 		"paramNamePattern" : "\\w{1,10}",
-		"namePattern" : "[0-9a-zA-Z_ ]{1,50}",
+		"namePattern" : "[0-9a-zA-Z_- ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
@@ -21,10 +21,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"mobile" : "",
 		"createdFrom" : "2017-01-01",
 		"createdTo" : "2017-06-30"
-	}
-	$scope.newparam = {
-		"paramName" : "",
-		"provider" : "OPTIONAL"
 	}
 	$scope.newinvoice = {
 		"invoiceCode" : "",
@@ -465,10 +461,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 					.copy($scope.merchant.setting.customParams[param]);
 			copyParam.id = null;
 			$scope.newinvoice.customParams.push(copyParam);
-		}
-		$scope.newparam = {
-			"paramName" : "",
-			"provider" : "OPTIONAL"
 		}
 	}
 	$scope.logout = function() {

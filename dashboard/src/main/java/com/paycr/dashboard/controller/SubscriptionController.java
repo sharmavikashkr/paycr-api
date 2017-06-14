@@ -87,7 +87,7 @@ public class SubscriptionController {
 					|| CommonUtil.isEmpty(subsMode.getRzpKeyId()) || CommonUtil.isEmpty(subsMode.getRzpSecretId())) {
 				throw new PaycrException(Constants.FAILURE, "Invalid Request");
 			}
-			SubscriptionMode existMode = subsModeRepo.findByActiveAndName(true, subsMode.getName());
+			SubscriptionMode existMode = subsModeRepo.findByActiveAndPayMode(true, subsMode.getPayMode());
 			if (existMode != null && subsMode.isActive()) {
 				existMode.setActive(false);
 				subsModeRepo.save(existMode);
@@ -117,7 +117,7 @@ public class SubscriptionController {
 	public void toggleSubscriptionSetting(@PathVariable Integer modeId, HttpServletResponse response) {
 		try {
 			SubscriptionMode toggleMode = subsModeRepo.findOne(modeId);
-			SubscriptionMode existMode = subsModeRepo.findByActiveAndName(true, toggleMode.getName());
+			SubscriptionMode existMode = subsModeRepo.findByActiveAndPayMode(true, toggleMode.getPayMode());
 			if (toggleMode != null && existMode != null) {
 				existMode.setActive(false);
 				subsModeRepo.save(existMode);
@@ -204,7 +204,7 @@ public class SubscriptionController {
 			subsCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
 		subs.setSubscriptionCode(subsCode);
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndName(true, PayMode.PAYCR);
+		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayMode(true, PayMode.PAYCR);
 		if (CommonUtil.isNull(subsMode)) {
 			throw new PaycrException(Constants.FAILURE, "Not Allowed");
 		}

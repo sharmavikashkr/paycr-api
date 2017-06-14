@@ -58,7 +58,8 @@ CREATE TABLE if not exists pc_pricing (
 
 CREATE TABLE if not exists pc_subscription_mode(
 	id SERIAL PRIMARY KEY NOT NULL,
-	name varchar(20) DEFAULT NULL,
+	name varchar(50) DEFAULT NULL,
+	pay_mode varchar(20) DEFAULT NULL,
 	rzp_merchant_id varchar(30) DEFAULT NULL,
 	rzp_key_id varchar(30) DEFAULT NULL,
 	rzp_secret_id varchar(30) DEFAULT NULL,
