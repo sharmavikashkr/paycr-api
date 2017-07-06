@@ -27,7 +27,7 @@ public class MerchantCustomParam {
 
 	@JsonIgnore
 	@ManyToOne
-	private MerchantSetting merchantSetting;
+	private InvoiceSetting invoiceSetting;
 
 	public ParamValueProvider getProvider() {
 		return provider;
@@ -49,12 +49,12 @@ public class MerchantCustomParam {
 		this.paramName = paramName;
 	}
 
-	public MerchantSetting getMerchantSetting() {
-		return merchantSetting;
+	public InvoiceSetting getInvoiceSetting() {
+		return invoiceSetting;
 	}
 
-	public void setMerchantSetting(MerchantSetting merchantSetting) {
-		this.merchantSetting = merchantSetting;
+	public void setInvoiceSetting(InvoiceSetting invoiceSetting) {
+		this.invoiceSetting = invoiceSetting;
 	}
 
 }

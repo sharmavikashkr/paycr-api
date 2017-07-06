@@ -19,9 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
@@ -56,7 +56,7 @@ public class PaymentController {
 			ModelAndView mv = new ModelAndView("html/payinvoice");
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
-			mv.addObject("rzpKeyId", merchant.getSetting().getRzpKeyId());
+			mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
 			mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().multiply(new BigDecimal(100))));
 			mv.addObject("consumer", invoice.getConsumer());
 			return mv;
@@ -111,12 +111,12 @@ public class PaymentController {
 					param.setParamValue(paramValue);
 				}
 			}
-			MerchantSetting setting = merchant.getSetting();
+			PaymentSetting paymentSetting = merchant.getPaymentSetting();
 			Payment payment = new Payment();
 			payment.setCreated(new Date());
 			payment.setInvoiceCode(invoiceCode);
 			payment.setPaymentRefNo(rzpPayId);
-			RazorpayClient razorpay = new RazorpayClient(setting.getRzpKeyId(), setting.getRzpSecretId());
+			RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 			com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
 			JSONObject request = new JSONObject();
 			request.put("amount", rzpPayment.get("amount").toString());

@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.MerchantPricing;
-import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Notification;
+import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.service.SecurityService;
@@ -108,12 +109,13 @@ public class MerchantController {
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
-	@RequestMapping("/setting/update")
-	public MerchantSetting updateSetting(@RequestBody MerchantSetting setting, HttpServletResponse response) {
+	@RequestMapping("/paymentsetting/update")
+	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting,
+			HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.updateSetting(merchant, setting);
-			return merchant.getSetting();
+			merSer.updatePaymentSetting(merchant, paymentSetting);
+			return merchant.getPaymentSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -122,12 +124,13 @@ public class MerchantController {
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
-	@RequestMapping("/customParam/new")
-	public MerchantSetting newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
+	@RequestMapping("/invoicesetting/update")
+	public List<InvoiceSetting> updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting,
+			HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.newCustomParam(merchant, customParam);
-			return merchant.getSetting();
+			merSer.updateInvoiceSetting(merchant, invoiceSetting);
+			return merchant.getInvoiceSettings();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -136,12 +139,28 @@ public class MerchantController {
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
-	@RequestMapping("/customParam/delete/{id}")
-	public MerchantSetting deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
+	@RequestMapping("/customParam/new/{settingId}")
+	public List<InvoiceSetting> newCustomParam(@PathVariable Integer settingId,
+			@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.deleteCustomParam(merchant, id);
-			return merchant.getSetting();
+			merSer.newCustomParam(settingId, customParam);
+			return merchant.getInvoiceSettings();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+			return null;
+		}
+	}
+
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@RequestMapping("/customParam/delete/{settingId}/{id}")
+	public List<InvoiceSetting> deleteCustomParam(@PathVariable Integer settingId, @PathVariable Integer id,
+			HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			merSer.deleteCustomParam(settingId, id);
+			return merchant.getInvoiceSettings();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

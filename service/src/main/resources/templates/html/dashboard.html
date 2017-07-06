@@ -161,8 +161,8 @@
 	                                    <tr>
 	                                        <th>Invoice Code</th>
 	                                        <th>Amount</th>
-	                                        <th>Email</th>
-	                                        <th>Mobile</th>
+	                                        <th>Consumer</th>
+	                                        <th>Business</th>
 	                                        <th>Status</th>
 	                                    </tr>
 	                                </thead>
@@ -170,8 +170,8 @@
 										<tr ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':'warning'" data-toggle="collapse" data-target="#details-{{invoice.invoiceCode}}" class="accordion-toggle">
 	                                        <td>{{invoice.invoiceCode}}</td>
 	                                        <td>&#8377; {{invoice.payAmount}}</td>
-	                                        <td>{{invoice.consumer.email}}</td>
-	                                        <td>{{invoice.consumer.mobile}}</td>
+	                                        <td>{{invoice.consumer.name}}</td>
+	                                        <td>{{invoice.invoiceSetting.name}}</td>
 	                                        <td>{{invoice.status}}</td>
 	                                    </tr>
 	                                    <tr>
@@ -221,6 +221,29 @@
 								                            </div>
 								                        </div>
 								            		</div>
+								            		<div style="padding-right:10px;padding-left:10px;" class="row">
+								                        <div class="col-lg-12">
+								                        	<h4>Consumer Details</h4>
+								                            <div class="table-responsive">
+								                                <table class="table table-striped table-bordered">
+								                                	<thead>
+								                                		<tr>
+									                                		<th>Name</th>
+									                                		<th>Email</th>
+									                                		<th>Mobile</th>
+								                                		</tr>
+								                                	</thead>
+								                                    <tbody>
+								                                        <tr>
+								                                            <td>{{invoice.consumer.name}}</td>
+								                                            <td>{{invoice.consumer.email}}</td>
+								                                            <td>{{invoice.consumer.mobile}}</td>
+								                                        </tr>
+								                                    </tbody>
+								                                </table>
+								                            </div>
+								                        </div>
+							                        </div>
 								            		<hr>
 								            		<div style="padding:10px;" class="row">
 								            			<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
@@ -332,38 +355,22 @@
 	        <div id="invoiceSettingTab" class="tab-pane fade">
 	        	<br>
 	        	<div class="row">
-	        		<div class="col-xs-12 col-md-6 col-lg-3">
-	                    <div class="panel panel-yellow">
-	                        <div class="panel-heading">Invoice Preference</div>
-	                        <div class="panel-body">
-	                        	<fieldset ng-disabled="roles.indexOf('ROLE_MERCHANT') <= -1">
-		                            <input type="checkbox" id="set-sendEmail" ng-model="merchant.setting.sendEmail">&nbsp;<strong>Send Email</strong></input><br>
-		                            <input type="checkbox" id="set-sendSms" ng-model="merchant.setting.sendSms">&nbsp;<strong>Send Sms</strong></input><br>
-		                        	<hr>
-		                        	<div class="form-group">
-		               					<label class="control-label" for="set-expiry">Expiry Days</label>
-		               					<input class="form-control" id="set-expiry" ng-model="merchant.setting.expiryDays" type="number" ng-pattern="patterns.paramNamePattern" required/>
-	               					</div>
-               					</fieldset>
-	                        </div>
-	                    </div>
-	                </div>
 	                <div class="col-xs-12 col-md-12 col-lg-3">
 	                    <div class="panel panel-yellow">
-	                        <div class="panel-heading">Payment Preference <a ng-if="roles.indexOf('ROLE_MERCHANT') > -1" href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs"><span class="btn glyphicon glyphicon-edit" style="float:right; padding:0px;"></span></a></div>
+	                        <div class="panel-heading">Payment Setting <a ng-if="roles.indexOf('ROLE_MERCHANT') > -1" href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs"><span class="btn glyphicon glyphicon-edit" style="float:right; padding:0px;"></span></a></div>
 	                        <div class="panel-body">
 		                		<fieldset ng-disabled="!editPayPrefs">
 		                        	<div class="form-group">
 		               					<label class="control-label" for="set-rzpmi">RazorPay Merchant Id</label>
-		               					<input class="form-control" id="set-rzpmi" ng-model="merchant.setting.rzpMerchantId"/>
+		               					<input class="form-control" id="set-rzpmi" ng-model="merchant.paymentSetting.rzpMerchantId"/>
 	               					</div>
 	               					<div class="form-group">
 		               					<label class="control-label" for="set-rzpki">RazorPay Key Id</label>
-		               					<input class="form-control" id="set-rzpki" ng-model="merchant.setting.rzpKeyId"/>
+		               					<input class="form-control" id="set-rzpki" ng-model="merchant.paymentSetting.rzpKeyId"/>
 	               					</div>
 	               					<div class="form-group">
 		               					<label class="control-label" for="set-rzpsi">RazorPay Secret Id</label>
-		               					<input class="form-control" id="set-rzpsi" ng-model="merchant.setting.rzpSecretId"/>
+		               					<input class="form-control" id="set-rzpsi" ng-model="merchant.paymentSetting.rzpSecretId"/>
 	               					</div>
 		                    	</fieldset>
 	                        </div>
@@ -396,11 +403,48 @@
 	                </div>
 	        	</div>
 	        	<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" class="row panel panel-body">
-	        		<button ng-click="saveSetting()" class="btn btn-info">Save</button>
+	        		<button ng-click="savePaymentSetting()" class="btn btn-info">Save</button>
 	        	</div>
-	        	<div class="row">
+	        	<div class="row panel panel-body">
+	        		<div class="col-xs-6 col-md-2 col-lg-2">
+	        			<label>Select Business: </label>
+	        		</div>
+	        		<div class="col-xs-6 col-md-4 col-lg-4">
+		        		<select class="form-control" ng-model="updateSetting">
+		        			<option ng-repeat="invoiceSetting in merchant.invoiceSettings" ng-value="invoiceSetting">{{invoiceSetting.name}}</option>
+		        		</select>
+	        		</div>
+	        		<div class="col-xs-6 col-md-4 col-lg-4" ng-if="roles.indexOf('ROLE_MERCHANT') > -1" name="newInvoiceSettingForm">
+	        			<div class="form-group input-group">
+		        			<input name="name" class="form-control" ng-model="newInvoiceSetting.name" placeholder="New Business Name" required>
+		        			<span class="input-group-btn"><button class="btn btn-default" ng-click="createInvoiceSetting()"><i class="fa fa-plus"></i></button></span>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	<div class="row" ng-if="updateSetting != null">
+	        		<div class="col-xs-12 col-md-6 col-lg-3">
+	                    <div class="panel panel-yellow">
+	                        <div class="panel-heading">Invoice Preference</div>
+	                        <div class="panel-body">
+	                        	<fieldset ng-disabled="roles.indexOf('ROLE_MERCHANT') <= -1">
+	                        		<div class="form-group">
+		               					<label class="control-label" for="set-expiry">Name</label>
+		               					<input class="form-control" type="text" id="set-name" ng-model="updateSetting.name"></input><br>
+	               					</div>
+	                        		<hr>
+		                            <input type="checkbox" id="set-sendEmail" ng-model="updateSetting.sendEmail">&nbsp;<strong>Send Email</strong></input><br>
+		                            <input type="checkbox" id="set-sendSms" ng-model="updateSetting.sendSms">&nbsp;<strong>Send Sms</strong></input><br>
+		                        	<hr>
+		                        	<div class="form-group">
+		               					<label class="control-label" for="set-expiry">Expiry Days</label>
+		               					<input class="form-control" id="set-expiry" ng-model="updateSetting.expiryDays" type="number" required/>
+	               					</div>
+               					</fieldset>
+	                        </div>
+	                    </div>
+	                </div>
 	        		<div class="col-xs-12 col-md-8 col-lg-6">
-	                    <div class="panel panel-danger">
+	                    <div class="panel panel-yellow">
 	                        <div class="panel-heading">Custom Params<span style="float:right;margin-top:-5px;"><button ng-if="roles.indexOf('ROLE_MERCHANT') > -1" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#createCustomParam"><i class="fa fa-plus"></i></button></span></div>
 	                        <div class="panel-body">
 	                        	<table style="width:100%; border-collapse:collapse; font-size:14px;" class="table table-striped table-bordered table-hover">
@@ -412,16 +456,19 @@
 	                                    </tr>
 	                                </thead>
 	                                <tbody>
-	                                	<tr ng-repeat="param in merchant.setting.customParams">
+	                                	<tr ng-repeat="param in updateSetting.customParams">
 	                                        <td>{{param.paramName}}</td>
 	                                        <td>{{param.provider}}</td>
-	                                        <td ng-if="roles.indexOf('ROLE_MERCHANT') > -1"><button ng-click="deleteParam(param.id, param.paramName)" style="margin-top:-5px;" type="button" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
+	                                        <td ng-if="roles.indexOf('ROLE_MERCHANT') > -1"><button ng-click="deleteParam(updateSetting.id, param.id, param.paramName)" style="margin-top:-5px;" type="button" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
 	                                    </tr>
 	                                </tbody>
 	                            </table>
 	                        </div>
 	                    </div>
 	                </div>
+	        	</div>
+	        	<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1 && updateSetting != null" class="row panel panel-body">
+	        		<button ng-click="saveInvoiceSetting(updateSetting)" class="btn btn-info">Save</button>
 	        	</div>
 	        </div>
 	        <div id="accountTab" class="tab-pane fade">
@@ -592,7 +639,14 @@
 	    <div id="newInvoice" class="modal-content" style="min-width:160%; margin-left:-30%;">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">Invoice for purchase</h4>
+	        <h4 class="modal-title">
+	        	<span class="col-xs-6 col-md-6 col-lg-3">Invoice for purchase </span>
+	        	<span class="col-xs-6 col-md-6 col-lg-3">
+		        	<select class="form-control" ng-model="newInvSetting" ng-change="refreshSetting(newInvSetting)">
+		        		<option ng-repeat="invoiceSetting in merchant.invoiceSettings" ng-value="invoiceSetting">{{invoiceSetting.name}}</option>
+		        	</select>
+		        </span>
+	        </h4>
 	      </div>
 	      <div class="modal-body" style="padding:20px;">
 	      	<form name="createInvoiceForm">
@@ -742,7 +796,7 @@
 	      	</form>
 	      </div>
 	      <div class="modal-footer">
-	      	<button type="button" class="btn btn-info" ng-click="addParam()">Add</button>
+	      	<button type="button" class="btn btn-info" ng-click="addParam(updateSetting.id)">Add</button>
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      </div>
 	    </div>

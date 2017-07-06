@@ -35,8 +35,11 @@ public class Merchant {
 	@OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL)
 	private List<MerchantPricing> pricings;
 
+	@OneToMany(mappedBy = "merchant")
+	private List<InvoiceSetting> invoiceSettings;
+
 	@OneToOne(cascade = CascadeType.ALL)
-	private MerchantSetting setting;
+	private PaymentSetting paymentSetting;
 
 	public Integer getId() {
 		return id;
@@ -114,11 +117,19 @@ public class Merchant {
 		this.pricings = pricings;
 	}
 
-	public MerchantSetting getSetting() {
-		return setting;
+	public PaymentSetting getPaymentSetting() {
+		return paymentSetting;
 	}
 
-	public void setSetting(MerchantSetting setting) {
-		this.setting = setting;
+	public void setPaymentSetting(PaymentSetting paymentSetting) {
+		this.paymentSetting = paymentSetting;
+	}
+
+	public List<InvoiceSetting> getInvoiceSettings() {
+		return invoiceSettings;
+	}
+
+	public void setInvoiceSettings(List<InvoiceSetting> invoiceSettings) {
+		this.invoiceSettings = invoiceSettings;
 	}
 }

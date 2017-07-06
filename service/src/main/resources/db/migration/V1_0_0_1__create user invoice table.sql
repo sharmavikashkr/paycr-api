@@ -56,6 +56,7 @@ CREATE TABLE if not exists pc_invoice(
 	expiry timestamp NOT NULL,
 	consumer_id int REFERENCES pc_consumer,
 	merchant_pricing_id int REFERENCES pc_merchant_pricing,
+	invoice_setting_id int REFERENCES pc_invoice_setting,
 	payment_id int REFERENCES pc_payment,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL
@@ -90,7 +91,7 @@ CREATE TABLE if not exists pc_merchant_custom_param (
 	id SERIAL PRIMARY KEY NOT NULL,
 	param_name varchar(20) NOT NULL,
 	provider varchar(20) NOT NULL,
-    merchant_setting_id int REFERENCES pc_merchant_setting
+    invoice_setting_id int REFERENCES pc_invoice_setting
 );
 
 CREATE TABLE if not exists pc_notification(

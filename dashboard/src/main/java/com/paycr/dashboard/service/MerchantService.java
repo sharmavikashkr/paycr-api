@@ -5,15 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
-import com.paycr.common.data.domain.MerchantSetting;
+import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.InvoiceSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -24,6 +24,9 @@ public class MerchantService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private InvoiceSettingRepository invSetRepo;
 
 	@Autowired
 	private InvoiceRepository invRepo;
@@ -47,8 +50,9 @@ public class MerchantService {
 		merRepo.save(merchant);
 	}
 
-	public void newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
-		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
+	public void newCustomParam(Integer settingId, MerchantCustomParam customParam) {
+		InvoiceSetting invoiceSetting = invSetRepo.findOne(settingId);
+		List<MerchantCustomParam> customParams = invoiceSetting.getCustomParams();
 		if (CommonUtil.isNull(customParam) || CommonUtil.isEmpty(customParam.getParamName())
 				|| CommonUtil.isNull(customParam.getProvider())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Custom Param");
@@ -62,42 +66,18 @@ public class MerchantService {
 			}
 		}
 		customParams.add(customParam);
-		customParam.setMerchantSetting(merchant.getSetting());
-		merRepo.save(merchant);
+		customParam.setInvoiceSetting(invoiceSetting);
+		invSetRepo.save(invoiceSetting);
 	}
 
-	public JsonObject getSetting(MerchantSetting setting) {
-		try {
-			JsonObject json = new JsonObject();
-			json.addProperty("sendEmail", setting.isSendEmail());
-			json.addProperty("sendSms", setting.isSendSms());
-			json.addProperty("expiryDays", setting.getExpiryDays());
-			json.addProperty("rzpMerchantId", setting.getRzpMerchantId());
-			json.addProperty("rzpKeyId", setting.getRzpKeyId());
-			json.addProperty("rzpSecretId", setting.getRzpSecretId());
-			List<MerchantCustomParam> customParams = setting.getCustomParams();
-			JsonArray jsonArr = new JsonArray();
-			for (MerchantCustomParam cp : customParams) {
-				JsonObject cpJson = new JsonObject();
-				cpJson.addProperty("id", cp.getId());
-				cpJson.addProperty("paramName", cp.getParamName());
-				cpJson.addProperty("provider", cp.getProvider().name());
-				jsonArr.add(cpJson);
-			}
-			json.add("customParams", jsonArr);
-			return json;
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Bad Request");
-		}
-	}
-
-	public void deleteCustomParam(Merchant merchant, Integer id) {
-		List<MerchantCustomParam> customParams = merchant.getSetting().getCustomParams();
+	public void deleteCustomParam(Integer settingId, Integer id) {
+		InvoiceSetting invoiceSetting = invSetRepo.findOne(settingId);
+		List<MerchantCustomParam> customParams = invoiceSetting.getCustomParams();
 		boolean found = false;
 		for (MerchantCustomParam param : customParams) {
 			if (param.getId() == id) {
 				customParams.remove(param);
-				param.setMerchantSetting(null);
+				param.setInvoiceSetting(null);
 				found = true;
 				break;
 			}
@@ -105,16 +85,19 @@ public class MerchantService {
 		if (!found) {
 			throw new PaycrException(Constants.FAILURE, "Custom Param does not exists");
 		}
-		merRepo.save(merchant);
+		invSetRepo.save(invoiceSetting);
 	}
 
-	public void updateSetting(Merchant merchant, MerchantSetting setting) {
-		merchant.getSetting().setSendSms(setting.isSendSms());
-		merchant.getSetting().setSendEmail(setting.isSendEmail());
-		merchant.getSetting().setExpiryDays(setting.getExpiryDays());
-		merchant.getSetting().setRzpMerchantId(setting.getRzpMerchantId());
-		merchant.getSetting().setRzpKeyId(setting.getRzpKeyId());
-		merchant.getSetting().setRzpSecretId(setting.getRzpSecretId());
+	public void updateInvoiceSetting(Merchant merchant, InvoiceSetting updatedSetting) {
+		updatedSetting.setMerchant(merchant);
+		invSetRepo.save(updatedSetting);
+	}
+
+	public void updatePaymentSetting(Merchant merchant, PaymentSetting updatedSetting) {
+		PaymentSetting paySet = merchant.getPaymentSetting();
+		paySet.setRzpKeyId(updatedSetting.getRzpKeyId());
+		paySet.setRzpMerchantId(updatedSetting.getRzpMerchantId());
+		paySet.setRzpSecretId(updatedSetting.getRzpSecretId());
 		merRepo.save(merchant);
 	}
 

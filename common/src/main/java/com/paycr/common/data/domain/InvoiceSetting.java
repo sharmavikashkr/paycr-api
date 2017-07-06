@@ -7,25 +7,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "pc_merchant_setting")
-public class MerchantSetting {
+@Table(name = "pc_invoice_setting")
+public class InvoiceSetting {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	private String name;
 	private boolean sendSms;
 	private boolean sendEmail;
 	private int expiryDays;
-	private String rzpMerchantId;
-	private String rzpKeyId;
-	private String rzpSecretId;
 
-	@OneToMany(mappedBy = "merchantSetting", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	@ManyToOne
+	private Merchant merchant;
+
+	@OneToMany(mappedBy = "invoiceSetting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MerchantCustomParam> customParams;
 
 	public Integer getId() {
@@ -56,36 +61,28 @@ public class MerchantSetting {
 		this.expiryDays = expiryDays;
 	}
 
-	public String getRzpMerchantId() {
-		return rzpMerchantId;
-	}
-
-	public void setRzpMerchantId(String rzpMerchantId) {
-		this.rzpMerchantId = rzpMerchantId;
-	}
-
-	public String getRzpKeyId() {
-		return rzpKeyId;
-	}
-
-	public void setRzpKeyId(String rzpKeyId) {
-		this.rzpKeyId = rzpKeyId;
-	}
-
-	public String getRzpSecretId() {
-		return rzpSecretId;
-	}
-
-	public void setRzpSecretId(String rzpSecretId) {
-		this.rzpSecretId = rzpSecretId;
-	}
-
 	public List<MerchantCustomParam> getCustomParams() {
 		return customParams;
 	}
 
 	public void setCustomParams(List<MerchantCustomParam> customParams) {
 		this.customParams = customParams;
+	}
+
+	public Merchant getMerchant() {
+		return merchant;
+	}
+
+	public void setMerchant(Merchant merchant) {
+		this.merchant = merchant;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

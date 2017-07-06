@@ -67,12 +67,15 @@ public class Invoice implements Serializable {
 	@ManyToOne
 	private MerchantPricing merchantPricing;
 
+	@OneToOne
+	private InvoiceSetting invoiceSetting;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private Payment payment;
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
-	
+
 	private String createdBy;
 
 	@Transient
@@ -83,6 +86,9 @@ public class Invoice implements Serializable {
 
 	@Transient
 	private String merchantName;
+
+	@Transient
+	private Integer invoiceSettingId;
 
 	public Integer getId() {
 		return id;
@@ -254,5 +260,21 @@ public class Invoice implements Serializable {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public InvoiceSetting getInvoiceSetting() {
+		return invoiceSetting;
+	}
+
+	public void setInvoiceSetting(InvoiceSetting invoiceSetting) {
+		this.invoiceSetting = invoiceSetting;
+	}
+
+	public Integer getInvoiceSettingId() {
+		return invoiceSettingId;
+	}
+
+	public void setInvoiceSettingId(Integer invoiceSettingId) {
+		this.invoiceSettingId = invoiceSettingId;
 	}
 }

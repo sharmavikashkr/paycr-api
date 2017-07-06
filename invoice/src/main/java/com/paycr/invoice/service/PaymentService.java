@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
@@ -40,8 +40,8 @@ public class PaymentService {
 	public void enquire(Invoice invoice) {
 		Payment payment = invoice.getPayment();
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
-		MerchantSetting setting = merchant.getSetting();
-		RazorpayClient razorpay = new RazorpayClient(setting.getRzpKeyId(), setting.getRzpSecretId());
+		PaymentSetting paymentSetting = merchant.getPaymentSetting();
+		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		try {
 			com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(payment.getPaymentRefNo());
 			if ("authorized".equals(rzpPayment.get("status"))) {
@@ -87,8 +87,8 @@ public class PaymentService {
 			return;
 		}
 		Merchant merchant = merRepo.findOne(invoice.getMerchant());
-		MerchantSetting setting = merchant.getSetting();
-		RazorpayClient razorpay = new RazorpayClient(setting.getRzpKeyId(), setting.getRzpSecretId());
+		PaymentSetting paymentSetting = merchant.getPaymentSetting();
+		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		try {
 			String refundAmount = String.valueOf(amount.multiply(new BigDecimal(100)));
 			JSONObject refundRequest = new JSONObject();

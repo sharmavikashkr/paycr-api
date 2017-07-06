@@ -9,7 +9,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	}
 	$scope.patterns = {
 		"paramNamePattern" : "\\w{1,10}",
-		"namePattern" : "[0-9a-zA-Z_- ]{1,50}",
+		"namePattern" : "[0-9a-zA-Z_\\- ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
@@ -20,7 +20,13 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-06-30"
+		"createdTo" : "2017-12-31"
+	}
+	$scope.newInvoiceSetting = {
+		"name" : "",
+		"sendEmail" : true,
+		"sendSms" : false,
+		"expiryDays" : 7
 	}
 	$scope.newinvoice = {
 		"invoiceCode" : "",
@@ -42,6 +48,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"payAmount" : 0,
 		"currency" : "INR",
 		"expiresIn" : "",
+		"invoiceSettingId" : 0,
 		"customParams" : [ {
 			"paramName" : "",
 			"paramValue" : "",
@@ -79,7 +86,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(merchant) {
 			$scope.merchant = merchant.data;
-			$scope.refreshSetting();
+			$scope.refreshSetting(merchant.data.invoiceSettings[0]);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -199,60 +206,95 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.saveSetting = function() {
+	$scope.savePaymentSetting = function() {
 		var req = {
 			method : 'POST',
-			url : "/merchant/setting/update",
+			url : "/merchant/paymentsetting/update",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.merchant.setting
+			data : $scope.merchant.paymentSetting
 		}
-		$http(req).then(function(setting) {
-			$scope.merchant.setting = setting.data;
-			$scope.refreshSetting();
-			$scope.serverMessage(setting);
+		$http(req).then(function(paymentsettings) {
+			$scope.merchant.paymentSettings = paymentsettings.data;
+			$scope.serverMessage(paymentsettings);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.addParam = function() {
+	$scope.createInvoiceSetting = function() {
+		var req = {
+			method : 'POST',
+			url : "/merchant/invoicesetting/update",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : $scope.newInvoiceSetting
+		}
+		$http(req).then(function(invoicesettings) {
+			$scope.merchant.invoiceSettings = invoicesettings.data;
+			$scope.refreshSetting(invoicesettings.data[0]);
+			$scope.serverMessage(invoicesettings);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.saveInvoiceSetting = function(invoiceSetting) {
+		var req = {
+			method : 'POST',
+			url : "/merchant/invoicesetting/update",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : invoiceSetting
+		}
+		$http(req).then(function(invoicesettings) {
+			$scope.merchant.invoiceSettings = invoicesettings.data;
+			$scope.refreshSetting(invoicesettings.data[0]);
+			$scope.serverMessage(invoicesettings);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.addParam = function(settingId) {
 		if(!$scope.addCustomParamForm.$valid) {
 			return false;
 		}
 		var req = {
 			method : 'POST',
-			url : "/merchant/customParam/new",
+			url : "/merchant/customParam/new/" + settingId,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
 			data : $scope.newparam
 		}
-		$http(req).then(function(setting) {
-			$scope.merchant.setting = setting.data;
-			$scope.refreshSetting();
+		$http(req).then(function(invoicesettings) {
+			$scope.merchant.invoiceSettings = invoicesettings.data;
+			$scope.refreshSetting(invoicesettings.data[0]);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#createCustomParam')).modal('hide');
 	}
-	$scope.deleteParam = function(paramId, paramName) {
+	$scope.deleteParam = function(settingId, paramId, paramName) {
 		if (!confirm('Delete ' + paramName + ' ?')) {
 			return false;
 		}
 		var req = {
 			method : 'GET',
-			url : "/merchant/customParam/delete/" + paramId,
+			url : "/merchant/customParam/delete/" + settingId + "/" + paramId,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			}
 		}
-		$http(req).then(function(setting) {
-			$scope.merchant.setting = setting.data;
-			$scope.refreshSetting();
+		$http(req).then(function(invoicesettings) {
+			$scope.merchant.invoiceSettings = invoicesettings.data;
+			$scope.refreshSetting(invoicesettings.data[0]);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -448,17 +490,15 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 		angular.element(document.querySelector('#markPaidInvoice')).modal('hide');
 	}
-	$scope.refreshSetting = function() {
-		$scope.newinvoice.sendEmail = angular
-				.copy($scope.merchant.setting.sendEmail);
-		$scope.newinvoice.sendMobile = angular
-				.copy($scope.merchant.setting.sendMobile);
-		$scope.newinvoice.expiresIn = angular
-				.copy($scope.merchant.setting.expiryDays);
+	$scope.refreshSetting = function(invoicesetting) {
+		$scope.newInvSetting = invoicesetting;
+		$scope.newinvoice.invoiceSettingId = angular.copy(invoicesetting.id);
+		$scope.newinvoice.sendEmail = angular.copy(invoicesetting.sendEmail);
+		$scope.newinvoice.sendMobile = angular.copy(invoicesetting.sendMobile);
+		$scope.newinvoice.expiresIn = angular.copy(invoicesetting.expiryDays);
 		$scope.newinvoice.customParams = [];
-		for (var param in $scope.merchant.setting.customParams) {
-			var copyParam = angular
-					.copy($scope.merchant.setting.customParams[param]);
+		for (var param in invoicesetting.customParams) {
+			var copyParam = angular.copy(invoicesetting.customParams[param]);
 			copyParam.id = null;
 			$scope.newinvoice.customParams.push(copyParam);
 		}

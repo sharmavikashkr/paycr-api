@@ -3,8 +3,6 @@ package com.paycr.common.service;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,8 +20,6 @@ import com.paycr.common.type.Role;
 
 @Service
 public class SecurityService {
-	@Autowired
-	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private UserRepository userRepo;
@@ -107,15 +103,5 @@ public class SecurityService {
 			return true;
 		}
 		return false;
-	}
-
-	public void autologin(String email, String password) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-				userDetails, password, userDetails.getAuthorities());
-		authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-		if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-			SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-		}
 	}
 }

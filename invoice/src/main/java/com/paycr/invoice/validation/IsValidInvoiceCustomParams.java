@@ -2,15 +2,12 @@ package com.paycr.invoice.validation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
-import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
-import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.util.CommonUtil;
@@ -21,13 +18,9 @@ import com.paycr.common.validation.RequestValidator;
 @Order(3)
 public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 
-	@Autowired
-	private MerchantRepository merRepo;
-
 	@Override
 	public void validate(Invoice invoice) {
-		Merchant merchant = merRepo.findOne(invoice.getMerchant());
-		List<MerchantCustomParam> merchantCustomParams = merchant.getSetting().getCustomParams();
+		List<MerchantCustomParam> merchantCustomParams = invoice.getInvoiceSetting().getCustomParams();
 		for (MerchantCustomParam mcp : merchantCustomParams) {
 			boolean mandatoryParamMissing = true;
 			for (InvoiceCustomParam icp : invoice.getCustomParams()) {
@@ -39,7 +32,7 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 				} else {
 					mandatoryParamMissing = false;
 				}
-				if(CommonUtil.isNull(icp.getParamValue())) {
+				if (CommonUtil.isNull(icp.getParamValue())) {
 					icp.setParamValue("");
 				}
 				icp.setInvoice(invoice);

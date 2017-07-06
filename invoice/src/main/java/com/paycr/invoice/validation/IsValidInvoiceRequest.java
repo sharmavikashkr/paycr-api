@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.InvoiceSettingRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
@@ -32,6 +34,9 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	private InvoiceRepository invRepo;
 
 	@Autowired
+	private InvoiceSettingRepository invSetRepo;
+
+	@Autowired
 	private HmacSignerUtil hmacSigner;
 
 	@Override
@@ -39,6 +44,11 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		invoice.setMerchant(merchant.getId());
+		InvoiceSetting invoiceSetting = invSetRepo.findOne(invoice.getInvoiceSettingId());
+		invoice.setInvoiceSetting(invoiceSetting);
+		if(invoiceSetting.getMerchant().getId() != merchant.getId()) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Invoice Setting Id");
+		}
 		if (CommonUtil.isNull(invoice.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
 		}

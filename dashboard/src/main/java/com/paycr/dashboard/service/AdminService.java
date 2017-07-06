@@ -9,16 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
-import com.paycr.common.data.domain.MerchantSetting;
 import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.Notification;
+import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.domain.SubscriptionMode;
 import com.paycr.common.data.domain.UserRole;
+import com.paycr.common.data.repository.InvoiceSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
@@ -42,6 +44,9 @@ public class AdminService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private InvoiceSettingRepository invSetRepo;
 
 	@Autowired
 	private SubscriptionRepository subsRepo;
@@ -106,16 +111,22 @@ public class AdminService {
 		merPricings.add(merPricing);
 		merchant.setPricings(merPricings);
 
-		MerchantSetting setting = new MerchantSetting();
-		setting.setSendEmail(true);
-		setting.setSendSms(false);
-		setting.setExpiryDays(7);
-		setting.setRzpMerchantId("");
-		setting.setRzpKeyId("");
-		setting.setRzpSecretId("");
-		merchant.setSetting(setting);
+		PaymentSetting paymentSetting = new PaymentSetting();
+		paymentSetting.setRzpMerchantId("");
+		paymentSetting.setRzpKeyId("");
+		paymentSetting.setRzpSecretId("");
+		merchant.setPaymentSetting(paymentSetting);
 
 		merRepo.save(merchant);
+
+		InvoiceSetting invoiceSetting = new InvoiceSetting();
+		invoiceSetting.setName("DEFAULT");
+		invoiceSetting.setSendEmail(true);
+		invoiceSetting.setSendSms(false);
+		invoiceSetting.setExpiryDays(7);
+		invoiceSetting.setMerchant(merchant);
+		
+		invSetRepo.save(invoiceSetting);
 
 		subs.setMerchant(merchant);
 		subsRepo.save(subs);

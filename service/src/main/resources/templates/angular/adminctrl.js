@@ -9,7 +9,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	}
 	$scope.patterns = {
 		"paramNamePattern" : "\\w{1,10}",
-		"namePattern" : "[0-9a-zA-Z_- ]{1,50}",
+		"namePattern" : "[0-9a-zA-Z_\\- ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
@@ -20,14 +20,14 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-06-30"
+		"createdTo" : "2017-12-31"
 	}
 	$scope.searchInvoiceReq = {
 		"invoiceCode" : "",
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-06-30"
+		"createdTo" : "2017-12-31"
 	}
 	$scope.newsubsmode = {
 		"name" : "",
