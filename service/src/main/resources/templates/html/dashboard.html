@@ -16,7 +16,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
 	<script src="/angular/merchantctrl.js"></script>
 </head>
-<body ng-app="payCrApp" ng-controller="MerchantController" ng-cloak>
+<body ng-app="payCrApp" ng-controller="MerchantController" style="background:lightyellow;" ng-cloak>
     <div ng-init="fetchRoles()" id="wrapper">
     	<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible">
 		    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>
@@ -24,7 +24,7 @@
 		    	<strong>{{server.respStatus}}</strong>&nbsp;<span>{{server.respMsg}}</span>
 		    </div>
 		</div>
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom:0; background:darksalmon;">
             <div ng-init="fetchMerchant()" class="navbar-header">
                 <strong><a class="navbar-brand" href="/merchant">{{merchant.name}}</a></strong>
             </div>
@@ -70,7 +70,7 @@
                     </ul>
                 </li>
             </ul>
-            <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
