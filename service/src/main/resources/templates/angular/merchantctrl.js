@@ -86,7 +86,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(merchant) {
 			$scope.merchant = merchant.data;
-			$scope.refreshSetting(merchant.data.invoiceSettings[0]);
+			$scope.refreshSetting(merchant.data.invoiceSetting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -233,10 +233,10 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			},
 			data : $scope.newInvoiceSetting
 		}
-		$http(req).then(function(invoicesettings) {
-			$scope.merchant.invoiceSettings = invoicesettings.data;
-			$scope.refreshSetting(invoicesettings.data[0]);
-			$scope.serverMessage(invoicesettings);
+		$http(req).then(function(invoicesetting) {
+			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$scope.refreshSetting(invoicesetting.data);
+			$scope.serverMessage(invoicesetting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -251,50 +251,50 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			},
 			data : invoiceSetting
 		}
-		$http(req).then(function(invoicesettings) {
-			$scope.merchant.invoiceSettings = invoicesettings.data;
-			$scope.refreshSetting(invoicesettings.data[0]);
-			$scope.serverMessage(invoicesettings);
+		$http(req).then(function(invoicesetting) {
+			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$scope.refreshSetting(invoicesetting.data);
+			$scope.serverMessage(invoicesetting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.addParam = function(settingId) {
+	$scope.addParam = function() {
 		if(!$scope.addCustomParamForm.$valid) {
 			return false;
 		}
 		var req = {
 			method : 'POST',
-			url : "/merchant/customParam/new/" + settingId,
+			url : "/merchant/customParam/new/",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
 			data : $scope.newparam
 		}
-		$http(req).then(function(invoicesettings) {
-			$scope.merchant.invoiceSettings = invoicesettings.data;
-			$scope.refreshSetting(invoicesettings.data[0]);
+		$http(req).then(function(invoicesetting) {
+			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$scope.refreshSetting(invoicesetting.data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#createCustomParam')).modal('hide');
 	}
-	$scope.deleteParam = function(settingId, paramId, paramName) {
+	$scope.deleteParam = function(paramId, paramName) {
 		if (!confirm('Delete ' + paramName + ' ?')) {
 			return false;
 		}
 		var req = {
 			method : 'GET',
-			url : "/merchant/customParam/delete/" + settingId + "/" + paramId,
+			url : "/merchant/customParam/delete/" + paramId,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			}
 		}
-		$http(req).then(function(invoicesettings) {
-			$scope.merchant.invoiceSettings = invoicesettings.data;
-			$scope.refreshSetting(invoicesettings.data[0]);
+		$http(req).then(function(invoicesetting) {
+			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$scope.refreshSetting(invoicesetting.data[0]);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

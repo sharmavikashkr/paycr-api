@@ -13,7 +13,6 @@ import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.InvoiceSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -24,9 +23,6 @@ public class MerchantService {
 
 	@Autowired
 	private MerchantRepository merRepo;
-
-	@Autowired
-	private InvoiceSettingRepository invSetRepo;
 
 	@Autowired
 	private InvoiceRepository invRepo;
@@ -50,8 +46,8 @@ public class MerchantService {
 		merRepo.save(merchant);
 	}
 
-	public void newCustomParam(Integer settingId, MerchantCustomParam customParam) {
-		InvoiceSetting invoiceSetting = invSetRepo.findOne(settingId);
+	public void newCustomParam(Merchant merchant, MerchantCustomParam customParam) {
+		InvoiceSetting invoiceSetting = merchant.getInvoiceSetting();
 		List<MerchantCustomParam> customParams = invoiceSetting.getCustomParams();
 		if (CommonUtil.isNull(customParam) || CommonUtil.isEmpty(customParam.getParamName())
 				|| CommonUtil.isNull(customParam.getProvider())) {
@@ -67,11 +63,11 @@ public class MerchantService {
 		}
 		customParams.add(customParam);
 		customParam.setInvoiceSetting(invoiceSetting);
-		invSetRepo.save(invoiceSetting);
+		merRepo.save(merchant);
 	}
 
-	public void deleteCustomParam(Integer settingId, Integer id) {
-		InvoiceSetting invoiceSetting = invSetRepo.findOne(settingId);
+	public void deleteCustomParam(Merchant merchant, Integer id) {
+		InvoiceSetting invoiceSetting = merchant.getInvoiceSetting();
 		List<MerchantCustomParam> customParams = invoiceSetting.getCustomParams();
 		boolean found = false;
 		for (MerchantCustomParam param : customParams) {
@@ -85,15 +81,16 @@ public class MerchantService {
 		if (!found) {
 			throw new PaycrException(Constants.FAILURE, "Custom Param does not exists");
 		}
-		invSetRepo.save(invoiceSetting);
+		merRepo.save(merchant);
 	}
 
 	public void updateInvoiceSetting(Merchant merchant, InvoiceSetting updatedSetting) {
-		updatedSetting.setMerchant(merchant);
-		for(MerchantCustomParam mcp : updatedSetting.getCustomParams()) {
+		updatedSetting.setId(merchant.getInvoiceSetting().getId());
+		merchant.setInvoiceSetting(updatedSetting);
+		for (MerchantCustomParam mcp : updatedSetting.getCustomParams()) {
 			mcp.setInvoiceSetting(updatedSetting);
 		}
-		invSetRepo.save(updatedSetting);
+		merRepo.save(merchant);
 	}
 
 	public void updatePaymentSetting(Merchant merchant, PaymentSetting updatedSetting) {

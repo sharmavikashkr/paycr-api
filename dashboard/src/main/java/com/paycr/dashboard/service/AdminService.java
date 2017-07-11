@@ -20,7 +20,6 @@ import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.domain.SubscriptionMode;
 import com.paycr.common.data.domain.UserRole;
-import com.paycr.common.data.repository.InvoiceSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
@@ -44,9 +43,6 @@ public class AdminService {
 
 	@Autowired
 	private MerchantRepository merRepo;
-
-	@Autowired
-	private InvoiceSettingRepository invSetRepo;
 
 	@Autowired
 	private SubscriptionRepository subsRepo;
@@ -117,16 +113,13 @@ public class AdminService {
 		paymentSetting.setRzpSecretId("");
 		merchant.setPaymentSetting(paymentSetting);
 
-		merRepo.save(merchant);
-
 		InvoiceSetting invoiceSetting = new InvoiceSetting();
-		invoiceSetting.setName("DEFAULT");
 		invoiceSetting.setSendEmail(true);
 		invoiceSetting.setSendSms(false);
 		invoiceSetting.setExpiryDays(7);
-		invoiceSetting.setMerchant(merchant);
-		
-		invSetRepo.save(invoiceSetting);
+		merchant.setInvoiceSetting(invoiceSetting);
+
+		merRepo.save(merchant);
 
 		subs.setMerchant(merchant);
 		subsRepo.save(subs);

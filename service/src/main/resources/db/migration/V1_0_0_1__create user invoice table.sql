@@ -56,7 +56,6 @@ CREATE TABLE if not exists pc_invoice(
 	expiry timestamp NOT NULL,
 	consumer_id int REFERENCES pc_consumer,
 	merchant_pricing_id int REFERENCES pc_merchant_pricing,
-	invoice_setting_id int REFERENCES pc_invoice_setting,
 	payment_id int REFERENCES pc_payment,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL

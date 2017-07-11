@@ -1,3 +1,4 @@
+
 CREATE TABLE if not exists pc_consumer (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -21,6 +22,13 @@ CREATE TABLE if not exists pc_payment_setting (
 	rzp_secret_id varchar(30) DEFAULT NULL
 );
 
+CREATE TABLE if not exists pc_invoice_setting (
+	id SERIAL PRIMARY KEY NOT NULL,
+	send_email boolean NOT NULL,
+	send_sms boolean NOT NULL,
+	expiry_days int NOT NULL
+);
+
 CREATE TABLE if not exists pc_merchant (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -37,16 +45,8 @@ CREATE TABLE if not exists pc_merchant (
     country varchar(50) DEFAULT NULL,
     pincode varchar(10) DEFAULT NULL,
     payment_setting_id int REFERENCES pc_payment_setting,
+	invoice_setting_id int REFERENCES pc_invoice_setting,
     active boolean NOT NULL
-);
-
-CREATE TABLE if not exists pc_invoice_setting (
-	id SERIAL PRIMARY KEY NOT NULL,
-	name varchar(50) DEFAULT NULL,
-	send_email boolean NOT NULL,
-	send_sms boolean NOT NULL,
-	expiry_days int NOT NULL,
-	merchant_id int REFERENCES pc_merchant
 );
 
 CREATE TABLE if not exists pc_pricing (

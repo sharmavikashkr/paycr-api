@@ -125,12 +125,12 @@ public class MerchantController {
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
 	@RequestMapping("/invoicesetting/update")
-	public List<InvoiceSetting> updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting,
+	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting,
 			HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.updateInvoiceSetting(merchant, invoiceSetting);
-			return merchant.getInvoiceSettings();
+			return merchant.getInvoiceSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -139,13 +139,12 @@ public class MerchantController {
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
-	@RequestMapping("/customParam/new/{settingId}")
-	public List<InvoiceSetting> newCustomParam(@PathVariable Integer settingId,
-			@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
+	@RequestMapping("/customParam/new")
+	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.newCustomParam(settingId, customParam);
-			return merchant.getInvoiceSettings();
+			merSer.newCustomParam(merchant, customParam);
+			return merchant.getInvoiceSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -154,13 +153,12 @@ public class MerchantController {
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
-	@RequestMapping("/customParam/delete/{settingId}/{id}")
-	public List<InvoiceSetting> deleteCustomParam(@PathVariable Integer settingId, @PathVariable Integer id,
-			HttpServletResponse response) {
+	@RequestMapping("/customParam/delete/{id}")
+	public InvoiceSetting deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.deleteCustomParam(settingId, id);
-			return merchant.getInvoiceSettings();
+			merSer.deleteCustomParam(merchant, id);
+			return merchant.getInvoiceSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
