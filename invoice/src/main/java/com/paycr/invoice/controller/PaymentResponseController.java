@@ -25,7 +25,7 @@ public class PaymentResponseController {
 		try {
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			Merchant merchant = merRepo.findOne(invoice.getMerchant());
-			ModelAndView mv = new ModelAndView("html/response");
+			ModelAndView mv = new ModelAndView("html/inv-response");
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
 			return mv;

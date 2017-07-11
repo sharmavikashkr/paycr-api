@@ -90,6 +90,9 @@ public class MerchantService {
 
 	public void updateInvoiceSetting(Merchant merchant, InvoiceSetting updatedSetting) {
 		updatedSetting.setMerchant(merchant);
+		for(MerchantCustomParam mcp : updatedSetting.getCustomParams()) {
+			mcp.setInvoiceSetting(updatedSetting);
+		}
 		invSetRepo.save(updatedSetting);
 	}
 
