@@ -1,0 +1,60 @@
+<div>
+	<br>
+	<div class="row text-center">
+		<div class="col-md-10 col-md-offset-1">
+			<h4>My Subscriptions</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center"><strong>Start Date</strong></td>
+						<td class="text-center"><strong>End Date</strong></td>
+						<td class="text-center"><strong>Used (Limit)</strong></td>
+						<td class="text-center"><strong>Amount Limits</strong></td>
+					</tr>
+				</thead>
+				<tbody id="itemBody">
+					<tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" title="{{merpricing.status}}">
+						<td class="text-center">{{merpricing.pricing.name}}</td>
+						<td class="text-center">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+						<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
+						<td class="text-center">{{merpricing.invNo}} ({{merpricing.pricing.invoiceLimit}})</td>
+						<td class="text-center">&#8377; {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<hr>
+	<div class="row text-center">
+		<div class="col-md-10 col-md-offset-1">
+			<h4>Buy new Subscription</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center"><strong>Duration</strong></td>
+						<td class="text-center"><strong>Start Amount</strong></td>
+						<td class="text-center"><strong>End Amount</strong></td>
+						<td class="text-center"><strong>Limit</strong></td>
+						<td class="text-center"><strong>Rate</strong></td>
+						<td class="text-center"><strong>Action</strong></td>
+					</tr>
+				</thead>
+				<tbody id="itemBody">
+					<tr ng-repeat="pricing in pricings" ng-if="pricing.active">
+						<td class="text-center">{{pricing.name}}</td>
+						<td class="text-center">{{pricing.duration}}</td>
+						<td class="text-center">{{pricing.startAmount}}</td>
+						<td class="text-center">{{pricing.endAmount}}</td>
+						<td class="text-center">{{pricing.invoiceLimit}}</td>
+						<td class="text-center">{{pricing.rate}}</td>
+						<td class="text-center">
+							<a href="/subscription/new/online/{{pricing.id}}" class="btn btn-xs btn-success" target="_blank">BUY</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

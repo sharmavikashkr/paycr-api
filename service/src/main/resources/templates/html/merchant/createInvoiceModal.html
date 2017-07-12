@@ -1,0 +1,175 @@
+<div id="createInvoice" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content" style="min-width: 160%; margin-left: -30%;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">
+					<span class="col-xs-6 col-md-6 col-lg-3">Invoice for purchase </span>
+				</h4>
+			</div>
+			<div class="modal-body" style="padding: 20px;">
+				<form name="createInvoiceForm">
+					<div class="row">
+						<div class="col-xs-12 col-md-6 col-lg-5">
+							<div class="panel panel-default height">
+								<div class="panel-heading">Consumer Details</div>
+								<div class="panel-body">
+									<div ng-class="(createInvoiceForm.conname.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Name:</label>&nbsp;
+										<input ng-model="newinvoice.consumer.name" name="conname" class="form-control" placeholder="Consumer Name" type="text" ng-pattern="patterns.namePattern" required autofocus />
+									</div>
+									<div ng-class="(createInvoiceForm.conemail.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Email:</label>&nbsp;
+										<input ng-model="newinvoice.consumer.email" name="conemail" class="form-control" placeholder="Consumer Email" type="email" ng-pattern="patterns.emailPattern" required />
+									</div>
+									<div ng-class="(createInvoiceForm.conmobile.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Mobile:</label>&nbsp;
+										<input ng-model="newinvoice.consumer.mobile" name="conmobile" class="form-control" placeholder="Consumer Mobile" type="number" ng-pattern="patterns.mobilePattern" required />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-6 col-lg-3">
+							<div class="panel panel-default height">
+								<div class="panel-heading">Invoice Preferences</div>
+								<div class="panel-body">
+									<input type="checkbox" ng-model="newinvoice.sendEmail">&nbsp;<strong>Send Email</strong><br>
+									<input type="checkbox" ng-model="newinvoice.sendSms">&nbsp;<strong>Send Sms</strong><br>
+									<hr>
+									<div ng-class="(createInvoiceForm.expiresIn.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Expires in (days):</label>
+										<input class="form-control" ng-model="newinvoice.expiresIn" name="expiresIn" style="width: 100px;" type="number" ng-pattern="patterns.numberPattern" required />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-6 col-lg-4">
+							<div class="panel panel-default height">
+								<div class="panel-heading">Custom Params</div>
+								<div class="panel-body">
+									<div ng-class="(createInvoiceForm.param{{$index}}.$valid)?'':'has-error'" ng-repeat="param in newinvoice.customParams" class="form-group">
+										<label ng-if="param.provider != 'CONSUMER'" class="control-label">{{param.paramName}}:</label>
+										<input ng-if="param.provider == 'MERCHANT'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value" ng-pattern="patterns.namePattern" required />
+										<input ng-if="param.provider == 'OPTIONAL'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h5 class="text-center">
+										<strong>Order summary</strong>
+									</h5>
+								</div>
+								<div class="panel-body">
+									<div class="table-responsive">
+										<table id="itemsTable" class="table table-bordered">
+											<thead>
+												<tr>
+													<td class="text-center"><strong>Actions</strong></td>
+													<td class="text-center"><strong>Item Name</strong></td>
+													<td class="text-center"><strong>Item Rate</strong></td>
+													<td class="text-center"><strong>Item Quantity</strong></td>
+													<td class="text-right"><strong>Total</strong></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="item in newinvoice.items">
+													<td>
+														<div class="panel text-center" style="width: 65px;">
+															<button ng-click="deleteItem($index)" type="button" class="col-lg-6 btn btn-danger btn-circle btn-md">
+																<i class="fa fa-minus"></i>
+															</button>
+															<button ng-click="addItem()" type="button" class="col-lg-6 btn btn-success btn-circle btn-md">
+																<i class="fa fa-plus"></i>
+															</button>
+														</div>
+													</td>
+													<td>
+														<div ng-class="(createInvoiceForm.itemName{{$index}}.$valid)?'':'has-error'" class="form-group">
+															<input class="form-control text-center" ng-model="item.name" name="itemName{{$index}}" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
+														</div>
+													</td>
+													<td>
+														<div class="input-group">
+															<div class="input-group-addon">&#8377;</div>
+															<div class="form-group">
+																<input class="form-control text-center" ng-change="calculateTotal()" ng-model="item.rate" placeholder="2000.00" type="number" step="1.00" required />
+															</div>
+														</div>
+													</td>
+													<td>
+														<div class="form-group">
+															<input class="form-control text-center" ng-change="calculateTotal()" ng-model="item.quantity" placeholder="2" type="number" required />
+														</div>
+													</td>
+													<td>
+														<div class="input-group">
+															<div class="input-group-addon">&#8377;</div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="item.price" placeholder="4000.00" type="number" step="1.00" readonly />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Shipping</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon">&#8377;</div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-change="calculateTotal()" ng-model="newinvoice.shipping" placeholder="400.00" type="number" step="1.00" />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Discount</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon">&#8377;</div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-change="calculateTotal()" ng-model="newinvoice.discount" placeholder="40.00" type="number" step="1.00" />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Total</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon">&#8377;</div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="newinvoice.payAmount" placeholder="4360.00" type="number" step="1.00" readonly required />
+															</div>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createInvoice()">Create</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

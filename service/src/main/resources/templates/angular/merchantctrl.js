@@ -75,6 +75,42 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.server.respMsg = data.headers('error_message');
 		}
 	}
+	$scope.prepare = function() {
+		$scope.fetchMerchant();
+		$scope.fetchUser();
+		$scope.fetchRoles();
+		$scope.fetchNotifications();
+		$scope.fetchEnums();
+	}
+	$scope.fetchEnums = function() {
+		var req = {
+			method : 'GET',
+			url : "/enum/providers",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(providers) {
+			$scope.paramProviders = providers.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+				method : 'GET',
+				url : "/enum/paymodes",
+				headers : {
+					"Authorization" : "Bearer "
+							+ $cookies.get("access_token")
+				}
+			}
+			$http(req).then(function(payModes) {
+				$scope.payModes = payModes.data;
+			}, function(data) {
+				$scope.serverMessage(data);
+			});
+	}
 	$scope.fetchMerchant = function() {
 		var req = {
 			method : 'GET',
@@ -91,6 +127,21 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchUser = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/user",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(user) {
+			$scope.user = user.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.fetchRoles = function() {
 		var req = {
 			method : 'GET',
@@ -102,6 +153,21 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(roles) {
 			$scope.roles = roles.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.fetchNotifications = function() {
+		var req = {
+			method : 'GET',
+			url : "/merchant/notifications",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(notifications) {
+			$scope.notices = notifications.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -122,7 +188,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.createUser = function() {
-		if(!$scope.addUserForm.$valid) {
+		if(!this.addUserForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -132,7 +198,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newuser
+			data : this.newuser
 		}
 		$http(req).then(function(data) {
 			$scope.serverMessage(data);
@@ -260,7 +326,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.addParam = function() {
-		if(!$scope.addCustomParamForm.$valid) {
+		if(!this.addCustomParamForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -270,7 +336,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newparam
+			data : this.newparam
 		}
 		$http(req).then(function(invoicesetting) {
 			$scope.merchant.invoiceSetting = invoicesetting.data;
@@ -295,21 +361,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$http(req).then(function(invoicesetting) {
 			$scope.merchant.invoiceSetting = invoicesetting.data;
 			$scope.refreshSetting(invoicesetting.data[0]);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchNotifications = function() {
-		var req = {
-			method : 'GET',
-			url : "/merchant/notifications",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(notifications) {
-			$scope.notices = notifications.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -370,7 +421,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				- parseFloat($scope.newinvoice.discount);
 	}
 	$scope.createInvoice = function() {
-		if(!$scope.createInvoiceForm.$valid) {
+		if(!this.createInvoiceForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -469,10 +520,10 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		angular.element(document.querySelector('#refundInvoice')).modal('hide');
 	}
 	$scope.markPaidInvoice = function(invoiceCode) {
-		if(!$scope.markPaidForm.$valid) {
+		if(!this.markPaidForm.$valid) {
 			return false;
 		}
-		$scope.markpaid.invoiceCode = invoiceCode;
+		this.markpaid.invoiceCode = invoiceCode;
 		var req = {
 			method : 'POST',
 			url : "/invoice/markpaid",
@@ -480,7 +531,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.markpaid
+			data : this.markpaid
 		}
 		$http(req).then(function(data) {
 			$scope.searchInvoice();

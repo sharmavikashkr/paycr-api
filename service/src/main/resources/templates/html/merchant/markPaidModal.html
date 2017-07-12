@@ -1,0 +1,54 @@
+<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" id="markPaidInvoice" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">
+					<span>Mark Paid : Invoice# <strong>{{invoiceInfo.invoiceCode}}</strong></span>
+				</h4>
+			</div>
+			<div class="modal-body" style="padding: 20px;">
+				<form name="markPaidForm">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<td>
+											<div ng-class="(markPaidForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Payment Reference Number</label>
+												<input name="paymentRefNo" class="form-control" placeholder="Payment Ref No" ng-model="markpaid.paymentRefNo" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(markPaidForm.method.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Payment Method</label>
+												<input name="method" class="form-control" placeholder="Method" ng-model="markpaid.method" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="control-label">Pay Mode</label>
+												<select class="form-control" name="payMode" ng-model="markpaid.payMode">
+													<option ng-repeat="payMode in payModes" ng-if="payMode != 'PAYCR'" value="{{payMode}}" selected="selected">{{payMode}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="markPaidInvoice(invoiceInfo.invoiceCode)">Mark Paid</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

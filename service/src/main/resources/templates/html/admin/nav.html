@@ -1,0 +1,59 @@
+<nav class="navbar navbar-static-top" role="navigation"
+	style="margin-bottom: 0; background: darksalmon;">
+	<div class="navbar-header">
+		<strong><a class="navbar-brand" href="/admin">PayCr</a></strong>
+	</div>
+	<ul class="nav navbar-top-links navbar-right">
+		<li>
+			<div>
+				<strong>{{user.name}}</strong>
+			</div>
+		</li>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				<i class="fa fa-bell fa-fw"></i>
+				<i class="fa fa-caret-down"></i>
+			</a>
+			<ul class="dropdown-menu dropdown-alerts">
+				<li ng-repeat="notice in notices" class="panel">
+					<a href="#">
+						<div>
+							<i class="fa fa-comment fa-fw"></i> {{notice.subject}} <span class="pull-right text-muted small">{{notice.createdStr}}</span>
+						</div>
+						<hr style="margin: 0px;">
+						<div>
+							<p>{{notice.message}}</p>
+						</div>
+					</a>
+				</li>
+				<li class="divider"></li>
+				<li><a href="#">View all..</a></li>
+			</ul>
+		</li>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+				<i class="fa fa-user fa-fw"></i>
+				<i class="fa fa-caret-down"></i>
+			</a>
+			<ul class="dropdown-menu dropdown-user">
+				<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
+				<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
+				<li class="divider"></li>
+				<li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+			</ul>
+		</li>
+	</ul>
+	<div class="sidebar" role="navigation">
+		<div class="sidebar-nav navbar-collapse">
+			<ul class="nav" id="side-menu">
+				<li><a href="#" data-target="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a></li>
+				<li><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Invoices</a></li>
+				<li><a href="#" data-target="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a></li>
+				<li><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
+				<li ng-if="roles.indexOf('ROLE_ADMIN') > -1"><a href="#" data-target="#subscriptionSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Subscription Setting</a></li>
+				<li><a href="#" data-target="#accountSettingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
+				<li ng-if="roles.indexOf('ROLE_ADMIN') > -1"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> User Management</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>

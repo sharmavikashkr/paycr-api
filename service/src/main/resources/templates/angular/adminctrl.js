@@ -29,14 +29,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"createdFrom" : "2017-01-01",
 		"createdTo" : "2017-12-31"
 	}
-	$scope.newsubsmode = {
-		"name" : "",
-		"rzpMerchantId" : "",
-		"rzpKeyId" : "",
-		"rzpSecretId" : "",
-		"payType" : "",
-		"active" : true
-	}
 	$scope.newpricing = {
 		"name" : "",
 		"description" : "",
@@ -45,17 +37,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"endAmount" : 0,
 		"duration" : 0,
 		"rate" : 0
-	}
-	$scope.offlinesubs = {
-		"subscriptionModeId" : 0,
-		"pricingId" : 0,
-		"merchantId" : 0,
-		"paymentRefNo" : ""
-	}
-	$scope.newmerchant = {
-		"name" : "",
-		"email" : "",
-		"mobile" : ""
 	}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
@@ -76,6 +57,71 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.server.respStatus = "FAILURE!";
 			$scope.server.respMsg = data.headers('error_message');
 		}
+	}
+	$scope.prepare = function() {
+		$scope.fetchUser();
+		$scope.fetchRoles();
+		$scope.fetchNotifications();
+		$scope.fetchEnums();
+	}
+	$scope.fetchEnums = function() {
+		var req = {
+			method : 'GET',
+			url : "/enum/providers",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(providers) {
+			$scope.paramProviders = providers.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+				method : 'GET',
+				url : "/enum/paymodes",
+				headers : {
+					"Authorization" : "Bearer "
+							+ $cookies.get("access_token")
+				}
+			}
+			$http(req).then(function(payModes) {
+				$scope.payModes = payModes.data;
+			}, function(data) {
+				$scope.serverMessage(data);
+			});
+	}
+	$scope.fetchUser = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/user",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(user) {
+			$scope.user = user.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.fetchRoles = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/roles",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(roles) {
+			$scope.roles = roles.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 	$scope.fetchNotifications = function() {
 		var req = {
@@ -124,21 +170,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchRoles = function() {
-		var req = {
-			method : 'GET',
-			url : "/common/roles",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(roles) {
-			$scope.roles = roles.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
 	$scope.fetchMyUsers = function() {
 		var req = {
 			method : 'GET',
@@ -155,7 +186,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.createUser = function() {
-		if(!$scope.addUserForm.$valid) {
+		if(!this.addUserForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -165,7 +196,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newuser
+			data : this.newuser
 		}
 		$http(req).then(function(data) {
 			$scope.serverMessage(data);
@@ -207,7 +238,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.createPricing = function() {
-		if(!$scope.createPricingForm.$valid) {
+		if(!this.createPricingForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -259,7 +290,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.createSubsMode = function() {
-		if(!$scope.createSubsModeForm.$valid) {
+		if(!this.createSubsModeForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -269,7 +300,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newsubsmode
+			data : this.newsubsmode
 		}
 		$http(req).then(function(data) {
 			$scope.fetchSubsModes();
@@ -294,7 +325,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.createOfflineSubs = function(merchantId) {
-		$scope.offlinesubs.merchantId = merchantId;
+		this.offlinesubs.merchantId = merchantId;
 		var req = {
 			method : 'POST',
 			url : "/subscription/new/offline",
@@ -302,7 +333,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.offlinesubs
+			data : this.offlinesubs
 		}
 		$http(req).then(function(data) {
 			$scope.searchMerchant();
@@ -327,7 +358,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		});
 	}
 	$scope.createMerchant = function() {
-		if(!$scope.createMerchantForm.$valid) {
+		if(!this.createMerchantForm.$valid) {
 			return false;
 		}
 		var req = {
@@ -337,7 +368,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newmerchant
+			data : this.newmerchant
 		}
 		$http(req).then(function(data) {
 			$scope.searchMerchant();

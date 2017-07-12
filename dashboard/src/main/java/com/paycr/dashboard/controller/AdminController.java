@@ -25,7 +25,6 @@ import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.PayMode;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -71,10 +70,7 @@ public class AdminController {
 		if (!isAdmin) {
 			response.sendRedirect("/adminlogin");
 		}
-		PcUser user = secSer.findLoggedInUser(token);
 		ModelAndView mv = new ModelAndView("html/admin");
-		mv.addObject("user", user);
-		mv.addObject("payModes", PayMode.values());
 		return mv;
 	}
 

@@ -61,6 +61,14 @@ public class CommonController {
 
 	@Autowired
 	private UserRoleService urService;
+	
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@RequestMapping("/user")
+	public PcUser getUser() {
+		PcUser user = secSer.findLoggedInUser();
+		user.setPassword("");
+		return user;
+	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/pricings")

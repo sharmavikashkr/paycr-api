@@ -1,0 +1,91 @@
+<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" id="createPricing" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div id="newInvoice" class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Create New Pricing</h4>
+			</div>
+			<div class="modal-body" style="padding: 20px;">
+				<form name="createPricingForm">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.name.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Name</label>
+												<input class="form-control" ng-model="newpricing.name" name="name" placeholder="Pricing Name" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.description.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Description</label>
+												<input class="form-control" ng-model="newpricing.description" name="description" placeholder="Pricing Description" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.invoiceLimit.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Invoice Limit</label>
+												<input class="form-control" ng-model="newpricing.invoiceLimit" type="number" name="invoiceLimit" placeholder="Invoice limit" ng-pattern="patterns.numberPattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.startAmount.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Start Amount</label>
+												<div class="input-group">
+													<div class="input-group-addon">&#8377;</div>
+													<input class="form-control" ng-model="newpricing.startAmount" name="startAmount" type="number" placeholder="Start Amount" ng-pattern="patterns.amountPattern" required />
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.endAmount.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">End Amount</label>
+												<div class="input-group">
+													<div class="input-group-addon">&#8377;</div>
+													<input class="form-control" ng-model="newpricing.endAmount" name="endAmount" type="number" placeholder="End Amount" ng-pattern="patterns.amountPattern" required />
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.duration.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Duration (Days)</label>
+												<input class="form-control" ng-model="newpricing.duration" name="duration" type="number" placeholder="Duration" ng-pattern="patterns.numberPattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.rate.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Rate</label>
+												<div class="input-group">
+													<div class="input-group-addon">&#8377;</div>
+													<input class="form-control" ng-model="newpricing.rate" name="rate" type="number" placeholder="Rate" ng-pattern="patterns.amountPattern" required />
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createPricing()">Create</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,6 @@
+<div ng-class="(server.isSuccess)?'alert-success':'alert-danger'" ng-hide="server.hideMessage" id="serverRespAlert" class="alert alert-dismissible" style="margin-bottom:0px;">
+    <a href="#" ng-click="dismissServerAlert()" class="close" aria-label="close">&times;</a>
+    <div class="text-center">
+    	<strong>{{server.respStatus}}</strong>&nbsp;<span>{{server.respMsg}}</span>
+    </div>
+</div>

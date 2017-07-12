@@ -28,8 +28,6 @@ import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.ParamValueProvider;
-import com.paycr.common.type.PayMode;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.MerchantService;
 
@@ -64,11 +62,7 @@ public class MerchantController {
 		if (merchant == null) {
 			response.sendRedirect("/login");
 		}
-		PcUser user = secSer.findLoggedInUser(token);
 		ModelAndView mv = new ModelAndView("html/dashboard");
-		mv.addObject("user", user);
-		mv.addObject("providers", ParamValueProvider.values());
-		mv.addObject("payModes", PayMode.values());
 		return mv;
 	}
 

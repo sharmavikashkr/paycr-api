@@ -1,0 +1,50 @@
+<div id="createUser" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Create New User</h4>
+			</div>
+			<div class="modal-body" style="padding: 20px;">
+				<form name="addUserForm">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<td>
+											<div ng-class="(addUserForm.addUserName.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Name</label>
+												<input name="addUserName" class="form-control" placeholder="Name" ng-model="newuser.name" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(addUserForm.addUserEmail.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Email</label>
+												<input name="addUserEmail" class="form-control" placeholder="Email" ng-model="newuser.email" ng-pattern="patterns.emailPattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(addUserForm.addUserMobile.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Mobile</label>
+												<input name="addUserMobile" class="form-control" placeholder="Mobile" ng-model="newuser.mobile" ng-pattern="patterns.mobilePattern" required />
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createUser()">Add</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

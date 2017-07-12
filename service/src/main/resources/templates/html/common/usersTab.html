@@ -1,0 +1,43 @@
+<div>
+	<br>
+	<div class="row">
+		<div class="col-lg-2" style="float: right;">
+			<div class="row">
+				<button title="Create User" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createUser">
+					<i class="fa fa-plus"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row text-center">
+		<div class="col-md-10 col-md-offset-1">
+			<h4>My Users</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center"><strong>Email</strong></td>
+						<td class="text-center"><strong>Mobile</strong></td>
+						<td class="text-center"><strong>Actions</strong></td>
+					</tr>
+				</thead>
+				<tbody id="itemBody">
+					<tr ng-class="(myuser.active)?'success':'danger'" ng-repeat="myuser in myusers" title="{{myusers.active}}">
+						<td class="text-center">{{myuser.name}}</td>
+						<td class="text-center">{{myuser.email}}</td>
+						<td class="text-center">{{myuser.mobile}}</td>
+						<td class="text-center">
+							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button title="ACTIVATE" ng-if="!myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-success btn-xs">
+								<i class="fa fa-check"></i>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
