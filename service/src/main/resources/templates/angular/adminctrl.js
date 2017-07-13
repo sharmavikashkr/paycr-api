@@ -138,6 +138,12 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.updateInvoiceInfo = function(invoice) {
+		$scope.invoiceInfo = invoice;
+	}
+	$scope.updateOffSubsMerchant = function(merchant) {
+		$scope.offSubsmerchant = merchant;
+	}
 	$scope.searchMerchant = function() {
 		var req = {
 			method : 'POST',

@@ -157,12 +157,12 @@
 											<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
 												<div style="float: right;">
 													<button style="margin: 5px;" type="button"
-														ng-click="$parent.$parent.invoiceInfo = invoice"
+														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#invoiceinfo"
 														class="btn btn-default">Info</button>
 													<button style="margin: 5px;"
 														ng-if="invoice.status != 'PAID' && roles.indexOf('ROLE_MERCHANT') > -1"
-														ng-click="$parent.$parent.$parent.invoiceInfo = invoice"
+														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#markPaidInvoice"
 														type="button" class="btn btn-default">Mark Paid</button>
 													<button style="margin: 5px;"
@@ -179,7 +179,7 @@
 														type="button" class="btn btn-danger">Expire</button>
 													<button style="margin: 5px;"
 														ng-if="invoice.status == 'PAID' && roles.indexOf('ROLE_MERCHANT') > -1"
-														ng-click="$parent.$parent.$parent.invoiceInfo = invoice"
+														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#refundInvoice"
 														type="button" class="btn btn-default">Refund</button>
 												</div>

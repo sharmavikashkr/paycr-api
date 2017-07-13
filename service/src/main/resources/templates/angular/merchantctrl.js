@@ -380,6 +380,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.updateInvoiceInfo = function(invoice) {
+		$scope.invoiceInfo = invoice;
+	}
 	$scope.addItem = function() {
 		if ($scope.newinvoice.items.length < 5) {
 			$scope.newinvoice.items.push({

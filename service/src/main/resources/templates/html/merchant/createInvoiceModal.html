@@ -48,9 +48,9 @@
 								<div class="panel-heading">Custom Params</div>
 								<div class="panel-body">
 									<div ng-class="(createInvoiceForm.param{{$index}}.$valid)?'':'has-error'" ng-repeat="param in newinvoice.customParams" class="form-group">
-										<label ng-if="param.provider != 'CONSUMER'" class="control-label">{{param.paramName}}:</label>
-										<input ng-if="param.provider == 'MERCHANT'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value" ng-pattern="patterns.namePattern" required />
-										<input ng-if="param.provider == 'OPTIONAL'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="value" />
+										<label class="control-label">{{param.paramName}}:</label>
+										<input ng-if="param.provider == 'MERCHANT'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="{{param.provider}}" ng-pattern="patterns.namePattern" required />
+										<input ng-if="param.provider != 'MERCHANT'" ng-model="param.paramValue" name="param{{$index}}" class="form-control" placeholder="{{param.provider}}" />
 									</div>
 								</div>
 							</div>
