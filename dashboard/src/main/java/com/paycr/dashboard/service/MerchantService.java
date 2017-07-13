@@ -3,20 +3,22 @@ package com.paycr.dashboard.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Address;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
+import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
-import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
+import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.DateUtil;
 
 @Service
 public class MerchantService {
@@ -25,7 +27,16 @@ public class MerchantService {
 	private MerchantRepository merRepo;
 
 	@Autowired
-	private InvoiceRepository invRepo;
+	private NotificationRepository notiRepo;
+
+	public List<Notification> getNotifications(Merchant merchant) {
+		Pageable topFour = new PageRequest(0, 4);
+		List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(null, merchant.getId(), topFour);
+		for (Notification notice : notices) {
+			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
+		}
+		return notices;
+	}
 
 	public void updateAccount(Merchant merchant, Merchant mer) {
 		merchant.setName(mer.getName());
@@ -99,15 +110,6 @@ public class MerchantService {
 		paySet.setRzpMerchantId(updatedSetting.getRzpMerchantId());
 		paySet.setRzpSecretId(updatedSetting.getRzpSecretId());
 		merRepo.save(merchant);
-	}
-
-	public List<Invoice> myInvoices(PcUser user) {
-		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(user.getEmail(), user.getMobile());
-		for (Invoice invoice : myInvoices) {
-			Merchant invMer = merRepo.findOne(invoice.getMerchant());
-			invoice.setMerchantName(invMer.getName());
-		}
-		return myInvoices;
 	}
 
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,8 @@ import com.paycr.common.type.Role;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
+import com.paycr.dashboard.validation.MerchantValidator;
+import com.paycr.dashboard.validation.PricingValidator;
 
 @Service
 public class AdminService {
@@ -68,8 +72,17 @@ public class AdminService {
 	@Autowired
 	private SubscriptionModeRepository subsModeRepo;
 
-	public void createMerchant(Merchant merchant) {
+	@Autowired
+	private MerchantValidator merValidator;
 
+	@Autowired
+	private PricingValidator pricingValidator;
+
+	@Autowired
+	private PricingRepository pricingRepo;
+
+	public void createMerchant(Merchant merchant) {
+		merValidator.validate(merchant);
 		Date timeNow = new Date();
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
 				String.valueOf(timeNow.getTime()));
@@ -152,6 +165,30 @@ public class AdminService {
 		noti.setCreated(timeNow);
 		noti.setRead(false);
 		notiRepo.save(noti);
+	}
+
+	public List<Notification> getNotifications(PcUser user) {
+		Pageable topFour = new PageRequest(0, 4);
+		List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(user.getId(), null, topFour);
+		for (Notification notice : notices) {
+			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
+		}
+		return notices;
+	}
+
+	public void createPricing(Pricing pricing) {
+		pricingValidator.validate(pricing);
+		pricingRepo.save(pricing);
+	}
+
+	public void togglePricing(Integer pricingId) {
+		Pricing pri = pricingRepo.findOne(pricingId);
+		if (pri.isActive()) {
+			pri.setActive(false);
+		} else {
+			pri.setActive(true);
+		}
+		pricingRepo.save(pri);
 	}
 
 }

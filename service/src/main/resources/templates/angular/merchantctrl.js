@@ -260,7 +260,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.fetchMyInvoices = function() {
 		var req = {
 			method : 'GET',
-			url : "/merchant/invoices/",
+			url : "/common/invoices/",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")

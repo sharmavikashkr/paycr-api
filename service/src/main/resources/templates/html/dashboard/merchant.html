@@ -21,8 +21,8 @@
     	<div ng-include="'/html/common/alert'"></div>
         <div ng-include="'/html/merchant/nav'"></div>
         <div class="tab-content" id="page-wrapper">
-	        <div id="dashboardTab" class="tab-pane active" ng-include="'/html/merchant/dashboardTab'"></div>
-	        <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
+	        <div ng-init="searchInvoice()" id="dashboardTab" class="tab-pane active" ng-include="'/html/merchant/dashboardTab'"></div>
+	        <div ng-init="fetchMyInvoices()" id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
 	        <div id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
 	        <div id="accountTab" class="tab-pane fade" ng-include="'/html/merchant/accountTab'"></div>
 	        <div ng-init="fetchPricings()" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>

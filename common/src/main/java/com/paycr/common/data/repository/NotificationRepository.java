@@ -11,7 +11,7 @@ import com.paycr.common.data.domain.Notification;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 
-	public List<Notification> findByUserIdOrMerchantIdOrderByIdDesc(Integer userId, Integer merchantId,
+	public List<Notification> findByUserIdAndMerchantIdOrderByIdDesc(Integer userId, Integer merchantId,
 			Pageable pageable);
 
 }

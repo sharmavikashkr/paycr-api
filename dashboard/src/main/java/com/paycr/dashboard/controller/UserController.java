@@ -1,9 +1,7 @@
 package com.paycr.dashboard.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -17,15 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
-import com.paycr.common.data.domain.UserRole;
-import com.paycr.common.data.repository.NotificationRepository;
-import com.paycr.common.data.repository.ResetPasswordRepository;
-import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.ResetStatus;
-import com.paycr.common.type.Role;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.UserService;
@@ -34,19 +26,10 @@ import com.paycr.dashboard.service.UserService;
 public class UserController {
 
 	@Autowired
-	private UserRepository userRepo;
-
-	@Autowired
 	private BCryptPasswordEncoder bcPassEncode;
 
 	@Autowired
-	private ResetPasswordRepository resetRepo;
-
-	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private NotificationRepository notiRepo;
 
 	@RequestMapping("/")
 	public ModelAndView index() {
@@ -56,14 +39,14 @@ public class UserController {
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletResponse response) {
 		response.addCookie(new Cookie("access_token", ""));
-		ModelAndView mv = new ModelAndView("html/login");
+		ModelAndView mv = new ModelAndView("html/dashboard/login");
 		return mv;
 	}
 
 	@RequestMapping("/adminlogin")
 	public ModelAndView adminlogin(HttpServletResponse response) {
 		response.addCookie(new Cookie("access_token", ""));
-		ModelAndView mv = new ModelAndView("html/adminlogin");
+		ModelAndView mv = new ModelAndView("html/dashboard/adminlogin");
 		return mv;
 	}
 
@@ -86,42 +69,17 @@ public class UserController {
 
 	@RequestMapping(value = "/user/admin", method = RequestMethod.GET)
 	public void createUser(HttpServletResponse response) throws IOException {
-		Date timeNow = new Date();
-		if (CommonUtil.isNotNull(userRepo.findByEmail("admin@paycr.in"))) {
-			return;
-		}
-		PcUser user = new PcUser();
-		user.setCreated(timeNow);
-		user.setName("Paycr Admin");
-		user.setEmail("admin@paycr.in");
-		user.setPassword(bcPassEncode.encode("password@123"));
-		user.setMobile("9977553311");
-		List<UserRole> userRoles = new ArrayList<UserRole>();
-		UserRole userRole = new UserRole();
-		userRole.setRole(Role.ROLE_ADMIN);
-		userRole.setPcUser(user);
-		userRoles.add(userRole);
-		user.setUserRoles(userRoles);
-		user.setActive(true);
-		userRepo.save(user);
-
-		Notification noti = new Notification();
-		noti.setUserId(user.getId());
-		noti.setMessage("Hope you manage the product well :)");
-		noti.setSubject("Welcome to Paycr");
-		noti.setCreated(timeNow);
-		noti.setRead(false);
-		notiRepo.save(noti);
+		userService.createSuperAdmin();
 	}
 
 	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)
 	public void sendResetPassword(@RequestParam("email") String userEmail, HttpServletResponse response)
 			throws IOException {
+		PcUser user = userService.getUserByEmail(userEmail);
 		Date timeNow = new Date();
-		PcUser user = userRepo.findByEmail(userEmail);
 		if (CommonUtil.isNotNull(user)) {
 			Date yesterday = DateUtil.addDays(timeNow, -1);
-			if (resetRepo.findResetCount(yesterday, timeNow) >= 3) {
+			if (userService.findResetCount(userEmail, yesterday, timeNow) >= 3) {
 				response.sendRedirect("/forgotPassword?error=2");
 			} else {
 				userService.sendResetLink(user);
@@ -134,13 +92,13 @@ public class UserController {
 
 	@RequestMapping("/resetPassword/{resetCode}")
 	public ModelAndView resetPasswordGet(@PathVariable String resetCode) {
-		ResetPassword resetPassword = resetRepo.findByResetCode(resetCode);
+		ResetPassword resetPassword = userService.getResetPassword(resetCode);
 		ModelAndView mvError = validateResetRequest(resetPassword);
 		if (CommonUtil.isNotNull(mvError)) {
 			return mvError;
 		}
 		resetPassword.setStatus(ResetStatus.INTITIATED);
-		resetRepo.save(resetPassword);
+		userService.saveResetPassword(resetPassword);
 		ModelAndView mv = new ModelAndView("html/reset-password");
 		mv.addObject("email", resetPassword.getEmail());
 		mv.addObject("resetCode", resetCode);
@@ -149,17 +107,17 @@ public class UserController {
 
 	@RequestMapping(value = "/resetPassword/{resetCode}", method = RequestMethod.POST)
 	public ModelAndView resetPasswordPost(@PathVariable String resetCode, @RequestParam("password") String password) {
-		ResetPassword resetPassword = resetRepo.findByResetCode(resetCode);
+		ResetPassword resetPassword = userService.getResetPassword(resetCode);
 		ModelAndView mvError = validateResetRequest(resetPassword);
 		if (CommonUtil.isNotNull(mvError)) {
 			return mvError;
 		}
-		PcUser user = userRepo.findByEmail(resetPassword.getEmail());
+		PcUser user = userService.getUserByEmail(resetPassword.getEmail());
 		user.setPassword(bcPassEncode.encode(password));
-		userRepo.save(user);
+		userService.saveUser(user);
 		resetPassword.setStatus(ResetStatus.SUCCESS);
-		resetRepo.save(resetPassword);
-		return new ModelAndView("html/login");
+		userService.saveResetPassword(resetPassword);
+		return new ModelAndView("html/dashboard/login");
 	}
 
 	private ModelAndView validateResetRequest(ResetPassword resetPassword) {

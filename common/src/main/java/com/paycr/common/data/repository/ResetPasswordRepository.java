@@ -14,7 +14,7 @@ public interface ResetPasswordRepository extends JpaRepository<ResetPassword, In
 
 	public ResetPassword findByResetCode(String resetCode);
 
-	@Query("SELECT COUNT(rp) FROM ResetPassword rp WHERE (rp.created BETWEEN :start AND :end)")
-	public int findResetCount(@Param("start") Date start, @Param("end") Date end);
+	@Query("SELECT COUNT(rp) FROM ResetPassword rp WHERE (rp.created BETWEEN :start AND :end) AND rp.email = :email")
+	public int findResetCount(@Param("email") String email, @Param("start") Date start, @Param("end") Date end);
 
 }

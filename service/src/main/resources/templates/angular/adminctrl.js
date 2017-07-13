@@ -138,6 +138,21 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchMyInvoices = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/invoices/",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(myInvoices) {
+			$scope.myinvoices = myInvoices.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.updateInvoiceInfo = function(invoice) {
 		$scope.invoiceInfo = invoice;
 	}
