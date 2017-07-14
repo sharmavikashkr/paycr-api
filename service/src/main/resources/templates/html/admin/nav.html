@@ -49,7 +49,7 @@
 				<li><a href="#" data-target="#merchantsTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Merchants</a></li>
 				<li><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Invoices</a></li>
 				<li><a href="#" data-target="#myInvoicesTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> My Invoices</a></li>
-				<li><a href="#" data-target="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a></li>
+				<li ng-if="roles.indexOf('ROLE_ADMIN') > -1"><a href="#" data-target="#pricingTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Pricing</a></li>
 				<li><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
 				<li ng-if="roles.indexOf('ROLE_ADMIN') > -1"><a href="#" data-target="#subscriptionSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Subscription Setting</a></li>
 				<li><a href="#" data-target="#accountSettingsTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
