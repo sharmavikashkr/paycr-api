@@ -19,7 +19,7 @@
 <body ng-app="payCrApp" ng-controller="MerchantController" style="background:lightyellow;" ng-cloak>
     <div ng-init="prepare()" id="wrapper">
         <div ng-include="'/html/merchant/nav'"></div>
-        <div class="tab-content" id="page-wrapper" style="margin-top:50px;">
+        <div class="tab-content" id="page-wrapper" style="padding-top:80px;">
         	<div ng-include="'/html/common/alert'"></div>
 	        <div ng-init="searchInvoice()" id="dashboardTab" class="tab-pane active" ng-include="'/html/merchant/dashboardTab'"></div>
 	        <div ng-init="fetchMyInvoices()" id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>

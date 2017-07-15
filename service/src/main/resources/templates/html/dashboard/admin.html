@@ -19,8 +19,8 @@
 </head>
 <body ng-app="payCrAdminApp" ng-controller="AdminController" style="background:lightyellow;" ng-cloak>
     <div ng-init="prepare()" id="wrapper">
-        <div ng-include="'/html/admin/nav'"></div>
-        <div class="tab-content" id="page-wrapper" style="margin-top:50px;">
+        <div ng-include="'/html/admin/nav'" style="position:relative;"></div>
+        <div class="tab-content" id="page-wrapper" style="padding-top:80px;">
     		<div ng-include="'/html/common/alert'"></div>
             <div ng-init="searchMerchant()" id="merchantsTab" class="tab-pane active" ng-include="'/html/admin/merchantTab'"></div>
         	<div ng-init="searchInvoice()" id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
