@@ -61,12 +61,16 @@
 				<div class="panel-heading">Invoice Preference</div>
 				<div class="panel-body">
 					<fieldset ng-disabled="roles.indexOf('ROLE_MERCHANT') <= -1">
-						<input type="checkbox" id="set-sendEmail" ng-model="merchant.invoiceSetting.sendEmail">&nbsp;<strong>Send Email</strong><br>
-						<input type="checkbox" id="set-sendSms" ng-model="merchant.invoiceSetting.sendSms">&nbsp;<strong>Send Sms</strong><br>
+						<input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail">&nbsp;<strong>Send Email</strong><br>
+						<input type="checkbox" ng-model="merchant.invoiceSetting.sendSms">&nbsp;<strong>Send Sms</strong><br>
 						<br>
 						<div class="form-group">
 							<label class="control-label" for="set-expiry">Expiry Days</label>
-							<input class="form-control" id="set-expiry" ng-model="merchant.invoiceSetting.expiryDays" type="number" required />
+							<input class="form-control" ng-model="merchant.invoiceSetting.expiryDays" type="number" required />
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="set-expiry">Tax %</label>
+							<input class="form-control" ng-model="merchant.invoiceSetting.tax" type="number" required />
 						</div>
 					</fieldset>
 					<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1">

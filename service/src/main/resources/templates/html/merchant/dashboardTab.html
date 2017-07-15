@@ -64,7 +64,7 @@
 								<th>Invoice Code</th>
 								<th>Amount</th>
 								<th>Type</th>
-								<th>Expiry</th>
+								<th>Name</th>
 								<th>Status</th>
 							</tr>
 						</thead>
@@ -77,7 +77,7 @@
 								<td>{{invoice.invoiceCode}}</td>
 								<td>&#8377; {{invoice.payAmount}}</td>
 								<td>{{invoice.invoiceType}}</td>
-								<td>{{invoice.expiry | date:'dd-MM-yyyy HH:mm'}}</td>
+								<td>{{invoice.consumer.name}}</td>
 								<td>{{invoice.status}}</td>
 							</tr>
 							<tr>

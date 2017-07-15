@@ -21,6 +21,7 @@ public class InvoiceSetting {
 	private boolean sendSms;
 	private boolean sendEmail;
 	private int expiryDays;
+	private float tax;
 
 	@OneToMany(mappedBy = "invoiceSetting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MerchantCustomParam> customParams;
@@ -63,6 +64,14 @@ public class InvoiceSetting {
 
 	public void setCustomParams(List<MerchantCustomParam> customParams) {
 		this.customParams = customParams;
+	}
+
+	public float getTax() {
+		return tax;
+	}
+
+	public void setTax(float tax) {
+		this.tax = tax;
 	}
 
 }

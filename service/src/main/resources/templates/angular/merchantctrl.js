@@ -419,9 +419,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		if ($scope.newinvoice.discount == null) {
 			$scope.newinvoice.discount = 0;
 		}
-		$scope.newinvoice.payAmount = totals
+		$scope.newinvoice.payAmount = Math.round(totals
 				+ parseFloat((parseFloat($scope.newinvoice.tax) * totals) / 100)
-				- parseFloat($scope.newinvoice.discount);
+				- parseFloat($scope.newinvoice.discount));
 	}
 	$scope.createInvoice = function() {
 		if(!this.createInvoiceForm.$valid) {
@@ -550,6 +550,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$scope.newinvoice.sendEmail = angular.copy(invoicesetting.sendEmail);
 		$scope.newinvoice.sendMobile = angular.copy(invoicesetting.sendMobile);
 		$scope.newinvoice.expiresIn = angular.copy(invoicesetting.expiryDays);
+		$scope.newinvoice.tax = angular.copy(invoicesetting.tax);
 		$scope.newinvoice.customParams = [];
 		for (var param in invoicesetting.customParams) {
 			var copyParam = angular.copy(invoicesetting.customParams[param]);

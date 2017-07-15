@@ -130,6 +130,7 @@ public class AdminService {
 		invoiceSetting.setSendEmail(true);
 		invoiceSetting.setSendSms(false);
 		invoiceSetting.setExpiryDays(7);
+		invoiceSetting.setTax(0.0F);
 		merchant.setInvoiceSetting(invoiceSetting);
 
 		merRepo.save(merchant);
