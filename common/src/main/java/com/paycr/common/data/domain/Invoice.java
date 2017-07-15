@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 
 @Entity
 @Table(name = "pc_invoice")
@@ -36,14 +37,14 @@ public class Invoice implements Serializable {
 	private String invoiceCode;
 	private Integer merchant;
 
-	@Column(precision = 10, scale = 2)
-	private BigDecimal originalAmount;
+	@Enumerated(EnumType.STRING)
+	private InvoiceType invoiceType;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
 	@Column(precision = 10, scale = 2)
-	private BigDecimal shipping;
+	private Float tax;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
@@ -152,14 +153,6 @@ public class Invoice implements Serializable {
 		this.merchant = merchant;
 	}
 
-	public BigDecimal getShipping() {
-		return shipping;
-	}
-
-	public void setShipping(BigDecimal shipping) {
-		this.shipping = shipping;
-	}
-
 	public BigDecimal getDiscount() {
 		return discount;
 	}
@@ -198,14 +191,6 @@ public class Invoice implements Serializable {
 
 	public void setExpiresIn(int expiresIn) {
 		this.expiresIn = expiresIn;
-	}
-
-	public BigDecimal getOriginalAmount() {
-		return originalAmount;
-	}
-
-	public void setOriginalAmount(BigDecimal originalAmount) {
-		this.originalAmount = originalAmount;
 	}
 
 	public BigDecimal getPayAmount() {
@@ -254,5 +239,21 @@ public class Invoice implements Serializable {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public Float getTax() {
+		return tax;
+	}
+
+	public void setTax(Float tax) {
+		this.tax = tax;
+	}
+
+	public InvoiceType getInvoiceType() {
+		return invoiceType;
+	}
+
+	public void setInvoiceType(InvoiceType invoiceType) {
+		this.invoiceType = invoiceType;
 	}
 }

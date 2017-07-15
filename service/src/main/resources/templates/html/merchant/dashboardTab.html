@@ -63,8 +63,8 @@
 							<tr>
 								<th>Invoice Code</th>
 								<th>Amount</th>
-								<th>Email</th>
-								<th>Mobile</th>
+								<th>Type</th>
+								<th>Expiry</th>
 								<th>Status</th>
 							</tr>
 						</thead>
@@ -76,8 +76,8 @@
 								class="accordion-toggle">
 								<td>{{invoice.invoiceCode}}</td>
 								<td>&#8377; {{invoice.payAmount}}</td>
-								<td>{{invoice.consumer.email}}</td>
-								<td>{{invoice.consumer.mobile}}</td>
+								<td>{{invoice.invoiceType}}</td>
+								<td>{{invoice.expiry | date:'dd-MM-yyyy HH:mm'}}</td>
 								<td>{{invoice.status}}</td>
 							</tr>
 							<tr>
@@ -90,8 +90,8 @@
 													<table class="table table-striped table-bordered">
 														<tbody>
 															<tr>
-																<td><strong>Shipping</strong></td>
-																<td>&#8377; {{invoice.shipping}}</td>
+																<td><strong>Tax</strong></td>
+																<td>{{invoice.tax}}%</td>
 															</tr>
 															<tr>
 																<td><strong>Discount</strong></td>

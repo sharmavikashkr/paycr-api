@@ -43,7 +43,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		} ],
 		"sendEmail" : false,
 		"sendSms" : false,
-		"shipping" : 0,
+		"tax" : 18.00,
 		"discount" : 0,
 		"payAmount" : 0,
 		"currency" : "INR",
@@ -413,14 +413,14 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			totals = totals
 					+ parseFloat($scope.newinvoice.items[item].price);
 		}
-		if ($scope.newinvoice.shipping == null) {
-			$scope.newinvoice.shipping = 0;
+		if ($scope.newinvoice.tax == null) {
+			$scope.newinvoice.tax = 0;
 		}
 		if ($scope.newinvoice.discount == null) {
 			$scope.newinvoice.discount = 0;
 		}
 		$scope.newinvoice.payAmount = totals
-				+ parseFloat($scope.newinvoice.shipping)
+				+ parseFloat((parseFloat($scope.newinvoice.tax) * totals) / 100)
 				- parseFloat($scope.newinvoice.discount);
 	}
 	$scope.createInvoice = function() {
