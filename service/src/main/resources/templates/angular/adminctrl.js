@@ -63,9 +63,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$scope.fetchRoles();
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
-		$scope.fetchPricings();
-		$scope.fetchSubsModes();
-		$scope.fetchMyUsers();
 	}
 	$scope.fetchPriceSettings = function() {
 		$scope.fetchPricings();
