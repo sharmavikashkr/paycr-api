@@ -25,15 +25,14 @@
             <div ng-init="searchMerchant()" id="merchantsTab" class="tab-pane active" ng-include="'/html/admin/merchantTab'"></div>
         	<div ng-init="searchInvoice()" id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
         	<div ng-init="fetchMyInvoices()" id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
-        	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchPricings()" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>
-	        <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchSubsModes()" id="subscriptionSettingTab" class="tab-pane fade" ng-include="'/html/admin/subscriptionSettingTab'"></div>
+        	<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchPriceSettings()" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>
 		    <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchMyUsers()" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
     	</div>
-	    <div ng-include="'/html/admin/createMerchantModal'"></div>
-		<div ng-include="'/html/admin/createPricingModal'"></div>
-		<div ng-include="'/html/admin/addSubsModeModal'"></div>
-		<div ng-include="'/html/admin/createOfflineSubsModal'"></div>
-		<div ng-include="'/html/common/createUserModal'"></div>
+	    <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-include="'/html/admin/createMerchantModal'"></div>
+		<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-include="'/html/admin/createPricingModal'"></div>
+		<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-include="'/html/admin/addSubsModeModal'"></div>
+		<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-include="'/html/admin/createOfflineSubsModal'"></div>
+		<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-include="'/html/common/createUserModal'"></div>
 		<div ng-include="'/html/common/invoiceInfoModal'"></div>
 		<div ng-include="'/html/admin/subsDetailsModal'"></div>
 	</div>

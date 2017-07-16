@@ -1,88 +1,87 @@
 <div>
 	<br>
 	<div class="row">
-		<div class="col-xs-12 col-md-12 col-lg-12">
-			<div class="panel">
-				<div class="panel-body col-lg-10 col-lg-offset-1">
-					<table style="width: 100%; border-collapse: collapse;" class="table table-striped table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>Invoice Code</th>
-								<th>Amount</th>
-								<th>Merchant</th>
-								<th>Status</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody ng-repeat="myinvoice in myinvoices">
-							<tr
-								ng-class="(myinvoice.status=='PAID')?'success':(myinvoice.status=='EXPIRED')?'basic':(myinvoice.status=='EXPIRED')?'danger':'warning'"
-								data-toggle="collapse"
-								data-target="#myinfo-{{myinvoice.invoiceCode}}"
-								class="accordion-toggle">
-								<td>{{myinvoice.invoiceCode}}</td>
-								<td>&#8377; {{myinvoice.payAmount}}</td>
-								<td>{{myinvoice.merchantName}}</td>
-								<td>{{myinvoice.status}}</td>
-								<td>
-									<div ng-if="myinvoice.status != 'PAID' && myinvoice.status != 'EXPIRED'">
-										<a href="/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-success">PAY</a>&nbsp; 
-										<a ng-if="myinvoice.status != 'DECLINED'" href="/decline/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-warning">DECLINE</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="12" style="padding: 0px;">
-									<div class="accordion-body collapse" id="myinfo-{{myinvoice.invoiceCode}}">
-										<div style="padding: 10px;" class="row">
-											<div class="panel-body col-lg-12">
-												<h4>Items Details</h4>
-												<div class="table-responsive">
-													<table class="table table-striped table-bordered">
-														<thead>
-															<tr>
-																<th>Name</th>
-																<th>Rate</th>
-																<th>Quantity</th>
-																<th>Price</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr ng-repeat="item in myinvoice.items">
-																<td><strong>{{item.name}}</strong></td>
-																<td>&#8377; {{item.rate}}</td>
-																<td>{{item.quantity}}</td>
-																<td>&#8377; {{item.price}}</td>
-															</tr>
-															<tr>
-																<td></td>
-																<td></td>
-																<td><strong>Shipping</strong></td>
-																<td>&#8377; {{myinvoice.shipping}}</td>
-															</tr>
-															<tr>
-																<td></td>
-																<td></td>
-																<td><strong>Discount</strong></td>
-																<td>&#8377; {{myinvoice.discount}}</td>
-															</tr>
-															<tr>
-																<td></td>
-																<td></td>
-																<td><strong>Pay Amount</strong></td>
-																<td>&#8377; {{myinvoice.payAmount}}</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
+		<div class="panel text-center">
+			<div class="panel-body col-lg-10 col-lg-offset-1">
+				<h4>Invoices billed to me</h4>
+				<table style="width: 100%; border-collapse: collapse;" class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="text-center">Invoice Code</th>
+							<th class="text-center">Amount</th>
+							<th class="text-center">Merchant</th>
+							<th class="text-center">Status</th>
+							<th class="text-center">Action</th>
+						</tr>
+					</thead>
+					<tbody ng-repeat="myinvoice in myinvoices">
+						<tr
+							ng-class="(myinvoice.status=='PAID')?'success':(myinvoice.status=='EXPIRED')?'basic':(myinvoice.status=='EXPIRED')?'danger':'warning'"
+							data-toggle="collapse"
+							data-target="#myinfo-{{myinvoice.invoiceCode}}"
+							class="accordion-toggle">
+							<td>{{myinvoice.invoiceCode}}</td>
+							<td>&#8377; {{myinvoice.payAmount}}</td>
+							<td>{{myinvoice.merchantName}}</td>
+							<td>{{myinvoice.status}}</td>
+							<td>
+								<div ng-if="myinvoice.status != 'PAID' && myinvoice.status != 'EXPIRED'">
+									<a href="/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-success">PAY</a>&nbsp; 
+									<a ng-if="myinvoice.status != 'DECLINED'" href="/decline/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-warning">DECLINE</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="12" style="padding: 0px;">
+								<div class="accordion-body collapse" id="myinfo-{{myinvoice.invoiceCode}}">
+									<div style="padding: 10px;" class="row">
+										<div class="panel-body col-lg-12">
+											<h4>Items Details</h4>
+											<div class="table-responsive">
+												<table class="table table-striped table-bordered">
+													<thead>
+														<tr>
+															<th>Name</th>
+															<th>Rate</th>
+															<th>Quantity</th>
+															<th>Price</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr ng-repeat="item in myinvoice.items">
+															<td><strong>{{item.name}}</strong></td>
+															<td>&#8377; {{item.rate}}</td>
+															<td>{{item.quantity}}</td>
+															<td>&#8377; {{item.price}}</td>
+														</tr>
+														<tr>
+															<td></td>
+															<td></td>
+															<td><strong>Shipping</strong></td>
+															<td>&#8377; {{myinvoice.shipping}}</td>
+														</tr>
+														<tr>
+															<td></td>
+															<td></td>
+															<td><strong>Discount</strong></td>
+															<td>&#8377; {{myinvoice.discount}}</td>
+														</tr>
+														<tr>
+															<td></td>
+															<td></td>
+															<td><strong>Pay Amount</strong></td>
+															<td>&#8377; {{myinvoice.payAmount}}</td>
+														</tr>
+													</tbody>
+												</table>
 											</div>
 										</div>
 									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

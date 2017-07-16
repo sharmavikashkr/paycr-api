@@ -40,7 +40,7 @@ public class SubscriptionController {
 	@Autowired
 	private SubscriptionService subsSer;
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/modes")
 	public List<SubscriptionMode> getSubscriptionModes() {
 		return subsSer.getSubscriptionModes();

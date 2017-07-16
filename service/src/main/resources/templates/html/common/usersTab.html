@@ -24,10 +24,10 @@
 				</thead>
 				<tbody id="itemBody">
 					<tr ng-class="(myuser.active)?'success':'danger'" ng-repeat="myuser in myusers" title="{{myusers.active}}">
-						<td class="text-center">{{myuser.name}}</td>
-						<td class="text-center">{{myuser.email}}</td>
-						<td class="text-center">{{myuser.mobile}}</td>
-						<td class="text-center">
+						<td>{{myuser.name}}</td>
+						<td>{{myuser.email}}</td>
+						<td>{{myuser.mobile}}</td>
+						<td>
 							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs">
 								<i class="fa fa-minus"></i>
 							</button>
