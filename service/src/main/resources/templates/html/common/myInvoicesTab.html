@@ -4,7 +4,7 @@
 		<div class="panel text-center">
 			<div class="panel-body col-lg-10 col-lg-offset-1">
 				<h4>Invoices billed to me</h4>
-				<table style="width: 100%; border-collapse: collapse;" class="table table-striped table-bordered table-hover">
+				<table class="table table-striped table-bordered table-hover table-responsive">
 					<thead>
 						<tr>
 							<th class="text-center">Invoice Code</th>
@@ -37,44 +37,42 @@
 									<div style="padding: 10px;" class="row">
 										<div class="panel-body col-lg-12">
 											<h4>Items Details</h4>
-											<div class="table-responsive">
-												<table class="table table-striped table-bordered">
-													<thead>
-														<tr>
-															<th>Name</th>
-															<th>Rate</th>
-															<th>Quantity</th>
-															<th>Price</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr ng-repeat="item in myinvoice.items">
-															<td><strong>{{item.name}}</strong></td>
-															<td>&#8377; {{item.rate}}</td>
-															<td>{{item.quantity}}</td>
-															<td>&#8377; {{item.price}}</td>
-														</tr>
-														<tr>
-															<td></td>
-															<td></td>
-															<td><strong>Shipping</strong></td>
-															<td>&#8377; {{myinvoice.shipping}}</td>
-														</tr>
-														<tr>
-															<td></td>
-															<td></td>
-															<td><strong>Discount</strong></td>
-															<td>&#8377; {{myinvoice.discount}}</td>
-														</tr>
-														<tr>
-															<td></td>
-															<td></td>
-															<td><strong>Pay Amount</strong></td>
-															<td>&#8377; {{myinvoice.payAmount}}</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
+											<table class="table table-striped table-bordered table-responsive">
+												<thead>
+													<tr>
+														<th>Name</th>
+														<th>Rate</th>
+														<th>Quantity</th>
+														<th>Price</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="item in myinvoice.items">
+														<td><strong>{{item.name}}</strong></td>
+														<td>&#8377; {{item.rate}}</td>
+														<td>{{item.quantity}}</td>
+														<td>&#8377; {{item.price}}</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td><strong>Shipping</strong></td>
+														<td>&#8377; {{myinvoice.shipping}}</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td><strong>Discount</strong></td>
+														<td>&#8377; {{myinvoice.discount}}</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td><strong>Pay Amount</strong></td>
+														<td>&#8377; {{myinvoice.payAmount}}</td>
+													</tr>
+												</tbody>
+											</table>
 										</div>
 									</div>
 								</div>
