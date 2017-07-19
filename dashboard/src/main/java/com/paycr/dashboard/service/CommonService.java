@@ -16,7 +16,6 @@ import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
@@ -59,15 +58,8 @@ public class CommonService {
 	@Autowired
 	private InvoiceRepository invRepo;
 
-	@Autowired
-	private MerchantRepository merRepo;
-
 	public List<Invoice> getMyInvoices(PcUser user) {
 		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(user.getEmail(), user.getMobile());
-		for (Invoice invoice : myInvoices) {
-			Merchant invMer = merRepo.findOne(invoice.getMerchant());
-			invoice.setMerchantName(invMer.getName());
-		}
 		return myInvoices;
 	}
 

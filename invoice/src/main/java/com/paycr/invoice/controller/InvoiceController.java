@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
@@ -44,6 +46,9 @@ public class InvoiceController {
 	private PaymentRepository payRepo;
 
 	@Autowired
+	private MerchantPricingRepository merPriRepo;
+
+	@Autowired
 	private NotifyService notSer;
 
 	@Autowired
@@ -61,6 +66,9 @@ public class InvoiceController {
 		try {
 			invValidator.validate(invoice);
 			invRepo.save(invoice);
+			MerchantPricing merPri = invoice.getMerchantPricing();
+			merPri.setInvCount(merPri.getInvCount() + 1);
+			merPriRepo.save(merPri);
 			notifyService.notify(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);

@@ -22,6 +22,7 @@ import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.domain.SubscriptionMode;
 import com.paycr.common.data.domain.UserRole;
+import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
@@ -47,6 +48,9 @@ public class AdminService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private MerchantPricingRepository merPriRepo;
 
 	@Autowired
 	private SubscriptionRepository subsRepo;
@@ -108,18 +112,6 @@ public class AdminService {
 		subs.setSubscriptionMode(subsMode);
 		subsRepo.save(subs);
 
-		List<MerchantPricing> merPricings = new ArrayList<MerchantPricing>();
-		MerchantPricing merPricing = new MerchantPricing();
-		merPricing.setCreated(timeNow);
-		merPricing.setStartDate(timeNow);
-		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
-		merPricing.setPricing(pricing);
-		merPricing.setStatus(PricingStatus.ACTIVE);
-		merPricing.setMerchant(merchant);
-		merPricing.setSubscription(subs);
-		merPricings.add(merPricing);
-		merchant.setPricings(merPricings);
-
 		PaymentSetting paymentSetting = new PaymentSetting();
 		paymentSetting.setRzpMerchantId("");
 		paymentSetting.setRzpKeyId("");
@@ -132,8 +124,17 @@ public class AdminService {
 		invoiceSetting.setExpiryDays(7);
 		invoiceSetting.setTax(0.0F);
 		merchant.setInvoiceSetting(invoiceSetting);
-
 		merRepo.save(merchant);
+		
+		MerchantPricing merPricing = new MerchantPricing();
+		merPricing.setCreated(timeNow);
+		merPricing.setStartDate(timeNow);
+		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
+		merPricing.setPricing(pricing);
+		merPricing.setStatus(PricingStatus.ACTIVE);
+		merPricing.setMerchant(merchant);
+		merPricing.setSubscription(subs);
+		merPriRepo.save(merPricing);
 
 		subs.setMerchant(merchant);
 		subsRepo.save(subs);

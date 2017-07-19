@@ -32,7 +32,7 @@ public class Merchant {
 	@Embedded
 	private Address address;
 
-	@OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "merchant")
 	private List<MerchantPricing> pricings;
 
 	@OneToOne(cascade = CascadeType.ALL)

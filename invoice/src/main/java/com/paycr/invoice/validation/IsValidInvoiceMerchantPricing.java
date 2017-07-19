@@ -2,15 +2,12 @@ package com.paycr.invoice.validation;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Pricing;
-import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.util.Constants;
@@ -20,13 +17,9 @@ import com.paycr.common.validation.RequestValidator;
 @Order(4)
 public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> {
 
-	@Autowired
-	private MerchantRepository merRepo;
-
 	@Override
 	public void validate(Invoice invoice) {
-		Merchant merchant = merRepo.findOne(invoice.getMerchant());
-		List<MerchantPricing> merPricings = merchant.getPricings();
+		List<MerchantPricing> merPricings = invoice.getMerchant().getPricings();
 		MerchantPricing selectedMerPricing = null;
 		boolean amountNotAllowed = true;
 		boolean noActivePlan = true;
@@ -39,7 +32,7 @@ public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> 
 				Pricing pricing = merPricing.getPricing();
 				if (invoice.getPayAmount().compareTo(pricing.getStartAmount()) > 0
 						&& invoice.getPayAmount().compareTo(pricing.getEndAmount()) <= 0) {
-					if (merPricing.getInvoices().size() < pricing.getInvoiceLimit()) {
+					if (merPricing.getInvCount() < pricing.getInvoiceLimit()) {
 						amountNotAllowed = false;
 						selectedMerPricing = merPricing;
 						break;
@@ -54,6 +47,5 @@ public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> 
 			throw new PaycrException(Constants.FAILURE, "No active pricing plan for this amount found");
 		}
 		invoice.setMerchantPricing(selectedMerPricing);
-		merRepo.save(merchant);
 	}
 }

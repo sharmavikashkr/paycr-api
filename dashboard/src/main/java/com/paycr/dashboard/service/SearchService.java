@@ -41,15 +41,17 @@ public class SearchService {
 	public List<Invoice> fetchInvoiceList(SearchInvoiceRequest request) {
 		try {
 			Date timeNow = new Date();
-			List<Invoice> invoiceList = invDao.findInvoices(request);
+			Merchant merchant = null;
+			if (request.getMerchant() != null) {
+				merchant = merRepo.findOne(request.getMerchant());
+			}
+			List<Invoice> invoiceList = invDao.findInvoices(request, merchant);
 			for (Invoice invoice : invoiceList) {
 				List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
 				invoice.setAllPayments(payments);
 				if (timeNow.compareTo(invoice.getExpiry()) > 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 					invoice.setStatus(InvoiceStatus.EXPIRED);
 				}
-				Merchant merchant = merRepo.findOne(invoice.getMerchant());
-				invoice.setMerchantName(merchant.getName());
 			}
 			invRepo.save(invoiceList);
 			return invoiceList;
@@ -60,8 +62,7 @@ public class SearchService {
 
 	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
 		try {
-			List<Merchant> merchantList = merDao.findMerchants(request);
-			return merchantList;
+			return merDao.findMerchants(request);
 		} catch (Exception ex) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}

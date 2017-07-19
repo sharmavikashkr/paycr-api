@@ -35,7 +35,9 @@ public class Invoice implements Serializable {
 
 	private Date created;
 	private String invoiceCode;
-	private Integer merchant;
+
+	@ManyToOne
+	private Merchant merchant;
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceType invoiceType;
@@ -81,9 +83,6 @@ public class Invoice implements Serializable {
 
 	@Transient
 	private int expiresIn;
-
-	@Transient
-	private String merchantName;
 
 	public Integer getId() {
 		return id;
@@ -145,11 +144,11 @@ public class Invoice implements Serializable {
 		this.payment = payment;
 	}
 
-	public Integer getMerchant() {
+	public Merchant getMerchant() {
 		return merchant;
 	}
 
-	public void setMerchant(Integer merchant) {
+	public void setMerchant(Merchant merchant) {
 		this.merchant = merchant;
 	}
 
@@ -223,14 +222,6 @@ public class Invoice implements Serializable {
 
 	public void setAllPayments(List<Payment> allPayments) {
 		this.allPayments = allPayments;
-	}
-
-	public String getMerchantName() {
-		return merchantName;
-	}
-
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
 	}
 
 	public String getCreatedBy() {

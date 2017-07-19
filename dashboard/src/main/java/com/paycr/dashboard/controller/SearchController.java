@@ -12,7 +12,6 @@ import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.dashboard.service.SearchService;
@@ -41,11 +40,6 @@ public class SearchController {
 	@RequestMapping("/merchant")
 	public List<Merchant> searchMerchant(@RequestBody SearchMerchantRequest request) {
 		List<Merchant> merchants = serSer.fetchMerchantList(request);
-		for (Merchant merchant : merchants) {
-			for (MerchantPricing merPri : merchant.getPricings()) {
-				merPri.setInvNo(merPri.getInvoices().size());
-			}
-		}
 		return merchants;
 	}
 

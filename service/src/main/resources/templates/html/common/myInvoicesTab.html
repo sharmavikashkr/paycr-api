@@ -22,7 +22,7 @@
 							class="accordion-toggle">
 							<td>{{myinvoice.invoiceCode}}</td>
 							<td>&#8377; {{myinvoice.payAmount}}</td>
-							<td>{{myinvoice.merchantName}}</td>
+							<td>{{myinvoice.merchant.name}}</td>
 							<td>{{myinvoice.status}}</td>
 							<td>
 								<div ng-if="myinvoice.status != 'PAID' && myinvoice.status != 'EXPIRED'">
@@ -40,36 +40,36 @@
 											<table class="table table-striped table-bordered table-responsive">
 												<thead>
 													<tr>
-														<th>Name</th>
-														<th>Rate</th>
-														<th>Quantity</th>
-														<th>Price</th>
+														<th class="text-left">Name</th>
+														<th class="text-center">Rate</th>
+														<th class="text-center">Quantity</th>
+														<th class="text-right">Price</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr ng-repeat="item in myinvoice.items">
-														<td><strong>{{item.name}}</strong></td>
-														<td>&#8377; {{item.rate}}</td>
-														<td>{{item.quantity}}</td>
-														<td>&#8377; {{item.price}}</td>
+														<td class="text-left">{{item.name}}</td>
+														<td class="text-center">&#8377; {{item.rate}}</td>
+														<td class="text-center">{{item.quantity}}</td>
+														<td class="text-right">&#8377; {{item.price}}</td>
 													</tr>
 													<tr>
 														<td></td>
 														<td></td>
-														<td><strong>Shipping</strong></td>
-														<td>&#8377; {{myinvoice.shipping}}</td>
+														<td><strong>Tax</strong></td>
+														<td class="text-right">&#8377; {{myinvoice.tax}}%</td>
 													</tr>
 													<tr>
 														<td></td>
 														<td></td>
 														<td><strong>Discount</strong></td>
-														<td>&#8377; {{myinvoice.discount}}</td>
+														<td class="text-right">&#8377; {{myinvoice.discount}}</td>
 													</tr>
 													<tr>
 														<td></td>
 														<td></td>
 														<td><strong>Pay Amount</strong></td>
-														<td>&#8377; {{myinvoice.payAmount}}</td>
+														<td class="text-right">&#8377; {{myinvoice.payAmount}}</td>
 													</tr>
 												</tbody>
 											</table>

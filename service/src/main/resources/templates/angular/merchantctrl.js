@@ -38,7 +38,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"items" : [ {
 			"name" : "",
 			"rate" : 0,
-			"quantity" : 0,
+			"quantity" : 1,
 			"price" : 0
 		} ],
 		"sendEmail" : false,
@@ -285,6 +285,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$http(req).then(function(paymentsettings) {
 			$scope.merchant.paymentSettings = paymentsettings.data;
 			$scope.serverMessage(paymentsettings);
+			$scope.editPayPrefs = false;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -388,7 +389,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.newinvoice.items.push({
 				"name" : "",
 				"rate" : 0,
-				"quantity" : 0,
+				"quantity" : 1,
 				"price" : 0
 			});
 		}

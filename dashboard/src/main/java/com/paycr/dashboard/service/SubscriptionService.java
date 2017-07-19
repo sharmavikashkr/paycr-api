@@ -2,7 +2,6 @@ package com.paycr.dashboard.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.domain.SubscriptionMode;
+import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
@@ -41,6 +41,9 @@ public class SubscriptionService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private MerchantPricingRepository merPriRepo;
 
 	@Autowired
 	private PricingRepository priRepo;
@@ -105,21 +108,16 @@ public class SubscriptionService {
 		subs.setSubscriptionCode("OFFLINE");
 		subs.setSubscriptionMode(subsMode);
 		subsRepo.save(subs);
-		List<MerchantPricing> merPricings = merchant.getPricings();
-		if (merPricings == null) {
-			merPricings = new ArrayList<MerchantPricing>();
-		}
 		MerchantPricing merPricing = new MerchantPricing();
 		merPricing.setCreated(timeNow);
 		merPricing.setStartDate(timeNow);
 		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
 		merPricing.setPricing(pricing);
 		merPricing.setStatus(PricingStatus.ACTIVE);
+		merPricing.setInvCount(0);
 		merPricing.setMerchant(merchant);
 		merPricing.setSubscription(subs);
-		merPricings.add(merPricing);
-		merchant.setPricings(merPricings);
-		merRepo.save(merchant);
+		merPriRepo.save(merPricing);
 	}
 
 	public ModelAndView onlineSubscription(Integer pricingId, Merchant merchant) {
@@ -186,21 +184,16 @@ public class SubscriptionService {
 		subsRepo.save(subs);
 		mv.addObject("subs", subs);
 		if ("captured".equals(subs.getStatus())) {
-			List<MerchantPricing> merPricings = merchant.getPricings();
-			if (merPricings == null) {
-				merPricings = new ArrayList<MerchantPricing>();
-			}
 			MerchantPricing merPricing = new MerchantPricing();
 			merPricing.setCreated(timeNow);
 			merPricing.setStartDate(timeNow);
 			merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
 			merPricing.setPricing(pricing);
 			merPricing.setStatus(PricingStatus.ACTIVE);
+			merPricing.setInvCount(0);
 			merPricing.setMerchant(merchant);
 			merPricing.setSubscription(subs);
-			merPricings.add(merPricing);
-			merchant.setPricings(merPricings);
-			merRepo.save(merchant);
+			merPriRepo.save(merPricing);
 
 			Notification noti = new Notification();
 			noti.setMerchantId(merchant.getId());

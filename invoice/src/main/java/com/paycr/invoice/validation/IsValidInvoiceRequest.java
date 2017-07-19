@@ -39,7 +39,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	public void validate(Invoice invoice) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		invoice.setMerchant(merchant.getId());
+		invoice.setMerchant(merchant);
 		if (CommonUtil.isNull(invoice.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
 		}

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 
@@ -19,11 +20,11 @@ public class InvoiceDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<Invoice> findInvoices(SearchInvoiceRequest searchReq) {
+	public List<Invoice> findInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
 		List<Invoice> invoices = null;
 		StringBuilder squery = new StringBuilder("SELECT i FROM Invoice i WHERE");
 		int pos = 1;
-		if (!CommonUtil.isNull(searchReq.getMerchant())) {
+		if (!CommonUtil.isNull(merchant)) {
 			squery.append(" i.merchant = ?" + pos++ + " AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
@@ -46,8 +47,8 @@ public class InvoiceDao {
 		TypedQuery<Invoice> query = em.createQuery(squery.toString(), Invoice.class);
 
 		pos = 1;
-		if (!CommonUtil.isNull(searchReq.getMerchant())) {
-			query.setParameter(pos++, searchReq.getMerchant());
+		if (!CommonUtil.isNull(merchant)) {
+			query.setParameter(pos++, merchant);
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
 			query.setParameter(pos++, searchReq.getInvoiceCode());

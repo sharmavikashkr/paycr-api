@@ -95,6 +95,7 @@ CREATE TABLE if not exists pc_merchant_pricing (
 	start_date timestamp NOT NULL,
 	end_date timestamp NOT NULL,
 	status varchar(20) NOT NULL,
+	inv_count int NOT NULL,
     merchant_id int REFERENCES pc_merchant,
     pricing_id int REFERENCES pc_pricing,
     subscription_id int REFERENCES pc_subscription

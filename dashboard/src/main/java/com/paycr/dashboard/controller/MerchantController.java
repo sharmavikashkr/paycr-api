@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
-import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.service.SecurityService;
@@ -61,9 +60,6 @@ public class MerchantController {
 	@RequestMapping("/get")
 	public Merchant getMerchant() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		for (MerchantPricing merPri : merchant.getPricings()) {
-			merPri.setInvNo(merPri.getInvoices().size());
-		}
 		return merchant;
 	}
 

@@ -13,7 +13,6 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.type.InvoiceStatus;
@@ -29,9 +28,6 @@ public class PaymentService {
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private MerchantRepository merRepo;
-
-	@Autowired
 	private NotificationRepository notiRepo;
 
 	@Autowired
@@ -39,7 +35,7 @@ public class PaymentService {
 
 	public void enquire(Invoice invoice) {
 		Payment payment = invoice.getPayment();
-		Merchant merchant = merRepo.findOne(invoice.getMerchant());
+		Merchant merchant = invoice.getMerchant();
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		try {
@@ -86,7 +82,7 @@ public class PaymentService {
 			payRepo.save(refPay);
 			return;
 		}
-		Merchant merchant = merRepo.findOne(invoice.getMerchant());
+		Merchant merchant = invoice.getMerchant();
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		try {

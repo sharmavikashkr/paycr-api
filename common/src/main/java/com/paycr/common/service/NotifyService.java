@@ -16,7 +16,6 @@ import com.paycr.common.communicate.Sms;
 import com.paycr.common.communicate.SmsEngine;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.repository.MerchantRepository;
 
 import freemarker.template.Configuration;
 
@@ -33,14 +32,11 @@ public class NotifyService {
 	private Company company;
 
 	@Autowired
-	private MerchantRepository merRepo;
-
-	@Autowired
 	private Configuration fmConfiguration;
 
 	public void notify(Invoice invoice) {
 		String invoiceUrl = company.getBaseUrl() + "/" + invoice.getInvoiceCode();
-		Merchant merchant = merRepo.findOne(invoice.getMerchant());
+		Merchant merchant = invoice.getMerchant();
 		if (invoice.isSendSms()) {
 			Sms sms = new Sms();
 			sms.setTo(invoice.getConsumer().getMobile());
@@ -66,7 +62,7 @@ public class NotifyService {
 	}
 
 	public String getEmail(Invoice invoice) throws Exception {
-		Merchant merchant = merRepo.findOne(invoice.getMerchant());
+		Merchant merchant = invoice.getMerchant();
 		Map<String, Object> templateProps = new HashMap<String, Object>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("merchant", merchant);

@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.MerchantRepository;
 
 @RestController
 public class PaymentResponseController {
@@ -17,14 +16,11 @@ public class PaymentResponseController {
 	@Autowired
 	private InvoiceRepository invRepo;
 
-	@Autowired
-	private MerchantRepository merRepo;
-
 	@RequestMapping("/response/{invoiceCode}")
 	public ModelAndView successPage(@PathVariable String invoiceCode) {
 		try {
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-			Merchant merchant = merRepo.findOne(invoice.getMerchant());
+			Merchant merchant = invoice.getMerchant();
 			ModelAndView mv = new ModelAndView("html/inv-response");
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);

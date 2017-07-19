@@ -1,7 +1,6 @@
 package com.paycr.common.data.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,10 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.PricingStatus;
@@ -43,12 +40,7 @@ public class MerchantPricing {
 	@OneToOne
 	private Subscription subscription;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "merchantPricing")
-	private List<Invoice> invoices;
-
-	@Transient
-	private int invNo;
+	private int invCount;
 
 	public Integer getId() {
 		return id;
@@ -102,28 +94,20 @@ public class MerchantPricing {
 		this.endDate = endDate;
 	}
 
-	public List<Invoice> getInvoices() {
-		return invoices;
-	}
-
-	public void setInvoices(List<Invoice> invoices) {
-		this.invoices = invoices;
-	}
-
-	public int getInvNo() {
-		return invNo;
-	}
-
-	public void setInvNo(int invNo) {
-		this.invNo = invNo;
-	}
-
 	public Subscription getSubscription() {
 		return subscription;
 	}
 
 	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
+	}
+
+	public int getInvCount() {
+		return invCount;
+	}
+
+	public void setInvCount(int invCount) {
+		this.invCount = invCount;
 	}
 
 }

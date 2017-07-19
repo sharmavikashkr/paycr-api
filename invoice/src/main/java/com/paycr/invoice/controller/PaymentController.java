@@ -23,7 +23,6 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
@@ -42,9 +41,6 @@ public class PaymentController {
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private MerchantRepository merRepo;
-
-	@Autowired
 	private NotificationRepository notiRepo;
 
 	@RequestMapping(value = "{invoiceCode}", method = RequestMethod.GET)
@@ -52,7 +48,7 @@ public class PaymentController {
 		try {
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 			validate(invoice);
-			Merchant merchant = merRepo.findOne(invoice.getMerchant());
+			Merchant merchant = invoice.getMerchant();
 			ModelAndView mv = new ModelAndView("html/payinvoice");
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
@@ -104,7 +100,7 @@ public class PaymentController {
 			String rzpPayId = formData.get("razorpay_payment_id");
 			invoiceCode = formData.get("invoiceCode");
 			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-			Merchant merchant = merRepo.findOne(invoice.getMerchant());
+			Merchant merchant = invoice.getMerchant();
 			for (InvoiceCustomParam param : invoice.getCustomParams()) {
 				if (ParamValueProvider.CONSUMER.equals(param.getProvider())) {
 					String paramValue = formData.get(param.getParamName());
