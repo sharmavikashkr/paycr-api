@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
@@ -38,14 +39,15 @@ public class SearchService {
 	@Autowired
 	private PaymentRepository payRepo;
 
-	public List<Invoice> fetchInvoiceList(SearchInvoiceRequest request) {
+	public SearchInvoiceResponse fetchInvoiceList(SearchInvoiceRequest request) {
 		try {
 			Date timeNow = new Date();
 			Merchant merchant = null;
 			if (request.getMerchant() != null) {
 				merchant = merRepo.findOne(request.getMerchant());
 			}
-			List<Invoice> invoiceList = invDao.findInvoices(request, merchant);
+			SearchInvoiceResponse response = invDao.findInvoices(request, merchant);
+			List<Invoice> invoiceList = response.getInvoiceList();
 			for (Invoice invoice : invoiceList) {
 				List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
 				invoice.setAllPayments(payments);
@@ -54,7 +56,7 @@ public class SearchService {
 				}
 			}
 			invRepo.save(invoiceList);
-			return invoiceList;
+			return response;
 		} catch (Exception ex) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}

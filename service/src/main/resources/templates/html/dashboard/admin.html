@@ -23,7 +23,7 @@
         <div class="tab-content" id="page-wrapper">
     		<div ng-include="'/html/common/alert'"></div>
             <div ng-init="searchMerchant()" id="merchantsTab" class="tab-pane active" ng-include="'/html/admin/merchantTab'"></div>
-        	<div ng-init="searchInvoice()" id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
+        	<div ng-init="searchInvoice(1)" id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
         	<div ng-init="fetchMyInvoices()" id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
         	<div ng-init="fetchPriceSettings()" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>
 		    <div ng-if="roles.indexOf('ROLE_ADMIN') > -1" ng-init="fetchMyUsers()" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>

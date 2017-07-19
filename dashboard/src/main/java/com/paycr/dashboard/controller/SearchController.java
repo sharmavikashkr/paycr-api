@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
@@ -28,7 +28,7 @@ public class SearchController {
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/invoice")
-	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
+	public SearchInvoiceResponse searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());

@@ -20,7 +20,8 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-12-31"
+		"createdTo" : "2017-12-31",
+		"page" : "1"
 	}
 	$scope.newInvoiceSetting = {
 		"name" : "",
@@ -241,7 +242,11 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.searchInvoice = function() {
+	$scope.searchInvoice = function(newPage) {
+		if(newPage != 1 && (newPage < 1 || newPage > $scope.searchInvResp.allPages.length)) {
+			return;
+		}
+		$scope.searchInvoiceReq.page = newPage;
 		var req = {
 			method : 'POST',
 			url : "/search/invoice",
@@ -252,7 +257,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : $scope.searchInvoiceReq
 		}
 		$http(req).then(function(invoices) {
-			$scope.invoices = invoices.data;
+			$scope.searchInvResp = invoices.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

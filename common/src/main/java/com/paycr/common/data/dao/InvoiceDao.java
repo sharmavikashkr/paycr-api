@@ -1,14 +1,17 @@
 package com.paycr.common.data.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.util.CommonUtil;
@@ -17,10 +20,13 @@ import com.paycr.common.util.DateUtil;
 @Component
 public class InvoiceDao {
 
+	@Value("${dashboard.pageSize}")
+	private int pageSize;
+
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<Invoice> findInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
+	public SearchInvoiceResponse findInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
 		List<Invoice> invoices = null;
 		StringBuilder squery = new StringBuilder("SELECT i FROM Invoice i WHERE");
 		int pos = 1;
@@ -66,12 +72,25 @@ public class InvoiceDao {
 			query.setParameter(pos++, DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
 			query.setParameter(pos++, DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
-		try {
-			invoices = query.getResultList();
-		} catch (Exception nre) {
-
+		int noOfInvoices = query.getResultList().size();
+		query.setFirstResult(pageSize * (searchReq.getPage() - 1));
+		query.setMaxResults(pageSize);
+		invoices = query.getResultList();
+		SearchInvoiceResponse response = new SearchInvoiceResponse();
+		response.setInvoiceList(invoices);
+		int noOfPages = 1;
+		if (noOfInvoices % pageSize == 0) {
+			noOfPages = noOfInvoices / pageSize;
+		} else {
+			noOfPages = noOfInvoices / pageSize + 1;
 		}
-		return invoices;
+		List<Integer> allPages = new ArrayList<Integer>();
+		for (int i = 1; i <= noOfPages; i++) {
+			allPages.add(i);
+		}
+		response.setAllPages(allPages);
+		response.setPage(searchReq.getPage());
+		return response;
 	}
 
 }

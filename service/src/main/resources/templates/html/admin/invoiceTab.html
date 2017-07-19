@@ -57,7 +57,7 @@
 								<th>Status</th>
 							</tr>
 						</thead>
-						<tbody ng-repeat="invoice in invoices">
+						<tbody ng-repeat="invoice in searchInvResp.invoiceList">
 							<tr
 								ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':'warning'"
 								data-toggle="collapse"
@@ -149,6 +149,11 @@
 							</tr>
 						</tbody>
 					</table>
+					<ul class="pagination" style="float:right;">
+						<li ng-class="(searchInvResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="searchInvoice(searchInvResp.page-1)" href="#">Previous</a></li>
+						<li ng-repeat="page in searchInvResp.allPages" ng-class="(page == searchInvResp.page)?'active':''"><a ng-click="searchInvoice(page)" href="#">{{page}}</a></li>
+						<li ng-class="(searchInvResp.page == searchInvResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchInvoice(searchInvResp.page+1)" href="#">Next</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
