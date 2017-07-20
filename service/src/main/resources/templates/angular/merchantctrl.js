@@ -444,7 +444,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(data) {
 			$scope.fetchMerchant();
-			$scope.searchInvoice();
+			$scope.searchInvoice(1);
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -461,7 +461,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$scope.searchInvoice(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -494,7 +494,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$scope.searchInvoice(1);
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -520,7 +520,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : $httpParamSerializer(refundRequest)
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$scope.searchInvoice(1);
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -543,7 +543,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : this.markpaid
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$scope.searchInvoice(1);
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);

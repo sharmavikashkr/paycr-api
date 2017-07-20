@@ -164,7 +164,11 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.updateOffSubsMerchant = function(merchant) {
 		$scope.offSubsmerchant = merchant;
 	}
-	$scope.searchMerchant = function() {
+	$scope.searchMerchant = function(newPage) {
+		if(newPage != 1 && (newPage < 1 || newPage > $scope.searchMerResp.allPages.length)) {
+			return;
+		}
+		$scope.searchMerchantReq.page = newPage;
 		var req = {
 			method : 'POST',
 			url : "/search/merchant",
@@ -174,8 +178,8 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			},
 			data : $scope.searchMerchantReq
 		}
-		$http(req).then(function(merchants) {
-			$scope.merchants = merchants.data;
+		$http(req).then(function(response) {
+			$scope.searchMerResp = response.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -194,8 +198,8 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			},
 			data : $scope.searchInvoiceReq
 		}
-		$http(req).then(function(invoices) {
-			$scope.searchInvResp = invoices.data;
+		$http(req).then(function(response) {
+			$scope.searchInvResp = response.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -366,7 +370,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : this.offlinesubs
 		}
 		$http(req).then(function(data) {
-			$scope.searchMerchant();
+			$scope.searchMerchant(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -401,7 +405,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : this.newmerchant
 		}
 		$http(req).then(function(data) {
-			$scope.searchMerchant();
+			$scope.searchMerchant(1);
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);

@@ -2,22 +2,14 @@ package com.paycr.common.bean;
 
 import java.util.List;
 
-import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.Merchant;
 
-public class SearchInvoiceResponse {
+public class SearchMerchantResponse {
 
-	private List<Invoice> invoiceList;
+	private List<Merchant> merchantList;
 	private int page;
 	private int noOfPages;
 	private List<Integer> allPages;
-
-	public List<Invoice> getInvoiceList() {
-		return invoiceList;
-	}
-
-	public void setInvoiceList(List<Invoice> invoiceList) {
-		this.invoiceList = invoiceList;
-	}
 
 	public int getPage() {
 		return page;
@@ -25,6 +17,14 @@ public class SearchInvoiceResponse {
 
 	public void setPage(int page) {
 		this.page = page;
+	}
+
+	public List<Merchant> getMerchantList() {
+		return merchantList;
+	}
+
+	public void setMerchantList(List<Merchant> merchantList) {
+		this.merchantList = merchantList;
 	}
 
 	public List<Integer> getAllPages() {

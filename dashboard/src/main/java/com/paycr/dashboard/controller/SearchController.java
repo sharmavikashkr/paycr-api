@@ -1,7 +1,5 @@
 package com.paycr.dashboard.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchMerchantResponse;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
@@ -38,9 +37,8 @@ public class SearchController {
 
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
 	@RequestMapping("/merchant")
-	public List<Merchant> searchMerchant(@RequestBody SearchMerchantRequest request) {
-		List<Merchant> merchants = serSer.fetchMerchantList(request);
-		return merchants;
+	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
+		return serSer.fetchMerchantList(request);
 	}
 
 }

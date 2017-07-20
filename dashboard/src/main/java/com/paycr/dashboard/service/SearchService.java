@@ -1,5 +1,6 @@
 package com.paycr.dashboard.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchMerchantResponse;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
 import com.paycr.common.data.domain.Invoice;
@@ -47,6 +49,11 @@ public class SearchService {
 				merchant = merRepo.findOne(request.getMerchant());
 			}
 			SearchInvoiceResponse response = invDao.findInvoices(request, merchant);
+			List<Integer> allPages = new ArrayList<Integer>();
+			for (int i = 1; i <= response.getNoOfPages(); i++) {
+				allPages.add(i);
+			}
+			response.setAllPages(allPages);
 			List<Invoice> invoiceList = response.getInvoiceList();
 			for (Invoice invoice : invoiceList) {
 				List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
@@ -62,9 +69,15 @@ public class SearchService {
 		}
 	}
 
-	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
+	public SearchMerchantResponse fetchMerchantList(SearchMerchantRequest request) {
 		try {
-			return merDao.findMerchants(request);
+			SearchMerchantResponse response = merDao.findMerchants(request);
+			List<Integer> allPages = new ArrayList<Integer>();
+			for (int i = 1; i <= response.getNoOfPages(); i++) {
+				allPages.add(i);
+			}
+			response.setAllPages(allPages);
+			return response;
 		} catch (Exception ex) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}

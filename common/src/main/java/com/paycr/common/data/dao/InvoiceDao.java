@@ -1,6 +1,5 @@
 package com.paycr.common.data.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -78,18 +77,14 @@ public class InvoiceDao {
 		invoices = query.getResultList();
 		SearchInvoiceResponse response = new SearchInvoiceResponse();
 		response.setInvoiceList(invoices);
+		response.setPage(searchReq.getPage());
 		int noOfPages = 1;
 		if (noOfInvoices % pageSize == 0) {
 			noOfPages = noOfInvoices / pageSize;
 		} else {
 			noOfPages = noOfInvoices / pageSize + 1;
 		}
-		List<Integer> allPages = new ArrayList<Integer>();
-		for (int i = 1; i <= noOfPages; i++) {
-			allPages.add(i);
-		}
-		response.setAllPages(allPages);
-		response.setPage(searchReq.getPage());
+		response.setNoOfPages(noOfPages);
 		return response;
 	}
 
