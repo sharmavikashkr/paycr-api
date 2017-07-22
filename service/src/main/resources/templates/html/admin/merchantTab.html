@@ -44,7 +44,7 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Mobile</label>
-										<input class="form-control" ng-model="searchMerchantReq.mobile" placeholder="Merchant Mobile" />
+										<input class="form-control" ng-model="searchMerchantReq.mobile" type="number" placeholder="Merchant Mobile" />
 									</div>
 								</td>
 							</tr>
@@ -125,7 +125,7 @@
 					<ul class="pagination" style="float:right;">
 						<li ng-class="(searchMerResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="searchMerchant(searchMerResp.page-1)" href="#">Previous</a></li>
 						<li ng-repeat="page in searchMerResp.allPages" ng-class="(page == searchMerResp.page)?'active':''"><a ng-click="searchMerchant(page)" href="#">{{page}}</a></li>
-						<li ng-class="(searchMerResp.page == searchMerResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchMerchant(searchMerResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(searchMerResp.page >= searchMerResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchMerchant(searchMerResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>

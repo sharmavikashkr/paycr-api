@@ -6,17 +6,21 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantUser;
+import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
+import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.data.repository.UserRoleRepository;
@@ -58,6 +62,9 @@ public class CommonService {
 	@Autowired
 	private InvoiceRepository invRepo;
 
+	@Autowired
+	private NotificationRepository notiRepo;
+
 	public List<Invoice> getMyInvoices(PcUser user) {
 		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(user.getEmail(), user.getMobile());
 		return myInvoices;
@@ -66,6 +73,20 @@ public class CommonService {
 	public List<Pricing> getPricings() {
 		List<Pricing> pricings = priceRepo.findAll();
 		return pricings;
+	}
+
+	public List<Notification> getNotifications() {
+		Pageable topFour = new PageRequest(0, 4);
+		if (secSer.isMerchantUser()) {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(null, merchant.getId(),
+					topFour);
+			return notices;
+		} else {
+			PcUser user = secSer.findLoggedInUser();
+			List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(user.getId(), null, topFour);
+			return notices;
+		}
 	}
 
 	public List<PcUser> getUsers() {

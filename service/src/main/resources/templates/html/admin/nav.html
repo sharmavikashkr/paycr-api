@@ -23,7 +23,7 @@
 				<li ng-repeat="notice in notices" class="panel">
 					<a href="#">
 						<div>
-							<i class="fa fa-comment fa-fw"></i> {{notice.subject}} <span class="pull-right text-muted small">{{notice.createdStr}}</span>
+							<i class="fa fa-comment fa-fw"></i> {{notice.subject}} <span class="pull-right text-muted small">{{notice.created | date:'dd-MM-yyyy HH:mm'}}</span>
 						</div>
 						<hr style="margin: 0px;">
 						<div>
@@ -41,7 +41,7 @@
 				<i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
-				<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
+				<li><a href="#" data-toggle="modal" data-target="#setting"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
 				<li class="divider"></li>
 				<li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
 			</ul>

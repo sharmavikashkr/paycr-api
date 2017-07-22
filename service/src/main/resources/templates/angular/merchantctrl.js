@@ -162,7 +162,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.fetchNotifications = function() {
 		var req = {
 			method : 'GET',
-			url : "/merchant/notifications",
+			url : "/common/notifications",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")

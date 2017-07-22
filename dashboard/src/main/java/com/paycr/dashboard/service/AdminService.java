@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -125,7 +123,7 @@ public class AdminService {
 		invoiceSetting.setTax(0.0F);
 		merchant.setInvoiceSetting(invoiceSetting);
 		merRepo.save(merchant);
-		
+
 		MerchantPricing merPricing = new MerchantPricing();
 		merPricing.setCreated(timeNow);
 		merPricing.setStartDate(timeNow);
@@ -167,15 +165,6 @@ public class AdminService {
 		noti.setCreated(timeNow);
 		noti.setRead(false);
 		notiRepo.save(noti);
-	}
-
-	public List<Notification> getNotifications(PcUser user) {
-		Pageable topFour = new PageRequest(0, 4);
-		List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(user.getId(), null, topFour);
-		for (Notification notice : notices) {
-			notice.setCreatedStr(DateUtil.getDashboardDate(notice.getCreated()));
-		}
-		return notices;
 	}
 
 	public void createPricing(Pricing pricing) {

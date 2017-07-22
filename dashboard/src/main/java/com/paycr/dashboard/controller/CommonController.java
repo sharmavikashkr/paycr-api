@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.service.SecurityService;
@@ -38,6 +39,12 @@ public class CommonController {
 		PcUser user = secSer.findLoggedInUser();
 		user.setPassword("");
 		return user;
+	}
+	
+	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@RequestMapping("/notifications")
+	public List<Notification> getNotifications() {
+		return comSer.getNotifications();
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")

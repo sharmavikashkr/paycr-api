@@ -35,6 +35,14 @@
 							<tr>
 								<td>
 									<div class="form-group">
+										<label class="control-label">Amount</label>
+										<input class="form-control" ng-model="searchInvoiceReq.amount" type="number" placeholder="1000.00" step=".01" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
 										<label class="control-label">Consumer Email</label>
 										<input class="form-control" ng-model="searchInvoiceReq.email" placeholder="name@email.com" />
 									</div>
@@ -44,7 +52,7 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Consumer Mobile</label>
-										<input class="form-control" ng-model="searchInvoiceReq.mobile" placeholder="9999999999" />
+										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="number" placeholder="9999999999" />
 									</div>
 								</td>
 							</tr>
@@ -181,7 +189,7 @@
 					<ul class="pagination" style="float:right;">
 						<li ng-class="(searchInvResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="searchInvoice(searchInvResp.page-1)" href="#">Previous</a></li>
 						<li ng-repeat="page in searchInvResp.allPages" ng-class="(page == searchInvResp.page)?'active':''"><a ng-click="searchInvoice(page)" href="#">{{page}}</a></li>
-						<li ng-class="(searchInvResp.page == searchInvResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchInvoice(searchInvResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(searchInvResp.page >= searchInvResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchInvoice(searchInvResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>

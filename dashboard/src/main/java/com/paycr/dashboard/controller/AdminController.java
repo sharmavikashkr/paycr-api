@@ -1,7 +1,6 @@
 package com.paycr.dashboard.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Notification;
-import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.service.SecurityService;
 import com.paycr.dashboard.service.AdminService;
@@ -53,13 +50,6 @@ public class AdminController {
 		}
 		ModelAndView mv = new ModelAndView("html/dashboard/admin");
 		return mv;
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
-	@RequestMapping("/notifications")
-	public List<Notification> getNotifications() {
-		PcUser user = secSer.findLoggedInUser();
-		return adminService.getNotifications(user);
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")

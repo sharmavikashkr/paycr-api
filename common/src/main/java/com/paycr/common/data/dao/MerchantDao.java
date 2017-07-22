@@ -27,36 +27,34 @@ public class MerchantDao {
 	public SearchMerchantResponse findMerchants(SearchMerchantRequest searchReq) {
 		List<Merchant> merchants = null;
 		StringBuilder squery = new StringBuilder("SELECT m FROM Merchant m WHERE");
-		int pos = 1;
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
-			squery.append(" m.name LIKE '%?%'" + pos++ + " AND");
+			squery.append(" m.name LIKE :name AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-			squery.append(" m.email = ?" + pos++ + " AND");
+			squery.append(" m.email = :email AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-			squery.append(" m.mobile = ?" + pos++ + " AND");
+			squery.append(" m.mobile = :mobile AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
-			squery.append(" m.created between ?" + pos++ + " AND ?" + pos++ + " AND");
+			squery.append(" m.created between :startDate AND :endDate AND");
 		}
 		squery.append(" m.id > 0 ORDER BY m.id DESC");
 
 		TypedQuery<Merchant> query = em.createQuery(squery.toString(), Merchant.class);
 
-		pos = 1;
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
-			query.setParameter(pos++, searchReq.getName());
+			query.setParameter("name", "%" + searchReq.getName() + "%");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-			query.setParameter(pos++, searchReq.getEmail());
+			query.setParameter("email", searchReq.getEmail());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-			query.setParameter(pos++, searchReq.getMobile());
+			query.setParameter("mobile", searchReq.getMobile());
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
-			query.setParameter(pos++, DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
-			query.setParameter(pos++, DateUtil.getEndOfDay(searchReq.getCreatedTo()));
+			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
+			query.setParameter("endDate", DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
 		int noOfMerchants = query.getResultList().size();
 		query.setFirstResult(pageSize * (searchReq.getPage() - 1));

@@ -1,7 +1,6 @@
 package com.paycr.dashboard.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
-import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.service.SecurityService;
 import com.paycr.dashboard.service.MerchantService;
@@ -75,13 +73,6 @@ public class MerchantController {
 			response.addHeader("error_message", ex.getMessage());
 			return null;
 		}
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
-	@RequestMapping("/notifications")
-	public List<Notification> getNotifications() {
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		return merSer.getNotifications(merchant);
 	}
 
 	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")

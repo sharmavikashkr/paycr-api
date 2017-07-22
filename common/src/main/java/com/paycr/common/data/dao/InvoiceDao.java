@@ -28,48 +28,46 @@ public class InvoiceDao {
 	public SearchInvoiceResponse findInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
 		List<Invoice> invoices = null;
 		StringBuilder squery = new StringBuilder("SELECT i FROM Invoice i WHERE");
-		int pos = 1;
 		if (!CommonUtil.isNull(merchant)) {
-			squery.append(" i.merchant = ?" + pos++ + " AND");
+			squery.append(" i.merchant = :merchant AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-			squery.append(" i.invoiceCode = ?" + pos++ + " AND");
+			squery.append(" i.invoiceCode = :invoiceCode AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-			squery.append(" i.consumer.email = ?" + pos++ + " AND");
+			squery.append(" i.consumer.email = :email AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-			squery.append(" i.consumer.mobile = ?" + pos++ + " AND");
+			squery.append(" i.consumer.mobile = :mobile AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getAmount())) {
-			squery.append(" i.payAmount = ?" + pos++ + " AND");
+			squery.append(" i.payAmount = :amount AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
-			squery.append(" i.created between ?" + pos++ + " AND ?" + pos++ + " AND");
+			squery.append(" i.created between :startDate AND :endDate AND");
 		}
 		squery.append(" i.id > 0 ORDER BY i.id DESC");
 
 		TypedQuery<Invoice> query = em.createQuery(squery.toString(), Invoice.class);
 
-		pos = 1;
 		if (!CommonUtil.isNull(merchant)) {
-			query.setParameter(pos++, merchant);
+			query.setParameter("merchant", merchant);
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-			query.setParameter(pos++, searchReq.getInvoiceCode());
+			query.setParameter("invoiceCode", searchReq.getInvoiceCode());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-			query.setParameter(pos++, searchReq.getEmail());
+			query.setParameter("email", searchReq.getEmail());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-			query.setParameter(pos++, searchReq.getMobile());
+			query.setParameter("mobile", searchReq.getMobile());
 		}
 		if (!CommonUtil.isNull(searchReq.getAmount())) {
-			query.setParameter(pos++, searchReq.getAmount());
+			query.setParameter("amount", searchReq.getAmount());
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
-			query.setParameter(pos++, DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
-			query.setParameter(pos++, DateUtil.getEndOfDay(searchReq.getCreatedTo()));
+			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
+			query.setParameter("endDate", DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
 		int noOfInvoices = query.getResultList().size();
 		query.setFirstResult(pageSize * (searchReq.getPage() - 1));
