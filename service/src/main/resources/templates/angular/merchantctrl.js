@@ -1,6 +1,13 @@
-var app = angular.module('payCrApp', [ "ngRoute", "ngCookies" ]);
+var app = angular.module('payCrApp', [ "ngRoute", "ngCookies", "ngMaterial" ]);
+app.config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+       return moment(date).format('YYYY-MM-DD');
+    };
+});
 app.controller('MerchantController',
 function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
+	var dateNow = moment().toDate();
+	var dateStart = moment().subtract(30, 'day').toDate();
 	$scope.server = {
 		"hideMessage" : true,
 		"respStatus" : "WELCOME!",
@@ -19,15 +26,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"invoiceCode" : "",
 		"email" : "",
 		"mobile" : "",
-		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-12-31",
+		"createdFrom" : dateStart,
+		"createdTo" : dateNow,
 		"page" : "1"
-	}
-	$scope.newInvoiceSetting = {
-		"name" : "",
-		"sendEmail" : true,
-		"sendSms" : false,
-		"expiryDays" : 7
 	}
 	$scope.newinvoice = {
 		"invoiceCode" : "",
@@ -291,24 +292,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.merchant.paymentSettings = paymentsettings.data;
 			$scope.serverMessage(paymentsettings);
 			$scope.editPayPrefs = false;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.createInvoiceSetting = function() {
-		var req = {
-			method : 'POST',
-			url : "/merchant/invoicesetting/update",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : $scope.newInvoiceSetting
-		}
-		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
-			$scope.refreshSetting(invoicesetting.data);
-			$scope.serverMessage(invoicesetting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

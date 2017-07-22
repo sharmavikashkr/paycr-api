@@ -1,6 +1,13 @@
-var app = angular.module('payCrAdminApp', [ "ngRoute", "ngCookies" ]);
+var app = angular.module('payCrAdminApp', [ "ngRoute", "ngCookies", "ngMaterial" ]);
+app.config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+       return moment(date).format('YYYY-MM-DD');
+    };
+});
 app.controller('AdminController',
 function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
+	var dateNow = moment().toDate();
+	var dateStart = moment().subtract(30, 'day').toDate();
 	$scope.server = {
 		"hideMessage" : true,
 		"respStatus" : "WELCOME!",
@@ -19,15 +26,16 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"name" : "",
 		"email" : "",
 		"mobile" : "",
-		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-12-31"
+		"createdFrom" : dateStart,
+		"createdTo" : dateNow,
+		"page" : 1
 	}
 	$scope.searchInvoiceReq = {
 		"invoiceCode" : "",
 		"email" : "",
 		"mobile" : "",
-		"createdFrom" : "2017-01-01",
-		"createdTo" : "2017-12-31",
+		"createdFrom" : dateStart,
+		"createdTo" : dateNow,
 		"page" : "1"
 	}
 	$scope.newpricing = {

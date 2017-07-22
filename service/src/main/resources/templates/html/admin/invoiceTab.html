@@ -10,9 +10,9 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Created between</label>
-										<input class="form-control" ng-model="searchInvoiceReq.createdFrom" placeholder="Created From" />
-										<span>&nbsp;&nbsp;and</span>
-										<input class="form-control" ng-model="searchInvoiceReq.createdTo" placeholder="Created To" />
+										<md-datepicker ng-model="searchInvoiceReq.createdFrom"></md-datepicker>
+										<br><span>&nbsp;&nbsp;and</span><br>
+										<md-datepicker ng-model="searchInvoiceReq.createdTo"></md-datepicker>
 									</div>
 								</td>
 							</tr>
