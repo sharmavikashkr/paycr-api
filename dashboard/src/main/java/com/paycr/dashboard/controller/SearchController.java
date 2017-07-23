@@ -13,6 +13,7 @@ import com.paycr.common.bean.SearchMerchantResponse;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.SearchService;
 
 @RestController
@@ -25,7 +26,7 @@ public class SearchController {
 	@Autowired
 	private SearchService serSer;
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/invoice")
 	public SearchInvoiceResponse searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -35,7 +36,7 @@ public class SearchController {
 		return serSer.fetchInvoiceList(request);
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.PAYCR_AUTH)
 	@RequestMapping("/merchant")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
 		return serSer.fetchMerchantList(request);

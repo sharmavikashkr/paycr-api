@@ -1,6 +1,6 @@
 <div>
 	<br>
-	<div class="row">
+	<div ng-if="user.access.finance" class="row">
 		<div class="col-lg-2 col-lg-offset-9">
 			<button title="Create Invoice" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createInvoice">
 				<i class="fa fa-plus"></i>
@@ -36,7 +36,7 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Amount</label>
-										<input class="form-control" ng-model="searchInvoiceReq.amount" type="number" placeholder="1000.00" step=".01" />
+										<input class="form-control" ng-model="searchInvoiceReq.amount" placeholder="1000.00" step=".01" />
 									</div>
 								</td>
 							</tr>
@@ -52,7 +52,7 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Consumer Mobile</label>
-										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="number" placeholder="9999999999" />
+										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="" placeholder="9999999999" />
 									</div>
 								</td>
 							</tr>
@@ -157,7 +157,7 @@
 														data-toggle="modal" data-target="#invoiceinfo"
 														class="btn btn-default">Info</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status != 'PAID' && roles.indexOf('ROLE_MERCHANT') > -1"
+														ng-if="invoice.status != 'PAID' && user.access.finance"
 														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#markPaidInvoice"
 														type="button" class="btn btn-success">Mark Paid</button>
@@ -166,15 +166,15 @@
 														ng-click="enquireInvoice(invoice.invoiceCode)"
 														type="button" class="btn btn-info">Enquire</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED'"
+														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
 														ng-click="notifyInvoice(invoice.invoiceCode)"
 														type="button" class="btn btn-warning">Notify</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && roles.indexOf('ROLE_MERCHANT') > -1"
+														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
 														ng-click="expireInvoice(invoice.invoiceCode)"
 														type="button" class="btn btn-default">Expire</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status == 'PAID' && roles.indexOf('ROLE_MERCHANT') > -1"
+														ng-if="invoice.status == 'PAID' && user.access.finance"
 														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#refundInvoice"
 														type="button" class="btn btn-danger">Refund</button>

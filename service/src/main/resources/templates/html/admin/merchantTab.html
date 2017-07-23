@@ -2,7 +2,7 @@
 	<br>
 	<div class="row">
 		<div class="col-lg-2 col-lg-offset-9">
-			<button ng-if="roles.indexOf('ROLE_ADMIN') > -1" title="Create Merchant" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createMerchant">
+			<button ng-if="user.access.supervisor" title="Create Merchant" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createMerchant">
 				<i class="fa fa-plus"></i>
 			</button>
 		</div>
@@ -80,7 +80,7 @@
 											<div class="panel-body col-lg-12 col-sm-12 col-xs-12">
 												<div class="row">
 													<h4 class="col-lg-6">Subscriptions</h4>
-													<div ng-if="roles.indexOf('ROLE_ADMIN') > -1" class="col-lg-2 col-lg-offset-3">
+													<div ng-if="user.access.supervisor" class="col-lg-2 col-lg-offset-3">
 														<button title="Add Offline Subscription" type="button"
 															class="btn btn-info btn-circle btn-md"
 															ng-click="updateOffSubsMerchant(merchant)"

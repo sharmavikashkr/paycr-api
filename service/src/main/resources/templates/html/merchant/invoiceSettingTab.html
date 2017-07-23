@@ -4,7 +4,7 @@
 		<div class="col-xs-12 col-md-12 col-lg-3">
 			<div class="panel panel-default">
 				<div class="panel-heading"> Payment Setting
-					<a ng-if="roles.indexOf('ROLE_MERCHANT') > -1" href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs">
+					<a ng-if="user.access.finance" href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs">
 						<span class="btn glyphicon glyphicon-edit" style="float: right; padding: 0px;"></span>
 					</a>
 				</div>
@@ -23,7 +23,7 @@
 							<input class="form-control" id="set-rzpsi" ng-model="merchant.paymentSetting.rzpSecretId" />
 						</div>
 					</fieldset>
-					<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1">
+					<div ng-if="user.access.finance">
 						<button ng-click="savePaymentSetting()" class="btn btn-info">Save</button>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Invoice Preference</div>
 				<div class="panel-body">
-					<fieldset ng-disabled="roles.indexOf('ROLE_MERCHANT') <= -1">
+					<fieldset ng-disabled="!user.access.finance">
 						<input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail">&nbsp;<strong>Send Email</strong><br>
 						<input type="checkbox" ng-model="merchant.invoiceSetting.sendSms">&nbsp;<strong>Send Sms</strong><br>
 						<br>
@@ -46,7 +46,7 @@
 							<input class="form-control" ng-model="merchant.invoiceSetting.tax" type="number" required />
 						</div>
 					</fieldset>
-					<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1">
+					<div ng-if="user.access.finance">
 						<button ng-click="saveInvoiceSetting(merchant.invoiceSetting)" class="btn btn-info">Save</button>
 					</div>
 				</div>
@@ -58,7 +58,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading"> Custom Params
 					<span style="float: right; margin-top: -5px;">
-						<button ng-if="roles.indexOf('ROLE_MERCHANT') > -1" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#createCustomParam">
+						<button ng-if="user.access.finance" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#createCustomParam">
 							<i class="fa fa-plus"></i>
 						</button>
 					</span>
@@ -69,14 +69,14 @@
 							<tr>
 								<th>Param Name</th>
 								<th>Provider</th>
-								<th ng-if="roles.indexOf('ROLE_MERCHANT') > -1">Action</th>
+								<th ng-if="user.access.finance">Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="param in merchant.invoiceSetting.customParams">
 								<td>{{param.paramName}}</td>
 								<td>{{param.provider}}</td>
-								<td ng-if="roles.indexOf('ROLE_MERCHANT') > -1">
+								<td ng-if="user.access.finance">
 									<button ng-click="deleteParam(param.id, param.paramName)" style="margin-top: -5px;" type="button" class="btn btn-danger btn-xs">
 										<i class="fa fa-minus"></i>
 									</button>

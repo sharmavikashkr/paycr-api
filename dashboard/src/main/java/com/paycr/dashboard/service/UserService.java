@@ -24,6 +24,7 @@ import com.paycr.common.data.repository.ResetPasswordRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.ResetStatus;
 import com.paycr.common.type.Role;
+import com.paycr.common.type.UserType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.HmacSignerUtil;
 
@@ -103,9 +104,11 @@ public class UserService {
 		user.setEmail("admin@paycr.in");
 		user.setPassword(bcPassEncode.encode("password@123"));
 		user.setMobile("9977553311");
+		user.setUserType(UserType.ADMIN);
+		user.setCreatedBy("SYSTEM");
 		List<UserRole> userRoles = new ArrayList<UserRole>();
 		UserRole userRole = new UserRole();
-		userRole.setRole(Role.ROLE_ADMIN);
+		userRole.setRole(Role.ROLE_PAYCR);
 		userRole.setPcUser(user);
 		userRoles.add(userRole);
 		user.setUserRoles(userRoles);

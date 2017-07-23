@@ -1,4 +1,4 @@
-<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" id="createCustomParam" class="modal fade" role="dialog">
+<div id="createCustomParam" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -14,7 +14,7 @@
 									<tr>
 										<td>
 											<div ng-class="(addCustomParamForm.addCustomParamName.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label" for="cus-paramName">Param Name</label>
+												<label class="control-label">Param Name</label>
 												<input name="addCustomParamName" class="form-control" placeholder="Param Name" ng-model="newparam.paramName" ng-pattern="patterns.paramNamePattern" required/>
 											</div>
 										</td>
@@ -23,7 +23,7 @@
 										<td>
 											<div class="form-group">
 												<label class="control-label" for="cus-provider">Provider</label>
-												<select class="form-control" id="cus-provider" ng-model="newparam.provider">
+												<select class="form-control" ng-model="newparam.provider">
 													<option ng-repeat="provider in paramProviders" value="{{provider}}">{{provider}}</option>
 												</select>
 											</div>

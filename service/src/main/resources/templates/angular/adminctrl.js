@@ -69,7 +69,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	}
 	$scope.prepare = function() {
 		$scope.fetchUser();
-		$scope.fetchRoles();
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
 	}
@@ -80,31 +79,32 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.fetchEnums = function() {
 		var req = {
 			method : 'GET',
-			url : "/enum/providers",
+			url : "/enum/paymodes",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			}
 		}
-		$http(req).then(function(providers) {
-			$scope.paramProviders = providers.data;
+		$http(req).then(function(payModes) {
+			$scope.payModes = payModes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 		
 		var req = {
-				method : 'GET',
-				url : "/enum/paymodes",
-				headers : {
-					"Authorization" : "Bearer "
-							+ $cookies.get("access_token")
-				}
+			method : 'GET',
+			url : "/enum/usertypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
 			}
-			$http(req).then(function(payModes) {
-				$scope.payModes = payModes.data;
-			}, function(data) {
-				$scope.serverMessage(data);
-			});
+		}
+		$http(req).then(function(usertypes) {
+			$scope.userTypes = usertypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
 	}
 	$scope.fetchUser = function() {
 		var req = {
@@ -117,21 +117,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(user) {
 			$scope.user = user.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchRoles = function() {
-		var req = {
-			method : 'GET',
-			url : "/common/roles",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(roles) {
-			$scope.roles = roles.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

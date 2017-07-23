@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.AdminService;
 
 @RestController
@@ -44,7 +45,7 @@ public class AdminController {
 		if (token == null) {
 			response.sendRedirect("/adminlogin");
 		}
-		boolean isAdmin = secSer.isLoggedInUserAdmin(token);
+		boolean isAdmin = secSer.isPaycrUser(token);
 		if (!isAdmin) {
 			response.sendRedirect("/adminlogin");
 		}
@@ -52,7 +53,7 @@ public class AdminController {
 		return mv;
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/merchant/new")
 	public void newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
 		try {
@@ -63,7 +64,7 @@ public class AdminController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/new")
 	public void createPricing(@RequestBody Pricing pricing, HttpServletResponse response) {
 		try {
@@ -74,7 +75,7 @@ public class AdminController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/toggle/{pricingId}")
 	public void togglePricing(@PathVariable Integer pricingId, HttpServletResponse response) {
 		try {

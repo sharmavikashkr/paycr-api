@@ -28,10 +28,12 @@ import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.SubscriptionModeRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.type.Role;
+import com.paycr.common.type.UserType;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
@@ -40,6 +42,9 @@ import com.paycr.dashboard.validation.PricingValidator;
 
 @Service
 public class AdminService {
+
+	@Autowired
+	private SecurityService secSer;
 
 	@Autowired
 	private UserRepository userRepo;
@@ -143,6 +148,8 @@ public class AdminService {
 		user.setEmail(merchant.getEmail());
 		user.setPassword(bcPassEncode.encode("password@123"));
 		user.setMobile(merchant.getMobile());
+		user.setUserType(UserType.ADMIN);
+		user.setCreatedBy(secSer.findLoggedInUser().getEmail());
 		List<UserRole> userRoles = new ArrayList<UserRole>();
 		UserRole userRole = new UserRole();
 		userRole.setRole(Role.ROLE_MERCHANT);

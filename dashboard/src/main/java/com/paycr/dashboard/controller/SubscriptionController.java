@@ -27,6 +27,7 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.SubscriptionService;
 import com.razorpay.RazorpayException;
 
@@ -40,13 +41,13 @@ public class SubscriptionController {
 	@Autowired
 	private SubscriptionService subsSer;
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/modes")
 	public List<SubscriptionMode> getSubscriptionModes() {
 		return subsSer.getSubscriptionModes();
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/mode/new")
 	public void createSubscriptionSetting(@RequestBody SubscriptionMode subsMode, HttpServletResponse response) {
 		try {
@@ -57,7 +58,7 @@ public class SubscriptionController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{subscriptionId}")
 	public Subscription getSubscription(@PathVariable Integer subscriptionId, HttpServletResponse response) {
 		try {
@@ -69,7 +70,7 @@ public class SubscriptionController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/mode/toggle/{modeId}")
 	public void toggleSubscriptionSetting(@PathVariable Integer modeId, HttpServletResponse response) {
 		try {
@@ -80,7 +81,7 @@ public class SubscriptionController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/new/offline")
 	public void offlineSubscription(@RequestBody OfflineSubscription offline, HttpServletResponse response) {
 		try {

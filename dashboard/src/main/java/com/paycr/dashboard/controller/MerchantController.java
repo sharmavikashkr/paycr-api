@@ -20,6 +20,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.MerchantService;
 
 @RestController
@@ -54,14 +55,14 @@ public class MerchantController {
 		return mv;
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/get")
 	public Merchant getMerchant() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		return merchant;
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/account/update")
 	public Merchant updateAccount(@RequestBody Merchant mer, HttpServletResponse response) {
 		try {
@@ -75,7 +76,7 @@ public class MerchantController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/paymentsetting/update")
 	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting,
 			HttpServletResponse response) {
@@ -90,7 +91,7 @@ public class MerchantController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/invoicesetting/update")
 	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting,
 			HttpServletResponse response) {
@@ -105,7 +106,7 @@ public class MerchantController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/customParam/new")
 	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
 		try {
@@ -119,7 +120,7 @@ public class MerchantController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/customParam/delete/{id}")
 	public InvoiceSetting deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
 		try {

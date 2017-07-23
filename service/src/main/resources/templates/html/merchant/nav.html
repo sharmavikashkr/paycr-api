@@ -55,11 +55,12 @@
 			<ul class="nav" id="side-menu">
 				<li><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
 				<li><a href="#" data-target="#myInvoicesTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> My Invoices</a></li>
-				<li><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
+				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
 				<li><a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory Items</a></li>
+				<li ng-if="user.access.ops"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
 				<li><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
-				<li ng-if="roles.indexOf('ROLE_MERCHANT') > -1"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
-				<li ng-if="roles.indexOf('ROLE_MERCHANT') > -1"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> User Management</a></li>
+				<li ng-if="user.access.finance"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
+				<li ng-if="user.access.admin"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> User Management</a></li>
 			</ul>
 		</div>
 	</div>

@@ -28,18 +28,18 @@
         	<div ng-include="'/html/common/alert'"></div>
 	        <div ng-init="searchInvoice(1)" id="dashboardTab" class="tab-pane active" ng-include="'/html/merchant/dashboardTab'"></div>
 	        <div ng-init="fetchMyInvoices()" id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
-	        <div id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
+	        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
 	        <div id="accountTab" class="tab-pane fade" ng-include="'/html/merchant/accountTab'"></div>
-	        <div ng-init="fetchPricings()" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
-	        <div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" ng-init="fetchMyUsers()" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
+	        <div ng-if="user.access.finance" ng-init="fetchPricings()" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
+	        <div ng-if="user.access.admin" ng-init="fetchMyUsers()" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
 		</div>
     </div>
-    <div ng-include="'/html/merchant/createInvoiceModal'"></div>
-	<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" ng-include="'/html/merchant/createParamModal'"></div>
-	<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" ng-include="'/html/common/createUserModal'"></div>
+    <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceModal'"></div>
+	<div ng-if="user.access.finance" ng-include="'/html/merchant/createParamModal'"></div>
 	<div ng-include="'/html/common/invoiceInfoModal'"></div>
-	<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" ng-include="'/html/merchant/markPaidModal'"></div>
-	<div ng-if="roles.indexOf('ROLE_MERCHANT') > -1" ng-include="'/html/merchant/refundModal'"></div>
+	<div ng-if="user.access.finance" ng-include="'/html/merchant/markPaidModal'"></div>
+	<div ng-if="user.access.finance" ng-include="'/html/merchant/refundModal'"></div>
+	<div ng-if="user.access.admin" ng-include="'/html/common/createUserModal'"></div>
 	<div ng-include="'/html/common/profileModal'"></div>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/metisMenu/metisMenu.min.js"></script>

@@ -29,6 +29,7 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.RoleUtil;
 import com.paycr.invoice.service.PaymentService;
 import com.paycr.invoice.validation.InvoiceValidator;
 
@@ -60,7 +61,7 @@ public class InvoiceController {
 	@Autowired
 	private PaymentService payService;
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
@@ -76,7 +77,7 @@ public class InvoiceController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
 	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
@@ -94,7 +95,7 @@ public class InvoiceController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
 	public void notify(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
@@ -111,7 +112,7 @@ public class InvoiceController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER')")
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
@@ -126,7 +127,7 @@ public class InvoiceController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/refund", method = RequestMethod.POST)
 	public void refund(@RequestParam(value = "amount", required = true) BigDecimal amount,
 			@RequestParam(value = "invoiceCode", required = true) String invoiceCode, HttpServletResponse response) {
@@ -151,7 +152,7 @@ public class InvoiceController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT')")
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
 	public void markPaid(@RequestBody Payment payment, HttpServletResponse response) {
 		try {

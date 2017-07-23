@@ -17,7 +17,7 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.service.UserRoleService;
+import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.CommonService;
 
 @RestController
@@ -28,45 +28,35 @@ public class CommonController {
 	private SecurityService secSer;
 
 	@Autowired
-	private UserRoleService urSer;
-
-	@Autowired
 	private CommonService comSer;
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/user")
 	public PcUser getUser() {
 		PcUser user = secSer.findLoggedInUser();
-		user.setPassword("");
+		user.setAccess(comSer.loadAccess(user));
 		return user;
 	}
-	
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/notifications")
 	public List<Notification> getNotifications() {
 		return comSer.getNotifications();
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
 	@RequestMapping("/pricings")
 	public List<Pricing> getPricings() {
 		return comSer.getPricings();
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
-	@RequestMapping("/roles")
-	public String[] getRoles() {
-		PcUser user = secSer.findLoggedInUser();
-		return urSer.getUserRoles(user);
-	}
-
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
 	@RequestMapping("/users")
 	public List<PcUser> getUsers() {
 		return comSer.getUsers();
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
 	@RequestMapping("/create/user")
 	public void createUser(@RequestBody PcUser user, HttpServletResponse response) {
 		try {
@@ -77,7 +67,7 @@ public class CommonController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
 	@RequestMapping("/toggle/user/{userId}")
 	public void toggleUser(@PathVariable("userId") Integer userId) {
 		try {
@@ -86,7 +76,7 @@ public class CommonController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_USER') or hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_ADMIN_USER')")
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/invoices")
 	public List<Invoice> myInvoices(HttpServletResponse response) {
 		try {

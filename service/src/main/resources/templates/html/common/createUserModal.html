@@ -35,6 +35,16 @@
 											</div>
 										</td>
 									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="control-label">Role</label>
+												<select class="form-control" ng-model="newuser.userType">
+													<option ng-repeat="userType in userTypes" value="{{userType}}">{{userType}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>

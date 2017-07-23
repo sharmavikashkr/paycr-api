@@ -5,7 +5,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Subscription Modes
 					<span style="float: right; margin-top: -5px;">
-						<button ng-if="roles.indexOf('ROLE_ADMIN') > -1" title="Add Subscription Mode" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#addSubscriptionMode">
+						<button title="Add Subscription Mode" type="button" class="btn btn-info btn-circle btn-md" data-toggle="modal" data-target="#addSubscriptionMode">
 							<i class="fa fa-plus"></i>
 						</button>
 					</span>
@@ -19,7 +19,7 @@
 								<th>Razorpay Merchant Id</th>
 								<th>Razorpay Key Id</th>
 								<th>Razorpay Secret Id</th>
-								<th ng-if="roles.indexOf('ROLE_ADMIN') > -1">Action</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -29,7 +29,7 @@
 								<td>{{subsMode.rzpMerchantId}}</td>
 								<td>{{subsMode.rzpKeyId}}</td>
 								<td>{{subsMode.rzpSecretId}}</td>
-								<td ng-if="roles.indexOf('ROLE_ADMIN') > -1">
+								<td>
 									<button title="ACTIVATE" ng-if="!subsMode.active" ng-click="toggleSubsMode(subsMode.id)" type="button" class="btn btn-success btn-xs">
 										<i class="fa fa-check"></i>
 									</button>
@@ -44,7 +44,7 @@
 	<hr>
 	<div class="row">
 		<div class="col-lg-2 col-lg-offset-9">
-			<button ng-if="roles.indexOf('ROLE_ADMIN') > -1" title="Create Pricing" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createPricing">
+			<button title="Create Pricing" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createPricing">
 				<i class="fa fa-plus"></i>
 			</button>
 		</div>
@@ -62,7 +62,7 @@
 							<th class="text-center">Invoice Limit</th>
 							<th class="text-center">Start Amount</th>
 							<th class="text-center">End Amount</th>
-							<th class="text-center" ng-if="roles.indexOf('ROLE_ADMIN') > -1">Action</th>
+							<th class="text-center">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -73,10 +73,10 @@
 							<td>{{pricing.invoiceLimit}}</td>
 							<td>&#8377; {{pricing.startAmount}}</td>
 							<td>&#8377; {{pricing.endAmount}}</td>
-							<td ng-if="pricing.active && roles.indexOf('ROLE_ADMIN') > -1">
+							<td ng-if="pricing.active">
 								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
 							</td>
-							<td ng-if="!pricing.active && roles.indexOf('ROLE_ADMIN') > -1">
+							<td ng-if="!pricing.active">
 								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-success btn-xs">Activate</button>
 							</td>
 						</tr>

@@ -61,7 +61,8 @@ public class SecurityService {
 		PcUser user = findLoggedInUser();
 		String[] roles = userRoleService.getUserRoles(user);
 		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_USER.name())) {
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
 			return true;
 		}
 		return false;
@@ -71,7 +72,8 @@ public class SecurityService {
 		PcUser user = findLoggedInUser();
 		String[] roles = userRoleService.getUserRoles(user);
 		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_USER.name())) {
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
 			return merRepo.findOne(merUser.getMerchantId());
 		}
@@ -85,21 +87,25 @@ public class SecurityService {
 		}
 		String[] roles = userRoleService.getUserRoles(user);
 		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_USER.name())) {
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
 			return merRepo.findOne(merUser.getMerchantId());
 		}
 		return null;
 	}
 
-	public boolean isLoggedInUserAdmin(String token) {
+	public boolean isPaycrUser(String token) {
 		PcUser user = findLoggedInUser(token);
 		if (user == null) {
 			return false;
 		}
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_ADMIN.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_ADMIN_USER.name())) {
+		if (Arrays.asList(roles).contains(Role.ROLE_PAYCR.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_SUPERVISOR.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_FINANCE.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_OPS.name())
+				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_ADVISOR.name())) {
 			return true;
 		}
 		return false;

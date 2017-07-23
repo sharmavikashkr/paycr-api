@@ -4,6 +4,8 @@ CREATE TABLE if not exists pc_user (
 	name varchar(50) DEFAULT NULL,
     email varchar(50) DEFAULT NULL,
     mobile varchar(15) NOT NULL,
+    created_by varchar(50) NOT NULL,
+    user_type varchar(20) NOT NULL,
     password varchar(100) NOT NULL,
     address_line1 varchar(255) DEFAULT NULL,
     address_line2 varchar(255) DEFAULT NULL,

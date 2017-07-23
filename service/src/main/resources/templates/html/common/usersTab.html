@@ -17,6 +17,7 @@
 						<td class="text-center"><strong>Name</strong></td>
 						<td class="text-center"><strong>Email</strong></td>
 						<td class="text-center"><strong>Mobile</strong></td>
+						<td class="text-center"><strong>Role</strong></td>
 						<td class="text-center"><strong>Actions</strong></td>
 					</tr>
 				</thead>
@@ -25,6 +26,7 @@
 						<td>{{myuser.name}}</td>
 						<td>{{myuser.email}}</td>
 						<td>{{myuser.mobile}}</td>
+						<td>{{myuser.userType}}</td>
 						<td>
 							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs">
 								<i class="fa fa-minus"></i>
