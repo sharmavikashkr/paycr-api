@@ -231,7 +231,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createUser')).modal('hide');
+		angular.element(document.querySelector('#createUserModal')).modal('hide');
 	}
 	$scope.toggleUser = function(userId) {
 		var req = {
@@ -283,7 +283,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createPricing')).modal('hide');
+		angular.element(document.querySelector('#createPricingModal')).modal('hide');
 	}
 	$scope.togglePricing = function(pricingId) {
 		var req = {
@@ -334,7 +334,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#addSubscriptionMode')).modal('hide');
+		angular.element(document.querySelector('#addSubsModeModal')).modal('hide');
 	}
 	$scope.toggleSubsMode = function(modeId) {
 		var req = {
@@ -367,7 +367,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createOfflineSubscription')).modal('hide');
+		angular.element(document.querySelector('#createOfflineSubsModal')).modal('hide');
 	}
 	$scope.fetchSubscriptionDetails = function(subscriptionId) {
 		var req = {
@@ -403,7 +403,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createMerchant')).modal('hide');
+		angular.element(document.querySelector('#createMerchantModal')).modal('hide');
 	}
 	$scope.logout = function() {
 		$timeout(function(){

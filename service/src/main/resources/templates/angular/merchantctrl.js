@@ -206,7 +206,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createUser')).modal('hide');
+		angular.element(document.querySelector('#createUserModal')).modal('hide');
 	}
 	$scope.toggleUser = function(userId) {
 		var req = {
@@ -331,7 +331,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createCustomParam')).modal('hide');
+		angular.element(document.querySelector('#createParamModal')).modal('hide');
 	}
 	$scope.deleteParam = function(paramId, paramName) {
 		if (!confirm('Delete ' + paramName + ' ?')) {
@@ -430,7 +430,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createInvoice')).modal('hide');
+		angular.element(document.querySelector('#createInvoiceModal')).modal('hide');
 	}
 	$scope.enquireInvoice = function(invoiceCode) {
 		var req = {
@@ -507,7 +507,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 		$scope.refundAmount = ''
-		angular.element(document.querySelector('#refundInvoice')).modal('hide');
+		angular.element(document.querySelector('#refundModal')).modal('hide');
 	}
 	$scope.markPaidInvoice = function(invoiceCode) {
 		if(!this.markPaidForm.$valid) {
@@ -529,7 +529,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#markPaidInvoice')).modal('hide');
+		angular.element(document.querySelector('#markPaidModal')).modal('hide');
 	}
 	$scope.refreshSetting = function(invoicesetting) {
 		$scope.newInvSetting = invoicesetting;
