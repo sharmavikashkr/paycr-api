@@ -2,7 +2,7 @@
 	<br>
 	<div class="row">
 		<div class="col-lg-2 col-lg-offset-9">
-			<button ng-if="user.access.supervisor" title="Create Merchant" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createMerchant">
+			<button ng-if="user.access.supervisor" title="Create Merchant" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createMerchantModal">
 				<i class="fa fa-plus"></i>
 			</button>
 		</div>
@@ -85,7 +85,7 @@
 															class="btn btn-info btn-circle btn-md"
 															ng-click="updateOffSubsMerchant(merchant)"
 															data-toggle="modal"
-															data-target="#createOfflineSubscription">
+															data-target="#createOfflineSubsModal">
 															<i class="fa fa-plus"></i>
 														</button>
 													</div>
@@ -106,7 +106,7 @@
 															ng-repeat="merpricing in merchant.pricings"
 															ng-click="fetchSubscriptionDetails(merpricing.subscription.id)"
 															title="{{merpricing.status}}" data-toggle="modal"
-															data-target="#subsDetails">
+															data-target="#subsDetailsModal">
 															<td class="text-center">{{merpricing.pricing.name}}</td>
 															<td class="text-center">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 															<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
