@@ -7,14 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.Merchant;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
 	public Invoice findByInvoiceCode(String invoiceCode);
 
-	public Invoice findByInvoiceCodeAndMerchant(String invoiceCode, Integer merchant);
+	public Invoice findByInvoiceCodeAndMerchant(String invoiceCode, Merchant merchant);
 
 	@Query("SELECT i from Invoice i WHERE i.consumer.email = ?1 OR i.consumer.mobile = ?2 ORDER BY i.id DESC")
-	public List<Invoice> findInvoicesForMerchant(String email, String mobile);
+	public List<Invoice> findInvoicesForConsumer(String email, String mobile);
 }

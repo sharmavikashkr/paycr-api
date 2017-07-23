@@ -83,7 +83,7 @@ public class InvoiceController {
 		try {
 			Date timeNow = new Date();
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
+			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 			if (timeNow.compareTo(invoice.getExpiry()) < 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 				invoice.setExpiry(timeNow);
 				invoice.setStatus(InvoiceStatus.EXPIRED);
@@ -101,7 +101,7 @@ public class InvoiceController {
 		try {
 			Date timeNow = new Date();
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
+			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 			if (timeNow.compareTo(invoice.getExpiry()) < 0) {
 				notSer.notify(invoice);
 				invRepo.save(invoice);
@@ -117,7 +117,7 @@ public class InvoiceController {
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
+			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 			if (!InvoiceStatus.PAID.equals(invoice.getStatus())) {
 				payService.enquire(invoice);
 			}
@@ -133,7 +133,7 @@ public class InvoiceController {
 			@RequestParam(value = "invoiceCode", required = true) String invoiceCode, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant.getId());
+			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 			List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoiceCode, PayType.REFUND);
 			BigDecimal refundAllowed = invoice.getPayAmount();
 			for (Payment refund : refunds) {
@@ -159,7 +159,7 @@ public class InvoiceController {
 			payment.setCreated(new Date());
 			payment.setStatus("captured");
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant.getId());
+			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
 			payment.setAmount(invoice.getPayAmount());
 			payment.setPayType(PayType.SALE);
 			invoice.setPayment(payment);

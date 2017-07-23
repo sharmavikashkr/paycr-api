@@ -65,7 +65,7 @@ public class CommonService {
 	private NotificationRepository notiRepo;
 
 	public List<Invoice> getMyInvoices(PcUser user) {
-		List<Invoice> myInvoices = invRepo.findInvoicesForMerchant(user.getEmail(), user.getMobile());
+		List<Invoice> myInvoices = invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
 		return myInvoices;
 	}
 
