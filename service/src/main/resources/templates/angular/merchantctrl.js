@@ -454,6 +454,28 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(invoiceReports) {
 			$scope.invoiceReports = invoiceReports.data;
+			$scope.loadedreport = angular.copy(report);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.downloadReport = function(report) {
+		var req = {
+			method : 'POST',
+			url : "/reports/download",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token"),
+				"Accept" : "text/csv"
+			},
+			data : report
+		}
+		$http(req).then(function(content) {
+		    var hiddenElement = document.createElement('a');
+		    hiddenElement.href = 'data:attachment/csv,' + encodeURI(content.data);
+		    hiddenElement.target = '_blank';
+		    hiddenElement.download = 'report.csv';
+		    hiddenElement.click();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

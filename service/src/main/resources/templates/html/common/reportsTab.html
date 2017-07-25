@@ -59,11 +59,11 @@
 			</table>
 			<br>
 			<div ng-if="invoiceReports != null" class="panel panel-default">
-				<div class="panel-heading">Invoice Report
+				<div class="panel-heading">Invoice Report ({{loadedreport.name}})
 					<span style="float: right;">
-						<button title="Download CSV" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addSubsModeModal">
+						<a title="Download CSV" type="button" class="btn btn-info btn-xs" ng-click="downloadReport(loadedreport)">
 							<i class="fa fa-book"></i>
-						</button>
+						</a>
 					</span>
 				</div>
 				<div class="panel-body">

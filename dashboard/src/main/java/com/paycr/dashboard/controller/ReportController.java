@@ -1,11 +1,14 @@
 package com.paycr.dashboard.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,6 +76,26 @@ public class ReportController {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			repSer.deleteReport(reportId, merchant);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@RequestMapping("/download")
+	public void downloadReport(@RequestBody Report report, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			String csv = repSer.downloadReport(report, merchant);
+			response.setContentType("text/csv");
+			byte[] data = csv.getBytes();
+			response.setHeader("Content-Disposition", "attachment; filename=\"report.csv\"");
+			response.setContentType("text/csv;charset=utf-8");
+			InputStream is = new ByteArrayInputStream(data);
+			IOUtils.copy(is, response.getOutputStream());
+			response.setContentLength(data.length);
+			response.flushBuffer();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

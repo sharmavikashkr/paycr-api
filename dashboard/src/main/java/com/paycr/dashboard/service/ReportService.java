@@ -1,7 +1,7 @@
 package com.paycr.dashboard.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -17,9 +17,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.type.TimeRange;
 import com.paycr.common.util.Constants;
-import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.helper.ReportHelper;
 
 @Service
@@ -49,24 +47,16 @@ public class ReportService {
 		repRepo.save(report);
 	}
 
+	public String downloadReport(Report report, Merchant merchant) throws IOException {
+		List<InvoiceReport> invReport = loadReport(report, merchant);
+		return repHelp.getCsv(invReport);
+	}
+
 	public List<InvoiceReport> loadReport(Report report, Merchant merchant) {
 		isValidReport(report);
 		SearchInvoiceRequest searchReq = new SearchInvoiceRequest();
 		Date createdTo = new Date();
-		Date createdFrom = new Date();
-		Calendar calendar = Calendar.getInstance();
-		if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
-			calendar.add(Calendar.DAY_OF_YEAR, -7);
-		} else if (TimeRange.LAST_2WEEKS.equals(report.getTimeRange())) {
-			calendar.add(Calendar.DAY_OF_YEAR, -14);
-		} else if (TimeRange.LAST_MONTH.equals(report.getTimeRange())) {
-			calendar.add(Calendar.DAY_OF_YEAR, -30);
-		} else if (TimeRange.LAST_2MONTHS.equals(report.getTimeRange())) {
-			calendar.add(Calendar.DAY_OF_YEAR, -60);
-		} else if (TimeRange.FOREVER.equals(report.getTimeRange())) {
-			calendar.add(Calendar.YEAR, -1);
-		}
-		createdFrom = DateUtil.getStartOfDay(calendar.getTime());
+		Date createdFrom = repHelp.getCreatedFrom(report.getTimeRange());
 		searchReq.setCreatedFrom(createdFrom);
 		searchReq.setCreatedTo(createdTo);
 		searchReq.setInvoiceStatus(report.getInvoiceStatus());
