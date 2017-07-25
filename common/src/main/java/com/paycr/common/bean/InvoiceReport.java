@@ -5,7 +5,6 @@ import java.util.Date;
 
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.InvoiceStatus;
-import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
@@ -13,9 +12,10 @@ public class InvoiceReport {
 
 	private Date created;
 	private String invoiceCode;
-	private InvoiceType invoiceType;
 	private InvoiceStatus invoiceStatus;
 	private BigDecimal payAmount;
+	private BigDecimal tax;
+	private BigDecimal discount;
 	private Currency currency;
 	private String paymentRefNo;
 	private PayType payType;
@@ -36,14 +36,6 @@ public class InvoiceReport {
 
 	public void setInvoiceCode(String invoiceCode) {
 		this.invoiceCode = invoiceCode;
-	}
-
-	public InvoiceType getInvoiceType() {
-		return invoiceType;
-	}
-
-	public void setInvoiceType(InvoiceType invoiceType) {
-		this.invoiceType = invoiceType;
 	}
 
 	public BigDecimal getPayAmount() {
@@ -100,5 +92,21 @@ public class InvoiceReport {
 
 	public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
 		this.invoiceStatus = invoiceStatus;
+	}
+
+	public BigDecimal getTax() {
+		return tax;
+	}
+
+	public void setTax(BigDecimal tax) {
+		this.tax = tax;
+	}
+
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
 	}
 }

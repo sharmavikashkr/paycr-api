@@ -72,7 +72,8 @@
 							<tr>
 								<td class="text-center"><strong>Created</strong></td>
 								<td class="text-center"><strong>Invoice Code</strong></td>
-								<td class="text-center"><strong>Invoice Type</strong></td>
+								<td class="text-center"><strong>Tax</strong></td>
+								<td class="text-center"><strong>Discount</strong></td>
 								<td class="text-center"><strong>Invoice Status</strong></td>
 								<td class="text-center"><strong>Pay Amount</strong></td>
 								<td class="text-center"><strong>Currency</strong></td>
@@ -86,7 +87,8 @@
 							<tr ng-repeat="invoiceReport in invoiceReports">
 								<td>{{invoiceReport.created | date:'dd-MM-yyyy HH:mm'}}</td>
 								<td>{{invoiceReport.invoiceCode}}</td>
-								<td>{{invoiceReport.invoiceType}}</td>
+								<td>{{invoiceReport.tax}}</td>
+								<td>{{invoiceReport.discount}}</td>
 								<td>{{invoiceReport.invoiceStatus}}</td>
 								<td>{{invoiceReport.payAmount}}</td>
 								<td>{{invoiceReport.currency}}</td>
