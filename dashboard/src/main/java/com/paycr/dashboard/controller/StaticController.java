@@ -17,8 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
+import com.paycr.common.type.PayType;
+import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.RoleUtil;
 
@@ -51,43 +54,45 @@ public class StaticController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/enum/providers")
-	public List<String> getParamProviders() {
-		List<String> providers = new ArrayList<String>();
-		for (ParamValueProvider provider : ParamValueProvider.values()) {
-			providers.add(provider.name());
-		}
-		return providers;
-	}
-
-	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/enum/paymodes")
-	public List<String> getPayModes() {
-		List<String> payModes = new ArrayList<String>();
-		for (PayMode payMode : PayMode.values()) {
-			payModes.add(payMode.name());
-		}
-		return payModes;
-	}
-
-	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/enum/usertypes")
-	public List<String> getUserTypes() {
-		boolean isMerchant = secSer.isMerchantUser();
-		PcUser user = secSer.findLoggedInUser();
-		List<String> userTypes = new ArrayList<String>();
-		if (isMerchant) {
-			userTypes.add(UserType.FINANCE.name());
-			userTypes.add(UserType.OPERATIONS.name());
-		} else {
-			if (UserType.ADMIN.equals(user.getUserType())) {
-				userTypes.add(UserType.SUPERVISOR.name());
+	@RequestMapping("/enum/{type}")
+	public List<String> getEnum(@PathVariable String type) {
+		List<String> enumList = new ArrayList<String>();
+		if ("providers".equals(type)) {
+			for (ParamValueProvider provider : ParamValueProvider.values()) {
+				enumList.add(provider.name());
 			}
-			userTypes.add(UserType.FINANCE.name());
-			userTypes.add(UserType.OPERATIONS.name());
-			userTypes.add(UserType.ADVISOR.name());
+		} else if ("paymodes".equals(type)) {
+			for (PayMode payMode : PayMode.values()) {
+				enumList.add(payMode.name());
+			}
+		} else if ("usertypes".equals(type)) {
+			boolean isMerchant = secSer.isMerchantUser();
+			PcUser user = secSer.findLoggedInUser();
+			if (isMerchant) {
+				enumList.add(UserType.FINANCE.name());
+				enumList.add(UserType.OPERATIONS.name());
+			} else {
+				if (UserType.ADMIN.equals(user.getUserType())) {
+					enumList.add(UserType.SUPERVISOR.name());
+				}
+				enumList.add(UserType.FINANCE.name());
+				enumList.add(UserType.OPERATIONS.name());
+				enumList.add(UserType.ADVISOR.name());
+			}
+		} else if ("timeranges".equals(type)) {
+			for (TimeRange timeRange : TimeRange.values()) {
+				enumList.add(timeRange.name());
+			}
+		} else if ("paytypes".equals(type)) {
+			for (PayType payType : PayType.values()) {
+				enumList.add(payType.name());
+			}
+		} else if ("invoicestatuses".equals(type)) {
+			for (InvoiceStatus status : InvoiceStatus.values()) {
+				enumList.add(status.name());
+			}
 		}
-		return userTypes;
+		return enumList;
 	}
 
 }

@@ -1,0 +1,104 @@
+<div>
+	<br>
+	<div class="row text-center">
+		<div class="col-md-12">
+			<h4>Reports</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center"><strong>Time Range</strong></td>
+						<td class="text-center"><strong>Invoice Status</strong></td>
+						<td class="text-center"><strong>Pay Type</strong></td>
+						<td class="text-center"><strong>Pay Mode</strong></td>
+						<td class="text-center"><strong>Actions</strong></td>
+					</tr>
+				</thead>
+				<tbody id="itemBody">
+					<tr class="warning">
+						<td><input class="form-control" placeholder="name" ng-model="newreport.name" required></td>
+						<td>
+							<select class="form-control" ng-model="newreport.timeRange">
+								<option ng-repeat="timeRange in timeRanges" value="{{timeRange}}">{{timeRange}}</option>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" ng-model="newreport.invoiceStatus">
+								<option ng-repeat="invoiceStatus in invoiceStatuses" value="{{invoiceStatus}}">{{invoiceStatus}}</option>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" ng-model="newreport.payType">
+								<option ng-repeat="payType in payTypes" value="{{payType}}">{{payType}}</option>
+							</select>
+						</td>
+						<td>
+							<select class="form-control" ng-model="newreport.payMode">
+								<option ng-repeat="payMode in payModes" value="{{payMode}}">{{payMode}}</option>
+							</select>
+						</td>
+						<td>
+							<button ng-click="createReport()" type="button" class="btn btn-success btn-xs">Create</button>
+							<button ng-click="loadReport(newreport)" type="button" class="btn btn-success btn-xs">Load</button>
+						</td>
+					</tr>
+					<tr ng-class="(report.merchant!=null)?'success':''" ng-repeat="report in reports">
+						<td>{{report.name}}</td>
+						<td>{{report.timeRange}}</td>
+						<td>{{report.invoiceStatus}}</td>
+						<td>{{report.payType}}</td>
+						<td>{{report.payMode}}</td>
+						<td>
+							<button ng-click="loadReport(report)" type="button" class="btn btn-success btn-xs">Load</button>
+							<button ng-if="report.merchant!=null" ng-click="deleteReport(report.id, report.name)" type="button" class="btn btn-danger btn-xs">
+								<i class="fa fa-minus"></i>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+			<div ng-if="invoiceReports != null" class="panel panel-default">
+				<div class="panel-heading">Invoice Report
+					<span style="float: right;">
+						<button title="Download CSV" type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addSubsModeModal">
+							<i class="fa fa-book"></i>
+						</button>
+					</span>
+				</div>
+				<div class="panel-body">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td class="text-center"><strong>Created</strong></td>
+								<td class="text-center"><strong>Invoice Code</strong></td>
+								<td class="text-center"><strong>Invoice Type</strong></td>
+								<td class="text-center"><strong>Invoice Status</strong></td>
+								<td class="text-center"><strong>Pay Amount</strong></td>
+								<td class="text-center"><strong>Currency</strong></td>
+								<td class="text-center"><strong>Payment Ref No</strong></td>
+								<td class="text-center"><strong>Pay Type</strong></td>
+								<td class="text-center"><strong>Pay Mode</strong></td>
+								<td class="text-center"><strong>Pay Method</strong></td>
+							</tr>
+						</thead>
+						<tbody id="itemBody">
+							<tr ng-repeat="invoiceReport in invoiceReports">
+								<td>{{invoiceReport.created | date:'dd-MM-yyyy HH:mm'}}</td>
+								<td>{{invoiceReport.invoiceCode}}</td>
+								<td>{{invoiceReport.invoiceType}}</td>
+								<td>{{invoiceReport.invoiceStatus}}</td>
+								<td>{{invoiceReport.payAmount}}</td>
+								<td>{{invoiceReport.currency}}</td>
+								<td>{{invoiceReport.paymentRefNo}}</td>
+								<td>{{invoiceReport.payType}}</td>
+								<td>{{invoiceReport.payMode}}</td>
+								<td>{{invoiceReport.payMethod}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

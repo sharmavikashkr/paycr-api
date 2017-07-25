@@ -19,8 +19,26 @@
 							<tr>
 								<td>
 									<div class="form-group">
+										<label class="control-label">Merchant Id</label>
+										<input class="form-control" ng-model="searchInvoiceReq.merchant" type="number" placeholder="1000" step="1" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
 										<label class="control-label">Invoice Code</label>
 										<input class="form-control" ng-model="searchInvoiceReq.invoiceCode" placeholder="invoiceCode" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="control-label">Invoice Status</label>
+										<select class="form-control" ng-model="searchInvoiceReq.invoiceStatus">
+											<option ng-repeat="invoiceStatus in invoiceStatuses" value="{{invoiceStatus}}">{{invoiceStatus}}</option>
+										</select>
 									</div>
 								</td>
 							</tr>

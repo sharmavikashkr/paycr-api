@@ -48,7 +48,7 @@ public class SearchService {
 			if (request.getMerchant() != null) {
 				merchant = merRepo.findOne(request.getMerchant());
 			}
-			SearchInvoiceResponse response = invDao.findInvoices(request, merchant);
+			SearchInvoiceResponse response = invDao.findInvoicesInPage(request, merchant);
 			List<Integer> allPages = new ArrayList<Integer>();
 			for (int i = 1; i <= response.getNoOfPages(); i++) {
 				allPages.add(i);

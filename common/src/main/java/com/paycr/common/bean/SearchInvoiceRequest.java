@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.paycr.common.type.InvoiceStatus;
+
 public class SearchInvoiceRequest {
 
 	private Integer merchant;
@@ -12,6 +14,7 @@ public class SearchInvoiceRequest {
 	private String email;
 	private String mobile;
 	private BigDecimal amount;
+	private InvoiceStatus invoiceStatus;
 	private int page;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -82,6 +85,14 @@ public class SearchInvoiceRequest {
 
 	public void setPage(int page) {
 		this.page = page;
+	}
+
+	public InvoiceStatus getInvoiceStatus() {
+		return invoiceStatus;
+	}
+
+	public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
+		this.invoiceStatus = invoiceStatus;
 	}
 
 }

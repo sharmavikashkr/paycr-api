@@ -25,8 +25,31 @@ public class InvoiceDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public SearchInvoiceResponse findInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
-		List<Invoice> invoices = null;
+	public List<Invoice> findAllInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
+		TypedQuery<Invoice> query = selectDataQuery(searchReq, merchant);
+		return query.getResultList();
+	}
+
+	public SearchInvoiceResponse findInvoicesInPage(SearchInvoiceRequest searchReq, Merchant merchant) {
+		TypedQuery<Invoice> query = selectDataQuery(searchReq, merchant);
+		int noOfInvoices = query.getResultList().size();
+		query.setFirstResult(pageSize * (searchReq.getPage() - 1));
+		query.setMaxResults(pageSize);
+		List<Invoice> invoices = query.getResultList();
+		SearchInvoiceResponse response = new SearchInvoiceResponse();
+		response.setInvoiceList(invoices);
+		response.setPage(searchReq.getPage());
+		int noOfPages = 1;
+		if (noOfInvoices % pageSize == 0) {
+			noOfPages = (noOfInvoices / pageSize);
+		} else {
+			noOfPages = (noOfInvoices / pageSize + 1);
+		}
+		response.setNoOfPages(noOfPages);
+		return response;
+	}
+
+	private TypedQuery<Invoice> selectDataQuery(SearchInvoiceRequest searchReq, Merchant merchant) {
 		StringBuilder squery = new StringBuilder("SELECT i FROM Invoice i WHERE");
 		if (!CommonUtil.isNull(merchant)) {
 			squery.append(" i.merchant = :merchant AND");
@@ -42,6 +65,9 @@ public class InvoiceDao {
 		}
 		if (!CommonUtil.isNull(searchReq.getAmount())) {
 			squery.append(" i.payAmount = :amount AND");
+		}
+		if (!CommonUtil.isNull(searchReq.getInvoiceStatus())) {
+			squery.append(" i.status = :status AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			squery.append(" i.created between :startDate AND :endDate AND");
@@ -65,25 +91,14 @@ public class InvoiceDao {
 		if (!CommonUtil.isNull(searchReq.getAmount())) {
 			query.setParameter("amount", searchReq.getAmount());
 		}
+		if (!CommonUtil.isNull(searchReq.getInvoiceStatus())) {
+			query.setParameter("status", searchReq.getInvoiceStatus());
+		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
 			query.setParameter("endDate", DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
-		int noOfInvoices = query.getResultList().size();
-		query.setFirstResult(pageSize * (searchReq.getPage() - 1));
-		query.setMaxResults(pageSize);
-		invoices = query.getResultList();
-		SearchInvoiceResponse response = new SearchInvoiceResponse();
-		response.setInvoiceList(invoices);
-		response.setPage(searchReq.getPage());
-		int noOfPages = 1;
-		if (noOfInvoices % pageSize == 0) {
-			noOfPages = noOfInvoices / pageSize;
-		} else {
-			noOfPages = noOfInvoices / pageSize + 1;
-		}
-		response.setNoOfPages(noOfPages);
-		return response;
+		return query;
 	}
 
 }

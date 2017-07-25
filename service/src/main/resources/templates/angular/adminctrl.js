@@ -105,6 +105,47 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 		
+		var req = {
+			method : 'GET',
+			url : "/enum/timeranges",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(timeranges) {
+			$scope.timeRanges = timeranges.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/invoicestatuses",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(invoicestatuses) {
+			$scope.invoiceStatuses = invoicestatuses.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/paytypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(paytypes) {
+			$scope.payTypes = paytypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 	$scope.fetchUser = function() {
 		var req = {
@@ -404,6 +445,55 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#createMerchantModal')).modal('hide');
+	}
+	$scope.fetchReports = function() {
+		var req = {
+			method : 'GET',
+			url : "/reports",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(reports) {
+			$scope.reports = reports.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.createReport = function() {
+		var req = {
+			method : 'POST',
+			url : "/reports/new",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : this.newreport
+		}
+		$http(req).then(function(data) {
+			$scope.fetchReports();
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		this.newreport = null;
+	}
+	$scope.loadReport = function(report) {
+		var req = {
+			method : 'POST',
+			url : "/reports/load",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : report
+		}
+		$http(req).then(function(invoiceReports) {
+			$scope.invoiceReports = invoiceReports.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 	$scope.logout = function() {
 		$timeout(function(){
