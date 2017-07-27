@@ -20,6 +20,7 @@ public class InvoiceSetting {
 
 	private boolean sendSms;
 	private boolean sendEmail;
+	private boolean addItems;
 	private int expiryDays;
 	private float tax;
 
@@ -72,6 +73,14 @@ public class InvoiceSetting {
 
 	public void setTax(float tax) {
 		this.tax = tax;
+	}
+
+	public boolean isAddItems() {
+		return addItems;
+	}
+
+	public void setAddItems(boolean addItems) {
+		this.addItems = addItems;
 	}
 
 }

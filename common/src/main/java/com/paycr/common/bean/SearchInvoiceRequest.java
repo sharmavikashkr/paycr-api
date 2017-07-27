@@ -15,7 +15,6 @@ public class SearchInvoiceRequest {
 	private String mobile;
 	private BigDecimal amount;
 	private InvoiceStatus invoiceStatus;
-	private int page;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdFrom;
@@ -77,14 +76,6 @@ public class SearchInvoiceRequest {
 
 	public void setCreatedTo(Date createdTo) {
 		this.createdTo = createdTo;
-	}
-
-	public int getPage() {
-		return page;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
 	}
 
 	public InvoiceStatus getInvoiceStatus() {

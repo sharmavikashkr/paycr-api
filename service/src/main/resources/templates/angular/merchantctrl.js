@@ -45,7 +45,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		} ],
 		"sendEmail" : false,
 		"sendSms" : false,
-		"tax" : 18.00,
+		"addItems" : false,
+		"total" : 0.00,
+		"tax" : 0.00,
 		"discount" : 0,
 		"payAmount" : 0,
 		"currency" : "INR",
@@ -283,11 +285,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.searchInvoice = function(newPage) {
-		if(newPage != 1 && (newPage < 1 || newPage > $scope.searchInvResp.allPages.length)) {
-			return;
-		}
-		$scope.searchInvoiceReq.page = newPage;
+	$scope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/invoice",
@@ -298,7 +296,8 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : $scope.searchInvoiceReq
 		}
 		$http(req).then(function(invoices) {
-			$scope.searchInvResp = invoices.data;
+			$scope.invoiceList = invoices.data;
+			$scope.loadInvoicePage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -455,6 +454,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$http(req).then(function(invoiceReports) {
 			$scope.invoiceReports = invoiceReports.data;
 			$scope.loadedreport = angular.copy(report);
+			$scope.loadReportPage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -499,6 +499,38 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.loadInvoicePage = function(page) {
+		var pageSize = 1;
+		$scope.invoiceResp = {};
+		$scope.invoiceResp.invoiceList = angular.copy($scope.invoiceList);
+		$scope.invoiceResp.invoiceList.splice(pageSize * page, $scope.invoiceList.length - pageSize);
+		$scope.invoiceResp.invoiceList.splice(0, pageSize * (page - 1));
+		$scope.invoiceResp.page = page;
+		$scope.invoiceResp.allPages = [];
+		var noOfPages = $scope.invoiceList.length/pageSize;
+		if($scope.invoiceList.length%pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for(var i = 1; i <= noOfPages; i++) {
+			$scope.invoiceResp.allPages.push(i);
+		}
+	}
+	$scope.loadReportPage = function(page) {
+		var pageSize = 15;
+		$scope.reportsResp = {};
+		$scope.reportsResp.invoiceReports = angular.copy($scope.invoiceReports);
+		$scope.reportsResp.invoiceReports.splice(pageSize * page, $scope.invoiceReports.length - pageSize);
+		$scope.reportsResp.invoiceReports.splice(0, pageSize * (page - 1));
+		$scope.reportsResp.page = page;
+		$scope.reportsResp.allPages = [];
+		var noOfPages = $scope.invoiceReports.length/pageSize;
+		if($scope.invoiceReports.length%pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for(var i = 1; i <= noOfPages; i++) {
+			$scope.reportsResp.allPages.push(i);
+		}
+	}
 	$scope.updateInvoiceInfo = function(invoice) {
 		$scope.invoiceInfo = invoice;
 	}
@@ -520,17 +552,22 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	}
 	$scope.calculateTotal = function() {
 		var totals = 0;
-		for ( var item in $scope.newinvoice.items) {
-			if ($scope.newinvoice.items[item].rate == null) {
-				$scope.newinvoice.items[item].rate = 0;
+		if($scope.newinvoice.addItems) {
+			for ( var item in $scope.newinvoice.items) {
+				if ($scope.newinvoice.items[item].rate == null) {
+					$scope.newinvoice.items[item].rate = 0;
+				}
+				if ($scope.newinvoice.items[item].quantity == null) {
+					$scope.newinvoice.items[item].quantity = 0;
+				}
+				$scope.newinvoice.items[item].price = parseFloat($scope.newinvoice.items[item].rate)
+						* parseFloat($scope.newinvoice.items[item].quantity);
+				totals = totals
+						+ parseFloat($scope.newinvoice.items[item].price);
 			}
-			if ($scope.newinvoice.items[item].quantity == null) {
-				$scope.newinvoice.items[item].quantity = 0;
-			}
-			$scope.newinvoice.items[item].price = parseFloat($scope.newinvoice.items[item].rate)
-					* parseFloat($scope.newinvoice.items[item].quantity);
-			totals = totals
-					+ parseFloat($scope.newinvoice.items[item].price);
+			$scope.newinvoice.total = totals;
+		} else {
+			totals = $scope.newinvoice.total;
 		}
 		if ($scope.newinvoice.tax == null) {
 			$scope.newinvoice.tax = 0;
@@ -557,7 +594,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		$http(req).then(function(data) {
 			$scope.fetchMerchant();
-			$scope.searchInvoice(1);
+			$scope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -574,7 +611,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice(1);
+			$scope.searchInvoice();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -607,7 +644,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice(1);
+			$scope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -633,7 +670,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : $httpParamSerializer(refundRequest)
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice(1);
+			$scope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -656,7 +693,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			data : this.markpaid
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice(1);
+			$scope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -668,6 +705,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$scope.newinvoice.invoiceSettingId = angular.copy(invoicesetting.id);
 		$scope.newinvoice.sendEmail = angular.copy(invoicesetting.sendEmail);
 		$scope.newinvoice.sendMobile = angular.copy(invoicesetting.sendMobile);
+		$scope.newinvoice.addItems = angular.copy(invoicesetting.addItems);
 		$scope.newinvoice.expiresIn = angular.copy(invoicesetting.expiryDays);
 		$scope.newinvoice.tax = angular.copy(invoicesetting.tax);
 		$scope.newinvoice.customParams = [];

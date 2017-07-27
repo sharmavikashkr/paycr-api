@@ -35,6 +35,7 @@
 								<div class="panel-body">
 									<input type="checkbox" ng-model="newinvoice.sendEmail">&nbsp;<strong>Send Email</strong><br>
 									<input type="checkbox" ng-model="newinvoice.sendSms">&nbsp;<strong>Send Sms</strong><br>
+									<input type="checkbox" ng-change="calculateTotal()" ng-model="newinvoice.addItems">&nbsp;<strong>Add Items</strong><br>
 									<hr>
 									<div ng-class="(createInvoiceForm.expiresIn.$valid)?'':'has-error'" class="form-group">
 										<label class="control-label">Expires in (days):</label>
@@ -77,7 +78,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr ng-repeat="item in newinvoice.items">
+												<tr ng-if="newinvoice.addItems" ng-repeat="item in newinvoice.items">
 													<td>
 														<div class="panel text-center" style="width: 65px;">
 															<button ng-click="deleteItem($index)" type="button" class="col-lg-6 btn btn-danger btn-circle btn-md">
@@ -111,6 +112,20 @@
 															<div class="input-group-addon">&#8377;</div>
 															<div class="form-group">
 																<input class="form-control text-right" ng-model="item.price" placeholder="4000.00" type="number" step="0.01" readonly />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Total</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon">&#8377;</div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-readonly="newinvoice.addItems" ng-change="calculateTotal()" ng-model="newinvoice.total" placeholder="1200.00" type="number" step="0.01" />
 															</div>
 														</div>
 													</td>

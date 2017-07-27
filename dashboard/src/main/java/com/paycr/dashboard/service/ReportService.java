@@ -60,7 +60,7 @@ public class ReportService {
 		searchReq.setCreatedFrom(createdFrom);
 		searchReq.setCreatedTo(createdTo);
 		searchReq.setInvoiceStatus(report.getInvoiceStatus());
-		List<Invoice> invoices = invDao.findAllInvoices(searchReq, merchant);
+		List<Invoice> invoices = invDao.findInvoices(searchReq, merchant);
 		List<InvoiceReport> invoiceReports = new ArrayList<InvoiceReport>();
 		List<Future<List<InvoiceReport>>> dataListFutures = new ArrayList<Future<List<InvoiceReport>>>();
 		for (Invoice invoice : invoices) {

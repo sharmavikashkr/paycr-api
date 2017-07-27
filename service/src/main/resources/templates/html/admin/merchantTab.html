@@ -49,7 +49,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td><button ng-click="searchMerchant(1)" type="button" class="btn btn-info">Search</button></td>
+								<td><button ng-click="searchMerchant()" type="button" class="btn btn-info">Search</button></td>
 							</tr>
 						</tbody>
 					</table>
@@ -65,7 +65,7 @@
 								<th>Created</th>
 							</tr>
 						</thead>
-						<tbody ng-repeat="merchant in searchMerResp.merchantList">
+						<tbody ng-repeat="merchant in merchantResp.merchantList">
 							<tr ng-class="(merchant.active)?'success':'warning'" data-toggle="collapse" data-target="#details-{{merchant.id}}" class="accordion-toggle">
 								<td>{{merchant.id}}</td>
 								<td>{{merchant.name}}</td>
@@ -123,9 +123,9 @@
 						</tbody>
 					</table>
 					<ul class="pagination" style="float:right;">
-						<li ng-class="(searchMerResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="searchMerchant(searchMerResp.page-1)" href="#">Previous</a></li>
-						<li ng-repeat="page in searchMerResp.allPages" ng-class="(page == searchMerResp.page)?'active':''"><a ng-click="searchMerchant(page)" href="#">{{page}}</a></li>
-						<li ng-class="(searchMerResp.page >= searchMerResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchMerchant(searchMerResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(merchantResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadMerchantPage(merchantResp.page-1)" href="#">Previous</a></li>
+						<li ng-repeat="page in merchantResp.allPages" ng-class="(page == merchantResp.page)?'active':''"><a ng-click="loadMerchantPage(page)" href="#">{{page}}</a></li>
+						<li ng-class="(merchantResp.page >= merchantResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadMerchantPage(merchantResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>

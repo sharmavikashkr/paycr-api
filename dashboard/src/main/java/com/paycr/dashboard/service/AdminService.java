@@ -124,6 +124,7 @@ public class AdminService {
 		InvoiceSetting invoiceSetting = new InvoiceSetting();
 		invoiceSetting.setSendEmail(true);
 		invoiceSetting.setSendSms(false);
+		invoiceSetting.setAddItems(true);
 		invoiceSetting.setExpiryDays(7);
 		invoiceSetting.setTax(0.0F);
 		merchant.setInvoiceSetting(invoiceSetting);

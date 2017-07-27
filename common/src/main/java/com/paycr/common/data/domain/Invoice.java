@@ -43,6 +43,9 @@ public class Invoice implements Serializable {
 	private InvoiceType invoiceType;
 
 	@Column(precision = 10, scale = 2)
+	private BigDecimal total;
+
+	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
 	@Column(precision = 10, scale = 2)
@@ -53,6 +56,7 @@ public class Invoice implements Serializable {
 
 	private boolean sendEmail;
 	private boolean sendSms;
+	private boolean addItems;
 	private Date expiry;
 
 	@Enumerated(EnumType.STRING)
@@ -246,5 +250,21 @@ public class Invoice implements Serializable {
 
 	public void setInvoiceType(InvoiceType invoiceType) {
 		this.invoiceType = invoiceType;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public boolean isAddItems() {
+		return addItems;
+	}
+
+	public void setAddItems(boolean addItems) {
+		this.addItems = addItems;
 	}
 }

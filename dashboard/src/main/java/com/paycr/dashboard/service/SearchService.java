@@ -1,6 +1,5 @@
 package com.paycr.dashboard.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -9,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
-import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchMerchantResponse;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
 import com.paycr.common.data.domain.Invoice;
@@ -42,7 +39,7 @@ public class SearchService {
 	@Autowired
 	private PaymentRepository payRepo;
 
-	public SearchInvoiceResponse fetchInvoiceList(SearchInvoiceRequest request) {
+	public List<Invoice> fetchInvoiceList(SearchInvoiceRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		Date timeNow = new Date();
@@ -50,13 +47,7 @@ public class SearchService {
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
-		SearchInvoiceResponse response = invDao.findInvoicesInPage(request, merchant);
-		List<Integer> allPages = new ArrayList<Integer>();
-		for (int i = 1; i <= response.getNoOfPages(); i++) {
-			allPages.add(i);
-		}
-		response.setAllPages(allPages);
-		List<Invoice> invoiceList = response.getInvoiceList();
+		List<Invoice> invoiceList = invDao.findInvoices(request, merchant);
 		for (Invoice invoice : invoiceList) {
 			List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
 			invoice.setAllPayments(payments);
@@ -66,19 +57,13 @@ public class SearchService {
 			}
 		}
 		invRepo.save(invoiceList);
-		return response;
+		return invoiceList;
 	}
 
-	public SearchMerchantResponse fetchMerchantList(SearchMerchantRequest request) {
+	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		SearchMerchantResponse response = merDao.findMerchants(request);
-		List<Integer> allPages = new ArrayList<Integer>();
-		for (int i = 1; i <= response.getNoOfPages(); i++) {
-			allPages.add(i);
-		}
-		response.setAllPages(allPages);
-		return response;
+		return merDao.findMerchants(request);
 	}
 
 	private void vaidateRequest(Object request) {
@@ -94,10 +79,10 @@ public class SearchService {
 		Calendar calTo = Calendar.getInstance();
 		calTo.setTime(to);
 		Calendar calFrom = Calendar.getInstance();
-		calTo.setTime(from);
-		calFrom.add(Calendar.DAY_OF_YEAR, 60);
+		calFrom.setTime(from);
+		calFrom.add(Calendar.DAY_OF_YEAR, 90);
 		if (calFrom.before(calTo)) {
-			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 60 days");
+			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 90 days");
 		}
 	}
 

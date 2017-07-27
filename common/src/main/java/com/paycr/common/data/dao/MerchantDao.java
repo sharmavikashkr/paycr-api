@@ -6,11 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchMerchantResponse;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
@@ -18,14 +16,10 @@ import com.paycr.common.util.DateUtil;
 @Component
 public class MerchantDao {
 
-	@Value("${dashboard.pageSize}")
-	private int pageSize;
-
 	@PersistenceContext
 	private EntityManager em;
 
-	public SearchMerchantResponse findMerchants(SearchMerchantRequest searchReq) {
-		List<Merchant> merchants = null;
+	public List<Merchant> findMerchants(SearchMerchantRequest searchReq) {
 		StringBuilder squery = new StringBuilder("SELECT m FROM Merchant m WHERE");
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
 			squery.append(" m.name LIKE :name AND");
@@ -56,21 +50,7 @@ public class MerchantDao {
 			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
 			query.setParameter("endDate", DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
-		int noOfMerchants = query.getResultList().size();
-		query.setFirstResult(pageSize * (searchReq.getPage() - 1));
-		query.setMaxResults(pageSize);
-		merchants = query.getResultList();
-		SearchMerchantResponse response = new SearchMerchantResponse();
-		response.setMerchantList(merchants);
-		response.setPage(searchReq.getPage());
-		int noOfPages = 1;
-		if (noOfMerchants % pageSize == 0) {
-			noOfPages = noOfMerchants / pageSize;
-		} else {
-			noOfPages = noOfMerchants / pageSize + 1;
-		}
-		response.setNoOfPages(noOfPages);
-		return response;
+		return query.getResultList();
 	}
 
 }

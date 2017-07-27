@@ -27,25 +27,14 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : dateStart,
-		"createdTo" : dateNow,
-		"page" : 1
+		"createdTo" : dateNow
 	}
 	$scope.searchInvoiceReq = {
 		"invoiceCode" : "",
 		"email" : "",
 		"mobile" : "",
 		"createdFrom" : dateStart,
-		"createdTo" : dateNow,
-		"page" : "1"
-	}
-	$scope.newpricing = {
-		"name" : "",
-		"description" : "",
-		"invoiceLimit" : 0,
-		"startAmount" : 0,
-		"endAmount" : 0,
-		"duration" : 0,
-		"rate" : 0
+		"createdTo" : dateNow
 	}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
@@ -198,11 +187,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.updateOffSubsMerchant = function(merchant) {
 		$scope.offSubsmerchant = merchant;
 	}
-	$scope.searchMerchant = function(newPage) {
-		if(newPage != 1 && (newPage < 1 || newPage > $scope.searchMerResp.allPages.length)) {
-			return;
-		}
-		$scope.searchMerchantReq.page = newPage;
+	$scope.searchMerchant = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/merchant",
@@ -212,17 +197,14 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			},
 			data : $scope.searchMerchantReq
 		}
-		$http(req).then(function(response) {
-			$scope.searchMerResp = response.data;
+		$http(req).then(function(merchants) {
+			$scope.merchantList = merchants.data;
+			$scope.loadMerchantPage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.searchInvoice = function(newPage) {
-		if(newPage != 1 && (newPage < 1 || newPage > $scope.searchInvResp.allPages.length)) {
-			return;
-		}
-		$scope.searchInvoiceReq.page = newPage;
+	$scope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/invoice",
@@ -232,8 +214,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			},
 			data : $scope.searchInvoiceReq
 		}
-		$http(req).then(function(response) {
-			$scope.searchInvResp = response.data;
+		$http(req).then(function(invoices) {
+			$scope.invoiceList = invoices.data;
+			$scope.loadInvoicePage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -316,7 +299,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newpricing
+			data : this.newpricing
 		}
 		$http(req).then(function(data) {
 			$scope.fetchPricings();
@@ -492,6 +475,7 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		$http(req).then(function(invoiceReports) {
 			$scope.invoiceReports = invoiceReports.data;
 			$scope.loadedreport = angular.copy(report);
+			$scope.loadReportPage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -516,6 +500,54 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+	}
+	$scope.loadInvoicePage = function(page) {
+		var pageSize = 15;
+		$scope.invoiceResp = {};
+		$scope.invoiceResp.invoiceList = angular.copy($scope.invoiceList);
+		$scope.invoiceResp.invoiceList.splice(pageSize * page, $scope.invoiceList.length - pageSize);
+		$scope.invoiceResp.invoiceList.splice(0, pageSize * (page - 1));
+		$scope.invoiceResp.page = page;
+		$scope.invoiceResp.allPages = [];
+		var noOfPages = $scope.invoiceList.length/pageSize;
+		if($scope.invoiceList.length%pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for(var i = 1; i <= noOfPages; i++) {
+			$scope.invoiceResp.allPages.push(i);
+		}
+	}
+	$scope.loadMerchantPage = function(page) {
+		var pageSize = 15;
+		$scope.merchantResp = {};
+		$scope.merchantResp.merchantList = angular.copy($scope.merchantList);
+		$scope.merchantResp.merchantList.splice(pageSize * page, $scope.merchantList.length - pageSize);
+		$scope.merchantResp.merchantList.splice(0, pageSize * (page - 1));
+		$scope.merchantResp.page = page;
+		$scope.merchantResp.allPages = [];
+		var noOfPages = $scope.merchantList.length/pageSize;
+		if($scope.merchantList.length%pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for(var i = 1; i <= noOfPages; i++) {
+			$scope.merchantResp.allPages.push(i);
+		}
+	}
+	$scope.loadReportPage = function(page) {
+		var pageSize = 15;
+		$scope.reportsResp = {};
+		$scope.reportsResp.invoiceReports = angular.copy($scope.invoiceReports);
+		$scope.reportsResp.invoiceReports.splice(pageSize * page, $scope.invoiceReports.length - pageSize);
+		$scope.reportsResp.invoiceReports.splice(0, pageSize * (page - 1));
+		$scope.reportsResp.page = page;
+		$scope.reportsResp.allPages = [];
+		var noOfPages = $scope.invoiceReports.length/pageSize;
+		if($scope.invoiceReports.length%pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for(var i = 1; i <= noOfPages; i++) {
+			$scope.reportsResp.allPages.push(i);
+		}
 	}
 	$scope.logout = function() {
 		$timeout(function(){

@@ -6,11 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
-import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.util.CommonUtil;
@@ -19,37 +17,10 @@ import com.paycr.common.util.DateUtil;
 @Component
 public class InvoiceDao {
 
-	@Value("${dashboard.pageSize}")
-	private int pageSize;
-
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<Invoice> findAllInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
-		TypedQuery<Invoice> query = selectDataQuery(searchReq, merchant);
-		return query.getResultList();
-	}
-
-	public SearchInvoiceResponse findInvoicesInPage(SearchInvoiceRequest searchReq, Merchant merchant) {
-		TypedQuery<Invoice> query = selectDataQuery(searchReq, merchant);
-		int noOfInvoices = query.getResultList().size();
-		query.setFirstResult(pageSize * (searchReq.getPage() - 1));
-		query.setMaxResults(pageSize);
-		List<Invoice> invoices = query.getResultList();
-		SearchInvoiceResponse response = new SearchInvoiceResponse();
-		response.setInvoiceList(invoices);
-		response.setPage(searchReq.getPage());
-		int noOfPages = 1;
-		if (noOfInvoices % pageSize == 0) {
-			noOfPages = (noOfInvoices / pageSize);
-		} else {
-			noOfPages = (noOfInvoices / pageSize + 1);
-		}
-		response.setNoOfPages(noOfPages);
-		return response;
-	}
-
-	private TypedQuery<Invoice> selectDataQuery(SearchInvoiceRequest searchReq, Merchant merchant) {
+	public List<Invoice> findInvoices(SearchInvoiceRequest searchReq, Merchant merchant) {
 		StringBuilder squery = new StringBuilder("SELECT i FROM Invoice i WHERE");
 		if (!CommonUtil.isNull(merchant)) {
 			squery.append(" i.merchant = :merchant AND");
@@ -98,7 +69,7 @@ public class InvoiceDao {
 			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));
 			query.setParameter("endDate", DateUtil.getEndOfDay(searchReq.getCreatedTo()));
 		}
-		return query;
+		return query.getResultList();
 	}
 
 }

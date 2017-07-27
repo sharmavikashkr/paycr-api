@@ -9,7 +9,6 @@ public class SearchMerchantRequest {
 	private String name;
 	private String email;
 	private String mobile;
-	private int page;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdFrom;
@@ -55,14 +54,6 @@ public class SearchMerchantRequest {
 
 	public void setCreatedTo(Date createdTo) {
 		this.createdTo = createdTo;
-	}
-
-	public int getPage() {
-		return page;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
 	}
 
 }

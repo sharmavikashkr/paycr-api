@@ -2,7 +2,6 @@ package com.paycr.dashboard.helper;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Item;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.Report;
 import com.paycr.common.data.repository.PaymentRepository;
@@ -42,6 +40,8 @@ public class ReportHelper {
 			calendar.add(Calendar.DAY_OF_YEAR, -30);
 		} else if (TimeRange.LAST_2MONTHS.equals(range)) {
 			calendar.add(Calendar.DAY_OF_YEAR, -60);
+		} else if (TimeRange.LAST_3MONTHS.equals(range)) {
+			calendar.add(Calendar.DAY_OF_YEAR, -90);
 		}
 		return DateUtil.getStartOfDay(calendar.getTime());
 	}
@@ -75,10 +75,6 @@ public class ReportHelper {
 	public Future<List<InvoiceReport>> prepareReport(Report report, Invoice invoice) {
 		List<InvoiceReport> invoiceReports = new ArrayList<InvoiceReport>();
 		List<Payment> payments = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), report.getPayType());
-		BigDecimal orgAmount = new BigDecimal(0);
-		for (Item item : invoice.getItems()) {
-			orgAmount = orgAmount.add(item.getPrice());
-		}
 		for (Payment payment : payments) {
 			if (payment.getPayMode().equals(report.getPayMode()) && payment.getPayType().equals(report.getPayType())) {
 				InvoiceReport invReport = new InvoiceReport();
@@ -86,7 +82,7 @@ public class ReportHelper {
 				invReport.setInvoiceCode(invoice.getInvoiceCode());
 				invReport.setInvoiceStatus(invoice.getStatus());
 				invReport.setPayAmount(invoice.getPayAmount());
-				invReport.setTax(invoice.getPayAmount().add(invoice.getDiscount()).subtract(orgAmount));
+				invReport.setTax(invoice.getPayAmount().add(invoice.getDiscount()).subtract(invoice.getTotal()));
 				invReport.setDiscount(invoice.getDiscount());
 				invReport.setCurrency(invoice.getCurrency());
 				invReport.setPaymentRefNo(payment.getPaymentRefNo());

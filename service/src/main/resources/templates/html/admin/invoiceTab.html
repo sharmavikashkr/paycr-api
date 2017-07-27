@@ -59,7 +59,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td><button ng-click="searchInvoice(1)" type="button" class="btn btn-info">Search</button></td>
+								<td><button ng-click="searchInvoice()" type="button" class="btn btn-info">Search</button></td>
 							</tr>
 						</tbody>
 					</table>
@@ -75,7 +75,7 @@
 								<th>Status</th>
 							</tr>
 						</thead>
-						<tbody ng-repeat="invoice in searchInvResp.invoiceList">
+						<tbody ng-repeat="invoice in invoiceResp.invoiceList">
 							<tr
 								ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':'warning'"
 								data-toggle="collapse"
@@ -96,12 +96,12 @@
 												<table class="table table-striped table-bordered table-responsive">
 													<tbody>
 														<tr>
-															<td><strong>Tax</strong></td>
-															<td>{{invoice.tax}}%</td>
+															<td><strong>Total</strong></td>
+															<td>{{invoice.total}}</td>
 														</tr>
 														<tr>
-															<td><strong>Discount</strong></td>
-															<td>&#8377; {{invoice.discount}}</td>
+															<td><strong>Tax</strong> : {{invoice.tax}}%</td>
+															<td><strong>Discount</strong> : &#8377; {{invoice.discount}}</td>
 														</tr>
 														<tr>
 															<td><strong>Pay Amount</strong></td>
@@ -168,9 +168,9 @@
 						</tbody>
 					</table>
 					<ul class="pagination" style="float:right;">
-						<li ng-class="(searchInvResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="searchInvoice(searchInvResp.page-1)" href="#">Previous</a></li>
-						<li ng-repeat="page in searchInvResp.allPages" ng-class="(page == searchInvResp.page)?'active':''"><a ng-click="searchInvoice(page)" href="#">{{page}}</a></li>
-						<li ng-class="(searchInvResp.page >= searchInvResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="searchInvoice(searchInvResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(invoiceResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadInvoicePage(invoiceResp.page-1)" href="#">Previous</a></li>
+						<li ng-repeat="page in invoiceResp.allPages" ng-class="(page == invoiceResp.page)?'active':''"><a ng-click="loadInvoicePage(page)" href="#">{{page}}</a></li>
+						<li ng-class="(invoiceResp.page >= invoiceResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadInvoicePage(invoiceResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>

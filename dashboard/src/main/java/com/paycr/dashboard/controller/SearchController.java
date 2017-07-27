@@ -1,5 +1,8 @@
 package com.paycr.dashboard.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
@@ -10,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
-import com.paycr.common.bean.SearchInvoiceResponse;
 import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchMerchantResponse;
+import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
@@ -31,34 +33,32 @@ public class SearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/invoice")
-	public SearchInvoiceResponse searchInvoices(@RequestBody SearchInvoiceRequest request,
-			HttpServletResponse response) {
-		SearchInvoiceResponse searchResponse = new SearchInvoiceResponse();
+	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request, HttpServletResponse response) {
+		List<Invoice> invoiceList = new ArrayList<Invoice>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
 				request.setMerchant(merchant.getId());
 			}
-			searchResponse = serSer.fetchInvoiceList(request);
+			invoiceList = serSer.fetchInvoiceList(request);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
-		return searchResponse;
+		return invoiceList;
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_AUTH)
 	@RequestMapping("/merchant")
-	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request,
-			HttpServletResponse response) {
-		SearchMerchantResponse searchResponse = new SearchMerchantResponse();
+	public List<Merchant> searchMerchant(@RequestBody SearchMerchantRequest request, HttpServletResponse response) {
+		List<Merchant> merchants = new ArrayList<Merchant>();
 		try {
-			searchResponse = serSer.fetchMerchantList(request);
+			merchants = serSer.fetchMerchantList(request);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
-		return searchResponse;
+		return merchants;
 	}
 
 }

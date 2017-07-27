@@ -1,5 +1,6 @@
 package com.paycr.invoice.validation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,25 +20,24 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 
 	@Override
 	public void validate(Invoice invoice) {
-		List<Item> items = new ArrayList<Item>();
-		for (Item item : invoice.getItems()) {
-			if (validateItem(item)) {
+		if (invoice.isAddItems()) {
+			List<Item> items = new ArrayList<Item>();
+			for (Item item : invoice.getItems()) {
+				validateItem(item);
 				item.setInvoice(invoice);
 				items.add(item);
 			}
+			invoice.setItems(items);
 		}
-		if (CommonUtil.isEmpty(items)) {
-			throw new PaycrException(Constants.FAILURE, "No Items specified");
-		}
-		invoice.setItems(items);
 	}
 
-	private boolean validateItem(Item item) {
+	private void validateItem(Item item) {
 		if ("".equals(item.getName().trim()) || CommonUtil.isNull(item.getRate()) || CommonUtil.isNull(item.getPrice())
 				|| 0 == item.getQuantity()) {
-			return false;
-		} else {
-			return true;
+			throw new PaycrException(Constants.FAILURE, "Invalid Params entered");
+		}
+		if (!item.getPrice().equals(item.getRate().multiply(new BigDecimal(item.getQuantity())))) {
+			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
 	}
 
