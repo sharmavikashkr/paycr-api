@@ -69,10 +69,12 @@ public class CommonController {
 
 	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
 	@RequestMapping("/toggle/user/{userId}")
-	public void toggleUser(@PathVariable("userId") Integer userId) {
+	public void toggleUser(@PathVariable("userId") Integer userId, HttpServletResponse response) {
 		try {
 			comSer.toggleUser(userId);
 		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 

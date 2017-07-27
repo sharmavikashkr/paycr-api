@@ -90,8 +90,8 @@ public class ReportService {
 	}
 
 	private void isValidReport(Report report) {
-		if (report.getInvoiceStatus() == null || report.getTimeRange() == null || report.getPayType() == null
-				|| report.getPayMode() == null) {
+		if (report.getName() == null || report.getInvoiceStatus() == null || report.getTimeRange() == null
+				|| report.getPayType() == null || report.getPayMode() == null) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
 		}
 	}

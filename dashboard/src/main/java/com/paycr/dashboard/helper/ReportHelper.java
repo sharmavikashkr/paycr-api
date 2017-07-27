@@ -42,8 +42,6 @@ public class ReportHelper {
 			calendar.add(Calendar.DAY_OF_YEAR, -30);
 		} else if (TimeRange.LAST_2MONTHS.equals(range)) {
 			calendar.add(Calendar.DAY_OF_YEAR, -60);
-		} else if (TimeRange.FOREVER.equals(range)) {
-			calendar.add(Calendar.YEAR, -1);
 		}
 		return DateUtil.getStartOfDay(calendar.getTime());
 	}
@@ -54,7 +52,6 @@ public class ReportHelper {
 		List<String[]> data = toStringArray(invReport);
 		csvWriter.writeAll(data);
 		csvWriter.close();
-		System.out.println(writer);
 		return writer.toString();
 	}
 

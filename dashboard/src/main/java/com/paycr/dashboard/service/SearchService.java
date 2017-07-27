@@ -1,6 +1,7 @@
 package com.paycr.dashboard.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -42,44 +43,61 @@ public class SearchService {
 	private PaymentRepository payRepo;
 
 	public SearchInvoiceResponse fetchInvoiceList(SearchInvoiceRequest request) {
-		try {
-			Date timeNow = new Date();
-			Merchant merchant = null;
-			if (request.getMerchant() != null) {
-				merchant = merRepo.findOne(request.getMerchant());
-			}
-			SearchInvoiceResponse response = invDao.findInvoicesInPage(request, merchant);
-			List<Integer> allPages = new ArrayList<Integer>();
-			for (int i = 1; i <= response.getNoOfPages(); i++) {
-				allPages.add(i);
-			}
-			response.setAllPages(allPages);
-			List<Invoice> invoiceList = response.getInvoiceList();
-			for (Invoice invoice : invoiceList) {
-				List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
-				invoice.setAllPayments(payments);
-				if (timeNow.compareTo(invoice.getExpiry()) > 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
-					invoice.setStatus(InvoiceStatus.EXPIRED);
-				}
-			}
-			invRepo.save(invoiceList);
-			return response;
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Bad Request");
+		vaidateRequest(request);
+		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		Date timeNow = new Date();
+		Merchant merchant = null;
+		if (request.getMerchant() != null) {
+			merchant = merRepo.findOne(request.getMerchant());
 		}
+		SearchInvoiceResponse response = invDao.findInvoicesInPage(request, merchant);
+		List<Integer> allPages = new ArrayList<Integer>();
+		for (int i = 1; i <= response.getNoOfPages(); i++) {
+			allPages.add(i);
+		}
+		response.setAllPages(allPages);
+		List<Invoice> invoiceList = response.getInvoiceList();
+		for (Invoice invoice : invoiceList) {
+			List<Payment> payments = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
+			invoice.setAllPayments(payments);
+			if (timeNow.compareTo(invoice.getExpiry()) > 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())
+					&& !InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
+				invoice.setStatus(InvoiceStatus.EXPIRED);
+			}
+		}
+		invRepo.save(invoiceList);
+		return response;
 	}
 
 	public SearchMerchantResponse fetchMerchantList(SearchMerchantRequest request) {
-		try {
-			SearchMerchantResponse response = merDao.findMerchants(request);
-			List<Integer> allPages = new ArrayList<Integer>();
-			for (int i = 1; i <= response.getNoOfPages(); i++) {
-				allPages.add(i);
-			}
-			response.setAllPages(allPages);
-			return response;
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Bad Request");
+		vaidateRequest(request);
+		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		SearchMerchantResponse response = merDao.findMerchants(request);
+		List<Integer> allPages = new ArrayList<Integer>();
+		for (int i = 1; i <= response.getNoOfPages(); i++) {
+			allPages.add(i);
+		}
+		response.setAllPages(allPages);
+		return response;
+	}
+
+	private void vaidateRequest(Object request) {
+		if (request == null) {
+			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
+		}
+	}
+
+	private void validateDates(Date from, Date to) {
+		if (from == null || to == null) {
+			throw new PaycrException(Constants.FAILURE, "From/To dates cannot be null");
+		}
+		Calendar calTo = Calendar.getInstance();
+		calTo.setTime(to);
+		Calendar calFrom = Calendar.getInstance();
+		calTo.setTime(from);
+		calFrom.add(Calendar.DAY_OF_YEAR, 60);
+		if (calFrom.before(calTo)) {
+			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 60 days");
 		}
 	}
 
