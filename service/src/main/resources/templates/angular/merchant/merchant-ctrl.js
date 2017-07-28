@@ -1,11 +1,10 @@
-var app = angular.module('payCrApp', [ "ngRoute", "ngCookies", "ngMaterial" ]);
+var app = angular.module('payCrMerchantApp', [ "ngRoute", "ngCookies", "ngMaterial" ]);
 app.config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {
        return moment(date).format('YYYY-MM-DD');
     };
 });
-app.controller('MerchantController',
-function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
+app.controller('MerchantController', function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	var dateNow = moment().toDate();
 	var dateStart = moment().subtract(30, 'day').toDate();
 	$scope.server = {
@@ -216,75 +215,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchMyUsers = function() {
-		var req = {
-			method : 'GET',
-			url : "/common/users",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(myusers) {
-			$scope.myusers = myusers.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.createUser = function() {
-		if(!this.addUserForm.$valid) {
-			return false;
-		}
-		var req = {
-			method : 'post',
-			url : "/common/create/user",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : this.newuser
-		}
-		$http(req).then(function(data) {
-			$scope.serverMessage(data);
-			$scope.fetchMyUsers();
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		angular.element(document.querySelector('#createUserModal')).modal('hide');
-	}
-	$scope.toggleUser = function(userId) {
-		var req = {
-			method : 'get',
-			url : "/common/toggle/user/" + userId,
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(data) {
-			$scope.serverMessage(data);
-			$scope.fetchMyUsers();
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.updateAccount = function() {
-		var req = {
-			method : 'POST',
-			url : "/merchant/account/update",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : $scope.merchant
-		}
-		$http(req).then(function(merchant) {
-			$scope.merchant = merchant.data;
-			$scope.serverMessage(merchant);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
 	$scope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
@@ -302,205 +232,8 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchMyInvoices = function() {
-		var req = {
-			method : 'GET',
-			url : "/common/invoices/",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(myInvoices) {
-			$scope.myinvoices = myInvoices.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.savePaymentSetting = function() {
-		var req = {
-			method : 'POST',
-			url : "/merchant/paymentsetting/update",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : $scope.merchant.paymentSetting
-		}
-		$http(req).then(function(paymentsettings) {
-			$scope.merchant.paymentSettings = paymentsettings.data;
-			$scope.serverMessage(paymentsettings);
-			$scope.editPayPrefs = false;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.saveInvoiceSetting = function(invoiceSetting) {
-		var req = {
-			method : 'POST',
-			url : "/merchant/invoicesetting/update",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : invoiceSetting
-		}
-		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
-			$scope.refreshSetting(invoicesetting.data);
-			$scope.serverMessage(invoicesetting);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.addParam = function() {
-		if(!this.addCustomParamForm.$valid) {
-			return false;
-		}
-		var req = {
-			method : 'POST',
-			url : "/merchant/customParam/new/",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : this.newparam
-		}
-		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
-			$scope.refreshSetting(invoicesetting.data);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		angular.element(document.querySelector('#createParamModal')).modal('hide');
-	}
-	$scope.deleteParam = function(paramId, paramName) {
-		if (!confirm('Delete ' + paramName + ' ?')) {
-			return false;
-		}
-		var req = {
-			method : 'GET',
-			url : "/merchant/customParam/delete/" + paramId,
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
-			$scope.refreshSetting(invoicesetting.data[0]);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchPricings = function() {
-		var req = {
-			method : 'GET',
-			url : "/common/pricings",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(pricings) {
-			$scope.pricings = pricings.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchReports = function() {
-		var req = {
-			method : 'GET',
-			url : "/reports",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(reports) {
-			$scope.reports = reports.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.createReport = function() {
-		var req = {
-			method : 'POST',
-			url : "/reports/new",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : this.newreport
-		}
-		$http(req).then(function(data) {
-			$scope.fetchReports();
-			$scope.serverMessage(data);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		this.newreport = null;
-	}
-	$scope.loadReport = function(report) {
-		var req = {
-			method : 'POST',
-			url : "/reports/load",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			},
-			data : report
-		}
-		$http(req).then(function(invoiceReports) {
-			$scope.invoiceReports = invoiceReports.data;
-			$scope.loadedreport = angular.copy(report);
-			$scope.loadReportPage(1);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.downloadReport = function(report) {
-		var req = {
-			method : 'POST',
-			url : "/reports/download",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token"),
-				"Accept" : "text/csv"
-			},
-			data : report
-		}
-		$http(req).then(function(content) {
-		    var hiddenElement = document.createElement('a');
-		    hiddenElement.href = 'data:attachment/csv,' + encodeURI(content.data);
-		    hiddenElement.target = '_blank';
-		    hiddenElement.download = 'report.csv';
-		    hiddenElement.click();
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.deleteReport = function(reportId, reportName) {
-		if (!confirm('Delete ' + reportName + ' ?')) {
-			return false;
-		}
-		var req = {
-			method : 'GET',
-			url : "/reports/delete/" + reportId,
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(data) {
-			$scope.serverMessage(data);
-			$scope.fetchReports();
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
 	$scope.loadInvoicePage = function(page) {
-		var pageSize = 1;
+		var pageSize = 15;
 		$scope.invoiceResp = {};
 		$scope.invoiceResp.invoiceList = angular.copy($scope.invoiceList);
 		$scope.invoiceResp.invoiceList.splice(pageSize * page, $scope.invoiceList.length - pageSize);
@@ -513,22 +246,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 		}
 		for(var i = 1; i <= noOfPages; i++) {
 			$scope.invoiceResp.allPages.push(i);
-		}
-	}
-	$scope.loadReportPage = function(page) {
-		var pageSize = 15;
-		$scope.reportsResp = {};
-		$scope.reportsResp.invoiceReports = angular.copy($scope.invoiceReports);
-		$scope.reportsResp.invoiceReports.splice(pageSize * page, $scope.invoiceReports.length - pageSize);
-		$scope.reportsResp.invoiceReports.splice(0, pageSize * (page - 1));
-		$scope.reportsResp.page = page;
-		$scope.reportsResp.allPages = [];
-		var noOfPages = $scope.invoiceReports.length/pageSize;
-		if($scope.invoiceReports.length%pageSize != 0) {
-			noOfPages = noOfPages + 1;
-		}
-		for(var i = 1; i <= noOfPages; i++) {
-			$scope.reportsResp.allPages.push(i);
 		}
 	}
 	$scope.updateInvoiceInfo = function(invoice) {
@@ -702,7 +419,6 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	}
 	$scope.refreshSetting = function(invoicesetting) {
 		$scope.newInvSetting = invoicesetting;
-		$scope.newinvoice.invoiceSettingId = angular.copy(invoicesetting.id);
 		$scope.newinvoice.sendEmail = angular.copy(invoicesetting.sendEmail);
 		$scope.newinvoice.sendMobile = angular.copy(invoicesetting.sendMobile);
 		$scope.newinvoice.addItems = angular.copy(invoicesetting.addItems);

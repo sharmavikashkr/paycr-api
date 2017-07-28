@@ -19,20 +19,26 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
   	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
   	<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-	<script src="/angular/merchantctrl.js"></script>
+	<script src="/angular/merchant/merchant-ctrl.js"></script>
+	<script src="/angular/merchant/invoice-setting-ctrl.js"></script>
+	<script src="/angular/merchant/account-ctrl.js"></script>
+	<script src="/angular/common/reports-ctrl.js"></script>
+	<script src="/angular/merchant/pricing-ctrl.js"></script>
+	<script src="/angular/common/users-ctrl.js"></script>
+	<script src="/angular/common/my-invoices-ctrl.js"></script>
 </head>
-<body ng-app="payCrApp" ng-controller="MerchantController" ng-cloak>
+<body ng-app="payCrMerchantApp" ng-controller="MerchantController" ng-cloak>
     <div ng-init="prepare()" style="background:lightyellow;" id="wrapper">
         <div ng-include="'/html/merchant/nav'"></div>
         <div class="tab-content" id="page-wrapper">
         	<div ng-include="'/html/common/alert'"></div>
-	        <div ng-init="searchInvoice(1)" id="dashboardTab" class="tab-pane active" ng-include="'/html/merchant/dashboardTab'"></div>
-	        <div ng-init="fetchMyInvoices()" id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
+	        <div id="dashboardTab" class="tab-pane active" ng-include="'/html/merchant/dashboardTab'"></div>
 	        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
 	        <div id="accountTab" class="tab-pane fade" ng-include="'/html/merchant/accountTab'"></div>
-	        <div ng-if="user.access.finance" ng-init="fetchPricings()" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
-	        <div ng-if="user.access.ops" ng-init="fetchReports()" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
-	        <div ng-if="user.access.admin" ng-init="fetchMyUsers()" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
+	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
+	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
+	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
+	        <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
 		</div>
     </div>
     <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceModal'"></div>
