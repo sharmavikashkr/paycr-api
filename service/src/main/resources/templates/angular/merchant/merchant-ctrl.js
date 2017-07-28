@@ -169,22 +169,6 @@ app.controller('MerchantController', function($scope, $http, $cookies, $httpPara
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchMerchant = function() {
-		var req = {
-			method : 'GET',
-			url : "/merchant/get",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(merchant) {
-			$scope.merchant = merchant.data;
-			$scope.refreshSetting(merchant.data.invoiceSetting);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
 	$scope.fetchUser = function() {
 		var req = {
 			method : 'GET',
@@ -211,6 +195,22 @@ app.controller('MerchantController', function($scope, $http, $cookies, $httpPara
 		}
 		$http(req).then(function(notifications) {
 			$scope.notices = notifications.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.fetchMerchant = function() {
+		var req = {
+			method : 'GET',
+			url : "/merchant/get",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(merchant) {
+			$scope.merchant = merchant.data;
+			$scope.refreshSetting(merchant.data.invoiceSetting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

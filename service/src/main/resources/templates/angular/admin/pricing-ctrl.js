@@ -53,7 +53,7 @@ app.controller('PricingController', function($scope, $http, $cookies,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#addSubsModeModal')).modal(
+		angular.element(document.querySelector('#createSubsModeModal')).modal(
 				'hide');
 	}
 	$scope.toggleSubsMode = function(modeId) {

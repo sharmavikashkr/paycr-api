@@ -211,4 +211,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.updateInvoiceInfo = function(invoice) {
 		$scope.invoiceInfo = invoice;
 	}
+	$scope.logout = function() {
+		$timeout(function(){
+			window.location.href="/login?logout";
+		}, 1000);
+	}
 });

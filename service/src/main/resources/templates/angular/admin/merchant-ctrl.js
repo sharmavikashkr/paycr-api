@@ -16,6 +16,22 @@ app.controller('MerchantController', function($scope, $http, $cookies,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.loadMerchantPage = function(page) {
+		var pageSize = 15;
+		$scope.merchantResp = {};
+		$scope.merchantResp.merchantList = angular.copy($scope.merchantList);
+		$scope.merchantResp.merchantList.splice(pageSize * page, $scope.merchantList.length - pageSize);
+		$scope.merchantResp.merchantList.splice(0, pageSize * (page - 1));
+		$scope.merchantResp.page = page;
+		$scope.merchantResp.allPages = [];
+		var noOfPages = $scope.merchantList.length/pageSize;
+		if($scope.merchantList.length%pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for(var i = 1; i <= noOfPages; i++) {
+			$scope.merchantResp.allPages.push(i);
+		}
+	}
 	$scope.updateOffSubsMerchant = function(merchant) {
 		$scope.offSubsmerchant = merchant;
 	}
@@ -30,7 +46,7 @@ app.controller('MerchantController', function($scope, $http, $cookies,
 			data : this.offlinesubs
 		}
 		$http(req).then(function(data) {
-			$scope.searchMerchant(1);
+			$scope.searchMerchant();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -50,28 +66,12 @@ app.controller('MerchantController', function($scope, $http, $cookies,
 			data : this.newmerchant
 		}
 		$http(req).then(function(data) {
-			$scope.searchMerchant(1);
+			$scope.searchMerchant();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#createMerchantModal')).modal(
 				'hide');
-	}
-	$scope.loadMerchantPage = function(page) {
-		var pageSize = 15;
-		$scope.merchantResp = {};
-		$scope.merchantResp.merchantList = angular.copy($scope.merchantList);
-		$scope.merchantResp.merchantList.splice(pageSize * page, $scope.merchantList.length - pageSize);
-		$scope.merchantResp.merchantList.splice(0, pageSize * (page - 1));
-		$scope.merchantResp.page = page;
-		$scope.merchantResp.allPages = [];
-		var noOfPages = $scope.merchantList.length/pageSize;
-		if($scope.merchantList.length%pageSize != 0) {
-			noOfPages = noOfPages + 1;
-		}
-		for(var i = 1; i <= noOfPages; i++) {
-			$scope.merchantResp.allPages.push(i);
-		}
 	}
 });
