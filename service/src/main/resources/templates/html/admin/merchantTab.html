@@ -123,7 +123,7 @@
 						</tbody>
 					</table>
 					<ul class="pagination" style="float:right;">
-						<li ng-class="(merchantResp.page == 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadMerchantPage(merchantResp.page-1)" href="#">Previous</a></li>
+						<li ng-class="(merchantResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadMerchantPage(merchantResp.page-1)" href="#">Previous</a></li>
 						<li ng-repeat="page in merchantResp.allPages" ng-class="(page == merchantResp.page)?'active':''"><a ng-click="loadMerchantPage(page)" href="#">{{page}}</a></li>
 						<li ng-class="(merchantResp.page >= merchantResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadMerchantPage(merchantResp.page+1)" href="#">Next</a></li>
 					</ul>
