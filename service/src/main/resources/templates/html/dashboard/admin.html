@@ -27,9 +27,10 @@
 	<script src="/angular/common/reports-ctrl.js"></script>
 	<script src="/angular/common/users-ctrl.js"></script>
 	<script src="/angular/common/my-invoices-ctrl.js"></script>
+	<script src="/angular/common/profile-ctrl.js"></script>
 </head>
 <body ng-app="payCrAdminApp" ng-controller="AdminController" ng-cloak>
-    <div ng-init="prepare()" style="background:lightyellow;" id="wrapper">
+    <div ng-init="prepare()" style="background:darksalmon;" id="wrapper">
         <div ng-include="'/html/admin/nav'" style="position:relative;"></div>
         <div class="tab-content" id="page-wrapper">
     		<div ng-include="'/html/common/alert'"></div>
@@ -39,6 +40,7 @@
 		    <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
 		    <div ng-if="user.access.supervisor" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
         	<div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
+        	<div id="profileTab" class="tab-pane fade" ng-include="'/html/common/profileTab'"></div>
     	</div>
 	    <div ng-if="user.access.supervisor" ng-include="'/html/admin/createMerchantModal'"></div>
 		<div ng-if="user.access.finance" ng-include="'/html/admin/createPricingModal'"></div>
@@ -47,7 +49,7 @@
 		<div ng-if="user.access.supervisor" ng-include="'/html/common/createUserModal'"></div>
 		<div ng-include="'/html/common/invoiceInfoModal'"></div>
 		<div ng-include="'/html/admin/subsDetailsModal'"></div>
-		<div ng-include="'/html/common/profileModal'"></div>
+		<div ng-include="'/html/common/changePasswordModal'"></div>
 	</div>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/metisMenu/metisMenu.min.js"></script>

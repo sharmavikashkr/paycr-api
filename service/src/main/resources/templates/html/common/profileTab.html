@@ -1,0 +1,73 @@
+<div ng-controller="ProfileController" id="profileTab">
+	<br>
+	<div class="row text-center">
+		<div class="col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">Profile Details</div>
+				<div class="panel-body">
+					<table class="table table-striped table-bordered table-hover table-responsive">
+						<tbody>
+							<tr>
+								<td><strong>Name</strong></td>
+								<td>{{user.name}}</td>
+							</tr>
+							<tr>
+								<td><strong>Email</strong></td>
+								<td>{{user.email}}</td>
+							</tr>
+							<tr>
+								<td><strong>Mobile</strong></td>
+								<td>{{user.mobile}}</td>
+							</tr>
+							<tr>
+								<td><strong>Role</strong></td>
+								<td>{{user.userType}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="panel">
+				<div class="panel-body">
+					<button class="btn btn-info" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">Address</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="control-label">Address Line 1</label>
+						<input class="form-control" ng-model="user.address.addressLine1" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">Address Line 2</label>
+						<input class="form-control" ng-model="user.address.addressLine2" />
+					</div>
+					<div class="form-group col-lg-6">
+						<label class="control-label">City</label>
+						<input class="form-control" ng-model="user.address.city" />
+					</div>
+					<div class="form-group col-lg-6">
+						<label class="control-label">District</label>
+						<input class="form-control" ng-model="user.address.district" />
+					</div>
+					<div class="form-group col-lg-6">
+						<label class="control-label">State</label>
+						<input class="form-control" ng-model="user.address.state" />
+					</div>
+					<div class="form-group col-lg-6">
+						<label class="control-label">Pincode</label>
+						<input class="form-control" ng-model="user.address.pincode" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">Country</label>
+						<input class="form-control" ng-model="user.address.country" />
+					</div>
+					<button class="btn btn-info" ng-click="updateAddress()">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

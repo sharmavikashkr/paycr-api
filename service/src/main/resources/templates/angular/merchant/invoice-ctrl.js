@@ -6,35 +6,6 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$rootScope.newinvoice = {
-		"invoiceCode" : "",
-		"consumer" : {
-			"email" : "",
-			"mobile" : "",
-			"name" : ""
-		},
-		"items" : [ {
-			"name" : "",
-			"rate" : 0,
-			"quantity" : 1,
-			"price" : 0
-		} ],
-		"sendEmail" : false,
-		"sendSms" : false,
-		"addItems" : false,
-		"total" : 0.00,
-		"tax" : 0.00,
-		"discount" : 0,
-		"payAmount" : 0,
-		"currency" : "INR",
-		"expiresIn" : "",
-		"invoiceSettingId" : 0,
-		"customParams" : [ {
-			"paramName" : "",
-			"paramValue" : "",
-			"provider" : ""
-		} ]
-	}
 	$scope.searchInvoice = function() {
 		var req = {
 			method : 'POST',

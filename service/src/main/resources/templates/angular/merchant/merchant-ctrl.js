@@ -19,7 +19,37 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
-		"numberPattern" : "\\d{1,4}"
+		"numberPattern" : "\\d{1,4}",
+		"passPattern" : /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
+	}
+	$rootScope.newinvoice = {
+		"invoiceCode" : "",
+		"consumer" : {
+			"email" : "",
+			"mobile" : "",
+			"name" : ""
+		},
+		"items" : [ {
+			"name" : "",
+			"rate" : 0,
+			"quantity" : 1,
+			"price" : 0
+		} ],
+		"sendEmail" : false,
+		"sendSms" : false,
+		"addItems" : false,
+		"total" : 0.00,
+		"tax" : 0.00,
+		"discount" : 0,
+		"payAmount" : 0,
+		"currency" : "INR",
+		"expiresIn" : "",
+		"invoiceSettingId" : 0,
+		"customParams" : [ {
+			"paramName" : "",
+			"paramValue" : "",
+			"provider" : ""
+		} ]
 	}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;

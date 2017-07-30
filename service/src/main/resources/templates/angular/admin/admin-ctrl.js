@@ -18,7 +18,8 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
-		"numberPattern" : "\\d{1,4}"
+		"numberPattern" : "\\d{1,4}",
+		"passPattern" : /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
 	}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
@@ -148,7 +149,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 	}
 	$scope.logout = function() {
 		$timeout(function(){
-			window.location.href="/login?logout";
+			window.location.href="/adminlogin?logout";
 		}, 1000);
 	}
 });
