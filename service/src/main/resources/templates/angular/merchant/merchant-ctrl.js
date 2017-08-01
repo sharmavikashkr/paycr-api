@@ -76,6 +76,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		$scope.fetchUser();
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
+		$rootScope.access_token = $cookies.get("access_token");
 	}
 	$scope.fetchEnums = function() {
 		var req = {

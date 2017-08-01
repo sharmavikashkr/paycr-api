@@ -13,7 +13,7 @@
 				<div class="panel panel-danger">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="huge">{{statsResponse.declinedInvs.length}}</div>
+                            <div class="huge">{{statsResponse.declinedInvCount}}</div>
                             <div>Invoices Declined</div>
                         </div>
                         <div class="row">
@@ -27,7 +27,7 @@
 				<div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="huge">{{statsResponse.expiredInvs.length}}</div>
+                            <div class="huge">{{statsResponse.expiredInvCount}}</div>
                             <div>Invoices Expired</div>
                         </div>
                         <div class="row">
@@ -41,7 +41,7 @@
 				<div class="panel panel-success">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="huge">{{statsResponse.salePays.length}}</div>
+                            <div class="huge">{{statsResponse.salePayCount}}</div>
                             <div>Invoices Paid</div>
                         </div>
                         <div class="row">
@@ -55,7 +55,7 @@
 				<div class="panel panel-info">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="huge">{{statsResponse.refundPays.length}}</div>
+                            <div class="huge">{{statsResponse.refundPayCount}}</div>
                             <div>Payment Refunds</div>
                         </div>
                         <div class="row">
@@ -67,4 +67,32 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">Payment/Refund per day</div>
+				<div class="panel-body">
+					<div id="per-day-area"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">Distribution by amount</div>
+				<div class="panel-body">
+					<div id="amount-donut"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">Distribution by count</div>
+				<div class="panel-body">
+					<div id="count-donut"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+<script src="/vendor/raphael/raphael.min.js"></script>
+<script src="/vendor/morrisjs/morris.min.js"></script>

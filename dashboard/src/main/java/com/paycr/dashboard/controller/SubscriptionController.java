@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -92,18 +91,10 @@ public class SubscriptionController {
 		}
 	}
 
-	@RequestMapping("/new/online/{pricingId}")
-	public ModelAndView onlineSubscription(@PathVariable Integer pricingId, HttpServletRequest request) {
-		String token = null;
-		for (Cookie cookie : request.getCookies()) {
-			if ("access_token".equals(cookie.getName())) {
-				token = cookie.getValue();
-			}
-		}
-		if (CommonUtil.isNull(token)) {
-			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
-		}
-		Merchant merchant = secSer.getMerchantForLoggedInUser(token);
+	@RequestMapping(value = "/new/online/{pricingId}", method = RequestMethod.GET)
+	public ModelAndView onlineSubscription(@PathVariable Integer pricingId,
+			@RequestParam("access_token") String accessToken, HttpServletRequest request) {
+		Merchant merchant = secSer.getMerchantForLoggedInUser(accessToken);
 		if (CommonUtil.isNull(merchant)) {
 			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
 		}

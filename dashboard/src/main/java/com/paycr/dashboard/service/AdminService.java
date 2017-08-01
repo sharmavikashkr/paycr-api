@@ -109,6 +109,7 @@ public class AdminService {
 		subs.setAmount(pricing.getRate());
 		subs.setCurrency(Currency.INR);
 		subs.setCreated(timeNow);
+		subs.setPaymentRefNo("onboarding");
 		subs.setPricing(pricing);
 		subs.setStatus("SUCCESS");
 		subs.setSubscriptionCode("OFFLINE");

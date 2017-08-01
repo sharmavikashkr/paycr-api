@@ -3,9 +3,6 @@ package com.paycr.common.bean;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Payment;
-
 public class StatsResponse {
 
 	private BigDecimal salePaySum;
@@ -13,42 +10,51 @@ public class StatsResponse {
 	private BigDecimal declinedInvSum;
 	private BigDecimal expiredInvSum;
 	private BigDecimal refundPaySum;
-	private List<Payment> salePays;
-	private List<Invoice> unpaidInvs;
-	private List<Invoice> declinedInvs;
-	private List<Invoice> expiredInvs;
-	private List<Payment> refundPays;
+	private int salePayCount;
+	private int unpaidInvCount;
+	private int declinedInvCount;
+	private int expiredInvCount;
+	private int refundPayCount;
+	private List<DailyPay> dailyPayList;
 
-	public List<Invoice> getUnpaidInvs() {
-		return unpaidInvs;
+	public int getSalePayCount() {
+		return salePayCount;
 	}
 
-	public void setUnpaidInvs(List<Invoice> unpaidInvs) {
-		this.unpaidInvs = unpaidInvs;
+	public void setSalePayCount(int salePayCount) {
+		this.salePayCount = salePayCount;
 	}
 
-	public List<Invoice> getDeclinedInvs() {
-		return declinedInvs;
+	public int getUnpaidInvCount() {
+		return unpaidInvCount;
 	}
 
-	public void setDeclinedInvs(List<Invoice> declinedInvs) {
-		this.declinedInvs = declinedInvs;
+	public void setUnpaidInvCount(int unpaidInvCount) {
+		this.unpaidInvCount = unpaidInvCount;
 	}
 
-	public List<Invoice> getExpiredInvs() {
-		return expiredInvs;
+	public int getDeclinedInvCount() {
+		return declinedInvCount;
 	}
 
-	public void setExpiredInvs(List<Invoice> expiredInvs) {
-		this.expiredInvs = expiredInvs;
+	public void setDeclinedInvCount(int declinedInvCount) {
+		this.declinedInvCount = declinedInvCount;
 	}
 
-	public List<Payment> getRefundPays() {
-		return refundPays;
+	public int getExpiredInvCount() {
+		return expiredInvCount;
 	}
 
-	public void setRefundPays(List<Payment> refundPays) {
-		this.refundPays = refundPays;
+	public void setExpiredInvCount(int expiredInvCount) {
+		this.expiredInvCount = expiredInvCount;
+	}
+
+	public int getRefundPayCount() {
+		return refundPayCount;
+	}
+
+	public void setRefundPayCount(int refundPayCount) {
+		this.refundPayCount = refundPayCount;
 	}
 
 	public BigDecimal getUnpaidInvSum() {
@@ -83,20 +89,20 @@ public class StatsResponse {
 		this.refundPaySum = refundPaySum;
 	}
 
-	public List<Payment> getSalePays() {
-		return salePays;
-	}
-
-	public void setSalePays(List<Payment> salePays) {
-		this.salePays = salePays;
-	}
-
 	public BigDecimal getSalePaySum() {
 		return salePaySum;
 	}
 
 	public void setSalePaySum(BigDecimal salePaySum) {
 		this.salePaySum = salePaySum;
+	}
+
+	public List<DailyPay> getDailyPayList() {
+		return dailyPayList;
+	}
+
+	public void setDailyPayList(List<DailyPay> dailyPayList) {
+		this.dailyPayList = dailyPayList;
 	}
 
 }

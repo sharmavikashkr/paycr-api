@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Access;
+import com.paycr.common.bean.DailyPay;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.StatsRequest;
 import com.paycr.common.bean.StatsResponse;
@@ -38,6 +39,7 @@ import com.paycr.common.type.PayType;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.validation.UserValidator;
 
 @Service
@@ -276,17 +278,24 @@ public class CommonService {
 					request.getCreatedFrom(), request.getCreatedTo());
 		}
 
-		response.setSalePays(salePays);
+		response.setSalePayCount(salePays.size());
 		response.setSalePaySum(getTotalPayAmount(salePays));
-		response.setUnpaidInvs(unpaidInvs);
+		response.setUnpaidInvCount(unpaidInvs.size());
 		response.setUnpaidInvSum(getTotalInvAmount(unpaidInvs));
-		response.setExpiredInvs(expiredInvs);
+		response.setExpiredInvCount(expiredInvs.size());
 		response.setExpiredInvSum(getTotalInvAmount(expiredInvs));
-		response.setDeclinedInvs(declinedInvs);
+		response.setDeclinedInvCount(declinedInvs.size());
 		response.setDeclinedInvSum(getTotalInvAmount(declinedInvs));
-		response.setRefundPays(refundPays);
+		response.setRefundPayCount(refundPays.size());
 		response.setRefundPaySum(getTotalPayAmount(refundPays));
-
+		List<DailyPay> dailyPayList = new ArrayList<DailyPay>();
+		for (Payment payment : refundPays) {
+			setDailyPay(dailyPayList, payment);
+		}
+		for (Payment payment : salePays) {
+			setDailyPay(dailyPayList, payment);
+		}
+		response.setDailyPayList(dailyPayList);
 		return response;
 	}
 
@@ -304,6 +313,29 @@ public class CommonService {
 			total = total.add(pay.getAmount());
 		}
 		return total;
+	}
+
+	private void setDailyPay(List<DailyPay> dailyPayList, Payment payment) {
+		for (DailyPay dp : dailyPayList) {
+			if (DateUtil.getDefaultDate(payment.getCreated()).equals(dp.getCreated())) {
+				if (PayType.SALE.equals(payment.getPayType())) {
+					dp.setSalePaySum(dp.getSalePaySum().add(payment.getAmount()));
+				} else if (PayType.REFUND.equals(payment.getPayType())) {
+					dp.setRefundPaySum(dp.getRefundPaySum().add(payment.getAmount()));
+				}
+				return;
+			}
+		}
+		DailyPay dp = new DailyPay();
+		dp.setCreated(DateUtil.getDefaultDate(payment.getCreated()));
+		if (PayType.SALE.equals(payment.getPayType())) {
+			dp.setSalePaySum(payment.getAmount());
+			dp.setRefundPaySum(new BigDecimal(0));
+		} else if (PayType.REFUND.equals(payment.getPayType())) {
+			dp.setRefundPaySum(payment.getAmount());
+			dp.setSalePaySum(new BigDecimal(0));
+		}
+		dailyPayList.add(dp);
 	}
 
 }
