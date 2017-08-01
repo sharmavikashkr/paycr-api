@@ -4,17 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.InvoiceReport;
-import com.paycr.common.bean.SearchInvoiceRequest;
-import com.paycr.common.data.dao.InvoiceDao;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.Report;
+import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.Constants;
@@ -24,13 +22,13 @@ import com.paycr.dashboard.helper.ReportHelper;
 public class ReportService {
 
 	@Autowired
-	private InvoiceDao invDao;
-
-	@Autowired
 	private ReportRepository repRepo;
 
 	@Autowired
 	private ReportHelper repHelp;
+
+	@Autowired
+	private PaymentRepository payRepo;
 
 	public List<Report> fetchReports(Merchant merchant) {
 		List<Report> commonReports = repRepo.findByMerchant(null);
@@ -54,28 +52,17 @@ public class ReportService {
 
 	public List<InvoiceReport> loadReport(Report report, Merchant merchant) {
 		isValidReport(report);
-		SearchInvoiceRequest searchReq = new SearchInvoiceRequest();
+		List<Payment> allPayments = new ArrayList<>();
 		Date createdTo = new Date();
 		Date createdFrom = repHelp.getCreatedFrom(report.getTimeRange());
-		searchReq.setCreatedFrom(createdFrom);
-		searchReq.setCreatedTo(createdTo);
-		searchReq.setInvoiceStatus(report.getInvoiceStatus());
-		List<Invoice> invoices = invDao.findInvoices(searchReq, merchant);
-		List<InvoiceReport> invoiceReports = new ArrayList<InvoiceReport>();
-		List<Future<List<InvoiceReport>>> dataListFutures = new ArrayList<Future<List<InvoiceReport>>>();
-		for (Invoice invoice : invoices) {
-			dataListFutures.add(repHelp.prepareReport(report, invoice));
+		if (merchant == null) {
+			allPayments
+					.addAll(payRepo.findPaysWithMode(report.getPayMode(), report.getPayType(), createdFrom, createdTo));
+		} else {
+			allPayments.addAll(payRepo.findPaysWithModeForMerchant(report.getPayMode(), report.getPayType(), merchant,
+					createdFrom, createdTo));
 		}
-		for (Future<List<InvoiceReport>> dataListFuture : dataListFutures) {
-			while (!dataListFuture.isDone() && !dataListFuture.isCancelled()) {
-			}
-			try {
-				invoiceReports.addAll(dataListFuture.get());
-			} catch (Exception ex) {
-				throw new PaycrException(Constants.FAILURE, "Processing failed");
-			}
-		}
-		return invoiceReports;
+		return repHelp.prepareReport(report, allPayments);
 	}
 
 	public void deleteReport(Integer reportId, Merchant merchant) {
@@ -90,7 +77,7 @@ public class ReportService {
 	}
 
 	private void isValidReport(Report report) {
-		if (report.getName() == null || report.getInvoiceStatus() == null || report.getTimeRange() == null
+		if (report.getName() == null || report.getPayStatus() == null || report.getTimeRange() == null
 				|| report.getPayType() == null || report.getPayMode() == null) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
 		}

@@ -20,6 +20,7 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
+import com.paycr.common.type.PayStatus;
 import com.paycr.common.type.PayType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
@@ -89,6 +90,10 @@ public class StaticController {
 			}
 		} else if ("invoicestatuses".equals(type)) {
 			for (InvoiceStatus status : InvoiceStatus.values()) {
+				enumList.add(status.name());
+			}
+		} else if ("paystatuses".equals(type)) {
+			for (PayStatus status : PayStatus.values()) {
 				enumList.add(status.name());
 			}
 		}

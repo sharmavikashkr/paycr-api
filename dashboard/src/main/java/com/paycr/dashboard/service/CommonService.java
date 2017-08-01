@@ -252,24 +252,32 @@ public class CommonService {
 		searchReq.setCreatedFrom(request.getCreatedFrom());
 		searchReq.setCreatedTo(request.getCreatedTo());
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		searchReq.setInvoiceStatus(InvoiceStatus.PAID);
-		List<Invoice> paidInvs = invDao.findInvoices(searchReq, merchant);
 		searchReq.setInvoiceStatus(InvoiceStatus.UNPAID);
 		List<Invoice> unpaidInvs = invDao.findInvoices(searchReq, merchant);
 		searchReq.setInvoiceStatus(InvoiceStatus.EXPIRED);
 		List<Invoice> expiredInvs = invDao.findInvoices(searchReq, merchant);
 		searchReq.setInvoiceStatus(InvoiceStatus.DECLINED);
 		List<Invoice> declinedInvs = invDao.findInvoices(searchReq, merchant);
+
+		List<Payment> salePays = new ArrayList<>();
+		if (merchant == null) {
+			salePays = payRepo.findPaysWithStatus("captured", PayType.SALE, request.getCreatedFrom(),
+					request.getCreatedTo());
+		} else {
+			salePays = payRepo.findPaysWithStatusForMerchant("captured", PayType.SALE, merchant,
+					request.getCreatedFrom(), request.getCreatedTo());
+		}
 		List<Payment> refundPays = new ArrayList<>();
 		if (merchant == null) {
-			refundPays = payRepo.findPays(request.getCreatedFrom(), request.getCreatedTo(), PayType.REFUND);
+			refundPays = payRepo.findPaysWithStatus("refund", PayType.REFUND, request.getCreatedFrom(),
+					request.getCreatedTo());
 		} else {
-			refundPays = payRepo.findPaysForMerchant(request.getCreatedFrom(), request.getCreatedTo(), PayType.REFUND,
-					merchant);
+			refundPays = payRepo.findPaysWithStatusForMerchant("refund", PayType.REFUND, merchant,
+					request.getCreatedFrom(), request.getCreatedTo());
 		}
 
-		response.setPaidInvs(paidInvs);
-		response.setPaidInvSum(getTotalInvAmount(paidInvs));
+		response.setSalePays(salePays);
+		response.setSalePaySum(getTotalPayAmount(salePays));
 		response.setUnpaidInvs(unpaidInvs);
 		response.setUnpaidInvSum(getTotalInvAmount(unpaidInvs));
 		response.setExpiredInvs(expiredInvs);

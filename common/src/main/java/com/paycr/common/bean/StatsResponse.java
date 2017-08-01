@@ -8,24 +8,16 @@ import com.paycr.common.data.domain.Payment;
 
 public class StatsResponse {
 
-	private BigDecimal paidInvSum;
+	private BigDecimal salePaySum;
 	private BigDecimal unpaidInvSum;
 	private BigDecimal declinedInvSum;
 	private BigDecimal expiredInvSum;
 	private BigDecimal refundPaySum;
-	private List<Invoice> paidInvs;
+	private List<Payment> salePays;
 	private List<Invoice> unpaidInvs;
 	private List<Invoice> declinedInvs;
 	private List<Invoice> expiredInvs;
 	private List<Payment> refundPays;
-
-	public List<Invoice> getPaidInvs() {
-		return paidInvs;
-	}
-
-	public void setPaidInvs(List<Invoice> paidInvs) {
-		this.paidInvs = paidInvs;
-	}
 
 	public List<Invoice> getUnpaidInvs() {
 		return unpaidInvs;
@@ -59,14 +51,6 @@ public class StatsResponse {
 		this.refundPays = refundPays;
 	}
 
-	public BigDecimal getPaidInvSum() {
-		return paidInvSum;
-	}
-
-	public void setPaidInvSum(BigDecimal paidInvSum) {
-		this.paidInvSum = paidInvSum;
-	}
-
 	public BigDecimal getUnpaidInvSum() {
 		return unpaidInvSum;
 	}
@@ -97,6 +81,22 @@ public class StatsResponse {
 
 	public void setRefundPaySum(BigDecimal refundPaySum) {
 		this.refundPaySum = refundPaySum;
+	}
+
+	public List<Payment> getSalePays() {
+		return salePays;
+	}
+
+	public void setSalePays(List<Payment> salePays) {
+		this.salePays = salePays;
+	}
+
+	public BigDecimal getSalePaySum() {
+		return salePaySum;
+	}
+
+	public void setSalePaySum(BigDecimal salePaySum) {
+		this.salePaySum = salePaySum;
 	}
 
 }

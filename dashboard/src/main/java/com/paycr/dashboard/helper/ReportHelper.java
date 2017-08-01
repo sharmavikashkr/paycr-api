@@ -7,18 +7,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.type.PayStatus;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.util.DateUtil;
 
@@ -28,7 +26,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class ReportHelper {
 
 	@Autowired
-	private PaymentRepository payRepo;
+	private InvoiceRepository invRepo;
 
 	public Date getCreatedFrom(TimeRange range) {
 		Calendar calendar = Calendar.getInstance();
@@ -57,31 +55,32 @@ public class ReportHelper {
 
 	private static List<String[]> toStringArray(List<InvoiceReport> invReport) {
 		List<String[]> records = new ArrayList<String[]>();
-		records.add(new String[] { "Created", "Invoice Code", "Invoice Status", "Pay Amount", "Tax", "Discount",
-				"Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method" });
+		records.add(new String[] { "Created", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
+				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 
 		Iterator<InvoiceReport> it = invReport.iterator();
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
 			records.add(new String[] { invr.getCreated().toString(), invr.getInvoiceCode(),
-					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
-					invr.getDiscount().toString(), invr.getCurrency().name(), invr.getPaymentRefNo(),
-					invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod() });
+					invr.getInvoiceStatus().name(), invr.getInvAmount().toString(), invr.getTax().toString(),
+					invr.getDiscount().toString(), invr.getAmount().toString(), invr.getCurrency().name(),
+					invr.getPaymentRefNo(), invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod(),
+					invr.getPayStatus() });
 		}
 		return records;
 	}
 
-	@Async
-	public Future<List<InvoiceReport>> prepareReport(Report report, Invoice invoice) {
+	public List<InvoiceReport> prepareReport(Report report, List<Payment> payments) {
 		List<InvoiceReport> invoiceReports = new ArrayList<InvoiceReport>();
-		List<Payment> payments = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), report.getPayType());
 		for (Payment payment : payments) {
-			if (payment.getPayMode().equals(report.getPayMode()) && payment.getPayType().equals(report.getPayType())) {
+			if (include(report.getPayStatus(), payment.getStatus())) {
+				Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 				InvoiceReport invReport = new InvoiceReport();
-				invReport.setCreated(invoice.getCreated());
+				invReport.setCreated(payment.getCreated());
 				invReport.setInvoiceCode(invoice.getInvoiceCode());
 				invReport.setInvoiceStatus(invoice.getStatus());
-				invReport.setPayAmount(invoice.getPayAmount());
+				invReport.setInvAmount(invoice.getPayAmount());
+				invReport.setAmount(payment.getAmount());
 				invReport.setTax(invoice.getPayAmount().add(invoice.getDiscount()).subtract(invoice.getTotal()));
 				invReport.setDiscount(invoice.getDiscount());
 				invReport.setCurrency(invoice.getCurrency());
@@ -89,10 +88,16 @@ public class ReportHelper {
 				invReport.setPayType(payment.getPayType());
 				invReport.setPayMode(payment.getPayMode());
 				invReport.setPayMethod(payment.getMethod());
+				invReport.setPayStatus(payment.getStatus());
 				invoiceReports.add(invReport);
 			}
 		}
-		return new AsyncResult<List<InvoiceReport>>(invoiceReports);
+		return invoiceReports;
+	}
+
+	private boolean include(PayStatus payStatus, String status) {
+		return (PayStatus.SUCCESS.equals(payStatus) && ("captured".equals(status) || "refund".equals(status)))
+				|| (PayStatus.FAILURE.equals(payStatus) && !"captured".equals(status) && !"refund".equals(status));
 	}
 
 }

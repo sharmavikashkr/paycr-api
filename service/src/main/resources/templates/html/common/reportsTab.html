@@ -8,9 +8,9 @@
 					<tr>
 						<td class="text-center"><strong>Name</strong></td>
 						<td class="text-center"><strong>Time Range</strong></td>
-						<td class="text-center"><strong>Invoice Status</strong></td>
 						<td class="text-center"><strong>Pay Type</strong></td>
 						<td class="text-center"><strong>Pay Mode</strong></td>
+						<td class="text-center"><strong>Pay Status</strong></td>
 						<td class="text-center"><strong>Actions</strong></td>
 					</tr>
 				</thead>
@@ -20,11 +20,6 @@
 						<td>
 							<select class="form-control" ng-model="newreport.timeRange">
 								<option ng-repeat="timeRange in timeRanges" value="{{timeRange}}">{{timeRange}}</option>
-							</select>
-						</td>
-						<td>
-							<select class="form-control" ng-model="newreport.invoiceStatus">
-								<option ng-repeat="invoiceStatus in invoiceStatuses" value="{{invoiceStatus}}">{{invoiceStatus}}</option>
 							</select>
 						</td>
 						<td>
@@ -38,6 +33,11 @@
 							</select>
 						</td>
 						<td>
+							<select class="form-control" ng-model="newreport.payStatus">
+								<option ng-repeat="payStatus in payStatuses" value="{{payStatus}}">{{payStatus}}</option>
+							</select>
+						</td>
+						<td>
 							<button ng-click="createReport()" type="button" class="btn btn-success btn-xs">Create</button>
 							<button ng-click="loadReport(newreport)" type="button" class="btn btn-success btn-xs">Load</button>
 						</td>
@@ -45,9 +45,9 @@
 					<tr ng-class="(report.merchant!=null)?'success':''" ng-repeat="report in reports">
 						<td>{{report.name}}</td>
 						<td>{{report.timeRange}}</td>
-						<td>{{report.invoiceStatus}}</td>
 						<td>{{report.payType}}</td>
 						<td>{{report.payMode}}</td>
+						<td>{{report.payStatus}}</td>
 						<td>
 							<button ng-click="loadReport(report)" type="button" class="btn btn-success btn-xs">Load</button>
 							<button ng-if="report.merchant!=null" ng-click="deleteReport(report.id, report.name)" type="button" class="btn btn-danger btn-xs">
@@ -72,30 +72,28 @@
 							<tr>
 								<td class="text-center"><strong>Created</strong></td>
 								<td class="text-center"><strong>Invoice Code</strong></td>
-								<td class="text-center"><strong>Tax</strong></td>
-								<td class="text-center"><strong>Discount</strong></td>
-								<td class="text-center"><strong>Invoice Status</strong></td>
-								<td class="text-center"><strong>Pay Amount</strong></td>
+								<td class="text-center"><strong>Amount</strong></td>
 								<td class="text-center"><strong>Currency</strong></td>
+								<td class="text-center"><strong>Invoice Status</strong></td>
 								<td class="text-center"><strong>Payment Ref No</strong></td>
 								<td class="text-center"><strong>Pay Type</strong></td>
 								<td class="text-center"><strong>Pay Mode</strong></td>
 								<td class="text-center"><strong>Pay Method</strong></td>
+								<td class="text-center"><strong>Pay Status</strong></td>
 							</tr>
 						</thead>
 						<tbody id="itemBody">
 							<tr ng-repeat="invoiceReport in reportsResp.invoiceReports">
 								<td>{{invoiceReport.created | date:'dd-MM-yyyy HH:mm'}}</td>
 								<td>{{invoiceReport.invoiceCode}}</td>
-								<td>{{invoiceReport.tax}}</td>
-								<td>{{invoiceReport.discount}}</td>
-								<td>{{invoiceReport.invoiceStatus}}</td>
-								<td>{{invoiceReport.payAmount}}</td>
+								<td>{{invoiceReport.amount}}</td>
 								<td>{{invoiceReport.currency}}</td>
+								<td>{{invoiceReport.invoiceStatus}}</td>
 								<td>{{invoiceReport.paymentRefNo}}</td>
 								<td>{{invoiceReport.payType}}</td>
 								<td>{{invoiceReport.payMode}}</td>
 								<td>{{invoiceReport.payMethod}}</td>
+								<td>{{invoiceReport.payStatus}}</td>
 							</tr>
 						</tbody>
 					</table>

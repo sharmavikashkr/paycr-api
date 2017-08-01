@@ -13,14 +13,16 @@ public class InvoiceReport {
 	private Date created;
 	private String invoiceCode;
 	private InvoiceStatus invoiceStatus;
-	private BigDecimal payAmount;
+	private BigDecimal invAmount;
 	private BigDecimal tax;
 	private BigDecimal discount;
+	private BigDecimal amount;
 	private Currency currency;
 	private String paymentRefNo;
 	private PayType payType;
 	private PayMode payMode;
 	private String payMethod;
+	private String payStatus;
 
 	public Date getCreated() {
 		return created;
@@ -36,14 +38,6 @@ public class InvoiceReport {
 
 	public void setInvoiceCode(String invoiceCode) {
 		this.invoiceCode = invoiceCode;
-	}
-
-	public BigDecimal getPayAmount() {
-		return payAmount;
-	}
-
-	public void setPayAmount(BigDecimal payAmount) {
-		this.payAmount = payAmount;
 	}
 
 	public Currency getCurrency() {
@@ -108,5 +102,29 @@ public class InvoiceReport {
 
 	public void setDiscount(BigDecimal discount) {
 		this.discount = discount;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public BigDecimal getInvAmount() {
+		return invAmount;
+	}
+
+	public void setInvAmount(BigDecimal invAmount) {
+		this.invAmount = invAmount;
+	}
+
+	public String getPayStatus() {
+		return payStatus;
+	}
+
+	public void setPayStatus(String payStatus) {
+		this.payStatus = payStatus;
 	}
 }

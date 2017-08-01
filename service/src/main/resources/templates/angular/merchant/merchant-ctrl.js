@@ -161,6 +161,20 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/paystatuses",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(paystatuses) {
+			$rootScope.payStatuses = paystatuses.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 	$scope.fetchUser = function() {
 		var req = {
