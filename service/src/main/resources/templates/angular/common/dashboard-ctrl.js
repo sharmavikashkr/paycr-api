@@ -26,6 +26,9 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	}
 	
 	$scope.loadCharts = function() {
+		$('#amount-donut').html('');
+		$('#count-donut').html('');
+		$('#per-day-area').html('');
 		Morris.Donut({
 	        element: 'amount-donut',
 	        colors : ['#3c763d', '#31708f', '#333', '#faf2cc', '#a94442'],
