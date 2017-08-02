@@ -10,7 +10,7 @@
 							<th class="text-center">Invoice Code</th>
 							<th class="text-center">Amount</th>
 							<th class="text-center">Merchant</th>
-							<th class="text-center">Status</th>
+							<th class="text-center hidden-xs">Status</th>
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
@@ -23,7 +23,7 @@
 							<td>{{myinvoice.invoiceCode}}</td>
 							<td>&#8377; {{myinvoice.payAmount}}</td>
 							<td>{{myinvoice.merchant.name}}</td>
-							<td>{{myinvoice.status}}</td>
+							<td class="hidden-xs">{{myinvoice.status}}</td>
 							<td>
 								<div ng-if="myinvoice.status != 'PAID' && myinvoice.status != 'EXPIRED'">
 									<a href="/{{myinvoice.invoiceCode}}" target="_blank" type="button" class="btn btn-xs btn-success">PAY</a>&nbsp; 

@@ -6,7 +6,7 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center hidden-xs"><strong>Name</strong></td>
 						<td class="text-center"><strong>Time Range</strong></td>
 						<td class="text-center"><strong>Pay Type</strong></td>
 						<td class="text-center"><strong>Pay Mode</strong></td>
@@ -15,7 +15,7 @@
 					</tr>
 				</thead>
 				<tbody id="itemBody">
-					<tr class="warning">
+					<tr class="warning hidden-xs">
 						<td><input class="form-control" placeholder="name" ng-model="newreport.name" required></td>
 						<td>
 							<select class="form-control" ng-model="newreport.timeRange">
@@ -43,7 +43,7 @@
 						</td>
 					</tr>
 					<tr ng-class="(report.merchant!=null)?'success':''" ng-repeat="report in reports">
-						<td>{{report.name}}</td>
+						<td class="hidden-xs">{{report.name}}</td>
 						<td>{{report.timeRange}}</td>
 						<td>{{report.payType}}</td>
 						<td>{{report.payMode}}</td>
@@ -71,29 +71,29 @@
 						<thead>
 							<tr>
 								<td class="text-center"><strong>Created</strong></td>
-								<td class="text-center"><strong>Invoice Code</strong></td>
+								<td class="text-center hidden-xs"><strong>Invoice Code</strong></td>
 								<td class="text-center"><strong>Amount</strong></td>
 								<td class="text-center"><strong>Currency</strong></td>
-								<td class="text-center"><strong>Invoice Status</strong></td>
-								<td class="text-center"><strong>Payment Ref No</strong></td>
+								<td class="text-center hidden-xs"><strong>Invoice Status</strong></td>
+								<td class="text-center hidden-xs"><strong>Payment Ref No</strong></td>
 								<td class="text-center"><strong>Pay Type</strong></td>
 								<td class="text-center"><strong>Pay Mode</strong></td>
-								<td class="text-center"><strong>Pay Method</strong></td>
-								<td class="text-center"><strong>Pay Status</strong></td>
+								<td class="text-center hidden-xs"><strong>Pay Method</strong></td>
+								<td class="text-center hidden-xs"><strong>Pay Status</strong></td>
 							</tr>
 						</thead>
 						<tbody id="itemBody">
 							<tr ng-repeat="invoiceReport in reportsResp.invoiceReports">
 								<td>{{invoiceReport.created | date:'dd-MM-yyyy HH:mm'}}</td>
-								<td>{{invoiceReport.invoiceCode}}</td>
+								<td class="hidden-xs">{{invoiceReport.invoiceCode}}</td>
 								<td>{{invoiceReport.amount}}</td>
 								<td>{{invoiceReport.currency}}</td>
-								<td>{{invoiceReport.invoiceStatus}}</td>
-								<td>{{invoiceReport.paymentRefNo}}</td>
+								<td class="hidden-xs">{{invoiceReport.invoiceStatus}}</td>
+								<td class="hidden-xs">{{invoiceReport.paymentRefNo}}</td>
 								<td>{{invoiceReport.payType}}</td>
 								<td>{{invoiceReport.payMode}}</td>
-								<td>{{invoiceReport.payMethod}}</td>
-								<td>{{invoiceReport.payStatus}}</td>
+								<td class="hidden-xs">{{invoiceReport.payMethod}}</td>
+								<td class="hidden-xs">{{invoiceReport.payStatus}}</td>
 							</tr>
 						</tbody>
 					</table>
