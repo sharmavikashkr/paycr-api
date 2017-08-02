@@ -1,9 +1,12 @@
 <div ng-controller="DashboardController" id="dashboardTab" ng-init="loadDashboard()">
 	<br>
 	<div class="row">
-		<div class="col-lg-6 text-right">
+		<div class="">
 			<div class="form-group">Created between :
-				<md-datepicker ng-model="statsReq.createdFrom"></md-datepicker> <md-datepicker ng-model="statsReq.createdTo"></md-datepicker>
+				<md-datepicker ng-model="statsReq.createdFrom"></md-datepicker>
+				<md-datepicker ng-model="statsReq.createdTo"></md-datepicker>
+				&nbsp;&nbsp;
+				<button class="btn button-default" ng-click="loadDashboard()">Load</button>
 			</div>
 		</div>
 	</div>

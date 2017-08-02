@@ -46,6 +46,7 @@ app.controller('PricingController', function($scope, $rootScope, $http, $cookies
 		$http(req).then(function(data) {
 			$scope.fetchPricings();
 			$scope.serverMessage(data);
+			this.newpricing = {};
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -81,6 +82,7 @@ app.controller('PricingController', function($scope, $rootScope, $http, $cookies
 		}
 		$http(req).then(function(data) {
 			$scope.fetchSubsModes();
+			this.newsubsmode = {};
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

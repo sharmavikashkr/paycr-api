@@ -76,7 +76,7 @@ public class PaymentService {
 			refPay.setCreated(new Date());
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setMerchant(merchant);
-			refPay.setPaymentRefNo("");
+			refPay.setPaymentRefNo(payment.getPaymentRefNo());
 			refPay.setStatus("refund");
 			refPay.setPayMode(payment.getPayMode());
 			refPay.setMethod(payment.getMethod());

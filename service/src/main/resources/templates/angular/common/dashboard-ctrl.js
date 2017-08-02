@@ -17,7 +17,9 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 		}
 		$http(req).then(function(response) {
 			$rootScope.statsResponse = response.data;
-			$scope.loadCharts();
+			if($rootScope.statsResponse.dailyPayList.length > 0) {
+				$scope.loadCharts();				
+			}
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
