@@ -72,7 +72,7 @@
 								<th>Invoice Code</th>
 								<th>Amount</th>
 								<th>Type</th>
-								<th>Status</th>
+								<th class="hidden-xs">Status</th>
 							</tr>
 						</thead>
 						<tbody ng-repeat="invoice in invoiceResp.invoiceList">
@@ -85,7 +85,7 @@
 								<td>{{invoice.invoiceCode}}</td>
 								<td>&#8377; {{invoice.payAmount}}</td>
 								<td>{{invoice.invoiceType}}</td>
-								<td>{{invoice.status}}</td>
+								<td class="hidden-xs">{{invoice.status}}</td>
 							</tr>
 							<tr>
 								<td colspan="12" style="padding:0px;border:0px;">

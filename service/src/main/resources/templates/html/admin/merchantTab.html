@@ -61,8 +61,8 @@
 								<th>Id</th>
 								<th>Name</th>
 								<th>Email</th>
-								<th>Mobile</th>
-								<th>Created</th>
+								<th class="hidden-xs">Mobile</th>
+								<th class="hidden-xs">Created</th>
 							</tr>
 						</thead>
 						<tbody ng-repeat="merchant in merchantResp.merchantList">
@@ -70,8 +70,8 @@
 								<td>{{merchant.id}}</td>
 								<td>{{merchant.name}}</td>
 								<td>{{merchant.email}}</td>
-								<td>{{merchant.mobile}}</td>
-								<td>{{merchant.created | date:'dd-MM-yyyy HH:mm'}}</td>
+								<td class="hidden-xs">{{merchant.mobile}}</td>
+								<td class="hidden-xs">{{merchant.created | date:'dd-MM-yyyy HH:mm'}}</td>
 							</tr>
 							<tr>
 								<td colspan="12" style="padding: 0px; border: 0px;">
@@ -94,8 +94,8 @@
 													<thead>
 														<tr>
 															<td class="text-center"><strong>Name</strong></td>
-															<td class="text-center"><strong>Start Date</strong></td>
-															<td class="text-center"><strong>End Date</strong></td>
+															<td class="text-center hidden-xs"><strong>Start Date</strong></td>
+															<td class="text-center hidden-xs"><strong>End Date</strong></td>
 															<td class="text-center"><strong>Used (Limit)</strong></td>
 															<td class="text-center"><strong>Amount Limits</strong></td>
 														</tr>
@@ -108,8 +108,8 @@
 															title="{{merpricing.status}}" data-toggle="modal"
 															data-target="#subsDetailsModal">
 															<td class="text-center">{{merpricing.pricing.name}}</td>
-															<td class="text-center">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
-															<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
+															<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+															<td class="text-center hidden-xs">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
 															<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit}})</td>
 															<td class="text-center">&#8377; {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
 														</tr>

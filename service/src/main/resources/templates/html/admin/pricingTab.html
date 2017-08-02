@@ -16,7 +16,7 @@
 							<tr>
 								<th>Name</th>
 								<th>Pay Mode</th>
-								<th>Razorpay Merchant Id</th>
+								<th class="hidden-xs">Razorpay Merchant Id</th>
 								<th class="hidden-xs">Razorpay Key Id</th>
 								<th class="hidden-xs">Razorpay Secret Id</th>
 								<th>Action</th>
@@ -28,7 +28,7 @@
 								<td>{{subsMode.payMode}}</td>
 								<td class="hidden-xs">{{subsMode.rzpMerchantId}}</td>
 								<td class="hidden-xs">{{subsMode.rzpKeyId}}</td>
-								<td>{{subsMode.rzpSecretId}}</td>
+								<td class="hidden-xs">{{subsMode.rzpSecretId}}</td>
 								<td>
 									<button title="ACTIVATE" ng-if="!subsMode.active" ng-click="toggleSubsMode(subsMode.id)" type="button" class="btn btn-success btn-xs">
 										<i class="fa fa-check"></i>
