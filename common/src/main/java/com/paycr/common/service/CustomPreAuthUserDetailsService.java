@@ -1,4 +1,4 @@
-package com.paycr.common.service;
+/*package com.paycr.common.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -27,4 +27,4 @@ public class CustomPreAuthUserDetailsService
 			return null;
 		}
 	}
-}
+}*/

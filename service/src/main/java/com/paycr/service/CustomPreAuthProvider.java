@@ -1,4 +1,4 @@
-package com.paycr.service;
+/*package com.paycr.service;
 
 import javax.annotation.PostConstruct;
 
@@ -22,4 +22,4 @@ public class CustomPreAuthProvider extends PreAuthenticatedAuthenticationProvide
 	public void init() {
 		super.setPreAuthenticatedUserDetailsService(userService);
 	}
-}
+}*/

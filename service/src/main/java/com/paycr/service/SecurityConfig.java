@@ -1,7 +1,6 @@
 package com.paycr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,9 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public CustomUserDetailsService userDetailsService;
 
-	@Autowired
+	/*@Autowired
 	@Qualifier("preAuthProvider")
-	private AuthenticationProvider preAuthProvider;
+	private AuthenticationProvider preAuthProvider;*/
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -61,6 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider()).authenticationProvider(preAuthProvider);
+		auth.authenticationProvider(authenticationProvider());//.authenticationProvider(preAuthProvider);
 	}
 }
