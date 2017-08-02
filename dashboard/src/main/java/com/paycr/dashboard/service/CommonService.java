@@ -2,6 +2,7 @@ package com.paycr.dashboard.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -246,9 +247,7 @@ public class CommonService {
 	}
 
 	public StatsResponse loadDashboard(StatsRequest request) {
-		if (request == null || request.getCreatedFrom() == null || request.getCreatedTo() == null) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
-		}
+		validateStatsRequest(request);
 		StatsResponse response = new StatsResponse();
 		SearchInvoiceRequest searchReq = new SearchInvoiceRequest();
 		searchReq.setCreatedFrom(request.getCreatedFrom());
@@ -297,6 +296,20 @@ public class CommonService {
 		}
 		response.setDailyPayList(dailyPayList);
 		return response;
+	}
+
+	private void validateStatsRequest(StatsRequest request) {
+		if (request == null || request.getCreatedFrom() == null || request.getCreatedTo() == null) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+		}
+		Calendar calTo = Calendar.getInstance();
+		calTo.setTime(request.getCreatedTo());
+		Calendar calFrom = Calendar.getInstance();
+		calFrom.setTime(request.getCreatedFrom());
+		calFrom.add(Calendar.DAY_OF_YEAR, 30);
+		if (calFrom.before(calTo)) {
+			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 30 days");
+		}
 	}
 
 	private BigDecimal getTotalInvAmount(List<Invoice> invs) {

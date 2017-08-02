@@ -17,8 +17,8 @@
 								<th>Name</th>
 								<th>Pay Mode</th>
 								<th>Razorpay Merchant Id</th>
-								<th>Razorpay Key Id</th>
-								<th>Razorpay Secret Id</th>
+								<th class="hidden-xs">Razorpay Key Id</th>
+								<th class="hidden-xs">Razorpay Secret Id</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -26,8 +26,8 @@
 							<tr ng-class="(subsMode.active)?'success':'warning'" ng-repeat="subsMode in subsModes" title="ACTIVE = {{subsMode.active}}">
 								<td>{{subsMode.name}}</td>
 								<td>{{subsMode.payMode}}</td>
-								<td>{{subsMode.rzpMerchantId}}</td>
-								<td>{{subsMode.rzpKeyId}}</td>
+								<td class="hidden-xs">{{subsMode.rzpMerchantId}}</td>
+								<td class="hidden-xs">{{subsMode.rzpKeyId}}</td>
 								<td>{{subsMode.rzpSecretId}}</td>
 								<td>
 									<button title="ACTIVATE" ng-if="!subsMode.active" ng-click="toggleSubsMode(subsMode.id)" type="button" class="btn btn-success btn-xs">
@@ -60,8 +60,8 @@
 							<th class="text-center">Duration</th>
 							<th class="text-center">Rate</th>
 							<th class="text-center">Invoice Limit</th>
-							<th class="text-center">Start Amount</th>
-							<th class="text-center">End Amount</th>
+							<th class="text-center hidden-xs">Start Amount</th>
+							<th class="text-center hidden-xs">End Amount</th>
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
@@ -71,8 +71,8 @@
 							<td>{{pricing.duration}}</td>
 							<td>&#8377; {{pricing.rate}}</td>
 							<td>{{pricing.invoiceLimit}}</td>
-							<td>&#8377; {{pricing.startAmount}}</td>
-							<td>&#8377; {{pricing.endAmount}}</td>
+							<td class="hidden-xs">&#8377; {{pricing.startAmount}}</td>
+							<td class="hidden-xs">&#8377; {{pricing.endAmount}}</td>
 							<td ng-if="pricing.active">
 								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
 							</td>
