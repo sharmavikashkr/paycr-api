@@ -1,6 +1,6 @@
 <div id="invoiceInfoModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content" style="min-width:130%;margin-left:-15%;">
+		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title"> Invoice# <span><strong>{{invoiceInfo.invoiceCode}}</strong></span>&nbsp;&nbsp;<span>({{invoiceInfo.merchantPricing.pricing.name}})</span></h4>
@@ -54,16 +54,16 @@
 							<thead>
 								<tr>
 									<td>Item Name</td>
-									<td>Item Rate</td>
-									<td>Item Quantity</td>
+									<td class="hidden-xs">Item Rate</td>
+									<td class="hidden-xs">Item Quantity</td>
 									<td>Item Price</td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="item in invoiceInfo.items">
 									<td>{{item.name}}</td>
-									<td>&#8377; {{item.rate}}</td>
-									<td>{{item.quantity}}</td>
+									<td class="hidden-xs">&#8377; {{item.rate}}</td>
+									<td class="hidden-xs">{{item.quantity}}</td>
 									<td>&#8377; {{item.price}}</td>
 								</tr>
 							</tbody>
@@ -77,22 +77,22 @@
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<thead>
 								<tr>
-									<td>Attempted</td>
-									<td>Ref Number</td>
+									<td class="hidden-xs">Attempted</td>
+									<td class="hidden-xs">Ref Number</td>
 									<td>Amount</td>
 									<td>Mode</td>
-									<td class="hidden-xs">Status</td>
+									<td>Status</td>
 									<td class="hidden-xs">Method</td>
 									<td>Type</td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="payment in invoiceInfo.allPayments">
-									<td>{{payment.created | date:'dd-MM-yyyy HH:mm'}}</td>
-									<td>{{payment.paymentRefNo}}</td>
+									<td class="hidden-xs">{{payment.created | date:'dd-MM-yyyy HH:mm'}}</td>
+									<td class="hidden-xs">{{payment.paymentRefNo}}</td>
 									<td>{{payment.amount}}</td>
 									<td>{{payment.payMode}}</td>
-									<td class="hidden-xs">{{payment.status}}</td>
+									<td>{{payment.status}}</td>
 									<td class="hidden-xs">{{payment.method}}</td>
 									<td>{{payment.payType}}</td>
 								</tr>

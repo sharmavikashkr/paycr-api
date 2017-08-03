@@ -15,20 +15,20 @@
 				<thead>
 					<tr>
 						<td class="text-center"><strong>Name</strong></td>
-						<td class="text-center"><strong>Email</strong></td>
-						<td class="text-center"><strong>Mobile</strong></td>
+						<td class="text-center hidden-xs"><strong>Email</strong></td>
+						<td class="text-center hidden-xs"><strong>Mobile</strong></td>
 						<td class="text-center"><strong>Role</strong></td>
-						<td class="text-center"><strong>Created By</strong></td>
+						<td class="text-center hidden-xs"><strong>Created By</strong></td>
 						<td class="text-center"><strong>Actions</strong></td>
 					</tr>
 				</thead>
 				<tbody id="itemBody">
 					<tr ng-class="(myuser.active)?'success':'danger'" ng-repeat="myuser in myusers" title="{{myusers.active}}">
 						<td>{{myuser.name}}</td>
-						<td>{{myuser.email}}</td>
-						<td>{{myuser.mobile}}</td>
+						<td class="hidden-xs">{{myuser.email}}</td>
+						<td class="hidden-xs">{{myuser.mobile}}</td>
 						<td>{{myuser.userType}}</td>
-						<td>{{myuser.createdBy}}</td>
+						<td class="hidden-xs">{{myuser.createdBy}}</td>
 						<td>
 							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs">
 								<i class="fa fa-minus"></i>

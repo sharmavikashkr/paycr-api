@@ -7,19 +7,19 @@
 				<thead>
 					<tr>
 						<td class="text-center"><strong>Name</strong></td>
-						<td class="text-center"><strong>Start Date</strong></td>
+						<td class="text-center hidden-xs"><strong>Start Date</strong></td>
 						<td class="text-center"><strong>End Date</strong></td>
 						<td class="text-center"><strong>Used (Limit)</strong></td>
-						<td class="text-center"><strong>Amount Limits</strong></td>
+						<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
 					</tr>
 				</thead>
 				<tbody id="itemBody">
 					<tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" title="{{merpricing.status}}">
 						<td class="text-center">{{merpricing.pricing.name}}</td>
-						<td class="text-center">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+						<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 						<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
 						<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit}})</td>
-						<td class="text-center">&#8377; {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
+						<td class="text-center hidden-xs">&#8377; {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -32,10 +32,9 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center hidden-xs"><strong>Name</strong></td>
 						<td class="text-center"><strong>Duration</strong></td>
-						<td class="text-center"><strong>Start Amount</strong></td>
-						<td class="text-center"><strong>End Amount</strong></td>
+						<td class="text-center"><strong>Amount Limits</strong></td>
 						<td class="text-center"><strong>Limit</strong></td>
 						<td class="text-center"><strong>Rate</strong></td>
 						<td class="text-center"><strong>Action</strong></td>
@@ -43,10 +42,9 @@
 				</thead>
 				<tbody id="itemBody">
 					<tr ng-repeat="pricing in pricings" ng-if="pricing.active">
-						<td class="text-center">{{pricing.name}}</td>
+						<td class="text-center hidden-xs">{{pricing.name}}</td>
 						<td class="text-center">{{pricing.duration}}</td>
-						<td class="text-center">{{pricing.startAmount}}</td>
-						<td class="text-center">{{pricing.endAmount}}</td>
+						<td class="text-center">&#8377; {{pricing.startAmount}} - {{pricing.endAmount}}</td>
 						<td class="text-center">{{pricing.invoiceLimit}}</td>
 						<td class="text-center">{{pricing.rate}}</td>
 						<td class="text-center">
