@@ -32,10 +32,10 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<td class="text-center hidden-xs"><strong>Name</strong></td>
-						<td class="text-center"><strong>Duration</strong></td>
-						<td class="text-center"><strong>Amount Limits</strong></td>
-						<td class="text-center"><strong>Limit</strong></td>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center hidden-xs"><strong>Duration</strong></td>
+						<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
+						<td class="text-center hidden-xs"><strong>Limit</strong></td>
 						<td class="text-center"><strong>Rate</strong></td>
 						<td class="text-center"><strong>Quantity</strong></td>
 						<td class="text-center"><strong>Action</strong></td>
@@ -43,10 +43,10 @@
 				</thead>
 				<tbody id="itemBody">
 					<tr ng-repeat="pricing in pricings" ng-if="pricing.active">
-						<td class="text-center hidden-xs">{{pricing.name}}</td>
-						<td class="text-center">{{pricing.duration}}</td>
-						<td class="text-center">&#8377; {{pricing.startAmount}} - {{pricing.endAmount}}</td>
-						<td class="text-center">{{pricing.invoiceLimit}}</td>
+						<td class="text-center">{{pricing.name}}</td>
+						<td class="text-center hidden-xs">{{pricing.duration}}</td>
+						<td class="text-center hidden-xs">&#8377; {{pricing.startAmount}} - {{pricing.endAmount}}</td>
+						<td class="text-center hidden-xs">{{pricing.invoiceLimit}}</td>
 						<td class="text-center">{{pricing.rate}}</td>
 						<td class="text-center col-sm-1 col-xs-2"><input class="form-control" ng-model="priceQuant[$index]" ng-init="priceQuant[$index] = 1" type="number" placeholder="Quantity" step="1" required></td>
 						<td class="text-center">
