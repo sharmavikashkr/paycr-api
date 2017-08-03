@@ -104,6 +104,7 @@ public class SubscriptionService {
 		subs.setCreated(timeNow);
 		subs.setMerchant(merchant);
 		subs.setPricing(pricing);
+		subs.setQuantity(offline.getQuantity());
 		subs.setPaymentRefNo(offline.getPaymentRefNo());
 		subs.setMethod(subsMode.getName());
 		subs.setStatus("SUCCESS");
@@ -115,6 +116,7 @@ public class SubscriptionService {
 		merPricing.setStartDate(timeNow);
 		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
 		merPricing.setPricing(pricing);
+		merPricing.setQuantity(offline.getQuantity());
 		merPricing.setStatus(PricingStatus.ACTIVE);
 		merPricing.setInvCount(0);
 		merPricing.setMerchant(merchant);
@@ -122,15 +124,17 @@ public class SubscriptionService {
 		merPriRepo.save(merPricing);
 	}
 
-	public ModelAndView onlineSubscription(Integer pricingId, Merchant merchant) {
+	public ModelAndView onlineSubscription(Integer pricingId, Integer quantity, Merchant merchant) {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
-		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1) {
-			throw new PaycrException(Constants.FAILURE, "Not Allowed");
+		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1 || quantity == 0
+				|| quantity == null) {
+			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}
 		Subscription subs = new Subscription();
-		subs.setAmount(pricing.getRate());
+		subs.setAmount(pricing.getRate().multiply(new BigDecimal(quantity)));
 		subs.setCurrency(Currency.INR);
+		subs.setQuantity(quantity);
 		subs.setCreated(timeNow);
 		subs.setMerchant(merchant);
 		subs.setPricing(pricing);
@@ -152,7 +156,7 @@ public class SubscriptionService {
 		ModelAndView mv = new ModelAndView("html/subscribe");
 		mv.addObject("merchant", merchant);
 		mv.addObject("pricing", pricing);
-		mv.addObject("subsCode", subsCode);
+		mv.addObject("subs", subs);
 		mv.addObject("rzpKeyId", subsMode.getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(subs.getAmount().multiply(new BigDecimal(100))));
 		return mv;
@@ -191,6 +195,7 @@ public class SubscriptionService {
 			merPricing.setStartDate(timeNow);
 			merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
 			merPricing.setPricing(pricing);
+			merPricing.setQuantity(subs.getQuantity());
 			merPricing.setStatus(PricingStatus.ACTIVE);
 			merPricing.setInvCount(0);
 			merPricing.setMerchant(merchant);

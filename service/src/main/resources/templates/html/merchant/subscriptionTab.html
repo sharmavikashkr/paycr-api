@@ -18,7 +18,7 @@
 						<td class="text-center">{{merpricing.pricing.name}}</td>
 						<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 						<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
-						<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit}})</td>
+						<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
 						<td class="text-center hidden-xs">&#8377; {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
 					</tr>
 				</tbody>
@@ -37,6 +37,7 @@
 						<td class="text-center"><strong>Amount Limits</strong></td>
 						<td class="text-center"><strong>Limit</strong></td>
 						<td class="text-center"><strong>Rate</strong></td>
+						<td class="text-center"><strong>Quantity</strong></td>
 						<td class="text-center"><strong>Action</strong></td>
 					</tr>
 				</thead>
@@ -47,8 +48,9 @@
 						<td class="text-center">&#8377; {{pricing.startAmount}} - {{pricing.endAmount}}</td>
 						<td class="text-center">{{pricing.invoiceLimit}}</td>
 						<td class="text-center">{{pricing.rate}}</td>
+						<td class="text-center"><input ng-model="priceQuant[$index]" ng-init="priceQuant[$index] = 1" type="number" placeholder="Quantity" step="1" required></td>
 						<td class="text-center">
-							<a href="/subscription/new/online/{{pricing.id}}?access_token={{access_token}}" class="btn btn-xs btn-success" target="_blank">BUY</a>
+							<a href="/subscription/new/online?pricing_id={{pricing.id}}&quantity={{priceQuant[$index]}}&access_token={{access_token}}" class="btn btn-xs btn-success" target="_blank">BUY</a>
 						</td>
 					</tr>
 				</tbody>

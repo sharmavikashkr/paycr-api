@@ -91,14 +91,15 @@ public class SubscriptionController {
 		}
 	}
 
-	@RequestMapping(value = "/new/online/{pricingId}", method = RequestMethod.GET)
-	public ModelAndView onlineSubscription(@PathVariable Integer pricingId,
-			@RequestParam("access_token") String accessToken, HttpServletRequest request) {
+	@RequestMapping(value = "/new/online", method = RequestMethod.GET)
+	public ModelAndView onlineSubscription(@RequestParam("access_token") String accessToken,
+			@RequestParam("pricing_id") Integer pricingId, @RequestParam("quantity") Integer quantity,
+			HttpServletRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser(accessToken);
 		if (CommonUtil.isNull(merchant)) {
 			throw new PaycrException(Constants.FAILURE, "We do not recognize you");
 		}
-		return subsSer.onlineSubscription(pricingId, merchant);
+		return subsSer.onlineSubscription(pricingId, quantity, merchant);
 	}
 
 	@RequestMapping(value = "/return", method = RequestMethod.POST)

@@ -29,6 +29,7 @@ public class Subscription implements Serializable {
 	private String subscriptionCode;
 	private Date created;
 	private BigDecimal amount;
+	private int quantity;
 
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
@@ -147,6 +148,14 @@ public class Subscription implements Serializable {
 
 	public void setSubscriptionMode(SubscriptionMode subscriptionMode) {
 		this.subscriptionMode = subscriptionMode;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 }

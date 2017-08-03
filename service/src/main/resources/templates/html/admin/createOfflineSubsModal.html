@@ -35,7 +35,15 @@
 										<td>
 											<div ng-class="(createOfflineSubsForm.paymentRefNo.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Payment Reference Number</label>
-												<input class="form-control" ng-model="offlinesubs.paymentRefNo" name="paymentRefNo" placeholder="Payment Ref No" ng-pattern="patterns.namePattern" required />
+												<input class="form-control" ng-model="offlinesubs.paymentRefNo" name="paymentRefNo" placeholder="Payment Ref No" ng-pattern="patterns.namePattern" required/>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createOfflineSubsForm.quantity.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Quantity</label>
+												<input class="form-control" ng-model="offlinesubs.quantity" name="quantity" type="number" placeholder="Quantity" ng-pattern="patterns.numberPattern" step="1" required/>
 											</div>
 										</td>
 									</tr>

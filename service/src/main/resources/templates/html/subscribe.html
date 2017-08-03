@@ -25,7 +25,7 @@
 							    src="https://checkout.razorpay.com/v1/checkout.js"
 							    data-key="${rzpKeyId}"
 							    data-amount="${payAmount}"
-							    data-buttontext="Pay &#8377; ${pricing.rate}"
+							    data-buttontext="Pay &#8377; ${subs.amount}"
 							    data-name="PayCr"
 							    data-description="Subscription Request"
 							    data-image="https://your-awesome-site.com/your_logo.jpg"
@@ -34,7 +34,7 @@
 							    data-prefill.contact="${merchant.mobile}"
 							    data-theme.color="#013487"
 							></script>
-							<input type="hidden" value="${subsCode}" name="subsCode">
+							<input type="hidden" value="${subs.subscriptionCode}" name="subsCode">
 							</form>
 	                        <a class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
 	                    </div>
@@ -71,6 +71,10 @@
 	                                <tr>
 	                                    <td><label class="control-label">Rate</label></td>
 	                                    <td><div class="form-group" style="margin:0px;">${pricing.rate}</div></td>
+	                                </tr>
+	                                <tr>
+	                                    <td><label class="control-label">Quantity</label></td>
+	                                    <td><div class="form-group" style="margin:0px;">${subs.quantity}</div></td>
 	                                </tr>
 	                             </tbody>
 	                         </table>

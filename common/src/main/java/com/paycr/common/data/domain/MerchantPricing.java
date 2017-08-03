@@ -26,6 +26,7 @@ public class MerchantPricing {
 	private Date created;
 	private Date startDate;
 	private Date endDate;
+	private int quantity;
 
 	@Enumerated(EnumType.STRING)
 	private PricingStatus status;
@@ -108,6 +109,14 @@ public class MerchantPricing {
 
 	public void setInvCount(int invCount) {
 		this.invCount = invCount;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 }

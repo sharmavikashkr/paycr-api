@@ -94,6 +94,7 @@
 													<thead>
 														<tr>
 															<td class="text-center"><strong>Name</strong></td>
+															<td class="text-center"><strong>Quantity</strong></td>
 															<td class="text-center hidden-xs"><strong>Start Date</strong></td>
 															<td class="text-center hidden-xs"><strong>End Date</strong></td>
 															<td class="text-center"><strong>Used (Limit)</strong></td>
@@ -108,9 +109,10 @@
 															title="{{merpricing.status}}" data-toggle="modal"
 															data-target="#subsDetailsModal">
 															<td class="text-center">{{merpricing.pricing.name}}</td>
+															<td class="text-center">{{merpricing.quantity}}</td>
 															<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 															<td class="text-center hidden-xs">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
-															<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit}})</td>
+															<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
 															<td class="text-center">&#8377; {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
 														</tr>
 													</tbody>

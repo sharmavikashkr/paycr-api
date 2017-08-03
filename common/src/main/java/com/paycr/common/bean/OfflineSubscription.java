@@ -6,6 +6,7 @@ public class OfflineSubscription {
 	private int pricingId;
 	private int subscriptionModeId;
 	private String paymentRefNo;
+	private int quantity;
 
 	public int getMerchantId() {
 		return merchantId;
@@ -37,6 +38,14 @@ public class OfflineSubscription {
 
 	public void setSubscriptionModeId(int subscriptionModeId) {
 		this.subscriptionModeId = subscriptionModeId;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 }

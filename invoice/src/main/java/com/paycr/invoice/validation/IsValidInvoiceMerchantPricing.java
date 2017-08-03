@@ -32,7 +32,7 @@ public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> 
 				Pricing pricing = merPricing.getPricing();
 				if (invoice.getPayAmount().compareTo(pricing.getStartAmount()) > 0
 						&& invoice.getPayAmount().compareTo(pricing.getEndAmount()) <= 0) {
-					if (merPricing.getInvCount() < pricing.getInvoiceLimit()) {
+					if (merPricing.getInvCount() < pricing.getInvoiceLimit() * merPricing.getQuantity()) {
 						amountNotAllowed = false;
 						selectedMerPricing = merPricing;
 						break;
