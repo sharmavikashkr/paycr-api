@@ -112,7 +112,7 @@ public class AdminService {
 		subs.setPaymentRefNo("onboarding");
 		subs.setPricing(pricing);
 		subs.setQuantity(1);
-		subs.setStatus("SUCCESS");
+		subs.setStatus("success");
 		subs.setSubscriptionCode("OFFLINE");
 		subs.setSubscriptionMode(subsMode);
 		subsRepo.save(subs);

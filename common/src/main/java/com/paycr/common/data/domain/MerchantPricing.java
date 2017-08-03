@@ -38,6 +38,7 @@ public class MerchantPricing {
 	@OneToOne
 	private Pricing pricing;
 
+	@JsonIgnore
 	@OneToOne
 	private Subscription subscription;
 

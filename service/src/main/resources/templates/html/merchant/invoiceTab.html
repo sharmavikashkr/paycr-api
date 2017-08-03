@@ -87,7 +87,7 @@
 							<tr
 								ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':'warning'"
 								data-toggle="collapse"
-								data-target="#details-{{invoice.invoiceCode}}"
+								data-target="#invdetails-{{invoice.invoiceCode}}"
 								class="accordion-toggle">
 								<td>{{invoice.invoiceCode}}</td>
 								<td>&#8377; {{invoice.payAmount}}</td>
@@ -97,7 +97,7 @@
 							</tr>
 							<tr>
 								<td colspan="12" style="padding: 0px; border: 0px;">
-									<div style="padding-right:10px;padding-left:10px;" class="accordion-body collapse" id="details-{{invoice.invoiceCode}}">
+									<div style="padding-right:10px;padding-left:10px;" class="accordion-body collapse" id="invdetails-{{invoice.invoiceCode}}">
 										<div class="row">
 											<div class="col-lg-6 col-sm-12 col-xs-12">
 												<h4>Amount Details</h4>

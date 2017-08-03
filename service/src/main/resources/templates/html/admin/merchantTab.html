@@ -66,7 +66,7 @@
 							</tr>
 						</thead>
 						<tbody ng-repeat="merchant in merchantResp.merchantList">
-							<tr ng-class="(merchant.active)?'success':'warning'" data-toggle="collapse" data-target="#details-{{merchant.id}}" class="accordion-toggle">
+							<tr ng-class="(merchant.active)?'success':'warning'" data-toggle="collapse" data-target="#merdetails-{{merchant.id}}" class="accordion-toggle">
 								<td>{{merchant.id}}</td>
 								<td>{{merchant.name}}</td>
 								<td>{{merchant.email}}</td>
@@ -75,7 +75,7 @@
 							</tr>
 							<tr>
 								<td colspan="12" style="padding: 0px; border: 0px;">
-									<div style="padding: 10px;" class="accordion-body collapse" id="details-{{merchant.id}}">
+									<div style="padding: 10px;" class="accordion-body collapse" id="merdetails-{{merchant.id}}">
 										<div class="row">
 											<div class="panel-body col-lg-12 col-sm-12 col-xs-12">
 												<div class="row">
@@ -105,7 +105,7 @@
 														<tr
 															ng-class="(merpricing.status=='ACTIVE')?'success':'danger'"
 															ng-repeat="merpricing in merchant.pricings"
-															ng-click="fetchSubscriptionDetails(merpricing.subscription.id)"
+															ng-click="fetchSubscriptionDetails(merpricing.id)"
 															title="{{merpricing.status}}" data-toggle="modal"
 															data-target="#subsDetailsModal">
 															<td class="text-center">{{merpricing.pricing.name}}</td>

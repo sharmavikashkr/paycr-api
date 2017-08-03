@@ -64,9 +64,9 @@ public class SubscriptionService {
 		return subsModeRepo.findAll();
 	}
 
-	public Subscription getSubscription(Integer subscriptionId) {
-		Subscription subs = subsRepo.findOne(subscriptionId);
-		return subs;
+	public Subscription getSubscription(Integer pricingId) {
+		MerchantPricing merPricing = merPriRepo.findOne(pricingId);
+		return merPricing.getSubscription();
 	}
 
 	public void createSubscriptionSetting(SubscriptionMode subsMode) {
@@ -107,8 +107,8 @@ public class SubscriptionService {
 		subs.setQuantity(offline.getQuantity());
 		subs.setPaymentRefNo(offline.getPaymentRefNo());
 		subs.setMethod(subsMode.getName());
-		subs.setStatus("SUCCESS");
-		subs.setSubscriptionCode("OFFLINE");
+		subs.setStatus("success");
+		subs.setSubscriptionCode("offline");
 		subs.setSubscriptionMode(subsMode);
 		subsRepo.save(subs);
 		MerchantPricing merPricing = new MerchantPricing();

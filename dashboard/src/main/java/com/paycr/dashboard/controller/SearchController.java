@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
@@ -59,6 +61,19 @@ public class SearchController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return merchants;
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
+	@RequestMapping("/subscription")
+	public List<Subscription> searchSubscription(@RequestBody SearchSubsRequest request, HttpServletResponse response) {
+		List<Subscription> subs = new ArrayList<Subscription>();
+		try {
+			subs = serSer.fetchSubsList(request);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return subs;
 	}
 
 }

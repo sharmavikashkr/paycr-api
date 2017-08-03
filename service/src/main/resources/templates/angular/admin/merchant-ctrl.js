@@ -40,10 +40,10 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 			$rootScope.merchantResp.allPages.push(i);
 		}
 	}
-	$scope.fetchSubscriptionDetails = function(subscriptionId) {
+	$scope.fetchSubscriptionDetails = function(pricingId) {
 		var req = {
 			method : 'GET',
-			url : "/subscription/get/" + subscriptionId,
+			url : "/subscription/get/" + pricingId,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			}

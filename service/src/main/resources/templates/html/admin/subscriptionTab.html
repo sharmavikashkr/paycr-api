@@ -1,0 +1,127 @@
+<div ng-controller="SubscriptionController" ng-init="searchSubscription()">
+	<br>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel">
+				<div class="panel-body col-lg-3 col-sm-12 col-xs-12">
+					<table class="table table-striped table-bordered table-hover table-responsive">
+						<tbody>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="control-label">Created between</label>
+										<md-datepicker ng-model="searchSubsReq.createdFrom"></md-datepicker>
+										<br><span>&nbsp;&nbsp;and</span><br>
+										<md-datepicker ng-model="searchSubsReq.createdTo"></md-datepicker>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="control-label">Merchant Id</label>
+										<input class="form-control" ng-model="searchSubsReq.merchant" type="number" placeholder="100" step="1" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="control-label">Pricing Id</label>
+										<input class="form-control" ng-model="searchSubsReq.pricing" type="number" placeholder="10" step="1" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="control-label">Subscription Code</label>
+										<input class="form-control" ng-model="searchSubsReq.subsCode" placeholder="Subscription Code" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td><button ng-click="searchSubscription()" type="button" class="btn btn-info">Search</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="panel-body col-lg-9 col-sm-12 col-xs-12">
+					<table class="table table-striped table-bordered table-hover table-responsive">
+						<thead>
+							<tr>
+								<th>Merchant</th>
+								<th>Pricing Name</th>
+								<th>Subscription Code</th>
+								<th>Amount</th>
+								<th class="hidden-xs">Status</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="subs in subsResp.subsList">
+							<tr
+								ng-class="(subs.status=='success')?'success':(subs.status=='captured')?'success':(subs.status=='initiated')?'warning':'danger'"
+								data-toggle="collapse"
+								data-target="#subsdetails-{{subs.id}}"
+								class="accordion-toggle">
+								<td>{{subs.merchant.name}}</td>
+								<td>{{subs.pricing.name}}</td>
+								<td>{{subs.subscriptionCode}}</td>
+								<td>&#8377; {{subs.amount}}</td>
+								<td class="hidden-xs">{{subs.status}}</td>
+							</tr>
+							<tr>
+								<td colspan="12" style="padding:0px;border:0px;">
+									<div style="padding:10px" class="accordion-body collapse" id="subsdetails-{{subs.id}}">
+										<div class="row">
+											<div class="col-lg-6 col-sm-12 col-xs-12">
+												<table class="table table-striped table-bordered table-responsive">
+													<tbody>
+														<tr>
+															<td><strong>Created</strong></td>
+															<td>{{subs.created | date:'dd-MM-yyyy HH:mm'}}</td>
+														</tr>
+														<tr>
+															<td><strong>Payment Ref No</strong></td>
+															<td>{{subs.paymentRefNo}}</td>
+														</tr>
+														<tr>
+															<td><strong>Status</strong></td>
+															<td>{{subs.status}}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="col-lg-6 col-sm-12 col-xs-12">
+												<table class="table table-striped table-bordered table-responsive">
+													<tbody>
+														<tr>
+															<td><strong>Method</strong></td>
+															<td>{{subs.method}}</td>
+														</tr>
+														<tr>
+															<td>Bank</td>
+															<td>{{subs.bank}}</td>
+														</tr>
+														<tr>
+															<td>Wallet</td>
+															<td>{{subs.wallet}}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<ul class="pagination" style="float:right;">
+						<li ng-class="(subsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadSubsPage(subsResp.page-1)" href="#">Previous</a></li>
+						<li ng-repeat="page in subsResp.allPages" ng-class="(page == subsResp.page)?'active':''"><a ng-click="loadSubsPage(page)" href="#">{{page}}</a></li>
+						<li ng-class="(subsResp.page >= subsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadSubsPage(subsResp.page+1)" href="#">Next</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

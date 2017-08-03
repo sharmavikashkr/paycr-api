@@ -58,10 +58,10 @@ public class SubscriptionController {
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/get/{subscriptionId}")
-	public Subscription getSubscription(@PathVariable Integer subscriptionId, HttpServletResponse response) {
+	@RequestMapping("/get/{pricingId}")
+	public Subscription getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
 		try {
-			return subsSer.getSubscription(subscriptionId);
+			return subsSer.getSubscription(pricingId);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
