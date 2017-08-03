@@ -111,6 +111,7 @@ public class AdminService {
 		subs.setCreated(timeNow);
 		subs.setPaymentRefNo("onboarding");
 		subs.setPricing(pricing);
+		subs.setQuantity(1);
 		subs.setStatus("SUCCESS");
 		subs.setSubscriptionCode("OFFLINE");
 		subs.setSubscriptionMode(subsMode);
@@ -136,6 +137,7 @@ public class AdminService {
 		merPricing.setStartDate(timeNow);
 		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
 		merPricing.setPricing(pricing);
+		merPricing.setQuantity(1);
 		merPricing.setStatus(PricingStatus.ACTIVE);
 		merPricing.setMerchant(merchant);
 		merPricing.setSubscription(subs);
