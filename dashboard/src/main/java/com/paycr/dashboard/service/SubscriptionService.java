@@ -127,8 +127,8 @@ public class SubscriptionService {
 	public ModelAndView onlineSubscription(Integer pricingId, Integer quantity, Merchant merchant) {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
-		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1 || quantity == 0
-				|| quantity == null) {
+		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1 || quantity == null
+				|| quantity <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}
 		Subscription subs = new Subscription();
