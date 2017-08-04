@@ -1,8 +1,10 @@
 package com.paycr.service;
 
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,8 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 
@@ -23,11 +27,10 @@ import com.paycr.common.service.CustomUserDetailsService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	public CustomUserDetailsService userDetailsService;
+	private CustomUserDetailsService userDetailsService;
 
-	/*@Autowired
-	@Qualifier("preAuthProvider")
-	private AuthenticationProvider preAuthProvider;*/
+	@Autowired
+	private DataSource dataSource;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -46,10 +49,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
 		return authenticationProvider;
 	}
-	
+
 	@Bean
 	public TokenStore tokenStore() {
-		return new InMemoryTokenStore();
+		return new JdbcTokenStore(dataSource);
+	}
+
+	@Bean(name = "clientDetailsService")
+	@Primary
+	public ClientDetailsService clientDetailsService() {
+		return new JdbcClientDetailsService(dataSource);
 	}
 
 	@Override
@@ -60,6 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider());//.authenticationProvider(preAuthProvider);
+		auth.authenticationProvider(authenticationProvider());
 	}
 }
