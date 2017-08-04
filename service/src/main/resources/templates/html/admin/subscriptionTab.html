@@ -27,8 +27,20 @@
 							<tr>
 								<td>
 									<div class="form-group">
-										<label class="control-label">Pricing Id</label>
-										<input class="form-control" ng-model="searchSubsReq.pricing" type="number" placeholder="10" step="1" />
+										<label class="control-label">Pricing</label>
+										<select class="form-control" ng-model="searchSubsReq.pricing">
+											<option ng-repeat="pricing in pricings" value="{{pricing.id}}">{{pricing.name}}</option>
+										</select>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
+										<label class="control-label">Subscription Mode</label>
+										<select class="form-control" ng-model="searchSubsReq.subsMode">
+											<option ng-repeat="subsMode in subsModes" value="{{subsMode.id}}">{{subsMode.name}}</option>
+										</select>
 									</div>
 								</td>
 							</tr>
@@ -59,7 +71,7 @@
 						</thead>
 						<tbody ng-repeat="subs in subsResp.subsList">
 							<tr
-								ng-class="(subs.status=='success')?'success':(subs.status=='captured')?'success':(subs.status=='initiated')?'warning':'danger'"
+								ng-class="(subs.status=='captured')?'success':(subs.status=='initiated')?'warning':'danger'"
 								data-toggle="collapse"
 								data-target="#subsdetails-{{subs.id}}"
 								class="accordion-toggle">

@@ -10,7 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.paycr.common.type.Currency;
@@ -39,13 +39,13 @@ public class Subscription implements Serializable {
 	private String bank;
 	private String wallet;
 
-	@OneToOne
+	@ManyToOne
 	private Pricing pricing;
 
-	@OneToOne
+	@ManyToOne
 	private Merchant merchant;
 
-	@OneToOne
+	@ManyToOne
 	private SubscriptionMode subscriptionMode;
 
 	public String getSubscriptionCode() {

@@ -107,7 +107,7 @@ public class SubscriptionService {
 		subs.setQuantity(offline.getQuantity());
 		subs.setPaymentRefNo(offline.getPaymentRefNo());
 		subs.setMethod(subsMode.getName());
-		subs.setStatus("success");
+		subs.setStatus("captured");
 		subs.setSubscriptionCode("offline");
 		subs.setSubscriptionMode(subsMode);
 		subsRepo.save(subs);

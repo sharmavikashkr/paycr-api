@@ -27,6 +27,9 @@ public class SubscriptionDao {
 		if (!CommonUtil.isNull(searchReq.getPricing())) {
 			squery.append(" s.pricing.id = :pricing AND");
 		}
+		if (!CommonUtil.isNull(searchReq.getSubsMode())) {
+			squery.append(" s.subscriptionMode.id = :subsMode AND");
+		}
 		if (!CommonUtil.isEmpty(searchReq.getSubsCode())) {
 			squery.append(" s.subscriptionCode = :subsCode AND");
 		}
@@ -42,6 +45,9 @@ public class SubscriptionDao {
 		}
 		if (!CommonUtil.isNull(searchReq.getPricing())) {
 			query.setParameter("pricing", searchReq.getPricing());
+		}
+		if (!CommonUtil.isNull(searchReq.getSubsMode())) {
+			query.setParameter("subsMode", searchReq.getSubsMode());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getSubsCode())) {
 			query.setParameter("subsCode", searchReq.getSubsCode());

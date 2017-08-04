@@ -79,7 +79,16 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 				refund: $rootScope.statsResponse.dailyPayList[dailyPay].refundPaySum
 			});
 		}
-		Morris.Area({
+		Morris.Bar({
+	        element: 'per-day-area',
+	        data: areaData,
+	        xkey: 'period',
+	        ykeys: ['paid', 'refund'],
+	        labels: ['paid', 'refund'],
+	        hideHover: 'auto',
+	        resize: true
+	    });
+		/*Morris.Area({
 	        element: 'per-day-area',
 	        data: areaData,
 	        xkey: 'period',
@@ -88,6 +97,6 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        pointSize: 1,
 	        hideHover: 'auto',
 	        resize: true
-	    });
+	    });*/
 	}
 });

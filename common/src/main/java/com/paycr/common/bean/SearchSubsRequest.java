@@ -8,6 +8,7 @@ public class SearchSubsRequest {
 
 	private Integer merchant;
 	private Integer pricing;
+	private Integer subsMode;
 	private String subsCode;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -54,6 +55,14 @@ public class SearchSubsRequest {
 
 	public void setCreatedTo(Date createdTo) {
 		this.createdTo = createdTo;
+	}
+
+	public Integer getSubsMode() {
+		return subsMode;
+	}
+
+	public void setSubsMode(Integer subsMode) {
+		this.subsMode = subsMode;
 	}
 
 }
