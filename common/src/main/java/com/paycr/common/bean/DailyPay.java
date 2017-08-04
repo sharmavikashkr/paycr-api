@@ -2,7 +2,7 @@ package com.paycr.common.bean;
 
 import java.math.BigDecimal;
 
-public class DailyPay {
+public class DailyPay implements Comparable<DailyPay> {
 
 	private String created;
 	private BigDecimal salePaySum;
@@ -30,6 +30,11 @@ public class DailyPay {
 
 	public void setRefundPaySum(BigDecimal refundPaySum) {
 		this.refundPaySum = refundPaySum;
+	}
+
+	@Override
+	public int compareTo(DailyPay dp) {
+		return created.compareTo(dp.getCreated());
 	}
 
 }

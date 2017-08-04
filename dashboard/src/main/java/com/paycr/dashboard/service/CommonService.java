@@ -3,6 +3,7 @@ package com.paycr.dashboard.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -294,6 +295,7 @@ public class CommonService {
 		for (Payment payment : salePays) {
 			setDailyPay(dailyPayList, payment);
 		}
+		Collections.sort(dailyPayList);
 		response.setDailyPayList(dailyPayList);
 		return response;
 	}

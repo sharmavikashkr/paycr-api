@@ -80,7 +80,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 			});
 		}
 		Morris.Bar({
-	        element: 'per-day-area',
+	        element: 'per-day-bar',
 	        data: areaData,
 	        xkey: 'period',
 	        ykeys: ['paid', 'refund'],
@@ -88,15 +88,5 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        hideHover: 'auto',
 	        resize: true
 	    });
-		/*Morris.Area({
-	        element: 'per-day-area',
-	        data: areaData,
-	        xkey: 'period',
-	        ykeys: ['paid', 'refund'],
-	        labels: ['paid', 'refund'],
-	        pointSize: 1,
-	        hideHover: 'auto',
-	        resize: true
-	    });*/
 	}
 });
