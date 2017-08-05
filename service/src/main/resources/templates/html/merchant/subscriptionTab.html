@@ -42,7 +42,7 @@
 					</tr>
 				</thead>
 				<tbody id="itemBody">
-					<tr ng-repeat="pricing in pricings" ng-if="pricing.active">
+					<tr ng-repeat="pricing in pricings" ng-if="pricing.active && pricing.rate > 0">
 						<td class="text-center">{{pricing.name}}</td>
 						<td class="text-center hidden-xs">{{pricing.duration}}</td>
 						<td class="text-center hidden-xs">&#8377; {{pricing.startAmount}} - {{pricing.endAmount}}</td>

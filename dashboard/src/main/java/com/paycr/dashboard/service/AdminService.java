@@ -9,32 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
-import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.data.domain.SubscriptionMode;
 import com.paycr.common.data.domain.UserRole;
-import com.paycr.common.data.repository.MerchantPricingRepository;
+import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
-import com.paycr.common.data.repository.SubscriptionModeRepository;
-import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.Currency;
-import com.paycr.common.type.PayMode;
-import com.paycr.common.type.PricingStatus;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
-import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -53,19 +45,10 @@ public class AdminService {
 	private MerchantRepository merRepo;
 
 	@Autowired
-	private MerchantPricingRepository merPriRepo;
-
-	@Autowired
-	private SubscriptionRepository subsRepo;
-
-	@Autowired
 	private MerchantUserRepository merUserRepo;
 
 	@Autowired
 	private BCryptPasswordEncoder bcPassEncode;
-
-	@Autowired
-	private PricingRepository priceRepo;
 
 	@Autowired
 	private HmacSignerUtil hmacSigner;
@@ -77,9 +60,6 @@ public class AdminService {
 	private NotificationRepository notiRepo;
 
 	@Autowired
-	private SubscriptionModeRepository subsModeRepo;
-
-	@Autowired
 	private MerchantValidator merValidator;
 
 	@Autowired
@@ -87,6 +67,9 @@ public class AdminService {
 
 	@Autowired
 	private PricingRepository pricingRepo;
+
+	@Autowired
+	private AdminSettingRepository adsetRepo;
 
 	public void createMerchant(Merchant merchant) {
 		merValidator.validate(merchant);
@@ -102,21 +85,6 @@ public class AdminService {
 		merchant.setCreated(timeNow);
 		merchant.setActive(true);
 
-		Pricing pricing = priceRepo.findOne(1);
-
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayMode(true, PayMode.CASH);
-		Subscription subs = new Subscription();
-		subs.setAmount(pricing.getRate());
-		subs.setCurrency(Currency.INR);
-		subs.setCreated(timeNow);
-		subs.setPaymentRefNo("onboarding");
-		subs.setPricing(pricing);
-		subs.setQuantity(1);
-		subs.setStatus("captured");
-		subs.setSubscriptionCode("OFFLINE");
-		subs.setSubscriptionMode(subsMode);
-		subsRepo.save(subs);
-
 		PaymentSetting paymentSetting = new PaymentSetting();
 		paymentSetting.setRzpMerchantId("");
 		paymentSetting.setRzpKeyId("");
@@ -131,20 +99,6 @@ public class AdminService {
 		invoiceSetting.setTax(0.0F);
 		merchant.setInvoiceSetting(invoiceSetting);
 		merRepo.save(merchant);
-
-		MerchantPricing merPricing = new MerchantPricing();
-		merPricing.setCreated(timeNow);
-		merPricing.setStartDate(timeNow);
-		merPricing.setEndDate(DateUtil.getExpiry(timeNow, pricing.getDuration()));
-		merPricing.setPricing(pricing);
-		merPricing.setQuantity(1);
-		merPricing.setStatus(PricingStatus.ACTIVE);
-		merPricing.setMerchant(merchant);
-		merPricing.setSubscription(subs);
-		merPriRepo.save(merPricing);
-
-		subs.setMerchant(merchant);
-		subsRepo.save(subs);
 
 		PcUser user = new PcUser();
 		user.setCreated(timeNow);
@@ -191,6 +145,21 @@ public class AdminService {
 			pri.setActive(true);
 		}
 		pricingRepo.save(pri);
+	}
+
+	public AdminSetting getSetting() {
+		return adsetRepo.findAll().get(0);
+	}
+
+	public void saveSetting(AdminSetting setting) {
+		AdminSetting adset = adsetRepo.findAll().get(0);
+		adset.setBanner(setting.getBanner());
+		adset.setTax(setting.getTax());
+		PaymentSetting payset = adset.getPaymentSetting();
+		payset.setRzpMerchantId(setting.getPaymentSetting().getRzpMerchantId());
+		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());
+		payset.setRzpSecretId(setting.getPaymentSetting().getRzpSecretId());
+		adsetRepo.save(adset);
 	}
 
 }

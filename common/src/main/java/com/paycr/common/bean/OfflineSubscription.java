@@ -1,10 +1,12 @@
 package com.paycr.common.bean;
 
+import com.paycr.common.type.PayMode;
+
 public class OfflineSubscription {
 
 	private int merchantId;
 	private int pricingId;
-	private int subscriptionModeId;
+	private PayMode payMode;
 	private String paymentRefNo;
 	private int quantity;
 
@@ -32,20 +34,20 @@ public class OfflineSubscription {
 		this.paymentRefNo = paymentRefNo;
 	}
 
-	public int getSubscriptionModeId() {
-		return subscriptionModeId;
-	}
-
-	public void setSubscriptionModeId(int subscriptionModeId) {
-		this.subscriptionModeId = subscriptionModeId;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public PayMode getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(PayMode payMode) {
+		this.payMode = payMode;
 	}
 
 }

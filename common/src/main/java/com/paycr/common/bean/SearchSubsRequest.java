@@ -4,11 +4,13 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.paycr.common.type.PayMode;
+
 public class SearchSubsRequest {
 
 	private Integer merchant;
 	private Integer pricing;
-	private Integer subsMode;
+	private PayMode payMode;
 	private String subsCode;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -57,12 +59,12 @@ public class SearchSubsRequest {
 		this.createdTo = createdTo;
 	}
 
-	public Integer getSubsMode() {
-		return subsMode;
+	public PayMode getPayMode() {
+		return payMode;
 	}
 
-	public void setSubsMode(Integer subsMode) {
-		this.subsMode = subsMode;
+	public void setPayMode(PayMode payMode) {
+		this.payMode = payMode;
 	}
 
 }

@@ -1,7 +1,7 @@
 <div ng-controller="InvoiceSettingController">
 	<br>
 	<div class="row">
-		<div class="col-xs-12 col-md-12 col-lg-3">
+		<div class="col-lg-4">
 			<div class="panel panel-default">
 				<div class="panel-heading"> Payment Setting
 					<a href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs">
@@ -11,39 +11,40 @@
 				<div class="panel-body">
 					<fieldset ng-disabled="!editPayPrefs">
 						<div class="form-group">
-							<label class="control-label" for="set-rzpmi">RazorPay Merchant Id</label>
-							<input class="form-control" id="set-rzpmi" ng-model="merchant.paymentSetting.rzpMerchantId" />
+							<label class="control-label">RazorPay Merchant Id</label>
+							<input class="form-control" ng-model="merchant.paymentSetting.rzpMerchantId" />
 						</div>
 						<div class="form-group">
-							<label class="control-label" for="set-rzpki">RazorPay Key Id</label>
-							<input class="form-control" id="set-rzpki" ng-model="merchant.paymentSetting.rzpKeyId" />
+							<label class="control-label">RazorPay Key Id</label>
+							<input class="form-control" ng-model="merchant.paymentSetting.rzpKeyId" />
 						</div>
 						<div class="form-group">
-							<label class="control-label" for="set-rzpsi">RazorPay Secret Id</label>
-							<input class="form-control" id="set-rzpsi" ng-model="merchant.paymentSetting.rzpSecretId" />
+							<label class="control-label">RazorPay Secret Id</label>
+							<input class="form-control" ng-model="merchant.paymentSetting.rzpSecretId" />
 						</div>
 						<div>
-							<button ng-click="savePaymentSetting()" class="btn btn-info">Save</button>
+							<button ng-click="savePaymentSetting(merchant.paymentSetting)" class="btn btn-info">Save</button>
 						</div>
 					</fieldset>
 				</div>
 			</div>
 		</div>
-		<div class="col-xs-12 col-md-6 col-lg-3">
+		<div class="col-lg-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">Invoice Preference</div>
 				<div class="panel-body">
-					<fieldset>
+					<fieldset class="col-lg-4">
 						<input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail">&nbsp;<strong>Send Email</strong><br>
 						<input type="checkbox" ng-model="merchant.invoiceSetting.sendSms">&nbsp;<strong>Send Sms</strong><br>
 						<input type="checkbox" ng-model="merchant.invoiceSetting.addItems">&nbsp;<strong>Add Items</strong><br>
-						<br>
+					</fieldset>
+					<fieldset class="col-lg-8">
 						<div class="form-group">
-							<label class="control-label" for="set-expiry">Expiry Days</label>
+							<label class="control-label">Expiry Days</label>
 							<input class="form-control" ng-model="merchant.invoiceSetting.expiryDays" type="number" required />
 						</div>
 						<div class="form-group">
-							<label class="control-label" for="set-expiry">Tax %</label>
+							<label class="control-label">Tax %</label>
 							<input class="form-control" ng-model="merchant.invoiceSetting.tax" type="number" required />
 						</div>
 					</fieldset>

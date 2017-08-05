@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.service.SecurityService;
@@ -51,6 +52,31 @@ public class AdminController {
 		}
 		ModelAndView mv = new ModelAndView("html/admin/admin");
 		return mv;
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
+	@RequestMapping("/setting")
+	public AdminSetting getSetting(HttpServletResponse response) {
+		try {
+			return adminService.getSetting();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
+	@RequestMapping("/setting/update")
+	public AdminSetting updateSetting(@RequestBody AdminSetting setting, HttpServletResponse response) {
+		try {
+			adminService.saveSetting(setting);
+			return adminService.getSetting();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)

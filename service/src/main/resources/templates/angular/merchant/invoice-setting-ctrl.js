@@ -1,16 +1,16 @@
 app.controller('InvoiceSettingController', function($scope, $rootScope, $http, $cookies) {
-	$scope.savePaymentSetting = function() {
+	$scope.savePaymentSetting = function(paymentSetting) {
 		var req = {
 			method : 'POST',
 			url : "/merchant/paymentsetting/update",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
-			data : $scope.merchant.paymentSetting
+			data : paymentSetting
 		}
-		$http(req).then(function(paymentsettings) {
-			$rootScope.merchant.paymentSettings = paymentsettings.data;
-			$scope.serverMessage(paymentsettings);
+		$http(req).then(function(paymentsetting) {
+			$rootScope.merchant.paymentSetting = paymentsetting.data;
+			$scope.serverMessage(paymentsetting);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

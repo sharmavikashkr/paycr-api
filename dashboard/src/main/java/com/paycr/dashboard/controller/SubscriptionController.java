@@ -1,7 +1,6 @@
 package com.paycr.dashboard.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.data.domain.SubscriptionMode;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
@@ -41,23 +39,6 @@ public class SubscriptionController {
 	private SubscriptionService subsSer;
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/modes")
-	public List<SubscriptionMode> getSubscriptionModes() {
-		return subsSer.getSubscriptionModes();
-	}
-
-	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/mode/new")
-	public void createSubscriptionSetting(@RequestBody SubscriptionMode subsMode, HttpServletResponse response) {
-		try {
-			subsSer.createSubscriptionSetting(subsMode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-	}
-
-	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
 	public Subscription getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
 		try {
@@ -66,17 +47,6 @@ public class SubscriptionController {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 			return null;
-		}
-	}
-
-	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/mode/toggle/{modeId}")
-	public void toggleSubscriptionSetting(@PathVariable Integer modeId, HttpServletResponse response) {
-		try {
-			subsSer.toggleSubscriptionSetting(modeId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
 		}
 	}
 

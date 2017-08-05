@@ -39,12 +39,12 @@
         	<div id="dashboardTab" class="tab-pane active" ng-include="'/html/common/dashboardTab'"></div>
 	        <div id="invoiceTab" class="tab-pane" ng-include="'/html/merchant/invoiceTab'"></div>
 	        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
-	        <div id="accountTab" class="tab-pane fade" ng-include="'/html/merchant/accountTab'"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
 	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
 	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
-	        <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
+	        <div ng-if="user.access.admin" id="accountTab" class="tab-pane fade" ng-include="'/html/merchant/accountTab'"></div>
 	        <div id="profileTab" class="tab-pane fade" ng-include="'/html/common/profileTab'"></div>
+	        <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
 		</div>
 	    <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceModal'"></div>
 		<div ng-if="user.access.finance" ng-include="'/html/merchant/createParamModal'"></div>

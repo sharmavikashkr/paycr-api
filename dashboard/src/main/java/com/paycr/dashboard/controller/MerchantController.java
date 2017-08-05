@@ -62,7 +62,7 @@ public class MerchantController {
 		return merchant;
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
 	@RequestMapping("/account/update")
 	public Merchant updateAccount(@RequestBody Merchant mer, HttpServletResponse response) {
 		try {

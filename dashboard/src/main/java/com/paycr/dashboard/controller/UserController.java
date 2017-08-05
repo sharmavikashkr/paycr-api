@@ -67,11 +67,6 @@ public class UserController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/user/admin", method = RequestMethod.GET)
-	public void createUser(HttpServletResponse response) throws IOException {
-		userService.createSuperAdmin();
-	}
-
 	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)
 	public void sendResetPassword(@RequestParam("email") String userEmail, HttpServletResponse response)
 			throws IOException {

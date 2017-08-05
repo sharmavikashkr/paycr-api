@@ -3,7 +3,6 @@ package com.paycr.dashboard.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -12,17 +11,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.OfflineSubscription;
+import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.data.domain.SubscriptionMode;
+import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
-import com.paycr.common.data.repository.SubscriptionModeRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.Currency;
@@ -58,44 +57,15 @@ public class SubscriptionService {
 	private NotificationRepository notiRepo;
 
 	@Autowired
-	private SubscriptionModeRepository subsModeRepo;
-
-	public List<SubscriptionMode> getSubscriptionModes() {
-		return subsModeRepo.findAll();
-	}
+	private AdminSettingRepository adsetRepo;
 
 	public Subscription getSubscription(Integer pricingId) {
 		MerchantPricing merPricing = merPriRepo.findOne(pricingId);
 		return merPricing.getSubscription();
 	}
 
-	public void createSubscriptionSetting(SubscriptionMode subsMode) {
-		if (CommonUtil.isNull(subsMode) || CommonUtil.isEmpty(subsMode.getRzpMerchantId())
-				|| CommonUtil.isEmpty(subsMode.getRzpKeyId()) || CommonUtil.isEmpty(subsMode.getRzpSecretId())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
-		}
-		SubscriptionMode existMode = subsModeRepo.findByActiveAndPayMode(true, subsMode.getPayMode());
-		if (existMode != null && subsMode.isActive()) {
-			existMode.setActive(false);
-			subsModeRepo.save(existMode);
-		}
-		subsModeRepo.save(subsMode);
-	}
-
-	public void toggleSubscriptionSetting(Integer modeId) {
-		SubscriptionMode toggleMode = subsModeRepo.findOne(modeId);
-		SubscriptionMode existMode = subsModeRepo.findByActiveAndPayMode(true, toggleMode.getPayMode());
-		if (toggleMode != null && existMode != null) {
-			existMode.setActive(false);
-			subsModeRepo.save(existMode);
-		}
-		toggleMode.setActive(true);
-		subsModeRepo.save(toggleMode);
-	}
-
 	public void offlineSubscription(OfflineSubscription offline) {
 		Date timeNow = new Date();
-		SubscriptionMode subsMode = subsModeRepo.findOne(offline.getSubscriptionModeId());
 		Merchant merchant = merRepo.findOne(offline.getMerchantId());
 		Pricing pricing = priRepo.findOne(offline.getPricingId());
 		Subscription subs = new Subscription();
@@ -106,10 +76,10 @@ public class SubscriptionService {
 		subs.setPricing(pricing);
 		subs.setQuantity(offline.getQuantity());
 		subs.setPaymentRefNo(offline.getPaymentRefNo());
-		subs.setMethod(subsMode.getName());
+		subs.setMethod(offline.getPayMode().name());
 		subs.setStatus("captured");
 		subs.setSubscriptionCode("offline");
-		subs.setSubscriptionMode(subsMode);
+		subs.setPayMode(offline.getPayMode());
 		subsRepo.save(subs);
 		MerchantPricing merPricing = new MerchantPricing();
 		merPricing.setCreated(timeNow);
@@ -127,6 +97,7 @@ public class SubscriptionService {
 	public ModelAndView onlineSubscription(Integer pricingId, Integer quantity, Merchant merchant) {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
+		AdminSetting adset = adsetRepo.findAll().get(0);
 		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1 || quantity == null
 				|| quantity <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
@@ -134,6 +105,7 @@ public class SubscriptionService {
 		Subscription subs = new Subscription();
 		subs.setAmount(pricing.getRate().multiply(new BigDecimal(quantity)));
 		subs.setCurrency(Currency.INR);
+		subs.setPayMode(PayMode.PAYCR);
 		subs.setQuantity(quantity);
 		subs.setCreated(timeNow);
 		subs.setMerchant(merchant);
@@ -147,23 +119,19 @@ public class SubscriptionService {
 			subsCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
 		subs.setSubscriptionCode(subsCode);
-		SubscriptionMode subsMode = subsModeRepo.findByActiveAndPayMode(true, PayMode.PAYCR);
-		if (CommonUtil.isNull(subsMode)) {
-			throw new PaycrException(Constants.FAILURE, "Not Allowed");
-		}
-		subs.setSubscriptionMode(subsMode);
 		subsRepo.save(subs);
 		ModelAndView mv = new ModelAndView("html/subscribe");
 		mv.addObject("merchant", merchant);
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
-		mv.addObject("rzpKeyId", subsMode.getRzpKeyId());
+		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(subs.getAmount().multiply(new BigDecimal(100))));
 		return mv;
 	}
 
 	public ModelAndView purchase(Map<String, String> formData) throws IOException, RazorpayException {
 		Date timeNow = new Date();
+		AdminSetting adset = adsetRepo.findAll().get(0);
 		String subsCode = null;
 		ModelAndView mv = new ModelAndView("html/subs-response");
 		String rzpPayId = formData.get("razorpay_payment_id");
@@ -174,8 +142,8 @@ public class SubscriptionService {
 		}
 		Merchant merchant = subs.getMerchant();
 		Pricing pricing = subs.getPricing();
-		SubscriptionMode subsMode = subs.getSubscriptionMode();
-		RazorpayClient razorpay = new RazorpayClient(subsMode.getRzpKeyId(), subsMode.getRzpSecretId());
+		RazorpayClient razorpay = new RazorpayClient(adset.getPaymentSetting().getRzpKeyId(),
+				adset.getPaymentSetting().getRzpSecretId());
 		com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
 		JSONObject request = new JSONObject();
 		request.put("amount", rzpPayment.get("amount").toString());

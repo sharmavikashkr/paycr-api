@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.paycr.common.type.Currency;
+import com.paycr.common.type.PayMode;
 
 @Entity
 @Table(name = "pc_subscription")
@@ -45,8 +46,8 @@ public class Subscription implements Serializable {
 	@ManyToOne
 	private Merchant merchant;
 
-	@ManyToOne
-	private SubscriptionMode subscriptionMode;
+	@Enumerated(EnumType.STRING)
+	private PayMode payMode;
 
 	public String getSubscriptionCode() {
 		return subscriptionCode;
@@ -140,20 +141,20 @@ public class Subscription implements Serializable {
 		this.paymentRefNo = paymentRefNo;
 	}
 
-	public SubscriptionMode getSubscriptionMode() {
-		return subscriptionMode;
-	}
-
-	public void setSubscriptionMode(SubscriptionMode subscriptionMode) {
-		this.subscriptionMode = subscriptionMode;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public PayMode getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(PayMode payMode) {
+		this.payMode = payMode;
 	}
 
 }

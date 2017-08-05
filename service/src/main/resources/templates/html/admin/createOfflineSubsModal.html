@@ -14,9 +14,9 @@
 									<tr>
 										<td>
 											<div class="form-group">
-												<label class="control-label">Subscription Mode</label>
-												<select class="form-control" ng-model="offlinesubs.subscriptionModeId">
-													<option ng-repeat="subsMode in subsModes" ng-if="subsMode.payMode != 'PAYCR' && subsMode.active" value="{{subsMode.id}}">{{subsMode.name}}</option>
+												<label class="control-label">Pay Mode</label>
+												<select class="form-control" ng-model="offlinesubs.payMode">
+													<option ng-repeat="payMode in payModes" ng-if="payMode != 'PAYCR'" value="{{payMode}}">{{payMode}}</option>
 												</select>
 											</div>
 										</td>

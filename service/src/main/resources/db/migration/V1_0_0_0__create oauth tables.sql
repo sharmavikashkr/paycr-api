@@ -63,6 +63,6 @@ create table ClientDetails (
   autoApproveScopes VARCHAR(256)
 );
 
-INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) VALUES('web-client', 'paycr-service', '3b5e8eb3fcfafa2e7b302f75c0e185d33d8690c2', 'read,write', 'password,authorization_code,refresh_token', '', '', 7200, 7200, NULL, 'false');
+INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) VALUES('web-client', 'paycr-service', '3b5e8eb3fcfafa2e7b302f75c0e185d33d8690c2', 'read,write', 'password,authorization_code,refresh_token', '', '', 72000, 72000, NULL, 'false');
 
-INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) VALUES('mob-client', 'paycr-service', 'adb9d44521109de590d6482e5d590353b0325afc', 'read,write', 'password,authorization_code,refresh_token', '', '', 7200, 7200, NULL, 'false');
+INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) VALUES('mob-client', 'paycr-service', 'adb9d44521109de590d6482e5d590353b0325afc', 'read,write', 'password,authorization_code,refresh_token', '', '', 72000, 72000, NULL, 'false');
