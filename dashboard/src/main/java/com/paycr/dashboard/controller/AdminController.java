@@ -36,7 +36,7 @@ public class AdminController {
 	public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
 		if (request.getCookies() == null) {
-			response.sendRedirect("/login");
+			response.sendRedirect("/adminlogin");
 		}
 		for (Cookie cookie : request.getCookies()) {
 			if ("access_token".equals(cookie.getName())) {
