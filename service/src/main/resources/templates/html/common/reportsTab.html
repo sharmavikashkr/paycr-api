@@ -1,5 +1,12 @@
 <div ng-controller="ReportsController" ng-init="fetchReports()">
 	<br>
+	<div class="row visible-xs">
+		<div class="col-lg-2 col-lg-offset-9">
+			<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createReportModal">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
 	<div class="row text-center">
 		<div class="col-md-12">
 			<h4>Reports</h4>
@@ -39,7 +46,7 @@
 						</td>
 						<td>
 							<button ng-click="createReport()" type="button" class="btn btn-success btn-xs">Create</button>
-							<button ng-click="loadReport(newreport)" type="button" class="btn btn-success btn-xs">Load</button>
+							<button ng-click="loadReport(newreport)" type="button" class="btn btn-info btn-xs">Load</button>
 						</td>
 					</tr>
 					<tr ng-class="(report.merchant!=null)?'success':''" ng-repeat="report in reports">

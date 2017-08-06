@@ -30,6 +30,7 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			$scope.serverMessage(data);
 		});
 		this.newreport = null;
+		angular.element(document.querySelector('#createReportModal')).modal('hide');
 	}
 	$scope.loadReport = function(report) {
 		var req = {
@@ -47,6 +48,7 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#createReportModal')).modal('hide');
 	}
 	$scope.downloadReport = function(report) {
 		var req = {
