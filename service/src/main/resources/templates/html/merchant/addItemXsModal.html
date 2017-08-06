@@ -33,7 +33,7 @@
 										<td>
 											<div ng-class="(addItemForm.quantity.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Quantity</label>
-												<input name="quantity" class="form-control" ng-model="item.quantity" placeholder="1" type="number" step="1" required />
+												<input name="quantity" class="form-control" ng-model="item.quantity" ng-init="item.quantity=1" placeholder="1" type="number" step="1" required />
 											</div>
 										</td>
 									</tr>

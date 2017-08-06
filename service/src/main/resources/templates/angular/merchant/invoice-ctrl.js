@@ -119,6 +119,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#createInvoiceModal')).modal('hide');
+		angular.element(document.querySelector('#createInvoiceXsModal')).modal('hide');
 	}
 	$scope.enquireInvoice = function(invoiceCode) {
 		var req = {
