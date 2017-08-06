@@ -1,8 +1,6 @@
 package com.paycr.invoice.controller;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,60 +15,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
-import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.MerchantPricingRepository;
-import com.paycr.common.data.repository.PaymentRepository;
-import com.paycr.common.exception.PaycrException;
-import com.paycr.common.service.NotifyService;
-import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.InvoiceStatus;
-import com.paycr.common.type.PayType;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.invoice.service.PaymentService;
-import com.paycr.invoice.validation.InvoiceValidator;
+import com.paycr.invoice.service.InvoiceService;
 
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
 
 	@Autowired
-	private SecurityService secSer;
-
-	@Autowired
-	private InvoiceRepository invRepo;
-
-	@Autowired
-	private PaymentRepository payRepo;
-
-	@Autowired
-	private MerchantPricingRepository merPriRepo;
-
-	@Autowired
-	private NotifyService notSer;
-
-	@Autowired
-	private InvoiceValidator invValidator;
-
-	@Autowired
-	private NotifyService notifyService;
-
-	@Autowired
-	private PaymentService payService;
+	private InvoiceService invSer;
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
-			invValidator.validate(invoice);
-			invRepo.save(invoice);
-			MerchantPricing merPri = invoice.getMerchantPricing();
-			merPri.setInvCount(merPri.getInvCount() + 1);
-			merPriRepo.save(merPri);
-			notifyService.notify(invoice);
+			invSer.single(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -81,14 +41,7 @@ public class InvoiceController {
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
 	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
-			Date timeNow = new Date();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-			if (timeNow.compareTo(invoice.getExpiry()) < 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
-				invoice.setExpiry(timeNow);
-				invoice.setStatus(InvoiceStatus.EXPIRED);
-				invRepo.save(invoice);
-			}
+			invSer.expire(invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -99,13 +52,7 @@ public class InvoiceController {
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
 	public void notify(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
-			Date timeNow = new Date();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-			if (timeNow.compareTo(invoice.getExpiry()) < 0) {
-				notSer.notify(invoice);
-				invRepo.save(invoice);
-			}
+			invSer.notify(invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -116,11 +63,7 @@ public class InvoiceController {
 	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
 	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-			if (!InvoiceStatus.PAID.equals(invoice.getStatus())) {
-				payService.enquire(invoice);
-			}
+			invSer.enquire(invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -132,20 +75,7 @@ public class InvoiceController {
 	public void refund(@RequestParam(value = "amount", required = true) BigDecimal amount,
 			@RequestParam(value = "invoiceCode", required = true) String invoiceCode, HttpServletResponse response) {
 		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-			List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), PayType.REFUND);
-			BigDecimal refundAllowed = invoice.getPayAmount();
-			for (Payment refund : refunds) {
-				if ("refund".equalsIgnoreCase(refund.getStatus())) {
-					refundAllowed = refundAllowed.subtract(refund.getAmount());
-				}
-			}
-			if (InvoiceStatus.PAID.equals(invoice.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
-				payService.refund(invoice, amount);
-			} else {
-				throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
-			}
+			invSer.refund(amount, invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -156,17 +86,7 @@ public class InvoiceController {
 	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
 	public void markPaid(@RequestBody Payment payment, HttpServletResponse response) {
 		try {
-			payment.setCreated(new Date());
-			payment.setStatus("captured");
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
-			payment.setAmount(invoice.getPayAmount());
-			payment.setPayType(PayType.SALE);
-			payment.setInvoiceCode(invoice.getInvoiceCode());
-			payment.setMerchant(merchant);
-			invoice.setPayment(payment);
-			invoice.setStatus(InvoiceStatus.PAID);
-			invRepo.save(invoice);
+			invSer.markPaid(payment);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

@@ -1,13 +1,17 @@
 package com.paycr.invoice.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
@@ -15,10 +19,15 @@ import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
+import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 import com.razorpay.Refund;
 
 @Service
@@ -33,41 +42,101 @@ public class PaymentService {
 	@Autowired
 	private PaymentRepository payRepo;
 
-	public void enquire(Invoice invoice) {
-		Payment payment = invoice.getPayment();
+	public ModelAndView payInvoice(String invoiceCode) {
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		validate(invoice);
 		Merchant merchant = invoice.getMerchant();
-		PaymentSetting paymentSetting = merchant.getPaymentSetting();
-		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
-		try {
-			com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(payment.getPaymentRefNo());
-			if ("authorized".equals(rzpPayment.get("status"))) {
-				JSONObject request = new JSONObject();
-				request.put("amount", rzpPayment.get("amount").toString());
-				rzpPayment = razorpay.Payments.capture(payment.getPaymentRefNo(), request);
-			}
-			payment.setStatus(rzpPayment.get("status"));
-			invoice.setStatus(getStatus(rzpPayment.get("status")));
-			payment.setMethod(rzpPayment.get("method"));
-			payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
-			payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
-			payment.setPayMode(PayMode.PAYCR);
-			payment.setPayType(PayType.SALE);
-			invoice.setPayment(payment);
+		ModelAndView mv = new ModelAndView("html/payinvoice");
+		mv.addObject("invoice", invoice);
+		mv.addObject("merchant", merchant);
+		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
+		mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().multiply(new BigDecimal(100))));
+		mv.addObject("consumer", invoice.getConsumer());
+		return mv;
+	}
+
+	private void validate(Invoice invoice) {
+		if (CommonUtil.isNull(invoice)) {
+			throw new PaycrException(Constants.FAILURE, "Requested Resource is not found");
+		}
+		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "This invoice is already paid");
+		}
+		if (InvoiceStatus.EXPIRED.equals(invoice.getStatus()) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+		}
+		Date timeNow = new Date();
+		if (invoice.getExpiry().before(timeNow)) {
+			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
-			if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
-				Notification noti = new Notification();
-				noti.setMerchantId(merchant.getId());
-				noti.setMessage("Payment received for Invoice# " + invoice.getInvoiceCode());
-				noti.setSubject("Invoice Paid");
-				noti.setCreated(new Date());
-				noti.setRead(false);
-				notiRepo.save(noti);
-			}
-		} catch (Exception e) {
+			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
 		}
 	}
 
-	public void refund(Invoice invoice, BigDecimal amount) {
+	public String purchase(Map<String, String> formData) throws IOException, RazorpayException {
+		String rzpPayId = formData.get("razorpay_payment_id");
+		String invoiceCode = formData.get("invoiceCode");
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		Merchant merchant = invoice.getMerchant();
+		for (InvoiceCustomParam param : invoice.getCustomParams()) {
+			if (ParamValueProvider.CONSUMER.equals(param.getProvider())) {
+				String paramValue = formData.get(param.getParamName());
+				param.setParamValue(paramValue);
+			}
+		}
+		PaymentSetting paymentSetting = merchant.getPaymentSetting();
+		Payment payment = new Payment();
+		payment.setCreated(new Date());
+		payment.setInvoiceCode(invoice.getInvoiceCode());
+		payment.setMerchant(merchant);
+		payment.setPaymentRefNo(rzpPayId);
+		capturePayment(invoice, payment, paymentSetting);
+		return invoiceCode;
+	}
+
+	public void decline(String invoiceCode) throws IOException {
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		invoice.setStatus(InvoiceStatus.DECLINED);
+		invRepo.save(invoice);
+	}
+
+	public void enquire(Invoice invoice) throws RazorpayException {
+		Payment payment = invoice.getPayment();
+		PaymentSetting paymentSetting = invoice.getMerchant().getPaymentSetting();
+		capturePayment(invoice, payment, paymentSetting);
+	}
+
+	private void capturePayment(Invoice invoice, Payment payment, PaymentSetting paymentSetting)
+			throws RazorpayException {
+		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
+		com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(payment.getPaymentRefNo());
+		JSONObject request = new JSONObject();
+		request.put("amount", rzpPayment.get("amount").toString());
+		if ("authorized".equals(rzpPayment.get("status"))) {
+			rzpPayment = razorpay.Payments.capture(payment.getPaymentRefNo(), request);
+		}
+		payment.setStatus(rzpPayment.get("status"));
+		invoice.setStatus(getStatus(rzpPayment.get("status")));
+		payment.setMethod(rzpPayment.get("method"));
+		payment.setAmount(invoice.getPayAmount());
+		payment.setPayMode(PayMode.PAYCR);
+		payment.setPayType(PayType.SALE);
+		payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
+		payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
+		invoice.setPayment(payment);
+		invRepo.save(invoice);
+		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			Notification noti = new Notification();
+			noti.setMerchantId(invoice.getMerchant().getId());
+			noti.setMessage("Payment received for Invoice# " + invoice.getInvoiceCode());
+			noti.setSubject("Invoice Paid");
+			noti.setCreated(new Date());
+			noti.setRead(false);
+			notiRepo.save(noti);
+		}
+	}
+
+	public void refund(Invoice invoice, BigDecimal amount) throws RazorpayException {
 		Payment payment = invoice.getPayment();
 		Merchant merchant = invoice.getMerchant();
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
@@ -86,24 +155,21 @@ public class PaymentService {
 		}
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
-		try {
-			String refundAmount = String.valueOf(amount.multiply(new BigDecimal(100)));
-			JSONObject refundRequest = new JSONObject();
-			refundRequest.put("amount", refundAmount);
-			Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
-			Payment refPay = new Payment();
-			refPay.setAmount(amount);
-			refPay.setCreated(new Date());
-			refPay.setInvoiceCode(invoice.getInvoiceCode());
-			refPay.setMerchant(merchant);
-			refPay.setPaymentRefNo(refund.get("id"));
-			refPay.setStatus(refund.get("entity"));
-			refPay.setPayMode(PayMode.PAYCR);
-			refPay.setMethod(payment.getMethod());
-			refPay.setPayType(PayType.REFUND);
-			payRepo.save(refPay);
-		} catch (Exception e) {
-		}
+		String refundAmount = String.valueOf(amount.multiply(new BigDecimal(100)));
+		JSONObject refundRequest = new JSONObject();
+		refundRequest.put("amount", refundAmount);
+		Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
+		Payment refPay = new Payment();
+		refPay.setAmount(amount);
+		refPay.setCreated(new Date());
+		refPay.setInvoiceCode(invoice.getInvoiceCode());
+		refPay.setMerchant(merchant);
+		refPay.setPaymentRefNo(refund.get("id"));
+		refPay.setStatus(refund.get("entity"));
+		refPay.setPayMode(PayMode.PAYCR);
+		refPay.setMethod(payment.getMethod());
+		refPay.setPayType(PayType.REFUND);
+		payRepo.save(refPay);
 	}
 
 	private InvoiceStatus getStatus(String rzpStatus) {

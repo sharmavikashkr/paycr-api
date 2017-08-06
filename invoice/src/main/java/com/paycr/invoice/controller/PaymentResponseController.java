@@ -8,18 +8,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.invoice.service.InvoiceService;
 
 @RestController
 public class PaymentResponseController {
 
 	@Autowired
-	private InvoiceRepository invRepo;
+	private InvoiceService invSer;
 
 	@RequestMapping("/response/{invoiceCode}")
 	public ModelAndView successPage(@PathVariable String invoiceCode) {
 		try {
-			Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+			Invoice invoice = invSer.getInvoice(invoiceCode);
 			Merchant merchant = invoice.getMerchant();
 			ModelAndView mv = new ModelAndView("html/inv-response");
 			mv.addObject("invoice", invoice);
