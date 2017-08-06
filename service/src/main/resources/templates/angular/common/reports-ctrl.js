@@ -30,7 +30,7 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			$scope.serverMessage(data);
 		});
 		this.newreport = null;
-		angular.element(document.querySelector('#createReportModal')).modal('hide');
+		angular.element(document.querySelector('#createReportXsModal')).modal('hide');
 	}
 	$scope.loadReport = function(report) {
 		var req = {

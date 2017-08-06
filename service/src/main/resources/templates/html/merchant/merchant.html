@@ -47,11 +47,13 @@
 	        <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
 		</div>
 	    <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceModal'"></div>
+	    <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceXsModal'"></div>
+	    <div ng-if="user.access.finance" ng-include="'/html/merchant/addItemXsModal'"></div>
 		<div ng-if="user.access.finance" ng-include="'/html/merchant/createParamModal'"></div>
 		<div ng-if="user.access.finance" ng-include="'/html/merchant/markPaidModal'"></div>
 		<div ng-if="user.access.finance" ng-include="'/html/merchant/refundModal'"></div>
 		<div ng-if="user.access.admin" ng-include="'/html/common/createUserModal'"></div>
-		<div ng-if="user.access.ops" ng-include="'/html/common/createReportModal'"></div>
+		<div ng-if="user.access.ops" ng-include="'/html/common/createReportXsModal'"></div>
 		<div ng-include="'/html/common/invoiceInfoModal'"></div>
 		<div ng-include="'/html/common/changePasswordModal'"></div>
 		<div ng-include="'/html/common/keyModal'"></div>

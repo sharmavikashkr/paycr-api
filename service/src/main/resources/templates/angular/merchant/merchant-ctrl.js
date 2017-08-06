@@ -29,12 +29,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 			"mobile" : "",
 			"name" : ""
 		},
-		"items" : [ {
-			"name" : "",
-			"rate" : 0,
-			"quantity" : 1,
-			"price" : 0
-		} ],
+		"items" : [],
 		"sendEmail" : false,
 		"sendSms" : false,
 		"addItems" : false,

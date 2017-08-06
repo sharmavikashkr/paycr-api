@@ -53,11 +53,22 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			});
 		}
 	}
-	$scope.deleteItem = function(pos) {
-		if ($scope.newinvoice.items.length > 1) {
-			$scope.newinvoice.items.splice(pos, 1);
-			$scope.calculateTotal();
+	$scope.addItemXs = function(item) {
+		if ($scope.newinvoice.items.length < 5) {
+			$scope.newinvoice.items.push({
+				"name" : item.name,
+				"rate" : item.rate,
+				"quantity" : item.quantity,
+				"price" : parseFloat(item.rate) * parseFloat(item.quantity)
+			});
 		}
+		angular.element(document.querySelector('#addItemXsModal')).modal('hide');
+		angular.element(document.querySelector('#createInvoiceXsModal')).modal('show');
+		$scope.calculateTotal();
+	}
+	$scope.deleteItem = function(pos) {
+		$scope.newinvoice.items.splice(pos, 1);
+		$scope.calculateTotal();
 	}
 	$scope.calculateTotal = function() {
 		var totals = 0;
