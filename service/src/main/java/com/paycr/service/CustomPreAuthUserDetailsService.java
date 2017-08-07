@@ -1,4 +1,4 @@
-package com.paycr.common.service;
+package com.paycr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -15,14 +15,11 @@ public class CustomPreAuthUserDetailsService
 	@Autowired
 	private TokenStore tokenStore;
 
-	@Autowired
-	private CustomUserDetailsService userDetSer;
-
 	@Override
 	public final UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken token) {
 		try {
-			OAuth2Authentication oauth = tokenStore.readAuthentication(tokenStore.readAccessToken(token.getName()));
-			return userDetSer.loadUserByUsername(oauth.getUserAuthentication().getName());
+			OAuth2Authentication oauth = tokenStore.readAuthentication(token.getName());
+			return (UserDetails) oauth.getUserAuthentication().getPrincipal();
 		} catch (Exception ex) {
 			return null;
 		}
