@@ -37,8 +37,8 @@
         <div ng-include="'/html/admin/nav'" style="position:relative;"></div>
         <div class="tab-content" id="page-wrapper">
     		<div ng-include="'/html/common/alert'"></div>
-    		<div id="dashboardTab" class="tab-pane active" ng-include="'/html/common/dashboardTab'"></div>
-            <div id="merchantsTab" class="tab-pane" ng-include="'/html/admin/merchantTab'"></div>
+    		<div ng-if="user.access.supervisor" id="dashboardTab" class="tab-pane active" ng-include="'/html/common/dashboardTab'"></div>
+            <div ng-class="(user.access.supervisor)?'':'active'" id="merchantsTab" class="tab-pane" ng-include="'/html/admin/merchantTab'"></div>
         	<div id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
         	<div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/admin/subscriptionTab'"></div>
         	<div ng-if="user.access.finance" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>

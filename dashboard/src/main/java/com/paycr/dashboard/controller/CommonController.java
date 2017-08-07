@@ -40,7 +40,7 @@ public class CommonController {
 		return user;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
 	@RequestMapping("/dashboard")
 	public StatsResponse getDashboard(@RequestBody StatsRequest request) {
 		return comSer.loadDashboard(request);

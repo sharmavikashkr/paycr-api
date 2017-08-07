@@ -6,6 +6,7 @@
 		<strong><a class="navbar-brand" href="/merchant">{{merchant.name}}</a></strong>
 	</div>
 	<ul class="nav navbar-top-links navbar-right">
+		<li><strong>{{user.name}}</strong></li>
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<i class="fa fa-bell fa-fw"></i>
@@ -29,7 +30,6 @@
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<i class="fa fa-user fa-fw"></i>
-				<strong>{{user.name}}</strong>
 				<i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
@@ -42,8 +42,8 @@
 	<div class="sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse collapse">
 			<ul class="nav" id="side-menu">
-				<li class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-				<li><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Invoices</a></li>
+				<li ng-if="user.access.admin" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
+				<li ng-class="(user.access.admin)?'':'active'"><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Invoices</a></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
 				<li ng-if="user.access.ops"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
