@@ -3,12 +3,12 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title"> Invoice# <span><strong>{{invoiceInfo.invoiceCode}}</strong></span>&nbsp;&nbsp;<span>({{invoiceInfo.merchantPricing.pricing.name}})</span></h4>
+				<h5 class="modal-title"> Invoice# <span><strong>{{invoiceInfo.invoiceCode}}</strong></span>&nbsp;&nbsp;<span>({{invoiceInfo.merchantPricing.pricing.name}})</span></h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-lg-6">
-						<h4 class="text-center">Invoice Setting</h4>
+						<h5 class="text-center">Invoice Setting</h5>
 						<table class="table table-bordered table-responsive">
 							<tbody>
 								<tr>
@@ -35,7 +35,7 @@
 						</table>
 					</div>
 					<div class="col-lg-6">
-						<h4 class="text-center">Params Details</h4>
+						<h5 class="text-center">Params Details</h5>
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<tbody>
 								<tr ng-repeat="param in invoiceInfo.customParams">
@@ -49,7 +49,7 @@
 				<hr>
 				<div class="row">
 					<div class="col-lg-12">
-						<h4 class="text-center">Item Details</h4>
+						<h5 class="text-center">Item Details</h5>
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<thead>
 								<tr>
@@ -73,7 +73,7 @@
 				<hr>
 				<div class="row">
 					<div class="col-lg-12">
-						<h4 class="text-center">Payment History</h4>
+						<h5 class="text-center">Payment History</h5>
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<thead>
 								<tr>

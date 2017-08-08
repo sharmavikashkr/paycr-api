@@ -5,7 +5,7 @@
  */
 body {
   background-color: #f8f8f8;
-  zoom: 97%;
+  zoom: 99%;
 }
 #wrapper {
   width: 100%;
@@ -20,7 +20,6 @@ body {
   	min-height: 568px;
     position: inherit;
     margin: 0 0 0 250px;
-    padding: 0 30px;
     border-left: 1px solid #e7e7e7;
   }
 }
