@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new JdbcTokenStore(dataSource);
 	}
 
-	@Bean(name = "clientDetailsService")
+	@Bean(name = "myClientDetailsService")
 	@Primary
 	public ClientDetailsService clientDetailsService() {
 		return new JdbcClientDetailsService(dataSource);
