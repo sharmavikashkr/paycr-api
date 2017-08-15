@@ -22,10 +22,10 @@
 							<label class="control-label" for="set-rzpsi">RazorPay Secret Id</label>
 							<input class="form-control" id="set-rzpsi" ng-model="merchant.paymentSetting.rzpSecretId" />
 						</div>
+						<div>
+							<button ng-click="savePaymentSetting()" class="btn btn-info">Save</button>
+						</div>
 					</fieldset>
-					<div>
-						<button ng-click="savePaymentSetting()" class="btn btn-info">Save</button>
-					</div>
 				</div>
 			</div>
 		</div>

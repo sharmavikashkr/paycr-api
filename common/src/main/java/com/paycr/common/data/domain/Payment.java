@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.paycr.common.type.PayMode;
@@ -30,6 +31,9 @@ public class Payment {
 	private String method;
 	private String bank;
 	private String wallet;
+
+	@ManyToOne
+	private Merchant merchant;
 
 	@Enumerated(EnumType.STRING)
 	private PayType payType;
@@ -122,6 +126,14 @@ public class Payment {
 
 	public void setPayType(PayType payType) {
 		this.payType = payType;
+	}
+
+	public Merchant getMerchant() {
+		return merchant;
+	}
+
+	public void setMerchant(Merchant merchant) {
+		this.merchant = merchant;
 	}
 
 }

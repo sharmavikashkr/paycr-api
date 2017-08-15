@@ -25,7 +25,8 @@ CREATE TABLE if not exists pc_payment (
 	bank varchar(20) DEFAULT NULL,
 	wallet varchar(20) DEFAULT NULL,
 	pay_mode varchar(20) NOT NULL,
-	pay_type varchar(10) NOT NULL
+	pay_type varchar(10) NOT NULL,
+	merchant_id int REFERENCES pc_merchant
 );
 
 CREATE TABLE if not exists pc_invoice(

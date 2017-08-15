@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paycr.common.bean.StatsRequest;
+import com.paycr.common.bean.StatsResponse;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
@@ -36,6 +38,12 @@ public class CommonController {
 		PcUser user = secSer.findLoggedInUser();
 		user.setAccess(comSer.loadAccess(user));
 		return user;
+	}
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping("/dashboard")
+	public StatsResponse getDashboard(@RequestBody StatsRequest request) {
+		return comSer.loadDashboard(request);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)

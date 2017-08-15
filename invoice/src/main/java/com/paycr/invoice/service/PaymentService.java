@@ -69,11 +69,13 @@ public class PaymentService {
 
 	public void refund(Invoice invoice, BigDecimal amount) {
 		Payment payment = invoice.getPayment();
+		Merchant merchant = invoice.getMerchant();
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
 			Payment refPay = new Payment();
 			refPay.setAmount(amount);
 			refPay.setCreated(new Date());
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
+			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo("");
 			refPay.setStatus("refund");
 			refPay.setPayMode(payment.getPayMode());
@@ -82,7 +84,6 @@ public class PaymentService {
 			payRepo.save(refPay);
 			return;
 		}
-		Merchant merchant = invoice.getMerchant();
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		try {
@@ -94,6 +95,7 @@ public class PaymentService {
 			refPay.setAmount(amount);
 			refPay.setCreated(new Date());
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
+			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(refund.get("id"));
 			refPay.setStatus(refund.get("entity"));
 			refPay.setPayMode(PayMode.PAYCR);

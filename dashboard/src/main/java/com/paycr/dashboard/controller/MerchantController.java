@@ -51,7 +51,7 @@ public class MerchantController {
 		if (merchant == null) {
 			response.sendRedirect("/login");
 		}
-		ModelAndView mv = new ModelAndView("html/dashboard/merchant");
+		ModelAndView mv = new ModelAndView("html/merchant/merchant");
 		return mv;
 	}
 

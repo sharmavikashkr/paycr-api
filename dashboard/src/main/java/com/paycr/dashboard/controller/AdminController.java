@@ -49,7 +49,7 @@ public class AdminController {
 		if (!isAdmin) {
 			response.sendRedirect("/adminlogin");
 		}
-		ModelAndView mv = new ModelAndView("html/dashboard/admin");
+		ModelAndView mv = new ModelAndView("html/admin/admin");
 		return mv;
 	}
 

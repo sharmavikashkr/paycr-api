@@ -1,5 +1,6 @@
 package com.paycr.dashboard.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,21 +12,29 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Access;
+import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.bean.StatsRequest;
+import com.paycr.common.bean.StatsResponse;
+import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.Notification;
+import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
+import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.data.repository.UserRoleRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.PayType;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.Constants;
@@ -63,6 +72,12 @@ public class CommonService {
 
 	@Autowired
 	private NotificationRepository notiRepo;
+
+	@Autowired
+	private PaymentRepository payRepo;
+
+	@Autowired
+	private InvoiceDao invDao;
 
 	public List<Invoice> getMyInvoices(PcUser user) {
 		List<Invoice> myInvoices = invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
@@ -226,6 +241,61 @@ public class CommonService {
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Invalid User Type specified");
 		}
+	}
+
+	public StatsResponse loadDashboard(StatsRequest request) {
+		if (request == null || request.getCreatedFrom() == null || request.getCreatedTo() == null) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+		}
+		StatsResponse response = new StatsResponse();
+		SearchInvoiceRequest searchReq = new SearchInvoiceRequest();
+		searchReq.setCreatedFrom(request.getCreatedFrom());
+		searchReq.setCreatedTo(request.getCreatedTo());
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		searchReq.setInvoiceStatus(InvoiceStatus.PAID);
+		List<Invoice> paidInvs = invDao.findInvoices(searchReq, merchant);
+		searchReq.setInvoiceStatus(InvoiceStatus.UNPAID);
+		List<Invoice> unpaidInvs = invDao.findInvoices(searchReq, merchant);
+		searchReq.setInvoiceStatus(InvoiceStatus.EXPIRED);
+		List<Invoice> expiredInvs = invDao.findInvoices(searchReq, merchant);
+		searchReq.setInvoiceStatus(InvoiceStatus.DECLINED);
+		List<Invoice> declinedInvs = invDao.findInvoices(searchReq, merchant);
+		List<Payment> refundPays = new ArrayList<>();
+		if (merchant == null) {
+			refundPays = payRepo.findPays(request.getCreatedFrom(), request.getCreatedTo(), PayType.REFUND);
+		} else {
+			refundPays = payRepo.findPaysForMerchant(request.getCreatedFrom(), request.getCreatedTo(), PayType.REFUND,
+					merchant);
+		}
+
+		response.setPaidInvs(paidInvs);
+		response.setPaidInvSum(getTotalInvAmount(paidInvs));
+		response.setUnpaidInvs(unpaidInvs);
+		response.setUnpaidInvSum(getTotalInvAmount(unpaidInvs));
+		response.setExpiredInvs(expiredInvs);
+		response.setExpiredInvSum(getTotalInvAmount(expiredInvs));
+		response.setDeclinedInvs(declinedInvs);
+		response.setDeclinedInvSum(getTotalInvAmount(declinedInvs));
+		response.setRefundPays(refundPays);
+		response.setRefundPaySum(getTotalPayAmount(refundPays));
+
+		return response;
+	}
+
+	private BigDecimal getTotalInvAmount(List<Invoice> invs) {
+		BigDecimal total = new BigDecimal(0);
+		for (Invoice inv : invs) {
+			total = total.add(inv.getPayAmount());
+		}
+		return total;
+	}
+
+	private BigDecimal getTotalPayAmount(List<Payment> pays) {
+		BigDecimal total = new BigDecimal(0);
+		for (Payment pay : pays) {
+			total = total.add(pay.getAmount());
+		}
+		return total;
 	}
 
 }

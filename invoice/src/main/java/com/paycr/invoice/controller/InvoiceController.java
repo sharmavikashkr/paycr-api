@@ -134,7 +134,7 @@ public class InvoiceController {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-			List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoiceCode, PayType.REFUND);
+			List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), PayType.REFUND);
 			BigDecimal refundAllowed = invoice.getPayAmount();
 			for (Payment refund : refunds) {
 				if ("refund".equalsIgnoreCase(refund.getStatus())) {
@@ -162,6 +162,8 @@ public class InvoiceController {
 			Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
 			payment.setAmount(invoice.getPayAmount());
 			payment.setPayType(PayType.SALE);
+			payment.setInvoiceCode(invoice.getInvoiceCode());
+			payment.setMerchant(merchant);
 			invoice.setPayment(payment);
 			invoice.setStatus(InvoiceStatus.PAID);
 			invRepo.save(invoice);

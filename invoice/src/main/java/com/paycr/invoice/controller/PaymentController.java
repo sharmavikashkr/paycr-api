@@ -110,7 +110,8 @@ public class PaymentController {
 			PaymentSetting paymentSetting = merchant.getPaymentSetting();
 			Payment payment = new Payment();
 			payment.setCreated(new Date());
-			payment.setInvoiceCode(invoiceCode);
+			payment.setInvoiceCode(invoice.getInvoiceCode());
+			payment.setMerchant(merchant);
 			payment.setPaymentRefNo(rzpPayId);
 			RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 			com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
