@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
@@ -39,6 +41,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	public void validate(Invoice invoice) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
 		invoice.setMerchant(merchant);
 		if (CommonUtil.isNull(invoice.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
@@ -49,9 +52,11 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
 		String invoiceCode = invoice.getInvoiceCode();
-		while (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode))) {
-			invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
-			invoice.setInvoiceCode(invoiceCode);
+		if (StringUtils.isEmpty(invoiceCode)) {
+			do {
+				invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
+				invoice.setInvoiceCode(invoiceCode);
+			} while (CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode)));
 		}
 		if (CommonUtil.isNull(invoice.getTaxValue())) {
 			invoice.setTaxValue(0.0F);
@@ -65,7 +70,12 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		invoice.setCreated(timeNow);
 		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		invoice.setStatus(InvoiceStatus.UNPAID);
-		invoice.setCreatedBy(merchant.getEmail());
+		invoice.setCreatedBy(user.getEmail());
+		if (CommonUtil.isNotNull(invoice.getInvoiceNotices())) {
+			for (InvoiceNotify invNot : invoice.getInvoiceNotices()) {
+				invNot.setInvoice(invoice);
+			}
+		}
 	}
 
 }
