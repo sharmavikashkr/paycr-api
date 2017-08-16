@@ -17,9 +17,14 @@ CREATE TABLE if not exists pc_invoice_setting (
 	send_email boolean NOT NULL,
 	send_sms boolean NOT NULL,
 	add_items boolean NOT NULL,
+	email_pdf boolean NOT NULL,
+	cc_me boolean NOT NULL,
 	expiry_days int NOT NULL,
+	email_note varchar(50) DEFAULT NULL,
+	email_subject varchar(50) DEFAULT NULL,
 	banner varchar(20) DEFAULT NULL,
-	tax float NOT NULL
+	tax_name varchar(10) DEFAULT NULL,
+	tax_value float DEFAULT NULL
 );
 
 CREATE TABLE if not exists pc_merchant_custom_param (

@@ -21,9 +21,14 @@ public class InvoiceSetting {
 	private boolean sendSms;
 	private boolean sendEmail;
 	private boolean addItems;
+	private boolean emailPdf;
+	private boolean ccMe;
 	private int expiryDays;
-	private float tax;
+	private String emailNote;
+	private String emailSubject;
 	private String banner;
+	private String taxName;
+	private float taxValue;
 
 	@OneToMany(mappedBy = "invoiceSetting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MerchantCustomParam> customParams;
@@ -68,14 +73,6 @@ public class InvoiceSetting {
 		this.customParams = customParams;
 	}
 
-	public float getTax() {
-		return tax;
-	}
-
-	public void setTax(float tax) {
-		this.tax = tax;
-	}
-
 	public boolean isAddItems() {
 		return addItems;
 	}
@@ -90,6 +87,54 @@ public class InvoiceSetting {
 
 	public void setBanner(String banner) {
 		this.banner = banner;
+	}
+
+	public boolean isEmailPdf() {
+		return emailPdf;
+	}
+
+	public void setEmailPdf(boolean emailPdf) {
+		this.emailPdf = emailPdf;
+	}
+
+	public boolean isCcMe() {
+		return ccMe;
+	}
+
+	public void setCcMe(boolean ccMe) {
+		this.ccMe = ccMe;
+	}
+
+	public String getEmailNote() {
+		return emailNote;
+	}
+
+	public void setEmailNote(String emailNote) {
+		this.emailNote = emailNote;
+	}
+
+	public String getEmailSubject() {
+		return emailSubject;
+	}
+
+	public void setEmailSubject(String emailSubject) {
+		this.emailSubject = emailSubject;
+	}
+
+	public String getTaxName() {
+		return taxName;
+	}
+
+	public void setTaxName(String taxName) {
+		this.taxName = taxName;
+	}
+
+	public float getTaxValue() {
+		return taxValue;
+	}
+
+	public void setTaxValue(float taxValue) {
+		this.taxValue = taxValue;
 	}
 
 }

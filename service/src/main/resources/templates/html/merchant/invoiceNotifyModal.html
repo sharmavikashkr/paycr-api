@@ -1,0 +1,102 @@
+<div ng-controller="InvoiceController" id="invoiceNotifyModal" class="modal fade" style="overflow-y:scroll;" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Notify Invoice : <strong>{{invoiceInfo.invoiceCode}}</strong></h5>
+			</div>
+			<div class="modal-body">
+				<form name="invoiceNotifyForm">
+					<div class="row">
+						<div class="col-md-4">
+							<input type="checkbox" ng-model="invoiceNotify.sendSms">&nbsp;<strong>Send Sms</strong><br>
+							<fieldset class="panel panel-default" ng-disabled="!invoiceNotify.sendSms">
+								<div class="panel-heading">
+									<input class="form-control" ng-value="invoiceInfo.consumer.mobile" readonly>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+									<textarea rows="15" style="width:100%" readonly>
+									Hi {{invoiceInfo.consumer.name}},
+									{{merchant.name}} has requested you to pay INR {{invoiceInfo.payAmount}} online.
+									Click on http://www.paycr.in/{{invoiceInfo.invoiceCode}} to proceed.
+									</textarea>
+									</div>
+								</div>
+							</fieldset>
+							<hr>
+							<input type="checkbox" ng-model="invoiceNotify.emailPdf">&nbsp;<strong>Send PDF in mail</strong><br>
+						</div>
+						<div class="col-md-8">
+							<input type="checkbox" ng-model="invoiceNotify.sendEmail">&nbsp;<strong>Send Email</strong><br>
+							<fieldset class="panel panel-default" ng-disabled="!invoiceNotify.sendEmail">
+								<div class="panel-heading">
+									<table class="table table-striped table-bordered table-hover table-responsive">
+										<tr>
+											<td><strong>FROM :</strong></td>
+											<td><input class="form-control" value="admin@paycr.in" readonly></td>
+										</tr>
+										<tr>
+											<td><strong>TO :</strong></td>
+											<td><input class="form-control" ng-value="invoiceInfo.consumer.email" readonly></td>
+										</tr>
+										<tr class="form-group" ng-class="(invoiceNotifyForm.ccme.$valid)?'':'has-error'">
+											<td><input type="checkbox" ng-model="invoiceNotify.ccMe">&nbsp;&nbsp;<strong>CC :</strong></td>
+											<td><input class="form-control" name="ccme" ng-model="invoiceNotify.ccEmail" ng-init="invoiceNotify.ccEmail = user.email" ng-readonly="!invoiceNotify.ccMe" ng-pattern="patterns.emailPattern" required></td>
+										</tr>
+										<tr class="form-group" ng-class="(invoiceNotifyForm.subject.$valid)?'':'has-error'">
+											<td><strong>Subject :</strong></td>
+											<td><input name="subject" class="form-control" ng-model="invoiceNotify.emailSubject" ng-pattern="patterns.namePattern" required></td>
+										</tr>
+									</table>
+								</div>
+								<div class="panel-body">
+									<div class="row text-center" style="background:darksalmon;">
+										<div class="panel-body">
+											<h5>Invoice request from <strong>{{merchant.name}}</strong></h5>
+											<div>Invoice Id : <strong>{{invoiceInfo.invoiceCode}}</strong></div>
+											<div class="form-group" ng-class="(invoiceNotifyForm.note.$valid)?'':'has-error'"><input class="form-control" name="note" ng-model="invoiceNotify.emailNote" ng-pattern="patterns.namePattern" required></div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="panel-body" style="background:white;">
+											<div>Billed To : </div>
+											<p><strong>{{invoiceInfo.consumer.email}}</strong></p>
+											<br>
+											<div>Pay By : </div>
+											<p><strong>{{invoiceInfo.expiry | date:'dd-MM-yyyy'}}</strong></p>
+										</div>
+									</div>
+									<div class="row" style="background:darksalmon;">
+										<div class="panel-body">
+											<table>
+												<tr>
+													<td>
+														<div>
+															<div>Pay Amount : </div>
+															<p><strong>INR {{invoiceInfo.payAmount}}</strong></p>
+														</div>
+													</td>
+													<td class="pull-right text-right">
+														<div>
+															<a href="#" type="button" class="btn btn-info">Proceed to Pay</a>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</form>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="notifyInvoice(invoiceInfo.invoiceCode)">Notify</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

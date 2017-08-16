@@ -35,11 +35,10 @@ CREATE TABLE if not exists pc_invoice(
 	invoice_code varchar(20) NOT NULL,
 	invoice_type  varchar(10) NOT NULL,
 	total float NOT NULL,
-	tax float NOT NULL,
+	tax_name varchar(10) DEFAULT NULL,
+	tax_value float DEFAULT NULL,
 	discount float DEFAULT NULL,
 	pay_amount float NOT NULL,
-	send_email BOOLEAN NOT NULL,
-	send_sms BOOLEAN NOT NULL,
 	add_items BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
 	expiry timestamp NOT NULL,
@@ -48,7 +47,20 @@ CREATE TABLE if not exists pc_invoice(
 	merchant_pricing_id int REFERENCES pc_merchant_pricing,
 	payment_id int REFERENCES pc_payment,
 	status varchar(20) NOT NULL,
-	created_by varchar(50) NOT NULL
+	created_by varchar(50) NOT NULL,
+	expires_in int not null
+);
+
+CREATE TABLE if not exists pc_invoice_notify (
+	id SERIAL PRIMARY KEY NOT NULL,
+	send_email boolean NOT NULL,
+	send_sms boolean NOT NULL,
+	email_pdf boolean NOT NULL,
+	cc_me boolean NOT NULL,
+	cc_email varchar(50) NOT NULL,
+	email_note varchar(50) NOT NULL,
+	email_subject varchar(50) NOT NULL,
+    invoice_id int REFERENCES pc_invoice
 );
 
 CREATE TABLE if not exists pc_item (

@@ -2,14 +2,14 @@
 	<br>
 	<div ng-if="user.access.finance" class="row hidden-xs">
 		<div class="col-lg-2 col-lg-offset-9">
-			<button title="Create Invoice" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createInvoiceModal">
+			<button title="Create Invoice" type="button" class="btn btn-info btn-circle btn-lg" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal">
 				<i class="fa fa-plus"></i>
 			</button>
 		</div>
 	</div>
 	<div ng-if="user.access.finance" class="row visible-xs">
 		<div class="col-lg-2 col-lg-offset-9">
-			<button type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createInvoiceXsModal">
+			<button type="button" class="btn btn-info btn-circle btn-lg" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
 				<i class="fa fa-plus"></i>
 			</button>
 		</div>
@@ -104,9 +104,34 @@
 							</tr>
 							<tr>
 								<td colspan="12" style="padding: 0px; border: 0px;">
-									<div style="padding-right:10px;padding-left:10px;" class="accordion-body collapse" id="invdetails-{{invoice.invoiceCode}}">
+									<div style="padding:10px;" class="accordion-body collapse" id="invdetails-{{invoice.invoiceCode}}">
 										<div class="row">
-											<div class="col-lg-6 col-sm-12 col-xs-12">
+											<div class="col-lg-6">
+												<button ng-click="updateInvoiceInfo(invoice)" title="Info" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#invoiceInfoModal">
+													<i class="fa fa-info"></i>
+												</button>
+												<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md hidden-xs" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceModal">
+													<i class="fa fa-pencil"></i>
+												</button>
+												<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md visible-xs" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
+													<i class="fa fa-pencil"></i>
+												</button>
+												<button ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
+													&#8377;
+												</button>
+												<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="#">
+													<i class="fa fa-file-pdf-o"></i>
+												</a>
+												<button title="Attachments" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#createInvoiceXsModal">
+													<i class="fa fa-paperclip"></i>
+												</button>
+												<button ng-click="updateInvoiceInfo(invoice)" title="Notifications" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">
+													<i class="fa fa-bell"></i>
+												</button>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
 												<h5>Amount Details</h5>
 												<table class="table table-striped table-bordered table-responsive">
 													<tbody>
@@ -115,7 +140,7 @@
 															<td>&#8377; {{invoice.total}}</td>
 														</tr>
 														<tr>
-															<td><strong>Tax</strong> : {{invoice.tax}}%</td>
+															<td><strong>Tax({{invoice.taxName}})</strong> : {{invoice.taxValue}}%</td>
 															<td><strong>Discount</strong> : &#8377; {{invoice.discount}}</td>
 														</tr>
 														<tr>
@@ -125,7 +150,7 @@
 													</tbody>
 												</table>
 											</div>
-											<div class="col-lg-6 col-sm-12 col-xs-12">
+											<div class="col-lg-6">
 												<h5>Payment Details</h5>
 												<table class="table table-striped table-bordered table-responsive">
 													<tbody>
@@ -146,7 +171,7 @@
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-lg-12 col-sm-12 col-xs-12">
+											<div class="col-lg-12">
 												<h5>Consumer Details</h5>
 												<table class="table table-striped table-bordered table-responsive">
 													<thead>
@@ -169,10 +194,6 @@
 										<div style="padding: 10px;" class="row">
 											<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
 												<div class="text-right">
-													<button style="margin: 5px;" type="button"
-														ng-click="updateInvoiceInfo(invoice)"
-														data-toggle="modal" data-target="#invoiceInfoModal"
-														class="btn btn-default">Info</button>
 													<button style="margin: 5px;"
 														ng-if="invoice.status != 'PAID' && user.access.finance"
 														ng-click="updateInvoiceInfo(invoice)"
@@ -184,7 +205,8 @@
 														type="button" class="btn btn-info">Enquire</button>
 													<button style="margin: 5px;"
 														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
-														ng-click="notifyInvoice(invoice.invoiceCode)"
+														ng-click="updateInvoiceInfo(invoice)"
+														data-toggle="modal" data-target="#invoiceNotifyModal"
 														type="button" class="btn btn-warning">Notify</button>
 													<button style="margin: 5px;"
 														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"

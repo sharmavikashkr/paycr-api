@@ -43,9 +43,12 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.updateInvoiceInfo = function(invoice) {
 		$rootScope.invoiceInfo = invoice;
 	}
+	$scope.updateSaveInvoice = function(invoice) {
+		$rootScope.saveinvoice = invoice;
+	}
 	$scope.addItem = function() {
-		if ($scope.newinvoice.items.length < 5) {
-			$scope.newinvoice.items.push({
+		if ($scope.saveinvoice.items.length < 5) {
+			$scope.saveinvoice.items.push({
 				"name" : "",
 				"rate" : 0,
 				"quantity" : 1,
@@ -54,8 +57,8 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}
 	}
 	$scope.addItemXs = function(item) {
-		if ($scope.newinvoice.items.length < 5) {
-			$scope.newinvoice.items.push({
+		if ($scope.saveinvoice.items.length < 5) {
+			$scope.saveinvoice.items.push({
 				"name" : item.name,
 				"rate" : item.rate,
 				"quantity" : item.quantity,
@@ -67,37 +70,37 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$scope.calculateTotal();
 	}
 	$scope.deleteItem = function(pos) {
-		$scope.newinvoice.items.splice(pos, 1);
+		$scope.saveinvoice.items.splice(pos, 1);
 		$scope.calculateTotal();
 	}
 	$scope.calculateTotal = function() {
 		var totals = 0;
-		if($scope.newinvoice.addItems) {
-			for ( var item in $scope.newinvoice.items) {
-				if ($scope.newinvoice.items[item].rate == null) {
-					$scope.newinvoice.items[item].rate = 0;
+		if($scope.saveinvoice.addItems) {
+			for ( var item in $scope.saveinvoice.items) {
+				if ($scope.saveinvoice.items[item].rate == null) {
+					$scope.saveinvoice.items[item].rate = 0;
 				}
-				if ($scope.newinvoice.items[item].quantity == null) {
-					$scope.newinvoice.items[item].quantity = 0;
+				if ($scope.saveinvoice.items[item].quantity == null) {
+					$scope.saveinvoice.items[item].quantity = 0;
 				}
-				$scope.newinvoice.items[item].price = parseFloat($scope.newinvoice.items[item].rate)
-						* parseFloat($scope.newinvoice.items[item].quantity);
+				$scope.saveinvoice.items[item].price = parseFloat($scope.saveinvoice.items[item].rate)
+						* parseFloat($scope.saveinvoice.items[item].quantity);
 				totals = totals
-						+ parseFloat($scope.newinvoice.items[item].price);
+						+ parseFloat($scope.saveinvoice.items[item].price);
 			}
-			$scope.newinvoice.total = totals;
+			$scope.saveinvoice.total = totals;
 		} else {
-			totals = $scope.newinvoice.total;
+			totals = $scope.saveinvoice.total;
 		}
-		if ($scope.newinvoice.tax == null) {
-			$scope.newinvoice.tax = 0;
+		if ($scope.saveinvoice.taxValue == null) {
+			$scope.saveinvoice.taxValue = 0;
 		}
-		if ($scope.newinvoice.discount == null) {
-			$scope.newinvoice.discount = 0;
+		if ($scope.saveinvoice.discount == null) {
+			$scope.saveinvoice.discount = 0;
 		}
-		$scope.newinvoice.payAmount = Math.round(totals
-				+ parseFloat((parseFloat($scope.newinvoice.tax) * totals) / 100)
-				- parseFloat($scope.newinvoice.discount));
+		$scope.saveinvoice.payAmount = Math.round(totals
+				+ parseFloat((parseFloat($scope.saveinvoice.taxValue) * totals) / 100)
+				- parseFloat($scope.saveinvoice.discount));
 	}
 	$scope.createInvoice = function() {
 		if(!this.createInvoiceForm.$valid) {
@@ -110,11 +113,13 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $scope.newinvoice
+			data : this.saveinvoice
 		}
-		$http(req).then(function(data) {
+		$http(req).then(function(invoice) {
 			$scope.searchInvoice();
-			$scope.serverMessage(data);
+			$scope.serverMessage(invoice);
+			$rootScope.invoiceInfo = invoice.data;
+			angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -137,19 +142,24 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		});
 	}
 	$scope.notifyInvoice = function(invoiceCode) {
+		if(!this.invoiceNotifyForm.$valid) {
+			return false;
+		}
 		var req = {
-			method : 'GET',
+			method : 'POST',
 			url : "/invoice/notify/" + invoiceCode,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
-			}
+			},
+			data : $scope.invoiceNotify
 		}
 		$http(req).then(function(data) {
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#invoiceNotifyModal')).modal('hide');
 	}
 	$scope.expireInvoice = function(invoiceCode) {
 		if (!confirm('Expire ' + invoiceCode + ' ?')) {

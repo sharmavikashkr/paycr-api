@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
@@ -44,18 +45,15 @@ public class InvoiceService {
 	private InvoiceValidator invValidator;
 
 	@Autowired
-	private NotifyService notifyService;
-
-	@Autowired
 	private PaymentService payService;
 
-	public void single(Invoice invoice) {
+	public Invoice single(Invoice invoice) {
 		invValidator.validate(invoice);
 		invRepo.save(invoice);
 		MerchantPricing merPri = invoice.getMerchantPricing();
 		merPri.setInvCount(merPri.getInvCount() + 1);
 		merPriRepo.save(merPri);
-		notifyService.notify(invoice);
+		return invoice;
 	}
 
 	public Invoice getInvoice(String invoiceCode) {
@@ -73,12 +71,15 @@ public class InvoiceService {
 		}
 	}
 
-	public void notify(String invoiceCode) {
+	public void notify(String invoiceCode, InvoiceNotify invoiceNotify) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (timeNow.compareTo(invoice.getExpiry()) < 0) {
-			notSer.notify(invoice);
+			notSer.notify(invoice, invoiceNotify);
+			invoiceNotify.setCreated(timeNow);
+			invoiceNotify.setInvoice(invoice);
+			invoice.getInvoiceNotices().add(invoiceNotify);
 			invRepo.save(invoice);
 		}
 	}

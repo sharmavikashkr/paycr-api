@@ -30,11 +30,10 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 			"name" : ""
 		},
 		"items" : [],
-		"sendEmail" : false,
-		"sendSms" : false,
 		"addItems" : false,
 		"total" : 0.00,
-		"tax" : 0.00,
+		"taxValue" : 0.00,
+		"taxName" : "",
 		"discount" : 0,
 		"payAmount" : 0,
 		"currency" : "INR",
@@ -46,6 +45,8 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 			"provider" : ""
 		} ]
 	}
+	$rootScope.saveinvoice = $rootScope.newinvoice;
+	$rootScope.invoiceNotify = {}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
 	}
@@ -220,17 +221,22 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 	}
 	$scope.refreshSetting = function(invoicesetting) {
 		$rootScope.newInvSetting = invoicesetting;
-		$rootScope.newinvoice.sendEmail = angular.copy(invoicesetting.sendEmail);
-		$rootScope.newinvoice.sendMobile = angular.copy(invoicesetting.sendMobile);
 		$rootScope.newinvoice.addItems = angular.copy(invoicesetting.addItems);
 		$rootScope.newinvoice.expiresIn = angular.copy(invoicesetting.expiryDays);
-		$rootScope.newinvoice.tax = angular.copy(invoicesetting.tax);
+		$rootScope.newinvoice.taxValue = angular.copy(invoicesetting.taxValue);
+		$rootScope.newinvoice.taxName = angular.copy(invoicesetting.taxName);
 		$rootScope.newinvoice.customParams = [];
 		for (var param in invoicesetting.customParams) {
 			var copyParam = angular.copy(invoicesetting.customParams[param]);
 			copyParam.id = null;
 			$rootScope.newinvoice.customParams.push(copyParam);
 		}
+		$rootScope.invoiceNotify.sendEmail = angular.copy(invoicesetting.sendEmail);
+		$rootScope.invoiceNotify.sendMobile = angular.copy(invoicesetting.sendMobile);
+		$rootScope.invoiceNotify.emailPdf = angular.copy(invoicesetting.emailPdf);
+		$rootScope.invoiceNotify.ccMe = angular.copy(invoicesetting.ccMe);
+		$rootScope.invoiceNotify.emailSubject = angular.copy(invoicesetting.emailSubject);
+		$rootScope.invoiceNotify.emailNote = angular.copy(invoicesetting.emailNote);
 	}
 	$scope.logout = function() {
 		$timeout(function(){

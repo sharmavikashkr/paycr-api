@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.invoice.service.InvoiceService;
@@ -28,13 +29,14 @@ public class InvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public void single(@RequestBody Invoice invoice, HttpServletResponse response) {
+	public Invoice single(@RequestBody Invoice invoice, HttpServletResponse response) {
 		try {
-			invSer.single(invoice);
+			return invSer.single(invoice);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
+		return null;
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
@@ -49,10 +51,11 @@ public class InvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.GET)
-	public void notify(@PathVariable String invoiceCode, HttpServletResponse response) {
+	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.POST)
+	public void notify(@PathVariable String invoiceCode, @RequestBody InvoiceNotify invoiceNotify,
+			HttpServletResponse response) {
 		try {
-			invSer.notify(invoiceCode);
+			invSer.notify(invoiceCode, invoiceNotify);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

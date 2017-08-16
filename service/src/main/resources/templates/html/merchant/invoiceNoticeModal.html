@@ -1,0 +1,41 @@
+<div id="invoiceNoticeModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title"> Invoice Notifications : <span><strong>{{invoiceInfo.invoiceCode}}</strong></span></h5>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12">
+						<table class="table table-striped table-bordered table-hover table-responsive">
+							<thead>
+								<tr>
+									<td>Sent</td>
+									<td>Send Email</td>
+									<td>Send Sms</td>
+									<td>Email Pdf</td>
+									<td>CC Me</td>
+									<td class="hidden-xs">Email Subject</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="notify in invoiceInfo.invoiceNotices">
+									<td>{{notify.created | date:'dd-MM-yyyy HH:mm'}}</td>
+									<td>{{notify.sendEmail}}</td>
+									<td>{{notify.sendSms}}</td>
+									<td>{{notify.emailPdf}}</td>
+									<td>{{notify.ccMe}}</td>
+									<td class="hidden-xs">{{notify.emailSubject}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

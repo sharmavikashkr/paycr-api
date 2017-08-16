@@ -6,10 +6,6 @@
     <meta name="description" content="" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
     <meta name="author" content="" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
     <title style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">PayCr</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
-    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
-    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 </head>
 <body style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;margin: 0;font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;font-size: 14px;line-height: 1.42857143;color: #333;background-color: #fff;">
 <div style="background: gray;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
@@ -17,7 +13,7 @@
 		<div class="panel-body" style="width: 100%;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 15px;">
 			<h4 style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-family: inherit;font-weight: 500;line-height: 1.1;color: inherit;margin-top: 10px;margin-bottom: 10px;font-size: 18px;">Invoice request from <strong style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-weight: 700;">${invoice.merchant.name}</strong></h4>
 			<div style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">Invoice Id : <strong style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;font-weight: 700;">${invoice.invoiceCode}</strong></div>
-			<div style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"><p style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;margin: 0 0 10px;">Some Note</p></div>
+			<div style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"><p style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;orphans: 3;widows: 3;margin: 0 0 10px;">${note}</p></div>
 		</div>
 	</div>
 	<div class="row" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">

@@ -28,35 +28,6 @@
 					</fieldset>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">Invoice Preference</div>
-				<div class="panel-body">
-					<fieldset class="col-lg-4">
-						<input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail">&nbsp;<strong>Send Email</strong><br>
-						<input type="checkbox" ng-model="merchant.invoiceSetting.sendSms">&nbsp;<strong>Send Sms</strong><br>
-						<input type="checkbox" ng-model="merchant.invoiceSetting.addItems">&nbsp;<strong>Add Items</strong><br>
-					</fieldset>
-					<fieldset class="col-lg-8">
-						<div class="form-group">
-							<label class="control-label">Expiry Days</label>
-							<input class="form-control" ng-model="merchant.invoiceSetting.expiryDays" type="number" required />
-						</div>
-						<div class="form-group">
-							<label class="control-label">Tax %</label>
-							<input class="form-control" ng-model="merchant.invoiceSetting.tax" type="number" required />
-						</div>
-					</fieldset>
-					<div>
-						<button ng-click="saveInvoiceSetting(merchant.invoiceSetting)" class="btn btn-info">Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12 col-md-8 col-lg-6">
 			<div class="panel panel-default">
 				<div class="panel-heading"> Custom Params
 					<span style="float: right; margin-top: -5px;">
@@ -86,6 +57,54 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">Invoice Preference</div>
+				<div class="panel-body">
+					<table class="table table-striped table-bordered table-hover table-responsive">
+						<tr>
+							<td>Send Email</td>
+							<td><input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail"></td>
+						</tr>
+						<tr>
+							<td>Send Sms</td>
+							<td><input type="checkbox" ng-model="merchant.invoiceSetting.sendSms"></td>
+						</tr>
+						<tr>
+							<td>Add Items</td>
+							<td><input type="checkbox" ng-model="merchant.invoiceSetting.addItems"></td>
+						</tr>
+						<tr>
+							<td>CC Me</td>
+							<td><input type="checkbox" ng-model="merchant.invoiceSetting.ccMe"></td>
+						</tr>
+						<tr>
+							<td>Expiry Days</td>
+							<td><input class="form-control" ng-model="merchant.invoiceSetting.expiryDays" type="number" required /></td>
+						</tr>
+						<tr>
+							<td>Tax Name</td>
+							<td><input class="form-control" ng-model="merchant.invoiceSetting.taxName" required /></td>
+						</tr>
+						<tr>
+							<td>Tax Value %</td>
+							<td><input class="form-control" ng-model="merchant.invoiceSetting.taxValue" type="number" required /></td>
+						</tr>
+						<tr>
+							<td>Email Subject</td>
+							<td><input class="form-control" ng-model="merchant.invoiceSetting.emailSubject" required /></td>
+						</tr>
+						<tr>
+							<td>Email Note</td>
+							<td><input class="form-control" ng-model="merchant.invoiceSetting.emailNote" required /></td>
+						</tr>
+					</table>
+					<div>
+						<button ng-click="saveInvoiceSetting(merchant.invoiceSetting)" class="btn btn-info">Save</button>
+					</div>
 				</div>
 			</div>
 		</div>

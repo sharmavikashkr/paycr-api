@@ -48,14 +48,14 @@ public class Invoice implements Serializable {
 	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
+	private String taxName;
+
 	@Column(precision = 10, scale = 2)
-	private Float tax;
+	private Float taxValue;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
 
-	private boolean sendEmail;
-	private boolean sendSms;
 	private boolean addItems;
 	private Date expiry;
 
@@ -71,6 +71,9 @@ public class Invoice implements Serializable {
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<InvoiceCustomParam> customParams;
 
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+	private List<InvoiceNotify> invoiceNotices;
+
 	@ManyToOne
 	private MerchantPricing merchantPricing;
 
@@ -82,11 +85,10 @@ public class Invoice implements Serializable {
 
 	private String createdBy;
 
-	@Transient
-	private List<Payment> allPayments;
+	private int expiresIn;
 
 	@Transient
-	private int expiresIn;
+	private List<Payment> allPayments;
 
 	public Integer getId() {
 		return id;
@@ -164,22 +166,6 @@ public class Invoice implements Serializable {
 		this.discount = discount;
 	}
 
-	public boolean isSendEmail() {
-		return sendEmail;
-	}
-
-	public void setSendEmail(boolean sendEmail) {
-		this.sendEmail = sendEmail;
-	}
-
-	public boolean isSendSms() {
-		return sendSms;
-	}
-
-	public void setSendSms(boolean sendSms) {
-		this.sendSms = sendSms;
-	}
-
 	public InvoiceStatus getStatus() {
 		return status;
 	}
@@ -236,14 +222,6 @@ public class Invoice implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	public Float getTax() {
-		return tax;
-	}
-
-	public void setTax(Float tax) {
-		this.tax = tax;
-	}
-
 	public InvoiceType getInvoiceType() {
 		return invoiceType;
 	}
@@ -266,5 +244,29 @@ public class Invoice implements Serializable {
 
 	public void setAddItems(boolean addItems) {
 		this.addItems = addItems;
+	}
+
+	public List<InvoiceNotify> getInvoiceNotices() {
+		return invoiceNotices;
+	}
+
+	public void setInvoiceNotices(List<InvoiceNotify> invoiceNotices) {
+		this.invoiceNotices = invoiceNotices;
+	}
+
+	public String getTaxName() {
+		return taxName;
+	}
+
+	public void setTaxName(String taxName) {
+		this.taxName = taxName;
+	}
+
+	public Float getTaxValue() {
+		return taxValue;
+	}
+
+	public void setTaxValue(Float taxValue) {
+		this.taxValue = taxValue;
 	}
 }

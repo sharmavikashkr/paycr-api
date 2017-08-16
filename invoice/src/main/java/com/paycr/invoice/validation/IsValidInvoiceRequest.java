@@ -53,8 +53,8 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 			invoice.setInvoiceCode(invoiceCode);
 		}
-		if (CommonUtil.isNull(invoice.getTax())) {
-			invoice.setTax(0.0F);
+		if (CommonUtil.isNull(invoice.getTaxValue())) {
+			invoice.setTaxValue(0.0F);
 		}
 		if (CommonUtil.isNull(invoice.getDiscount())) {
 			invoice.setDiscount(new BigDecimal(0));
