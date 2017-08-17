@@ -12,8 +12,8 @@
 	</properties>
 
 	<parent>
-		<groupId>com.payme</groupId>
-		<artifactId>payme-parent</artifactId>
+		<groupId>com.paycr</groupId>
+		<artifactId>paycr-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
