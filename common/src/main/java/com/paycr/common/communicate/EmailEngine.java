@@ -83,17 +83,16 @@ public class EmailEngine {
 		props.put("mail.smtp.port", "465");
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("paycr.in@gmail.com", "password@123");
+				return new PasswordAuthentication("noreply@paycr.in", "C@rpe_d!em");
 			}
 		});
 		try {
 			MimeMessage message = new MimeMessage(session);
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getTo().get(0)));
 			message.setSubject(email.getSubject());
-			message.setFrom(new InternetAddress("paycr.in@gmail.com", "PayCr Admin"));
+			message.setFrom(new InternetAddress("noreply@paycr.in", "PayCr | No Reply"));
 			message.setContent(email.getMessage(), "text/html; charset=utf-8");
 			Transport.send(message);
-			System.out.println("message sent successfully");
 		} catch (Exception e) {
 		}
 	}
