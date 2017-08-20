@@ -98,9 +98,9 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		if ($scope.saveinvoice.discount == null) {
 			$scope.saveinvoice.discount = 0;
 		}
-		$scope.saveinvoice.payAmount = Math.round(totals
+		$scope.saveinvoice.payAmount = totals
 				+ parseFloat((parseFloat($scope.saveinvoice.taxValue) * totals) / 100)
-				- parseFloat($scope.saveinvoice.discount));
+				- parseFloat($scope.saveinvoice.discount);
 	}
 	$scope.createInvoice = function() {
 		if(!this.createInvoiceForm.$valid) {

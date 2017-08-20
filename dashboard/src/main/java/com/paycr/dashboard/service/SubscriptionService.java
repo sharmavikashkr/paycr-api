@@ -84,8 +84,15 @@ public class SubscriptionService {
 		Date timeNow = new Date();
 		Merchant merchant = merRepo.findOne(offline.getMerchantId());
 		Pricing pricing = priRepo.findOne(offline.getPricingId());
+		AdminSetting adset = adsetRepo.findAll().get(0);
 		Subscription subs = new Subscription();
-		subs.setAmount(pricing.getRate());
+		BigDecimal total = pricing.getRate().multiply(new BigDecimal(offline.getQuantity()));
+		subs.setTotal(total);
+		subs.setTaxName(adset.getTaxName());
+		subs.setTaxValue(adset.getTaxValue());
+		BigDecimal payAmount = total
+				.add(total.multiply(new BigDecimal(adset.getTaxValue())).divide(new BigDecimal(100)));
+		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setCreated(timeNow);
 		subs.setMerchant(merchant);
@@ -125,7 +132,13 @@ public class SubscriptionService {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}
 		Subscription subs = new Subscription();
-		subs.setAmount(pricing.getRate().multiply(new BigDecimal(quantity)));
+		BigDecimal total = pricing.getRate().multiply(new BigDecimal(quantity));
+		subs.setTotal(total);
+		subs.setTaxName(adset.getTaxName());
+		subs.setTaxValue(adset.getTaxValue());
+		BigDecimal payAmount = total
+				.add(total.multiply(new BigDecimal(adset.getTaxValue())).divide(new BigDecimal(100)));
+		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setPayMode(PayMode.PAYCR);
 		subs.setQuantity(quantity);
@@ -147,7 +160,7 @@ public class SubscriptionService {
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
 		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());
-		mv.addObject("payAmount", String.valueOf(subs.getAmount().multiply(new BigDecimal(100))));
+		mv.addObject("payAmount", String.valueOf(subs.getPayAmount().multiply(new BigDecimal(100))));
 		return mv;
 	}
 

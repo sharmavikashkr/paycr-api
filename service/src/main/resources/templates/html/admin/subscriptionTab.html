@@ -78,7 +78,7 @@
 								<td>{{subs.merchant.name}}</td>
 								<td>{{subs.pricing.name}}</td>
 								<td class="hidden-xs">{{subs.subscriptionCode}}</td>
-								<td>&#8377; {{subs.amount}}</td>
+								<td>&#8377; {{subs.payAmount}}</td>
 								<td class="hidden-xs">{{subs.status}}</td>
 							</tr>
 							<tr>
@@ -97,8 +97,12 @@
 															<td>{{subs.paymentRefNo}}</td>
 														</tr>
 														<tr>
-															<td><strong>Status</strong></td>
-															<td>{{subs.status}}</td>
+															<td><strong>Pricing Rate</strong></td>
+															<td>&#8377; {{subs.pricing.rate}}</td>
+														</tr>
+														<tr>
+															<td><strong>Tax({{subs.taxName}})</strong></td>
+															<td>{{subs.taxValue}}%</td>
 														</tr>
 													</tbody>
 												</table>
@@ -111,12 +115,16 @@
 															<td>{{subs.method}}</td>
 														</tr>
 														<tr>
-															<td>Bank</td>
+															<td><strong>Bank</strong></td>
 															<td>{{subs.bank}}</td>
 														</tr>
 														<tr>
-															<td>Wallet</td>
+															<td><strong>Wallet</strong></td>
 															<td>{{subs.wallet}}</td>
+														</tr>
+														<tr>
+															<td><strong>Pricing Quantity</strong></td>
+															<td>{{subs.quantity}}</td>
 														</tr>
 													</tbody>
 												</table>

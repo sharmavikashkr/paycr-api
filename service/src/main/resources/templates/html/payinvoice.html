@@ -7,6 +7,7 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <style>
     	#paySection {border:none;text-size:6px;}
     </style>
@@ -35,32 +36,28 @@
 	                            	<#list invoice.items as item>
 	                                <tr id="itemRow">
 	                                    <td class="text-center">${item.name}</td>
-	                                    <td class="text-center">${item.rate}</td>
+	                                    <td class="text-center">&#8377; ${item.rate}</td>
 	                                    <td class="text-center">${item.quantity}</td>
-	                                    <td class="text-right">${item.price}</td>
+	                                    <td class="text-right">&#8377; ${item.price}</td>
 	                                </tr>
 	                                </#list>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
-	                                    <#if invoice.taxName??>
 					                    <td class="text-center"><strong>Tax(${invoice.taxName})</strong></td>
-					                    <#else>
-					                    <td class="text-center"><strong>Tax</strong></td>
-					                    </#if>
 	                                    <td class="text-right">${invoice.taxValue}%</td>
 	                                </tr>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"><strong>Discount</strong></td>
-	                                    <td class="text-right">${invoice.discount}</td>
+	                                    <td class="text-right">&#8377; ${invoice.discount}</td>
 	                                </tr>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"><strong>Pay Amount</strong></td>
-	                                    <td class="text-right">${invoice.payAmount}</td>
+	                                    <td class="text-right">&#8377; ${invoice.payAmount}</td>
 	                                </tr>
 	                            </tbody>
 	                        </table>
@@ -129,6 +126,7 @@
     </section>
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/dist/js/sb-admin-2.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
     	$(".razorpay-payment-button").addClass('btn btn-info');

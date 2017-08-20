@@ -17,8 +17,10 @@ public class AdminSetting {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	private String taxName;
+
 	@Column(precision = 10, scale = 2)
-	private Float tax;
+	private Float taxValue;
 
 	private String banner;
 
@@ -27,14 +29,6 @@ public class AdminSetting {
 
 	public Integer getId() {
 		return id;
-	}
-
-	public Float getTax() {
-		return tax;
-	}
-
-	public void setTax(Float tax) {
-		this.tax = tax;
 	}
 
 	public String getBanner() {
@@ -51,6 +45,22 @@ public class AdminSetting {
 
 	public void setPaymentSetting(PaymentSetting paymentSetting) {
 		this.paymentSetting = paymentSetting;
+	}
+
+	public String getTaxName() {
+		return taxName;
+	}
+
+	public void setTaxName(String taxName) {
+		this.taxName = taxName;
+	}
+
+	public Float getTaxValue() {
+		return taxValue;
+	}
+
+	public void setTaxValue(Float taxValue) {
+		this.taxValue = taxValue;
 	}
 
 }

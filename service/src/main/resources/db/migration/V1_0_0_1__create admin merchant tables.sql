@@ -7,7 +7,8 @@ CREATE TABLE if not exists pc_payment_setting (
 
 CREATE TABLE if not exists pc_admin_setting (
 	id SERIAL PRIMARY KEY NOT NULL,
-	tax float NOT NULL,
+	tax_name varchar(10) NOT NULL,
+	tax_value float NOT NULL,
 	banner varchar(20) DEFAULT NULL,
 	payment_setting_id int REFERENCES pc_payment_setting
 );
@@ -23,8 +24,8 @@ CREATE TABLE if not exists pc_invoice_setting (
 	email_note varchar(50) DEFAULT NULL,
 	email_subject varchar(50) DEFAULT NULL,
 	banner varchar(20) DEFAULT NULL,
-	tax_name varchar(10) DEFAULT NULL,
-	tax_value float DEFAULT NULL
+	tax_name varchar(10) NOT NULL,
+	tax_value float NOT NULL
 );
 
 CREATE TABLE if not exists pc_merchant_custom_param (
@@ -71,7 +72,10 @@ CREATE TABLE if not exists pc_subscription(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	subscription_code varchar(20) NOT NULL,
-	amount float NOT NULL,
+	total float NOT NULL,
+	tax_name varchar(10) NOT NULL,
+	tax_value float NOT NULL,
+	pay_amount float NOT NULL,
 	quantity int NOT NULL,
 	currency varchar(10) NOT NULL,
     pay_mode varchar(20) NOT NULL,

@@ -23,14 +23,22 @@
 							<input class="form-control" ng-model="adminSetting.paymentSetting.rzpSecretId" />
 						</div>
 						<div class="form-group">
-							<label class="control-label">Tax %</label>
-							<input class="form-control" ng-model="adminSetting.tax" type="number" required />
+							<label class="control-label">Tax Name</label>
+							<input class="form-control" ng-model="adminSetting.taxName" required />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Tax Value %</label>
+							<input class="form-control" ng-model="adminSetting.taxValue" type="number" required />
 						</div>
 						<div>
 							<button ng-click="saveAdminSetting(adminSetting)" class="btn btn-info">Save</button>
 						</div>
 					</fieldset>
 				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label">Banner (80x80)</label>
+				<input class="form-control" ng-model="adminSetting.banner" type="file" required />
 			</div>
 		</div>
 	</div>

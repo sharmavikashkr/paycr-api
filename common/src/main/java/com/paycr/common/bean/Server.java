@@ -6,6 +6,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Server {
 
+	@Value("${admin.banner.location}")
+	private String adminLocation;
+
+	@Value("${merchant.banner.location}")
+	private String merchantLocation;
+
 	@Value("${invoice.pdf.location}")
 	private String invoiceLocation;
 
@@ -48,6 +54,22 @@ public class Server {
 
 	public void setSubscriptionLocation(String subscriptionLocation) {
 		this.subscriptionLocation = subscriptionLocation;
+	}
+
+	public String getAdminLocation() {
+		return adminLocation;
+	}
+
+	public void setAdminLocation(String adminLocation) {
+		this.adminLocation = adminLocation;
+	}
+
+	public String getMerchantLocation() {
+		return merchantLocation;
+	}
+
+	public void setMerchantLocation(String merchantLocation) {
+		this.merchantLocation = merchantLocation;
 	}
 
 }

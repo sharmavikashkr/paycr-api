@@ -14,7 +14,7 @@ import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
-@Order(3)
+@Order(4)
 public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 
 	@Override

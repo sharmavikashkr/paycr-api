@@ -68,7 +68,8 @@ public class StartupService {
 		payset.setRzpSecretId("");
 
 		AdminSetting adset = new AdminSetting();
-		adset.setTax(0f);
+		adset.setTaxValue(0f);
+		adset.setTaxName("");
 		adset.setPaymentSetting(payset);
 
 		adsetRepo.save(adset);

@@ -58,7 +58,19 @@
                        				<td class="text-center"><p>${invoice.consumer.email}</p></td>
                        			</tr>
                        			<tr>
-                       				<td class="text-center"><label>Amount</label></td>
+                       				<td class="text-center"><label>Total</label></td>
+                       				<td class="text-center"><p>&#8377; ${invoice.total}</p></td>
+                       			</tr>
+                       			<tr>
+                       				<td class="text-center"><label>tax(${invoice.taxName})</label></td>
+                       				<td class="text-center"><p>${invoice.taxValue}%</p></td>
+                       			</tr>
+                       			<tr>
+                       				<td class="text-center"><label>Discount</label></td>
+                       				<td class="text-center"><p>&#8377; ${invoice.discount}</p></td>
+                       			</tr>
+                       			<tr>
+                       				<td class="text-center"><label>Pay Amount</label></td>
                        				<td class="text-center"><p>&#8377; ${invoice.payAmount}</p></td>
                        			</tr>
                        			<#if invoice.payment??>
