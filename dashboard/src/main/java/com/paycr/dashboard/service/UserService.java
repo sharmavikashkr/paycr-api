@@ -50,7 +50,8 @@ public class UserService {
 		to.add(user.getEmail());
 		List<String> cc = new ArrayList<String>();
 		cc.add(user.getEmail());
-		Email email = new Email(company.getContact(), to, cc);
+		Email email = new Email(company.getContactName(), company.getContactEmail(), company.getContactPassword(), to,
+				cc);
 		email.setSubject("Reset Password");
 		String resetCode = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
 				String.valueOf(timeNow.getTime()));

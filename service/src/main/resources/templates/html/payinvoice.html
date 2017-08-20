@@ -43,7 +43,11 @@
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
-	                                    <td class="emptyrow text-center"><strong>Tax(${invoice.taxName}%)</strong></td>
+	                                    <#if invoice.taxName??>
+					                    <td class="text-center"><strong>Tax(${invoice.taxName})</strong></td>
+					                    <#else>
+					                    <td class="text-center"><strong>Tax</strong></td>
+					                    </#if>
 	                                    <td class="text-right">${invoice.taxValue}%</td>
 	                                </tr>
 	                                <tr>
@@ -55,7 +59,7 @@
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
-	                                    <td class="text-center"><strong>Final</strong></td>
+	                                    <td class="text-center"><strong>Pay Amount</strong></td>
 	                                    <td class="text-right">${invoice.payAmount}</td>
 	                                </tr>
 	                            </tbody>
@@ -68,7 +72,7 @@
 	                    <h3 class="section-heading">Hi ${consumer.name}, <span style="color:white;">${merchant.name}</span> has requested you to pay <span style="color:white;">&#8377; ${invoice.payAmount}</span></h3>
 	                    <p>Proceed to make payment</p>
 	                    <div class="row">
-	                    	<form id="payForm" class="col-sm-6" action="/return/${invoice.invoiceCode}" method="POST">
+	                    	<form id="payForm" class="col-sm-6" action="/payment/return/${invoice.invoiceCode}" method="POST">
 							<script
 							    src="https://checkout.razorpay.com/v1/checkout.js"
 							    data-key="${rzpKeyId}"
@@ -87,7 +91,7 @@
                                 <input type="hidden" name="${param.paramName}" value="${param.paramValue}">
                             </#list>
 							</form>
-	                        <a href="/decline/${invoice.invoiceCode}" class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
+	                        <a href="/payment/decline/${invoice.invoiceCode}" class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
 	                    </div>
 	                </div>
 	            </div>

@@ -8,20 +8,18 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <div class="row" style="margin-top:20px;">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                    	<#if success>
-                        <h3 class="panel-title text-center">Payment for Subscription# <span><strong>${subs.subscriptionCode} : </strong></span><span><strong style="color:limegreen;">${status}</strong></span></h3>
+                    	<#if subs.status == 'captured'>
+                        <h3 class="panel-title text-center">Payment for Subscription# <span><strong>${subs.subscriptionCode} : </strong></span><span><strong style="color:limegreen;">SUCCESS</strong></span></h3>
                         <#else>
-                        <h3 class="panel-title text-center">Payment for Subscription# <span><strong>${subs.subscriptionCode} : </strong></span><span><strong style="color:red;">${status}</strong></span></h3>
+                        <h3 class="panel-title text-center">Payment for Subscription# <span><strong>${subs.subscriptionCode} : </strong></span><span><strong style="color:red;">FAILURE</strong></span></h3>
                         </#if>
                     </div>
                     <div class="panel-body">
@@ -69,19 +67,28 @@
                        			</tr>
                        		</tbody>
                        	</table>
-                       	<div class="text-center">
-               				<button type="button" class="btn btn-info">download</button>
-               				<button type="button" class="btn btn-warning">print</button>
-                       	</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <#if show>
+    <div class="text-center">
+		<a href="/subscription/receipt/download/${subs.subscriptionCode}" type="button"  class="btn btn-info">download</a>
+		<button type="button" onclick="printDiv()" class="btn btn-warning">print</button>
+	</div>
+	</#if>
+	<br>
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendor/metisMenu/metisMenu.min.js"></script>
-    <script src="/dist/js/sb-admin-2.js"></script>
+    <script type="text/javascript">
+		function printDiv() {
+		     var printContents = document.getElementById('container').innerHTML;
+		     var originalContents = document.body.innerHTML;
+		     document.body.innerHTML = printContents;
+		     window.print();
+		     document.body.innerHTML = originalContents;
+		}
+	</script>
 </body>
-
 </html>

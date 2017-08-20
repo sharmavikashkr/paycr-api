@@ -4,7 +4,9 @@ import java.util.List;
 
 public class Email {
 
+	private String name;
 	private String from;
+	private String password;
 	private List<String> to;
 	private List<String> cc;
 	private String subject;
@@ -13,14 +15,19 @@ public class Email {
 	public Email() {
 	}
 
-	public Email(String from, List<String> to, List<String> cc) {
+	public Email(String name, String from, String password, List<String> to, List<String> cc) {
+		this.name = name;
 		this.from = from;
+		this.password = password;
 		this.to = to;
 		this.cc = cc;
 	}
 
-	public Email(String from, List<String> to, List<String> cc, String subject, String message) {
+	public Email(String name, String from, String password, List<String> to, List<String> cc, String subject,
+			String message) {
+		this.name = name;
 		this.from = from;
+		this.password = password;
 		this.to = to;
 		this.cc = cc;
 		this.subject = subject;
@@ -65,5 +72,21 @@ public class Email {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

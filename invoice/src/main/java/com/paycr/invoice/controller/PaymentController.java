@@ -34,7 +34,7 @@ public class PaymentController {
 		}
 	}
 
-	@RequestMapping("/decline/{invoiceCode}")
+	@RequestMapping("/payment/decline/{invoiceCode}")
 	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
 		try {
 			paySer.decline(invoiceCode);
@@ -44,7 +44,7 @@ public class PaymentController {
 		response.sendRedirect("/response/" + invoiceCode);
 	}
 
-	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)
+	@RequestMapping(value = "/payment/return/{invoiceCode}", method = RequestMethod.POST)
 	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws IOException {
 		String invoiceCode = null;
 		try {
@@ -52,6 +52,6 @@ public class PaymentController {
 		} catch (RazorpayException e) {
 			System.out.println(e.getMessage());
 		}
-		response.sendRedirect("/response/" + invoiceCode);
+		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
 }

@@ -1,5 +1,6 @@
 package com.paycr.dashboard.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
+import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
@@ -31,9 +34,9 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
+import com.paycr.common.util.PdfUtil;
 import com.paycr.common.util.RandomIdGenerator;
 import com.razorpay.RazorpayClient;
-import com.razorpay.RazorpayException;
 
 @Service
 public class SubscriptionService {
@@ -59,6 +62,19 @@ public class SubscriptionService {
 	@Autowired
 	private AdminSettingRepository adsetRepo;
 
+	@Autowired
+	private Server server;
+
+	@Autowired
+	private Company company;
+
+	@Autowired
+	private PdfUtil pdfUtil;
+
+	public Subscription getSubscriptionByCode(String subscriptionCode) {
+		return subsRepo.findBySubscriptionCode(subscriptionCode);
+	}
+
 	public Subscription getSubscription(Integer pricingId) {
 		MerchantPricing merPricing = merPriRepo.findOne(pricingId);
 		return merPricing.getSubscription();
@@ -78,7 +94,13 @@ public class SubscriptionService {
 		subs.setPaymentRefNo(offline.getPaymentRefNo());
 		subs.setMethod(offline.getPayMode().name());
 		subs.setStatus("captured");
-		subs.setSubscriptionCode("offline");
+		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
+		charset += charset.toLowerCase() + charset.toUpperCase();
+		String subsCode = "";
+		do {
+			subsCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
+		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
+		subs.setSubscriptionCode(subsCode);
 		subs.setPayMode(offline.getPayMode());
 		subsRepo.save(subs);
 		MerchantPricing merPricing = new MerchantPricing();
@@ -129,7 +151,7 @@ public class SubscriptionService {
 		return mv;
 	}
 
-	public ModelAndView purchase(Map<String, String> formData) throws IOException, RazorpayException {
+	public Subscription purchase(Map<String, String> formData) throws Exception {
 		Date timeNow = new Date();
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		String subsCode = null;
@@ -138,7 +160,7 @@ public class SubscriptionService {
 		subsCode = formData.get("subsCode");
 		Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
 		if ("captured".equals(subs.getStatus())) {
-			return mv;
+			return subs;
 		}
 		Merchant merchant = subs.getMerchant();
 		Pricing pricing = subs.getPricing();
@@ -177,13 +199,19 @@ public class SubscriptionService {
 			noti.setCreated(timeNow);
 			noti.setRead(false);
 			notiRepo.save(noti);
-
-			mv.addObject("status", "SUCCESS");
-			mv.addObject("success", true);
-		} else {
-			mv.addObject("status", "FAILURE");
-			mv.addObject("success", false);
 		}
-		return mv;
+		return subs;
+	}
+
+	public File downloadPdf(String subscriptionCode) throws IOException {
+		String pdfPath = server.getSubscriptionLocation() + subscriptionCode + ".pdf";
+		File pdfFile = new File(pdfPath);
+		if (pdfFile.exists()) {
+			return pdfFile;
+		}
+		pdfFile.createNewFile();
+		pdfUtil.makePdf(company.getBaseUrl() + "/subscription/response/" + subscriptionCode + "?show=false",
+				pdfFile.getAbsolutePath());
+		return pdfFile;
 	}
 }

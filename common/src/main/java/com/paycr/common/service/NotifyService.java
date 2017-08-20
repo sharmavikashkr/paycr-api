@@ -41,15 +41,22 @@ public class NotifyService {
 		if (invoiceNotify.isSendSms()) {
 			Sms sms = new Sms();
 			sms.setTo(invoice.getConsumer().getMobile());
-			sms.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
-					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
-			smsEngine.send(sms);
+			try {
+				sms.setMessage(getSms(invoice));
+				smsEngine.send(sms);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		if (invoiceNotify.isSendEmail()) {
 			List<String> to = new ArrayList<String>();
 			to.add(invoice.getConsumer().getEmail());
 			List<String> cc = new ArrayList<String>();
-			Email email = new Email(company.getContact(), to, cc);
+			if (invoiceNotify.isCcMe()) {
+				cc.add(invoiceNotify.getCcEmail());
+			}
+			Email email = new Email(company.getContactName(), company.getContactEmail(), company.getContactPassword(),
+					to, cc);
 			email.setSubject(invoiceNotify.getEmailSubject());
 			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
@@ -68,6 +75,14 @@ public class NotifyService {
 		templateProps.put("note", note);
 		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
+				templateProps);
+	}
+
+	public String getSms(Invoice invoice) throws Exception {
+		Map<String, Object> templateProps = new HashMap<String, Object>();
+		templateProps.put("invoice", invoice);
+		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
+		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("sms/invoice_sms.ftl"),
 				templateProps);
 	}
 

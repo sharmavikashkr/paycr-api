@@ -12,27 +12,14 @@ public class Company {
 	@Value("${company.baseUrl}")
 	private String baseUrl;
 
-	@Value("${company.contact}")
-	private String contact;
+	@Value("${company.contact.name}")
+	private String contactName;
 
-	@Value("${company.env}")
-	private String env;
+	@Value("${company.contact.email}")
+	private String contactEmail;
 
-	public String getContact() {
-		return contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
-
-	public String getEnv() {
-		return env;
-	}
-
-	public void setEnv(String env) {
-		this.env = env;
-	}
+	@Value("${company.contact.password}")
+	private String contactPassword;
 
 	public String getBaseUrl() {
 		return baseUrl;
@@ -48,6 +35,30 @@ public class Company {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
+	}
+
+	public String getContactPassword() {
+		return contactPassword;
+	}
+
+	public void setContactPassword(String contactPassword) {
+		this.contactPassword = contactPassword;
 	}
 
 }

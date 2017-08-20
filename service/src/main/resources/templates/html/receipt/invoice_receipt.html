@@ -1,0 +1,128 @@
+<html>
+<head>
+    <title>PayCr</title>
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
+    <script src="/vendor/jquery/jquery.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<h1>Invoice # ${invoice.invoiceCode}</h1>
+			</div>
+			<div class="col-md-4 text-right">
+				<br>
+				<div><strong>Pay By</strong></div>
+				<div>${invoice.expiry}</div>
+			</div>
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div><strong>${invoice.merchant.name}</strong></div>
+				<div>${invoice.merchant.email}</div>
+				<div>${invoice.merchant.mobile}</div>
+			</div>
+			<div class="col-md-6 text-right">
+				<div><strong>${invoice.consumer.name}</strong></div>
+				<div>${invoice.consumer.email}</div>
+				<div>${invoice.consumer.mobile}</div>
+			</div>
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="panel">
+					<div class="panel-heading">
+						<h5>Param Details</h5>
+					</div>
+					<div class="panel-body">
+						<table class="table table-bordered table-responsive">
+							<thead>
+								<tr>
+				                    <th class="text-center">Param</td>
+				                    <th class="text-center">Value</td>
+				                </tr>
+							</thead>
+							<tbody>
+								<#list invoice.customParams as param>
+			                    <tr id="itemRow">
+			                        <td class="text-center">${param.paramName}</td>
+			                        <td class="text-center">${param.paramValue}</td>
+			                    </tr>
+			                    </#list>
+		                    </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="panel">
+					<div class="panel-heading">
+						<h5>Item Details</h5>
+					</div>
+					<div class="panel-body">
+						<table class="table table-bordered table-responsive">
+							<thead>
+								<tr>
+				                    <th class="text-center">Item</td>
+				                    <th class="text-center">Rate</td>
+				                    <th class="text-center">Quantity</td>
+				                    <th class="text-right">Price</td>
+				                </tr>
+							</thead>
+							<tbody>
+								<#list invoice.items as item>
+				                <tr>
+				                    <td class="text-center">${item.name}</td>
+				                    <td class="text-center">${item.rate}</td>
+				                    <td class="text-center">${item.quantity}</td>
+				                    <td class="text-right">${item.price}</td>
+				                </tr>
+				                </#list>
+				                <tr>
+				                    <td class="text-center"></td>
+				                    <td class="text-center"></td>
+				                    <td class="text-center">Total</td>
+				                    <td class="text-right">${invoice.total}</td>
+				                </tr>
+				                <tr>
+				                    <td class="text-center"></td>
+				                    <td class="text-center"></td>
+				                    <#if invoice.taxName??>
+				                    <td class="text-center">Tax(${invoice.taxName})</td>
+				                    <#else>
+				                    <td class="text-center">Tax</td>
+				                    </#if>
+				                    <td class="text-right">${invoice.taxValue}%</td>
+				                </tr>
+				                <tr>
+				                    <td class="text-center"></td>
+				                    <td class="text-center"></td>
+				                    <td class="text-center">Discount</td>
+				                    <td class="text-right">${invoice.discount}</td>
+				                </tr>
+				                <tr>
+				                    <td class="text-center"></td>
+				                    <td class="text-center"></td>
+				                    <td class="text-center"><strong>Pay Amount</strong></td>
+				                    <td class="text-right"><strong>${invoice.payAmount}</strong></td>
+				                </tr>
+			                </tbody>
+		                </table>
+	                </div>
+                </div>
+			</div>
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+	</div>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

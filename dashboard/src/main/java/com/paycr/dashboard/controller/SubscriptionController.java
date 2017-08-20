@@ -1,11 +1,16 @@
 package com.paycr.dashboard.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +31,6 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.SubscriptionService;
-import com.razorpay.RazorpayException;
 
 @RestController
 @RequestMapping("/subscription")
@@ -73,16 +77,51 @@ public class SubscriptionController {
 	}
 
 	@RequestMapping(value = "/return", method = RequestMethod.POST)
-	public ModelAndView purchase(@RequestParam Map<String, String> formData, HttpServletResponse response)
-			throws IOException {
+	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws IOException {
+		try {
+			Subscription subs = subsSer.purchase(formData);
+			response.sendRedirect("/subscription/response/" + subs.getSubscriptionCode());
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/response/{subscriptionCode}", method = RequestMethod.GET)
+	public ModelAndView response(@PathVariable String subscriptionCode,
+			@RequestParam(value = "show", required = false) Boolean show, HttpServletResponse response)
+					throws IOException {
 		ModelAndView mv = new ModelAndView("html/subs-response");
 		try {
-			mv = subsSer.purchase(formData);
-		} catch (RazorpayException e) {
-			mv.addObject("status", "FAILURE");
-			mv.addObject("success", false);
+			Subscription subs = subsSer.getSubscriptionByCode(subscriptionCode);
+			mv.addObject("subs", subs);
+			show = (show != null) ? show : true;
+			mv.addObject("show", show);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
 		}
 		return mv;
+	}
+
+	@RequestMapping(value = "/receipt/download/{subscriptionCode}", method = RequestMethod.GET)
+	public void download(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
+		File pdfFile = subsSer.downloadPdf(subscriptionCode);
+		response.setContentType("application/pdf");
+
+		FileInputStream fis = null;
+		byte[] bFile = new byte[(int) pdfFile.length()];
+		fis = new FileInputStream(pdfFile);
+		fis.read(bFile);
+		fis.close();
+
+		response.setHeader("Content-Disposition",
+				"attachment; filename=\"SubscriptionReceipt-" + subscriptionCode + ".pdf\"");
+		response.setContentType("application/pdf");
+		InputStream is = new ByteArrayInputStream(bFile);
+		IOUtils.copy(is, response.getOutputStream());
+		response.setContentLength(bFile.length);
+		response.flushBuffer();
 	}
 
 }

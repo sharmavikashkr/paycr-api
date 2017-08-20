@@ -8,12 +8,10 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <div class="row" style="margin-top:20px;">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
@@ -79,25 +77,34 @@
                        			</#if>
                        		</tbody>
                        	</table>
-                       	<div class="text-center">
-                   			<tr>
-                       		<#if invoice.status == 'PAID'>
-                   				<td class="text-center"><button type="button" class="btn btn-info">download</button></td>
-                   				<td class="text-center"><button type="button" class="btn btn-warning">print</button></td>
-                   			<#else>
-		                        <td class="text-center"><a type="button" class="btn btn-success" href="/${invoice.invoiceCode}">pay</a></td>
-		                    </#if>
-                   			</tr>
-                    	</div>
                 	</div>
                 </div>
             </div>
         </div>
     </div>
+    <#if show>
+    <div class="text-center">
+    	<tr>
+        	<#if invoice.status == 'PAID'>
+        	<td class="text-center"><a href="/payment/receipt/download/${invoice.invoiceCode}" type="button" class="btn btn-info">download</a></td>
+            <td class="text-center"><button type="button" onclick="printDiv()" class="btn btn-warning">print</button></td>
+            <#else>
+	        <td class="text-center"><a type="button" class="btn btn-success" href="/${invoice.invoiceCode}">pay</a></td>
+	        </#if>
+            </tr>
+    </div>
+    </#if>
+    <br>
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendor/metisMenu/metisMenu.min.js"></script>
-    <script src="/dist/js/sb-admin-2.js"></script>
+    <script type="text/javascript">
+		function printDiv() {
+		     var printContents = document.getElementById('container').innerHTML;
+		     var originalContents = document.body.innerHTML;
+		     document.body.innerHTML = printContents;
+		     window.print();
+		     document.body.innerHTML = originalContents;
+		}
+	</script>
 </body>
-
 </html>
