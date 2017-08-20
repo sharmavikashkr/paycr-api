@@ -13,8 +13,8 @@ public class PdfUtil {
 
 	public void makePdf(String inputPath, String outputPath) {
 		try {
-			Process p = Runtime.getRuntime()
-					.exec(server.getWkhtmlToPdfLocation() + "wkhtmltopdf" + " " + inputPath + " " + outputPath);
+			Process p = Runtime.getRuntime().exec(
+					"xvfb-run " + server.getWkhtmlToPdfLocation() + "wkhtmltopdf" + " " + inputPath + " " + outputPath);
 			p.waitFor();
 		} catch (Exception e) {
 			e.printStackTrace();
