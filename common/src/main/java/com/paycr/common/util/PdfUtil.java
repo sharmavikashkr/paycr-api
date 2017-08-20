@@ -17,6 +17,7 @@ public class PdfUtil {
 					.exec(server.getWkhtmlToPdfLocation() + "wkhtmltopdf" + " " + inputPath + " " + outputPath);
 			p.waitFor();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
