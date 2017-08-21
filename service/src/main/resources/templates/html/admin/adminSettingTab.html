@@ -38,8 +38,9 @@
 			</div>
 			<div class="form-group">
 				<label class="control-label">Banner (80x80)</label>
-				<input class="form-control" ng-model="adminSetting.banner" type="file" required />
+				<input type="file" onchange="angular.element(this).scope().uploadBanner(this.files)" accept=".png" />
 			</div>
+			Uploaded File -> <a target="_blank" href="/banner/admin/{{adminSetting.banner}}">{{adminSetting.banner}}</a>
 		</div>
 	</div>
 </div>

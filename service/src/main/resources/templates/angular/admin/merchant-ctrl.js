@@ -59,14 +59,14 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 	}
 	$scope.calculateSubsAmount = function() {
 		if(this.offlinesubs.pricing != null && this.offlinesubs.quantity != null) {
-			var total = parseFloat(JSON.parse(this.offlinesubs.pricing).rate) * parseFloat(this.offlinesubs.quantity);
+			var total = parseFloat(this.offlinesubs.pricing.rate) * parseFloat(this.offlinesubs.quantity);
 			this.offlinesubs.total = total;
 			this.offlinesubs.payAmount = total + parseFloat((parseFloat($scope.adminSetting.taxValue) * total) / 100);
 		}
 	}
 	$scope.createOfflineSubs = function(merchantId) {
 		this.offlinesubs.merchantId = merchantId;
-		this.offlinesubs.pricingId = JSON.parse(this.offlinesubs.pricing).id; 
+		this.offlinesubs.pricingId = this.offlinesubs.pricing.id; 
 		var req = {
 			method : 'POST',
 			url : "/subscription/new/offline",

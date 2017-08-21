@@ -157,6 +157,7 @@ public class SubscriptionService {
 		subsRepo.save(subs);
 		ModelAndView mv = new ModelAndView("html/subscribe");
 		mv.addObject("merchant", merchant);
+		mv.addObject("banner", company.getBaseUrl() + "/banner/admin/" + adset.getBanner());
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
 		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());

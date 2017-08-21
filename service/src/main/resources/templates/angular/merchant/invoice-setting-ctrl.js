@@ -71,4 +71,19 @@ app.controller('InvoiceSettingController', function($scope, $rootScope, $http, $
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.uploadBanner = function(files) {
+		var fd = new FormData();
+		fd.append("banner", files[0]);
+		$http.post("/banner/upload", fd, {
+			transformRequest : angular.identity,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				'Content-Type' : undefined
+			}
+		}).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 });

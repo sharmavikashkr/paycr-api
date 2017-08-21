@@ -26,7 +26,7 @@
 											<div class="form-group">
 												<label class="control-label">Pricing</label>
 												<select class="form-control" ng-model="offlinesubs.pricing" ng-change="calculateSubsAmount()">
-													<option ng-repeat="pricing in pricings" value="{{pricing}}">{{pricing.name}}</option>
+													<option ng-repeat="pricing in pricings" ng-value="pricing">{{pricing.name}}</option>
 												</select>
 											</div>
 										</td>

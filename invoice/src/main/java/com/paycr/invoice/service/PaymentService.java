@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Merchant;
@@ -42,13 +43,16 @@ public class PaymentService {
 	@Autowired
 	private PaymentRepository payRepo;
 
+	@Autowired
+	private Company company;
+
 	public ModelAndView payInvoice(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		validate(invoice);
 		Merchant merchant = invoice.getMerchant();
 		ModelAndView mv = new ModelAndView("html/payinvoice");
 		mv.addObject("invoice", invoice);
-		mv.addObject("merchant", merchant);
+		mv.addObject("banner", company.getBaseUrl() + "/banner/merchant/" + merchant.getInvoiceSetting().getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().multiply(new BigDecimal(100))));
 		mv.addObject("consumer", invoice.getConsumer());

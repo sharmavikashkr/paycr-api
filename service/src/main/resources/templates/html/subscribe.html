@@ -7,7 +7,6 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
     <style>
     	#paySection {border:none;text-size:6px;}
     </style>
@@ -29,7 +28,7 @@
 							    data-buttontext="Pay &#8377; ${subs.payAmount}"
 							    data-name="PayCr"
 							    data-description="Subscription Request"
-							    data-image="https://your-awesome-site.com/your_logo.jpg"
+							    data-image="${banner}"
 							    data-prefill.name="${merchant.name}"
 							    data-prefill.email="${merchant.email}"
 							    data-prefill.contact="${merchant.mobile}"
@@ -99,7 +98,6 @@
     </section>
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/dist/js/sb-admin-2.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
     	$(".razorpay-payment-button").addClass('btn btn-info');
