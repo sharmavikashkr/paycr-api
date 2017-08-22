@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
@@ -33,6 +34,7 @@ public class Payment {
 	private String wallet;
 
 	@ManyToOne
+	@JsonIgnore
 	private Merchant merchant;
 
 	@Enumerated(EnumType.STRING)

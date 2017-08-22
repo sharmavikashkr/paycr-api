@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchPaymentRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
@@ -48,6 +50,23 @@ public class SearchController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return invoiceList;
+	}
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping("/payment")
+	public List<Payment> searchInvoices(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
+		List<Payment> paymentList = new ArrayList<Payment>();
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			if (CommonUtil.isNotNull(merchant)) {
+				request.setMerchant(merchant.getId());
+			}
+			paymentList = serSer.fetchPaymentList(request);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return paymentList;
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_AUTH)

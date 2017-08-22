@@ -23,6 +23,7 @@
 	<script src="/angular/merchant/merchant-ctrl.js"></script>
 	<script src="/angular/common/dashboard-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-ctrl.js"></script>
+	<script src="/angular/common/payment-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-setting-ctrl.js"></script>
 	<script src="/angular/merchant/account-ctrl.js"></script>
 	<script src="/angular/common/reports-ctrl.js"></script>
@@ -38,6 +39,7 @@
         	<div ng-include="'/html/common/alert'"></div>
         	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="'/html/common/dashboardTab'"></div>
 	        <div ng-class="(user.access.admin)?'':'active'" id="invoiceTab" class="tab-pane" ng-include="'/html/merchant/invoiceTab'"></div>
+	        <div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="'/html/common/paymentTab'"></div>
 	        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
 	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>

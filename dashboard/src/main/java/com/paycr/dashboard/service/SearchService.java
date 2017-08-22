@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchPaymentRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
+import com.paycr.common.data.dao.PaymentDao;
 import com.paycr.common.data.dao.SubscriptionDao;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
@@ -35,6 +37,9 @@ public class SearchService {
 
 	@Autowired
 	private MerchantRepository merRepo;
+
+	@Autowired
+	private PaymentDao payDao;
 
 	@Autowired
 	private MerchantDao merDao;
@@ -64,6 +69,17 @@ public class SearchService {
 		}
 		invRepo.save(invoiceList);
 		return invoiceList;
+	}
+
+	public List<Payment> fetchPaymentList(SearchPaymentRequest request) {
+		vaidateRequest(request);
+		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		Merchant merchant = null;
+		if (request.getMerchant() != null) {
+			merchant = merRepo.findOne(request.getMerchant());
+		}
+		List<Payment> paymentList = payDao.findPayments(request, merchant);
+		return paymentList;
 	}
 
 	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
