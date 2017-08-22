@@ -29,7 +29,7 @@
 	<script src="/angular/common/reports-ctrl.js"></script>
 	<script src="/angular/common/users-ctrl.js"></script>
 	<script src="/angular/admin/admin-setting-ctrl.js"></script>
-	<script src="/angular/common/my-invoices-ctrl.js"></script>
+	<!-- <script src="/angular/common/my-invoices-ctrl.js"></script> -->
 	<script src="/angular/common/profile-ctrl.js"></script>
 </head>
 <body ng-app="payCrAdminApp" ng-controller="AdminController" ng-cloak>
@@ -45,8 +45,8 @@
 		    <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
 		    <div ng-if="user.access.supervisor" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
 		    <div ng-if="user.access.supervisor" id="settingsTab" class="tab-pane fade" ng-include="'/html/admin/adminSettingTab'"></div>
-        	<div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
         	<div id="profileTab" class="tab-pane fade" ng-include="'/html/common/profileTab'"></div>
+        	<!-- <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div> -->
     	</div>
 	    <div ng-if="user.access.supervisor" ng-include="'/html/admin/createMerchantModal'"></div>
 		<div ng-if="user.access.finance" ng-include="'/html/admin/createPricingModal'"></div>

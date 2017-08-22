@@ -28,7 +28,7 @@
 	<script src="/angular/common/reports-ctrl.js"></script>
 	<script src="/angular/merchant/pricing-ctrl.js"></script>
 	<script src="/angular/common/users-ctrl.js"></script>
-	<script src="/angular/common/my-invoices-ctrl.js"></script>
+	<!-- <script src="/angular/common/my-invoices-ctrl.js"></script> -->
 	<script src="/angular/common/profile-ctrl.js"></script>
 </head>
 <body ng-app="payCrMerchantApp" ng-controller="MerchantController" ng-cloak>
@@ -44,7 +44,7 @@
 	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
 	        <div ng-if="user.access.admin" id="accountTab" class="tab-pane fade" ng-include="'/html/merchant/accountTab'"></div>
 	        <div id="profileTab" class="tab-pane fade" ng-include="'/html/common/profileTab'"></div>
-	        <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>
+	        <!-- <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div> -->
 		</div>
 	    <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceModal'"></div>
 	    <div ng-if="user.access.finance" ng-include="'/html/merchant/createInvoiceXsModal'"></div>

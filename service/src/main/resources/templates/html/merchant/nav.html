@@ -42,16 +42,18 @@
 	<div class="sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse collapse">
 			<ul class="nav" id="side-menu">
+				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Invoicing</strong></li>
 				<li ng-if="user.access.admin" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-				<li ng-class="(user.access.admin)?'':'active'"><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Invoices</a></li>
+				<li ng-class="(user.access.admin)?'':'active'"><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i> Invoices</a></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
 				<li ng-if="user.access.ops"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
+				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Subscription</strong></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
-				<li ng-if="user.access.admin"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-user fa-fw"></i> Users</a></li>
-				<br><br>
+				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Account</strong></li>
+				<li ng-if="user.access.admin"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Users</a></li>
 				<li ng-if="user.access.admin"><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
 				<li><a href="#" data-target="#profileTab" data-toggle="tab"><i class="fa fa-user fa-fw"></i> Profile</a></li>
-				<li><a href="#" data-target="#myInvoicesTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> My Invoices</a></li>
+				<!-- <li><a href="#" data-target="#myInvoicesTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> My Invoices</a></li> -->
 			</ul>
 		</div>
 	</div>
