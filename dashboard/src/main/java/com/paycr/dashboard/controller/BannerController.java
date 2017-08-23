@@ -35,7 +35,7 @@ public class BannerController {
 		}
 	}
 
-	@RequestMapping("/admin/{bannerName}")
+	@RequestMapping("/admin/{bannerName:.+}")
 	public byte[] adminBanner(@PathVariable String bannerName, HttpServletResponse response) {
 		try {
 			return banSer.getAdminBanner(bannerName);
@@ -46,7 +46,7 @@ public class BannerController {
 		}
 	}
 
-	@RequestMapping("/merchant/{bannerName}")
+	@RequestMapping("/merchant/{bannerName:.+}")
 	public byte[] merchantBanner(@PathVariable String bannerName, HttpServletResponse response) {
 		try {
 			return banSer.getMerchantBanner(bannerName);

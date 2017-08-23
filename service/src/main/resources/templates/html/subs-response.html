@@ -61,6 +61,7 @@
                        				<td class="text-center"><label>Pay Amount</label></td>
                        				<td class="text-center"><p>&#8377; ${subs.payAmount}</p></td>
                        			</tr>
+                       			<#if subs.status == 'captured'>
                        			<tr>
                        				<td class="text-center"><label>Payment Reference Number</label></td>
                        				<td class="text-center"><p>${subs.paymentRefNo}</p></td>
@@ -73,6 +74,7 @@
                        				<td class="text-center"><label>Payment Mode</label></td>
                        				<td class="text-center"><p>${subs.method}</p></td>
                        			</tr>
+                       			</#if>
                        		</tbody>
                        	</table>
                     </div>

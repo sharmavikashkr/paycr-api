@@ -228,4 +228,10 @@ public class SubscriptionService {
 				pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
+
+	public void decline(String subsCode) {
+		Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
+		subs.setStatus("declined");
+		subsRepo.save(subs);
+	}
 }

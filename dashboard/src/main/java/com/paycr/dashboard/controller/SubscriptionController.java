@@ -86,6 +86,16 @@ public class SubscriptionController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 	}
+	
+	@RequestMapping("/decline/{subscriptionCode}")
+	public void decline(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
+		try {
+			subsSer.decline(subscriptionCode);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		response.sendRedirect("/subscription/response/" + subscriptionCode);
+	}
 
 	@RequestMapping(value = "/response/{subscriptionCode}", method = RequestMethod.GET)
 	public ModelAndView response(@PathVariable String subscriptionCode,

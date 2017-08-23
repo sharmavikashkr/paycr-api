@@ -41,7 +41,7 @@ public class PaymentController {
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
-		response.sendRedirect("/response/" + invoiceCode);
+		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
 
 	@RequestMapping(value = "/payment/return/{invoiceCode}", method = RequestMethod.POST)
