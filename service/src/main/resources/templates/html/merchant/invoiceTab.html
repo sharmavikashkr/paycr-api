@@ -226,9 +226,9 @@
 						</tbody>
 					</table>
 					<ul class="pagination" style="float:right;">
-						<li ng-class="(invoiceResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadInvoicePage(invoiceResp.page-1)" href="#">Previous</a></li>
+						<li ng-class="(invoiceResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(invoiceResp.page <= 1) || loadInvoicePage(invoiceResp.page-1)" href="#">Previous</a></li>
 						<li ng-repeat="page in invoiceResp.allPages" ng-class="(page == invoiceResp.page)?'active':''"><a ng-click="loadInvoicePage(page)" href="#">{{page}}</a></li>
-						<li ng-class="(invoiceResp.page >= invoiceResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadInvoicePage(invoiceResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(invoiceResp.page >= invoiceResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(invoiceResp.page >= invoiceResp.allPages.length) || loadInvoicePage(invoiceResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>

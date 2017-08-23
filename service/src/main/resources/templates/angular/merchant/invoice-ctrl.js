@@ -18,9 +18,82 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$http(req).then(function(invoices) {
 			$rootScope.invoiceList = invoices.data;
 			$scope.loadInvoicePage(1);
+			$scope.getConsumers();
+			$scope.getItems();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+	}
+	$scope.getConsumers = function() {
+		var req = {
+			method : 'GET',
+			url : "/consumer/get",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(consumers) {
+			$rootScope.consumerList = consumers.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.getItems = function() {
+		var req = {
+			method : 'GET',
+			url : "/item/get",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(items) {
+			$rootScope.itemList = items.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.setConsumer = function(from) {
+		if(from == "EMAIL") {
+			var email = this.saveinvoice.consumer.email;
+			for(var index in $rootScope.consumerList) {
+				var consumer = $rootScope.consumerList[index];
+				if(consumer.email == email){
+					this.saveinvoice.consumer.email = consumer.email;
+					this.saveinvoice.consumer.mobile = consumer.mobile;
+					this.saveinvoice.consumer.name = consumer.name;
+				}
+			}
+		} else if(from == "MOBILE") {
+			var mobile = this.saveinvoice.consumer.mobile;
+			for(var index in $rootScope.consumerList) {
+				var consumer = $rootScope.consumerList[index];
+				if(consumer.mobile == mobile){
+					this.saveinvoice.consumer.email = consumer.email;
+					this.saveinvoice.consumer.mobile = consumer.mobile;
+					this.saveinvoice.consumer.name = consumer.name;
+				}
+			}
+		} else if(from == "NAME") {
+			var name = this.saveinvoice.consumer.name;
+			for(var index in $rootScope.consumerList) {
+				var consumer = $rootScope.consumerList[index];
+				if(consumer.name == name){
+					this.saveinvoice.consumer.email = consumer.email;
+					this.saveinvoice.consumer.mobile = consumer.mobile;
+					this.saveinvoice.consumer.name = consumer.name;
+				}
+			}
+		}
+	}
+	$scope.setItem = function(item) {
+		for(var index in $rootScope.itemList) {
+			var it = $rootScope.itemList[index];
+			if(it.name == item.name){
+				item.rate = it.rate;
+				$scope.calculateTotal();
+				break;
+			}
+		}
 	}
 	$scope.loadInvoicePage = function(page) {
 		var pageSize = 15;
@@ -83,12 +156,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				if ($scope.saveinvoice.items[item].quantity == null) {
 					$scope.saveinvoice.items[item].quantity = 0;
 				}
-				$scope.saveinvoice.items[item].price = parseFloat($scope.saveinvoice.items[item].rate)
-						* parseFloat($scope.saveinvoice.items[item].quantity);
-				totals = totals
-						+ parseFloat($scope.saveinvoice.items[item].price);
+				$scope.saveinvoice.items[item].price = parseFloat((parseFloat($scope.saveinvoice.items[item].rate)
+						* parseFloat($scope.saveinvoice.items[item].quantity)).toFixed(2));
+				totals = totals + parseFloat($scope.saveinvoice.items[item].price);
 			}
-			$scope.saveinvoice.total = totals;
+			$scope.saveinvoice.total = parseFloat(totals.toFixed(2));
 		} else {
 			totals = $scope.saveinvoice.total;
 		}
@@ -98,9 +170,9 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		if ($scope.saveinvoice.discount == null) {
 			$scope.saveinvoice.discount = 0;
 		}
-		$scope.saveinvoice.payAmount = totals
+		$scope.saveinvoice.payAmount = parseFloat((totals
 				+ parseFloat((parseFloat($scope.saveinvoice.taxValue) * totals) / 100)
-				- parseFloat($scope.saveinvoice.discount);
+				- parseFloat($scope.saveinvoice.discount)).toFixed(2));
 	}
 	$scope.createInvoice = function() {
 		if(!this.createInvoiceForm.$valid) {

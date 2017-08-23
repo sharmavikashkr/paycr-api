@@ -100,9 +100,9 @@
 						</tbody>
 					</table>
 					<ul class="pagination" style="float:right;">
-						<li ng-class="(paymentResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadPaymentPage(paymentResp.page-1)" href="#">Previous</a></li>
+						<li ng-class="(paymentResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(paymentResp.page <= 1) || loadPaymentPage(paymentResp.page-1)" href="#">Previous</a></li>
 						<li ng-repeat="page in paymentResp.allPages" ng-class="(page == paymentResp.page)?'active':''"><a ng-click="loadPaymentPage(page)" href="#">{{page}}</a></li>
-						<li ng-class="(paymentResp.page >= paymentResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadPaymentPage(paymentResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(paymentResp.page >= paymentResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(paymentResp.page >= paymentResp.allPages.length) || loadPaymentPage(paymentResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>

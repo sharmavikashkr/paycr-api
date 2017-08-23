@@ -1,6 +1,7 @@
 package com.paycr.invoice.validation;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import com.paycr.common.validation.RequestValidator;
 @Component
 @Order(3)
 public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
+
+	DecimalFormat df = new DecimalFormat("#.00");
 
 	@Override
 	public void validate(Invoice invoice) {
@@ -29,7 +32,7 @@ public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
 		BigDecimal finalAmount = invoice.getTotal()
 				.add(invoice.getTotal().multiply(new BigDecimal(invoice.getTaxValue())).divide(new BigDecimal(100)))
 				.subtract(invoice.getDiscount());
-		if (finalAmount.compareTo(invoice.getPayAmount()) != 0) {
+		if (finalAmount.setScale(2, BigDecimal.ROUND_UP).compareTo(invoice.getPayAmount()) != 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount calculation mismatch");
 		}
 	}

@@ -105,9 +105,9 @@
 						</tbody>
 					</table>
 					<ul class="pagination" style="float:right;">
-						<li ng-class="(reportsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="loadReportPage(reportsResp.page-1)" href="#">Previous</a></li>
+						<li ng-class="(reportsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(reportsResp.page <= 1) || loadReportPage(reportsResp.page-1)" href="#">Previous</a></li>
 						<li ng-repeat="page in reportsResp.allPages" ng-class="(page == reportsResp.page)?'active':''"><a ng-click="loadReportPage(page)" href="#">{{page}}</a></li>
-						<li ng-class="(reportsResp.page >= reportsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="loadReportPage(reportsResp.page+1)" href="#">Next</a></li>
+						<li ng-class="(reportsResp.page >= reportsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(reportsResp.page >= reportsResp.allPages.length) || loadReportPage(reportsResp.page+1)" href="#">Next</a></li>
 					</ul>
 				</div>
 			</div>
