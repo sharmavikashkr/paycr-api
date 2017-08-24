@@ -134,7 +134,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 	$scope.fetchUser = function() {
 		var req = {
 			method : 'GET',
-			url : "/common/user",
+			url : "/user",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")

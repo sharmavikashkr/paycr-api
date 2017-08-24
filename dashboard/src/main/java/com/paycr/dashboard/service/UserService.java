@@ -2,104 +2,211 @@ package com.paycr.dashboard.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import com.paycr.common.bean.Company;
-import com.paycr.common.communicate.Email;
-import com.paycr.common.communicate.EmailEngine;
+import com.paycr.common.bean.Access;
+import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.ResetPassword;
-import com.paycr.common.data.repository.ResetPasswordRepository;
+import com.paycr.common.data.domain.UserRole;
+import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.UserRepository;
-import com.paycr.common.type.ResetStatus;
-import com.paycr.common.util.HmacSignerUtil;
-
-import freemarker.template.Configuration;
+import com.paycr.common.data.repository.UserRoleRepository;
+import com.paycr.common.exception.PaycrException;
+import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.Role;
+import com.paycr.common.type.UserType;
+import com.paycr.common.util.Constants;
+import com.paycr.dashboard.validation.UserValidator;
 
 @Service
 public class UserService {
 
 	@Autowired
-	private Company company;
-
-	@Autowired
-	private EmailEngine emailEngine;
-
-	@Autowired
-	private ResetPasswordRepository resetRepo;
-
-	@Autowired
-	private Configuration fmConfiguration;
-
-	@Autowired
-	private HmacSignerUtil hmacSigner;
-
-	@Autowired
 	private UserRepository userRepo;
 
-	public void sendResetLink(PcUser user) {
-		Date timeNow = new Date();
-		List<String> to = new ArrayList<String>();
-		to.add(user.getEmail());
-		List<String> cc = new ArrayList<String>();
-		cc.add(user.getEmail());
-		Email email = new Email(company.getContactName(), company.getContactEmail(), company.getContactPassword(), to,
-				cc);
-		email.setSubject("Reset Password");
-		String resetCode = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
-				String.valueOf(timeNow.getTime()));
-		ResetPassword resetPassword = new ResetPassword();
-		resetPassword.setCreated(timeNow);
-		resetPassword.setEmail(user.getEmail());
-		resetPassword.setResetCode(resetCode);
-		resetPassword.setStatus(ResetStatus.MAIL_SENT);
-		resetRepo.save(resetPassword);
-		String resetUrl = company.getBaseUrl() + "/resetPassword/" + resetCode;
-		email.setMessage(
-				"Hi, " + user.getName() + " please click on this link : " + resetUrl + " to reset your password");
-		try {
-			email.setMessage(getResetPassEmailBody(user, resetUrl));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		emailEngine.sendViaGmail(email);
-	}
+	@Autowired
+	private UserRoleRepository userRoleRepo;
 
-	public String getResetPassEmailBody(PcUser user, String resetUrl) throws Exception {
-		Map<String, Object> templateProps = new HashMap<String, Object>();
-		templateProps.put("name", user.getName());
-		templateProps.put("resetUrl", resetUrl);
-		templateProps.put("companyName", company.getName());
-		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/reset_email.ftl"),
-				templateProps);
+	@Autowired
+	private SecurityService secSer;
+
+	@Autowired
+	private BCryptPasswordEncoder bcPassEncode;
+
+	@Autowired
+	private MerchantUserRepository merUserRepo;
+
+	@Autowired
+	private LoginService userService;
+
+	@Autowired
+	private UserValidator userValidator;
+
+	@Autowired
+	private InvoiceRepository invRepo;
+
+	public PcUser saveUser(PcUser user) {
+		return userRepo.save(user);
 	}
 
 	public PcUser getUserByEmail(String userEmail) {
 		return userRepo.findByEmail(userEmail);
 	}
 
-	public PcUser saveUser(PcUser user) {
-		return userRepo.save(user);
+	public List<Invoice> getMyInvoices(PcUser user) {
+		List<Invoice> myInvoices = invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
+		return myInvoices;
 	}
 
-	public ResetPassword getResetPassword(String resetCode) {
-		ResetPassword resetPassword = resetRepo.findByResetCode(resetCode);
-		return resetPassword;
+	public Access loadAccess(PcUser user) {
+		Access access = new Access();
+		if (UserType.ADMIN.equals(user.getUserType())) {
+			access.setAdmin(true);
+			access.setSupervisor(true);
+			access.setFinance(true);
+			access.setOps(true);
+			access.setAdvisor(true);
+		} else if (UserType.SUPERVISOR.equals(user.getUserType())) {
+			access.setAdmin(false);
+			access.setSupervisor(true);
+			access.setFinance(true);
+			access.setOps(true);
+			access.setAdvisor(true);
+		} else if (UserType.FINANCE.equals(user.getUserType())) {
+			access.setAdmin(false);
+			access.setSupervisor(false);
+			access.setFinance(true);
+			access.setOps(false);
+			access.setAdvisor(false);
+		} else if (UserType.OPERATIONS.equals(user.getUserType())) {
+			access.setAdmin(false);
+			access.setSupervisor(false);
+			access.setFinance(false);
+			access.setOps(true);
+			access.setAdvisor(false);
+		} else if (UserType.ADVISOR.equals(user.getUserType())) {
+			access.setAdmin(false);
+			access.setSupervisor(false);
+			access.setFinance(false);
+			access.setOps(false);
+			access.setAdvisor(true);
+		}
+		return access;
 	}
 
-	public void saveResetPassword(ResetPassword resetPassword) {
-		resetRepo.save(resetPassword);
+	public List<PcUser> getUsers() {
+		List<PcUser> myUsers = new ArrayList<PcUser>();
+		PcUser user = secSer.findLoggedInUser();
+		if (secSer.isMerchantUser()) {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			List<MerchantUser> merUsers = merUserRepo.findByMerchantId(merchant.getId());
+			for (MerchantUser merUser : merUsers) {
+				PcUser myUser = userRepo.findOne(merUser.getUserId());
+				if (!UserType.ADMIN.equals(myUser.getUserType())) {
+					myUsers.add(myUser);
+				}
+			}
+		} else {
+			List<UserRole> superRoles = new ArrayList<UserRole>();
+			if (UserType.ADMIN.equals(user.getUserType())) {
+				superRoles = userRoleRepo.findByRole(Role.ROLE_PAYCR_SUPERVISOR);
+			}
+			List<UserRole> finRoles = userRoleRepo.findByRole(Role.ROLE_PAYCR_FINANCE);
+			List<UserRole> opsRoles = userRoleRepo.findByRole(Role.ROLE_PAYCR_OPS);
+			List<UserRole> advRoles = userRoleRepo.findByRole(Role.ROLE_PAYCR_ADVISOR);
+			List<UserRole> userRoles = new ArrayList<UserRole>();
+			userRoles.addAll(superRoles);
+			userRoles.addAll(finRoles);
+			userRoles.addAll(opsRoles);
+			userRoles.addAll(advRoles);
+			for (UserRole userRole : userRoles) {
+				myUsers.add(userRole.getPcUser());
+			}
+		}
+		return myUsers;
 	}
 
-	public int findResetCount(String email, Date yesterday, Date timeNow) {
-		return resetRepo.findResetCount(email, yesterday, timeNow);
+	public void createUser(PcUser user) {
+		userValidator.validate(user);
+		user.setCreatedBy(secSer.findLoggedInUser().getEmail());
+		Date timeNow = new Date();
+		if (secSer.isMerchantUser()) {
+			List<PcUser> existingUsers = getUsers();
+			if (existingUsers != null && existingUsers.size() >= 10) {
+				throw new PaycrException(Constants.FAILURE, "Not allowed to create more users");
+			}
+			user.setCreated(timeNow);
+			user.setPassword(bcPassEncode.encode("password@123"));
+			List<UserRole> userRoles = new ArrayList<UserRole>();
+			UserRole userRole = new UserRole();
+			userRole.setRole(getRoleForMerchantUserType(user.getUserType()));
+			userRole.setPcUser(user);
+			user.setUserRoles(userRoles);
+			userRoles.add(userRole);
+			user.setActive(true);
+			userRepo.save(user);
+
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			MerchantUser merUser = new MerchantUser();
+			merUser.setMerchantId(merchant.getId());
+			merUser.setUserId(user.getId());
+			merUserRepo.save(merUser);
+			userService.sendResetLink(user);
+		} else {
+			user.setCreated(timeNow);
+			user.setPassword(bcPassEncode.encode("password@123"));
+			List<UserRole> userRoles = new ArrayList<UserRole>();
+			UserRole userRole = new UserRole();
+			userRole.setRole(getRoleForAdminUserType(user.getUserType()));
+			userRole.setPcUser(user);
+			user.setUserRoles(userRoles);
+			userRoles.add(userRole);
+			user.setActive(true);
+			userRepo.save(user);
+		}
+	}
+
+	public void toggleUser(Integer userId) {
+		PcUser user = userRepo.findOne(userId);
+		if (getUsers().contains(user)) {
+			if (user.isActive()) {
+				user.setActive(false);
+			} else {
+				user.setActive(true);
+			}
+			userRepo.save(user);
+		}
+	}
+
+	private Role getRoleForAdminUserType(UserType type) {
+		if (UserType.SUPERVISOR.equals(type)) {
+			return Role.ROLE_PAYCR_SUPERVISOR;
+		} else if (UserType.FINANCE.equals(type)) {
+			return Role.ROLE_PAYCR_FINANCE;
+		} else if (UserType.OPERATIONS.equals(type)) {
+			return Role.ROLE_PAYCR_OPS;
+		} else if (UserType.ADVISOR.equals(type)) {
+			return Role.ROLE_PAYCR_ADVISOR;
+		} else {
+			throw new PaycrException(Constants.FAILURE, "Invalid User Type specified");
+		}
+	}
+
+	private Role getRoleForMerchantUserType(UserType type) {
+		if (UserType.FINANCE.equals(type)) {
+			return Role.ROLE_MERCHANT_FINANCE;
+		} else if (UserType.OPERATIONS.equals(type)) {
+			return Role.ROLE_MERCHANT_OPS;
+		} else {
+			throw new PaycrException(Constants.FAILURE, "Invalid User Type specified");
+		}
 	}
 
 }

@@ -29,7 +29,7 @@ public class ProfileController {
 	private BCryptPasswordEncoder bcPassEncode;
 
 	@Autowired
-	private UserService userSer;
+	private UserService userService;
 
 	@Autowired
 	private SecurityService secSer;
@@ -39,7 +39,7 @@ public class ProfileController {
 		try {
 			PcUser user = secSer.findLoggedInUser();
 			user.setAddress(address);
-			userSer.saveUser(user);
+			userService.saveUser(user);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -57,7 +57,7 @@ public class ProfileController {
 			}
 			if (bcPassEncode.matches(oldPass, user.getPassword())) {
 				user.setPassword(bcPassEncode.encode(newPass));
-				userSer.saveUser(user);
+				userService.saveUser(user);
 			} else {
 				throw new PaycrException(Constants.FAILURE, "Wrong Password Entered");
 			}

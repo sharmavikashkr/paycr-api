@@ -3,7 +3,7 @@ app.controller('MyInvoicesController', function($scope, $rootScope, $http,
 	$scope.fetchMyInvoices = function() {
 		var req = {
 			method : 'GET',
-			url : "/common/invoices/",
+			url : "/user/invoices/",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			}

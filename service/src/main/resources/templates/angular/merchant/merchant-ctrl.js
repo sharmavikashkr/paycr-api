@@ -176,7 +176,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 	$scope.fetchUser = function() {
 		var req = {
 			method : 'GET',
-			url : "/common/user",
+			url : "/user",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")

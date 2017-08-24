@@ -54,7 +54,7 @@ public class AdminService {
 	private HmacSignerUtil hmacSigner;
 
 	@Autowired
-	private UserService userService;
+	private LoginService userService;
 
 	@Autowired
 	private NotificationRepository notiRepo;

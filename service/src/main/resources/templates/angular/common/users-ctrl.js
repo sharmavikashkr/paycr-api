@@ -3,7 +3,7 @@ app.controller('UsersController',
 			$scope.fetchMyUsers = function() {
 				var req = {
 					method : 'GET',
-					url : "/common/users",
+					url : "/user/getAll",
 					headers : {
 						"Authorization" : "Bearer "
 								+ $cookies.get("access_token")
@@ -21,7 +21,7 @@ app.controller('UsersController',
 				}
 				var req = {
 					method : 'POST',
-					url : "/common/create/user",
+					url : "/user/new",
 					headers : {
 						"Authorization" : "Bearer "
 								+ $cookies.get("access_token")
@@ -40,7 +40,7 @@ app.controller('UsersController',
 			$scope.toggleUser = function(userId) {
 				var req = {
 					method : 'GET',
-					url : "/common/toggle/user/" + userId,
+					url : "/user/toggle/" + userId,
 					headers : {
 						"Authorization" : "Bearer "
 								+ $cookies.get("access_token")
