@@ -1,0 +1,50 @@
+<div ng-controller="ManageController" id="createConsumerModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Create New Consumer</h5>
+			</div>
+			<div class="modal-body">
+				<form name="addConsumerForm">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered table-responsive">
+								<tbody>
+									<tr>
+										<td>
+											<div ng-class="(addConsumerForm.addConsumerName.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Name</label>
+												<input name="addConsumerName" class="form-control" placeholder="Name" ng-model="newconsumer.name" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(addConsumerForm.addConsumerEmail.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Email</label>
+												<input name="addConsumerEmail" class="form-control" placeholder="Email" ng-model="newconsumer.email" ng-pattern="patterns.emailPattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(addConsumerForm.addConsumerMobile.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Mobile</label>
+												<input name="addConsumerMobile" class="form-control" placeholder="Mobile" ng-model="newconsumer.mobile" ng-pattern="patterns.mobilePattern" type="number" required />
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createConsumer()">Add</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

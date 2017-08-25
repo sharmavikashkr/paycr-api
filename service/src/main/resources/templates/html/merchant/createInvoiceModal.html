@@ -98,9 +98,9 @@
 													</td>
 													<td>
 														<div ng-class="(createInvoiceForm.itemName{{$index}}.$valid)?'':'has-error'" class="form-group">
-															<input class="form-control text-center" list="item-auto-complete" ng-change="setItem(item)" ng-model="item.name" name="itemName{{$index}}" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
+															<input class="form-control text-center" list="item-auto-complete" ng-change="setInventory(item)" ng-model="item.name" name="itemName{{$index}}" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
 															<datalist id="item-auto-complete">
-																<option ng-repeat="autoitem in itemList" ng-value="autoitem.name">
+																<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.name">
 															</datalist>
 														</div>
 													</td>

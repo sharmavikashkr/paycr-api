@@ -1,13 +1,10 @@
-package com.paycr.invoice.validation;
-
-import java.util.Date;
+package com.paycr.dashboard.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -15,8 +12,8 @@ import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
-@Order(1)
-public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
+@Order(0)
+public class IsValidConsumer implements RequestValidator<Consumer> {
 
 	@Autowired
 	private ConsumerRepository consRepo;
@@ -29,26 +26,19 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 	private static final String NAME_PATTERN = "[a-zA-Z ]*";
 
 	@Override
-	public void validate(Invoice invoice) {
-		Consumer consumer = invoice.getConsumer();
+	public void validate(Consumer consumer) {
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Consumer");
 		}
-		if (!(match(consumer.getEmail(), EMAIL_PATTERN)
-				|| match(consumer.getMobile(), MOBILE_PATTERN)
+		if (!(match(consumer.getEmail(), EMAIL_PATTERN) || match(consumer.getMobile(), MOBILE_PATTERN)
 				|| match(consumer.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		Consumer exstConsumer = consRepo.findByMerchantAndEmailAndMobile(invoice.getMerchant(),
-				consumer.getEmail(), consumer.getMobile());
-		if (CommonUtil.isNull(exstConsumer)) {
-			consumer.setMerchant(invoice.getMerchant());
-			consumer.setActive(true);
-			consumer.setCreated(new Date());
-			consumer.setCreatedBy(invoice.getCreatedBy());
-			exstConsumer = consRepo.save(consumer);
+		Consumer extConsumer = consRepo.findByMerchantAndEmailAndMobile(consumer.getMerchant(), consumer.getEmail(),
+				consumer.getMobile());
+		if (CommonUtil.isNotNull(extConsumer)) {
+			throw new PaycrException(Constants.FAILURE, "Consumer already exists");
 		}
-		invoice.setConsumer(exstConsumer);
 	}
 
 	private boolean match(String value, String pattern) {

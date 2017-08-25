@@ -1,0 +1,44 @@
+<div ng-controller="ManageController" id="createInventoryModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Add to Inventory</h5>
+			</div>
+			<div class="modal-body">
+				<form name="addItemForm">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered table-responsive">
+								<tbody>
+									<tr>
+										<td>
+											<div ng-class="(addItemForm.name.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Name</label>
+												<input name="name" class="form-control" list="item-auto-complete" placeholder="Name" ng-model="newinventory.name" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="input-group">
+												<div class="input-group-addon">&#8377;</div>
+												<div ng-class="(addItemForm.rate.$valid)?'':'has-error'" class="form-group">
+													<input class="form-control text-center" name="rate" ng-model="newinventory.rate" placeholder="2000.00" type="number" step="0.01" required />
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createInventory()">Add</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

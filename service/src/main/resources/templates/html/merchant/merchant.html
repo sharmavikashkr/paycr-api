@@ -24,6 +24,7 @@
 	<script src="/angular/common/dashboard-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-ctrl.js"></script>
 	<script src="/angular/common/payment-ctrl.js"></script>
+	<script src="/angular/merchant/manage-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-setting-ctrl.js"></script>
 	<script src="/angular/merchant/account-ctrl.js"></script>
 	<script src="/angular/common/reports-ctrl.js"></script>
@@ -41,6 +42,8 @@
 	        <div ng-class="(user.access.admin)?'':'active'" id="invoiceTab" class="tab-pane" ng-include="'/html/merchant/invoiceTab'"></div>
 	        <div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="'/html/common/paymentTab'"></div>
 	        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="'/html/merchant/invoiceSettingTab'"></div>
+	        <div id="consumerTab" class="tab-pane fade" ng-include="'/html/merchant/consumerTab'"></div>
+	        <div id="inventoryTab" class="tab-pane fade" ng-include="'/html/merchant/inventoryTab'"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/merchant/subscriptionTab'"></div>
 	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
 	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
@@ -60,6 +63,8 @@
 		<div ng-include="'/html/common/invoiceInfoModal'"></div>
 		<div ng-include="'/html/common/invoicePaymentModal'"></div>
 		<div ng-include="'/html/merchant/invoiceNoticeModal'"></div>
+		<div ng-include="'/html/merchant/createConsumerModal'"></div>
+		<div ng-include="'/html/merchant/createInventoryModal'"></div>
 		<div ng-include="'/html/common/changePasswordModal'"></div>
 		<div ng-include="'/html/common/keyModal'"></div>
     </div>

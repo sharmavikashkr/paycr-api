@@ -18,36 +18,6 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$http(req).then(function(invoices) {
 			$rootScope.invoiceList = invoices.data;
 			$scope.loadInvoicePage(1);
-			$scope.getConsumers();
-			$scope.getItems();
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.getConsumers = function() {
-		var req = {
-			method : 'GET',
-			url : "/consumer/get",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(consumers) {
-			$rootScope.consumerList = consumers.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.getItems = function() {
-		var req = {
-			method : 'GET',
-			url : "/item/get",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(items) {
-			$rootScope.itemList = items.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -61,6 +31,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 					this.saveinvoice.consumer.email = consumer.email;
 					this.saveinvoice.consumer.mobile = consumer.mobile;
 					this.saveinvoice.consumer.name = consumer.name;
+					break;
 				}
 			}
 		} else if(from == "MOBILE") {
@@ -71,6 +42,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 					this.saveinvoice.consumer.email = consumer.email;
 					this.saveinvoice.consumer.mobile = consumer.mobile;
 					this.saveinvoice.consumer.name = consumer.name;
+					break;
 				}
 			}
 		} else if(from == "NAME") {
@@ -81,15 +53,16 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 					this.saveinvoice.consumer.email = consumer.email;
 					this.saveinvoice.consumer.mobile = consumer.mobile;
 					this.saveinvoice.consumer.name = consumer.name;
+					break;
 				}
 			}
 		}
 	}
-	$scope.setItem = function(item) {
-		for(var index in $rootScope.itemList) {
-			var it = $rootScope.itemList[index];
-			if(it.name == item.name){
-				item.rate = it.rate;
+	$scope.setInventory = function(item) {
+		for(var index in $rootScope.inventoryList) {
+			var invn = $rootScope.inventoryList[index];
+			if(invn.name == item.name){
+				item.rate = invn.rate;
 				$scope.calculateTotal();
 				break;
 			}

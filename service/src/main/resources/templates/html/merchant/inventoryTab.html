@@ -1,0 +1,34 @@
+<div ng-controller="ManageController" ng-init="fetchInventory()">
+	<br>
+	<div class="row">
+		<div class="col-lg-2 col-lg-offset-9">
+			<button title="Add Item" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createInventoryModal">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row text-center">
+		<div class="col-md-10 col-md-offset-1">
+			<h4>My Inventory</h4>
+			<table class="table table-bordered table-responsive">
+				<thead>
+					<tr>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center"><strong>Rate</strong></td>
+						<td class="text-center hidden-xs"><strong>Created By</strong></td>
+						<td class="text-center hidden-xs"><strong>Created</strong></td>
+					</tr>
+				</thead>
+				<tbody id="itemBody">
+					<tr ng-repeat="inventory in inventoryList">
+						<td class="text-center">{{inventory.name}}</td>
+						<td class="text-center">&#8377; {{inventory.rate}}</td>
+						<td class="text-center hidden-xs">{{inventory.createdBy}}</td>
+						<td class="text-center hidden-xs">{{inventory.created | date:'dd-MM-yyyy'}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

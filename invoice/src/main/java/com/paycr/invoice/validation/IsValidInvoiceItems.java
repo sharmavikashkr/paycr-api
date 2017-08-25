@@ -2,13 +2,17 @@ package com.paycr.invoice.validation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Item;
+import com.paycr.common.data.repository.InventoryRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -18,20 +22,26 @@ import com.paycr.common.validation.RequestValidator;
 @Order(2)
 public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 
+	@Autowired
+	private InventoryRepository invnRepo;
+
 	@Override
 	public void validate(Invoice invoice) {
 		if (invoice.isAddItems()) {
 			List<Item> items = new ArrayList<Item>();
 			for (Item item : invoice.getItems()) {
-				validateItem(item);
+				validateItem(invoice, item);
 				item.setInvoice(invoice);
 				items.add(item);
+			}
+			if (items.size() < 1 || items.size() > 5) {
+				throw new PaycrException(Constants.FAILURE, "Min 1 and Max 5 Items expected");
 			}
 			invoice.setItems(items);
 		}
 	}
 
-	private void validateItem(Item item) {
+	private void validateItem(Invoice invoice, Item item) {
 		if ("".equals(item.getName().trim()) || CommonUtil.isNull(item.getRate()) || CommonUtil.isNull(item.getPrice())
 				|| 0 == item.getQuantity()) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Params entered");
@@ -39,6 +49,18 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 		if (!item.getPrice().equals(item.getRate().multiply(new BigDecimal(item.getQuantity())))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
+		Inventory inventory = invnRepo.findByMerchantAndNameAndRate(invoice.getMerchant(), item.getName(),
+				item.getRate());
+		if (CommonUtil.isNull(inventory)) {
+			inventory = new Inventory();
+			inventory.setCreated(new Date());
+			inventory.setMerchant(invoice.getMerchant());
+			inventory.setName(item.getName());
+			inventory.setRate(item.getRate());
+			inventory.setCreatedBy(invoice.getCreatedBy());
+			invnRepo.save(inventory);
+		}
+		item.setInventory(inventory);
 	}
 
 }

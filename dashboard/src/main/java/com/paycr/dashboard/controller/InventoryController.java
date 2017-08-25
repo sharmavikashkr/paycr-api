@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.data.domain.Consumer;
+import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.ConsumerService;
+import com.paycr.dashboard.service.InventoryService;
 
 @RestController
-@RequestMapping("/consumer")
-public class ConsumerController {
+@RequestMapping("/inventory")
+public class InventoryController {
 
 	@Autowired
-	private ConsumerService conSer;
+	private InventoryService invnSer;
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/get")
-	public List<Consumer> getAllConsumer(HttpServletResponse response) {
+	public List<Inventory> getMyInventory(HttpServletResponse response) {
 		try {
-			return conSer.getAllConsumer();
+			return invnSer.getMyInventory();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -36,9 +36,9 @@ public class ConsumerController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/new")
-	public void newConsumer(@RequestBody Consumer consumer, HttpServletResponse response) {
+	public void newInventory(@RequestBody Inventory inventory, HttpServletResponse response) {
 		try {
-			conSer.newConsumer(consumer);
+			invnSer.newInventory(inventory);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

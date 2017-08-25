@@ -15,9 +15,9 @@
 										<td>
 											<div ng-class="(addItemForm.name.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Name</label>
-												<input name="name" class="form-control" list="item-auto-complete" ng-change="setItem(item)" placeholder="Name" ng-model="item.name" ng-pattern="patterns.namePattern" required />
+												<input name="name" class="form-control" list="item-auto-complete" ng-change="setInventory(item)" placeholder="Name" ng-model="item.name" ng-pattern="patterns.namePattern" required />
 												<datalist id="item-auto-complete">
-													<option ng-repeat="autoitem in itemList" ng-value="autoitem.name">
+													<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.name">
 												</datalist>
 											</div>
 										</td>

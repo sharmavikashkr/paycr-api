@@ -53,8 +53,8 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="item in invoiceInfo.items">
-									<td>{{item.name}}</td>
-									<td class="hidden-xs">&#8377; {{item.rate}}</td>
+									<td>{{item.inventory.name}}</td>
+									<td class="hidden-xs">&#8377; {{item.inventory.rate}}</td>
 									<td class="hidden-xs">{{item.quantity}}</td>
 									<td>&#8377; {{item.price}}</td>
 								</tr>

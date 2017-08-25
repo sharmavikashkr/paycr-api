@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,14 +20,23 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private String name;
 	private int quantity;
-	private BigDecimal rate;
+
 	private BigDecimal price;
+
+	@Transient
+	private String name;
+
+	@Transient
+	private BigDecimal rate;
 
 	@JsonIgnore
 	@ManyToOne
 	private Invoice invoice;
+
+	@JsonIgnore
+	@ManyToOne
+	private Inventory inventory;
 
 	public String getName() {
 		return name;
@@ -70,6 +80,14 @@ public class Item {
 
 	public void setInvoice(Invoice invoice) {
 		this.invoice = invoice;
+	}
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
 	}
 
 }

@@ -11,7 +11,9 @@ CREATE TABLE if not exists pc_consumer (
     state varchar(50) DEFAULT NULL,
     country varchar(50) DEFAULT NULL,
     pincode varchar(10) DEFAULT NULL,
-    active boolean NOT NULL
+    active boolean NOT NULL,
+    created_by varchar(50) NOT NULL,
+	merchant_id int REFERENCES pc_merchant
 );
 
 CREATE TABLE if not exists pc_payment (
@@ -63,13 +65,21 @@ CREATE TABLE if not exists pc_invoice_notify (
     invoice_id int REFERENCES pc_invoice
 );
 
+CREATE TABLE if not exists pc_inventory (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	name varchar(50) NOT NULL,
+	rate float NOT NULL,
+	created_by varchar(50) NOT NULL,
+    merchant_id int REFERENCES pc_merchant
+);
+
 CREATE TABLE if not exists pc_item (
 	id SERIAL PRIMARY KEY NOT NULL,
-	name varchar(50) NOT NULL,
 	quantity int NOT NULL,
-	rate float NOT NULL,
 	price float NOT NULL,
-    invoice_id int REFERENCES pc_invoice
+    invoice_id int REFERENCES pc_invoice,
+    inventory_id int REFERENCES pc_inventory
 );
 
 CREATE TABLE if not exists pc_invoice_custom_param (

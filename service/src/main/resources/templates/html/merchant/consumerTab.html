@@ -1,0 +1,36 @@
+<div ng-controller="ManageController" ng-init="fetchConsumers()">
+	<br>
+	<div class="row">
+		<div class="col-lg-2 col-lg-offset-9">
+			<button title="Create Consumer" type="button" class="btn btn-info btn-circle btn-lg" data-toggle="modal" data-target="#createConsumerModal">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
+	<br>
+	<div class="row text-center">
+		<div class="col-md-10 col-md-offset-1">
+			<h4>My Consumers</h4>
+			<table class="table table-bordered table-responsive">
+				<thead>
+					<tr>
+						<td class="text-center hidden-xs"><strong>Name</strong></td>
+						<td class="text-center"><strong>Email</strong></td>
+						<td class="text-center"><strong>Mobile</strong></td>
+						<td class="text-center hidden-xs"><strong>Created By</strong></td>
+						<td class="text-center hidden-xs"><strong>Created</strong></td>
+					</tr>
+				</thead>
+				<tbody id="itemBody">
+					<tr ng-repeat="consumer in consumerList">
+						<td class="text-center hidden-xs">{{consumer.name}}</td>
+						<td class="text-center">{{consumer.email}}</td>
+						<td class="text-center">{{consumer.mobile}}</td>
+						<td class="text-center hidden-xs">{{consumer.createdBy}}</td>
+						<td class="text-center hidden-xs">{{consumer.created | date:'dd-MM-yyyy'}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
