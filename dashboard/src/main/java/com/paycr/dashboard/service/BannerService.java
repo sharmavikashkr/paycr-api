@@ -41,7 +41,7 @@ public class BannerService {
 		String extension = validateBanner(banner);
 		if (merchant != null) {
 			String bannerName = merchant.getAccessKey() + extension;
-			file = new File(server.getMerchantLocation() + bannerName);
+			file = new File(server.getMerchantLocation() + "banner/" + bannerName);
 			merchant.getInvoiceSetting().setBanner(bannerName);
 			merRepo.save(merchant);
 		} else {
@@ -75,7 +75,7 @@ public class BannerService {
 	}
 
 	public byte[] getMerchantBanner(String bannerName) throws IOException {
-		Path path = Paths.get(server.getMerchantLocation() + bannerName);
+		Path path = Paths.get(server.getMerchantLocation() + "banner/" + bannerName);
 		return Files.readAllBytes(path);
 	}
 

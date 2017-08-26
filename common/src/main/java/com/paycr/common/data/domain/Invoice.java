@@ -74,6 +74,9 @@ public class Invoice implements Serializable {
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<InvoiceNotify> invoiceNotices;
 
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+	private List<Attachment> attachments;
+
 	@ManyToOne
 	private MerchantPricing merchantPricing;
 
@@ -268,5 +271,13 @@ public class Invoice implements Serializable {
 
 	public void setTaxValue(Float taxValue) {
 		this.taxValue = taxValue;
+	}
+
+	public List<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
 	}
 }

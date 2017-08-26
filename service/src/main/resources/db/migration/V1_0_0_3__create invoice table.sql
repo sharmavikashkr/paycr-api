@@ -89,3 +89,11 @@ CREATE TABLE if not exists pc_invoice_custom_param (
 	provider varchar(20) NOT NULL,
     invoice_id int REFERENCES pc_invoice
 );
+
+CREATE TABLE if not exists pc_attachment (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	name varchar(50) NOT NULL,
+	created_by varchar(50) NOT NULL,
+    invoice_id int REFERENCES pc_invoice
+);

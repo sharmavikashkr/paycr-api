@@ -122,7 +122,7 @@
 												<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
 													<i class="fa fa-file-pdf-o"></i>
 												</a>
-												<button title="Attachments" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#createInvoiceXsModal">
+												<button ng-click="updateInvoiceInfo(invoice)" title="Attachments" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#attachmentModal">
 													<i class="fa fa-paperclip"></i>
 												</button>
 												<button ng-click="updateInvoiceInfo(invoice)" title="Notifications" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">

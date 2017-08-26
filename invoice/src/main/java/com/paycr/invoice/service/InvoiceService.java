@@ -1,17 +1,27 @@
 package com.paycr.invoice.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.bean.Server;
+import com.paycr.common.data.domain.Attachment;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.PaymentRepository;
@@ -46,6 +56,9 @@ public class InvoiceService {
 
 	@Autowired
 	private PaymentService payService;
+
+	@Autowired
+	private Server server;
 
 	public Invoice single(Invoice invoice) {
 		invValidator.validate(invoice);
@@ -122,4 +135,33 @@ public class InvoiceService {
 		invoice.setStatus(InvoiceStatus.PAID);
 		invRepo.save(invoice);
 	}
+
+	public void saveAttach(String invoiceCode, MultipartFile attach) throws IOException {
+		PcUser user = secSer.findLoggedInUser();
+		Invoice invoice = getInvoice(invoiceCode);
+		List<Attachment> attachments = invoice.getAttachments();
+		if (attachments != null && attachments.size() >= 5) {
+			throw new PaycrException(Constants.FAILURE, "Max 5 attachments allowed");
+		}
+		Attachment attachment = new Attachment();
+		attachment.setName(attach.getOriginalFilename());
+		attachment.setCreated(new Date());
+		attachment.setCreatedBy(user.getEmail());
+		attachment.setInvoice(invoice);
+		attachments.add(attachment);
+		invRepo.save(invoice);
+		String attachName = invoiceCode + "-" + attach.getOriginalFilename();
+		File file = null;
+		file = new File(server.getMerchantLocation() + "attachment/" + attachName);
+		FileOutputStream out = new FileOutputStream(file);
+		out.write(attach.getBytes());
+		out.close();
+	}
+
+	public byte[] getAttach(String invoiceCode, String attachName) throws IOException {
+		attachName = invoiceCode + "-" + attachName;
+		Path path = Paths.get(server.getMerchantLocation() + "attachment/" + attachName);
+		return Files.readAllBytes(path);
+	}
+
 }

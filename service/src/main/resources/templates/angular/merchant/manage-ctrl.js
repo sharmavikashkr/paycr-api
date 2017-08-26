@@ -70,4 +70,23 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#createInventoryModal')).modal(
 				'hide');
 	}
+	$scope.updateInvoiceConsumer = function(consumer) {
+		$rootScope.saveinvoice = $rootScope.newinvoice;
+		$rootScope.saveinvoice.consumer = consumer;
+	}
+	$scope.seachConInvoice = function(consumer) {
+		$rootScope.searchInvoiceReq.email = consumer.email;
+		$rootScope.searchInvoiceReq.mobile = consumer.mobile;
+		$rootScope.searchInvoice();
+	}
+	$scope.updateInvoiceItem = function(inventory) {
+		$rootScope.saveinvoice = $rootScope.newinvoice;
+		$scope.saveinvoice.items.push({
+			"name" : inventory.name,
+			"rate" : inventory.rate,
+			"quantity" : 1,
+			"price" : 0
+		});
+		$rootScope.calculateTotal();
+	}
 });

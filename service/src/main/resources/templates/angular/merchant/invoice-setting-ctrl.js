@@ -72,6 +72,9 @@ app.controller('InvoiceSettingController', function($scope, $rootScope, $http, $
 		});
 	}
 	$scope.uploadBanner = function(files) {
+		if (!confirm('Upload Banner?')) {
+			return false;
+		}
 		var fd = new FormData();
 		fd.append("banner", files[0]);
 		$http.post("/banner/upload", fd, {

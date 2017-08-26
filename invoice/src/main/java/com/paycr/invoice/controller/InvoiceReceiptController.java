@@ -33,7 +33,6 @@ public class InvoiceReceiptController {
 	public void downloadReceipt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String invoiceCode) throws Exception {
 		File pdfFile = invRecSer.downloadPdf(invoiceCode);
-		response.setContentType("application/pdf");
 
 		FileInputStream fis = null;
 		byte[] bFile = new byte[(int) pdfFile.length()];

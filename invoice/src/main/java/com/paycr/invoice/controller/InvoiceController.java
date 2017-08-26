@@ -1,9 +1,12 @@
 package com.paycr.invoice.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
@@ -90,6 +94,36 @@ public class InvoiceController {
 	public void markPaid(@RequestBody Payment payment, HttpServletResponse response) {
 		try {
 			invSer.markPaid(payment);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@RequestMapping(value = "/{invoiceCode}/attachment/new", method = RequestMethod.POST)
+	public void addAttachment(@PathVariable String invoiceCode, @RequestParam("attach") MultipartFile attach,
+			HttpServletResponse response) {
+		try {
+			invSer.saveAttach(invoiceCode, attach);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/{invoiceCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
+	public void getAttachment(@PathVariable String invoiceCode, @PathVariable String attachName,
+			HttpServletResponse response) {
+		try {
+			byte[] data = invSer.getAttach(invoiceCode, attachName);
+
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
+			//response.setContentType("application/pdf");
+			InputStream is = new ByteArrayInputStream(data);
+			IOUtils.copy(is, response.getOutputStream());
+			response.setContentLength(data.length);
+			response.flushBuffer();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

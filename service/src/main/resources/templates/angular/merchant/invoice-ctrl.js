@@ -6,7 +6,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$scope.searchInvoice = function() {
+	$rootScope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/invoice",
@@ -119,7 +119,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$scope.saveinvoice.items.splice(pos, 1);
 		$scope.calculateTotal();
 	}
-	$scope.calculateTotal = function() {
+	$rootScope.calculateTotal = function() {
 		var totals = 0;
 		if($scope.saveinvoice.addItems) {
 			for ( var item in $scope.saveinvoice.items) {
@@ -273,5 +273,26 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#markPaidModal')).modal('hide');
+	}
+	$scope.uploadAttachment = function(files) {
+		if (!confirm('Upload Attachment?')) {
+			return false;
+		}
+		var invoiceCode = this.invoiceInfo.invoiceCode;
+		var fd = new FormData();
+		fd.append("attach", files[0]);
+		$http.post("/invoice/"+invoiceCode+"/attachment/new", fd, {
+			transformRequest : angular.identity,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				'Content-Type' : undefined
+			}
+		}).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#attachmentModal')).modal('hide');
+		$rootScope.searchInvoice();
 	}
 });

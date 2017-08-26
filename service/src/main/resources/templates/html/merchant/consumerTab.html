@@ -19,15 +19,36 @@
 						<td class="text-center"><strong>Mobile</strong></td>
 						<td class="text-center hidden-xs"><strong>Created By</strong></td>
 						<td class="text-center hidden-xs"><strong>Created</strong></td>
+						<td class="text-center"><strong>Invoice</strong></td>
 					</tr>
 				</thead>
 				<tbody id="itemBody">
-					<tr ng-repeat="consumer in consumerList">
+					<tr ng-repeat="consumer in consumerList"
+						ng-click="searchConInvoice(consumer)"
+						data-toggle="collapse"
+						data-target="#condetails-{{consumer.id}}"
+						class="accordion-toggle">
 						<td class="text-center hidden-xs">{{consumer.name}}</td>
 						<td class="text-center">{{consumer.email}}</td>
 						<td class="text-center">{{consumer.mobile}}</td>
 						<td class="text-center hidden-xs">{{consumer.createdBy}}</td>
 						<td class="text-center hidden-xs">{{consumer.created | date:'dd-MM-yyyy'}}</td>
+						<td class="text-center">
+							<button title="Add Invoice" type="button"
+								class="btn btn-info btn-circle btn-md"
+								ng-click="updateInvoiceConsumer(consumer)"
+								data-toggle="modal"
+								data-target="#createInvoiceModal">
+								<i class="fa fa-plus"></i>
+							</button>
+							<button title="Add Invoice" type="button"
+								class="btn btn-success btn-circle btn-md"
+								ng-click="seachConInvoice(consumer)"
+								data-target="#invoiceTab"
+								data-toggle="tab">
+								<i class="fa fa-search"></i>
+							</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
