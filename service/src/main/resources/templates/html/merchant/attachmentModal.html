@@ -18,15 +18,15 @@
 							<thead>
 								<tr>
 									<th>Name</th>
-									<th>Uploaded By</th>
-									<th>Uploaded On</th>
+									<th class="hidden-xs">Uploaded By</th>
+									<th class="hidden-xs">Uploaded On</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="attach in invoiceInfo.attachments">
 									<td><a target="_blank" href="/invoice/{{invoiceInfo.invoiceCode}}/attachment/{{attach.name}}">{{attach.name}}</a></td>
-									<td>{{attach.createdBy}}</td>
-									<td>{{attach.created | date:'dd-MM-yyyy'}}</td>
+									<td class="hidden-xs">{{attach.createdBy}}</td>
+									<td class="hidden-xs">{{attach.created | date:'dd-MM-yyyy'}}</td>
 								</tr>
 							</tbody>
 						</table>
