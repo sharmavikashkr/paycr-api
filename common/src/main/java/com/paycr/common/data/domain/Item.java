@@ -34,7 +34,6 @@ public class Item {
 	@ManyToOne
 	private Invoice invoice;
 
-	@JsonIgnore
 	@ManyToOne
 	private Inventory inventory;
 

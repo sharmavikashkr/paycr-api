@@ -97,8 +97,8 @@
 							<tbody>
 								<#list invoice.items as item>
 				                <tr>
-				                    <td class="text-center">${item.name}</td>
-				                    <td class="text-center">&#8377; ${item.rate}</td>
+				                    <td class="text-center">${item.inventory.name}</td>
+				                    <td class="text-center">&#8377; ${item.inventory.rate}</td>
 				                    <td class="text-center">${item.quantity}</td>
 				                    <td class="text-right">&#8377; ${item.price}</td>
 				                </tr>
