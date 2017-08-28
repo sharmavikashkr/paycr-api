@@ -3,15 +3,22 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h5 class="modal-title">
-					<span>Invoice for purchase <strong>: {{saveinvoice.invoiceCode}}</strong></span>
-				</h5>
+				<div class="col-md-4">
+					<h5 class="modal-title">
+						<span>Invoice for purchase <strong>: {{saveinvoice.invoiceCode}}</strong></span>
+					</h5>
+				</div>
+				<div class="col-md-4">
+					<select class="form-control" ng-model="saveinvoice.invoiceType">
+						<option ng-repeat="invoiceType in invoiceTypes" value="{{invoiceType}}">{{invoiceType}}</option>
+					</select>
+				</div>
 			</div>
 			<div class="modal-body">
 				<form name="createInvoiceForm">
 					<div class="row">
 						<div class="col-xs-12">
-							<div class="panel panel-default">
+							<div ng-if="!(saveinvoice.invoiceType == 'BULK')" class="panel panel-default">
 								<div class="panel-heading">Consumer Details</div>
 								<div class="panel-body">
 									<div ng-class="(createInvoiceForm.conname.$valid)?'':'has-error'" class="form-group">

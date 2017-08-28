@@ -71,7 +71,7 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 				'hide');
 	}
 	$scope.updateInvoiceConsumer = function(consumer) {
-		$rootScope.saveinvoice = $rootScope.newinvoice;
+		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
 		$rootScope.saveinvoice.consumer = consumer;
 	}
 	$scope.seachConInvoice = function(consumer) {
@@ -80,7 +80,7 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoice();
 	}
 	$scope.updateInvoiceItem = function(inventory) {
-		$rootScope.saveinvoice = $rootScope.newinvoice;
+		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
 		$scope.saveinvoice.items.push({
 			"name" : inventory.name,
 			"rate" : inventory.rate,

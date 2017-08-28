@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
@@ -90,11 +91,19 @@ public class Invoice implements Serializable {
 
 	private int expiresIn;
 
+	@JsonIgnore
+	@ManyToOne
+	private Invoice parent;
+
 	@Transient
 	private List<Payment> allPayments;
 
 	public Integer getId() {
 		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Date getCreated() {
@@ -279,5 +288,13 @@ public class Invoice implements Serializable {
 
 	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;
+	}
+
+	public Invoice getParent() {
+		return parent;
+	}
+
+	public void setParent(Invoice parent) {
+		this.parent = parent;
 	}
 }

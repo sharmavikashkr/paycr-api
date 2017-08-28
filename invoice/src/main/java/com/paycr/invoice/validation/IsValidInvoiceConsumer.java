@@ -10,6 +10,7 @@ import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
@@ -30,17 +31,20 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 
 	@Override
 	public void validate(Invoice invoice) {
+		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
+			invoice.setConsumer(null);
+			return;
+		}
 		Consumer consumer = invoice.getConsumer();
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Consumer");
 		}
-		if (!(match(consumer.getEmail(), EMAIL_PATTERN)
-				|| match(consumer.getMobile(), MOBILE_PATTERN)
+		if (!(match(consumer.getEmail(), EMAIL_PATTERN) || match(consumer.getMobile(), MOBILE_PATTERN)
 				|| match(consumer.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		Consumer exstConsumer = consRepo.findByMerchantAndEmailAndMobile(invoice.getMerchant(),
-				consumer.getEmail(), consumer.getMobile());
+		Consumer exstConsumer = consRepo.findByMerchantAndEmailAndMobile(invoice.getMerchant(), consumer.getEmail(),
+				consumer.getMobile());
 		if (CommonUtil.isNull(exstConsumer)) {
 			consumer.setMerchant(invoice.getMerchant());
 			consumer.setActive(true);

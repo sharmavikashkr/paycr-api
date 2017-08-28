@@ -24,6 +24,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 	}
 	$rootScope.newinvoice = {
 		"invoiceCode" : "",
+		"invoiceType" : "SINGLE",
 		"consumer" : {
 			"email" : "",
 			"mobile" : "",
@@ -169,6 +170,20 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}
 		$http(req).then(function(paystatuses) {
 			$rootScope.payStatuses = paystatuses.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/invoicetypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(invoicetypes) {
+			$rootScope.invoiceTypes = invoicetypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

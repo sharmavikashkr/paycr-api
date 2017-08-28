@@ -7,12 +7,36 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-    	#paySection {border:none;text-size:6px;}
+    <style type="text/css">
+    	table {
+			font-size: 14px;
+		}
     </style>
 </head>
 <body style="background:cadetblue;">
-	<section id="paySection" style="margin-top:120px; font-size:14px;">
+	<section style="margin-top:60px;" ng-init="loadInvoice('${invoiceCode}')">
+		<div class="container text-center">
+			<div class="col-xs-12 col-sm-8">
+				<table class="table table-bordered table-responsive">
+                    <tbody>
+                        <tr>
+                            <td class="text-center hidden-xs">Name : </td>
+                            <td class="text-center"><input class="form-control" value="${invoice.consumer.name}" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center hidden-xs">Email : </td>
+                            <td class="text-center"><input class="form-control" value="${invoice.consumer.email}" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center hidden-xs">Mobile : </td>
+                            <td class="text-center"><input class="form-control" value="${invoice.consumer.mobile}" readonly></td>
+                        </tr>
+                    </tbody>
+                </table>
+			</div>
+		</div>
+	</section>
+	<section>
         <div class="container text-center">
 			<div class="col-xs-12 col-sm-8">
 				<div class="panel-group" role="tab">
@@ -65,7 +89,7 @@
 				</div>
 				<div class="row panel-default">
 	                <div class="col-md-8 col-md-offset-2">
-	                    <h3 class="section-heading">Hi ${consumer.name}, <span style="color:white;">${invoice.merchant.name}</span> has requested you to pay <span style="color:white;">&#8377; ${invoice.payAmount}</span></h3>
+	                    <h3 class="section-heading">Hi ${invoice.consumer.name}, <span style="color:white;">${invoice.merchant.name}</span> has requested you to pay <span style="color:white;">&#8377; ${invoice.payAmount}</span></h3>
 	                    <p>Proceed to make payment</p>
 	                    <div class="row">
 	                    	<form id="payForm" class="col-sm-6" action="/payment/return/${invoice.invoiceCode}" method="POST">
@@ -77,9 +101,9 @@
 							    data-name="${invoice.merchant.name}"
 							    data-description="Invoice Request"
 							    data-image="${banner}"
-							    data-prefill.name="${consumer.name}"
-							    data-prefill.email="${consumer.email}"
-							    data-prefill.contact="${consumer.mobile}"
+							    data-prefill.name="${invoice.consumer.name}"
+							    data-prefill.email="${invoice.consumer.email}"
+							    data-prefill.contact="${invoice.consumer.mobile}"
 							    data-theme.color="#013487"
 							></script>
 							<input type="hidden" value="${invoice.invoiceCode}" name="invoiceCode">

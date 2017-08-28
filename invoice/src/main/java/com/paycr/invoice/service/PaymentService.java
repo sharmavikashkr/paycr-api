@@ -22,11 +22,14 @@ import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.HmacSignerUtil;
+import com.paycr.common.util.RandomIdGenerator;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.razorpay.Refund;
@@ -46,16 +49,34 @@ public class PaymentService {
 	@Autowired
 	private Company company;
 
+	@Autowired
+	private HmacSignerUtil hmacSigner;
+
 	public ModelAndView payInvoice(String invoiceCode) {
+		Date timeNow = new Date();
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		validate(invoice);
 		Merchant merchant = invoice.getMerchant();
+		validate(invoice);
+		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
+			Invoice childInvoice = invoice;
+			String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
+			charset += charset.toLowerCase() + charset.toUpperCase();
+			String childCode = null;
+			do {
+				invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
+				invoice.setInvoiceCode(invoiceCode);
+			} while (CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode)));
+			childInvoice.setId(null);
+			childInvoice.setParent(invoice);
+			childInvoice.setInvoiceCode(childCode);
+			childInvoice = invRepo.save(childInvoice);
+			invoice = childInvoice;
+		}
 		ModelAndView mv = new ModelAndView("html/payinvoice");
 		mv.addObject("invoice", invoice);
 		mv.addObject("banner", company.getBaseUrl() + "/banner/merchant/" + merchant.getInvoiceSetting().getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().multiply(new BigDecimal(100))));
-		mv.addObject("consumer", invoice.getConsumer());
 		return mv;
 	}
 

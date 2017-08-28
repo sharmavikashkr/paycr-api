@@ -87,10 +87,10 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}
 	}
 	$scope.updateInvoiceInfo = function(invoice) {
-		$rootScope.invoiceInfo = invoice;
+		$rootScope.invoiceInfo = angular.copy(invoice);
 	}
 	$scope.updateSaveInvoice = function(invoice) {
-		$rootScope.saveinvoice = invoice;
+		$rootScope.saveinvoice = angular.copy(invoice);
 	}
 	$scope.addItem = function() {
 		if ($scope.saveinvoice.items.length < 5) {

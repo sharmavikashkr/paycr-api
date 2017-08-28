@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayStatus;
@@ -95,6 +96,10 @@ public class StaticController {
 		} else if ("paystatuses".equals(type)) {
 			for (PayStatus status : PayStatus.values()) {
 				enumList.add(status.name());
+			}
+		} else if ("invoicetypes".equals(type)) {
+			for (InvoiceType invType : InvoiceType.values()) {
+				enumList.add(invType.name());
 			}
 		}
 		return enumList;

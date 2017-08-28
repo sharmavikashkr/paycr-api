@@ -50,7 +50,8 @@ CREATE TABLE if not exists pc_invoice(
 	payment_id int REFERENCES pc_payment,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
-	expires_in int not null
+	expires_in int not null,
+	parent_id int REFERENCES pc_invoice
 );
 
 CREATE TABLE if not exists pc_invoice_notify (
