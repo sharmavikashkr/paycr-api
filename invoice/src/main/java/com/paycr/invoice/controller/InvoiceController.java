@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Payment;
@@ -119,7 +120,7 @@ public class InvoiceController {
 			byte[] data = invSer.getAttach(invoiceCode, attachName);
 
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
-			//response.setContentType("application/pdf");
+			// response.setContentType("application/pdf");
 			InputStream is = new ByteArrayInputStream(data);
 			IOUtils.copy(is, response.getOutputStream());
 			response.setContentLength(data.length);
@@ -128,6 +129,19 @@ public class InvoiceController {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/createChild/{invoiceCode}", method = RequestMethod.POST)
+	public Invoice createChild(@PathVariable String invoiceCode, @RequestBody Consumer consumer,
+			HttpServletResponse response) {
+		try {
+			return invSer.createChild(invoiceCode, consumer);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
 	}
 
 }

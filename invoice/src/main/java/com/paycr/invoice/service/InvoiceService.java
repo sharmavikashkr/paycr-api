@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Attachment;
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Merchant;
@@ -30,6 +31,7 @@ import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.PayType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.invoice.validation.InvoiceValidator;
 import com.razorpay.RazorpayException;
@@ -47,6 +49,9 @@ public class InvoiceService {
 
 	@Autowired
 	private MerchantPricingRepository merPriRepo;
+
+	@Autowired
+	private InvoiceHelper invHelp;
 
 	@Autowired
 	private NotifyService notSer;
@@ -168,6 +173,21 @@ public class InvoiceService {
 		attachName = invoiceCode + "-" + attachName;
 		Path path = Paths.get(server.getMerchantLocation() + "attachment/" + attachName);
 		return Files.readAllBytes(path);
+	}
+
+	public Invoice createChild(String invoiceCode, Consumer consumer) {
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		if (CommonUtil.isNull(invoice)) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
+		}
+		Invoice childInvoice = invHelp.prepareChildInvoice(invoice);
+		consumer.setActive(true);
+		consumer.setCreated(new Date());
+		consumer.setCreatedBy(secSer.findLoggedInUser().getEmail());
+		consumer.setMerchant(invoice.getMerchant());
+		childInvoice.setConsumer(consumer);
+		invHelp.updateConsumer(childInvoice, consumer);
+		return childInvoice;
 	}
 
 }

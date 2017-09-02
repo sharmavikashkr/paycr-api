@@ -77,6 +77,10 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 	$scope.seachConInvoice = function(consumer) {
 		$rootScope.searchInvoiceReq.email = consumer.email;
 		$rootScope.searchInvoiceReq.mobile = consumer.mobile;
+		$rootScope.searchInvoiceReq.invoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceType = null;
+		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceStatus = null;
 		$rootScope.searchInvoice();
 	}
 	$scope.updateInvoiceItem = function(inventory) {

@@ -146,7 +146,7 @@
 												<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoiceInfo(invoice)" title="Notifications" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">
 													<i class="fa fa-bell"></i>
 												</button>
-												<button ng-if="invoice.invoiceType == 'BULK'" ng-click="updateInvoiceInfo(invoice)" title="Add child invoice" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#childInvoiceModal">
+												<button ng-if="invoice.invoiceType == 'BULK' && user.access.finance" ng-click="updateInvoiceInfo(invoice)" title="Add child invoice" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#childInvoiceModal">
 													<i class="fa fa-plus"></i>
 												</button>
 												<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice)" title="Search child invoices" type="button" class="btn btn-warning btn-md">

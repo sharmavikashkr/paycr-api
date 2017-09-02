@@ -172,7 +172,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			data : this.saveinvoice
 		}
 		$http(req).then(function(invoice) {
-			$scope.searchInvoice();
+			$rootScope.searchInvoice();
 			$scope.serverMessage(invoice);
 			$rootScope.invoiceInfo = invoice.data;
 			if($rootScope.invoiceInfo.invoiceType != 'BULK') {
@@ -194,7 +194,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$rootScope.searchInvoice();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -232,7 +232,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			}
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$rootScope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -258,7 +258,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			data : $httpParamSerializer(refundRequest)
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$rootScope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -280,7 +280,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			data : this.markpaid
 		}
 		$http(req).then(function(data) {
-			$scope.searchInvoice();
+			$rootScope.searchInvoice();
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -308,9 +308,34 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#attachmentModal')).modal('hide');
 		$rootScope.searchInvoice();
 	}
+	$scope.createChildInvoice = function(invoiceCode) {
+		var req = {
+			method : 'POST',
+			url : "/invoice/createChild/"+invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : this.consumer
+		}
+		$http(req).then(function(invoice) {
+			$rootScope.searchInvoice();
+			$scope.serverMessage(invoice);
+			$rootScope.invoiceInfo = invoice.data;
+			angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
+		$rootScope.searchInvoice();
+	}
 	$scope.searchChildInvoices = function(invoice) {
 		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
 		$scope.searchInvoiceReq.invoiceType = 'SINGLE';
+		$rootScope.searchInvoiceReq.email = '';
+		$rootScope.searchInvoiceReq.mobile = '';
+		$rootScope.searchInvoiceReq.invoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceStatus = null;
 		$rootScope.searchInvoice();
 	}
 });
