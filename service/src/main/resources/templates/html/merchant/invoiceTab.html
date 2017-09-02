@@ -42,6 +42,24 @@
 							<tr>
 								<td>
 									<div class="form-group">
+										<label class="control-label">Invoice Type</label>
+										<select class="form-control" ng-model="searchInvoiceReq.invoiceType">
+											<option ng-repeat="invoiceType in invoiceTypes" value="{{invoiceType}}">{{invoiceType}}</option>
+										</select>
+									</div>
+								</td>
+							</tr>
+							<tr ng-if="searchInvoiceReq.invoiceType == 'SINGLE' || searchInvoiceReq.invoiceType == 'RECURRING'">
+								<td>
+									<div class="form-group">
+										<label class="control-label">Parent Invoice Code</label>
+										<input class="form-control" ng-model="searchInvoiceReq.parentInvoiceCode" placeholder="parent invoiceCode" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
 										<label class="control-label">Invoice Status</label>
 										<select class="form-control" ng-model="searchInvoiceReq.invoiceStatus">
 											<option ng-repeat="invoiceStatus in invoiceStatuses" value="{{invoiceStatus}}">{{invoiceStatus}}</option>
@@ -86,7 +104,7 @@
 								<th>Invoice Code</th>
 								<th>Amount</th>
 								<th>Type</th>
-								<th>Name</th>
+								<th>Created</th>
 								<th class="hidden-xs">Status</th>
 							</tr>
 						</thead>
@@ -99,7 +117,7 @@
 								<td>{{invoice.invoiceCode}}</td>
 								<td>&#8377; {{invoice.payAmount}}</td>
 								<td>{{invoice.invoiceType}}</td>
-								<td>{{invoice.consumer.name}}</td>
+								<td>{{invoice.created | date:'dd-MM-yyyy'}}</td>
 								<td class="hidden-xs">{{invoice.status}}</td>
 							</tr>
 							<tr>
@@ -110,13 +128,13 @@
 												<button ng-click="updateInvoiceInfo(invoice)" title="Info" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#invoiceInfoModal">
 													<i class="fa fa-info"></i>
 												</button>
-												<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md hidden-xs" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceModal">
+												<button ng-if="invoice.invoiceType != 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md hidden-xs" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceModal">
 													<i class="fa fa-pencil"></i>
 												</button>
-												<button ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md visible-xs-inline" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
+												<button ng-if="invoice.invoiceType != 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md visible-xs-inline" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
 													<i class="fa fa-pencil"></i>
 												</button>
-												<button ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
+												<button ng-if="invoice.invoiceType != 'BULK'" ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 													&#8377;
 												</button>
 												<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
@@ -125,8 +143,14 @@
 												<button ng-click="updateInvoiceInfo(invoice)" title="Attachments" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#attachmentModal">
 													<i class="fa fa-paperclip"></i>
 												</button>
-												<button ng-click="updateInvoiceInfo(invoice)" title="Notifications" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">
+												<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoiceInfo(invoice)" title="Notifications" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">
 													<i class="fa fa-bell"></i>
+												</button>
+												<button ng-if="invoice.invoiceType == 'BULK'" ng-click="updateInvoiceInfo(invoice)" title="Add child invoice" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#childInvoiceModal">
+													<i class="fa fa-plus"></i>
+												</button>
+												<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
+													<i class="fa fa-search"></i>
 												</button>
 											</div>
 										</div>
@@ -170,7 +194,7 @@
 												</table>
 											</div>
 										</div>
-										<div class="row">
+										<div ng-if="invoice.invoiceType != 'BULK'" class="row">
 											<div class="col-lg-12">
 												<h5>Consumer Details</h5>
 												<table class="table table-striped table-bordered table-responsive">
@@ -195,16 +219,16 @@
 											<div class="col-xs-12 col-md-12 col-lg-8 col-lg-offset-4">
 												<div class="text-right">
 													<button style="margin: 5px;"
-														ng-if="invoice.status != 'PAID' && user.access.finance"
+														ng-if="invoice.invoiceType == 'SINGLE' && invoice.status != 'PAID' && user.access.finance"
 														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#markPaidModal"
 														type="button" class="btn btn-success">Mark Paid</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status != 'PAID'"
+														ng-if="invoice.invoiceType == 'SINGLE' && invoice.status != 'PAID'"
 														ng-click="enquireInvoice(invoice.invoiceCode)"
 														type="button" class="btn btn-info">Enquire</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
+														ng-if="invoice.invoiceType == 'SINGLE' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
 														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#invoiceNotifyModal"
 														type="button" class="btn btn-warning">Notify</button>
@@ -213,7 +237,7 @@
 														ng-click="expireInvoice(invoice.invoiceCode)"
 														type="button" class="btn btn-default">Expire</button>
 													<button style="margin: 5px;"
-														ng-if="invoice.status == 'PAID' && user.access.finance"
+														ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && user.access.finance"
 														ng-click="updateInvoiceInfo(invoice)"
 														data-toggle="modal" data-target="#refundModal"
 														type="button" class="btn btn-danger">Refund</button>

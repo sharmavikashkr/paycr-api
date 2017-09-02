@@ -19,6 +19,9 @@ public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> 
 
 	@Override
 	public void validate(Invoice invoice) {
+		if (invoice.isUpdate()) {
+			return;
+		}
 		List<MerchantPricing> merPricings = invoice.getMerchant().getPricings();
 		MerchantPricing selectedMerPricing = null;
 		boolean amountNotAllowed = true;

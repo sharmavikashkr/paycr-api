@@ -35,6 +35,24 @@
 							<tr>
 								<td>
 									<div class="form-group">
+										<label class="control-label">Invoice Type</label>
+										<select class="form-control" ng-model="searchInvoiceReq.invoiceType">
+											<option ng-repeat="invoiceType in invoiceTypes" value="{{invoiceType}}">{{invoiceType}}</option>
+										</select>
+									</div>
+								</td>
+							</tr>
+							<tr ng-if="searchInvoiceReq.invoiceType == 'SINGLE' || searchInvoiceReq.invoiceType == 'RECURRING'">
+								<td>
+									<div class="form-group">
+										<label class="control-label">Parent Invoice Code</label>
+										<input class="form-control" ng-model="searchInvoiceReq.parentInvoiceCode" placeholder="parent invoiceCode" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="form-group">
 										<label class="control-label">Invoice Status</label>
 										<select class="form-control" ng-model="searchInvoiceReq.invoiceStatus">
 											<option ng-repeat="invoiceStatus in invoiceStatuses" value="{{invoiceStatus}}">{{invoiceStatus}}</option>
@@ -95,12 +113,15 @@
 												<button ng-click="updateInvoiceInfo(invoice)" title="Info" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#invoiceInfoModal">
 													<i class="fa fa-info"></i>
 												</button>
-												<button ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
+												<button ng-if="invoice.invoiceType != 'BULK'" ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 													&#8377;
 												</button>
 												<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
 													<i class="fa fa-file-pdf-o"></i>
 												</a>
+												<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
+													<i class="fa fa-search"></i>
+												</button>
 											</div>
 										</div>
 										<div class="row">

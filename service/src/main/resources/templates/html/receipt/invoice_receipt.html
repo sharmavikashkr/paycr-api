@@ -43,6 +43,7 @@
 						<hr>
 					</div>
 				</div>
+				<#if invoice.consumer??>
 				<div class="row">
 					<div class="col-xs-6">
 						<div>Billed To:</div>
@@ -51,6 +52,7 @@
 						<div>${invoice.consumer.mobile}</div>
 					</div>
 				</div>
+				</#if>
 			</div>
 			<div class="col-xs-4">
 				<div class="panel">

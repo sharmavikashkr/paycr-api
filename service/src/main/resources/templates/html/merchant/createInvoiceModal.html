@@ -105,7 +105,7 @@
 													</td>
 													<td>
 														<div ng-class="(createInvoiceForm.itemName{{$index}}.$valid)?'':'has-error'" class="form-group">
-															<input class="form-control text-center" list="item-auto-complete" ng-change="setInventory(item)" ng-model="item.name" name="itemName{{$index}}" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
+															<input class="form-control text-center" list="item-auto-complete" ng-change="setInventory(item)" ng-model="item.inventory.name" name="itemName{{$index}}" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
 															<datalist id="item-auto-complete">
 																<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.name">
 															</datalist>
@@ -115,7 +115,7 @@
 														<div class="input-group">
 															<div class="input-group-addon">&#8377;</div>
 															<div class="form-group">
-																<input class="form-control text-center" ng-change="calculateTotal()" ng-model="item.rate" placeholder="2000.00" type="number" step="0.01" required />
+																<input class="form-control text-center" ng-change="calculateTotal()" ng-model="item.inventory.rate" placeholder="2000.00" type="number" step="0.01" required />
 															</div>
 														</div>
 													</td>

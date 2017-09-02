@@ -130,6 +130,20 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/invoicetypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(invoicetypes) {
+			$rootScope.invoiceTypes = invoicetypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 	$scope.fetchUser = function() {
 		var req = {

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.exception.PaycrException;
 import com.paycr.invoice.service.PaymentService;
-import com.razorpay.RazorpayException;
 
 @RestController
 public class PaymentController {
@@ -34,6 +33,19 @@ public class PaymentController {
 		}
 	}
 
+	@RequestMapping(value = "/updateConsumerAndPay/{invoiceCode}", method = RequestMethod.POST)
+	public void updateConsumerAndPay(@PathVariable(value = "invoiceCode") String invoiceCode,
+			@RequestParam("name") String name, @RequestParam("email") String email,
+			@RequestParam("mobile") String mobile, @RequestParam("signature") String signature,
+			HttpServletResponse response) throws IOException {
+		try {
+			paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		response.sendRedirect("/" + invoiceCode);
+	}
+
 	@RequestMapping("/payment/decline/{invoiceCode}")
 	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
 		try {
@@ -49,7 +61,7 @@ public class PaymentController {
 		String invoiceCode = null;
 		try {
 			invoiceCode = paySer.purchase(formData);
-		} catch (RazorpayException e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		response.sendRedirect("/payment/response/" + invoiceCode);

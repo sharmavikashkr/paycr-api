@@ -91,12 +91,20 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	}
 	$scope.updateSaveInvoice = function(invoice) {
 		$rootScope.saveinvoice = angular.copy(invoice);
+		if(invoice.id != null) {
+			$rootScope.saveinvoice.update = true;
+		} else {
+			$rootScope.saveinvoice.update = false;
+		}
 	}
 	$scope.addItem = function() {
 		if ($scope.saveinvoice.items.length < 5) {
-			$scope.saveinvoice.items.push({
+			var inventory = {
 				"name" : "",
-				"rate" : 0,
+				"rate" : 0
+			}
+			$scope.saveinvoice.items.push({
+				"inventory" : inventory,
 				"quantity" : 1,
 				"price" : 0
 			});
@@ -104,9 +112,12 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	}
 	$scope.addItemXs = function(item) {
 		if ($scope.saveinvoice.items.length < 5) {
-			$scope.saveinvoice.items.push({
+			var inventory = {
 				"name" : item.name,
-				"rate" : item.rate,
+				"rate" : item.rate
+			}
+			$scope.saveinvoice.items.push({
+				"inventory" : inventory,
 				"quantity" : item.quantity,
 				"price" : parseFloat(item.rate) * parseFloat(item.quantity)
 			});
@@ -164,7 +175,9 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.searchInvoice();
 			$scope.serverMessage(invoice);
 			$rootScope.invoiceInfo = invoice.data;
-			angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
+			if($rootScope.invoiceInfo.invoiceType != 'BULK') {
+				angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
+			}
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -293,6 +306,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#attachmentModal')).modal('hide');
+		$rootScope.searchInvoice();
+	}
+	$scope.searchChildInvoices = function(invoice) {
+		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
+		$scope.searchInvoiceReq.invoiceType = 'SINGLE';
 		$rootScope.searchInvoice();
 	}
 });

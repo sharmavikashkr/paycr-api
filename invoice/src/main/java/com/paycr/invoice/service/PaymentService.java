@@ -2,22 +2,29 @@ package com.paycr.invoice.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
+import com.paycr.common.data.domain.Item;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.exception.PaycrException;
@@ -29,7 +36,9 @@ import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.HmacSignerUtil;
-import com.paycr.common.util.RandomIdGenerator;
+import com.paycr.invoice.validation.IsValidInvoiceConsumer;
+import com.paycr.invoice.validation.IsValidInvoiceMerchantPricing;
+import com.paycr.invoice.validation.IsValidInvoiceRequest;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.razorpay.Refund;
@@ -52,25 +61,30 @@ public class PaymentService {
 	@Autowired
 	private HmacSignerUtil hmacSigner;
 
+	@Autowired
+	private MerchantPricingRepository merPriRepo;
+
+	@Autowired
+	private IsValidInvoiceRequest isValidRequest;
+
+	@Autowired
+	private IsValidInvoiceConsumer isValidConsumer;
+
+	@Autowired
+	private IsValidInvoiceMerchantPricing isValidPricing;
+
 	public ModelAndView payInvoice(String invoiceCode) {
-		Date timeNow = new Date();
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			Invoice childInvoice = invoice;
-			String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
-			charset += charset.toLowerCase() + charset.toUpperCase();
-			String childCode = null;
-			do {
-				invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
-				invoice.setInvoiceCode(invoiceCode);
-			} while (CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode)));
-			childInvoice.setId(null);
-			childInvoice.setParent(invoice);
-			childInvoice.setInvoiceCode(childCode);
-			childInvoice = invRepo.save(childInvoice);
-			invoice = childInvoice;
+			invoice = prepareChildInvoice(invoice);
+		}
+		if (CommonUtil.isNull(invoice.getConsumer())) {
+			ModelAndView mv = new ModelAndView("html/getconsumer");
+			mv.addObject("invoice", invoice);
+			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
+			return mv;
 		}
 		ModelAndView mv = new ModelAndView("html/payinvoice");
 		mv.addObject("invoice", invoice);
@@ -96,6 +110,43 @@ public class PaymentService {
 			invRepo.save(invoice);
 			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
 		}
+	}
+
+	private Invoice prepareChildInvoice(Invoice invoice) {
+		Invoice childInvoice = ObjectUtils.clone(invoice);
+		childInvoice.setId(null);
+		childInvoice.setInvoiceCode(null);
+		childInvoice.setParent(invoice);
+		childInvoice.setMerchant(invoice.getMerchant());
+		List<Item> newItems = new ArrayList<Item>();
+		for (Item item : invoice.getItems()) {
+			Item newItem = new Item();
+			newItem.setInventory(item.getInventory());
+			newItem.setQuantity(item.getQuantity());
+			newItem.setPrice(item.getPrice());
+			newItem.setInvoice(childInvoice);
+			newItems.add(newItem);
+		}
+		childInvoice.setItems(newItems);
+		List<InvoiceCustomParam> params = new ArrayList<InvoiceCustomParam>();
+		for (InvoiceCustomParam param : invoice.getCustomParams()) {
+			InvoiceCustomParam newParam = new InvoiceCustomParam();
+			newParam.setParamName(param.getParamName());
+			newParam.setParamValue(param.getParamValue());
+			newParam.setProvider(param.getProvider());
+			param.setInvoice(childInvoice);
+		}
+		childInvoice.setAttachments(null);
+		childInvoice.setInvoiceNotices(null);
+		childInvoice.setCustomParams(params);
+		isValidRequest.validate(childInvoice);
+		isValidPricing.validate(childInvoice);
+		childInvoice.setInvoiceType(InvoiceType.SINGLE);
+		childInvoice = invRepo.save(childInvoice);
+		MerchantPricing merPri = childInvoice.getMerchantPricing();
+		merPri.setInvCount(merPri.getInvCount() + 1);
+		merPriRepo.save(merPri);
+		return childInvoice;
 	}
 
 	public String purchase(Map<String, String> formData) throws IOException, RazorpayException {
@@ -203,6 +254,28 @@ public class PaymentService {
 		} else {
 			return InvoiceStatus.UNPAID;
 		}
+	}
+
+	public void updateConsumerAndPay(String invoiceCode, String name, String email, String mobile, String signature) {
+		String genSig = hmacSigner.signWithSecretKey(invoiceCode, invoiceCode);
+		if (!genSig.equals(signature)) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Signature");
+		}
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		if (CommonUtil.isNull(invoice)) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
+		}
+		Consumer consumer = new Consumer();
+		consumer.setActive(true);
+		consumer.setCreated(new Date());
+		consumer.setCreatedBy("SELF");
+		consumer.setEmail(email);
+		consumer.setMerchant(invoice.getMerchant());
+		consumer.setMobile(mobile);
+		consumer.setName(name);
+		invoice.setConsumer(consumer);
+		isValidConsumer.validate(invoice);
+		invRepo.save(invoice);
 	}
 
 }

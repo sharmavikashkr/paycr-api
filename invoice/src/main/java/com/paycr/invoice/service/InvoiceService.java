@@ -61,11 +61,17 @@ public class InvoiceService {
 	private Server server;
 
 	public Invoice single(Invoice invoice) {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
+		invoice.setMerchant(merchant);
+		invoice.setCreatedBy(user.getEmail());
 		invValidator.validate(invoice);
 		invRepo.save(invoice);
-		MerchantPricing merPri = invoice.getMerchantPricing();
-		merPri.setInvCount(merPri.getInvCount() + 1);
-		merPriRepo.save(merPri);
+		if (!invoice.isUpdate()) {
+			MerchantPricing merPri = invoice.getMerchantPricing();
+			merPri.setInvCount(merPri.getInvCount() + 1);
+			merPriRepo.save(merPri);
+		}
 		return invoice;
 	}
 

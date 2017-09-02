@@ -6,11 +6,14 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 
 public class SearchInvoiceRequest {
 
 	private Integer merchant;
 	private String invoiceCode;
+	private InvoiceType invoiceType;
+	private String parentInvoiceCode;
 	private String email;
 	private String mobile;
 	private BigDecimal amount;
@@ -84,6 +87,22 @@ public class SearchInvoiceRequest {
 
 	public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
 		this.invoiceStatus = invoiceStatus;
+	}
+
+	public InvoiceType getInvoiceType() {
+		return invoiceType;
+	}
+
+	public void setInvoiceType(InvoiceType invoiceType) {
+		this.invoiceType = invoiceType;
+	}
+
+	public String getParentInvoiceCode() {
+		return parentInvoiceCode;
+	}
+
+	public void setParentInvoiceCode(String parentInvoiceCode) {
+		this.parentInvoiceCode = parentInvoiceCode;
 	}
 
 }

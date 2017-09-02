@@ -1,6 +1,5 @@
 package com.paycr.common.data.domain;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +25,7 @@ import com.paycr.common.type.InvoiceType;
 
 @Entity
 @Table(name = "pc_invoice")
-public class Invoice implements Serializable {
-
-	private static final long serialVersionUID = -8798244987005274799L;
+public class Invoice implements Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,6 +94,9 @@ public class Invoice implements Serializable {
 
 	@Transient
 	private List<Payment> allPayments;
+	
+	@Transient
+	private boolean update;
 
 	public Integer getId() {
 		return id;
@@ -296,5 +296,17 @@ public class Invoice implements Serializable {
 
 	public void setParent(Invoice parent) {
 		this.parent = parent;
+	}
+
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+
+	public boolean isUpdate() {
+		return update;
+	}
+
+	public void setUpdate(boolean update) {
+		this.update = update;
 	}
 }

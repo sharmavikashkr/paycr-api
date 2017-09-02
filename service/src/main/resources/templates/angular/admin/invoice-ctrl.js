@@ -43,4 +43,9 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.updateInvoiceInfo = function(invoice) {
 		$rootScope.invoiceInfo = invoice;
 	}
+	$scope.searchChildInvoices = function(invoice) {
+		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
+		$scope.searchInvoiceReq.invoiceType = 'SINGLE';
+		$scope.searchInvoice();
+	}
 });

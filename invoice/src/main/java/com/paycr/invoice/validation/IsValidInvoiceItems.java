@@ -42,21 +42,21 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 	}
 
 	private void validateItem(Invoice invoice, Item item) {
-		if ("".equals(item.getName().trim()) || CommonUtil.isNull(item.getRate()) || CommonUtil.isNull(item.getPrice())
-				|| 0 == item.getQuantity()) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Params entered");
+		if ("".equals(item.getInventory().getName()) || CommonUtil.isNull(item.getInventory().getRate())
+				|| CommonUtil.isNull(item.getPrice()) || 0 == item.getQuantity()) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Items entered");
 		}
-		if (!item.getPrice().equals(item.getRate().multiply(new BigDecimal(item.getQuantity())))) {
+		if (!item.getPrice().equals(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity())))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
-		Inventory inventory = invnRepo.findByMerchantAndNameAndRate(invoice.getMerchant(), item.getName(),
-				item.getRate());
+		Inventory inventory = invnRepo.findByMerchantAndNameAndRate(invoice.getMerchant(),
+				item.getInventory().getName(), item.getInventory().getRate());
 		if (CommonUtil.isNull(inventory)) {
 			inventory = new Inventory();
 			inventory.setCreated(new Date());
 			inventory.setMerchant(invoice.getMerchant());
-			inventory.setName(item.getName());
-			inventory.setRate(item.getRate());
+			inventory.setName(item.getInventory().getName());
+			inventory.setRate(item.getInventory().getRate());
 			inventory.setCreatedBy(invoice.getCreatedBy());
 			invnRepo.save(inventory);
 		}

@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,26 +23,12 @@ public class Item {
 
 	private BigDecimal price;
 
-	@Transient
-	private String name;
-
-	@Transient
-	private BigDecimal rate;
-
 	@JsonIgnore
 	@ManyToOne
 	private Invoice invoice;
 
 	@ManyToOne
 	private Inventory inventory;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Integer getId() {
 		return id;
@@ -55,14 +40,6 @@ public class Item {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public BigDecimal getRate() {
-		return rate;
-	}
-
-	public void setRate(BigDecimal rate) {
-		this.rate = rate;
 	}
 
 	public BigDecimal getPrice() {

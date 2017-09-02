@@ -10,11 +10,8 @@ import org.springframework.util.StringUtils;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
-import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
@@ -29,9 +26,6 @@ import com.paycr.common.validation.RequestValidator;
 public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 
 	@Autowired
-	private SecurityService secSer;
-
-	@Autowired
 	private InvoiceRepository invRepo;
 
 	@Autowired
@@ -40,23 +34,29 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	@Override
 	public void validate(Invoice invoice) {
 		Date timeNow = new Date();
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		PcUser user = secSer.findLoggedInUser();
-		invoice.setMerchant(merchant);
-		if (CommonUtil.isNull(invoice.getPayAmount())) {
-			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
-		}
-		if (invoice.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
-			throw new PaycrException(Constants.FAILURE, "Amount should be greated than 0");
-		}
-		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
+		String charset = hmacSigner.signWithSecretKey(invoice.getMerchant().getSecretKey(),
+				String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
 		String invoiceCode = invoice.getInvoiceCode();
-		if (StringUtils.isEmpty(invoiceCode)) {
+		if (invoice.isUpdate()) {
+			Invoice extInvoice = invRepo.findByInvoiceCode(invoiceCode);
+			if (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNull(extInvoice)) {
+				throw new PaycrException(Constants.FAILURE, "Invoice not found");
+			}
+			if (InvoiceStatus.EXPIRED.equals(extInvoice.getStatus())
+					|| InvoiceStatus.PAID.equals(extInvoice.getStatus())) {
+				throw new PaycrException(Constants.FAILURE, "Invoice cannot be modified now");
+			}
+			if (!invoice.getInvoiceType().equals(extInvoice.getInvoiceType())) {
+				throw new PaycrException(Constants.FAILURE, "Invoice type cannot be modified");
+			}
+		} else {
 			do {
 				invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 				invoice.setInvoiceCode(invoiceCode);
 			} while (CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode)));
+			invoice.setCreated(timeNow);
+			invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		}
 		if (CommonUtil.isNull(invoice.getTaxValue())) {
 			invoice.setTaxValue(0.0F);
@@ -67,10 +67,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		if (CommonUtil.isNull(invoice.getInvoiceType())) {
 			invoice.setInvoiceType(InvoiceType.SINGLE);
 		}
-		invoice.setCreated(timeNow);
-		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		invoice.setStatus(InvoiceStatus.UNPAID);
-		invoice.setCreatedBy(user.getEmail());
 		if (CommonUtil.isNotNull(invoice.getInvoiceNotices())) {
 			for (InvoiceNotify invNot : invoice.getInvoiceNotices()) {
 				invNot.setInvoice(invoice);
