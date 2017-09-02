@@ -81,9 +81,12 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 	}
 	$scope.updateInvoiceItem = function(inventory) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
-		$scope.saveinvoice.items.push({
+		var inventory = {
 			"name" : inventory.name,
 			"rate" : inventory.rate,
+		}
+		$scope.saveinvoice.items.push({
+			"inventory" : inventory,
 			"quantity" : 1,
 			"price" : 0
 		});

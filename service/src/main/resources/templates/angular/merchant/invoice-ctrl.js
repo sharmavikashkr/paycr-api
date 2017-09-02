@@ -61,8 +61,8 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.setInventory = function(item) {
 		for(var index in $rootScope.inventoryList) {
 			var invn = $rootScope.inventoryList[index];
-			if(invn.name == item.name){
-				item.rate = invn.rate;
+			if(invn.name == item.inventory.name){
+				item.inventory.rate = invn.rate;
 				$scope.calculateTotal();
 				break;
 			}
@@ -113,13 +113,13 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.addItemXs = function(item) {
 		if ($scope.saveinvoice.items.length < 5) {
 			var inventory = {
-				"name" : item.name,
-				"rate" : item.rate
+				"name" : item.inventory.name,
+				"rate" : item.inventory.rate
 			}
 			$scope.saveinvoice.items.push({
 				"inventory" : inventory,
 				"quantity" : item.quantity,
-				"price" : parseFloat(item.rate) * parseFloat(item.quantity)
+				"price" : parseFloat(item.inventory.rate) * parseFloat(item.quantity)
 			});
 		}
 		angular.element(document.querySelector('#addItemXsModal')).modal('hide');
@@ -134,13 +134,13 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		var totals = 0;
 		if($scope.saveinvoice.addItems) {
 			for ( var item in $scope.saveinvoice.items) {
-				if ($scope.saveinvoice.items[item].rate == null) {
-					$scope.saveinvoice.items[item].rate = 0;
+				if ($scope.saveinvoice.items[item].inventory.rate == null) {
+					$scope.saveinvoice.items[item].inventory.rate = 0;
 				}
 				if ($scope.saveinvoice.items[item].quantity == null) {
 					$scope.saveinvoice.items[item].quantity = 0;
 				}
-				$scope.saveinvoice.items[item].price = parseFloat((parseFloat($scope.saveinvoice.items[item].rate)
+				$scope.saveinvoice.items[item].price = parseFloat((parseFloat($scope.saveinvoice.items[item].inventory.rate)
 						* parseFloat($scope.saveinvoice.items[item].quantity)).toFixed(2));
 				totals = totals + parseFloat($scope.saveinvoice.items[item].price);
 			}
