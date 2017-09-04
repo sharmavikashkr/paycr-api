@@ -27,10 +27,10 @@
 						<tr ng-class="(pricing.active)?'success':'warning'" ng-repeat="pricing in pricings" title="ACTIVE = {{pricing.active}}">
 							<td>{{pricing.name}}</td>
 							<td>{{pricing.duration}}</td>
-							<td>&#8377; {{pricing.rate}}</td>
+							<td><i class="fa fa-rupee"></i> {{pricing.rate}}</td>
 							<td>{{pricing.invoiceLimit}}</td>
-							<td class="hidden-xs">&#8377; {{pricing.startAmount}}</td>
-							<td class="hidden-xs">&#8377; {{pricing.endAmount}}</td>
+							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.startAmount}}</td>
+							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.endAmount}}</td>
 							<td ng-if="pricing.active">
 								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
 							</td>

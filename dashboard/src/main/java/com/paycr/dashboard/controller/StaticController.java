@@ -23,6 +23,7 @@ import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayStatus;
 import com.paycr.common.type.PayType;
+import com.paycr.common.type.RecurrType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.RoleUtil;
@@ -100,6 +101,10 @@ public class StaticController {
 		} else if ("invoicetypes".equals(type)) {
 			for (InvoiceType invType : InvoiceType.values()) {
 				enumList.add(invType.name());
+			}
+		} else if ("recurrtypes".equals(type)) {
+			for (RecurrType recType : RecurrType.values()) {
+				enumList.add(recType.name());
 			}
 		}
 		return enumList;

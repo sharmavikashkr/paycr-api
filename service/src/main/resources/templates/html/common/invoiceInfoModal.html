@@ -17,11 +17,11 @@
 								</tr>
 								<tr>
 									<td class="text-center"><label>Created</label></td>
-									<td class="text-center"><p>{{invoiceInfo.created | date:'dd-MM-yyyy HH:mm'}}</p></td>
+									<td class="text-center"><p>{{invoiceInfo.created | date:'dd-MM-yyyy'}}</p></td>
 								</tr>
 								<tr>
 									<td class="text-center"><label>Expiry</label></td>
-									<td class="text-center"><p>{{invoiceInfo.expiry | date:'dd-MM-yyyy HH:mm'}}</p></td>
+									<td class="text-center"><p>{{invoiceInfo.expiry | date:'dd-MM-yyyy'}}</p></td>
 								</tr>
 							</tbody>
 						</table>
@@ -54,9 +54,9 @@
 							<tbody>
 								<tr ng-repeat="item in invoiceInfo.items">
 									<td>{{item.inventory.name}}</td>
-									<td class="hidden-xs">&#8377; {{item.inventory.rate}}</td>
+									<td class="hidden-xs"><i class="fa fa-rupee"></i> {{item.inventory.rate}}</td>
 									<td class="hidden-xs">{{item.quantity}}</td>
-									<td>&#8377; {{item.price}}</td>
+									<td><i class="fa fa-rupee"></i> {{item.price}}</td>
 								</tr>
 							</tbody>
 						</table>

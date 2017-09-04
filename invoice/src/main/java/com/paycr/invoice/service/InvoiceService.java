@@ -23,16 +23,21 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
+import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.data.repository.RecurringInvoiceRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.DateUtil;
+import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.validation.InvoiceValidator;
 import com.razorpay.RazorpayException;
 
@@ -65,6 +70,12 @@ public class InvoiceService {
 	@Autowired
 	private Server server;
 
+	@Autowired
+	private InvoiceSchedulerService invSchSer;
+
+	@Autowired
+	private RecurringInvoiceRepository recInvRepo;
+
 	public Invoice single(Invoice invoice) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
@@ -96,29 +107,36 @@ public class InvoiceService {
 	}
 
 	public void notify(String invoiceCode, InvoiceNotify invoiceNotify) {
-		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-		if (timeNow.compareTo(invoice.getExpiry()) < 0) {
+		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())
+				&& !InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
 			notSer.notify(invoice, invoiceNotify);
-			invoiceNotify.setCreated(timeNow);
+			invoiceNotify.setCreated(new Date());
 			invoiceNotify.setInvoice(invoice);
 			invoice.getInvoiceNotices().add(invoiceNotify);
 			invRepo.save(invoice);
+		} else {
+			throw new PaycrException(Constants.FAILURE, "Notify Not allowed");
 		}
 	}
 
 	public void enquire(String invoiceCode) throws RazorpayException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-		if (!InvoiceStatus.PAID.equals(invoice.getStatus())) {
+		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			payService.enquire(invoice);
+		} else {
+			throw new PaycrException(Constants.FAILURE, "Enquiry Not allowed");
 		}
 	}
 
 	public void refund(BigDecimal amount, String invoiceCode) throws RazorpayException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
+		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
+		}
 		List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), PayType.REFUND);
 		BigDecimal refundAllowed = invoice.getPayAmount();
 		for (Payment refund : refunds) {
@@ -134,11 +152,13 @@ public class InvoiceService {
 	}
 
 	public void markPaid(Payment payment) {
-		payment.setCreated(new Date());
-		payment.setStatus("captured");
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
-		payment.setAmount(invoice.getPayAmount());
+		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "Mark paid Not allowed");
+		}
+		payment.setCreated(new Date());
+		payment.setStatus("captured");
 		payment.setPayType(PayType.SALE);
 		payment.setInvoiceCode(invoice.getInvoiceCode());
 		payment.setMerchant(merchant);
@@ -177,10 +197,10 @@ public class InvoiceService {
 
 	public Invoice createChild(String invoiceCode, Consumer consumer) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		if (CommonUtil.isNull(invoice)) {
+		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
 		}
-		Invoice childInvoice = invHelp.prepareChildInvoice(invoice);
+		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode);
 		consumer.setActive(true);
 		consumer.setCreated(new Date());
 		consumer.setCreatedBy(secSer.findLoggedInUser().getEmail());
@@ -188,6 +208,40 @@ public class InvoiceService {
 		childInvoice.setConsumer(consumer);
 		invHelp.updateConsumer(childInvoice, consumer);
 		return childInvoice;
+	}
+
+	public void recurr(String invoiceCode, RecurringInvoice recInv) {
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		if (invoice == null || !InvoiceType.RECURRING.equals(invoice.getInvoiceType())
+				|| InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid invoice");
+		}
+		RecurringInvoice ext = recInvRepo.findByInvoiceAndActive(invoice, true);
+		if (ext != null) {
+			ext.setActive(false);
+			recInvRepo.save(ext);
+		}
+		Date timeNow = new Date();
+		Date start = DateUtil.getStartOfDay(timeNow);
+		Date end = DateUtil.getEndOfDay(timeNow);
+		if (recInv.getStartDate() == null || start.after(recInv.getStartDate())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid start date");
+		}
+		recInv.setActive(true);
+		recInv.setInvoice(invoice);
+		recInv.setRemaining(recInv.getTotal());
+		recInv.setNextInvDate(recInv.getStartDate());
+		recInvRepo.save(recInv);
+		if (start.before(recInv.getStartDate()) && end.after(recInv.getStartDate())) {
+			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode());
+			Thread th = new Thread(invSchSer.processInvoice(recInv, childInvoice, timeNow));
+			th.start();
+		}
+	}
+
+	public List<RecurringInvoice> allRecurr(String invoiceCode) {
+		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		return recInvRepo.findByInvoice(invoice);
 	}
 
 }

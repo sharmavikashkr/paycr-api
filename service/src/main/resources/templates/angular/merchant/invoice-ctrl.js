@@ -6,6 +6,9 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
+	$rootScope.recurringInvoice = {
+		"startDate" : dateNow
+	}
 	$rootScope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
@@ -175,8 +178,10 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$rootScope.searchInvoice();
 			$scope.serverMessage(invoice);
 			$rootScope.invoiceInfo = invoice.data;
-			if($rootScope.invoiceInfo.invoiceType != 'BULK') {
+			if($rootScope.invoiceInfo.invoiceType == 'SINGLE') {
 				angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
+			} else if($rootScope.invoiceInfo.invoiceType == 'RECURRING') {
+				angular.element(document.querySelector('#recurrInvoiceModal')).modal('show');
 			}
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -327,7 +332,6 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
-		$rootScope.searchInvoice();
 	}
 	$scope.searchChildInvoices = function(invoice) {
 		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
@@ -337,5 +341,39 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.invoiceCode = '';
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
 		$rootScope.searchInvoice();
+	}
+	$scope.updateRecurrInvoiceInfo = function(invoice) {
+		$rootScope.recurrInvoiceInfo = angular.copy(invoice);
+		var req = {
+			method : 'GET',
+			url : "/invoice/recurr/all/"+invoice.invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(recurrInvoices) {
+			$rootScope.recurrInvoices = recurrInvoices.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.recurrInvoice = function(invoiceCode) {
+		var req = {
+			method : 'POST',
+			url : "/invoice/recurr/new/"+invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : this.recurringInvoice
+		}
+		$http(req).then(function(data) {
+			$rootScope.searchInvoice();
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#recurrInvoiceModal')).modal('hide');
 	}
 });

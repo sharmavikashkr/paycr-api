@@ -49,7 +49,7 @@
 									</div>
 								</td>
 							</tr>
-							<tr ng-if="searchInvoiceReq.invoiceType == 'SINGLE' || searchInvoiceReq.invoiceType == 'RECURRING'">
+							<tr ng-if="searchInvoiceReq.invoiceType == 'SINGLE'">
 								<td>
 									<div class="form-group">
 										<label class="control-label">Parent Invoice Code</label>
@@ -115,7 +115,7 @@
 								data-target="#invdetails-{{invoice.invoiceCode}}"
 								class="accordion-toggle">
 								<td>{{invoice.invoiceCode}}</td>
-								<td>&#8377; {{invoice.payAmount}}</td>
+								<td><i class="fa fa-rupee"></i> {{invoice.payAmount}}</td>
 								<td>{{invoice.invoiceType}}</td>
 								<td>{{invoice.created | date:'dd-MM-yyyy'}}</td>
 								<td class="hidden-xs">{{invoice.status}}</td>
@@ -135,7 +135,7 @@
 													<i class="fa fa-pencil"></i>
 												</button>
 												<button ng-if="invoice.invoiceType != 'BULK'" ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
-													&#8377;
+													<i class="fa fa-rupee"></i>
 												</button>
 												<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
 													<i class="fa fa-file-pdf-o"></i>
@@ -152,6 +152,9 @@
 												<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
 													<i class="fa fa-search"></i>
 												</button>
+												<button ng-if="invoice.invoiceType == 'RECURRING'" ng-click="updateRecurrInvoiceInfo(invoice)" title="Schedule invoices" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#recurrInvoiceModal">
+													<i class="fa fa-clock-o"></i>
+												</button>
 											</div>
 										</div>
 										<div class="row">
@@ -161,15 +164,15 @@
 													<tbody>
 														<tr>
 															<td><strong>Total</strong></td>
-															<td>&#8377; {{invoice.total}}</td>
+															<td><i class="fa fa-rupee"></i> {{invoice.total}}</td>
 														</tr>
 														<tr>
 															<td><strong>Tax({{invoice.taxName}})</strong> : {{invoice.taxValue}}%</td>
-															<td><strong>Discount</strong> : &#8377; {{invoice.discount}}</td>
+															<td><strong>Discount</strong> : <i class="fa fa-rupee"></i> {{invoice.discount}}</td>
 														</tr>
 														<tr>
 															<td><strong>Pay Amount</strong></td>
-															<td>&#8377; {{invoice.payAmount}}</td>
+															<td><i class="fa fa-rupee"></i> {{invoice.payAmount}}</td>
 														</tr>
 													</tbody>
 												</table>

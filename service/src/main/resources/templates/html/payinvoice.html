@@ -59,9 +59,9 @@
 	                            	<#list invoice.items as item>
 	                                <tr id="itemRow">
 	                                    <td class="text-center">${item.inventory.name}</td>
-	                                    <td class="text-center">&#8377; ${item.inventory.rate}</td>
+	                                    <td class="text-center"><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
 	                                    <td class="text-center">${item.quantity}</td>
-	                                    <td class="text-right">&#8377; ${item.price}</td>
+	                                    <td class="text-right"><i class="fa fa-rupee"></i> ${item.price}</td>
 	                                </tr>
 	                                </#list>
 	                                <tr>
@@ -74,13 +74,13 @@
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"><strong>Discount</strong></td>
-	                                    <td class="text-right">&#8377; ${invoice.discount}</td>
+	                                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.discount}</td>
 	                                </tr>
 	                                <tr>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"></td>
 	                                    <td class="text-center"><strong>Pay Amount</strong></td>
-	                                    <td class="text-right">&#8377; ${invoice.payAmount}</td>
+	                                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.payAmount}</td>
 	                                </tr>
 	                            </tbody>
 	                        </table>
@@ -89,7 +89,7 @@
 				</div>
 				<div class="row panel-default">
 	                <div class="col-md-8 col-md-offset-2">
-	                    <h3 class="section-heading">Hi ${invoice.consumer.name}, <span style="color:white;">${invoice.merchant.name}</span> has requested you to pay <span style="color:white;">&#8377; ${invoice.payAmount}</span></h3>
+	                    <h3 class="section-heading">Hi ${invoice.consumer.name}, <span style="color:white;">${invoice.merchant.name}</span> has requested you to pay <span style="color:white;"><i class="fa fa-rupee"></i> ${invoice.payAmount}</span></h3>
 	                    <p>Proceed to make payment</p>
 	                    <div class="row">
 	                    	<form id="payForm" class="col-sm-6" action="/payment/return/${invoice.invoiceCode}" method="POST">

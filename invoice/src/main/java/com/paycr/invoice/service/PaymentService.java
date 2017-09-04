@@ -30,6 +30,7 @@ import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.HmacSignerUtil;
+import com.paycr.invoice.helper.InvoiceHelper;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.razorpay.Refund;
@@ -60,7 +61,7 @@ public class PaymentService {
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			invoice = invHelp.prepareChildInvoice(invoice);
+			invoice = invHelp.prepareChildInvoice(invoiceCode);
 		}
 		if (CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");

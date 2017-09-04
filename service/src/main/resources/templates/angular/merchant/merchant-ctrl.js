@@ -187,6 +187,20 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/recurrtypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(recurrtypes) {
+			$rootScope.recurrTypes = recurrtypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 	$scope.fetchUser = function() {
 		var req = {

@@ -14,7 +14,7 @@
 							<div class="col-md-6 col-xs-6">
 								<div ng-class="(refundForm.amount.$valid)?'':'has-error'"
 									class="input-group">
-									<div class="input-group-addon">&#8377;</div>
+									<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
 									<input name="amount" class="form-control" placeholder="Amount" ng-model="refundAmount" ng-pattern="patterns.amountPattern" type="number" required />
 								</div>
 							</div>
@@ -23,7 +23,7 @@
 							</div>
 						</div>
 						<div class="col-md-4 col-xs-6">
-							<button type="button" class="btn btn-button btn-warning" ng-click="refundInvoice(invoiceInfo.invoiceCode, invoiceInfo.payAmount)">&#8377;{{invoiceInfo.payAmount}} Full Refund</button>
+							<button type="button" class="btn btn-button btn-warning" ng-click="refundInvoice(invoiceInfo.invoiceCode, invoiceInfo.payAmount)"><i class="fa fa-rupee"></i>{{invoiceInfo.payAmount}} Full Refund</button>
 						</div>
 					</div>
 				</form>

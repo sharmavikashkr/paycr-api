@@ -3,6 +3,7 @@ package com.paycr.invoice.controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +23,7 @@ import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.invoice.service.InvoiceService;
 
@@ -137,6 +139,30 @@ public class InvoiceController {
 			HttpServletResponse response) {
 		try {
 			return invSer.createChild(invoiceCode, consumer);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/recurr/new/{invoiceCode}", method = RequestMethod.POST)
+	public void recurr(@PathVariable String invoiceCode, @RequestBody RecurringInvoice recInv,
+			HttpServletResponse response) {
+		try {
+			invSer.recurr(invoiceCode, recInv);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/recurr/all/{invoiceCode}", method = RequestMethod.GET)
+	public List<RecurringInvoice> allRecurr(@PathVariable String invoiceCode, HttpServletResponse response) {
+		try {
+			return invSer.allRecurr(invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

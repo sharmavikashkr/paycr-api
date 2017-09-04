@@ -9,17 +9,18 @@
 	</div>
 	<br>
 	<div class="row text-center">
-		<div class="col-md-10 col-md-offset-1">
+		<div class="col-md-12">
 			<h4>My Users</h4>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<td class="text-center"><strong>Name</strong></td>
-						<td class="text-center hidden-xs"><strong>Email</strong></td>
-						<td class="text-center hidden-xs"><strong>Mobile</strong></td>
-						<td class="text-center"><strong>Role</strong></td>
-						<td class="text-center hidden-xs"><strong>Created By</strong></td>
-						<td class="text-center"><strong>Actions</strong></td>
+						<th class="text-center">Name</th>
+						<th class="text-center hidden-xs">Email</th>
+						<th class="text-center hidden-xs">Mobile</th>
+						<th class="text-center">Role</th>
+						<th class="text-center hidden-xs">Created By</th>
+						<th class="text-center hidden-xs">Created</th>
+						<th class="text-center">Actions</th>
 					</tr>
 				</thead>
 				<tbody id="itemBody">
@@ -29,6 +30,7 @@
 						<td class="hidden-xs">{{myuser.mobile}}</td>
 						<td>{{myuser.userType}}</td>
 						<td class="hidden-xs">{{myuser.createdBy}}</td>
+						<td class="hidden-xs">{{myuser.created | date:'dd:MM:yyyy'}}</td>
 						<td>
 							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs">
 								<i class="fa fa-minus"></i>

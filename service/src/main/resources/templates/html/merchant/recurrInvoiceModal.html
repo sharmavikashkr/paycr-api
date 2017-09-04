@@ -1,0 +1,80 @@
+<div ng-controller="InvoiceController" id="recurrInvoiceModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Recurr Invoice : {{recurrInvoiceInfo.invoiceCode}}</h5>
+			</div>
+			<div class="modal-body">
+				<div class="row text-center">
+					<div class="col-md-12">
+						<h4>Recurr Settings</h4>
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th class="text-center hidden-xs">Start Date</th>
+									<th class="text-center hidden-xs">Next Invoice Date</th>
+									<th class="text-center">Recurr</th>
+									<th class="text-center">Total</th>
+									<th class="text-center">Remaining</th>
+									<th class="text-center hidden-xs">Active</th>
+								</tr>
+							</thead>
+							<tbody id="itemBody">
+								<tr ng-class="(recurrInvoice.active)?'success':'danger'" ng-repeat="recurrInvoice in recurrInvoices" title="{{recurrInvoice.active}}">
+									<td class="hidden-xs">{{recurrInvoice.startDate | date:'dd-MM-yyyy'}}</td>
+									<td class="hidden-xs">{{recurrInvoice.nextInvDate | date:'dd-MM-yyyy'}}</td>
+									<td>{{recurrInvoice.recurr}}</td>
+									<td>{{recurrInvoice.total}}</td>
+									<td>{{recurrInvoice.remaining}}</td>
+									<td class="hidden-xs">{{recurrInvoice.active}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<h5>New Setting</h5>
+				<form name="recurringInvoiceForm">
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-bordered table-responsive">
+								<tbody>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="control-label">Start Date</label>
+												<md-datepicker ng-model="recurringInvoice.startDate"></md-datepicker>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(recurringInvoiceForm.total.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Total Installments</label>
+												<input name="total" class="form-control" ng-model="recurringInvoice.total" ng-init="recurringInvoice.total=1" type="number" step="1" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="control-label">Recurr Every</label>
+												<select class="form-control" ng-model="recurringInvoice.recurr">
+													<option ng-repeat="recurrType in recurrTypes" value="{{recurrType}}" selected>{{recurrType}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="recurrInvoice(recurrInvoiceInfo.invoiceCode)">Add</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

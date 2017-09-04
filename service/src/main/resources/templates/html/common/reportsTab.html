@@ -91,7 +91,7 @@
 						</thead>
 						<tbody id="itemBody">
 							<tr ng-repeat="invoiceReport in reportsResp.invoiceReports">
-								<td class="hidden-xs">{{invoiceReport.created | date:'dd-MM-yyyy HH:mm'}}</td>
+								<td class="hidden-xs">{{invoiceReport.created | date:'dd-MM-yyyy'}}</td>
 								<td class="hidden-xs">{{invoiceReport.invoiceCode}}</td>
 								<td>{{invoiceReport.amount}}</td>
 								<td>{{invoiceReport.currency}}</td>

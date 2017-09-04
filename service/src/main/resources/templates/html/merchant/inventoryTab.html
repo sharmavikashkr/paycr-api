@@ -24,7 +24,7 @@
 				<tbody id="itemBody">
 					<tr ng-repeat="inventory in inventoryList">
 						<td class="text-center">{{inventory.name}}</td>
-						<td class="text-center">&#8377; {{inventory.rate}}</td>
+						<td class="text-center"><i class="fa fa-rupee"></i> {{inventory.rate}}</td>
 						<td class="text-center hidden-xs">{{inventory.createdBy}}</td>
 						<td class="text-center hidden-xs">{{inventory.created | date:'dd-MM-yyyy'}}</td>
 						<td class="text-center">

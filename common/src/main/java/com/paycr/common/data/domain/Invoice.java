@@ -94,7 +94,7 @@ public class Invoice implements Cloneable {
 
 	@Transient
 	private List<Payment> allPayments;
-	
+
 	@Transient
 	private boolean update;
 
