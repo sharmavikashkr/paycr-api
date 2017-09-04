@@ -177,10 +177,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$http(req).then(function(invoice) {
 			$rootScope.searchInvoice();
 			$scope.serverMessage(invoice);
-			$rootScope.invoiceInfo = invoice.data;
-			if($rootScope.invoiceInfo.invoiceType == 'SINGLE') {
+			if(invoice.data.invoiceType == 'SINGLE') {
+				$rootScope.invoiceInfo = angular.copy(invoice.data);
 				angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
-			} else if($rootScope.invoiceInfo.invoiceType == 'RECURRING') {
+			} else if(invoice.data.invoiceType == 'RECURRING') {
+				$rootScope.recurrInvoiceInfo = angular.copy(invoice.data);
 				angular.element(document.querySelector('#recurrInvoiceModal')).modal('show');
 			}
 		}, function(data) {
