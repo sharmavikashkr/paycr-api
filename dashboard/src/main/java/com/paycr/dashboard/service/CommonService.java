@@ -150,7 +150,7 @@ public class CommonService {
 		for (Invoice inv : invs) {
 			total = total.add(inv.getPayAmount());
 		}
-		return total;
+		return total.setScale(2, BigDecimal.ROUND_UP);
 	}
 
 	private BigDecimal getTotalPayAmount(List<Payment> pays) {
@@ -158,7 +158,7 @@ public class CommonService {
 		for (Payment pay : pays) {
 			total = total.add(pay.getAmount());
 		}
-		return total;
+		return total.setScale(2, BigDecimal.ROUND_UP);
 	}
 
 	private void setDailyPay(List<DailyPay> dailyPayList, Payment payment) {

@@ -43,6 +43,9 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			if (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNull(extInvoice)) {
 				throw new PaycrException(Constants.FAILURE, "Invoice not found");
 			}
+			if (!InvoiceType.SINGLE.equals(extInvoice.getInvoiceType())) {
+				throw new PaycrException(Constants.FAILURE, "Only Single invoices can be modified");
+			}
 			if (InvoiceStatus.EXPIRED.equals(extInvoice.getStatus())
 					|| InvoiceStatus.PAID.equals(extInvoice.getStatus())) {
 				throw new PaycrException(Constants.FAILURE, "Invoice cannot be modified now");
