@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.invoice.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -22,7 +22,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.ReportService;
+import com.paycr.invoice.service.ReportService;
 
 @RestController
 @RequestMapping("/reports")
@@ -58,7 +58,7 @@ public class ReportController {
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/load")
 	public List<InvoiceReport> loadReport(@RequestBody Report report, HttpServletResponse response) {
-		List<InvoiceReport> invoiceReport = new ArrayList<InvoiceReport>();
+		List<InvoiceReport> invoiceReport = new ArrayList<>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			report.setMerchant(merchant);

@@ -1,13 +1,13 @@
-package com.paycr.dashboard.service;
+package com.paycr.invoice.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
@@ -16,7 +16,7 @@ import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.Constants;
-import com.paycr.dashboard.helper.ReportHelper;
+import com.paycr.invoice.helper.ReportHelper;
 
 @Service
 public class ReportService {
@@ -32,7 +32,7 @@ public class ReportService {
 
 	public List<Report> fetchReports(Merchant merchant) {
 		List<Report> commonReports = repRepo.findByMerchant(null);
-		List<Report> myReports = new ArrayList<Report>();
+		List<Report> myReports = new ArrayList<>();
 		if (merchant != null) {
 			myReports = repRepo.findByMerchant(merchant);
 		}
@@ -53,14 +53,13 @@ public class ReportService {
 	public List<InvoiceReport> loadReport(Report report, Merchant merchant) {
 		isValidReport(report);
 		List<Payment> allPayments = new ArrayList<>();
-		Date createdTo = new Date();
-		Date createdFrom = repHelp.getCreatedFrom(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
 		if (merchant == null) {
-			allPayments
-					.addAll(payRepo.findPaysWithMode(report.getPayMode(), report.getPayType(), createdFrom, createdTo));
+			allPayments.addAll(payRepo.findPaysWithMode(report.getPayMode(), report.getPayType(),
+					dateFilter.getStartDate(), dateFilter.getEndDate()));
 		} else {
 			allPayments.addAll(payRepo.findPaysWithModeForMerchant(report.getPayMode(), report.getPayType(), merchant,
-					createdFrom, createdTo));
+					dateFilter.getStartDate(), dateFilter.getEndDate()));
 		}
 		return repHelp.prepareReport(report, allPayments);
 	}

@@ -1,5 +1,6 @@
 package com.paycr.common.data.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
 	@Query("SELECT i from Invoice i WHERE i.consumer.email = ?1 OR i.consumer.mobile = ?2 ORDER BY i.id DESC")
 	public List<Invoice> findInvoicesForConsumer(String email, String mobile);
+
+	@Query("SELECT i from Invoice i WHERE i.status != 'PAID' AND i.status != 'EXPIRED' AND i.expiry < ?1")
+	public List<Invoice> findExpiredInvoices(Date date);
 
 }

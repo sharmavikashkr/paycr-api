@@ -1,4 +1,4 @@
-package com.paycr.dashboard.helper;
+package com.paycr.invoice.helper;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Payment;
@@ -28,20 +29,29 @@ public class ReportHelper {
 	@Autowired
 	private InvoiceRepository invRepo;
 
-	public Date getCreatedFrom(TimeRange range) {
+	public DateFilter getDateFilter(TimeRange range) {
+		DateFilter dateFilter = null;
 		Calendar calendar = Calendar.getInstance();
 		if (TimeRange.LAST_WEEK.equals(range)) {
-			calendar.add(Calendar.DAY_OF_YEAR, -7);
-		} else if (TimeRange.LAST_2WEEKS.equals(range)) {
-			calendar.add(Calendar.DAY_OF_YEAR, -14);
+			Date aDayInLastWeek = DateUtil.addDays(calendar.getTime(), -7);
+			Date start = DateUtil.getFirstDayOfWeek(aDayInLastWeek);
+			Date end = DateUtil.getLastDayOfWeek(aDayInLastWeek);
+			dateFilter = new DateFilter(start, end);
 		} else if (TimeRange.LAST_MONTH.equals(range)) {
-			calendar.add(Calendar.DAY_OF_YEAR, -30);
-		} else if (TimeRange.LAST_2MONTHS.equals(range)) {
-			calendar.add(Calendar.DAY_OF_YEAR, -60);
-		} else if (TimeRange.LAST_3MONTHS.equals(range)) {
-			calendar.add(Calendar.DAY_OF_YEAR, -90);
+			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+			Date aDayInLastMonth = DateUtil.addDays(calendar.getTime(), -20);
+			Date start = DateUtil.getFirstDayOfMonth(aDayInLastMonth);
+			Date end = DateUtil.getLastDayOfMonth(aDayInLastMonth);
+			dateFilter = new DateFilter(start, end);
+		} else if (TimeRange.LAST_QUARTER.equals(range)) {
+			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+			Date aDayIn3LastMonth = DateUtil.addDays(calendar.getTime(), -70);
+			Date aDayInLastMonth = DateUtil.addDays(calendar.getTime(), -20);
+			Date start = DateUtil.getFirstDayOfMonth(aDayIn3LastMonth);
+			Date end = DateUtil.getLastDayOfMonth(aDayInLastMonth);
+			dateFilter = new DateFilter(start, end);
 		}
-		return DateUtil.getStartOfDay(calendar.getTime());
+		return dateFilter;
 	}
 
 	public String getCsv(List<InvoiceReport> invReport) throws IOException {
@@ -54,7 +64,7 @@ public class ReportHelper {
 	}
 
 	private static List<String[]> toStringArray(List<InvoiceReport> invReport) {
-		List<String[]> records = new ArrayList<String[]>();
+		List<String[]> records = new ArrayList<>();
 		records.add(new String[] { "Created", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
 				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 
@@ -71,7 +81,7 @@ public class ReportHelper {
 	}
 
 	public List<InvoiceReport> prepareReport(Report report, List<Payment> payments) {
-		List<InvoiceReport> invoiceReports = new ArrayList<InvoiceReport>();
+		List<InvoiceReport> invoiceReports = new ArrayList<>();
 		for (Payment payment : payments) {
 			if (include(report.getPayStatus(), payment.getStatus())) {
 				Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());

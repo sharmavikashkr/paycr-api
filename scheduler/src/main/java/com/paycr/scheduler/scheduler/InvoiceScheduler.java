@@ -1,10 +1,10 @@
-package com.paycr.invoice.scheduler;
+package com.paycr.scheduler.scheduler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.paycr.invoice.service.InvoiceSchedulerService;
+import com.paycr.invoice.scheduler.InvoiceSchedulerService;
 
 @Component
 public class InvoiceScheduler {
@@ -12,9 +12,14 @@ public class InvoiceScheduler {
 	@Autowired
 	private InvoiceSchedulerService invSchSer;
 
-	@Scheduled(cron = "0 30 3 * * ?")
+	@Scheduled(cron = "${recurring.invoice.cron}")
 	public void recurrInvoice() {
 		invSchSer.recurrInvoice();
+	}
+	
+	@Scheduled(cron = "${expire.invoice.cron}")
+	public void expireInvoice() {
+		invSchSer.expireInvoice();
 	}
 
 }

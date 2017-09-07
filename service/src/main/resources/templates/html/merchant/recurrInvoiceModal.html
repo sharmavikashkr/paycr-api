@@ -13,7 +13,7 @@
 							<thead>
 								<tr>
 									<th class="text-center hidden-xs">Start Date</th>
-									<th class="text-center hidden-xs">Next Invoice Date</th>
+									<th class="text-center hidden-xs">Next Date</th>
 									<th class="text-center">Recurr</th>
 									<th class="text-center">Total</th>
 									<th class="text-center">Remaining</th>
@@ -23,7 +23,7 @@
 							<tbody id="itemBody">
 								<tr ng-class="(recurrInvoice.active)?'success':'danger'" ng-repeat="recurrInvoice in recurrInvoices" title="{{recurrInvoice.active}}">
 									<td class="hidden-xs">{{recurrInvoice.startDate | date:'dd-MM-yyyy'}}</td>
-									<td class="hidden-xs">{{recurrInvoice.nextInvDate | date:'dd-MM-yyyy'}}</td>
+									<td class="hidden-xs">{{recurrInvoice.nextDate | date:'dd-MM-yyyy'}}</td>
 									<td>{{recurrInvoice.recurr}}</td>
 									<td>{{recurrInvoice.total}}</td>
 									<td>{{recurrInvoice.remaining}}</td>

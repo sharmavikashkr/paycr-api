@@ -1,4 +1,4 @@
-package com.paycr.invoice.service;
+package com.paycr.invoice.scheduler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
@@ -36,6 +37,7 @@ public class InvoiceSchedulerService {
 	@Autowired
 	private NotifyService notSer;
 
+	@Transactional
 	public void recurrInvoice() {
 		Date timeNow = new Date();
 		Date start = DateUtil.getStartOfDay(timeNow);
@@ -52,6 +54,16 @@ public class InvoiceSchedulerService {
 				exec.execute(processInvoice(recInv, childInvoice, timeNow));
 			}
 		}
+	}
+
+	@Transactional
+	public void expireInvoice() {
+		Date timeNow = new Date();
+		List<Invoice> expiredList = invRepo.findExpiredInvoices(timeNow);
+		for (Invoice expInv : expiredList) {
+			expInv.setStatus(InvoiceStatus.EXPIRED);
+		}
+		invRepo.save(expiredList);
 	}
 
 	public Runnable processInvoice(RecurringInvoice recInv, Invoice childInvoice, Date timeNow) {
@@ -78,7 +90,7 @@ public class InvoiceSchedulerService {
 			} else {
 				nextInvDate = DateUtil.addDays(timeNow, 30);
 			}
-			recInv.setNextInvDate(nextInvDate);
+			recInv.setNextDate(nextInvDate);
 			recInv.setRemaining(recInv.getRemaining() - 1);
 			recInvRepo.save(recInv);
 		};

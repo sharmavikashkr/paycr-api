@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,7 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
+import com.paycr.invoice.scheduler.InvoiceSchedulerService;
 import com.paycr.invoice.validation.InvoiceValidator;
 import com.razorpay.RazorpayException;
 
@@ -171,7 +173,10 @@ public class InvoiceService {
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = getInvoice(invoiceCode);
 		List<Attachment> attachments = invoice.getAttachments();
-		if (attachments != null && attachments.size() >= 5) {
+		if (attachments == null) {
+			attachments = new ArrayList<>();
+		}
+		if (attachments.size() >= 5) {
 			throw new PaycrException(Constants.FAILURE, "Max 5 attachments allowed");
 		}
 		Attachment attachment = new Attachment();
@@ -230,7 +235,7 @@ public class InvoiceService {
 		recInv.setActive(true);
 		recInv.setInvoice(invoice);
 		recInv.setRemaining(recInv.getTotal());
-		recInv.setNextInvDate(recInv.getStartDate());
+		recInv.setNextDate(recInv.getStartDate());
 		recInvRepo.save(recInv);
 		if (start.before(recInv.getStartDate()) && end.after(recInv.getStartDate())) {
 			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode());

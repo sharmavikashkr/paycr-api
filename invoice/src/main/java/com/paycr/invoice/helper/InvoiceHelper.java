@@ -46,7 +46,7 @@ public class InvoiceHelper {
 		childInvoice.setParent(invoice);
 		childInvoice.setMerchant(invoice.getMerchant());
 		childInvoice.setConsumer(invoice.getConsumer());
-		List<Item> newItems = new ArrayList<Item>();
+		List<Item> newItems = new ArrayList<>();
 		for (Item item : invoice.getItems()) {
 			Item newItem = new Item();
 			newItem.setInventory(item.getInventory());
