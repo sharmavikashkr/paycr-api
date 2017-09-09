@@ -16,11 +16,11 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<td class="text-center hidden-xs"><strong>Name</strong></td>
-						<td class="text-center"><strong>Range</strong></td>
-						<td class="text-center"><strong>Pay Type</strong></td>
-						<td class="text-center"><strong>Pay Mode</strong></td>
-						<td class="text-center"><strong>Pay Status</strong></td>
+						<td class="text-center"><strong>Name</strong></td>
+						<td class="text-center hidden-xs"><strong>Range</strong></td>
+						<td class="text-center hidden-xs"><strong>Pay Type</strong></td>
+						<td class="text-center hidden-xs"><strong>Pay Mode</strong></td>
+						<td class="text-center hidden-xs"><strong>Pay Status</strong></td>
 						<td class="text-center"><strong>Actions</strong></td>
 					</tr>
 				</thead>
@@ -53,11 +53,11 @@
 						</td>
 					</tr>
 					<tr ng-class="(report.merchant!=null)?'success':''" ng-repeat="report in reports">
-						<td class="hidden-xs">{{report.name}}</td>
-						<td>{{report.timeRange}}</td>
-						<td>{{report.payType}}</td>
-						<td>{{report.payMode}}</td>
-						<td>{{report.payStatus}}</td>
+						<td>{{report.name}}</td>
+						<td class="hidden-xs">{{report.timeRange}}</td>
+						<td class="hidden-xs">{{report.payType}}</td>
+						<td class="hidden-xs">{{report.payMode}}</td>
+						<td class="hidden-xs">{{report.payStatus}}</td>
 						<td>
 							<button ng-click="loadReport(report)" type="button" class="btn btn-info btn-xs" title="Load"><i class="fa fa-retweet"></i></button>
 							<button ng-if="report.merchant!=null" ng-click="deleteReport(report.id, report.name)" type="button" class="btn btn-danger btn-xs" title="Delete">

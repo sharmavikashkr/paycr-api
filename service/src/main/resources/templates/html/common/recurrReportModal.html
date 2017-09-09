@@ -13,19 +13,19 @@
 							<thead>
 								<tr>
 									<th class="text-center">Report Name</th>
-									<th class="text-center">Time Range</th>
+									<th class="text-center hidden-xs">Time Range</th>
 									<th class="text-center hidden-xs">Start Date</th>
 									<th class="text-center hidden-xs">Next Date</th>
-									<th class="text-center hidden-xs">Action</th>
+									<th class="text-center">Action</th>
 								</tr>
 							</thead>
 							<tbody id="itemBody">
 								<tr ng-class="(recRepUser.recurringReport.active)?'success':'danger'" ng-repeat="recRepUser in recRepUsers" title="{{recRepUser.recurringReport.active}}">
 									<td>{{recRepUser.recurringReport.report.name}}</td>
-									<td>{{recRepUser.recurringReport.report.timeRange}}</td>
+									<td class="hidden-xs">{{recRepUser.recurringReport.report.timeRange}}</td>
 									<td class="hidden-xs">{{recRepUser.recurringReport.startDate | date:'dd-MM-yyyy'}}</td>
 									<td class="hidden-xs">{{recRepUser.recurringReport.nextDate | date:'dd-MM-yyyy'}}</td>
-									<td class="hidden-xs">
+									<td>
 										<button ng-click="removeSchedule(recRepUser.id)" type="button" class="btn btn-danger btn-xs" title="Delete">
 											<i class="fa fa-times"></i>
 										</button>
