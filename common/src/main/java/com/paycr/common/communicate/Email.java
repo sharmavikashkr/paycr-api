@@ -11,6 +11,8 @@ public class Email {
 	private List<String> cc;
 	private String subject;
 	private String message;
+	private String filePath;
+	private String fileName;
 
 	public Email() {
 	}
@@ -21,17 +23,6 @@ public class Email {
 		this.password = password;
 		this.to = to;
 		this.cc = cc;
-	}
-
-	public Email(String name, String from, String password, List<String> to, List<String> cc, String subject,
-			String message) {
-		this.name = name;
-		this.from = from;
-		this.password = password;
-		this.to = to;
-		this.cc = cc;
-		this.subject = subject;
-		this.message = message;
 	}
 
 	public String getFrom() {
@@ -88,5 +79,21 @@ public class Email {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 }

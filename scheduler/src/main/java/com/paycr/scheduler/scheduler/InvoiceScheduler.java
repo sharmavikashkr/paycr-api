@@ -16,7 +16,7 @@ public class InvoiceScheduler {
 	public void recurrInvoice() {
 		invSchSer.recurrInvoice();
 	}
-	
+
 	@Scheduled(cron = "${expire.invoice.cron}")
 	public void expireInvoice() {
 		invSchSer.expireInvoice();

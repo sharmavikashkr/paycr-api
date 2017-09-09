@@ -12,6 +12,9 @@ public class Server {
 	@Value("${merchant.banner.location}")
 	private String merchantLocation;
 
+	@Value("${report.pdf.location}")
+	private String reportLocation;
+
 	@Value("${invoice.pdf.location}")
 	private String invoiceLocation;
 
@@ -46,6 +49,14 @@ public class Server {
 
 	public void setWkhtmlToPdfLocation(String wkhtmlToPdfLocation) {
 		this.wkhtmlToPdfLocation = wkhtmlToPdfLocation;
+	}
+
+	public String getReportLocation() {
+		return reportLocation;
+	}
+
+	public void setReportLocation(String reportLocation) {
+		this.reportLocation = reportLocation;
 	}
 
 	public String getSubscriptionLocation() {

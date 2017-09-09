@@ -17,7 +17,7 @@ public interface RecurringInvoiceRepository extends JpaRepository<RecurringInvoi
 
 	public RecurringInvoice findByInvoiceAndActive(Invoice invoice, boolean active);
 
-	@Query("select ri from RecurringInvoice ri where nextDate between ?1 and ?2")
+	@Query("SELECT ri FROM RecurringInvoice ri WHERE active = true AND nextDate BETWEEN ?1 and ?2")
 	public List<RecurringInvoice> findTodaysRecurringInvoices(Date start, Date end);
 
 }

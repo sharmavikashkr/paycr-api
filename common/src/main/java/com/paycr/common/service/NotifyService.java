@@ -1,5 +1,6 @@
 package com.paycr.common.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.communicate.Sms;
@@ -17,6 +19,7 @@ import com.paycr.common.communicate.SmsEngine;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.util.PdfUtil;
 
 import freemarker.template.Configuration;
 
@@ -35,6 +38,12 @@ public class NotifyService {
 	@Autowired
 	private Configuration fmConfiguration;
 
+	@Autowired
+	private Server server;
+
+	@Autowired
+	private PdfUtil pdfUtil;
+
 	public void notify(Invoice invoice, InvoiceNotify invoiceNotify) {
 		String invoiceUrl = company.getBaseUrl() + "/" + invoice.getInvoiceCode();
 		Merchant merchant = invoice.getMerchant();
@@ -49,9 +58,9 @@ public class NotifyService {
 			}
 		}
 		if (invoiceNotify.isSendEmail()) {
-			List<String> to = new ArrayList<String>();
+			List<String> to = new ArrayList<>();
 			to.add(invoice.getConsumer().getEmail());
-			List<String> cc = new ArrayList<String>();
+			List<String> cc = new ArrayList<>();
 			if (invoiceNotify.isCcMe()) {
 				cc.add(invoiceNotify.getCcEmail());
 			}
@@ -65,12 +74,28 @@ public class NotifyService {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			if (invoiceNotify.isEmailPdf()) {
+				try {
+					String fileName = invoice.getInvoiceCode() + ".pdf";
+					String pdfPath = server.getInvoiceLocation() + fileName;
+					File pdfFile = new File(pdfPath);
+					if (!pdfFile.exists()) {
+						pdfFile.createNewFile();
+						pdfUtil.makePdf(company.getBaseUrl() + "/invoice/receipt/" + invoice.getInvoiceCode(),
+								pdfFile.getAbsolutePath());
+					}
+					email.setFileName(fileName);
+					email.setFilePath(pdfPath);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
 			emailEngine.sendViaGmail(email);
 		}
 	}
 
 	public String getEmail(Invoice invoice, String note) throws Exception {
-		Map<String, Object> templateProps = new HashMap<String, Object>();
+		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("note", note);
 		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
@@ -79,7 +104,7 @@ public class NotifyService {
 	}
 
 	public String getSms(Invoice invoice) throws Exception {
-		Map<String, Object> templateProps = new HashMap<String, Object>();
+		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("sms/invoice_sms.ftl"),

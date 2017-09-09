@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.PcUser;
+import com.paycr.common.data.domain.RecurringReportUser;
 import com.paycr.common.data.domain.Report;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
@@ -96,6 +98,44 @@ public class ReportController {
 			IOUtils.copy(is, response.getOutputStream());
 			response.setContentLength(data.length);
 			response.flushBuffer();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@RequestMapping("/schedule/get")
+	public List<RecurringReportUser> getSchedule(HttpServletResponse response) {
+		try {
+			PcUser user = secSer.findLoggedInUser();
+			return repSer.getSchedule(user);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@RequestMapping("/schedule/add/{reportId}")
+	public void addSchedule(@PathVariable Integer reportId, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			PcUser user = secSer.findLoggedInUser();
+			repSer.addSchedule(reportId, merchant, user);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@RequestMapping("/schedule/remove/{recRepUserId}")
+	public void removeSchedule(@PathVariable Integer recRepUserId, HttpServletResponse response) {
+		try {
+			PcUser user = secSer.findLoggedInUser();
+			repSer.removeSchedule(recRepUserId, user);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

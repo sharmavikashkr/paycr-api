@@ -106,6 +106,13 @@ public class InvoiceService {
 			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
 		}
+		if (InvoiceType.RECURRING.equals(invoice.getInvoiceType())) {
+			RecurringInvoice recInv = recInvRepo.findByInvoiceAndActive(invoice, true);
+			if (recInv != null) {
+				recInv.setActive(false);
+				recInvRepo.save(recInv);
+			}
+		}
 	}
 
 	public void notify(String invoiceCode, InvoiceNotify invoiceNotify) {

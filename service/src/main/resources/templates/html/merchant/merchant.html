@@ -62,6 +62,7 @@
 		<div ng-if="user.access.finance" ng-include="'/html/merchant/refundModal'"></div>
 		<div ng-if="user.access.admin" ng-include="'/html/common/createUserModal'"></div>
 		<div ng-if="user.access.ops" ng-include="'/html/common/createReportXsModal'"></div>
+		<div ng-if="user.access.ops" ng-include="'/html/common/recurrReportModal'"></div>
 		<div ng-include="'/html/common/invoiceInfoModal'"></div>
 		<div ng-include="'/html/common/invoicePaymentModal'"></div>
 		<div ng-include="'/html/merchant/invoiceNoticeModal'"></div>

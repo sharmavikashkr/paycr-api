@@ -28,7 +28,6 @@ public class RecurringReport {
 
 	private boolean active;
 
-	@JsonIgnore
 	@ManyToOne
 	private Report report;
 

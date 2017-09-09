@@ -107,4 +107,49 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			$rootScope.reportsResp.allPages.push(i);
 		}
 	}
+	$scope.getSchedule = function() {
+		var req = {
+			method : 'GET',
+			url : "/reports/schedule/get",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(recRepUsers) {
+			$rootScope.recRepUsers = recRepUsers.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.addSchedule = function(reportId) {
+		var req = {
+			method : 'GET',
+			url : "/reports/schedule/add/" + reportId,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.getSchedule();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#recurrReportModal')).modal('hide');
+	}
+	$scope.removeSchedule = function(recRepUserId) {
+		var req = {
+			method : 'GET',
+			url : "/reports/schedule/remove/" + recRepUserId,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.getSchedule();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 });

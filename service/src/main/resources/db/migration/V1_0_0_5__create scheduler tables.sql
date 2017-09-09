@@ -17,3 +17,9 @@ CREATE TABLE if not exists pc_recurring_report (
     report_id int REFERENCES pc_report,
     merchant_id int REFERENCES pc_merchant
 );
+
+CREATE TABLE if not exists pc_recurring_report_user (
+	id SERIAL PRIMARY KEY NOT NULL,
+    recurring_report_id int REFERENCES pc_recurring_report,
+    pc_user_id int REFERENCES pc_user
+);
