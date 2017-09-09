@@ -9,6 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<start-class>com.paycr.scheduler.Application</start-class>
 	</properties>
 
 	<parent>
