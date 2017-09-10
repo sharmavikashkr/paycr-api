@@ -335,11 +335,20 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
 	}
 	$scope.searchChildInvoices = function(invoice) {
-		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
-		$scope.searchInvoiceReq.invoiceType = 'SINGLE';
+		$rootScope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
+		$rootScope.searchInvoiceReq.invoiceType = 'SINGLE';
 		$rootScope.searchInvoiceReq.email = '';
 		$rootScope.searchInvoiceReq.mobile = '';
 		$rootScope.searchInvoiceReq.invoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.searchInvoice();
+	}
+	$scope.searchConsumerInvoices = function(invoice) {
+		$rootScope.searchInvoiceReq.parentInvoiceCode = null;
+		$rootScope.searchInvoiceReq.invoiceType = null;
+		$rootScope.searchInvoiceReq.email = invoice.consumer.email;
+		$rootScope.searchInvoiceReq.mobile = invoice.consumer.mobile;
+		$rootScope.searchInvoiceReq.invoiceCode = null;
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
 		$rootScope.searchInvoice();
 	}

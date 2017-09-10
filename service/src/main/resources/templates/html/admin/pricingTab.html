@@ -15,9 +15,9 @@
 					<thead>
 						<tr>
 							<th class="text-center">Name</th>
-							<th class="text-center">Duration</th>
+							<th class="text-center hidden-xs">Duration</th>
 							<th class="text-center">Rate</th>
-							<th class="text-center">Invoice Limit</th>
+							<th class="text-center hidden-xs">Invoice Limit</th>
 							<th class="text-center hidden-xs">Start Amount</th>
 							<th class="text-center hidden-xs">End Amount</th>
 							<th class="text-center">Action</th>
@@ -26,9 +26,9 @@
 					<tbody>
 						<tr ng-class="(pricing.active)?'success':'warning'" ng-repeat="pricing in pricings" title="ACTIVE = {{pricing.active}}">
 							<td>{{pricing.name}}</td>
-							<td>{{pricing.duration}}</td>
+							<td class="hidden-xs">{{pricing.duration}}</td>
 							<td><i class="fa fa-rupee"></i> {{pricing.rate}}</td>
-							<td>{{pricing.invoiceLimit}}</td>
+							<td class="hidden-xs">{{pricing.invoiceLimit}}</td>
 							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.startAmount}}</td>
 							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.endAmount}}</td>
 							<td ng-if="pricing.active">

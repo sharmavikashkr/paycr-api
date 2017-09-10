@@ -44,8 +44,33 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$rootScope.invoiceInfo = invoice;
 	}
 	$scope.searchChildInvoices = function(invoice) {
+		$scope.searchInvoiceReq.merchant = null;
 		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
 		$scope.searchInvoiceReq.invoiceType = 'SINGLE';
+		$scope.searchInvoiceReq.email = null;
+		$scope.searchInvoiceReq.mobile = null;
+		$scope.searchInvoiceReq.invoiceCode = null;
+		$scope.searchInvoiceReq.invoiceStatus = null;
+		$scope.searchInvoice();
+	}
+	$scope.searchMerchantInvoices = function(invoice) {
+		$scope.searchInvoiceReq.merchant = invoice.merchant.id;
+		$scope.searchInvoiceReq.parentInvoiceCode = null;
+		$scope.searchInvoiceReq.invoiceType = null;
+		$scope.searchInvoiceReq.email = null;
+		$scope.searchInvoiceReq.mobile = null;
+		$scope.searchInvoiceReq.invoiceCode = null;
+		$scope.searchInvoiceReq.invoiceStatus = null;
+		$scope.searchInvoice();
+	}
+	$scope.searchConsumerInvoices = function(invoice) {
+		$scope.searchInvoiceReq.merchant = null;
+		$scope.searchInvoiceReq.parentInvoiceCode = null;
+		$scope.searchInvoiceReq.invoiceType = null;
+		$scope.searchInvoiceReq.email = invoice.consumer.email;
+		$scope.searchInvoiceReq.mobile = invoice.consumer.mobile;
+		$scope.searchInvoiceReq.invoiceCode = null;
+		$scope.searchInvoiceReq.invoiceStatus = null;
 		$scope.searchInvoice();
 	}
 });

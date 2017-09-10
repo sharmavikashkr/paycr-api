@@ -72,7 +72,7 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Consumer Mobile</label>
-										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="number" placeholder="9999999999" />
+										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="text" placeholder="9999999999" />
 									</div>
 								</td>
 							</tr>
@@ -171,9 +171,10 @@
 													<thead>
 														<tr>
 															<th>Id</th>
-															<th class="hidden-xs">Name</th>
-															<th>Email</th>
-															<th>Mobile</th>
+															<th>Name</th>
+															<th class="hidden-xs">Email</th>
+															<th class="hidden-xs">Mobile</th>
+															<th>Action</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -182,6 +183,11 @@
 															<td>{{invoice.merchant.name}}</td>
 															<td class="hidden-xs">{{invoice.merchant.email}}</td>
 															<td class="hidden-xs">{{invoice.merchant.mobile}}</td>
+															<td>
+																<button ng-click="searchMerchantInvoices(invoice)" title="Search merchant invoices" type="button" class="btn btn-warning btn-xs">
+																	<i class="fa fa-search"></i>
+																</button>
+															</td>
 														</tr>
 													</tbody>
 												</table>
@@ -196,6 +202,7 @@
 															<th class="hidden-xs">Name</th>
 															<th>Email</th>
 															<th>Mobile</th>
+															<th>Action</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -203,6 +210,11 @@
 															<td class="hidden-xs">{{invoice.consumer.name}}</td>
 															<td>{{invoice.consumer.email}}</td>
 															<td>{{invoice.consumer.mobile}}</td>
+															<td>
+																<button ng-click="searchConsumerInvoices(invoice)" title="Search consumer invoices" type="button" class="btn btn-warning btn-xs">
+																	<i class="fa fa-search"></i>
+																</button>
+															</td>
 														</tr>
 													</tbody>
 												</table>

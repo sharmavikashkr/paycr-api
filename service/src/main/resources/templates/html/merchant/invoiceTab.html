@@ -87,7 +87,7 @@
 								<td>
 									<div class="form-group">
 										<label class="control-label">Consumer Mobile</label>
-										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="" placeholder="9999999999" />
+										<input class="form-control" ng-model="searchInvoiceReq.mobile" type="text" placeholder="9999999999" />
 									</div>
 								</td>
 							</tr>
@@ -206,6 +206,7 @@
 															<th class="hidden-xs">Name</th>
 															<th>Email</th>
 															<th>Mobile</th>
+															<th>Action</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -213,6 +214,11 @@
 															<td class="hidden-xs">{{invoice.consumer.name}}</td>
 															<td>{{invoice.consumer.email}}</td>
 															<td>{{invoice.consumer.mobile}}</td>
+															<td>
+																<button ng-click="searchConsumerInvoices(invoice)" title="Search consumer invoices" type="button" class="btn btn-warning btn-xs">
+																	<i class="fa fa-search"></i>
+																</button>
+															</td>
 														</tr>
 													</tbody>
 												</table>

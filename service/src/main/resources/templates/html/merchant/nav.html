@@ -51,7 +51,7 @@
 				<li><a href="#" data-target="#consumerTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Consumers</a></li>
 				<li><a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory</a></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
-				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Subscription</strong></li>
+				<li ng-if="user.access.finance" style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Subscription</strong></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
 				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Account</strong></li>
 				<li ng-if="user.access.admin"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Users</a></li>
