@@ -51,15 +51,13 @@ public class MerchantController {
 		if (merchant == null) {
 			response.sendRedirect("/login");
 		}
-		ModelAndView mv = new ModelAndView("html/merchant/merchant");
-		return mv;
+		return new ModelAndView("html/merchant/merchant");
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/get")
 	public Merchant getMerchant() {
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		return merchant;
+		return secSer.getMerchantForLoggedInUser();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)

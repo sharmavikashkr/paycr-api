@@ -1,12 +1,14 @@
 package com.paycr.common.bean;
 
-import java.math.BigDecimal;
-
-public class DailyPay implements Comparable<DailyPay> {
+public class DailyPay {
 
 	private String created;
-	private BigDecimal salePaySum;
-	private BigDecimal refundPaySum;
+	private Double salePaySum;
+	private Double refundPaySum;
+
+	public DailyPay() {
+		super();
+	}
 
 	public String getCreated() {
 		return created;
@@ -16,25 +18,20 @@ public class DailyPay implements Comparable<DailyPay> {
 		this.created = created;
 	}
 
-	public BigDecimal getSalePaySum() {
+	public Double getSalePaySum() {
 		return salePaySum;
 	}
 
-	public void setSalePaySum(BigDecimal salePaySum) {
+	public void setSalePaySum(Double salePaySum) {
 		this.salePaySum = salePaySum;
 	}
 
-	public BigDecimal getRefundPaySum() {
+	public Double getRefundPaySum() {
 		return refundPaySum;
 	}
 
-	public void setRefundPaySum(BigDecimal refundPaySum) {
+	public void setRefundPaySum(Double refundPaySum) {
 		this.refundPaySum = refundPaySum;
-	}
-
-	@Override
-	public int compareTo(DailyPay dp) {
-		return created.compareTo(dp.getCreated());
 	}
 
 }

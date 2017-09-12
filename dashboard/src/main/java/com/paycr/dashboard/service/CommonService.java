@@ -1,9 +1,9 @@
 package com.paycr.dashboard.service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.DailyPay;
-import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.StatsRequest;
 import com.paycr.common.bean.StatsResponse;
-import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
-import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -31,7 +28,6 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.Constants;
-import com.paycr.common.util.DateUtil;
 
 @Service
 public class CommonService {
@@ -50,9 +46,6 @@ public class CommonService {
 
 	@Autowired
 	private PaymentRepository payRepo;
-
-	@Autowired
-	private InvoiceDao invDao;
 
 	public List<Invoice> getMyInvoices(PcUser user) {
 		return invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
@@ -76,52 +69,56 @@ public class CommonService {
 	public StatsResponse loadDashboard(StatsRequest request) {
 		validateStatsRequest(request);
 		StatsResponse response = new StatsResponse();
-		SearchInvoiceRequest searchReq = new SearchInvoiceRequest();
-		searchReq.setCreatedFrom(request.getCreatedFrom());
-		searchReq.setCreatedTo(request.getCreatedTo());
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		searchReq.setInvoiceStatus(InvoiceStatus.UNPAID);
-		List<Invoice> unpaidInvs = invDao.findInvoices(searchReq, merchant);
-		searchReq.setInvoiceStatus(InvoiceStatus.EXPIRED);
-		List<Invoice> expiredInvs = invDao.findInvoices(searchReq, merchant);
-		searchReq.setInvoiceStatus(InvoiceStatus.DECLINED);
-		List<Invoice> declinedInvs = invDao.findInvoices(searchReq, merchant);
-
-		List<Payment> salePays;
+		List<Object[]> salePays;
+		List<Object[]> refundPays;
+		List<Object[]> unpaid;
+		List<Object[]> expired;
+		List<Object[]> declined;
+		List<Object[]> dailyPays;
 		if (merchant == null) {
-			salePays = payRepo.findPaysWithStatus("captured", PayType.SALE, request.getCreatedFrom(),
+			salePays = payRepo.findCountAndSum(PayType.SALE.name(), request.getCreatedFrom(), request.getCreatedTo());
+			refundPays = payRepo.findCountAndSum(PayType.REFUND.name(), request.getCreatedFrom(),
 					request.getCreatedTo());
-		} else {
-			salePays = payRepo.findPaysWithStatusForMerchant("captured", PayType.SALE, merchant,
-					request.getCreatedFrom(), request.getCreatedTo());
-		}
-		List<Payment> refundPays;
-		if (merchant == null) {
-			refundPays = payRepo.findPaysWithStatus("refund", PayType.REFUND, request.getCreatedFrom(),
+			unpaid = invRepo.findCountAndSum(InvoiceStatus.UNPAID.name(), request.getCreatedFrom(),
 					request.getCreatedTo());
+			expired = invRepo.findCountAndSum(InvoiceStatus.EXPIRED.name(), request.getCreatedFrom(),
+					request.getCreatedTo());
+			declined = invRepo.findCountAndSum(InvoiceStatus.DECLINED.name(), request.getCreatedFrom(),
+					request.getCreatedTo());
+			dailyPays = payRepo.findDailyPayList(request.getCreatedFrom(), request.getCreatedTo());
 		} else {
-			refundPays = payRepo.findPaysWithStatusForMerchant("refund", PayType.REFUND, merchant,
+			salePays = payRepo.findCountAndSumForMerchant(merchant.getId(), PayType.SALE.name(),
 					request.getCreatedFrom(), request.getCreatedTo());
+			refundPays = payRepo.findCountAndSumForMerchant(merchant.getId(), PayType.REFUND.name(),
+					request.getCreatedFrom(), request.getCreatedTo());
+			unpaid = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.UNPAID.name(),
+					request.getCreatedFrom(), request.getCreatedTo());
+			expired = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.EXPIRED.name(),
+					request.getCreatedFrom(), request.getCreatedTo());
+			declined = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.DECLINED.name(),
+					request.getCreatedFrom(), request.getCreatedTo());
+			dailyPays = payRepo.findDailyPayListForMerchant(request.getCreatedFrom(), request.getCreatedTo(),
+					merchant.getId());
 		}
-
-		response.setSalePayCount(salePays.size());
-		response.setSalePaySum(getTotalPayAmount(salePays));
-		response.setUnpaidInvCount(unpaidInvs.size());
-		response.setUnpaidInvSum(getTotalInvAmount(unpaidInvs));
-		response.setExpiredInvCount(expiredInvs.size());
-		response.setExpiredInvSum(getTotalInvAmount(expiredInvs));
-		response.setDeclinedInvCount(declinedInvs.size());
-		response.setDeclinedInvSum(getTotalInvAmount(declinedInvs));
-		response.setRefundPayCount(refundPays.size());
-		response.setRefundPaySum(getTotalPayAmount(refundPays));
+		response.setSalePayCount((BigInteger) salePays.get(0)[0]);
+		response.setSalePaySum(BigDecimal.valueOf((Double) salePays.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setRefundPayCount((BigInteger) refundPays.get(0)[0]);
+		response.setRefundPaySum(BigDecimal.valueOf((Double) refundPays.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setUnpaidInvCount((BigInteger) unpaid.get(0)[0]);
+		response.setUnpaidInvSum(BigDecimal.valueOf((Double) unpaid.get(0)[1] == null ? 0D : (Double) unpaid.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setExpiredInvCount((BigInteger) expired.get(0)[0]);
+		response.setExpiredInvSum(BigDecimal.valueOf((Double) expired.get(0)[1] == null ? 0D : (Double) expired.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setDeclinedInvCount((BigInteger) declined.get(0)[0]);
+		response.setDeclinedInvSum(BigDecimal.valueOf((Double) declined.get(0)[1] == null ? 0D : (Double) declined.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
 		List<DailyPay> dailyPayList = new ArrayList<>();
-		for (Payment payment : refundPays) {
-			setDailyPay(dailyPayList, payment);
+		for (Object[] obj : dailyPays) {
+			DailyPay dp = new DailyPay();
+			dp.setCreated((String) obj[0]);
+			dp.setSalePaySum((Double) obj[1]);
+			dp.setRefundPaySum((Double) obj[2]);
+			dailyPayList.add(dp);
 		}
-		for (Payment payment : salePays) {
-			setDailyPay(dailyPayList, payment);
-		}
-		Collections.sort(dailyPayList);
 		response.setDailyPayList(dailyPayList);
 		return response;
 	}
@@ -138,45 +135,6 @@ public class CommonService {
 		if (calFrom.before(calTo)) {
 			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 30 days");
 		}
-	}
-
-	private BigDecimal getTotalInvAmount(List<Invoice> invs) {
-		BigDecimal total = new BigDecimal(0);
-		for (Invoice inv : invs) {
-			total = total.add(inv.getPayAmount());
-		}
-		return total.setScale(2, BigDecimal.ROUND_UP);
-	}
-
-	private BigDecimal getTotalPayAmount(List<Payment> pays) {
-		BigDecimal total = new BigDecimal(0);
-		for (Payment pay : pays) {
-			total = total.add(pay.getAmount());
-		}
-		return total.setScale(2, BigDecimal.ROUND_UP);
-	}
-
-	private void setDailyPay(List<DailyPay> dailyPayList, Payment payment) {
-		for (DailyPay dp : dailyPayList) {
-			if (DateUtil.getDefaultDate(payment.getCreated()).equals(dp.getCreated())) {
-				if (PayType.SALE.equals(payment.getPayType())) {
-					dp.setSalePaySum(dp.getSalePaySum().add(payment.getAmount()));
-				} else if (PayType.REFUND.equals(payment.getPayType())) {
-					dp.setRefundPaySum(dp.getRefundPaySum().add(payment.getAmount()));
-				}
-				return;
-			}
-		}
-		DailyPay dp = new DailyPay();
-		dp.setCreated(DateUtil.getDefaultDate(payment.getCreated()));
-		if (PayType.SALE.equals(payment.getPayType())) {
-			dp.setSalePaySum(payment.getAmount());
-			dp.setRefundPaySum(new BigDecimal(0));
-		} else if (PayType.REFUND.equals(payment.getPayType())) {
-			dp.setRefundPaySum(payment.getAmount());
-			dp.setSalePaySum(new BigDecimal(0));
-		}
-		dailyPayList.add(dp);
 	}
 
 }

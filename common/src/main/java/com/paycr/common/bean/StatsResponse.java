@@ -1,6 +1,7 @@
 package com.paycr.common.bean;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 public class StatsResponse {
@@ -10,50 +11,50 @@ public class StatsResponse {
 	private BigDecimal declinedInvSum;
 	private BigDecimal expiredInvSum;
 	private BigDecimal refundPaySum;
-	private int salePayCount;
-	private int unpaidInvCount;
-	private int declinedInvCount;
-	private int expiredInvCount;
-	private int refundPayCount;
+	private BigInteger salePayCount;
+	private BigInteger unpaidInvCount;
+	private BigInteger declinedInvCount;
+	private BigInteger expiredInvCount;
+	private BigInteger refundPayCount;
 	private List<DailyPay> dailyPayList;
 
-	public int getSalePayCount() {
+	public BigInteger getSalePayCount() {
 		return salePayCount;
 	}
 
-	public void setSalePayCount(int salePayCount) {
+	public void setSalePayCount(BigInteger salePayCount) {
 		this.salePayCount = salePayCount;
 	}
 
-	public int getUnpaidInvCount() {
+	public BigInteger getUnpaidInvCount() {
 		return unpaidInvCount;
 	}
 
-	public void setUnpaidInvCount(int unpaidInvCount) {
+	public void setUnpaidInvCount(BigInteger unpaidInvCount) {
 		this.unpaidInvCount = unpaidInvCount;
 	}
 
-	public int getDeclinedInvCount() {
+	public BigInteger getDeclinedInvCount() {
 		return declinedInvCount;
 	}
 
-	public void setDeclinedInvCount(int declinedInvCount) {
+	public void setDeclinedInvCount(BigInteger declinedInvCount) {
 		this.declinedInvCount = declinedInvCount;
 	}
 
-	public int getExpiredInvCount() {
+	public BigInteger getExpiredInvCount() {
 		return expiredInvCount;
 	}
 
-	public void setExpiredInvCount(int expiredInvCount) {
+	public void setExpiredInvCount(BigInteger expiredInvCount) {
 		this.expiredInvCount = expiredInvCount;
 	}
 
-	public int getRefundPayCount() {
+	public BigInteger getRefundPayCount() {
 		return refundPayCount;
 	}
 
-	public void setRefundPayCount(int refundPayCount) {
+	public void setRefundPayCount(BigInteger refundPayCount) {
 		this.refundPayCount = refundPayCount;
 	}
 
