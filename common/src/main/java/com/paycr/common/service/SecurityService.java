@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
@@ -31,9 +30,6 @@ public class SecurityService {
 	private MerchantRepository merRepo;
 
 	@Autowired
-	private UserDetailsService userDetailsService;
-
-	@Autowired
 	private UserRoleService userRoleService;
 
 	@Autowired
@@ -50,8 +46,8 @@ public class SecurityService {
 	public PcUser findLoggedInUser(String token) {
 		try {
 			OAuth2Authentication oauth = tokenStore.readAuthentication(tokenStore.readAccessToken(token));
-			UserDetails userDetails = userDetailsService.loadUserByUsername(oauth.getUserAuthentication().getName());
-			return userRepo.findByEmail(((UserDetails) userDetails).getUsername());
+			UserDetails userDetails = (UserDetails) oauth.getUserAuthentication().getPrincipal();
+			return userRepo.findByEmail(userDetails.getUsername());
 		} catch (Exception ex) {
 			return null;
 		}
@@ -60,12 +56,9 @@ public class SecurityService {
 	public boolean isMerchantUser() {
 		PcUser user = findLoggedInUser();
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
+		return (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
-			return true;
-		}
-		return false;
+				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name()));
 	}
 
 	public Merchant getMerchantForLoggedInUser() {
@@ -101,13 +94,10 @@ public class SecurityService {
 			return false;
 		}
 		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_PAYCR.name())
+		return (Arrays.asList(roles).contains(Role.ROLE_PAYCR.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_SUPERVISOR.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_FINANCE.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_OPS.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_ADVISOR.name())) {
-			return true;
-		}
-		return false;
+				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_ADVISOR.name()));
 	}
 }

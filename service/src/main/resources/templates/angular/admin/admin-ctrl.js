@@ -41,6 +41,9 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 			$scope.server.respMsg = data.headers('error_message');
 		}
 	}
+	$scope.templateUrl = function(folder, page) {
+		return '/html/' + folder + '/' + page +'?access_token=' + $cookies.get("access_token");
+	}
 	$scope.prepare = function() {
 		$scope.fetchUser();
 		$scope.fetchNotifications();

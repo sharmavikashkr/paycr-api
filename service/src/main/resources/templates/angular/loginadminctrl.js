@@ -9,7 +9,7 @@ app.controller('LoginController',
     };
     $scope.encoded = "d2ViLWNsaWVudDozYjVlOGViM2ZjZmFmYTJlN2IzMDJmNzVjMGUxODVkMzNkODY5MGMy";
     
-    $scope.login = function() {   
+    $scope.login = function() {
         var req = {
             method: 'POST',
             url: "/oauth/token",
@@ -19,7 +19,7 @@ app.controller('LoginController',
             },
             data: $httpParamSerializer($scope.data)
         }
-        $http(req).then(function(data){
+        $http(req).then(function(data) {
         	$http.defaults.headers.common.Authorization = 'Bearer ' + data.data.access_token;
             $cookies.put("access_token", data.data.access_token);
             window.location.href="/admin";

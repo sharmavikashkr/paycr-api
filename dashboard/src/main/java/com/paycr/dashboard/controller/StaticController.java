@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,23 +35,19 @@ public class StaticController {
 	private SecurityService secSer;
 
 	@RequestMapping("/html/{folder}/{file}")
-	public ModelAndView getTemplate(@PathVariable String folder, @PathVariable String file, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		String token = null;
-		if (request.getCookies() == null) {
-			response.sendRedirect("/login");
-		}
-		for (Cookie cookie : request.getCookies()) {
-			if ("access_token".equals(cookie.getName())) {
-				token = cookie.getValue();
-			}
-		}
-		if (token == null) {
-			response.sendRedirect("/login");
-		}
-		PcUser user = secSer.findLoggedInUser(token);
+	public ModelAndView getTemplate(@PathVariable String folder, @PathVariable String file,
+			@RequestParam("access_token") String accessToken, HttpServletRequest request, HttpServletResponse response)
+					throws IOException {
+		PcUser user = secSer.findLoggedInUser(accessToken);
 		if (user == null) {
 			response.sendRedirect("/login");
+		}
+		boolean isPaycr = secSer.isPaycrUser(accessToken);
+		if ("admin".equals(folder) && !isPaycr) {
+			response.sendRedirect("/login");
+		}
+		if ("merchant".equals(folder) && isPaycr) {
+			response.sendRedirect("/adminlogin");
 		}
 		return new ModelAndView("html/" + folder + "/" + file);
 	}
@@ -59,7 +55,7 @@ public class StaticController {
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/enum/{type}")
 	public List<String> getEnum(@PathVariable String type) {
-		List<String> enumList = new ArrayList<String>();
+		List<String> enumList = new ArrayList<>();
 		if ("providers".equals(type)) {
 			for (ParamValueProvider provider : ParamValueProvider.values()) {
 				enumList.add(provider.name());

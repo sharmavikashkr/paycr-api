@@ -35,31 +35,31 @@
 </head>
 <body ng-app="payCrAdminApp" ng-controller="AdminController" ng-cloak>
     <div ng-init="prepare()" style="background:lightyellow;" id="wrapper">
-        <div ng-include="'/html/admin/nav'" style="position:relative;"></div>
+        <div ng-include="templateUrl('admin','nav')" style="position:relative;"></div>
         <div class="tab-content" id="page-wrapper">
-    		<div ng-include="'/html/common/alert'"></div>
-    		<div ng-if="user.access.supervisor" id="dashboardTab" class="tab-pane active" ng-include="'/html/common/dashboardTab'"></div>
-            <div ng-class="(user.access.supervisor)?'':'active'" id="merchantsTab" class="tab-pane" ng-include="'/html/admin/merchantTab'"></div>
-        	<div id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
-        	<div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="'/html/common/paymentTab'"></div>
-        	<div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="'/html/admin/subscriptionTab'"></div>
-        	<div ng-if="user.access.finance" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>
-		    <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
-		    <div ng-if="user.access.supervisor" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
-		    <div ng-if="user.access.supervisor" id="settingsTab" class="tab-pane fade" ng-include="'/html/admin/adminSettingTab'"></div>
-        	<div id="profileTab" class="tab-pane fade" ng-include="'/html/common/profileTab'"></div>
-        	<!-- <div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div> -->
+    		<div ng-include="templateUrl('common','alert')"></div>
+    		<div ng-if="user.access.supervisor" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
+            <div ng-class="(user.access.supervisor)?'':'active'" id="merchantsTab" class="tab-pane" ng-include="templateUrl('admin','merchantTab')"></div>
+        	<div id="invoiceTab" class="tab-pane fade" ng-include="templateUrl('admin','invoiceTab')"></div>
+        	<div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="templateUrl('common','paymentTab')"></div>
+        	<div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="templateUrl('admin','subscriptionTab')"></div>
+        	<div ng-if="user.access.finance" id="pricingTab" class="tab-pane fade" ng-include="templateUrl('admin','pricingTab')"></div>
+		    <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="templateUrl('common','reportsTab')"></div>
+		    <div ng-if="user.access.supervisor" id="usersTab" class="tab-pane fade" ng-include="templateUrl('common','usersTab')"></div>
+		    <div ng-if="user.access.supervisor" id="settingsTab" class="tab-pane fade" ng-include="templateUrl('admin','adminSettingTab')"></div>
+        	<div id="profileTab" class="tab-pane fade" ng-include="templateUrl('common','profileTab')"></div>
+        	<!-- <div id="myInvoicesTab" class="tab-pane fade" ng-include="templateUrl('common','myInvoicesTab')"></div> -->
     	</div>
-	    <div ng-if="user.access.supervisor" ng-include="'/html/admin/createMerchantModal'"></div>
-		<div ng-if="user.access.finance" ng-include="'/html/admin/createPricingModal'"></div>
-		<div ng-if="user.access.supervisor" ng-include="'/html/admin/createOfflineSubsModal'"></div>
-		<div ng-if="user.access.supervisor" ng-include="'/html/common/createUserModal'"></div>
-		<div ng-if="user.access.ops" ng-include="'/html/common/createReportXsModal'"></div>
-		<div ng-if="user.access.ops" ng-include="'/html/common/recurrReportModal'"></div>
-		<div ng-include="'/html/common/invoiceInfoModal'"></div>
-		<div ng-include="'/html/common/invoicePaymentModal'"></div>
-		<div ng-include="'/html/admin/subsDetailsModal'"></div>
-		<div ng-include="'/html/common/changePasswordModal'"></div>
+	    <div ng-if="user.access.supervisor" ng-include="templateUrl('admin','createMerchantModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('admin','createPricingModal')"></div>
+		<div ng-if="user.access.supervisor" ng-include="templateUrl('admin','createOfflineSubsModal')"></div>
+		<div ng-if="user.access.supervisor" ng-include="templateUrl('common','createUserModal')"></div>
+		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportXsModal')"></div>
+		<div ng-if="user.access.ops" ng-include="templateUrl('common','recurrReportModal')"></div>
+		<div ng-include="templateUrl('common','invoiceInfoModal')"></div>
+		<div ng-include="templateUrl('common','invoicePaymentModal')"></div>
+		<div ng-include="templateUrl('admin','subsDetailsModal')"></div>
+		<div ng-include="templateUrl('common','changePasswordModal')"></div>
 	</div>
     <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="/vendor/metisMenu/metisMenu.min.js"></script>

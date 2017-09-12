@@ -55,26 +55,21 @@ public class CommonService {
 	private InvoiceDao invDao;
 
 	public List<Invoice> getMyInvoices(PcUser user) {
-		List<Invoice> myInvoices = invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
-		return myInvoices;
+		return invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
 	}
 
 	public List<Pricing> getPricings() {
-		List<Pricing> pricings = priceRepo.findAll();
-		return pricings;
+		return priceRepo.findAll();
 	}
 
 	public List<Notification> getNotifications() {
 		Pageable topFour = new PageRequest(0, 4);
 		if (secSer.isMerchantUser()) {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(null, merchant.getId(),
-					topFour);
-			return notices;
+			return notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(null, merchant.getId(), topFour);
 		} else {
 			PcUser user = secSer.findLoggedInUser();
-			List<Notification> notices = notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(user.getId(), null, topFour);
-			return notices;
+			return notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(user.getId(), null, topFour);
 		}
 	}
 
@@ -92,7 +87,7 @@ public class CommonService {
 		searchReq.setInvoiceStatus(InvoiceStatus.DECLINED);
 		List<Invoice> declinedInvs = invDao.findInvoices(searchReq, merchant);
 
-		List<Payment> salePays = new ArrayList<>();
+		List<Payment> salePays;
 		if (merchant == null) {
 			salePays = payRepo.findPaysWithStatus("captured", PayType.SALE, request.getCreatedFrom(),
 					request.getCreatedTo());
@@ -100,7 +95,7 @@ public class CommonService {
 			salePays = payRepo.findPaysWithStatusForMerchant("captured", PayType.SALE, merchant,
 					request.getCreatedFrom(), request.getCreatedTo());
 		}
-		List<Payment> refundPays = new ArrayList<>();
+		List<Payment> refundPays;
 		if (merchant == null) {
 			refundPays = payRepo.findPaysWithStatus("refund", PayType.REFUND, request.getCreatedFrom(),
 					request.getCreatedTo());
@@ -119,7 +114,7 @@ public class CommonService {
 		response.setDeclinedInvSum(getTotalInvAmount(declinedInvs));
 		response.setRefundPayCount(refundPays.size());
 		response.setRefundPaySum(getTotalPayAmount(refundPays));
-		List<DailyPay> dailyPayList = new ArrayList<DailyPay>();
+		List<DailyPay> dailyPayList = new ArrayList<>();
 		for (Payment payment : refundPays) {
 			setDailyPay(dailyPayList, payment);
 		}
