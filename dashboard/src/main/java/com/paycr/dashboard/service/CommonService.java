@@ -106,11 +106,16 @@ public class CommonService {
 		response.setRefundPayCount((BigInteger) refundPays.get(0)[0]);
 		response.setRefundPaySum(BigDecimal.valueOf((Double) refundPays.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
 		response.setUnpaidInvCount((BigInteger) unpaid.get(0)[0]);
-		response.setUnpaidInvSum(BigDecimal.valueOf((Double) unpaid.get(0)[1] == null ? 0D : (Double) unpaid.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setUnpaidInvSum(BigDecimal.valueOf((Double) unpaid.get(0)[1] == null ? 0D : (Double) unpaid.get(0)[1])
+				.setScale(2, BigDecimal.ROUND_FLOOR));
 		response.setExpiredInvCount((BigInteger) expired.get(0)[0]);
-		response.setExpiredInvSum(BigDecimal.valueOf((Double) expired.get(0)[1] == null ? 0D : (Double) expired.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setExpiredInvSum(
+				BigDecimal.valueOf((Double) expired.get(0)[1] == null ? 0D : (Double) expired.get(0)[1]).setScale(2,
+						BigDecimal.ROUND_FLOOR));
 		response.setDeclinedInvCount((BigInteger) declined.get(0)[0]);
-		response.setDeclinedInvSum(BigDecimal.valueOf((Double) declined.get(0)[1] == null ? 0D : (Double) declined.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setDeclinedInvSum(
+				BigDecimal.valueOf((Double) declined.get(0)[1] == null ? 0D : (Double) declined.get(0)[1]).setScale(2,
+						BigDecimal.ROUND_FLOOR));
 		List<DailyPay> dailyPayList = new ArrayList<>();
 		for (Object[] obj : dailyPays) {
 			DailyPay dp = new DailyPay();

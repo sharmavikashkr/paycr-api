@@ -7,6 +7,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 		"createdTo" : dateNow
 	}
 	$scope.loadDashboard = function() {
+		angular.element(document.querySelector('#spinnerModal')).modal('show');
 		var req = {
 			method : 'POST',
 			url : "/common/dashboard",
@@ -88,5 +89,6 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        hideHover: 'auto',
 	        resize: true
 	    });
+		angular.element(document.querySelector('#spinnerModal')).modal('hide');
 	}
 });
