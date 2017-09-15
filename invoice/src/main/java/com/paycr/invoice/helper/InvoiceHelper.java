@@ -80,7 +80,6 @@ public class InvoiceHelper {
 	public void updateConsumer(Invoice invoice, Consumer consumer) {
 		consumer.setActive(true);
 		consumer.setCreated(new Date());
-		consumer.setMerchant(invoice.getMerchant());
 		invoice.setConsumer(consumer);
 		isValidConsumer.validate(invoice);
 		invRepo.save(invoice);

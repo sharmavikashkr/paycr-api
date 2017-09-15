@@ -34,7 +34,7 @@ public class IsValidConsumer implements RequestValidator<Consumer> {
 				|| match(consumer.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		Consumer extConsumer = consRepo.findByMerchantAndEmailAndMobile(consumer.getMerchant(), consumer.getEmail(),
+		Consumer extConsumer = consRepo.findConsumerForMerchant(consumer.getMerchant(), consumer.getEmail(),
 				consumer.getMobile());
 		if (CommonUtil.isNotNull(extConsumer)) {
 			throw new PaycrException(Constants.FAILURE, "Consumer already exists");

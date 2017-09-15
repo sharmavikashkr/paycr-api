@@ -2,7 +2,10 @@ package com.paycr.invoice.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,19 +15,24 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Attachment;
+import com.paycr.common.data.domain.BulkUpload;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
+import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
+import com.paycr.common.data.repository.BulkUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.PaymentRepository;
@@ -42,6 +50,10 @@ import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.scheduler.InvoiceSchedulerService;
 import com.paycr.invoice.validation.InvoiceValidator;
 import com.razorpay.RazorpayException;
+
+import au.com.bytecode.opencsv.CSVParser;
+import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 public class InvoiceService {
@@ -77,6 +89,9 @@ public class InvoiceService {
 
 	@Autowired
 	private RecurringInvoiceRepository recInvRepo;
+
+	@Autowired
+	private BulkUploadRepository bulkUpdRepo;
 
 	public Invoice single(Invoice invoice) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -207,18 +222,27 @@ public class InvoiceService {
 		return Files.readAllBytes(path);
 	}
 
-	public Invoice createChild(String invoiceCode, Consumer consumer) {
+	@Transactional
+	public Invoice createChild(String invoiceCode, Consumer consumer, String createdBy) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
 		}
 		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode);
-		consumer.setActive(true);
-		consumer.setCreated(new Date());
-		consumer.setCreatedBy(secSer.findLoggedInUser().getEmail());
-		consumer.setMerchant(invoice.getMerchant());
-		childInvoice.setConsumer(consumer);
+		consumer.setCreatedBy(createdBy);
 		invHelp.updateConsumer(childInvoice, consumer);
+		InvoiceSetting invSetting = childInvoice.getMerchant().getInvoiceSetting();
+		InvoiceNotify invNot = new InvoiceNotify();
+		invNot.setCreated(new Date());
+		invNot.setInvoice(childInvoice);
+		invNot.setCcMe(invSetting.isCcMe());
+		invNot.setCcEmail(childInvoice.getCreatedBy());
+		invNot.setEmailNote(invSetting.getEmailNote());
+		invNot.setEmailSubject(invSetting.getEmailSubject());
+		invNot.setEmailPdf(invSetting.isEmailPdf());
+		invNot.setSendEmail(invSetting.isSendEmail());
+		invNot.setSendSms(invSetting.isSendSms());
+		notSer.notify(childInvoice, invNot);
 		return childInvoice;
 	}
 
@@ -254,6 +278,65 @@ public class InvoiceService {
 	public List<RecurringInvoice> allRecurr(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		return recInvRepo.findByInvoice(invoice);
+	}
+
+	@Async
+	@Transactional
+	public void uploadConsumers(String invoiceCode, MultipartFile consumers, String createdBy) throws IOException {
+		List<BulkUpload> bulkUploads = bulkUpdRepo.findByInvoiceCode(invoiceCode);
+		String fileName = invoiceCode + "-" + bulkUploads.size() + ".csv";
+		String updatedCsv = server.getBulkCsvLocation() + fileName;
+		CSVWriter writer = new CSVWriter(new FileWriter(updatedCsv, true));
+		Reader reader = new InputStreamReader(consumers.getInputStream());
+		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
+		List<String[]> consumerList = csvReader.readAll();
+		csvReader.close();
+		for (String[] consumer : consumerList) {
+			String reason = "Invalid format";
+			if (consumer.length != 3) {
+				String[] record = new String[4];
+				for (int i = 0; i < consumer.length; i++) {
+					record[i] = consumer[i];
+				}
+				record[3] = reason;
+				writer.writeNext(record);
+				continue;
+			}
+			Consumer con = new Consumer();
+			con.setName(consumer[0].trim());
+			con.setEmail(consumer[1].trim());
+			con.setMobile(consumer[2].trim());
+			try {
+				Invoice invoice = createChild(invoiceCode, con, createdBy);
+				reason = invoice.getInvoiceCode();
+			} catch (PaycrException ex) {
+				reason = ex.getMessage();
+			} catch (Exception ex) {
+				reason = "Something went worng";
+			}
+			String[] record = new String[4];
+			record[0] = consumer[0];
+			record[1] = consumer[1];
+			record[2] = consumer[2];
+			record[3] = reason;
+			writer.writeNext(record);
+		}
+		writer.close();
+		BulkUpload bun = new BulkUpload();
+		bun.setCreated(new Date());
+		bun.setFileName(fileName);
+		bun.setInvoiceCode(invoiceCode);
+		bun.setCreatedBy(createdBy);
+		bulkUpdRepo.save(bun);
+	}
+
+	public List<BulkUpload> getUploads(String invoiceCode) {
+		return bulkUpdRepo.findByInvoiceCode(invoiceCode);
+	}
+
+	public byte[] downloadFile(String filename) throws IOException {
+		Path path = Paths.get(server.getBulkCsvLocation() + filename);
+		return Files.readAllBytes(path);
 	}
 
 }

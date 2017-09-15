@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -19,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.data.domain.BulkUpload;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
+import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.invoice.service.InvoiceService;
 
@@ -33,6 +37,9 @@ public class InvoiceController {
 
 	@Autowired
 	private InvoiceService invSer;
+
+	@Autowired
+	private SecurityService secSer;
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -138,12 +145,60 @@ public class InvoiceController {
 	public Invoice createChild(@PathVariable String invoiceCode, @RequestBody Consumer consumer,
 			HttpServletResponse response) {
 		try {
-			return invSer.createChild(invoiceCode, consumer);
+			PcUser user = secSer.findLoggedInUser();
+			return invSer.createChild(invoiceCode, consumer, user.getEmail());
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return null;
+	}
+
+	@RequestMapping("/bulk/upload/format")
+	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String content = "Name1,Email1,Mobile1\r\nName2,Email2,Mobile2";
+		response.setHeader("Content-Disposition", "attachment; filename=\"consumers.csv\"");
+		response.setContentType("application/csv");
+		InputStream is = new ByteArrayInputStream(content.getBytes());
+		IOUtils.copy(is, response.getOutputStream());
+		response.setContentLength(content.getBytes().length);
+		response.flushBuffer();
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/bulk/uploads/{invoiceCode}", method = RequestMethod.GET)
+	public List<BulkUpload> uploadConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
+		try {
+			return invSer.getUploads(invoiceCode);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
+	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
+	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
+		try {
+			return invSer.downloadFile(filename);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/bulk/upload/{invoiceCode}", method = RequestMethod.POST)
+	public void uploadConsumers(@PathVariable String invoiceCode, @RequestParam("consumers") MultipartFile consumers,
+			HttpServletResponse response) {
+		try {
+			PcUser user = secSer.findLoggedInUser();
+			invSer.uploadConsumers(invoiceCode, consumers, user.getEmail());
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)

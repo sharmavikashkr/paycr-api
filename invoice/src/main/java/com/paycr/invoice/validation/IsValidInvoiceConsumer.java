@@ -43,13 +43,15 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 				|| match(consumer.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		Consumer exstConsumer = consRepo.findByMerchantAndEmailAndMobile(invoice.getMerchant(), consumer.getEmail(),
+		Consumer exstConsumer = consRepo.findConsumerForMerchant(invoice.getMerchant(), consumer.getEmail(),
 				consumer.getMobile());
 		if (CommonUtil.isNull(exstConsumer)) {
 			consumer.setMerchant(invoice.getMerchant());
 			consumer.setActive(true);
 			consumer.setCreated(new Date());
-			consumer.setCreatedBy(invoice.getCreatedBy());
+			if (consumer.getCreatedBy() == null) {
+				consumer.setCreatedBy(invoice.getCreatedBy());
+			}
 			exstConsumer = consRepo.save(consumer);
 		}
 		invoice.setConsumer(exstConsumer);

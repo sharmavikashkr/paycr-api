@@ -3,12 +3,34 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h5 class="modal-title">Create Child Invoice : <strong>{{invoiceInfo.invoiceCode}}</strong></h5>
+				<h5 class="modal-title">Create Child Invoice : <strong>{{bulkInvoiceInfo.invoiceCode}}</strong></h5>
 			</div>
 			<div class="modal-body">
 				<form name="childInvoiceForm">
 					<div class="row">
 						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Upload Consumers (CSV): (<a href="/invoice/bulk/upload/format">Download format</a>)</label>
+								<input type="file" onchange="angular.element(this).scope().uploadConsumers(this.files)" accept=".csv" />
+							</div>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="hidden-xs">Uploaded On</th>
+										<th class="hidden-xs">Uploaded By</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="bulkUpload in bulkUploads">
+										<td><a target="_blank" href="/invoice/bulk/download/{{bulkUpload.fileName}}">{{bulkUpload.fileName}}</a></td>
+										<td class="hidden-xs">{{bulkUpload.created | date:'dd-MM-yyyy'}}</td>
+										<td class="hidden-xs">{{bulkUpload.createdBy}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<hr>
+							<h5>Add Single Consumer</h5>
 							<table class="table table-bordered table-responsive">
 								<tbody>
 									<tr>
@@ -42,7 +64,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-info" ng-click="createChildInvoice(invoiceInfo.invoiceCode)">Create</button>
+				<button type="button" class="btn btn-info" ng-click="createChildInvoice(bulkInvoiceInfo.invoiceCode)">Create</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>

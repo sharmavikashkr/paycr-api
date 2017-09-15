@@ -98,3 +98,11 @@ CREATE TABLE if not exists pc_attachment (
 	created_by varchar(50) NOT NULL,
     invoice_id int REFERENCES pc_invoice
 );
+
+CREATE TABLE if not exists pc_bulk_upload (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	file_name varchar(20) NOT NULL,
+	created_by varchar(50) NOT NULL,
+    invoice_code varchar(20) NOT NULL
+);

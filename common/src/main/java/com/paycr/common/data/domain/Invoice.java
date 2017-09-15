@@ -60,7 +60,7 @@ public class Invoice implements Cloneable {
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Consumer consumer;
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)

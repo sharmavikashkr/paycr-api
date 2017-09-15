@@ -334,6 +334,26 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		});
 		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
 	}
+	$scope.uploadConsumers = function(files) {
+		if (!confirm('Upload Consumers?')) {
+			return false;
+		}
+		var invoiceCode = this.bulkInvoiceInfo.invoiceCode;
+		var fd = new FormData();
+		fd.append("consumers", files[0]);
+		$http.post("/invoice/bulk/upload/"+invoiceCode, fd, {
+			transformRequest : angular.identity,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				'Content-Type' : undefined
+			}
+		}).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
+	}
 	$scope.searchChildInvoices = function(invoice) {
 		$rootScope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
 		$rootScope.searchInvoiceReq.invoiceType = 'SINGLE';
@@ -364,6 +384,22 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}
 		$http(req).then(function(recurrInvoices) {
 			$rootScope.recurrInvoices = recurrInvoices.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.updateBulkInvoiceInfo = function(invoice) {
+		$rootScope.bulkInvoiceInfo = angular.copy(invoice);
+		var req = {
+			method : 'GET',
+			url : "/invoice/bulk/uploads/"+invoice.invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(bulkUploads) {
+			$rootScope.bulkUploads = bulkUploads.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
