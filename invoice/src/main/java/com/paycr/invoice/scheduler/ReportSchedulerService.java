@@ -78,6 +78,9 @@ public class ReportSchedulerService {
 				}
 				String filePath = server.getReportLocation() + fileName;
 				File file = new File(filePath);
+				if(!file.exists()) {
+					file.createNewFile();
+				}
 				FileOutputStream out = new FileOutputStream(file);
 				out.write(repCsv.getBytes());
 				out.close();
