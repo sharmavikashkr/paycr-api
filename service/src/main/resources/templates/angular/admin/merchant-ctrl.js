@@ -6,7 +6,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$scope.searchMerchant = function() {
+	$rootScope.searchMerchant = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/merchant",

@@ -1,6 +1,6 @@
 app.controller('PricingController', function($scope, $rootScope, $http,
 		$cookies) {
-	$scope.fetchPricings = function() {
+	$rootScope.fetchPricings = function() {
 		var req = {
 			method : 'GET',
 			url : "/common/pricings",

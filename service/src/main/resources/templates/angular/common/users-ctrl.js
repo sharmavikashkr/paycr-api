@@ -1,6 +1,6 @@
 app.controller('UsersController',
 		function($scope, $rootScope, $http, $cookies) {
-			$scope.fetchMyUsers = function() {
+			$rootScope.fetchMyUsers = function() {
 				var req = {
 					method : 'GET',
 					url : "/user/getAll",

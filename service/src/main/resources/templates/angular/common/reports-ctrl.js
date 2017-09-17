@@ -1,6 +1,6 @@
 app.controller('ReportsController', function($scope, $rootScope, $http,
 		$cookies) {
-	$scope.fetchReports = function() {
+	$rootScope.fetchReports = function() {
 		var req = {
 			method : 'GET',
 			url : "/reports",

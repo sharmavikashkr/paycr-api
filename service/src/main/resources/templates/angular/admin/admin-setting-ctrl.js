@@ -1,5 +1,19 @@
 app.controller('AdminSettingController', function($scope, $rootScope, $http,
 		$cookies) {
+	$rootScope.loadAdminSetting = function() {
+		var req = {
+			method : 'GET',
+			url : "/admin/setting",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(setting) {
+			$rootScope.adminSetting = setting.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.saveAdminSetting = function(adminSetting) {
 		var req = {
 			method : 'POST',
@@ -12,20 +26,6 @@ app.controller('AdminSettingController', function($scope, $rootScope, $http,
 		$http(req).then(function(setting) {
 			$rootScope.adminSetting = setting.data;
 			$scope.serverMessage(setting);
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.loadAdminSetting = function() {
-		var req = {
-			method : 'GET',
-			url : "/admin/setting",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(setting) {
-			$rootScope.adminSetting = setting.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

@@ -1,6 +1,6 @@
 app.controller('ManageController', function($scope, $http, $rootScope,
 		$cookies, $httpParamSerializer) {
-	$scope.fetchConsumers = function() {
+	$rootScope.fetchConsumers = function() {
 		var req = {
 			method : 'GET',
 			url : "/consumer/get",
@@ -14,7 +14,7 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchInventory = function() {
+	$rootScope.fetchInventory = function() {
 		var req = {
 			method : 'GET',
 			url : "/inventory/get",

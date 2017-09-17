@@ -6,7 +6,7 @@ app.controller('SubscriptionController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$scope.searchSubscription = function() {
+	$rootScope.searchSubscription = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/subscription",

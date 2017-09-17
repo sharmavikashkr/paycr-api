@@ -6,7 +6,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$scope.searchInvoice = function() {
+	$rootScope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/invoice",

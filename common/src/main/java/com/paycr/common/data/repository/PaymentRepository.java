@@ -32,14 +32,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 			+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as sale,"
 			+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refund "
 			+ "FROM pc_payment p WHERE p.created BETWEEN ?1 AND ?2 AND p.status in ('captured','refund') "
-			+ "GROUP BY CAST(p.created as DATE);", nativeQuery = true)
+			+ "GROUP BY CAST(p.created as DATE) ORDER BY CAST(p.created as DATE);", nativeQuery = true)
 	public List<Object[]> findDailyPayList(Date startDate, Date endDate);
 
 	@Query(value = "SELECT CAST(CAST(p.created as DATE) as VARCHAR(10)) as date,"
 			+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as sale,"
 			+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refund "
 			+ "FROM pc_payment p WHERE p.merchant_id = ?3 AND p.created BETWEEN ?1 AND ?2 AND p.status in ('captured','refund') "
-			+ "GROUP BY CAST(p.created as DATE);", nativeQuery = true)
+			+ "GROUP BY CAST(p.created as DATE) ORDER BY CAST(p.created as DATE);", nativeQuery = true)
 	public List<Object[]> findDailyPayListForMerchant(Date startDate, Date endDate, Integer merchantId);
 
 	@Query("SELECT p from Payment p WHERE p.payMode = ?1 AND p.payType = ?2 AND p.created BETWEEN ?3 AND ?4")

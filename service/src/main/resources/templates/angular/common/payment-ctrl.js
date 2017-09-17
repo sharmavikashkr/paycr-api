@@ -6,7 +6,7 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$scope.searchPayment = function() {
+	$rootScope.searchPayment = function() {
 		var req = {
 			method : 'POST',
 			url : "/search/payment",
