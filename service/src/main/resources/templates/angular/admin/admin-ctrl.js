@@ -6,6 +6,7 @@ app.config(function($mdDateLocaleProvider) {
 });
 app.controller('AdminController',
 function($scope, $rootScope, $http, $cookies, $timeout) {
+	$rootScope.hideSpinner = false;
 	$scope.server = {
 		"hideMessage" : true,
 		"respStatus" : "WELCOME!",

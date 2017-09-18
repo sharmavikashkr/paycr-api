@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.DailyPay;
-import com.paycr.common.bean.StatsRequest;
 import com.paycr.common.bean.StatsResponse;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
@@ -23,11 +22,9 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
-import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.PayType;
-import com.paycr.common.util.Constants;
 
 @Service
 public class CommonService {
@@ -66,8 +63,14 @@ public class CommonService {
 		}
 	}
 
-	public StatsResponse loadDashboard(StatsRequest request) {
-		validateStatsRequest(request);
+	public StatsResponse loadDashboard(String timeRange) {
+		Calendar calTo = Calendar.getInstance();
+		Calendar calFrom = Calendar.getInstance();
+		if ("LAST_WEEK".equalsIgnoreCase(timeRange)) {
+			calFrom.add(Calendar.DATE, -7);
+		} else if ("LAST_MONTH".equalsIgnoreCase(timeRange)) {
+			calFrom.add(Calendar.DATE, -31);
+		}
 		StatsResponse response = new StatsResponse();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		List<Object[]> salePays;
@@ -77,29 +80,24 @@ public class CommonService {
 		List<Object[]> declined;
 		List<Object[]> dailyPays;
 		if (merchant == null) {
-			salePays = payRepo.findCountAndSum(PayType.SALE.name(), request.getCreatedFrom(), request.getCreatedTo());
-			refundPays = payRepo.findCountAndSum(PayType.REFUND.name(), request.getCreatedFrom(),
-					request.getCreatedTo());
-			unpaid = invRepo.findCountAndSum(InvoiceStatus.UNPAID.name(), request.getCreatedFrom(),
-					request.getCreatedTo());
-			expired = invRepo.findCountAndSum(InvoiceStatus.EXPIRED.name(), request.getCreatedFrom(),
-					request.getCreatedTo());
-			declined = invRepo.findCountAndSum(InvoiceStatus.DECLINED.name(), request.getCreatedFrom(),
-					request.getCreatedTo());
-			dailyPays = payRepo.findDailyPayList(request.getCreatedFrom(), request.getCreatedTo());
+			salePays = payRepo.findCountAndSum(PayType.SALE.name(), calFrom.getTime(), calTo.getTime());
+			refundPays = payRepo.findCountAndSum(PayType.REFUND.name(), calFrom.getTime(), calTo.getTime());
+			unpaid = invRepo.findCountAndSum(InvoiceStatus.UNPAID.name(), calFrom.getTime(), calTo.getTime());
+			expired = invRepo.findCountAndSum(InvoiceStatus.EXPIRED.name(), calFrom.getTime(), calTo.getTime());
+			declined = invRepo.findCountAndSum(InvoiceStatus.DECLINED.name(), calFrom.getTime(), calTo.getTime());
+			dailyPays = payRepo.findDailyPayList(calFrom.getTime(), calTo.getTime());
 		} else {
-			salePays = payRepo.findCountAndSumForMerchant(merchant.getId(), PayType.SALE.name(),
-					request.getCreatedFrom(), request.getCreatedTo());
-			refundPays = payRepo.findCountAndSumForMerchant(merchant.getId(), PayType.REFUND.name(),
-					request.getCreatedFrom(), request.getCreatedTo());
+			salePays = payRepo.findCountAndSumForMerchant(merchant.getId(), PayType.SALE.name(), calFrom.getTime(),
+					calTo.getTime());
+			refundPays = payRepo.findCountAndSumForMerchant(merchant.getId(), PayType.REFUND.name(), calFrom.getTime(),
+					calTo.getTime());
 			unpaid = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.UNPAID.name(),
-					request.getCreatedFrom(), request.getCreatedTo());
+					calFrom.getTime(), calTo.getTime());
 			expired = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.EXPIRED.name(),
-					request.getCreatedFrom(), request.getCreatedTo());
+					calFrom.getTime(), calTo.getTime());
 			declined = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.DECLINED.name(),
-					request.getCreatedFrom(), request.getCreatedTo());
-			dailyPays = payRepo.findDailyPayListForMerchant(request.getCreatedFrom(), request.getCreatedTo(),
-					merchant.getId());
+					calFrom.getTime(), calTo.getTime());
+			dailyPays = payRepo.findDailyPayListForMerchant(calFrom.getTime(), calTo.getTime(), merchant.getId());
 		}
 		response.setSalePayCount((BigInteger) salePays.get(0)[0]);
 		response.setSalePaySum(BigDecimal.valueOf((Double) salePays.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
@@ -126,20 +124,6 @@ public class CommonService {
 		}
 		response.setDailyPayList(dailyPayList);
 		return response;
-	}
-
-	private void validateStatsRequest(StatsRequest request) {
-		if (request == null || request.getCreatedFrom() == null || request.getCreatedTo() == null) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
-		}
-		Calendar calTo = Calendar.getInstance();
-		calTo.setTime(request.getCreatedTo());
-		Calendar calFrom = Calendar.getInstance();
-		calFrom.setTime(request.getCreatedFrom());
-		calFrom.add(Calendar.DAY_OF_YEAR, 30);
-		if (calFrom.before(calTo)) {
-			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 30 days");
-		}
 	}
 
 }

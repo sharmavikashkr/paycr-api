@@ -1,20 +1,13 @@
 app.controller('DashboardController', function($scope, $rootScope, $http,
 		$cookies) {
-	var dateNow = moment().toDate();
-	var dateStart = moment().subtract(30, 'day').toDate();
-	$scope.statsReq = {
-		"createdFrom" : dateStart,
-		"createdTo" : dateNow
-	}
+	$scope.timeRange = 'LAST_WEEK';
 	$scope.loadDashboard = function() {
-		angular.element(document.querySelector('#spinnerModal')).modal('show');
 		var req = {
-			method : 'POST',
-			url : "/common/dashboard",
+			method : 'GET',
+			url : "/common/dashboard/" + $scope.timeRange,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
-			},
-			data : $scope.statsReq
+			}
 		}
 		$http(req).then(function(response) {
 			$rootScope.statsResponse = response.data;
@@ -29,7 +22,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	$scope.loadCharts = function() {
 		$('#amount-donut').html('');
 		$('#count-donut').html('');
-		$('#per-day-area').html('');
+		$('#per-day-bar').html('');
 		Morris.Donut({
 	        element: 'amount-donut',
 	        colors : ['#3c763d', '#31708f', '#333', '#faf2cc', '#a94442'],
@@ -89,6 +82,6 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        hideHover: 'auto',
 	        resize: true
 	    });
-		angular.element(document.querySelector('#spinnerModal')).modal('hide');
+		$rootScope.hideSpinner = true;
 	}
 });

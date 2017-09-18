@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.StatsRequest;
 import com.paycr.common.bean.StatsResponse;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
@@ -23,9 +22,9 @@ public class CommonController {
 	private CommonService comSer;
 
 	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
-	@RequestMapping("/dashboard")
-	public StatsResponse getDashboard(@RequestBody StatsRequest request) {
-		return comSer.loadDashboard(request);
+	@RequestMapping("/dashboard/{timeRange}")
+	public StatsResponse getDashboard(@PathVariable String timeRange) {
+		return comSer.loadDashboard(timeRange);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)

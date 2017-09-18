@@ -38,7 +38,6 @@
         <div ng-include="templateUrl('admin','nav')" style="position:relative;"></div>
         <div class="tab-content" id="page-wrapper">
     		<div ng-include="templateUrl('common','alert')"></div>
-    		<div ng-include="templateUrl('common','spinnerModal')"></div>
     		<div ng-if="user.access.supervisor" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
             <div ng-class="(user.access.supervisor)?'':'active'" id="merchantsTab" class="tab-pane" ng-include="templateUrl('admin','merchantTab')"></div>
         	<div id="invoiceTab" class="tab-pane fade" ng-include="templateUrl('admin','invoiceTab')"></div>

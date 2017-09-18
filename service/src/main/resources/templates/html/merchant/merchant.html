@@ -38,7 +38,6 @@
         <div ng-include="templateUrl('merchant','nav')"></div>
         <div class="tab-content bordered" id="page-wrapper">
         	<div ng-include="templateUrl('common','alert')"></div>
-        	<div ng-include="templateUrl('common','spinnerModal')"></div>
         	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
 	        <div ng-class="(user.access.admin)?'':'active'" id="invoiceTab" class="tab-pane" ng-include="templateUrl('merchant','invoiceTab')"></div>
 	        <div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="templateUrl('common','paymentTab')"></div>

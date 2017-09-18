@@ -5,6 +5,7 @@ app.config(function($mdDateLocaleProvider) {
     };
 });
 app.controller('MerchantController', function($scope, $rootScope, $http, $cookies, $timeout) {
+	$rootScope.hideSpinner = false;
 	var dateNow = moment().toDate();
 	var dateStart = moment().subtract(30, 'day').toDate();
 	$scope.server = {
