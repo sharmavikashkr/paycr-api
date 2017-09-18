@@ -4,10 +4,11 @@
             <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
         </button>
 		<strong><a class="navbar-brand" href="/admin">PayCr</a></strong>
+		<div ng-hide="hideSpinner" class="navbar-brand"><i id="spinner" class="fa fa-spinner fa-spin"></i></div>
 	</div>
 	<ul class="nav navbar-top-links navbar-right">
-		<li ng-hide="hideSpinner" class="navbar-brand"><i id="spinner" class="fa fa-spinner fa-spin"></i></li>
-		<li ng-hide="hideSpinner">Loading..</li>
+		<li class="navbar-brand"><strong>Welcome!</strong></li>
+		<li class="navbar-brand">|</li>
 		<li>&nbsp;&nbsp;&nbsp;<strong>{{user.name}}</strong></li>
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
