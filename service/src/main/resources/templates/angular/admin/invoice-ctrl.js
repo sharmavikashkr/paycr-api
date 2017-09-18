@@ -43,6 +43,22 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.updateInvoiceInfo = function(invoice) {
 		$rootScope.invoiceInfo = invoice;
 	}
+	$scope.updateInvoicePayInfo = function(invoice) {
+		$rootScope.invoicePayInfo = angular.copy(invoice);
+		var req = {
+			method : 'GET',
+			url : "/invoice/payments/" + invoice.invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(allPayments) {
+			$rootScope.invoicePayInfo.allPayments = allPayments.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.searchChildInvoices = function(invoice) {
 		$scope.searchInvoiceReq.merchant = null;
 		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;

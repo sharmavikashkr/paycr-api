@@ -93,9 +93,6 @@ public class Invoice implements Cloneable {
 	private Invoice parent;
 
 	@Transient
-	private List<Payment> allPayments;
-
-	@Transient
 	private boolean update;
 
 	public Integer getId() {
@@ -216,14 +213,6 @@ public class Invoice implements Cloneable {
 
 	public void setCustomParams(List<InvoiceCustomParam> customParams) {
 		this.customParams = customParams;
-	}
-
-	public List<Payment> getAllPayments() {
-		return allPayments;
-	}
-
-	public void setAllPayments(List<Payment> allPayments) {
-		this.allPayments = allPayments;
 	}
 
 	public String getCreatedBy() {

@@ -190,6 +190,22 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#createInvoiceModal')).modal('hide');
 		angular.element(document.querySelector('#createInvoiceXsModal')).modal('hide');
 	}
+	$scope.updateInvoicePayInfo = function(invoice) {
+		$rootScope.invoicePayInfo = angular.copy(invoice);
+		var req = {
+			method : 'GET',
+			url : "/invoice/payments/" + invoice.invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(allPayments) {
+			$rootScope.invoicePayInfo.allPayments = allPayments.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.enquireInvoice = function(invoiceCode) {
 		var req = {
 			method : 'GET',

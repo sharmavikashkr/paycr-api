@@ -71,6 +71,21 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.mailReport = function(report) {
+		var req = {
+			method : 'POST',
+			url : "/reports/mail",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			},
+			data : report
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.deleteReport = function(reportId, reportName) {
 		if (!confirm('Delete ' + reportName + ' ?')) {
 			return false;

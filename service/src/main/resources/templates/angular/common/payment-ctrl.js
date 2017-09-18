@@ -40,4 +40,40 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 			$rootScope.paymentResp.allPages.push(i);
 		}
 	}
+	$scope.downloadCsv = function() {
+		var req = {
+			method : 'POST',
+			url : "/search/payment/download",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				"Accept" : "text/csv"
+			},
+			data : $scope.searchPaymentReq
+		}
+		$http(req).then(function(content) {
+			var hiddenElement = document.createElement('a');
+			hiddenElement.href = 'data:attachment/csv,'
+					+ encodeURI(content.data);
+			hiddenElement.target = '_blank';
+			hiddenElement.download = 'payments.csv';
+			hiddenElement.click();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.mailCsv = function() {
+		var req = {
+			method : 'POST',
+			url : "/search/payment/mail",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			},
+			data : $scope.searchPaymentReq
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 });

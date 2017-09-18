@@ -134,7 +134,7 @@
 												<button ng-if="invoice.invoiceType == 'SINGLE' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" title="Edit Invoice" type="button" class="btn btn-warning btn-md visible-xs-inline" ng-click="updateSaveInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
 													<i class="fa fa-pencil"></i>
 												</button>
-												<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoiceInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
+												<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 													<i class="fa fa-rupee"></i>
 												</button>
 												<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">

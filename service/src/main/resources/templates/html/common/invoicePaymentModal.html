@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h5 class="modal-title"> Payment History : <strong>{{invoiceInfo.invoiceCode}}</strong></h5>
+				<h5 class="modal-title"> Payment History : <strong>{{invoicePayInfo.invoiceCode}}</strong></h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -20,7 +20,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="payment in invoiceInfo.allPayments">
+								<tr ng-repeat="payment in invoicePayInfo.allPayments">
 									<td class="hidden-xs">{{payment.created | date:'dd-MM-yyyy'}}</td>
 									<td class="hidden-xs">{{payment.paymentRefNo}}</td>
 									<td>{{payment.amount}}</td>

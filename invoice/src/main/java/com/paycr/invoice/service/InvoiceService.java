@@ -339,4 +339,8 @@ public class InvoiceService {
 		return Files.readAllBytes(path);
 	}
 
+	public List<Payment> payments(String invoiceCode) {
+		return payRepo.findByInvoiceCode(invoiceCode);
+	}
+
 }

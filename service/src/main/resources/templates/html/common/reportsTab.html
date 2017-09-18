@@ -71,9 +71,8 @@
 			<div ng-if="invoiceReports != null" class="panel panel-default">
 				<div class="panel-heading">Invoice Report ({{loadedreport.name}})
 					<span style="float: right;">
-						<a title="Download CSV" type="button" class="btn btn-info btn-xs" ng-click="downloadReport(loadedreport)">
-							<i class="fa fa-book"></i>
-						</a>
+						<a title="Download CSV" class="btn btn-success btn-xs" ng-click="downloadReport(loadedreport)"><i class="fa fa-book"></i></a>
+						<a title="Mail CSV" class="btn btn-danger btn-xs" ng-click="mailReport(loadedreport)"><i class="fa fa-envelope"></i></a>
 					</span>
 				</div>
 				<div class="panel-body">

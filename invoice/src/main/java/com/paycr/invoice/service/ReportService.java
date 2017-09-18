@@ -1,5 +1,7 @@
 package com.paycr.invoice.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,8 +11,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.InvoiceReport;
+import com.paycr.common.bean.Server;
+import com.paycr.common.communicate.Email;
+import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
@@ -45,6 +51,15 @@ public class ReportService {
 	@Autowired
 	private PaymentRepository payRepo;
 
+	@Autowired
+	private Company company;
+
+	@Autowired
+	private Server server;
+
+	@Autowired
+	private EmailEngine emailEngine;
+
 	public List<Report> fetchReports(Merchant merchant) {
 		List<Report> commonReports = repRepo.findByMerchant(null);
 		List<Report> myReports = new ArrayList<>();
@@ -65,14 +80,10 @@ public class ReportService {
 		return repHelp.getCsv(invReport);
 	}
 
-	public DateFilter getDateFilter(TimeRange range) {
-		return repHelp.getDateFilter(range);
-	}
-
 	public List<InvoiceReport> loadReport(Report report, Merchant merchant) {
 		isValidReport(report);
 		List<Payment> allPayments = new ArrayList<>();
-		DateFilter dateFilter = getDateFilter(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
 		if (merchant == null) {
 			allPayments.addAll(payRepo.findPaysWithMode(report.getPayMode(), report.getPayType(),
 					dateFilter.getStartDate(), dateFilter.getEndDate()));
@@ -154,6 +165,36 @@ public class ReportService {
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
+	}
+
+	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {
+		String repCsv = downloadReport(report, merchant);
+		DateFilter df = repHelp.getDateFilter(report.getTimeRange());
+		String fileName = "";
+		if (merchant != null) {
+			fileName = merchant.getAccessKey() + " - " + report.getId() + ".csv";
+		} else {
+			fileName = "PAYCR - " + report.getId() + ".csv";
+		}
+		String filePath = server.getReportLocation() + fileName;
+		File file = new File(filePath);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		FileOutputStream out = new FileOutputStream(file);
+		out.write(repCsv.getBytes());
+		out.close();
+		List<String> to = new ArrayList<>();
+		to.addAll(mailTo);
+		List<String> cc = new ArrayList<>();
+		Email email = new Email(company.getContactName(), company.getContactEmail(), company.getContactPassword(), to,
+				cc);
+		email.setSubject("Payment Report - " + report.getName());
+		email.setMessage("Payment Report - " + report.getName() + " FROM "
+				+ DateUtil.getDashboardDate(df.getStartDate()) + " to " + DateUtil.getDashboardDate(df.getEndDate()));
+		email.setFileName(fileName);
+		email.setFilePath(filePath);
+		emailEngine.sendViaGmail(email);
 	}
 
 }

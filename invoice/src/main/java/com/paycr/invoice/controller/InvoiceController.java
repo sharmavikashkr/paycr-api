@@ -53,6 +53,18 @@ public class InvoiceController {
 		return null;
 	}
 
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping(value = "/payments/{invoiceCode}", method = RequestMethod.GET)
+	public List<Payment> payments(@PathVariable String invoiceCode, HttpServletResponse response) {
+		try {
+			return invSer.payments(invoiceCode);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
 	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {

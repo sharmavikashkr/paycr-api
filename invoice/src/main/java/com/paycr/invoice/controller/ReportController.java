@@ -105,6 +105,21 @@ public class ReportController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@RequestMapping("/mail")
+	public void mailReport(@RequestBody Report report, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			PcUser user = secSer.findLoggedInUser();
+			List<String> mailTo = new ArrayList<>();
+			mailTo.add(user.getEmail());
+			repSer.mailReport(report, merchant, mailTo);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/schedule/get")
 	public List<RecurringReportUser> getSchedule(HttpServletResponse response) {
 		try {
