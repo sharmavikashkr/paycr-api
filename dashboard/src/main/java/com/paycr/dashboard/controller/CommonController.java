@@ -24,12 +24,7 @@ public class CommonController {
 	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
 	@RequestMapping("/dashboard/{timeRange}")
 	public StatsResponse getDashboard(@PathVariable String timeRange) {
-		try {
-			return comSer.loadDashboard(timeRange);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
+		return comSer.loadDashboard(timeRange);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
