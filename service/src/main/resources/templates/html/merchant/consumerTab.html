@@ -24,10 +24,10 @@
 				<tbody id="itemBody">
 					<tr>
 						<td><input type="text" class="form-control" ng-model="conquery.name" placeholder="search name"></input></td>
-						<td><input type="text" class="form-control" ng-model="conquery.email" placeholder="search email"></input></td>
-						<td><input type="text" class="form-control" ng-model="conquery.mobile" placeholder="search mobile"></input></td>
-						<td><input type="text" class="form-control" ng-model="conquery.createdBy" placeholder="search created by"></input></td>
-						<td></td>
+						<td class="hidden-xs"><input type="text" class="form-control" ng-model="conquery.email" placeholder="search email"></input></td>
+						<td class="hidden-xs"><input type="text" class="form-control" ng-model="conquery.mobile" placeholder="search mobile"></input></td>
+						<td class="hidden-xs"><input type="text" class="form-control" ng-model="conquery.createdBy" placeholder="search created by"></input></td>
+						<td class="hidden-xs"></td>
 						<td></td>
 					</tr>
 					<tr ng-repeat="consumer in consumerList | filter: conquery"

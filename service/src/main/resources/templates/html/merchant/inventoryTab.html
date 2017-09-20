@@ -24,8 +24,8 @@
 					<tr>
 						<td><input type="text" class="form-control" ng-model="invquery.name" placeholder="search name"></input></td>
 						<td><input type="text" class="form-control" ng-model="invquery.rate" placeholder="search rate"></input></td>
-						<td><input type="text" class="form-control" ng-model="invquery.createdBy" placeholder="search created by"></input></td>
-						<td></td>
+						<td class="hidden-xs"><input type="text" class="form-control" ng-model="invquery.createdBy" placeholder="search created by"></input></td>
+						<td class="hidden-xs"></td>
 						<td ng-if="user.access.finance"></td>
 					</tr>
 					<tr ng-repeat="inventory in inventoryList | filter : invquery">
