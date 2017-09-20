@@ -4,6 +4,17 @@
             <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
         </button>
 		<strong><a class="navbar-brand" href="/merchant">{{merchant.name}}</a></strong>
+		<div ng-if="user.access.finance" class="col-md-5 hidden-xs"></div>
+		<div ng-if="user.access.finance" class="col-md-5 hidden-xs" style="margin-top:7px;">
+			<div class="dropdown">
+				<button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">Quick Create <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+					<li><a href="#" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal"><i class="fa fa-plus"></i> Invoice</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#createConsumerModal"><i class="fa fa-plus"></i> Consumer</a></li>
+					<li><a href="#" data-toggle="modal" data-target="#createInventoryModal"><i class="fa fa-plus"></i> Item</a></li>
+				</ul>
+			</div>
+		</div>
 		<div ng-hide="hideSpinner" class="navbar-brand"><i id="spinner" class="fa fa-spinner fa-spin"></i></div>
 	</div>
 	<ul class="nav navbar-top-links navbar-right">

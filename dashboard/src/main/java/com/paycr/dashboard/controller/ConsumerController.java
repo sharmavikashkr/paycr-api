@@ -34,7 +34,7 @@ public class ConsumerController {
 		return null;
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
 	public void newConsumer(@RequestBody Consumer consumer, HttpServletResponse response) {
 		try {

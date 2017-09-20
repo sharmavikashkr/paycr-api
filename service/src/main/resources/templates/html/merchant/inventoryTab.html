@@ -1,6 +1,6 @@
 <div ng-controller="ManageController" ng-init="fetchInventory()">
 	<br>
-	<div class="row">
+	<div ng-if="user.access.finance" class="row">
 		<div class="col-sm-2 col-sm-offset-9">
 			<button title="Add Item" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#createInventoryModal">
 				<i class="fa fa-plus"></i> Item
@@ -26,7 +26,7 @@
 						<td><input type="text" class="form-control" ng-model="invquery.rate" placeholder="search rate"></input></td>
 						<td><input type="text" class="form-control" ng-model="invquery.createdBy" placeholder="search created by"></input></td>
 						<td></td>
-						<td></td>
+						<td ng-if="user.access.finance"></td>
 					</tr>
 					<tr ng-repeat="inventory in inventoryList | filter : invquery">
 						<td class="text-center">{{inventory.name}}</td>

@@ -1,6 +1,6 @@
 <div ng-controller="ManageController" ng-init="fetchConsumers()">
 	<br>
-	<div class="row">
+	<div ng-if="user.access.finance" class="row">
 		<div class="col-sm-2 col-sm-offset-9">
 			<button title="Create Consumer" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#createConsumerModal">
 				<i class="fa fa-plus"></i> Consumer

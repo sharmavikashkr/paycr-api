@@ -34,7 +34,7 @@ public class InventoryController {
 		return null;
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
 	public void newInventory(@RequestBody Inventory inventory, HttpServletResponse response) {
 		try {
