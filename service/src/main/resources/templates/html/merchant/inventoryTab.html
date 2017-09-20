@@ -10,7 +10,6 @@
 	<br>
 	<div class="row text-center">
 		<div class="col-md-10 col-md-offset-1">
-			<h4>My Inventory</h4>
 			<table class="table table-bordered table-responsive">
 				<thead>
 					<tr>
@@ -22,7 +21,14 @@
 					</tr>
 				</thead>
 				<tbody id="itemBody">
-					<tr ng-repeat="inventory in inventoryList">
+					<tr>
+						<td><input type="text" class="form-control" ng-model="invquery.name" placeholder="search name"></input></td>
+						<td><input type="text" class="form-control" ng-model="invquery.rate" placeholder="search rate"></input></td>
+						<td><input type="text" class="form-control" ng-model="invquery.createdBy" placeholder="search created by"></input></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr ng-repeat="inventory in inventoryList | filter : invquery">
 						<td class="text-center">{{inventory.name}}</td>
 						<td class="text-center"><i class="fa fa-rupee"></i> {{inventory.rate}}</td>
 						<td class="text-center hidden-xs">{{inventory.createdBy}}</td>
@@ -37,7 +43,7 @@
 							</button>
 							<button title="Add Invoice" type="button"
 								class="btn btn-info btn-circle btn-md visible-xs-inline"
-								ng-click="updateInvoiceConsumer(consumer)"
+								ng-click="updateInvoiceItem(inventory)"
 								data-toggle="modal"
 								data-target="#createInvoiceXsModal">
 								<i class="fa fa-plus"></i>

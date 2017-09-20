@@ -9,8 +9,7 @@
 	</div>
 	<br>
 	<div class="row text-center">
-		<div class="col-md-10 col-md-offset-1">
-			<h4>My Consumers</h4>
+		<div class="col-md-12">
 			<table class="table table-bordered table-responsive">
 				<thead>
 					<tr>
@@ -23,7 +22,15 @@
 					</tr>
 				</thead>
 				<tbody id="itemBody">
-					<tr ng-repeat="consumer in consumerList"
+					<tr>
+						<td><input type="text" class="form-control" ng-model="conquery.name" placeholder="search name"></input></td>
+						<td><input type="text" class="form-control" ng-model="conquery.email" placeholder="search email"></input></td>
+						<td><input type="text" class="form-control" ng-model="conquery.mobile" placeholder="search mobile"></input></td>
+						<td><input type="text" class="form-control" ng-model="conquery.createdBy" placeholder="search created by"></input></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr ng-repeat="consumer in consumerList | filter: conquery"
 						data-toggle="collapse"
 						data-target="#condetails-{{consumer.id}}"
 						class="accordion-toggle">

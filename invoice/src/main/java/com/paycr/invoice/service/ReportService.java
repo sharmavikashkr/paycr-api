@@ -72,6 +72,10 @@ public class ReportService {
 
 	public void createReports(Report report) {
 		isValidReport(report);
+		int exstRepSize = repRepo.findByMerchant(report.getMerchant()).size();
+		if (exstRepSize >= 10) {
+			throw new PaycrException(Constants.FAILURE, "Max 10 reports can be configured");
+		}
 		repRepo.save(report);
 	}
 
@@ -144,6 +148,10 @@ public class ReportService {
 			recRep.setStartDate(nextDate);
 			recRep.setNextDate(nextDate);
 			recRepRepo.save(recRep);
+		}
+		int schedules = recRepUserRepo.findByPcUser(user).size();
+		if (schedules >= 5) {
+			throw new PaycrException(Constants.FAILURE, "Max 5 reports can be scheduled");
 		}
 		RecurringReportUser recRepUser = recRepUserRepo.findByRecurringReportAndPcUser(recRep, user);
 		if (recRepUser != null) {

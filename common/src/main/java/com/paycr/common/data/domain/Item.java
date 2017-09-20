@@ -20,7 +20,6 @@ public class Item {
 	private Integer id;
 
 	private int quantity;
-
 	private BigDecimal price;
 
 	@JsonIgnore
