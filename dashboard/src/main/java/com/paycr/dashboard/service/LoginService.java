@@ -57,7 +57,7 @@ public class LoginService {
 		resetPassword.setResetCode(resetCode);
 		resetPassword.setStatus(ResetStatus.MAIL_SENT);
 		resetRepo.save(resetPassword);
-		String resetUrl = company.getBaseUrl() + "/resetPassword/" + resetCode;
+		String resetUrl = company.getAppUrl() + "/resetPassword/" + resetCode;
 		email.setMessage(
 				"Hi, " + user.getName() + " please click on this link : " + resetUrl + " to reset your password");
 		try {

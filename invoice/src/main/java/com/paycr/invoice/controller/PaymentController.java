@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.invoice.service.PaymentService;
 
@@ -22,12 +23,16 @@ public class PaymentController {
 	@Autowired
 	private PaymentService paySer;
 
+	@Autowired
+	private Company company;
+
 	@RequestMapping(value = "{invoiceCode}", method = RequestMethod.GET)
 	public ModelAndView payInvoice(@PathVariable(value = "invoiceCode") String invoiceCode) {
 		try {
 			return paySer.payInvoice(invoiceCode);
 		} catch (PaycrException pex) {
 			ModelAndView mv = new ModelAndView("html/errorpage");
+			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("message", pex.getMessage());
 			return mv;
 		}

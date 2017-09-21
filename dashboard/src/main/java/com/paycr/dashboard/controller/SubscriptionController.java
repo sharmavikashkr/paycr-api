@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Subscription;
@@ -41,6 +42,9 @@ public class SubscriptionController {
 
 	@Autowired
 	private SubscriptionService subsSer;
+
+	@Autowired
+	private Company company;
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
@@ -86,7 +90,7 @@ public class SubscriptionController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 	}
-	
+
 	@RequestMapping("/decline/{subscriptionCode}")
 	public void decline(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
 		try {
@@ -102,6 +106,7 @@ public class SubscriptionController {
 			@RequestParam(value = "show", required = false) Boolean show, HttpServletResponse response)
 					throws IOException {
 		ModelAndView mv = new ModelAndView("html/subs-response");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		try {
 			Subscription subs = subsSer.getSubscriptionByCode(subscriptionCode);
 			mv.addObject("subs", subs);

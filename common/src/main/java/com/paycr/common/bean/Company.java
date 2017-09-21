@@ -9,8 +9,11 @@ public class Company {
 	@Value("${company.name}")
 	private String name;
 
-	@Value("${company.baseUrl}")
-	private String baseUrl;
+	@Value("${company.app.url}")
+	private String appUrl;
+	
+	@Value("${company.static.url}")
+	private String staticUrl;
 
 	@Value("${company.contact.name}")
 	private String contactName;
@@ -21,12 +24,12 @@ public class Company {
 	@Value("${company.contact.password}")
 	private String contactPassword;
 
-	public String getBaseUrl() {
-		return baseUrl;
+	public String getAppUrl() {
+		return appUrl;
 	}
 
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
+	public void setAppUrl(String appUrl) {
+		this.appUrl = appUrl;
 	}
 
 	public String getName() {
@@ -59,6 +62,14 @@ public class Company {
 
 	public void setContactPassword(String contactPassword) {
 		this.contactPassword = contactPassword;
+	}
+
+	public String getStaticUrl() {
+		return staticUrl;
+	}
+
+	public void setStaticUrl(String staticUrl) {
+		this.staticUrl = staticUrl;
 	}
 
 }

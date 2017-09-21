@@ -30,10 +30,11 @@ public class InvoiceReceiptService {
 
 	public ModelAndView getReceiptModelAndView(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		ModelAndView modelAndView = new ModelAndView("html/receipt/invoice_receipt");
-		modelAndView.addObject("invoice", invoice);
-		modelAndView.addObject("invoice_url", company.getBaseUrl() + "/" + invoiceCode);
-		return modelAndView;
+		ModelAndView mv = new ModelAndView("html/receipt/invoice_receipt");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		mv.addObject("invoice", invoice);
+		mv.addObject("invoice_url", company.getAppUrl() + "/" + invoiceCode);
+		return mv;
 	}
 
 	public File downloadPdf(String invoiceCode) throws IOException {
@@ -43,7 +44,7 @@ public class InvoiceReceiptService {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getBaseUrl() + "/invoice/receipt/" + invoiceCode, pdfFile.getAbsolutePath());
+		pdfUtil.makePdf(company.getAppUrl() + "/invoice/receipt/" + invoiceCode, pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
 

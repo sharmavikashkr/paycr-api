@@ -29,7 +29,7 @@ public class PaymentReceiptService {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getBaseUrl() + "/payment/response/" + invoiceCode + "?show=false", pdfFile.getAbsolutePath());
+		pdfUtil.makePdf(company.getAppUrl() + "/payment/response/" + invoiceCode + "?show=false", pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
 

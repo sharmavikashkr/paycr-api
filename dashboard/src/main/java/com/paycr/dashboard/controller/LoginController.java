@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
 import com.paycr.common.type.ResetStatus;
@@ -35,15 +36,21 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private Company company;
+
 	@RequestMapping("/")
 	public ModelAndView index() {
-		return new ModelAndView("html/index");
+		ModelAndView mv = new ModelAndView("html/index");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		return mv;
 	}
 
 	@RequestMapping("/login")
 	public ModelAndView login(HttpServletResponse response) {
 		response.addCookie(new Cookie("access_token", ""));
 		ModelAndView mv = new ModelAndView("html/login");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
 
@@ -51,6 +58,7 @@ public class LoginController {
 	public ModelAndView adminlogin(HttpServletResponse response) {
 		response.addCookie(new Cookie("access_token", ""));
 		ModelAndView mv = new ModelAndView("html/adminlogin");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
 
@@ -66,6 +74,7 @@ public class LoginController {
 			message = "Reset already requested 3 times in 24 hours";
 			isError = true;
 		}
+		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("message", message);
 		mv.addObject("isError", isError);
 		return mv;
@@ -99,6 +108,7 @@ public class LoginController {
 		resetPassword.setStatus(ResetStatus.INTITIATED);
 		loginService.saveResetPassword(resetPassword);
 		ModelAndView mv = new ModelAndView("html/reset-password");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("email", resetPassword.getEmail());
 		mv.addObject("resetCode", resetCode);
 		return mv;
@@ -116,12 +126,15 @@ public class LoginController {
 		userService.saveUser(user);
 		resetPassword.setStatus(ResetStatus.SUCCESS);
 		loginService.saveResetPassword(resetPassword);
-		return new ModelAndView("html/login");
+		ModelAndView mv = new ModelAndView("html/login");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		return mv;
 	}
 
 	private ModelAndView validateResetRequest(ResetPassword resetPassword) {
 		if (CommonUtil.isNull(resetPassword)) {
 			ModelAndView mv = new ModelAndView("html/forgot-password");
+			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("message", "Invalid reset password request");
 			mv.addObject("isError", true);
 			return mv;
@@ -129,12 +142,14 @@ public class LoginController {
 		Date dayAfterCreation = DateUtil.addDays(resetPassword.getCreated(), 1);
 		if (dayAfterCreation.compareTo(new Date()) <= 0) {
 			ModelAndView mv = new ModelAndView("html/forgot-password");
+			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("message", "Reset link has expired");
 			mv.addObject("isError", true);
 			return mv;
 		}
 		if (ResetStatus.SUCCESS.equals(resetPassword.getStatus())) {
 			ModelAndView mv = new ModelAndView("html/forgot-password");
+			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("message", "Reset link already used");
 			mv.addObject("isError", true);
 			return mv;

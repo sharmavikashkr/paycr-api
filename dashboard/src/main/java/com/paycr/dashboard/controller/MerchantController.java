@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
@@ -32,6 +33,9 @@ public class MerchantController {
 
 	@Autowired
 	private MerchantService merSer;
+
+	@Autowired
+	private Company company;
 
 	@RequestMapping("")
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,7 +55,9 @@ public class MerchantController {
 		if (merchant == null) {
 			response.sendRedirect("/login");
 		}
-		return new ModelAndView("html/merchant/merchant");
+		ModelAndView mv = new ModelAndView("html/merchant/merchant");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		return mv;
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)

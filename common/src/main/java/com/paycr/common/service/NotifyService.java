@@ -45,7 +45,7 @@ public class NotifyService {
 	private PdfUtil pdfUtil;
 
 	public void notify(Invoice invoice, InvoiceNotify invoiceNotify) {
-		String invoiceUrl = company.getBaseUrl() + "/" + invoice.getInvoiceCode();
+		String invoiceUrl = company.getAppUrl() + "/" + invoice.getInvoiceCode();
 		Merchant merchant = invoice.getMerchant();
 		if (invoiceNotify.isSendSms()) {
 			Sms sms = new Sms();
@@ -81,7 +81,7 @@ public class NotifyService {
 					File pdfFile = new File(pdfPath);
 					if (!pdfFile.exists()) {
 						pdfFile.createNewFile();
-						pdfUtil.makePdf(company.getBaseUrl() + "/invoice/receipt/" + invoice.getInvoiceCode(),
+						pdfUtil.makePdf(company.getAppUrl() + "/invoice/receipt/" + invoice.getInvoiceCode(),
 								pdfFile.getAbsolutePath());
 					}
 					email.setFileName(fileName);
@@ -98,7 +98,7 @@ public class NotifyService {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("note", note);
-		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
+		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
 				templateProps);
 	}
@@ -106,7 +106,7 @@ public class NotifyService {
 	public String getSms(Invoice invoice) throws Exception {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
-		templateProps.put("invoiceUrl", company.getBaseUrl() + "/" + invoice.getInvoiceCode());
+		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("sms/invoice_sms.ftl"),
 				templateProps);
 	}

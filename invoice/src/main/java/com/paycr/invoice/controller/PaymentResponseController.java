@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.invoice.service.InvoiceService;
@@ -31,6 +32,9 @@ public class PaymentResponseController {
 	@Autowired
 	private PaymentReceiptService payRecSer;
 
+	@Autowired
+	private Company company;
+
 	@RequestMapping("/response/{invoiceCode}")
 	public ModelAndView successPage(@PathVariable String invoiceCode,
 			@RequestParam(value = "show", required = false) Boolean show) {
@@ -38,6 +42,7 @@ public class PaymentResponseController {
 			Invoice invoice = invSer.getInvoice(invoiceCode);
 			Merchant merchant = invoice.getMerchant();
 			ModelAndView mv = new ModelAndView("html/inv-response");
+			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("invoice", invoice);
 			mv.addObject("merchant", merchant);
 			show = (show != null) ? show : true;
@@ -45,6 +50,7 @@ public class PaymentResponseController {
 			return mv;
 		} catch (Exception ex) {
 			ModelAndView mv = new ModelAndView("html/errorpage");
+			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("message", "Requested Resource is not found");
 			return mv;
 		}

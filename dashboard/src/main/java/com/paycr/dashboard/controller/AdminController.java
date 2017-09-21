@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
@@ -31,6 +32,9 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private Company company;
 
 	@RequestMapping("")
 	public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,6 +55,7 @@ public class AdminController {
 			response.sendRedirect("/adminlogin");
 		}
 		ModelAndView mv = new ModelAndView("html/admin/admin");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
 

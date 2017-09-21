@@ -156,8 +156,9 @@ public class SubscriptionService {
 		subs.setSubscriptionCode(subsCode);
 		subsRepo.save(subs);
 		ModelAndView mv = new ModelAndView("html/subscribe");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("merchant", merchant);
-		mv.addObject("banner", company.getBaseUrl() + "/banner/admin/" + adset.getBanner());
+		mv.addObject("banner", company.getAppUrl() + "/banner/admin/" + adset.getBanner());
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
 		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());
@@ -170,6 +171,7 @@ public class SubscriptionService {
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		String subsCode = null;
 		ModelAndView mv = new ModelAndView("html/subs-response");
+		mv.addObject("staticUrl", company.getStaticUrl());
 		String rzpPayId = formData.get("razorpay_payment_id");
 		subsCode = formData.get("subsCode");
 		Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
@@ -224,7 +226,7 @@ public class SubscriptionService {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getBaseUrl() + "/subscription/response/" + subscriptionCode + "?show=false",
+		pdfUtil.makePdf(company.getAppUrl() + "/subscription/response/" + subscriptionCode + "?show=false",
 				pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
