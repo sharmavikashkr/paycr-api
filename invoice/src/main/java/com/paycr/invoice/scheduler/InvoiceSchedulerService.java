@@ -59,7 +59,7 @@ public class InvoiceSchedulerService {
 	@Transactional
 	public void expireInvoice() {
 		Date timeNow = new Date();
-		List<Invoice> expiredList = invRepo.findExpiredInvoices(timeNow);
+		List<Invoice> expiredList = invRepo.findInvoicesToExpire(timeNow, false);
 		for (Invoice expInv : expiredList) {
 			expInv.setStatus(InvoiceStatus.EXPIRED);
 		}

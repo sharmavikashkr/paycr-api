@@ -95,7 +95,7 @@
 						</thead>
 						<tbody ng-repeat="invoice in invoiceResp.invoiceList">
 							<tr
-								ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':'warning'"
+								ng-class="(invoice.status=='PAID')?'success':(invoice.status=='EXPIRED')?'basic':(invoice.status=='DECLINED')?'danger':(invoice.status=='UNPAID')?'warning':'default"
 								data-toggle="collapse"
 								data-target="#invdetails-{{invoice.invoiceCode}}"
 								class="accordion-toggle">

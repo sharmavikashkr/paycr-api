@@ -1,5 +1,5 @@
 package com.paycr.common.type;
 
 public enum InvoiceStatus {
-	UNPAID, DECLINED, EXPIRED, PAID
+	CREATED, UNPAID, DECLINED, EXPIRED, PAID
 }

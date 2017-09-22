@@ -13,6 +13,8 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 			$rootScope.statsResponse = response.data;
 			if($rootScope.statsResponse.dailyPayList.length > 0) {
 				$scope.loadCharts();				
+			} else {
+				$rootScope.hideSpinner = true;
 			}
 		}, function(data) {
 			$scope.serverMessage(data);

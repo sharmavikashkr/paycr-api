@@ -88,6 +88,12 @@ public class Invoice implements Cloneable {
 
 	private int expiresIn;
 
+	private boolean neverExpire;
+
+	private Date updated;
+
+	private String updatedBy;
+
 	@JsonIgnore
 	@ManyToOne
 	private Invoice parent;
@@ -297,5 +303,29 @@ public class Invoice implements Cloneable {
 
 	public void setUpdate(boolean update) {
 		this.update = update;
+	}
+
+	public boolean isNeverExpire() {
+		return neverExpire;
+	}
+
+	public void setNeverExpire(boolean neverExpire) {
+		this.neverExpire = neverExpire;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 }

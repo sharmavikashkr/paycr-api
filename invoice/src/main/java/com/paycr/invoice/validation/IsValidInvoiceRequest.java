@@ -53,13 +53,19 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			if (!invoice.getInvoiceType().equals(extInvoice.getInvoiceType())) {
 				throw new PaycrException(Constants.FAILURE, "Invoice type cannot be modified");
 			}
+			invoice.setUpdated(timeNow);
 		} else {
 			do {
 				invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 				invoice.setInvoiceCode(invoiceCode);
 			} while (CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode)));
 			invoice.setCreated(timeNow);
-			invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
+			if(!invoice.isNeverExpire()) {
+				invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
+			} else {
+				invoice.setExpiry(null);
+				invoice.setExpiresIn(-1);
+			}
 		}
 		if (CommonUtil.isNull(invoice.getTaxValue())) {
 			invoice.setTaxValue(0.0F);
@@ -70,7 +76,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		if (CommonUtil.isNull(invoice.getInvoiceType())) {
 			invoice.setInvoiceType(InvoiceType.SINGLE);
 		}
-		invoice.setStatus(InvoiceStatus.UNPAID);
+		invoice.setStatus(InvoiceStatus.CREATED);
 		if (CommonUtil.isNotNull(invoice.getInvoiceNotices())) {
 			for (InvoiceNotify invNot : invoice.getInvoiceNotices()) {
 				invNot.setInvoice(invoice);

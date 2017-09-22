@@ -43,14 +43,17 @@ CREATE TABLE if not exists pc_invoice(
 	pay_amount float NOT NULL,
 	add_items BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
-	expiry timestamp NOT NULL,
+	expiry timestamp DEFAULT NULL,
 	merchant_id int REFERENCES pc_merchant,
 	consumer_id int REFERENCES pc_consumer,
 	merchant_pricing_id int REFERENCES pc_merchant_pricing,
 	payment_id int REFERENCES pc_payment,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
-	expires_in int not null,
+	expires_in int NOT null,
+	never_expire BOOLEAN NOT NULL,
+	updated timestamp DEFAULT NULL,
+	updated_by varchar(50) DEFAULT NULL,
 	parent_id int REFERENCES pc_invoice
 );
 

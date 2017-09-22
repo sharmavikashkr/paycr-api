@@ -90,7 +90,7 @@ public class PaymentService {
 			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
 		}
 		Date timeNow = new Date();
-		if (invoice.getExpiry().before(timeNow)) {
+		if (invoice.getExpiry() != null && invoice.getExpiry().before(timeNow)) {
 			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
 			throw new PaycrException(Constants.FAILURE, "This invoice has expired");

@@ -7,6 +7,11 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
+					<div class="text-center">
+						<p><strong>Created By</strong> - {{invoiceInfo.createdBy}}</p>
+						<p><Strong>Updated By</strong> - {{invoiceInfo.updatedBy}}</p>
+					</div>
+					<hr>
 					<div class="col-lg-6">
 						<h5 class="text-center">Invoice Setting</h5>
 						<table class="table table-bordered table-responsive">
@@ -22,6 +27,14 @@
 								<tr>
 									<td class="text-center"><label>Expiry</label></td>
 									<td class="text-center"><p>{{invoiceInfo.expiry | date:'dd-MM-yyyy'}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><label>Never Expire</label></td>
+									<td class="text-center"><p>{{invoiceInfo.neverExpire}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><label>Updated</label></td>
+									<td class="text-center"><p>{{invoiceInfo.updated | date:'dd-MM-yyyy'}}</p></td>
 								</tr>
 							</tbody>
 						</table>

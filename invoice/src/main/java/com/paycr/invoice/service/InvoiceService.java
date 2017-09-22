@@ -98,6 +98,9 @@ public class InvoiceService {
 		PcUser user = secSer.findLoggedInUser();
 		invoice.setMerchant(merchant);
 		invoice.setCreatedBy(user.getEmail());
+		if (invoice.isUpdate()) {
+			invoice.setUpdatedBy(user.getEmail());
+		}
 		invValidator.validate(invoice);
 		invRepo.save(invoice);
 		if (!invoice.isUpdate()) {
@@ -116,6 +119,9 @@ public class InvoiceService {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
+		if(invoice.isNeverExpire()) {
+			throw new PaycrException(Constants.FAILURE, "Cannot be expired");
+		}
 		if (timeNow.compareTo(invoice.getExpiry()) < 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			invoice.setExpiry(timeNow);
 			invoice.setStatus(InvoiceStatus.EXPIRED);
@@ -139,6 +145,9 @@ public class InvoiceService {
 			invoiceNotify.setCreated(new Date());
 			invoiceNotify.setInvoice(invoice);
 			invoice.getInvoiceNotices().add(invoiceNotify);
+			if (InvoiceStatus.CREATED.equals(invoice.getStatus())) {
+				invoice.setStatus(InvoiceStatus.UNPAID);
+			}
 			invRepo.save(invoice);
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Notify Not allowed");
