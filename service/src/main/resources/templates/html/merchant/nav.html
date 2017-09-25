@@ -46,6 +46,7 @@
 			</a>
 			<ul class="dropdown-menu dropdown-user">
 				<li ng-if="user.access.admin"><a href="#" data-toggle="modal" data-target="#keyModal"><i class="fa fa-gear fa-fw"></i> Keys</a></li>
+				<li id="profileTabId" class="active"><a href="#" ng-click="loadProfileTab()" data-target="#profileTab" data-toggle="tab"><i class="fa fa-user fa-fw"></i> Profile</a></li>
 				<li class="divider"></li>
 				<li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
 			</ul>
@@ -65,10 +66,9 @@
 				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
 				<li ng-if="user.access.finance" style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Subscription</strong></li>
 				<li ng-if="user.access.finance" ng-click="fetchPricings()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
-				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Account</strong></li>
+				<li ng-if="user.access.admin" style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Account</strong></li>
 				<li ng-if="user.access.admin" ng-click="fetchMyUsers()"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Users</a></li>
 				<li ng-if="user.access.admin"><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
-				<li><a href="#" data-target="#profileTab" data-toggle="tab"><i class="fa fa-user fa-fw"></i> Profile</a></li>
 			</ul>
 		</div>
 	</div>

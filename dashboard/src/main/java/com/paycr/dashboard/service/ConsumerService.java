@@ -34,10 +34,23 @@ public class ConsumerService {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		consumer.setMerchant(merchant);
+		consumer.setOrganization("");
+		consumer.setEmailOnPay(true);
+		consumer.setEmailOnRefund(true);
 		conVal.validate(consumer);
 		consumer.setActive(true);
 		consumer.setCreated(new Date());
 		consumer.setCreatedBy(user.getEmail());
 		conRepo.save(consumer);
+	}
+
+	public void updateConsumer(Consumer consumer, Integer consumerId) {
+		Consumer exstCon = conRepo.findOne(consumerId);
+		exstCon.setActive(consumer.isActive());
+		exstCon.setAddress(consumer.getAddress());
+		exstCon.setOrganization(consumer.getOrganization());
+		exstCon.setEmailOnPay(consumer.isEmailOnPay());
+		exstCon.setEmailOnRefund(consumer.isEmailOnRefund());
+		conRepo.save(exstCon);
 	}
 }

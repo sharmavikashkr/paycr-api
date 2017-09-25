@@ -24,6 +24,10 @@ public class Consumer {
 	private String name;
 	private String email;
 	private String mobile;
+	private String organization;
+	private boolean emailOnPay;
+	private boolean emailOnRefund;
+
 	private boolean active;
 	private String createdBy;
 
@@ -100,6 +104,30 @@ public class Consumer {
 
 	public void setMerchant(Merchant merchant) {
 		this.merchant = merchant;
+	}
+
+	public String getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+
+	public boolean isEmailOnPay() {
+		return emailOnPay;
+	}
+
+	public void setEmailOnPay(boolean emailOnPay) {
+		this.emailOnPay = emailOnPay;
+	}
+
+	public boolean isEmailOnRefund() {
+		return emailOnRefund;
+	}
+
+	public void setEmailOnRefund(boolean emailOnRefund) {
+		this.emailOnRefund = emailOnRefund;
 	}
 
 }

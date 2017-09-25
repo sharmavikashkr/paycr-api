@@ -8,7 +8,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="row text-center">
+	<div class="row">
 		<div class="col-md-12">
 			<table class="table table-bordered table-responsive">
 				<thead>
@@ -18,19 +18,18 @@
 						<td class="text-center hidden-xs"><strong>Mobile</strong></td>
 						<td class="text-center hidden-xs"><strong>Created By</strong></td>
 						<td class="text-center hidden-xs"><strong>Created</strong></td>
-						<td class="text-center"><strong>Invoice</strong></td>
 					</tr>
-				</thead>
-				<tbody id="itemBody">
 					<tr>
 						<td><input type="text" class="form-control" ng-model="conquery.name" placeholder="search name"></input></td>
 						<td class="hidden-xs"><input type="text" class="form-control" ng-model="conquery.email" placeholder="search email"></input></td>
 						<td class="hidden-xs"><input type="text" class="form-control" ng-model="conquery.mobile" placeholder="search mobile"></input></td>
 						<td class="hidden-xs"><input type="text" class="form-control" ng-model="conquery.createdBy" placeholder="search created by"></input></td>
 						<td class="hidden-xs"></td>
-						<td></td>
 					</tr>
-					<tr ng-repeat="consumer in consumerList | filter: conquery"
+				</thead>
+				<tbody ng-repeat="consumer in consumerList | filter: conquery">
+					<tr
+						ng-class="(consumer.active)?'success':'warning'"
 						data-toggle="collapse"
 						data-target="#condetails-{{consumer.id}}"
 						class="accordion-toggle">
@@ -39,30 +38,101 @@
 						<td class="text-center hidden-xs">{{consumer.mobile}}</td>
 						<td class="text-center hidden-xs">{{consumer.createdBy}}</td>
 						<td class="text-center hidden-xs">{{consumer.created | date:'dd-MM-yyyy'}}</td>
-						<td class="text-center">
-							<button title="Add Invoice" type="button"
-								class="btn btn-info btn-circle btn-md hidden-xs"
-								ng-if="user.access.finance"
-								ng-click="updateInvoiceConsumer(consumer)"
-								data-toggle="modal"
-								data-target="#createInvoiceModal">
-								<i class="fa fa-plus"></i>
-							</button>
-							<button title="Add Invoice" type="button"
-								class="btn btn-info btn-circle btn-md visible-xs-inline"
-								ng-if="user.access.finance"
-								ng-click="updateInvoiceConsumer(consumer)"
-								data-toggle="modal"
-								data-target="#createInvoiceXsModal">
-								<i class="fa fa-plus"></i>
-							</button>
-							<button title="Search Invoice" type="button"
-								class="btn btn-success btn-circle btn-md"
-								ng-click="seachConInvoice(consumer)"
-								data-target="#invoiceTab"
-								data-toggle="tab">
-								<i class="fa fa-search"></i>
-							</button>
+					</tr>
+					<tr>
+						<td colspan="12" style="padding: 0px; border: 0px;">
+							<div style="padding:10px;" class="accordion-body collapse" id="condetails-{{consumer.id}}">
+								<div class="row">
+									<div class="col-md-12">
+										<button title="Add Invoice" type="button"
+											class="btn btn-info btn-md hidden-xs"
+											ng-if="user.access.finance"
+											ng-click="updateInvoiceConsumer(consumer)"
+											data-toggle="modal"
+											data-target="#createInvoiceModal">
+											<i class="fa fa-plus"></i>
+										</button>
+										<button title="Add Invoice" type="button"
+											class="btn btn-info btn-md visible-xs-inline"
+											ng-if="user.access.finance"
+											ng-click="updateInvoiceConsumer(consumer)"
+											data-toggle="modal"
+											data-target="#createInvoiceXsModal">
+											<i class="fa fa-plus"></i>
+										</button>
+										<button title="Search Invoice" type="button"
+											class="btn btn-success btn-md"
+											ng-click="seachConInvoice(consumer)"
+											data-target="#invoiceTab"
+											data-toggle="tab">
+											<i class="fa fa-search"></i>
+										</button>
+										<a href="#" ng-click="$parent.editConPrefs = !$parent.editConPrefs" ng-if="user.access.finance">
+											<span class="btn btn-danger glyphicon glyphicon-edit"></span>
+										</a>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-lg-6">
+										<h5>Consumer Settings</h5>
+										<fieldset ng-disabled="!editConPrefs">
+											<table class="table table-striped table-bordered table-responsive">
+												<tbody>
+													<tr>
+														<td><strong>Organization</strong></td>
+														<td><input class="form-control" ng-model="consumer.organization"/></td>
+													</tr>
+													<tr>
+														<td><strong>Email On Pay</strong></td>
+														<td><input ng-model="consumer.emailOnPay" type="checkbox"/></td>
+													</tr>
+													<tr>
+														<td><strong>Email On Refund</strong></td>
+														<td><input ng-model="consumer.emailOnRefund" type="checkbox"/></td>
+													</tr>
+													<tr>
+														<td><strong>Active</strong></td>
+														<td><input ng-model="consumer.active" type="checkbox"/></td>
+													</tr>
+												</tbody>
+											</table>
+										</fieldset>
+									</div>
+									<div class="col-lg-6">
+										<h5>Address</h5>
+										<fieldset ng-disabled="!editConPrefs">
+											<table class="table table-striped table-bordered table-responsive">
+												<tbody>
+													<tr>
+														<td><strong>Address Line 1</strong></td>
+														<td><input class="form-control" ng-model="consumer.address.addressLine1"/></td>
+													</tr>
+													<tr>
+														<td><strong>Address Line 2</strong></td>
+														<td><input class="form-control" ng-model="consumer.address.addressLine2"/></td>
+													</tr>
+													<tr>
+														<td><strong>City</strong> : <input class="form-control" ng-model="consumer.address.city"/></td>
+														<td><strong>Disctrict</strong> : <input class="form-control" ng-model="consumer.address.district"/></td>
+													</tr>
+													<tr>
+														<td><strong>State</strong> : <input class="form-control" ng-model="consumer.address.state"/></td>
+														<td><strong>Pincode</strong> : <input class="form-control" ng-model="consumer.address.pincode"/></td>
+													</tr>
+													<tr>
+														<td><strong>Country</strong></td>
+														<td><input class="form-control" ng-model="consumer.address.country"/></td>
+													</tr>
+												</tbody>
+											</table>
+										</fieldset>
+									</div>
+									<div class="col-lg-6">
+										<button type="button" ng-click="updateConsumer(consumer)" class="btn btn-info">Save</button>
+									</div>
+								</div>
+							</div>
 						</td>
 					</tr>
 				</tbody>

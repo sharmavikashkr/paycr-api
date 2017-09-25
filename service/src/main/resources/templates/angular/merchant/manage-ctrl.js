@@ -28,6 +28,22 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.updateConsumer = function(consumer) {
+		var req = {
+			method : 'POST',
+			url : "/consumer/update/" + consumer.id,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			},
+			data : consumer
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.fetchConsumers();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.createConsumer = function() {
 		if (!this.addConsumerForm.$valid) {
 			return false;

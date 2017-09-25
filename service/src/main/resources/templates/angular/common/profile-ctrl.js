@@ -17,6 +17,9 @@ app.controller('ProfileController',
 				$scope.serverMessage(data);
 			});
 		}
+		$rootScope.loadProfileTab = function() {
+			angular.element(document.querySelector('#profileTabId')).removeClass('active');
+		}
 		$scope.changePassword = function() {
 			if (!this.changePasswordForm.$valid) {
 				return false;
