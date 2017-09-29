@@ -55,18 +55,19 @@
 	<div class="sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse collapse">
 			<ul class="nav" id="side-menu">
-				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Invoicing</strong></li>
+				<br>
 				<li ng-if="user.access.admin" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
+				<li style="margin-top:20px;">&nbsp;<strong>Sale</strong></li>
 				<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a id="invoiceTabNav" href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i> Invoices</a></li>
 				<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Payments</a></li>
 				<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
-				<li style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Manage</strong></li>
+				<li style="margin-top:20px;">&nbsp;<strong>Manage</strong></li>
 				<li ng-click="fetchConsumers()"><a href="#" data-target="#consumerTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Consumers</a></li>
 				<li ng-click="fetchInventory()"><a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory</a></li>
 				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
-				<li ng-if="user.access.finance" style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Subscription</strong></li>
+				<li ng-if="user.access.finance" style="margin-top:20px;">&nbsp;</i><strong>Subscription</strong></li>
 				<li ng-if="user.access.finance" ng-click="fetchPricings()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
-				<li ng-if="user.access.admin" style="margin-top:20px;">&nbsp;<i class="fa fa-hand-o-right fa-fw"></i><strong>Account</strong></li>
+				<li ng-if="user.access.admin" style="margin-top:20px;">&nbsp;<strong>Account</strong></li>
 				<li ng-if="user.access.admin" ng-click="fetchMyUsers()"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Users</a></li>
 				<li ng-if="user.access.admin"><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
 			</ul>

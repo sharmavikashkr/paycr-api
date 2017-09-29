@@ -18,12 +18,15 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 
 @Service
@@ -43,6 +46,9 @@ public class CommonService {
 
 	@Autowired
 	private PaymentRepository payRepo;
+
+	@Autowired
+	private TimelineRepository tlRepo;
 
 	public List<Invoice> getMyInvoices(PcUser user) {
 		return invRepo.findInvoicesForConsumer(user.getEmail(), user.getMobile());
@@ -100,9 +106,13 @@ public class CommonService {
 			dailyPays = payRepo.findDailyPayListForMerchant(calFrom.getTime(), calTo.getTime(), merchant.getId());
 		}
 		response.setSalePayCount((BigInteger) salePays.get(0)[0]);
-		response.setSalePaySum(BigDecimal.valueOf((Double) salePays.get(0)[1] == null ? 0D : (Double) salePays.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setSalePaySum(
+				BigDecimal.valueOf((Double) salePays.get(0)[1] == null ? 0D : (Double) salePays.get(0)[1]).setScale(2,
+						BigDecimal.ROUND_FLOOR));
 		response.setRefundPayCount((BigInteger) refundPays.get(0)[0]);
-		response.setRefundPaySum(BigDecimal.valueOf((Double) refundPays.get(0)[1] == null ? 0D : (Double) refundPays.get(0)[1]).setScale(2, BigDecimal.ROUND_FLOOR));
+		response.setRefundPaySum(
+				BigDecimal.valueOf((Double) refundPays.get(0)[1] == null ? 0D : (Double) refundPays.get(0)[1])
+						.setScale(2, BigDecimal.ROUND_FLOOR));
 		response.setUnpaidInvCount((BigInteger) unpaid.get(0)[0]);
 		response.setUnpaidInvSum(BigDecimal.valueOf((Double) unpaid.get(0)[1] == null ? 0D : (Double) unpaid.get(0)[1])
 				.setScale(2, BigDecimal.ROUND_FLOOR));
@@ -124,6 +134,10 @@ public class CommonService {
 		}
 		response.setDailyPayList(dailyPayList);
 		return response;
+	}
+
+	public List<Timeline> getTimelines(ObjectType objectType, Integer objectId) {
+		return tlRepo.findByObjectTypeAndObjectId(objectType, objectId);
 	}
 
 }

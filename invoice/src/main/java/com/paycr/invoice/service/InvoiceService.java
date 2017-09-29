@@ -32,16 +32,19 @@ import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
+import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.BulkUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
+import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
+import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -93,6 +96,9 @@ public class InvoiceService {
 	@Autowired
 	private BulkUploadRepository bulkUpdRepo;
 
+	@Autowired
+	private TimelineRepository tlRepo;
+
 	public Invoice single(Invoice invoice) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
@@ -108,6 +114,18 @@ public class InvoiceService {
 			merPri.setInvCount(merPri.getInvCount() + 1);
 			merPriRepo.save(merPri);
 		}
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(user.getEmail());
+		tl.setCreated(invoice.getCreated());
+		tl.setInternal(true);
+		if (invoice.isUpdate()) {
+			tl.setMessage("Invoice Updated");
+		} else {
+			tl.setMessage("Invoice Created");
+		}
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 		return invoice;
 	}
 
@@ -118,8 +136,9 @@ public class InvoiceService {
 	public void expire(String invoiceCode) {
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-		if(invoice.isNeverExpire()) {
+		if (invoice.isNeverExpire()) {
 			throw new PaycrException(Constants.FAILURE, "Cannot be expired");
 		}
 		if (timeNow.compareTo(invoice.getExpiry()) < 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
@@ -134,10 +153,19 @@ public class InvoiceService {
 				recInvRepo.save(recInv);
 			}
 		}
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(user.getEmail());
+		tl.setCreated(timeNow);
+		tl.setInternal(true);
+		tl.setMessage("Invoice Expired");
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 	}
 
 	public void notify(String invoiceCode, InvoiceNotify invoiceNotify) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())
 				&& !InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
@@ -149,6 +177,14 @@ public class InvoiceService {
 				invoice.setStatus(InvoiceStatus.UNPAID);
 			}
 			invRepo.save(invoice);
+			Timeline tl = new Timeline();
+			tl.setCreatedBy(user.getEmail());
+			tl.setCreated(new Date());
+			tl.setInternal(true);
+			tl.setMessage("Notification sent to consumer");
+			tl.setObjectId(invoice.getId());
+			tl.setObjectType(ObjectType.INVOICE);
+			tlRepo.save(tl);
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Notify Not allowed");
 		}
@@ -166,6 +202,7 @@ public class InvoiceService {
 
 	public void refund(BigDecimal amount, String invoiceCode) throws RazorpayException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
@@ -178,7 +215,7 @@ public class InvoiceService {
 			}
 		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
-			payService.refund(invoice, amount);
+			payService.refund(invoice, amount, user.getEmail());
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
 		}
@@ -186,11 +223,13 @@ public class InvoiceService {
 
 	public void markPaid(Payment payment) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
 		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "Mark paid Not allowed");
 		}
-		payment.setCreated(new Date());
+		Date timeNow = new Date();
+		payment.setCreated(timeNow);
 		payment.setStatus("captured");
 		payment.setPayType(PayType.SALE);
 		payment.setInvoiceCode(invoice.getInvoiceCode());
@@ -198,6 +237,14 @@ public class InvoiceService {
 		invoice.setPayment(payment);
 		invoice.setStatus(InvoiceStatus.PAID);
 		invRepo.save(invoice);
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(user.getEmail());
+		tl.setCreated(timeNow);
+		tl.setInternal(true);
+		tl.setMessage("Invoice marked paid");
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 	}
 
 	public void saveAttach(String invoiceCode, MultipartFile attach) throws IOException {
@@ -223,6 +270,14 @@ public class InvoiceService {
 		FileOutputStream out = new FileOutputStream(file);
 		out.write(attach.getBytes());
 		out.close();
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(user.getEmail());
+		tl.setCreated(new Date());
+		tl.setInternal(true);
+		tl.setMessage("Attachment saved : " + attach.getOriginalFilename());
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 	}
 
 	public byte[] getAttach(String invoiceCode, String attachName) throws IOException {
@@ -237,6 +292,7 @@ public class InvoiceService {
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
 		}
+		Date timeNow = new Date();
 		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode);
 		consumer.setCreatedBy(createdBy);
 		invHelp.updateConsumer(childInvoice, consumer);
@@ -252,11 +308,36 @@ public class InvoiceService {
 		invNot.setSendEmail(invSetting.isSendEmail());
 		invNot.setSendSms(invSetting.isSendSms());
 		notSer.notify(childInvoice, invNot);
+		Timeline tlParent = new Timeline();
+		tlParent.setCreatedBy(createdBy);
+		tlParent.setCreated(timeNow);
+		tlParent.setInternal(true);
+		tlParent.setMessage("Child invoice created : " + childInvoice.getInvoiceCode());
+		tlParent.setObjectId(invoice.getId());
+		tlParent.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tlParent);
+		Timeline tlChild = new Timeline();
+		tlChild.setCreatedBy(createdBy);
+		tlChild.setCreated(timeNow);
+		tlChild.setInternal(true);
+		tlChild.setMessage("Invoice created");
+		tlChild.setObjectId(childInvoice.getId());
+		tlChild.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tlChild);
+		Timeline tlChildNot = new Timeline();
+		tlChildNot.setCreatedBy(createdBy);
+		tlChildNot.setCreated(timeNow);
+		tlChildNot.setInternal(true);
+		tlChildNot.setMessage("Notification sent to consumer");
+		tlChildNot.setObjectId(childInvoice.getId());
+		tlChildNot.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tlChildNot);
 		return childInvoice;
 	}
 
 	public void recurr(String invoiceCode, RecurringInvoice recInv) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		PcUser user = secSer.findLoggedInUser();
 		if (invoice == null || !InvoiceType.RECURRING.equals(invoice.getInvoiceType())
 				|| InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid invoice");
@@ -282,6 +363,14 @@ public class InvoiceService {
 			Thread th = new Thread(invSchSer.processInvoice(recInv, childInvoice, timeNow));
 			th.start();
 		}
+		Timeline tlParent = new Timeline();
+		tlParent.setCreatedBy(user.getEmail());
+		tlParent.setCreated(timeNow);
+		tlParent.setInternal(true);
+		tlParent.setMessage("Recurr setting added");
+		tlParent.setObjectId(invoice.getId());
+		tlParent.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tlParent);
 	}
 
 	public List<RecurringInvoice> allRecurr(String invoiceCode) {
@@ -293,6 +382,7 @@ public class InvoiceService {
 	@Transactional
 	public void uploadConsumers(String invoiceCode, MultipartFile consumers, String createdBy) throws IOException {
 		List<BulkUpload> bulkUploads = bulkUpdRepo.findByInvoiceCode(invoiceCode);
+		Invoice parenInv = invRepo.findByInvoiceCode(invoiceCode);
 		String fileName = invoiceCode + "-" + bulkUploads.size() + ".csv";
 		String updatedCsv = server.getBulkCsvLocation() + fileName;
 		CSVWriter writer = new CSVWriter(new FileWriter(updatedCsv, true));
@@ -331,12 +421,21 @@ public class InvoiceService {
 			writer.writeNext(record);
 		}
 		writer.close();
+		Date timeNow = new Date();
 		BulkUpload bun = new BulkUpload();
-		bun.setCreated(new Date());
+		bun.setCreated(timeNow);
 		bun.setFileName(fileName);
 		bun.setInvoiceCode(invoiceCode);
 		bun.setCreatedBy(createdBy);
 		bulkUpdRepo.save(bun);
+		Timeline tlParent = new Timeline();
+		tlParent.setCreatedBy(createdBy);
+		tlParent.setCreated(timeNow);
+		tlParent.setInternal(true);
+		tlParent.setMessage("Consumers csv uploaded");
+		tlParent.setObjectId(parenInv.getId());
+		tlParent.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tlParent);
 	}
 
 	public List<BulkUpload> getUploads(String invoiceCode) {

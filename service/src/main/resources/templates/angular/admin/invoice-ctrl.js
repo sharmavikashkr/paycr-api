@@ -89,4 +89,20 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$scope.searchInvoiceReq.invoiceStatus = null;
 		$scope.searchInvoice();
 	}
+	$scope.fetchTimelines = function(invoice) {
+		$rootScope.timelineInvoice = invoice;
+		var req = {
+			method : 'GET',
+			url : "/common/timeline/INVOICE/"+invoice.id,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(timelines) {
+			$rootScope.timelineList = timelines.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 });

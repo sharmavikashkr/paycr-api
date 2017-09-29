@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paycr.common.bean.StatsResponse;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.Timeline;
+import com.paycr.common.type.ObjectType;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.CommonService;
 
@@ -37,6 +39,12 @@ public class CommonController {
 	@RequestMapping("/pricings")
 	public List<Pricing> getPricings() {
 		return comSer.getPricings();
+	}
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping("/timeline/{objectType}/{objectId}")
+	public List<Timeline> getTimelines(@PathVariable ObjectType objectType, @PathVariable Integer objectId) {
+		return comSer.getTimelines(objectType, objectId);
 	}
 
 }

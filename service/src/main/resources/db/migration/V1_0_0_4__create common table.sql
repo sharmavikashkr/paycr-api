@@ -24,3 +24,13 @@ CREATE TABLE if not exists pc_report(
 	pay_mode varchar(20) NOT NULL,
 	merchant_id int REFERENCES pc_merchant
 );
+
+CREATE TABLE if not exists pc_timeline(
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	object_id int NOT NULL,
+	object_type varchar(20) NOT NULL,
+	internal boolean NOT NULL,
+	message varchar(255) NOT NULL,
+	created_by varchar(50) NOT NULL
+);

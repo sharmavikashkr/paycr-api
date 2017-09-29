@@ -1,6 +1,5 @@
 package com.paycr.invoice.service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
@@ -18,12 +17,15 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PaymentSetting;
+import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
+import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
@@ -56,8 +58,19 @@ public class PaymentService {
 	@Autowired
 	private InvoiceHelper invHelp;
 
+	@Autowired
+	private TimelineRepository tlRepo;
+
 	public ModelAndView payInvoice(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+		Timeline tl = new Timeline();
+		tl.setCreatedBy("Consumer");
+		tl.setCreated(new Date());
+		tl.setInternal(false);
+		tl.setMessage("Invoice payment initiated");
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
@@ -97,7 +110,7 @@ public class PaymentService {
 		}
 	}
 
-	public String purchase(Map<String, String> formData) throws IOException, RazorpayException {
+	public String purchase(Map<String, String> formData) throws RazorpayException {
 		String rzpPayId = formData.get("razorpay_payment_id");
 		String invoiceCode = formData.get("invoiceCode");
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
@@ -118,7 +131,7 @@ public class PaymentService {
 		return invoiceCode;
 	}
 
-	public void decline(String invoiceCode) throws IOException {
+	public void decline(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		invoice.setStatus(InvoiceStatus.DECLINED);
 		invRepo.save(invoice);
@@ -132,6 +145,7 @@ public class PaymentService {
 
 	private void capturePayment(Invoice invoice, Payment payment, PaymentSetting paymentSetting)
 			throws RazorpayException {
+		Date timeNow = new Date();
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(payment.getPaymentRefNo());
 		JSONObject request = new JSONObject();
@@ -154,13 +168,22 @@ public class PaymentService {
 			noti.setMerchantId(invoice.getMerchant().getId());
 			noti.setMessage("Payment received for Invoice# " + invoice.getInvoiceCode());
 			noti.setSubject("Invoice Paid");
-			noti.setCreated(new Date());
+			noti.setCreated(timeNow);
 			noti.setRead(false);
 			notiRepo.save(noti);
 		}
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(invoice.getConsumer().getEmail());
+		tl.setCreated(timeNow);
+		tl.setInternal(false);
+		tl.setMessage("Payment : " + payment.getPaymentRefNo() + " captured with status : " + payment.getStatus());
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 	}
 
-	public void refund(Invoice invoice, BigDecimal amount) throws RazorpayException {
+	public void refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
+		Date timeNow = new Date();
 		Payment payment = invoice.getPayment();
 		Merchant merchant = invoice.getMerchant();
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
@@ -185,7 +208,7 @@ public class PaymentService {
 		Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
 		Payment refPay = new Payment();
 		refPay.setAmount(amount);
-		refPay.setCreated(new Date());
+		refPay.setCreated(timeNow);
 		refPay.setInvoiceCode(invoice.getInvoiceCode());
 		refPay.setMerchant(merchant);
 		refPay.setPaymentRefNo(refund.get("id"));
@@ -194,6 +217,14 @@ public class PaymentService {
 		refPay.setMethod(payment.getMethod());
 		refPay.setPayType(PayType.REFUND);
 		payRepo.save(refPay);
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(createdBy);
+		tl.setCreated(timeNow);
+		tl.setInternal(true);
+		tl.setMessage("Invoice refunded with amount : " + amount);
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 	}
 
 	private InvoiceStatus getStatus(String rzpStatus) {
@@ -222,6 +253,14 @@ public class PaymentService {
 		consumer.setName(name);
 		consumer.setCreatedBy("SELF");
 		invHelp.updateConsumer(invoice, consumer);
+		Timeline tl = new Timeline();
+		tl.setCreatedBy(email);
+		tl.setCreated(new Date());
+		tl.setInternal(false);
+		tl.setMessage("Consumer added to invoice");
+		tl.setObjectId(invoice.getId());
+		tl.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tl);
 	}
 
 }

@@ -1,0 +1,29 @@
+<div id="invoiceTimelineModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title"> Invoice# <strong>{{timelineInvoice.invoiceCode}}</strong> | Timelines</h5>
+			</div>
+			<div class="modal-body">
+				<ul class="timeline">
+	                <li ng-repeat="tLine in timelineList" ng-class="(tLine.internal)?'':'timeline-inverted'">
+	                    <div class="timeline-badge"><i class="fa" ng-class="(tLine.internal)?'fa-arrow-left':'fa-arrow-right'"></i></div>
+	                    <div class="timeline-panel">
+	                        <div class="timeline-heading">
+	                            <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{tLine.created | date:'dd-MM-yyyy HH:mm'}} | <strong>{{tLine.createdBy}}</strong></small>
+	                            </p>
+	                        </div>
+	                        <div class="timeline-body">
+	                            <p>{{tLine.message}}</p>
+	                        </div>
+	                    </div>
+	                </li>
+                </ul>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
