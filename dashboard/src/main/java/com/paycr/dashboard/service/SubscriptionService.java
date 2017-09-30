@@ -104,6 +104,8 @@ public class SubscriptionService {
 		subs.setCreated(timeNow);
 		subs.setMerchant(merchant);
 		subs.setPricing(pricing);
+		subs.setPaymentRefNo(offline.getPaymentRefNo());
+		subs.setMethod(subsMode.getName());
 		subs.setStatus("SUCCESS");
 		subs.setSubscriptionCode("OFFLINE");
 		subs.setSubscriptionMode(subsMode);

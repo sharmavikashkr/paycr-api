@@ -32,9 +32,6 @@ app.controller('MerchantController', function($scope, $http, $cookies,
 			$scope.merchantResp.allPages.push(i);
 		}
 	}
-	$scope.updateOffSubsMerchant = function(merchant) {
-		$scope.offSubsmerchant = merchant;
-	}
 	$scope.createOfflineSubs = function(merchantId) {
 		this.offlinesubs.merchantId = merchantId;
 		var req = {

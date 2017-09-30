@@ -211,6 +211,9 @@ function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
 	$scope.updateInvoiceInfo = function(invoice) {
 		$scope.invoiceInfo = invoice;
 	}
+	$scope.updateOffSubsMerchant = function(merchant) {
+		$scope.offSubsmerchant = merchant;
+	}
 	$scope.logout = function() {
 		$timeout(function(){
 			window.location.href="/login?logout";
