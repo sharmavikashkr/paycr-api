@@ -1,5 +1,4 @@
-app.controller('PricingController', function($scope, $http, $cookies,
-		$httpParamSerializer, $timeout) {
+app.controller('PricingController', function($scope, $http, $cookies) {
 	$scope.fetchPricings = function() {
 		var req = {
 			method : 'GET',

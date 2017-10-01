@@ -1,5 +1,4 @@
-app.controller('InvoiceSettingController', function($scope, $http, $cookies,
-		$httpParamSerializer, $timeout) {
+app.controller('InvoiceSettingController', function($scope, $http, $cookies) {
 	$scope.savePaymentSetting = function() {
 		var req = {
 			method : 'POST',

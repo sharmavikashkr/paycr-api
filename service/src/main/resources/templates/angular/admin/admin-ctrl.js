@@ -5,7 +5,7 @@ app.config(function($mdDateLocaleProvider) {
     };
 });
 app.controller('AdminController',
-function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
+function($scope, $http, $cookies, $timeout) {
 	var dateNow = moment().toDate();
 	var dateStart = moment().subtract(30, 'day').toDate();
 	$scope.server = {

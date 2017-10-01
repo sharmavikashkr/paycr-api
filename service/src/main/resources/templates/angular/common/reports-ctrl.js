@@ -1,5 +1,5 @@
 app.controller('ReportsController',
-		function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
+		function($scope, $http, $cookies) {
 			$scope.fetchReports = function() {
 				var req = {
 					method : 'GET',

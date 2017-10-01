@@ -1,12 +1,10 @@
-app.controller('MyInvoicesController',
-function($scope, $http, $cookies, $httpParamSerializer, $timeout) {
+app.controller('MyInvoicesController', function($scope, $http, $cookies) {
 	$scope.fetchMyInvoices = function() {
 		var req = {
 			method : 'GET',
 			url : "/common/invoices/",
 			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
+				"Authorization" : "Bearer " + $cookies.get("access_token")
 			}
 		}
 		$http(req).then(function(myInvoices) {

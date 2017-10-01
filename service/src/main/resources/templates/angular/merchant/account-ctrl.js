@@ -1,5 +1,4 @@
-app.controller('AccountController', function($scope, $http, $cookies,
-		$httpParamSerializer, $timeout) {
+app.controller('AccountController', function($scope, $http, $cookies) {
 	$scope.updateAccount = function() {
 		var req = {
 			method : 'POST',

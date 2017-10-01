@@ -1,5 +1,4 @@
-app.controller('PricingController', function($scope, $http, $cookies,
-		$httpParamSerializer, $timeout) {
+app.controller('PricingController', function($scope, $http, $cookies) {
 	$scope.createPricing = function() {
 		if (!this.createPricingForm.$valid) {
 			return false;
