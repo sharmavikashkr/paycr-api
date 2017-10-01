@@ -1,4 +1,5 @@
-app.controller('PricingController', function($scope, $http, $cookies) {
+app.controller('PricingController', function($scope, $rootScope, $http,
+		$cookies) {
 	$scope.fetchPricings = function() {
 		var req = {
 			method : 'GET',
@@ -8,7 +9,7 @@ app.controller('PricingController', function($scope, $http, $cookies) {
 			}
 		}
 		$http(req).then(function(pricings) {
-			$scope.pricings = pricings.data;
+			$rootScope.pricings = pricings.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

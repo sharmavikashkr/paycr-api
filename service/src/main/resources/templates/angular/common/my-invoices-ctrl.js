@@ -1,4 +1,5 @@
-app.controller('MyInvoicesController', function($scope, $http, $cookies) {
+app.controller('MyInvoicesController', function($scope, $rootScope, $http,
+		$cookies) {
 	$scope.fetchMyInvoices = function() {
 		var req = {
 			method : 'GET',
@@ -8,7 +9,7 @@ app.controller('MyInvoicesController', function($scope, $http, $cookies) {
 			}
 		}
 		$http(req).then(function(myInvoices) {
-			$scope.myinvoices = myInvoices.data;
+			$rootScope.myinvoices = myInvoices.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

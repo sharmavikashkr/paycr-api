@@ -1,5 +1,11 @@
 app.controller('MerchantController', function($scope, $rootScope, $http,
 		$cookies) {
+	var dateNow = moment().toDate();
+	var dateStart = moment().subtract(30, 'day').toDate();
+	$scope.searchMerchantReq = {
+		"createdFrom" : dateStart,
+		"createdTo" : dateNow
+	}
 	$scope.searchMerchant = function() {
 		var req = {
 			method : 'POST',
@@ -33,6 +39,23 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		for (var i = 1; i <= noOfPages; i++) {
 			$rootScope.merchantResp.allPages.push(i);
 		}
+	}
+	$scope.fetchSubscriptionDetails = function(subscriptionId) {
+		var req = {
+			method : 'GET',
+			url : "/subscription/get/" + subscriptionId,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(subscription) {
+			$rootScope.subsinfo = subscription.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.updateOffSubsMerchant = function(merchant) {
+		$rootScope.offSubsmerchant = merchant;
 	}
 	$scope.createOfflineSubs = function(merchantId) {
 		this.offlinesubs.merchantId = merchantId;

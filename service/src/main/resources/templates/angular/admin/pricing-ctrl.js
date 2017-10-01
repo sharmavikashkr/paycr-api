@@ -1,4 +1,36 @@
-app.controller('PricingController', function($scope, $http, $cookies) {
+app.controller('PricingController', function($scope, $rootScope, $http, $cookies) {
+	$scope.fetchPriceSettings = function() {
+		$scope.fetchPricings();
+		$scope.fetchSubsModes();
+	}
+	$scope.fetchPricings = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/pricings",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(pricings) {
+			$rootScope.pricings = pricings.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.fetchSubsModes = function() {
+		var req = {
+			method : 'GET',
+			url : "/subscription/modes",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(subsModes) {
+			$rootScope.subsModes = subsModes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.createPricing = function() {
 		if (!this.createPricingForm.$valid) {
 			return false;

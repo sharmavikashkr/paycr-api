@@ -1,4 +1,4 @@
-app.controller('InvoiceSettingController', function($scope, $http, $cookies) {
+app.controller('InvoiceSettingController', function($scope, $rootScope, $http, $cookies) {
 	$scope.savePaymentSetting = function() {
 		var req = {
 			method : 'POST',
@@ -9,7 +9,7 @@ app.controller('InvoiceSettingController', function($scope, $http, $cookies) {
 			data : $scope.merchant.paymentSetting
 		}
 		$http(req).then(function(paymentsettings) {
-			$scope.merchant.paymentSettings = paymentsettings.data;
+			$rootScope.merchant.paymentSettings = paymentsettings.data;
 			$scope.serverMessage(paymentsettings);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -25,7 +25,7 @@ app.controller('InvoiceSettingController', function($scope, $http, $cookies) {
 			data : invoiceSetting
 		}
 		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$rootScope.merchant.invoiceSetting = invoicesetting.data;
 			$scope.refreshSetting(invoicesetting.data);
 			$scope.serverMessage(invoicesetting);
 		}, function(data) {
@@ -45,7 +45,7 @@ app.controller('InvoiceSettingController', function($scope, $http, $cookies) {
 			data : this.newparam
 		}
 		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$rootScope.merchant.invoiceSetting = invoicesetting.data;
 			$scope.refreshSetting(invoicesetting.data);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -65,7 +65,7 @@ app.controller('InvoiceSettingController', function($scope, $http, $cookies) {
 			}
 		}
 		$http(req).then(function(invoicesetting) {
-			$scope.merchant.invoiceSetting = invoicesetting.data;
+			$rootScope.merchant.invoiceSetting = invoicesetting.data;
 			$scope.refreshSetting(invoicesetting.data);
 		}, function(data) {
 			$scope.serverMessage(data);

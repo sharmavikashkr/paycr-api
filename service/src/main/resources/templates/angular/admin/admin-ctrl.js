@@ -5,9 +5,7 @@ app.config(function($mdDateLocaleProvider) {
     };
 });
 app.controller('AdminController',
-function($scope, $http, $cookies, $timeout) {
-	var dateNow = moment().toDate();
-	var dateStart = moment().subtract(30, 'day').toDate();
+function($scope, $rootScope, $http, $cookies, $timeout) {
 	$scope.server = {
 		"hideMessage" : true,
 		"respStatus" : "WELCOME!",
@@ -21,20 +19,6 @@ function($scope, $http, $cookies, $timeout) {
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
 		"numberPattern" : "\\d{1,4}"
-	}
-	$scope.searchMerchantReq = {
-		"name" : "",
-		"email" : "",
-		"mobile" : "",
-		"createdFrom" : dateStart,
-		"createdTo" : dateNow
-	}
-	$scope.searchInvoiceReq = {
-		"invoiceCode" : "",
-		"email" : "",
-		"mobile" : "",
-		"createdFrom" : dateStart,
-		"createdTo" : dateNow
 	}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
@@ -61,10 +45,6 @@ function($scope, $http, $cookies, $timeout) {
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
 	}
-	$scope.fetchPriceSettings = function() {
-		$scope.fetchPricings();
-		$scope.fetchSubsModes();
-	}
 	$scope.fetchEnums = function() {
 		var req = {
 			method : 'GET',
@@ -75,7 +55,7 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(payModes) {
-			$scope.payModes = payModes.data;
+			$rootScope.payModes = payModes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -89,7 +69,7 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(usertypes) {
-			$scope.userTypes = usertypes.data;
+			$rootScope.userTypes = usertypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -103,7 +83,7 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(timeranges) {
-			$scope.timeRanges = timeranges.data;
+			$rootScope.timeRanges = timeranges.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -117,7 +97,7 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(invoicestatuses) {
-			$scope.invoiceStatuses = invoicestatuses.data;
+			$rootScope.invoiceStatuses = invoicestatuses.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -131,7 +111,7 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(paytypes) {
-			$scope.payTypes = paytypes.data;
+			$rootScope.payTypes = paytypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -146,7 +126,7 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(user) {
-			$scope.user = user.data;
+			$rootScope.user = user.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -161,58 +141,10 @@ function($scope, $http, $cookies, $timeout) {
 			}
 		}
 		$http(req).then(function(notifications) {
-			$scope.notices = notifications.data;
+			$rootScope.notices = notifications.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-	}
-	$scope.fetchPricings = function() {
-		var req = {
-			method : 'GET',
-			url : "/common/pricings",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(pricings) {
-			$scope.pricings = pricings.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchSubsModes = function() {
-		var req = {
-			method : 'GET',
-			url : "/subscription/modes",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(subsModes) {
-			$scope.subsModes = subsModes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.fetchSubscriptionDetails = function(subscriptionId) {
-		var req = {
-			method : 'GET',
-			url : "/subscription/get/" + subscriptionId,
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(subscription) {
-			$scope.subsinfo = subscription.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-	}
-	$scope.updateInvoiceInfo = function(invoice) {
-		$scope.invoiceInfo = invoice;
-	}
-	$scope.updateOffSubsMerchant = function(merchant) {
-		$scope.offSubsmerchant = merchant;
 	}
 	$scope.logout = function() {
 		$timeout(function(){

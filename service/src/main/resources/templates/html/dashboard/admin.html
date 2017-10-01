@@ -35,7 +35,7 @@
     		<div ng-include="'/html/common/alert'"></div>
             <div id="merchantsTab" class="tab-pane active" ng-include="'/html/admin/merchantTab'"></div>
         	<div id="invoiceTab" class="tab-pane fade" ng-include="'/html/admin/invoiceTab'"></div>
-        	<div ng-if="user.access.finance" ng-init="fetchPriceSettings()" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>
+        	<div ng-if="user.access.finance" id="pricingTab" class="tab-pane fade" ng-include="'/html/admin/pricingTab'"></div>
 		    <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="'/html/common/reportsTab'"></div>
 		    <div ng-if="user.access.supervisor" id="usersTab" class="tab-pane fade" ng-include="'/html/common/usersTab'"></div>
         	<div id="myInvoicesTab" class="tab-pane fade" ng-include="'/html/common/myInvoicesTab'"></div>

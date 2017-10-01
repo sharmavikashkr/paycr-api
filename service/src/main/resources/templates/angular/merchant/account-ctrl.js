@@ -1,4 +1,5 @@
-app.controller('AccountController', function($scope, $http, $cookies) {
+app.controller('AccountController', function($scope, $rootScope, $http,
+		$cookies) {
 	$scope.updateAccount = function() {
 		var req = {
 			method : 'POST',
@@ -9,7 +10,7 @@ app.controller('AccountController', function($scope, $http, $cookies) {
 			data : $scope.merchant
 		}
 		$http(req).then(function(merchant) {
-			$scope.merchant = merchant.data;
+			$rootScope.merchant = merchant.data;
 			$scope.serverMessage(merchant);
 		}, function(data) {
 			$scope.serverMessage(data);

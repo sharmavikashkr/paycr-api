@@ -1,5 +1,5 @@
 app.controller('UsersController',
-		function($scope, $http, $cookies, $rootScope) {
+		function($scope, $rootScope, $http, $cookies) {
 			$scope.fetchMyUsers = function() {
 				var req = {
 					method : 'GET',
