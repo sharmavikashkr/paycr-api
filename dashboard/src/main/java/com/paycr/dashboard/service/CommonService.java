@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,6 +139,14 @@ public class CommonService {
 
 	public List<Timeline> getTimelines(ObjectType objectType, Integer objectId) {
 		return tlRepo.findByObjectTypeAndObjectId(objectType, objectId);
+	}
+
+	public void saveComment(Timeline tl) {
+		PcUser user = secSer.findLoggedInUser();
+		tl.setCreatedBy(user.getEmail());
+		tl.setCreated(new Date());
+		tl.setInternal(true);
+		tlRepo.save(tl);
 	}
 
 }

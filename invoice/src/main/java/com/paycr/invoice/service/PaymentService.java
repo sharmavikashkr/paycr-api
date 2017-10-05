@@ -74,7 +74,7 @@ public class PaymentService {
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			invoice = invHelp.prepareChildInvoice(invoiceCode);
+			invoice = invHelp.prepareChildInvoice(invoiceCode, "Consumer");
 		}
 		if (CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");

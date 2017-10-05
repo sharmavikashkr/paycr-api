@@ -1,9 +1,9 @@
 <div ng-controller="MerchantController">
 	<br>
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-md-12">
 			<div class="panel">
-				<div class="panel-body col-lg-3 col-sm-12 col-xs-12">
+				<div class="panel-body col-md-3">
 					<table class="table table-striped table-bordered table-hover table-responsive">
 						<tbody>
 							<tr>
@@ -46,7 +46,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="panel-body col-lg-9 col-sm-12 col-xs-12">
+				<div class="panel-body col-md-9">
 					<div class="row">
 						<div class="col-sm-2 col-sm-offset-9">
 							<button ng-if="user.access.supervisor" title="Create Merchant" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#createMerchantModal">
@@ -77,10 +77,10 @@
 								<td colspan="12" style="padding: 0px; border: 0px;">
 									<div style="padding: 10px;" class="accordion-body collapse" id="merdetails-{{merchant.id}}">
 										<div class="row">
-											<div class="panel-body col-lg-12 col-sm-12 col-xs-12">
+											<div class="panel-body col-md-12">
 												<div class="row">
-													<h5 class="col-lg-6 col-xs-6">Subscriptions</h5>
-													<div ng-if="user.access.supervisor" class="col-xs-4 col-xs-offset-1 col-lg-2 col-lg-offset-3">
+													<h5 class="col-md-6 col-xs-6">Subscriptions</h5>
+													<div ng-if="user.access.supervisor" class="col-xs-4 col-xs-offset-1 col-md-2 col-md-offset-3">
 														<button title="Add Offline Subscription" type="button"
 															class="btn btn-info btn-circle btn-md"
 															ng-click="updateOffSubsMerchant(merchant)"

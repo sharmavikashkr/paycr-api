@@ -13,9 +13,12 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Item;
 import com.paycr.common.data.domain.MerchantPricing;
+import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
+import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.type.InvoiceType;
+import com.paycr.common.type.ObjectType;
 import com.paycr.invoice.validation.IsValidInvoiceConsumer;
 import com.paycr.invoice.validation.IsValidInvoiceMerchantPricing;
 import com.paycr.invoice.validation.IsValidInvoiceRequest;
@@ -38,12 +41,18 @@ public class InvoiceHelper {
 	@Autowired
 	private IsValidInvoiceMerchantPricing isValidPricing;
 
-	public Invoice prepareChildInvoice(String invoiceCode) {
+	@Autowired
+	private TimelineRepository tlRepo;
+
+	public Invoice prepareChildInvoice(String invoiceCode, String createdBy) {
+		Date timeNow = new Date();
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		Invoice childInvoice = ObjectUtils.clone(invoice);
 		childInvoice.setId(null);
 		childInvoice.setInvoiceCode(null);
 		childInvoice.setParent(invoice);
+		childInvoice.setCreated(timeNow);
+		childInvoice.setCreatedBy(createdBy);
 		childInvoice.setMerchant(invoice.getMerchant());
 		childInvoice.setConsumer(invoice.getConsumer());
 		List<Item> newItems = new ArrayList<>();
@@ -74,6 +83,14 @@ public class InvoiceHelper {
 		MerchantPricing merPri = childInvoice.getMerchantPricing();
 		merPri.setInvCount(merPri.getInvCount() + 1);
 		merPriRepo.save(merPri);
+		Timeline tlParent = new Timeline();
+		tlParent.setCreatedBy(createdBy);
+		tlParent.setCreated(timeNow);
+		tlParent.setInternal(true);
+		tlParent.setMessage("Child invoice created : " + childInvoice.getInvoiceCode());
+		tlParent.setObjectId(invoice.getId());
+		tlParent.setObjectType(ObjectType.INVOICE);
+		tlRepo.save(tlParent);
 		return childInvoice;
 	}
 

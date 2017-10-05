@@ -293,7 +293,7 @@ public class InvoiceService {
 			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
 		}
 		Date timeNow = new Date();
-		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode);
+		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode, createdBy);
 		consumer.setCreatedBy(createdBy);
 		invHelp.updateConsumer(childInvoice, consumer);
 		InvoiceSetting invSetting = childInvoice.getMerchant().getInvoiceSetting();
@@ -359,7 +359,7 @@ public class InvoiceService {
 		recInv.setNextDate(recInv.getStartDate());
 		recInvRepo.save(recInv);
 		if (start.before(recInv.getStartDate()) && end.after(recInv.getStartDate())) {
-			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode());
+			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), user.getEmail());
 			Thread th = new Thread(invSchSer.processInvoice(recInv, childInvoice, timeNow));
 			th.start();
 		}

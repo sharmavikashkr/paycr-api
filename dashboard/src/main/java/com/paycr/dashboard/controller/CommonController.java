@@ -2,10 +2,15 @@ package com.paycr.dashboard.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.StatsResponse;
@@ -45,6 +50,17 @@ public class CommonController {
 	@RequestMapping("/timeline/{objectType}/{objectId}")
 	public List<Timeline> getTimelines(@PathVariable ObjectType objectType, @PathVariable Integer objectId) {
 		return comSer.getTimelines(objectType, objectId);
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/timeline/new", method = RequestMethod.PUT)
+	public void addComment(@RequestBody Timeline timeline, HttpServletResponse response) {
+		try {
+			comSer.saveComment(timeline);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
 	}
 
 }

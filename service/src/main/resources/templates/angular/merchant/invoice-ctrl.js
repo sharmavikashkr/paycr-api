@@ -454,4 +454,26 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.addCommentInvoice = function(objectId) {
+		var timeline = {};
+		timeline.objectId = objectId;
+		timeline.message = this.newInvComment;
+		timeline.objectType = 'INVOICE';
+		var req = {
+			method : 'PUT',
+			url : "/common/timeline/new",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : timeline
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#invoiceTimelineModal')).modal('hide');
+		this.newInvComment = "";
+	}
 });

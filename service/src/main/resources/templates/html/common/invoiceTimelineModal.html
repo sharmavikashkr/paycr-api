@@ -1,4 +1,4 @@
-<div id="invoiceTimelineModal" class="modal fade" role="dialog">
+<div id="invoiceTimelineModal" ng-controller="InvoiceController" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -16,6 +16,19 @@
 	                        </div>
 	                        <div class="timeline-body">
 	                            <p>{{tLine.message}}</p>
+	                        </div>
+	                    </div>
+	                </li>
+	                <li ng-if="merchant != null && user.access.finance">
+	                    <div class="timeline-badge"><i class="fa fa-arrow-left"></i></div>
+	                    <div class="timeline-panel">
+	                        <div class="timeline-heading">
+	                            <p><small class="text-muted"><strong>Leave a Comment</strong></small></p>
+	                        </div>
+	                        <div class="timeline-body">
+	                            <textarea class="form-control" ng-model="newInvComment"></textarea>
+	                            <br>
+	                            <button class="btn btn-info" ng-click="addCommentInvoice(timelineInvoice.id)">add</button>
 	                        </div>
 	                    </div>
 	                </li>

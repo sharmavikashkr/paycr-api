@@ -50,7 +50,7 @@ public class InvoiceSchedulerService {
 				if (InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
 					continue;
 				}
-				Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode());
+				Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), "Scheduler");
 				exec.execute(processInvoice(recInv, childInvoice, timeNow));
 			}
 		}
