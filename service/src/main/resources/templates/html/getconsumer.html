@@ -7,122 +7,145 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <style type="text/css">
     	table {
 			font-size: 14px;
 		}
     </style>
 </head>
-<body style="background:cadetblue;">
-	<section style="margin-top:60px;">
-		<div class="container text-center">
-			<div class="col-xs-12 col-sm-8">
-				<h4>Provide your details to pay</h4>
-				<form action="/updateConsumerAndPay/${invoice.invoiceCode}" method="post">
-					<table class="table table-bordered table-responsive">
-	                    <tbody>
-	                        <tr>
-	                            <td class="text-center hidden-xs">Name : </td>
-	                            <td class="text-center"><input class="form-control has-error" id="conname" name="name" pattern="[0-9a-zA-Z_\\- ]{1,50}" required></td>
-	                        </tr>
-	                        <tr>
-	                            <td class="text-center hidden-xs">Email : </td>
-	                            <td class="text-center"><input class="form-control has-error" id="conemail" name="email" pattern="([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))" required></td>
-	                        </tr>
-	                        <tr>
-	                            <td class="text-center hidden-xs">Mobile : </td>
-	                            <td class="text-center"><input class="form-control has-error" name="mobile" pattern="\d{10}" required></td>
-	                        </tr>
-	                    </tbody>
-	                </table>
-	                <input type="hidden" name="signature" value="${signature}">
-	                <input class="btn btn-basic" type="submit" value="Proceed to Pay">
-                </form>
+<body style="background:lightyellow;">
+	<nav id="mainNav" class="navbar navbar-default navbar-fixed-top" style="background: darksalmon;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" target="_blank" href="/#page-top">PayCr</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" target="_blank" href="/#download">Download</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" target="_blank" href="/#features">Features</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" target="_blank" href="/#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="itemsModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h5 class="modal-title"> Invoice# <strong>${invoice.invoiceCode}</strong></h5>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td class="text-center"><strong>Item Name</strong></td>
+                                    <td class="text-center"><strong>Item Rate</strong></td>
+                                    <td class="text-center"><strong>Item Quantity</strong></td>
+                                    <td class="text-right"><strong>Total</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody id="itemBody">
+                            	<#list invoice.items as item>
+                                <tr id="itemRow">
+                                    <td class="text-center">${item.inventory.name}</td>
+                                    <td class="text-center"><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
+                                    <td class="text-center">${item.quantity}</td>
+                                    <td class="text-right"><i class="fa fa-rupee"></i> ${item.price}</td>
+                                </tr>
+                                </#list>
+                                <tr>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+				                    <td class="text-center"><strong>Tax(${invoice.taxName})</strong></td>
+                                    <td class="text-right">${invoice.taxValue}%</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"><strong>Discount</strong></td>
+                                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.discount}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"><strong>Pay Amount</strong></td>
+                                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.payAmount}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
 			</div>
 		</div>
-	</section>
-	<section>
+	</div>
+	<section style="margin-top:160px;">
         <div class="container text-center">
-			<div class="col-xs-12 col-sm-8">
-				<div class="panel-group" role="tab">
-					<div class="panel">
-						<div class="panel-heading text-left">
-							<a class="accordion-toggle" role="button" data-toggle="collapse"
-								href="#" data-target="#collapseItem"> Items Information </a>
-						</div>
-						<div id="collapseItem" class="accordion-body collapse">
-							<table class="table table-bordered">
-	                            <thead>
-	                                <tr>
-	                                    <td class="text-center"><strong>Item Name</strong></td>
-	                                    <td class="text-center"><strong>Item Rate</strong></td>
-	                                    <td class="text-center"><strong>Item Quantity</strong></td>
-	                                    <td class="text-right"><strong>Total</strong></td>
-	                                </tr>
-	                            </thead>
-	                            <tbody id="itemBody">
-	                            	<#list invoice.items as item>
-	                                <tr id="itemRow">
-	                                    <td class="text-center">${item.inventory.name}</td>
-	                                    <td class="text-center"><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
-	                                    <td class="text-center">${item.quantity}</td>
-	                                    <td class="text-right"><i class="fa fa-rupee"></i> ${item.price}</td>
-	                                </tr>
-	                                </#list>
-	                                <tr>
-	                                    <td class="text-center"></td>
-	                                    <td class="text-center"></td>
-					                    <td class="text-center"><strong>Tax(${invoice.taxName})</strong></td>
-	                                    <td class="text-right">${invoice.taxValue}%</td>
-	                                </tr>
-	                                <tr>
-	                                    <td class="text-center"></td>
-	                                    <td class="text-center"></td>
-	                                    <td class="text-center"><strong>Discount</strong></td>
-	                                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.discount}</td>
-	                                </tr>
-	                                <tr>
-	                                    <td class="text-center"></td>
-	                                    <td class="text-center"></td>
-	                                    <td class="text-center"><strong>Pay Amount</strong></td>
-	                                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.payAmount}</td>
-	                                </tr>
-	                            </tbody>
-	                        </table>
-						</div>
-					</div>
-				</div>
-	            <hr>
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="row panel panel-primary" style="background: cadetblue;">
+	                <div class="col-md-6" style="background: darksalmon;padding:20px;">
+	                	<div class="row">
+	                    	<div class="col-md-3 col-xs-3">
+	                    		<i class="fa fa-user fa-3x"></i>
+	                    	</div>
+	                    	<div class="col-md-6 col-xs-6" style="font-size:12px;color:white;">
+	                    		<div>Consumer details required</div>
+	                    		<div>before proceeding to pay</div>
+	                    	</div>
+	                    </div>
+	                    <hr class="hidden-xs">
+	                    <div class="row hidden-xs">
+	                    	<h3 class="section-heading"><a class="btn btn-basic" href="/invoice/receipt/download/${invoice.invoiceCode}" title="Download Invoice Pdf"><i class="fa fa-file-pdf-o fa-5x"></i></a></h3>
+	                    	<a href="#" data-toggle="modal" data-target="#itemsModal">View Bill</a>
+	                    </div>
+	                    <div class="row hidden-xs">
+	                    	<h3 class="section-heading">Powered by Paycr</h3>
+	                    </div>
+	                </div>
+	                <div class="col-md-6" style="padding:20px;">
+	                	<div class="row hidden-xs">
+	                    	<h3 class="section-heading"><img alt="PAYCR" src="${banner}"></h3>
+	                    </div>
+	                	<div class="row">
+							<form action="/updateConsumerAndPay/${invoice.invoiceCode}" method="post">
+								<table class="table table-bordered table-responsive">
+				                    <tbody>
+				                        <tr>
+				                            <td class="text-center hidden-xs">Name : </td>
+				                            <td class="text-center"><input class="form-control has-error" id="conname" placeholder="Name" name="name" pattern="[0-9a-zA-Z_\\- ]{1,50}" required></td>
+				                        </tr>
+				                        <tr>
+				                            <td class="text-center hidden-xs">Email : </td>
+				                            <td class="text-center"><input class="form-control has-error" id="conemail" placeholder="Email" name="email" pattern="([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))" required></td>
+				                        </tr>
+				                        <tr>
+				                            <td class="text-center hidden-xs">Mobile : </td>
+				                            <td class="text-center"><input class="form-control has-error" name="mobile" placeholder="Mobile" pattern="\d{10}" required></td>
+				                        </tr>
+				                    </tbody>
+				                </table>
+				                <input type="hidden" name="signature" value="${signature}">
+				                <input class="btn btn-warning" type="submit" value="Proceed to Pay">
+			                </form>
+	                	</div>
+	                </div>
+	            </div>
 			</div>
-			<div class="col-xs-12 col-sm-4">
-				<div class="panel-group" role="tab">
-					<div class="panel">
-						<div class="panel-heading text-left">
-							<a class="accordion-toggle" role="button" data-toggle="collapse"
-								href="#" data-target="#collapseParams"> Params Information </a>
-						</div>
-						<div id="collapseParams" class="accordion-body collapse in">
-							<table id="paramsTable" class="table table-bordered">
-	                            <thead>
-	                                <tr>
-	                                    <td class="text-center"><strong>Name</strong></td>
-	                                    <td class="text-center"><strong>Value</strong></td>
-	                                </tr>
-	                            </thead>
-	                            <tbody class="text-center">
-	                            	<#list invoice.customParams as param>
-	                                <tr id="itemRow">
-	                                    <td><label class="control-label">${param.paramName}</label></td>
-	                                    <td><div class="form-group">${param.paramValue}"</div></td>
-	                                </tr>
-	                                </#list>
-	                             </tbody>
-	                         </table>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>
+		</div>
     </section>
     <script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
     <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>

@@ -79,6 +79,7 @@ public class PaymentService {
 		if (CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");
 			mv.addObject("staticUrl", company.getStaticUrl());
+			mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getInvoiceSetting().getBanner());
 			mv.addObject("invoice", invoice);
 			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
 			return mv;
