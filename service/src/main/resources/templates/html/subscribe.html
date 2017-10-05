@@ -7,19 +7,137 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <style>
-    	#paySection {border:none;text-size:6px;}
+    	table {
+			font-size: 14px;
+		}
     </style>
 </head>
-<body style="background:cadetblue;">
-	<section id="paySection" style="margin-top:120px; font-size:14px;">
+<body style="background:lightyellow;">
+	<nav id="mainNav" class="navbar navbar-default navbar-fixed-top" style="background: darksalmon;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" target="_blank" href="/#page-top">PayCr</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" target="_blank" href="/#download">Download</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" target="_blank" href="/#features">Features</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" target="_blank" href="/#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="subsModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h5 class="modal-title"> Subscription# <strong>${subs.subscriptionCode}</strong></h5>
+				</div>
+				<div class="modal-body">
+					<table id="paramsTable" class="table table-bordered">
+                           <tbody class="text-center">
+                               <tr>
+                                   <td><label class="control-label">Name</label></td>
+                                   <td><div class="form-group" style="margin:0px;">${pricing.name}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Duration</label></td>
+                                   <td><div class="form-group" style="margin:0px;">${pricing.duration}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Start Amount</label></td>
+                                   <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${pricing.startAmount}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">End Amount</label></td>
+                                   <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${pricing.endAmount}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Rate</label></td>
+                                   <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${pricing.rate}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Quantity</label></td>
+                                   <td><div class="form-group" style="margin:0px;">${subs.quantity}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Total</label></td>
+                                   <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${subs.total}</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Tax(${subs.taxName})</label></td>
+                                   <td><div class="form-group" style="margin:0px;">${subs.taxValue}%</div></td>
+                               </tr>
+                               <tr>
+                                   <td><label class="control-label">Pay Amount</label></td>
+                                   <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${subs.payAmount}</div></td>
+                               </tr>
+                            </tbody>
+                        </table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<section style="margin-top:160px;">
         <div class="container text-center">
-			<div class="col-xs-12 col-sm-8">
-				<div class="row panel-default">
-	                <div class="col-md-8 col-md-offset-2">
-	                    <h3 class="section-heading">Hi ${merchant.name}, <span style="color:white;">PayCr</span> has requested you to pay <span style="color:white;"><i class="fa fa-rupee"></i> ${subs.payAmount}</span></h3>
-	                    <p>Proceed to make payment</p>
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="row panel panel-primary" style="background: cadetblue;">
+	                <div class="col-md-6" style="background: darksalmon;padding:20px;">
 	                    <div class="row">
+	                    	<div class="col-md-3 col-xs-3">
+	                    		<i class="fa fa-institution fa-3x"></i>
+	                    	</div>
+	                    	<div class="col-md-6 col-xs-6 text-left" style="font-size:12px;color:white;">
+	                    		<div>${merchant.name}</div>
+	                    		<div><small>${merchant.email}</small></div>
+	                    		<div><small>${merchant.mobile}</small></div>
+	                    	</div>
+	                    	<div class="col-md-3 col-xs-3">
+	                    		<a href="/logout" title="Logout"><i class="fa fa-sign-out fa-3x"></i></a>
+	                    	</div>
+	                    </div>
+	                    <hr class="hidden-xs">
+	                    <div class="row hidden-xs">
+	                    	<h3 class="section-heading">BUY NEW SUBSCRIPTION</h3>
+	                    </div>
+	                    <div class="row hidden-xs">
+	                    	<h3 class="section-heading"><i class="fa fa-recycle fa-4x"></i></h3>
+	                    	<a href="#" data-toggle="modal" data-target="#subsModal">View Details</a>
+	                    </div>
+	                    <div class="row hidden-xs">
+	                    	<h3 class="section-heading">Powered by Paycr</h3>
+	                    </div>
+	                </div>
+	                <div class="col-md-6" style="padding:20px;">
+	                	<div class="row hidden-xs">
+	                		<div class="col-md-2 col-md-offset-5">
+	                    		<h3 class="section-heading"><img style="max-height:100%;max-width:100%" alt="PAYCR" src="${banner}"></h3>
+	                    	</div>
+	                    </div>
+	                	<div class="row">
+	                    	<h3 class="section-heading">Hi ${merchant.name}, <span style="color:white;">PayCr</span> has requested you to pay <span style="color:white;"><i class="fa fa-rupee"></i> ${subs.payAmount}</span></h3>
+	                    </div>
+	                    <div class="hidden-xs">
+	                    	<br><br>
+	                    </div>
+	                    <hr>
+	                    <p>Proceed to make payment</p>
+	                	<div class="row">
 	                    	<form id="payForm" class="col-sm-6" action="/subscription/return" method="POST">
 							<script
 							    src="https://checkout.razorpay.com/v1/checkout.js"
@@ -40,61 +158,8 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <hr>
 			</div>
-			<div class="col-xs-12 col-sm-4">
-				<div class="panel-group" role="tab">
-					<div class="panel">
-						<div class="panel-heading text-left">
-							<a class="accordion-toggle" role="button" data-toggle="collapse"
-								href="#" data-target="#collapseParams"> Subscription Information </a>
-						</div>
-						<div id="collapseParams" class="accordion-body collapse in">
-							<table id="paramsTable" class="table table-bordered">
-	                            <tbody class="text-center">
-	                                <tr>
-	                                    <td><label class="control-label">Name</label></td>
-	                                    <td><div class="form-group" style="margin:0px;">${pricing.name}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Duration</label></td>
-	                                    <td><div class="form-group" style="margin:0px;">${pricing.duration}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Start Amount</label></td>
-	                                    <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${pricing.startAmount}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">End Amount</label></td>
-	                                    <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${pricing.endAmount}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Rate</label></td>
-	                                    <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${pricing.rate}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Quantity</label></td>
-	                                    <td><div class="form-group" style="margin:0px;">${subs.quantity}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Total</label></td>
-	                                    <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${subs.total}</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Tax(${subs.taxName})</label></td>
-	                                    <td><div class="form-group" style="margin:0px;">${subs.taxValue}%</div></td>
-	                                </tr>
-	                                <tr>
-	                                    <td><label class="control-label">Pay Amount</label></td>
-	                                    <td><div class="form-group" style="margin:0px;"><i class="fa fa-rupee"></i> ${subs.payAmount}</div></td>
-	                                </tr>
-	                             </tbody>
-	                         </table>
-						</div>
-					</div>
-				</div>
-			</div>
-        </div>
+		</div>
     </section>
     <script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
     <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>
