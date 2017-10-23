@@ -136,9 +136,10 @@
 	                    	<br><br>
 	                    </div>
 	                    <hr>
-	                    <p>Proceed to make payment</p>
+	                    <p style="color:white;">Proceed to make payment</p>
+	                    <br>
 	                	<div class="row">
-	                    	<form id="payForm" class="col-sm-6" action="/subscription/return" method="POST">
+	                    	<form id="payForm" class="col-sm-6 col-xs-6" action="/subscription/return" method="POST">
 							<script
 							    src="https://checkout.razorpay.com/v1/checkout.js"
 							    data-key="${rzpKeyId}"
@@ -154,7 +155,7 @@
 							></script>
 							<input type="hidden" value="${subs.subscriptionCode}" name="subsCode">
 							</form>
-	                        <a href="/subscription/decline/${subs.subscriptionCode}" class="col-sm-6"><button type="button" class="btn btn-warning">Decline</button></a>
+	                        <a href="/subscription/decline/${subs.subscriptionCode}" class="col-sm-6 col-xs-6"><button type="button" class="btn btn-warning">Decline</button></a>
 	                    </div>
 	                </div>
 	            </div>

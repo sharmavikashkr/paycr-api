@@ -3,7 +3,9 @@ package com.paycr.dashboard.controller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paycr.common.bean.SearchConsumerRequest;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.bean.SearchPaymentRequest;
 import com.paycr.common.bean.SearchSubsRequest;
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
@@ -71,7 +75,24 @@ public class SearchController {
 		}
 		return paymentList;
 	}
-	
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping("/consumer")
+	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request, HttpServletResponse response) {
+		Set<Consumer> consumerList = new HashSet<>();
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			if (CommonUtil.isNotNull(merchant)) {
+				request.setMerchant(merchant.getId());
+			}
+			consumerList = serSer.fetchConsumerList(request);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return consumerList;
+	}
+
 	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
 	@RequestMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
@@ -94,7 +115,7 @@ public class SearchController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 	}
-	
+
 	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
 	@RequestMapping("/payment/mail")
 	public void mailPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
@@ -125,7 +146,8 @@ public class SearchController {
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/subscription")
-	public List<Subscription> searchSubscriptions(@RequestBody SearchSubsRequest request, HttpServletResponse response) {
+	public List<Subscription> searchSubscriptions(@RequestBody SearchSubsRequest request,
+			HttpServletResponse response) {
 		List<Subscription> subs = new ArrayList<>();
 		try {
 			subs = serSer.fetchSubsList(request);

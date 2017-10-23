@@ -74,12 +74,13 @@ public class PaymentService {
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			invoice = invHelp.prepareChildInvoice(invoiceCode, "Consumer");
+			invoice = invHelp.prepareChildInvoice(invoiceCode, InvoiceType.SINGLE, "Consumer");
 		}
 		if (CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");
 			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getInvoiceSetting().getBanner());
+			mv.addObject("banner",
+					company.getAppUrl() + "/banner/merchant/" + merchant.getInvoiceSetting().getBanner());
 			mv.addObject("invoice", invoice);
 			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
 			return mv;

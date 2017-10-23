@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.data.domain.Consumer;
+import com.paycr.common.data.domain.ConsumerCategory;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.ConsumerService;
 
@@ -56,5 +57,41 @@ public class ConsumerController {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/category/new/{consumerId}")
+	public void addCategory(@RequestBody ConsumerCategory conCat, @PathVariable Integer consumerId,
+			HttpServletResponse response) {
+		try {
+			conSer.addCategory(consumerId, conCat);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/category/delete/{consumerId}/{conCatId}")
+	public void deleteCategory(@PathVariable Integer consumerId, @PathVariable Integer conCatId,
+			HttpServletResponse response) {
+		try {
+			conSer.deleteCategory(consumerId, conCatId);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/categories")
+	public List<String> getCategories(HttpServletResponse response) {
+		return conSer.getCategories();
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/category/{category}")
+	public List<String> getCategoryValues(@PathVariable String category, HttpServletResponse response) {
+		return conSer.getCategoryValues(category);
 	}
 }

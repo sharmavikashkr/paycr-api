@@ -1,13 +1,16 @@
 package com.paycr.common.data.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,12 +27,14 @@ public class Consumer {
 	private String name;
 	private String email;
 	private String mobile;
-	private String organization;
 	private boolean emailOnPay;
 	private boolean emailOnRefund;
 
 	private boolean active;
 	private String createdBy;
+
+	@OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
+	private List<ConsumerCategory> conCats;
 
 	@JsonIgnore
 	@ManyToOne
@@ -106,14 +111,6 @@ public class Consumer {
 		this.merchant = merchant;
 	}
 
-	public String getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(String organization) {
-		this.organization = organization;
-	}
-
 	public boolean isEmailOnPay() {
 		return emailOnPay;
 	}
@@ -128,6 +125,14 @@ public class Consumer {
 
 	public void setEmailOnRefund(boolean emailOnRefund) {
 		this.emailOnRefund = emailOnRefund;
+	}
+
+	public List<ConsumerCategory> getConCats() {
+		return conCats;
+	}
+
+	public void setConCats(List<ConsumerCategory> conCats) {
+		this.conCats = conCats;
 	}
 
 }

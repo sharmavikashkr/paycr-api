@@ -6,9 +6,6 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$rootScope.recurringInvoice = {
-		"startDate" : dateNow
-	}
 	$rootScope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
@@ -333,18 +330,34 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.createChildInvoice = function(invoiceCode) {
 		var req = {
 			method : 'POST',
-			url : "/invoice/createChild/"+invoiceCode,
+			url : "/invoice/bulk/child/"+invoiceCode,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : this.consumer
+			data : this.childInvoiceReq
 		}
 		$http(req).then(function(invoice) {
 			$rootScope.searchInvoice();
 			$scope.serverMessage(invoice);
-			$rootScope.invoiceInfo = invoice.data;
-			angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
+	}
+	$scope.createCategoryInvoice = function(invoiceCode) {
+		var req = {
+			method : 'POST',
+			url : "/invoice/bulk/category/"+invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			},
+			data : this.childInvoiceReq
+		}
+		$http(req).then(function(invoice) {
+			$rootScope.searchInvoice();
+			$scope.serverMessage(invoice);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -372,7 +385,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	}
 	$scope.searchChildInvoices = function(invoice) {
 		$rootScope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
-		$rootScope.searchInvoiceReq.invoiceType = 'SINGLE';
+		$rootScope.searchInvoiceReq.invoiceType = null;
 		$rootScope.searchInvoiceReq.email = '';
 		$rootScope.searchInvoiceReq.mobile = '';
 		$rootScope.searchInvoiceReq.invoiceCode = '';
@@ -403,6 +416,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		$rootScope.recurringInvoice = {
+			"startDate" : dateNow,
+			"recurr" : 'MONTHLY',
+			"total" : 12
+		}
 	}
 	$scope.updateBulkInvoiceInfo = function(invoice) {
 		$rootScope.bulkInvoiceInfo = angular.copy(invoice);
@@ -419,6 +437,31 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		
+		var req = {
+			method : 'GET',
+			url : "/invoice/bulk/categories/"+invoice.invoiceCode,
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(bulkcategories) {
+			$rootScope.bulkCategories = bulkcategories.data;
+			$rootScope.fetchCategories();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+
+		$rootScope.childInvoiceReq = {
+			"conCatList" : [],
+			"invoiceType" : "SINGLE",
+			"recInv" : {
+				"startDate" : dateNow,
+				"recurr" : 'MONTHLY',
+				"total" : 12
+			}
+		}
 	}
 	$scope.recurrInvoice = function(invoiceCode) {
 		var req = {
@@ -475,5 +518,12 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		});
 		angular.element(document.querySelector('#invoiceTimelineModal')).modal('hide');
 		this.newInvComment = "";
+	}
+	$scope.addFilter = function(newFilter) {
+		$rootScope.childInvoiceReq.conCatList.push(angular.copy(newFilter));
+		this.newFilter = {"name":"","value":""};
+	}
+	$scope.deleteFilter = function(pos) {
+		$rootScope.childInvoiceReq.conCatList.splice(pos, 1);
 	}
 });

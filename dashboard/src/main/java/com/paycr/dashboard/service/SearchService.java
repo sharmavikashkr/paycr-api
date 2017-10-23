@@ -9,12 +9,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.InvoiceReport;
+import com.paycr.common.bean.SearchConsumerRequest;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.bean.SearchPaymentRequest;
@@ -22,10 +24,12 @@ import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
+import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
 import com.paycr.common.data.dao.PaymentDao;
 import com.paycr.common.data.dao.SubscriptionDao;
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
@@ -62,6 +66,9 @@ public class SearchService {
 	private MerchantDao merDao;
 
 	@Autowired
+	private ConsumerDao conDao;
+
+	@Autowired
 	private SubscriptionDao subsDao;
 
 	@Autowired
@@ -90,8 +97,16 @@ public class SearchService {
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
-		List<Payment> paymentList = payDao.findPayments(request, merchant);
-		return paymentList;
+		return payDao.findPayments(request, merchant);
+	}
+
+	public Set<Consumer> fetchConsumerList(SearchConsumerRequest request) {
+		vaidateRequest(request);
+		Merchant merchant = null;
+		if (request.getMerchant() != null) {
+			merchant = merRepo.findOne(request.getMerchant());
+		}
+		return conDao.findConsumers(request, merchant);
 	}
 
 	public String downloadPayments(SearchPaymentRequest request) throws IOException {

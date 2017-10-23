@@ -49,7 +49,6 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 			consumer.setMerchant(invoice.getMerchant());
 			consumer.setActive(true);
 			consumer.setCreated(new Date());
-			consumer.setOrganization("");
 			consumer.setEmailOnPay(true);
 			consumer.setEmailOnRefund(true);
 			if (consumer.getCreatedBy() == null) {

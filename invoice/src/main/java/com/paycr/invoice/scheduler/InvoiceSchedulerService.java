@@ -18,6 +18,7 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.RecurrType;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
@@ -50,7 +51,8 @@ public class InvoiceSchedulerService {
 				if (InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
 					continue;
 				}
-				Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), "Scheduler");
+				Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), InvoiceType.SINGLE,
+						"Scheduler");
 				exec.execute(processInvoice(recInv, childInvoice, timeNow));
 			}
 		}

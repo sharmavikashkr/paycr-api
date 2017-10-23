@@ -20,9 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkUpload;
-import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
@@ -37,21 +36,9 @@ public class InvoiceController {
 
 	@Autowired
 	private InvoiceService invSer;
-
+	
 	@Autowired
 	private SecurityService secSer;
-
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public Invoice single(@RequestBody Invoice invoice, HttpServletResponse response) {
-		try {
-			return invSer.single(invoice);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
-	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping(value = "/payments/{invoiceCode}", method = RequestMethod.GET)
@@ -141,7 +128,6 @@ public class InvoiceController {
 			byte[] data = invSer.getAttach(invoiceCode, attachName);
 
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
-			// response.setContentType("application/pdf");
 			InputStream is = new ByteArrayInputStream(data);
 			IOUtils.copy(is, response.getOutputStream());
 			response.setContentLength(data.length);
@@ -153,12 +139,23 @@ public class InvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/createChild/{invoiceCode}", method = RequestMethod.POST)
-	public Invoice createChild(@PathVariable String invoiceCode, @RequestBody Consumer consumer,
+	@RequestMapping(value = "/recurr/new/{invoiceCode}", method = RequestMethod.POST)
+	public void recurr(@PathVariable String invoiceCode, @RequestBody RecurringInvoice recInv,
 			HttpServletResponse response) {
 		try {
 			PcUser user = secSer.findLoggedInUser();
-			return invSer.createChild(invoiceCode, consumer, user.getEmail());
+			invSer.recurr(invoiceCode, recInv, user.getEmail());
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/recurr/all/{invoiceCode}", method = RequestMethod.GET)
+	public List<RecurringInvoice> allRecurr(@PathVariable String invoiceCode, HttpServletResponse response) {
+		try {
+			return invSer.allRecurr(invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -188,11 +185,12 @@ public class InvoiceController {
 		}
 		return null;
 	}
-
-	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
+	
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/bulk/categories/{invoiceCode}", method = RequestMethod.GET)
+	public List<BulkCategory> categoryConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
-			return invSer.downloadFile(filename);
+			return invSer.getCategories(invoiceCode);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -200,36 +198,10 @@ public class InvoiceController {
 		return null;
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/upload/{invoiceCode}", method = RequestMethod.POST)
-	public void uploadConsumers(@PathVariable String invoiceCode, @RequestParam("consumers") MultipartFile consumers,
-			HttpServletResponse response) {
+	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
+	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
 		try {
-			PcUser user = secSer.findLoggedInUser();
-			invSer.uploadConsumers(invoiceCode, consumers, user.getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-	}
-
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/recurr/new/{invoiceCode}", method = RequestMethod.POST)
-	public void recurr(@PathVariable String invoiceCode, @RequestBody RecurringInvoice recInv,
-			HttpServletResponse response) {
-		try {
-			invSer.recurr(invoiceCode, recInv);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-	}
-
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/recurr/all/{invoiceCode}", method = RequestMethod.GET)
-	public List<RecurringInvoice> allRecurr(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			return invSer.allRecurr(invoiceCode);
+			return invSer.downloadFile(filename);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

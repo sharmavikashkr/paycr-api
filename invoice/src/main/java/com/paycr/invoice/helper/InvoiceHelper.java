@@ -44,7 +44,7 @@ public class InvoiceHelper {
 	@Autowired
 	private TimelineRepository tlRepo;
 
-	public Invoice prepareChildInvoice(String invoiceCode, String createdBy) {
+	public Invoice prepareChildInvoice(String invoiceCode, InvoiceType invoiceType, String createdBy) {
 		Date timeNow = new Date();
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		Invoice childInvoice = ObjectUtils.clone(invoice);
@@ -78,7 +78,7 @@ public class InvoiceHelper {
 		childInvoice.setCustomParams(params);
 		isValidRequest.validate(childInvoice);
 		isValidPricing.validate(childInvoice);
-		childInvoice.setInvoiceType(InvoiceType.SINGLE);
+		childInvoice.setInvoiceType(invoiceType);
 		childInvoice = invRepo.save(childInvoice);
 		MerchantPricing merPri = childInvoice.getMerchantPricing();
 		merPri.setInvCount(merPri.getInvCount() + 1);

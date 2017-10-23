@@ -4,7 +4,6 @@ CREATE TABLE if not exists pc_consumer (
 	name varchar(50) DEFAULT NULL,
     email varchar(50) DEFAULT NULL,
     mobile varchar(15) DEFAULT NULL,
-    organizarion varchar(50) DEFAULT NULL,
     email_on_pay BOOLEAN NOT NULL,
     email_on_refund BOOLEAN NOT NULL,
     address_line1 varchar(255) DEFAULT NULL,
@@ -110,5 +109,15 @@ CREATE TABLE if not exists pc_bulk_upload (
 	created timestamp NOT NULL,
 	file_name varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
+    invoice_code varchar(20) NOT NULL
+);
+
+CREATE TABLE if not exists pc_bulk_category (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	categories varchar(255) NOT NULL,
+	invoice_type  varchar(10) NOT NULL,
+	created_by varchar(50) NOT NULL,
+	message varchar(255) NOT NULL,
     invoice_code varchar(20) NOT NULL
 );

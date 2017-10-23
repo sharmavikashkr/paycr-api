@@ -14,8 +14,9 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
 	public List<Consumer> findByMerchant(Merchant merchant);
 
+	public Consumer findByMerchantAndId(Merchant merchant, Integer id);
+
 	@Query("SELECT c FROM Consumer c WHERE c.merchant = ?1 AND c.email = ?2 AND c.mobile = ?3")
 	public Consumer findConsumerForMerchant(Merchant merchant, String email, String mobile);
-	
-	
+
 }
