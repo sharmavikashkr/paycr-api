@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h5 class="modal-title">Create Child Invoice : <strong>{{bulkInvoiceInfo.invoiceCode}}</strong></h5>
+				<h5 class="modal-title">Create Child Invoice (SINGLE) : <strong>{{bulkInvoiceInfo.invoiceCode}}</strong></h5>
 			</div>
 			<div class="modal-body">
 				<form name="childInvoiceForm">
@@ -13,6 +13,8 @@
 								<label class="control-label">Upload Consumers (CSV): (<a href="/invoice/bulk/upload/format">Download format</a>)</label>
 								<input type="file" onchange="angular.element(this).scope().uploadConsumers(this.files)" accept=".csv" />
 							</div>
+							<br>
+							<label>History</label>
 							<table class="table table-bordered table-responsive">
 								<thead>
 									<tr>

@@ -12,7 +12,7 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
-			data : $scope.searchConsumerReq
+			data : $rootScope.searchConsumerReq
 		}
 		$http(req).then(function(consumers) {
 			$rootScope.consumerList = consumers.data;

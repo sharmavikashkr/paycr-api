@@ -463,6 +463,14 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			}
 		}
 	}
+	$scope.fetchCategoryConsumer = function() {
+		$rootScope.searchConsumerReq = {
+			"email" : "",
+			"mobile" : "",
+			"conCatList" : $rootScope.childInvoiceReq.conCatList
+		}
+		$rootScope.searchConsumer();
+	}
 	$scope.recurrInvoice = function(invoiceCode) {
 		var req = {
 			method : 'POST',

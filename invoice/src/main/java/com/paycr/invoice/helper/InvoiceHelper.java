@@ -65,6 +65,10 @@ public class InvoiceHelper {
 			newItems.add(newItem);
 		}
 		childInvoice.setItems(newItems);
+		childInvoice.setAttachments(null);
+		childInvoice.setInvoiceNotices(null);
+		isValidRequest.validate(childInvoice);
+		isValidPricing.validate(childInvoice);
 		List<InvoiceCustomParam> params = new ArrayList<InvoiceCustomParam>();
 		for (InvoiceCustomParam param : invoice.getCustomParams()) {
 			InvoiceCustomParam newParam = new InvoiceCustomParam();
@@ -73,11 +77,7 @@ public class InvoiceHelper {
 			newParam.setProvider(param.getProvider());
 			param.setInvoice(childInvoice);
 		}
-		childInvoice.setAttachments(null);
-		childInvoice.setInvoiceNotices(null);
 		childInvoice.setCustomParams(params);
-		isValidRequest.validate(childInvoice);
-		isValidPricing.validate(childInvoice);
 		childInvoice.setInvoiceType(invoiceType);
 		childInvoice = invRepo.save(childInvoice);
 		MerchantPricing merPri = childInvoice.getMerchantPricing();

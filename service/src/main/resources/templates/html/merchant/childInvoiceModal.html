@@ -1,4 +1,9 @@
-<div id="childInvoiceModal" ng-controller="InvoiceController" class="modal fade" role="dialog">
+<style> 
+.md-datepicker-calendar-pane{
+	z-index: 1200
+}
+</style>
+<div id="childInvoiceModal" ng-controller="InvoiceController" style="overflow-y:scroll;" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -46,6 +51,26 @@
 								</tbody>
 							</table>
 							<hr>
+							<label>Add Category Consumers</label>
+							<div>
+								<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in childInvoiceReq.conCatList">
+									<a class="panel panel-default" href="#"><strong>{{conCatFilter.name}} : </strong>{{conCatFilter.value}}</a>
+									<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteFilter($index)"><i class="fa fa-minus"></i></a> 
+								</div>
+								<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline">
+									<select ng-model="newFilter.name" ng-change="fetchCategoryValues(newFilter.name)">
+										<option ng-repeat="category in categories" ng-value="category">{{category}}</option>
+									</select>
+									<select ng-model="newFilter.value">
+										<option ng-repeat="catValue in catValues" ng-value="catValue">{{catValue}}</option>
+									</select>
+									<a class="btn btn-success btn-xs" title="add filter" ng-click="addFilter(newFilter)"><i class="fa fa-plus"></i></a>
+								</div>
+								<a ng-if="childInvoiceReq.conCatList.length > 0" ng-click="fetchCategoryConsumer()" data-toggle="modal" data-target="#categoryConsumerModal" href="#">View Consumers</a>
+							</div>
+							<br>
+							<button ng-if="childInvoiceReq.conCatList.length > 0" class="btn btn-info" ng-click="createCategoryInvoice(bulkInvoiceInfo.invoiceCode)">Create for category</button>
+							<br><br>
 							<label>History</label>
 							<table class="table table-bordered table-responsive">
 								<thead>
@@ -67,25 +92,6 @@
 									</tr>
 								</tbody>
 							</table>
-							<label>Add Category Consumers</label>
-							<div>
-								<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in childInvoiceReq.conCatList">
-									<a class="panel panel-default" href="#"><strong>{{conCatFilter.name}} : </strong>{{conCatFilter.value}}</a>
-									<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteFilter($index)"><i class="fa fa-minus"></i></a> 
-								</div>
-								<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline">
-									<select ng-model="newFilter.name" ng-change="fetchCategoryValues(newFilter.name)">
-										<option ng-repeat="category in categories" ng-value="category">{{category}}</option>
-									</select>
-									<select ng-model="newFilter.value">
-										<option ng-repeat="catValue in catValues" ng-value="catValue">{{catValue}}</option>
-									</select>
-									<a class="btn btn-success btn-xs" title="add filter" ng-click="addFilter(newFilter)"><i class="fa fa-plus"></i></a>
-								</div>
-								<a href="#">View Consumers</a>
-							</div>
-							<br>
-							<button class="btn btn-info" ng-click="createCategoryInvoice(bulkInvoiceInfo.invoiceCode)">Create for category</button>
 							<hr>
 							<label>Add Single Consumer</label>
 							<table class="table table-bordered table-responsive">

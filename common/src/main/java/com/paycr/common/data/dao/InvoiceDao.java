@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 
@@ -32,8 +31,7 @@ public class InvoiceDao {
 		if (!CommonUtil.isNull(searchReq.getInvoiceType())) {
 			squery.append(" i.invoiceType = :invoiceType AND");
 		}
-		if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())
-				&& InvoiceType.SINGLE.equals(searchReq.getInvoiceType())) {
+		if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())) {
 			squery.append(" i.parent.invoiceCode = :parentInvoiceCode AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
@@ -64,7 +62,7 @@ public class InvoiceDao {
 		if (!CommonUtil.isNull(searchReq.getInvoiceType())) {
 			query.setParameter("invoiceType", searchReq.getInvoiceType());
 		}
-		if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode()) && InvoiceType.SINGLE.equals(searchReq.getInvoiceType())) {
+		if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())) {
 			query.setParameter("parentInvoiceCode", searchReq.getParentInvoiceCode());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
