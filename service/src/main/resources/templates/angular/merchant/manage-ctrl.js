@@ -5,6 +5,12 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		"mobile" : "",
 		"conCatList" : []
 	}
+	$rootScope.updateConsumerReq = {
+		"conCatList" : [],
+		"emailOnPay" : true,
+		"emailOnRefund" : true,
+		"active" : true
+	}
 	$rootScope.searchConsumer = function() {
 		var req = {
 			method : 'POST',
@@ -70,6 +76,26 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.updateConsumerCategory = function() {
+		if (!confirm('Update for search criteria above?')) {
+			return false;
+		}
+		this.updateConsumerReq.searchReq = $rootScope.searchConsumerReq;
+		var req = {
+			method : 'POST',
+			url : "/consumer/update/category",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			},
+			data : this.updateConsumerReq
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.searchConsumer();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.createConsumer = function() {
 		if (!this.addConsumerForm.$valid) {
 			return false;
@@ -101,6 +127,7 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		}
 		$http(req).then(function(categories) {
 			$rootScope.categories = categories.data;
+			$rootScope.updateCategories = categories.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -115,6 +142,34 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		}
 		$http(req).then(function(catValues) {
 			$rootScope.catValues = catValues.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$rootScope.fetchUpdateCategoryValues = function(name) {
+		var req = {
+			method : 'GET',
+			url : "/consumer/category/" + name,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(updateCatValues) {
+			$rootScope.updateCatValues = updateCatValues.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$rootScope.fetchNewCategoryValues = function(name) {
+		var req = {
+			method : 'GET',
+			url : "/consumer/category/" + name,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(newCatValues) {
+			$rootScope.newCatValues = newCatValues.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -136,6 +191,9 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		});
 	}
 	$scope.deleteCategory = function(consumerId, conCatId) {
+		if (!confirm('Delete tag?')) {
+			return false;
+		}
 		var req = {
 			method : 'GET',
 			url : "/consumer/category/delete/" + consumerId + "/" + conCatId,
@@ -204,5 +262,13 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 	}
 	$scope.deleteFilter = function(pos) {
 		$rootScope.searchConsumerReq.conCatList.splice(pos, 1);
+	}
+	$scope.addUpdateFilter = function(udpateFilter) {
+		$rootScope.updateConsumerReq.conCatList.push(angular.copy(udpateFilter));
+		this.updateFilter = {"name":"","value":""};
+		$rootScope.updateCatValues = [];
+	}
+	$scope.deleteUpdateFilter = function(pos) {
+		$rootScope.updateConsumerReq.conCatList.splice(pos, 1);
 	}
 });

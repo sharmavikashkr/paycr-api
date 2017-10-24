@@ -2,10 +2,15 @@ package com.paycr.dashboard.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.paycr.common.bean.UpdateConsumerRequest;
+import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
 import com.paycr.common.data.domain.Merchant;
@@ -31,6 +36,9 @@ public class ConsumerService {
 
 	@Autowired
 	private ConsumerValidator conVal;
+
+	@Autowired
+	private ConsumerDao conDao;
 
 	public List<Consumer> getAllConsumer() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -67,7 +75,7 @@ public class ConsumerService {
 		return conCatRepo.findByConsumer(consumer);
 	}
 
-	public void addCategory(Integer consumerId, ConsumerCategory conCat) {
+	public void addCategory(Integer consumerId, ConsumerCategory conCat, Merchant merchant) {
 		Consumer consumer = conRepo.findOne(consumerId);
 		if (consumer == null) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
@@ -76,15 +84,15 @@ public class ConsumerService {
 				|| conCat.getValue().isEmpty()) {
 			throw new PaycrException(Constants.FAILURE, "Invalid category name/value");
 		}
-		if (conCatRepo.findByConsumerAndName(consumer, conCat.getName()) != null) {
-			throw new PaycrException(Constants.FAILURE, "Category already added for consumer");
+		ConsumerCategory exstConCat = conCatRepo.findByConsumerAndName(consumer, conCat.getName());
+		if (exstConCat != null) {
+			deleteCategory(consumerId, exstConCat.getId(), merchant);
 		}
 		conCat.setConsumer(consumer);
 		conCatRepo.save(conCat);
 	}
 
-	public void deleteCategory(Integer consumerId, Integer conCatId) {
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
+	public void deleteCategory(Integer consumerId, Integer conCatId, Merchant merchant) {
 		Consumer consumer = conRepo.findByMerchantAndId(merchant, consumerId);
 		if (consumer == null) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
@@ -102,5 +110,22 @@ public class ConsumerService {
 	public List<String> getCategoryValues(String category) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		return conCatRepo.findValuesForCategory(merchant, category);
+	}
+
+	@Async
+	@Transactional
+	public void updateConsumerCategory(UpdateConsumerRequest updateReq, Merchant merchant) {
+		Set<Consumer> consumerList = conDao.findConsumers(updateReq.getSearchReq(), merchant);
+		for (Consumer consumer : consumerList) {
+			consumer.setActive(updateReq.isActive());
+			consumer.setEmailOnPay(updateReq.isEmailOnPay());
+			consumer.setEmailOnRefund(updateReq.isEmailOnRefund());
+			if (updateReq.isRemoveOldTags()) {
+				conCatRepo.deleteForConsumer(consumer);
+			}
+			for (ConsumerCategory conCat : updateReq.getConCatList()) {
+				addCategory(consumer.getId(), conCat, merchant);
+			}
+		}
 	}
 }

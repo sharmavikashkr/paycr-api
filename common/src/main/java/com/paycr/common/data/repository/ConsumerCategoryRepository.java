@@ -3,8 +3,10 @@ package com.paycr.common.data.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
@@ -27,5 +29,10 @@ public interface ConsumerCategoryRepository extends JpaRepository<ConsumerCatego
 	public List<String> findValuesForCategory(Merchant merchant, String category);
 
 	public ConsumerCategory findByConsumerAndId(Consumer consumer, Integer id);
+
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM ConsumerCategory cc WHERE cc.consumer = ?1")
+	public void deleteForConsumer(Consumer consumer);
 
 }

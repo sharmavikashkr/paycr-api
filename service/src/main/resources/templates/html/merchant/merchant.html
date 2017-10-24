@@ -31,6 +31,11 @@
 	<script src="/angular/common/users-ctrl.js"></script>
 	<!-- <script src="/angular/common/my-invoices-ctrl.js"></script> -->
 	<script src="/angular/common/profile-ctrl.js"></script>
+	<style> 
+	.md-datepicker-calendar-pane{
+		z-index: 1200
+	}
+	</style>
 </head>
 <body ng-app="payCrMerchantApp" ng-controller="MerchantController" ng-cloak>
     <div ng-init="prepare()" style="background:lightyellow;" id="wrapper">

@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paycr.common.bean.UpdateConsumerRequest;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.ConsumerService;
 
@@ -23,6 +26,9 @@ public class ConsumerController {
 
 	@Autowired
 	private ConsumerService conSer;
+
+	@Autowired
+	private SecurityService secSer;
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/get")
@@ -64,7 +70,8 @@ public class ConsumerController {
 	public void addCategory(@RequestBody ConsumerCategory conCat, @PathVariable Integer consumerId,
 			HttpServletResponse response) {
 		try {
-			conSer.addCategory(consumerId, conCat);
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			conSer.addCategory(consumerId, conCat, merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -76,7 +83,8 @@ public class ConsumerController {
 	public void deleteCategory(@PathVariable Integer consumerId, @PathVariable Integer conCatId,
 			HttpServletResponse response) {
 		try {
-			conSer.deleteCategory(consumerId, conCatId);
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			conSer.deleteCategory(consumerId, conCatId, merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -93,5 +101,17 @@ public class ConsumerController {
 	@RequestMapping("/category/{category}")
 	public List<String> getCategoryValues(@PathVariable String category, HttpServletResponse response) {
 		return conSer.getCategoryValues(category);
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/update/category")
+	public void updateConsumerCategory(@RequestBody UpdateConsumerRequest updateReq, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			conSer.updateConsumerCategory(updateReq, merchant);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
 	}
 }
