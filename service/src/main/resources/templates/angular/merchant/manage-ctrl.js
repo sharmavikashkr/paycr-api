@@ -117,6 +117,40 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#createConsumerModal')).modal(
 				'hide');
 	}
+	$scope.updateBulkConsumerUploads = function() {
+		var req = {
+			method : 'GET',
+			url : "/consumer/bulk/uploads/all",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(bulkConsumerUploads) {
+			$rootScope.bulkConsumerUploads = bulkConsumerUploads.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.uploadConsumers = function(files) {
+		if (!confirm('Upload Consumers?')) {
+			return false;
+		}
+		var fd = new FormData();
+		fd.append("consumers", files[0]);
+		$http.post("/consumer/bulk/upload", fd, {
+			transformRequest : angular.identity,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				'Content-Type' : undefined
+			}
+		}).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#bulkConsumerUploadModal')).modal('hide');
+	}
 	$rootScope.fetchCategories = function() {
 		var req = {
 			method : 'GET',

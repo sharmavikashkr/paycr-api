@@ -192,37 +192,35 @@ public class CreateInvoiceService {
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> consumerList = csvReader.readAll();
 		csvReader.close();
+		if (consumerList == null || consumerList.isEmpty() || consumerList.size() > 200) {
+			String[] record = new String[1];
+			record[0] = "Min 1 and Max 200 consumers can be uploaded";
+			writer.writeNext(record);
+		}
 		for (String[] consumer : consumerList) {
+			String[] record = new String[consumer.length + 1];
+			for (int i = 0; i < consumer.length; i++) {
+				record[i] = consumer[i];
+			}
 			String reason = "Invalid format";
-			if (consumer.length != 3) {
-				String[] record = new String[4];
-				for (int i = 0; i < consumer.length; i++) {
-					record[i] = consumer[i];
+			if (consumer.length == 3) {
+				Consumer con = new Consumer();
+				con.setName(consumer[0].trim());
+				con.setEmail(consumer[1].trim());
+				con.setMobile(consumer[2].trim());
+				try {
+					ChildInvoiceRequest chldInvReq = new ChildInvoiceRequest();
+					chldInvReq.setConsumer(con);
+					chldInvReq.setInvoiceType(InvoiceType.SINGLE);
+					Invoice invoice = createChild(invoiceCode, chldInvReq, createdBy);
+					reason = invoice.getInvoiceCode();
+				} catch (PaycrException ex) {
+					reason = ex.getMessage();
+				} catch (Exception ex) {
+					reason = "Something went wrong";
 				}
-				record[3] = reason;
-				writer.writeNext(record);
-				continue;
 			}
-			Consumer con = new Consumer();
-			con.setName(consumer[0].trim());
-			con.setEmail(consumer[1].trim());
-			con.setMobile(consumer[2].trim());
-			try {
-				ChildInvoiceRequest chldInvReq = new ChildInvoiceRequest();
-				chldInvReq.setConsumer(con);
-				chldInvReq.setInvoiceType(InvoiceType.SINGLE);
-				Invoice invoice = createChild(invoiceCode, chldInvReq, createdBy);
-				reason = invoice.getInvoiceCode();
-			} catch (PaycrException ex) {
-				reason = ex.getMessage();
-			} catch (Exception ex) {
-				reason = "Something went worng";
-			}
-			String[] record = new String[4];
-			record[0] = consumer[0];
-			record[1] = consumer[1];
-			record[2] = consumer[2];
-			record[3] = reason;
+			record[consumer.length] = reason;
 			writer.writeNext(record);
 		}
 		writer.close();

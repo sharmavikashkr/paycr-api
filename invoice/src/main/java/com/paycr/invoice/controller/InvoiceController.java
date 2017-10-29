@@ -166,7 +166,7 @@ public class InvoiceController {
 	@RequestMapping("/bulk/upload/format")
 	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String content = "Name1,Email1,Mobile1\r\nName2,Email2,Mobile2";
-		response.setHeader("Content-Disposition", "attachment; filename=\"consumers.csv\"");
+		response.setHeader("Content-Disposition", "attachment; filename=\"bulkInvoice.csv\"");
 		response.setContentType("application/csv");
 		InputStream is = new ByteArrayInputStream(content.getBytes());
 		IOUtils.copy(is, response.getOutputStream());
@@ -175,7 +175,7 @@ public class InvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/uploads/{invoiceCode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/bulk/uploads/all/{invoiceCode}", method = RequestMethod.GET)
 	public List<BulkUpload> uploadConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
 			return invSer.getUploads(invoiceCode);

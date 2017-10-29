@@ -69,13 +69,14 @@
 		<div ng-if="user.access.admin" ng-include="templateUrl('common','createUserModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportXsModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','recurrReportModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','createConsumerModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','bulkConsumerUploadModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInventoryModal')"></div>
+		<div ng-if="user.access.admin" ng-include="templateUrl('merchant','keyModal')"></div>
 		<div ng-include="templateUrl('common','invoiceInfoModal')"></div>
 		<div ng-include="templateUrl('common','invoicePaymentModal')"></div>
 		<div ng-include="templateUrl('merchant','invoiceNoticeModal')"></div>
 		<div ng-include="templateUrl('merchant','attachmentModal')"></div>
-		<div ng-include="templateUrl('merchant','createConsumerModal')"></div>
-		<div ng-include="templateUrl('merchant','createInventoryModal')"></div>
-		<div ng-include="templateUrl('merchant','keyModal')"></div>
 		<div ng-include="templateUrl('common','changePasswordModal')"></div>
 		<div ng-include="templateUrl('common','invoiceTimelineModal')"></div>
     </div>

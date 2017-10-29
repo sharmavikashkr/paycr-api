@@ -15,6 +15,9 @@ public class Server {
 	@Value("${bulk.csv.location}")
 	private String bulkCsvLocation;
 
+	@Value("${bulk.consumer.location}")
+	private String bulkConsumerLocation;
+
 	@Value("${report.pdf.location}")
 	private String reportLocation;
 
@@ -92,6 +95,14 @@ public class Server {
 
 	public void setBulkCsvLocation(String bulkCsvLocation) {
 		this.bulkCsvLocation = bulkCsvLocation;
+	}
+
+	public String getBulkConsumerLocation() {
+		return bulkConsumerLocation;
+	}
+
+	public void setBulkConsumerLocation(String bulkConsumerLocation) {
+		this.bulkConsumerLocation = bulkConsumerLocation;
 	}
 
 }

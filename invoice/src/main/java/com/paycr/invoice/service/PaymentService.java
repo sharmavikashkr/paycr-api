@@ -73,10 +73,7 @@ public class PaymentService {
 		tlRepo.save(tl);
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
-		if (InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			invoice = invHelp.prepareChildInvoice(invoiceCode, InvoiceType.SINGLE, "Consumer");
-		}
-		if (CommonUtil.isNull(invoice.getConsumer())) {
+		if (InvoiceType.BULK.equals(invoice.getInvoiceType()) || CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");
 			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("banner",
@@ -237,32 +234,31 @@ public class PaymentService {
 		}
 	}
 
-	public void updateConsumerAndPay(String invoiceCode, String name, String email, String mobile, String signature) {
+	public String updateConsumerAndPay(String invoiceCode, String name, String email, String mobile, String signature) {
 		String genSig = hmacSigner.signWithSecretKey(invoiceCode, invoiceCode);
 		if (!genSig.equals(signature)) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Signature");
 		}
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		if (CommonUtil.isNull(invoice)) {
+		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
 		}
-		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Invoice type");
-		}
+		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode, InvoiceType.SINGLE, "Consumer");
 		Consumer consumer = new Consumer();
 		consumer.setEmail(email);
 		consumer.setMobile(mobile);
 		consumer.setName(name);
 		consumer.setCreatedBy("SELF");
-		invHelp.updateConsumer(invoice, consumer);
+		invHelp.updateConsumer(childInvoice, consumer);
 		Timeline tl = new Timeline();
 		tl.setCreatedBy(email);
 		tl.setCreated(new Date());
 		tl.setInternal(false);
 		tl.setMessage("Consumer added to invoice");
-		tl.setObjectId(invoice.getId());
+		tl.setObjectId(childInvoice.getId());
 		tl.setObjectType(ObjectType.INVOICE);
 		tlRepo.save(tl);
+		return childInvoice.getInvoiceCode();
 	}
 
 }

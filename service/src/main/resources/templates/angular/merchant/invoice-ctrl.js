@@ -381,7 +381,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#childInvoiceModal')).modal('hide');
+		angular.element(document.querySelector('#bulkUploadModal')).modal('hide');
 	}
 	$scope.searchChildInvoices = function(invoice) {
 		$rootScope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
@@ -426,7 +426,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$rootScope.bulkInvoiceInfo = angular.copy(invoice);
 		var req = {
 			method : 'GET',
-			url : "/invoice/bulk/uploads/"+invoice.invoiceCode,
+			url : "/invoice/bulk/uploads/all/"+invoice.invoiceCode,
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")

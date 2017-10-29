@@ -44,7 +44,7 @@ public class PaymentController {
 			@RequestParam("mobile") String mobile, @RequestParam("signature") String signature,
 			HttpServletResponse response) throws IOException {
 		try {
-			paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
+			invoiceCode = paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
