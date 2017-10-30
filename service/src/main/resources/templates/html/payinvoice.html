@@ -49,10 +49,10 @@
 					<table class="table table-bordered">
                            <thead>
                                <tr>
-                                   <td class="text-center"><strong>Item Name</strong></td>
-                                   <td class="text-center"><strong>Item Rate</strong></td>
-                                   <td class="text-center"><strong>Item Quantity</strong></td>
-                                   <td class="text-right"><strong>Total</strong></td>
+                                   <th class="text-center">Item Name</th>
+                                   <th class="text-center">Item Rate</th>
+                                   <th class="text-center">Item Quantity</th>
+                                   <th class="text-right">Total</th>
                                </tr>
                            </thead>
                            <tbody id="itemBody">
@@ -91,6 +91,37 @@
 			</div>
 		</div>
 	</div>
+	<div id="paramsModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h5 class="modal-title"> Invoice# <strong>${invoice.invoiceCode}</strong></h5>
+				</div>
+				<div class="modal-body">
+					<table class="table table-bordered">
+                           <thead>
+                               <tr>
+                                   <th class="text-center">Param Name</th>
+                                   <th class="text-center">Param Value</th>
+                               </tr>
+                           </thead>
+                           <tbody id="itemBody">
+                           	<#list invoice.customParams as param>
+                               <tr id="itemRow">
+                                   <td class="text-center">${param.paramName}</td>
+                                   <td><input class="form-control" id="paramValue" ref="${param.paramName}" provider="${param.provider}" value="${param.paramValue}"/></td>
+                               </tr>
+                               </#list>
+                           </tbody>
+                       </table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<section style="margin-top:160px;">
         <div class="container text-center">
 			<div class="col-sm-8 col-sm-offset-2">
@@ -118,6 +149,7 @@
 	                    	<a href="#" data-toggle="modal" data-target="#itemsModal">View Bill</a>
 	                    </div>
 	                    <div class="row hidden-xs">
+	                    	<br><br>
 	                    	<h3 class="section-heading">Powered by Paycr</h3>
 	                    </div>
 	                </div>
@@ -133,6 +165,7 @@
 	                    <div class="hidden-xs">
 	                    	<br><br>
 	                    </div>
+	                    <a id="paramsLink" href="#" data-toggle="modal" data-target="#paramsModal">View Params</a>
 	                    <hr>
 	                    <p style="color:white;">Proceed to make payment</p>
 	                    <br>
@@ -182,6 +215,7 @@
     	if(req > 0) {
 			$(".razorpay-payment-button").prop('disabled', true);
 			$(".razorpay-payment-button").attr('title', 'Set proper param values');
+			$("#paramsLink").css('color', 'red');
 		}
     	$("[id = paramValue]").on("change",function() {
     		var paramValue = $(this).val();
@@ -198,10 +232,12 @@
         	});
     		if(req > 0) {
     			$(".razorpay-payment-button").prop('disabled', true);
-    			$(".razorpay-payment-button").attr('title', 'Set proper param values');
+    			$(".razorpay-payment-button").attr('title', 'Set proper param values (View Params)');
+    			$("#paramsLink").css('color', 'red');
     		} else {
     			$(".razorpay-payment-button").prop('disabled', false);
     			$(".razorpay-payment-button").attr('title', 'Pay');
+    			$("#paramsLink").css('color', 'black');
     		}
     	});
     });
