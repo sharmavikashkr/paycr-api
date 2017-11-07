@@ -13,10 +13,9 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Item;
 import com.paycr.common.data.domain.MerchantPricing;
-import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
-import com.paycr.common.data.repository.TimelineRepository;
+import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.invoice.validation.IsValidInvoiceConsumer;
@@ -42,7 +41,7 @@ public class InvoiceHelper {
 	private IsValidInvoiceMerchantPricing isValidPricing;
 
 	@Autowired
-	private TimelineRepository tlRepo;
+	private TimelineService tlService;
 
 	public Invoice prepareChildInvoice(String invoiceCode, InvoiceType invoiceType, String createdBy) {
 		Date timeNow = new Date();
@@ -83,14 +82,9 @@ public class InvoiceHelper {
 		MerchantPricing merPri = childInvoice.getMerchantPricing();
 		merPri.setInvCount(merPri.getInvCount() + 1);
 		merPriRepo.save(merPri);
-		Timeline tlParent = new Timeline();
-		tlParent.setCreatedBy(createdBy);
-		tlParent.setCreated(timeNow);
-		tlParent.setInternal(true);
-		tlParent.setMessage("Child invoice created : " + childInvoice.getInvoiceCode());
-		tlParent.setObjectId(invoice.getId());
-		tlParent.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tlParent);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
+				"Child invoice created : " + childInvoice.getInvoiceCode(), true, createdBy);
+		tlService.saveToTimeline(childInvoice.getId(), ObjectType.INVOICE, "Invoice created", true, createdBy);
 		return childInvoice;
 	}
 

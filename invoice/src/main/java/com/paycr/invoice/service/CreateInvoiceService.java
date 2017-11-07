@@ -29,15 +29,14 @@ import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.BulkCategoryRepository;
 import com.paycr.common.data.repository.BulkUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
-import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
@@ -86,7 +85,7 @@ public class CreateInvoiceService {
 	private BulkCategoryRepository bulkCatRepo;
 
 	@Autowired
-	private TimelineRepository tlRepo;
+	private TimelineService tlService;
 
 	public Invoice single(Invoice invoice) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -103,18 +102,11 @@ public class CreateInvoiceService {
 			merPri.setInvCount(merPri.getInvCount() + 1);
 			merPriRepo.save(merPri);
 		}
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(user.getEmail());
-		tl.setCreated(invoice.getCreated());
-		tl.setInternal(true);
 		if (invoice.isUpdate()) {
-			tl.setMessage("Invoice Updated");
+			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice created", true, user.getEmail());
 		} else {
-			tl.setMessage("Invoice Created");
+			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice updated", true, user.getEmail());
 		}
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
 		return invoice;
 	}
 
@@ -124,7 +116,6 @@ public class CreateInvoiceService {
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
 		}
-		Date timeNow = new Date();
 		if (InvoiceType.BULK.equals(chldInvReq.getInvoiceType())) {
 			throw new PaycrException(Constants.FAILURE, "InvoiceType BULK not supported for child invoices");
 		}
@@ -152,31 +143,9 @@ public class CreateInvoiceService {
 			childInvoice.setInvoiceNotices(invNots);
 			childInvoice.setStatus(InvoiceStatus.UNPAID);
 			invRepo.save(childInvoice);
+			tlService.saveToTimeline(childInvoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,
+					createdBy);
 		}
-		Timeline tlParent = new Timeline();
-		tlParent.setCreatedBy(createdBy);
-		tlParent.setCreated(timeNow);
-		tlParent.setInternal(true);
-		tlParent.setMessage("Child invoice created : " + childInvoice.getInvoiceCode());
-		tlParent.setObjectId(invoice.getId());
-		tlParent.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tlParent);
-		Timeline tlChild = new Timeline();
-		tlChild.setCreatedBy(createdBy);
-		tlChild.setCreated(timeNow);
-		tlChild.setInternal(true);
-		tlChild.setMessage("Invoice created");
-		tlChild.setObjectId(childInvoice.getId());
-		tlChild.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tlChild);
-		Timeline tlChildNot = new Timeline();
-		tlChildNot.setCreatedBy(createdBy);
-		tlChildNot.setCreated(timeNow);
-		tlChildNot.setInternal(true);
-		tlChildNot.setMessage("Notification sent to consumer");
-		tlChildNot.setObjectId(childInvoice.getId());
-		tlChildNot.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tlChildNot);
 		return childInvoice;
 	}
 
@@ -231,14 +200,7 @@ public class CreateInvoiceService {
 		bun.setInvoiceCode(invoiceCode);
 		bun.setCreatedBy(createdBy);
 		bulkUpdRepo.save(bun);
-		Timeline tlParent = new Timeline();
-		tlParent.setCreatedBy(createdBy);
-		tlParent.setCreated(timeNow);
-		tlParent.setInternal(true);
-		tlParent.setMessage("Consumers csv uploaded");
-		tlParent.setObjectId(parenInv.getId());
-		tlParent.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tlParent);
+		tlService.saveToTimeline(parenInv.getId(), ObjectType.INVOICE, "Consumers csv uploaded", true, createdBy);
 	}
 
 	@Async
@@ -269,14 +231,8 @@ public class CreateInvoiceService {
 			}
 			buc.setCategories(sb.toString());
 			buc.setMessage("SUCCESS");
-			Timeline tlParent = new Timeline();
-			tlParent.setCreatedBy(createdBy);
-			tlParent.setCreated(timeNow);
-			tlParent.setInternal(true);
-			tlParent.setMessage("Child invoices created for categories");
-			tlParent.setObjectId(parenInv.getId());
-			tlParent.setObjectType(ObjectType.INVOICE);
-			tlRepo.save(tlParent);
+			tlService.saveToTimeline(parenInv.getId(), ObjectType.INVOICE, "Child invoices created for categories",
+					true, createdBy);
 		}
 		bulkCatRepo.save(buc);
 	}

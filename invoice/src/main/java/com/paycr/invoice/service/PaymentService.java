@@ -17,12 +17,11 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PaymentSetting;
-import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
-import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
@@ -59,18 +58,11 @@ public class PaymentService {
 	private InvoiceHelper invHelp;
 
 	@Autowired
-	private TimelineRepository tlRepo;
+	private TimelineService tlService;
 
 	public ModelAndView payInvoice(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		Timeline tl = new Timeline();
-		tl.setCreatedBy("Consumer");
-		tl.setCreated(new Date());
-		tl.setInternal(false);
-		tl.setMessage("Invoice payment initiated");
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice payment initiated", true, "Consumer");
 		Merchant merchant = invoice.getMerchant();
 		validate(invoice);
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType()) || CommonUtil.isNull(invoice.getConsumer())) {
@@ -171,14 +163,9 @@ public class PaymentService {
 			noti.setRead(false);
 			notiRepo.save(noti);
 		}
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(invoice.getConsumer().getEmail());
-		tl.setCreated(timeNow);
-		tl.setInternal(false);
-		tl.setMessage("Payment : " + payment.getPaymentRefNo() + " captured with status : " + payment.getStatus());
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
+				"Payment : " + payment.getPaymentRefNo() + " captured with status : " + payment.getStatus(), true,
+				invoice.getConsumer().getEmail());
 	}
 
 	public void refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
@@ -216,14 +203,8 @@ public class PaymentService {
 		refPay.setMethod(payment.getMethod());
 		refPay.setPayType(PayType.REFUND);
 		payRepo.save(refPay);
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(createdBy);
-		tl.setCreated(timeNow);
-		tl.setInternal(true);
-		tl.setMessage("Invoice refunded with amount : " + amount);
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice refunded with amount : " + amount, true,
+				createdBy);
 	}
 
 	private InvoiceStatus getStatus(String rzpStatus) {
@@ -250,14 +231,7 @@ public class PaymentService {
 		consumer.setName(name);
 		consumer.setCreatedBy("SELF");
 		invHelp.updateConsumer(childInvoice, consumer);
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(email);
-		tl.setCreated(new Date());
-		tl.setInternal(false);
-		tl.setMessage("Consumer added to invoice");
-		tl.setObjectId(childInvoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Consumer added to invoice", true, email);
 		return childInvoice.getInvoiceCode();
 	}
 

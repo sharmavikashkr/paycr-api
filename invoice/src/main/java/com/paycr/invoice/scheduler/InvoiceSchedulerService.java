@@ -17,8 +17,10 @@ import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
 import com.paycr.common.service.NotifyService;
+import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
+import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.RecurrType;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
@@ -37,6 +39,9 @@ public class InvoiceSchedulerService {
 
 	@Autowired
 	private NotifyService notSer;
+
+	@Autowired
+	private TimelineService tlService;
 
 	@Transactional
 	public void recurrInvoice() {
@@ -64,6 +69,7 @@ public class InvoiceSchedulerService {
 		List<Invoice> expiredList = invRepo.findInvoicesToExpire(timeNow, false);
 		for (Invoice expInv : expiredList) {
 			expInv.setStatus(InvoiceStatus.EXPIRED);
+			tlService.saveToTimeline(expInv.getId(), ObjectType.INVOICE, "Invoice expired", true, "Scheduler");
 		}
 		invRepo.save(expiredList);
 	}
@@ -82,6 +88,8 @@ public class InvoiceSchedulerService {
 			invNot.setSendEmail(invSetting.isSendEmail());
 			invNot.setSendSms(invSetting.isSendSms());
 			notSer.notify(childInvoice, invNot);
+			tlService.saveToTimeline(childInvoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,
+					"Scheduler");
 			ArrayList<InvoiceNotify> invNots = new ArrayList<>();
 			invNots.add(invNot);
 			childInvoice.setInvoiceNotices(invNots);

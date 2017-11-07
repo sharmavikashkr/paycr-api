@@ -25,16 +25,15 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
-import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.BulkCategoryRepository;
 import com.paycr.common.data.repository.BulkUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
-import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
@@ -47,7 +46,7 @@ import com.razorpay.RazorpayException;
 
 @Service
 public class InvoiceService {
-	
+
 	@Autowired
 	private SecurityService secSer;
 
@@ -77,12 +76,12 @@ public class InvoiceService {
 
 	@Autowired
 	private BulkUploadRepository bulkUpdRepo;
-	
+
 	@Autowired
 	private BulkCategoryRepository bulkCatRepo;
 
 	@Autowired
-	private TimelineRepository tlRepo;
+	private TimelineService tlService;
 
 	public Invoice getInvoice(String invoiceCode) {
 		return invRepo.findByInvoiceCode(invoiceCode);
@@ -108,14 +107,7 @@ public class InvoiceService {
 				recInvRepo.save(recInv);
 			}
 		}
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(user.getEmail());
-		tl.setCreated(timeNow);
-		tl.setInternal(true);
-		tl.setMessage("Invoice Expired");
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice expired", true, user.getEmail());
 	}
 
 	public void notify(String invoiceCode, InvoiceNotify invoiceNotify) {
@@ -132,14 +124,8 @@ public class InvoiceService {
 				invoice.setStatus(InvoiceStatus.UNPAID);
 			}
 			invRepo.save(invoice);
-			Timeline tl = new Timeline();
-			tl.setCreatedBy(user.getEmail());
-			tl.setCreated(new Date());
-			tl.setInternal(true);
-			tl.setMessage("Notification sent to consumer");
-			tl.setObjectId(invoice.getId());
-			tl.setObjectType(ObjectType.INVOICE);
-			tlRepo.save(tl);
+			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,
+					user.getEmail());
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Notify Not allowed");
 		}
@@ -192,14 +178,7 @@ public class InvoiceService {
 		invoice.setPayment(payment);
 		invoice.setStatus(InvoiceStatus.PAID);
 		invRepo.save(invoice);
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(user.getEmail());
-		tl.setCreated(timeNow);
-		tl.setInternal(true);
-		tl.setMessage("Invoice marked paid");
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice marked paid", true, user.getEmail());
 	}
 
 	public void saveAttach(String invoiceCode, MultipartFile attach) throws IOException {
@@ -225,14 +204,8 @@ public class InvoiceService {
 		FileOutputStream out = new FileOutputStream(file);
 		out.write(attach.getBytes());
 		out.close();
-		Timeline tl = new Timeline();
-		tl.setCreatedBy(user.getEmail());
-		tl.setCreated(new Date());
-		tl.setInternal(true);
-		tl.setMessage("Attachment saved : " + attach.getOriginalFilename());
-		tl.setObjectId(invoice.getId());
-		tl.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tl);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
+				"Attachment saved : " + attach.getOriginalFilename(), true, user.getEmail());
 	}
 
 	public byte[] getAttach(String invoiceCode, String attachName) throws IOException {
@@ -268,14 +241,7 @@ public class InvoiceService {
 			Thread th = new Thread(invSchSer.processInvoice(recInv, childInvoice, timeNow));
 			th.start();
 		}
-		Timeline tlParent = new Timeline();
-		tlParent.setCreatedBy(createdBy);
-		tlParent.setCreated(timeNow);
-		tlParent.setInternal(true);
-		tlParent.setMessage("Recurr setting added");
-		tlParent.setObjectId(invoice.getId());
-		tlParent.setObjectType(ObjectType.INVOICE);
-		tlRepo.save(tlParent);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Recurr setting added", true, createdBy);
 	}
 
 	public List<RecurringInvoice> allRecurr(String invoiceCode) {
