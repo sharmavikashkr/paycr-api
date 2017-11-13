@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
-import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
@@ -38,7 +38,7 @@ public class InvoiceSchedulerService {
 	private InvoiceHelper invHelp;
 
 	@Autowired
-	private NotifyService notSer;
+	private NotifyService<InvoiceNotify> invNotSer;
 
 	@Autowired
 	private TimelineService tlService;
@@ -87,7 +87,7 @@ public class InvoiceSchedulerService {
 			invNot.setEmailPdf(invSetting.isEmailPdf());
 			invNot.setSendEmail(invSetting.isSendEmail());
 			invNot.setSendSms(invSetting.isSendSms());
-			notSer.notify(childInvoice, invNot);
+			invNotSer.notify(invNot);
 			tlService.saveToTimeline(childInvoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,
 					"Scheduler");
 			ArrayList<InvoiceNotify> invNots = new ArrayList<>();

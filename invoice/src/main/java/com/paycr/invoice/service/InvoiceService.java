@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.Server;
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Attachment;
 import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkUpload;
@@ -31,7 +32,6 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
@@ -60,7 +60,7 @@ public class InvoiceService {
 	private InvoiceHelper invHelp;
 
 	@Autowired
-	private NotifyService notSer;
+	private NotifyService<InvoiceNotify> invNotSer;
 
 	@Autowired
 	private PaymentService payService;
@@ -116,9 +116,9 @@ public class InvoiceService {
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())
 				&& !InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
-			notSer.notify(invoice, invoiceNotify);
 			invoiceNotify.setCreated(new Date());
 			invoiceNotify.setInvoice(invoice);
+			invNotSer.notify(invoiceNotify);
 			invoice.getInvoiceNotices().add(invoiceNotify);
 			if (InvoiceStatus.CREATED.equals(invoice.getStatus())) {
 				invoice.setStatus(InvoiceStatus.UNPAID);

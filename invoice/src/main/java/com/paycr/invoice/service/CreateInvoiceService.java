@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.paycr.common.bean.ChildInvoiceRequest;
 import com.paycr.common.bean.SearchConsumerRequest;
 import com.paycr.common.bean.Server;
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkUpload;
@@ -34,7 +35,6 @@ import com.paycr.common.data.repository.BulkUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.service.NotifyService;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
@@ -70,7 +70,7 @@ public class CreateInvoiceService {
 	private ConsumerDao conDao;
 
 	@Autowired
-	private NotifyService notSer;
+	private NotifyService<InvoiceNotify> invNotSer;
 
 	@Autowired
 	private InvoiceValidator invValidator;
@@ -137,7 +137,7 @@ public class CreateInvoiceService {
 			invNot.setEmailPdf(invSetting.isEmailPdf());
 			invNot.setSendEmail(invSetting.isSendEmail());
 			invNot.setSendSms(invSetting.isSendSms());
-			notSer.notify(childInvoice, invNot);
+			invNotSer.notify(invNot);
 			List<InvoiceNotify> invNots = new ArrayList<>();
 			invNots.add(invNot);
 			childInvoice.setInvoiceNotices(invNots);

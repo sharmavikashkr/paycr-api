@@ -14,6 +14,7 @@ import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.communicate.Sms;
 import com.paycr.common.communicate.SmsEngine;
 import com.paycr.common.data.domain.Invoice;
@@ -24,7 +25,7 @@ import com.paycr.common.util.PdfUtil;
 import freemarker.template.Configuration;
 
 @Service
-public class NotifyService {
+public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 
 	@Autowired
 	private SmsEngine smsEngine;
@@ -44,14 +45,15 @@ public class NotifyService {
 	@Autowired
 	private PdfUtil pdfUtil;
 
-	public void notify(Invoice invoice, InvoiceNotify invoiceNotify) {
+	public void notify(InvoiceNotify invoiceNotify) {
+		Invoice invoice = invoiceNotify.getInvoice();
 		String invoiceUrl = company.getAppUrl() + "/" + invoice.getInvoiceCode();
 		Merchant merchant = invoice.getMerchant();
 		if (invoiceNotify.isSendSms()) {
 			Sms sms = new Sms();
 			sms.setTo(invoice.getConsumer().getMobile());
 			try {
-				sms.setMessage(getSms(invoice));
+				sms.setMessage(getSms(invoiceNotify));
 				smsEngine.send(sms);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -70,7 +72,7 @@ public class NotifyService {
 			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
 			try {
-				email.setMessage(getEmail(invoice, invoiceNotify.getEmailNote()));
+				email.setMessage(getEmail(invoiceNotify));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -94,16 +96,18 @@ public class NotifyService {
 		}
 	}
 
-	public String getEmail(Invoice invoice, String note) throws Exception {
+	public String getEmail(InvoiceNotify invoiceNotify) throws Exception {
+		Invoice invoice = invoiceNotify.getInvoice();
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
-		templateProps.put("note", note);
+		templateProps.put("note", invoiceNotify.getEmailNote());
 		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
 				templateProps);
 	}
 
-	public String getSms(Invoice invoice) throws Exception {
+	public String getSms(InvoiceNotify invoiceNotify) throws Exception {
+		Invoice invoice = invoiceNotify.getInvoice();
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());

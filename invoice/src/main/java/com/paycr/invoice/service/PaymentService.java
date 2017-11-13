@@ -14,11 +14,9 @@ import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.TimelineService;
@@ -41,9 +39,6 @@ public class PaymentService {
 
 	@Autowired
 	private InvoiceRepository invRepo;
-
-	@Autowired
-	private NotificationRepository notiRepo;
 
 	@Autowired
 	private PaymentRepository payRepo;
@@ -136,7 +131,6 @@ public class PaymentService {
 
 	private void capturePayment(Invoice invoice, Payment payment, PaymentSetting paymentSetting)
 			throws RazorpayException {
-		Date timeNow = new Date();
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(payment.getPaymentRefNo());
 		JSONObject request = new JSONObject();
@@ -154,15 +148,6 @@ public class PaymentService {
 		payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
 		invoice.setPayment(payment);
 		invRepo.save(invoice);
-		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
-			Notification noti = new Notification();
-			noti.setMerchantId(invoice.getMerchant().getId());
-			noti.setMessage("Payment received for Invoice# " + invoice.getInvoiceCode());
-			noti.setSubject("Invoice Paid");
-			noti.setCreated(timeNow);
-			noti.setRead(false);
-			notiRepo.save(noti);
-		}
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
 				"Payment : " + payment.getPaymentRefNo() + " captured with status : " + payment.getStatus(), true,
 				invoice.getConsumer().getEmail());
@@ -175,7 +160,7 @@ public class PaymentService {
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
 			Payment refPay = new Payment();
 			refPay.setAmount(amount);
-			refPay.setCreated(new Date());
+			refPay.setCreated(timeNow);
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(payment.getPaymentRefNo());
