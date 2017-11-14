@@ -1,36 +1,33 @@
-<div id="invoiceTimelineModal" ng-controller="InvoiceController" class="modal fade" role="dialog">
+<div id="invoiceTimelineModal" ng-controller="InvoiceController" class="modal fade" role="dialog" id="modal-primary">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h5 class="modal-title"> Invoice# <strong>{{timelineInvoice.invoiceCode}}</strong> | Timelines</h5>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body bg-warning">
 				<ul class="timeline">
-	                <li ng-repeat="tLine in timelineList" ng-class="(tLine.internal)?'':'timeline-inverted'">
-	                    <div class="timeline-badge"><i class="fa" ng-class="(tLine.internal)?'fa-arrow-left':'fa-arrow-right'"></i></div>
-	                    <div class="timeline-panel">
-	                        <div class="timeline-heading">
-	                            <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{tLine.created | date:'dd-MM-yyyy HH:mm'}} | <strong>{{tLine.createdBy}}</strong></small>
-	                            </p>
-	                        </div>
-	                        <div class="timeline-body">
-	                            <p>{{tLine.message}}</p>
-	                        </div>
-	                    </div>
-	                </li>
+		            <li ng-repeat="tLine in timelineList">
+		            	<i class="fa fa-comments bg-yellow"></i>
+		            	<div class="timeline-item">
+		            		<span class="time"><i class="fa fa-clock-o"></i> {{tLine.created | date:'dd, MMM yyyy HH:mm'}}</span>
+		                	<h3 class="timeline-header"><strong>{{timelineInvoice.createdBy}}</strong></h3>
+		                	<div class="timeline-body">
+			                	{{tLine.message}}
+			                </div>
+		            	</div>
+		            </li>
 	                <li ng-if="merchant != null && user.access.finance">
-	                    <div class="timeline-badge"><i class="fa fa-arrow-left"></i></div>
-	                    <div class="timeline-panel">
-	                        <div class="timeline-heading">
-	                            <p><small class="text-muted"><strong>Leave a Comment</strong></small></p>
-	                        </div>
-	                        <div class="timeline-body">
-	                            <textarea class="form-control" ng-model="newInvComment"></textarea>
-	                            <br>
-	                            <button class="btn btn-info" ng-click="addCommentInvoice(timelineInvoice.id)">add</button>
-	                        </div>
-	                    </div>
+	                	<i class="fa fa-comments bg-yellow"></i>
+	                	<div class="timeline-item">
+		                	<h3 class="timeline-header"><strong>Leave a Comment</strong></h3>
+		                	<div class="timeline-body">
+		                    	<textarea class="form-control" ng-model="newInvComment"></textarea>
+			                </div>
+			                <div class="timeline-footer">
+			                  <a class="btn btn-primary btn-md" ng-click="addCommentInvoice(timelineInvoice.id)">add</a>
+			                </div>
+		            	</div>
 	                </li>
                 </ul>
 			</div>

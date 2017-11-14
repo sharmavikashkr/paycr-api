@@ -1,102 +1,105 @@
 <div ng-controller="DashboardController" id="dashboardTab" ng-init="loadDashboard()">
-	<br>
-	<div class="row form-group">
-		<div class="col-xs-3 col-sm-1">
-			<label class="control-label">Time Range :</label>
-		</div>
-		<div class="col-xs-6 col-sm-3">
-			<select class="form-control" ng-model="timeRange" ng-init="timeRange = 'LAST_WEEK'">
-				<option value="LAST_WEEK">Last Week</option>
-				<option value="LAST_MONTH">Last Month</option>
-			</select>
-		</div>
-		<div class="col-xs-3 col-sm-2">
-			<button class="btn btn-default" ng-click="loadDashboard()">Load</button>
-		</div>
-	</div>
-	<hr>
-	<div class="row text-center">
-		<div class="col-lg-12">
-			<div class="col-lg-3 col-md-6">
-				<div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="huge">{{statsResponse.declinedInvCount}}</div>
-                            <div>Invoices Declined</div>
-                        </div>
-                        <div class="row">
-                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.declinedInvSum}}</strong></div>
-                            <div>Declined</div>
-                        </div>
-                    </div>
-                </div>
-			</div>
-			<div class="col-lg-3 col-md-6">
-				<div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="huge">{{statsResponse.expiredInvCount}}</div>
-                            <div>Invoices Expired</div>
-                        </div>
-                        <div class="row">
-                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.expiredInvSum}}</strong></div>
-                            <div>Expired</div>
-                        </div>
-                    </div>
-                </div>
-			</div>
-			<div class="col-lg-3 col-md-6">
-				<div class="panel panel-success">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="huge">{{statsResponse.salePayCount}}</div>
-                            <div>Invoices Paid</div>
-                        </div>
-                        <div class="row">
-                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.salePaySum}}</strong></div>
-                            <div>Paid</div>
-                        </div>
-                    </div>
-                </div>
-			</div>
-			<div class="col-lg-3 col-md-6">
-				<div class="panel panel-info">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="huge">{{statsResponse.refundPayCount}}</div>
-                            <div>Payment Refunds</div>
-                        </div>
-                        <div class="row">
-                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.refundPaySum}}</strong></div>
-                            <div>Refunded</div>
-                        </div>
-                    </div>
-                </div>
-			</div>
-		</div>
-	</div>
 	<div class="row">
-		<div class="col-lg-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">Payment/Refund per day</div>
-				<div class="panel-body">
-					<div id="per-day-bar"></div>
+		<div class="panel-body col-md-12">
+			<div class="form-group">
+				<div class="col-xs-3 col-sm-1">
+					<label class="control-label">Time Range :</label>
+				</div>
+				<div class="col-xs-6 col-sm-3">
+					<select class="form-control" ng-model="timeRange" ng-init="timeRange = 'LAST_WEEK'">
+						<option value="LAST_WEEK">Last Week</option>
+						<option value="LAST_MONTH">Last Month</option>
+					</select>
+				</div>
+				<div class="col-xs-3 col-sm-2">
+					<button class="btn btn-default" ng-click="loadDashboard()">Load</button>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-3">
-			<div class="panel panel-default">
-				<div class="panel-heading">Distribution by amount</div>
-				<div class="panel-body">
-					<div id="amount-donut"></div>
+			<hr>
+			<div class="panel-body text-center">
+				<div class="col-lg-12">
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-danger">
+		                    <div class="panel-heading">
+		                        <div class="row">
+		                            <div class="huge">{{statsResponse.declinedInvCount}}</div>
+		                            <div>Invoices Declined</div>
+		                        </div>
+		                        <div class="row">
+		                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.declinedInvSum}}</strong></div>
+		                            <div>Declined</div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-default">
+		                    <div class="panel-heading">
+		                        <div class="row">
+		                            <div class="huge">{{statsResponse.expiredInvCount}}</div>
+		                            <div>Invoices Expired</div>
+		                        </div>
+		                        <div class="row">
+		                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.expiredInvSum}}</strong></div>
+		                            <div>Expired</div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-success">
+		                    <div class="panel-heading">
+		                        <div class="row">
+		                            <div class="huge">{{statsResponse.salePayCount}}</div>
+		                            <div>Invoices Paid</div>
+		                        </div>
+		                        <div class="row">
+		                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.salePaySum}}</strong></div>
+		                            <div>Paid</div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-info">
+		                    <div class="panel-heading">
+		                        <div class="row">
+		                            <div class="huge">{{statsResponse.refundPayCount}}</div>
+		                            <div>Payment Refunds</div>
+		                        </div>
+		                        <div class="row">
+		                            <div><i class="fa fa-rupee"></i> <strong>{{statsResponse.refundPaySum}}</strong></div>
+		                            <div>Refunded</div>
+		                        </div>
+		                    </div>
+		                </div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-lg-3">
-			<div class="panel panel-default">
-				<div class="panel-heading">Distribution by count</div>
-				<div class="panel-body">
-					<div id="count-donut"></div>
+			<div class="panel-body row">
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Payment/Refund per day</div>
+						<div class="panel-body">
+							<div id="per-day-bar"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">Distribution by amount</div>
+						<div class="panel-body">
+							<div id="amount-donut"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">Distribution by count</div>
+						<div class="panel-body">
+							<div id="count-donut"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

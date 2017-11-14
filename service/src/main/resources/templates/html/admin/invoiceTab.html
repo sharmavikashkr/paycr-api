@@ -1,5 +1,4 @@
 <div ng-controller="InvoiceController">
-	<br>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel">
@@ -196,7 +195,7 @@
 												</table>
 											</div>
 										</div>
-										<div class="row">
+										<div ng-if="invoice.invoiceType != 'BULK'" class="row">
 											<div class="col-md-12">
 												<h5>Consumer Details</h5>
 												<table class="table table-striped table-bordered table-responsive">

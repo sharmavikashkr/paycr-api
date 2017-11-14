@@ -8,26 +8,28 @@
     <title>PayCr</title>
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="${staticUrl}/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
-    <link href="${staticUrl}/vendor/device-mockups/device-mockups.min.css" rel="stylesheet">
-    <link href="${staticUrl}/css/new-age.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${staticUrl}/dist/css/AdminLTE.min.css">
     <style>
     	#newInvoice input {border:none;text-size:6px;}
     </style>
 </head>
-<body style="background:cadetblue;">
-	<section id="download" class="download text-center">
-        <div class="container">
+<body class="hold-transition login-page">
+    <div class="container">
+    	<div class="login-box">
+			<div class="login-logo">
+				<a href="/"><b>PAY</b>CR</a>
+			</div>
+		<div class="login-box-body">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <h3 class="section-heading">${message}</h3>
-                    <p>Please try again later</p>
-                    <div class="badges">
-                        <a class="badge-link" href="/"><button type="button" class="btn btn-warning">Ok</button></a>
+                    <h3 class="section-heading"><i class="fa fa-warning text-yellow"></i> Oops! ${message}</h3>
+                    <div>
+                        <a href="/" type="button" class="btn btn-warning btn-flat">Ok</a>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,76 +1,79 @@
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0;background:darksalmon;">
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-        </button>
-		<strong><a class="navbar-brand" href="/merchant">{{merchant.name}}</a></strong>
-		<div ng-if="user.access.finance" class="col-md-5 hidden-xs"></div>
-		<div ng-if="user.access.finance" class="col-md-5 hidden-xs" style="margin-top:7px;">
-			<div class="dropdown">
-				<button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">Quick Create <span class="caret"></span></button>
+<header class="main-header">
+	<a href="#" class="logo">
+		<span class="logo-mini"><i class="fa fa-institution"></i></span>
+		<span class="logo-lg"><b>{{merchant.name}}</b></span>
+	</a>
+	<nav class="navbar navbar-static-top">
+		<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+			<span class="sr-only">Toggle navigation</span>
+		</a>
+		<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav">
+				<li class="dropdown notifications-menu">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="fa fa-bell-o"></i>
+					<span class="label label-warning">new</span>
+				</a>
 				<ul class="dropdown-menu">
-					<li><a href="#" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal"><i class="fa fa-plus"></i> Invoice</a></li>
-					<li><a href="#" data-toggle="modal" data-target="#createConsumerModal"><i class="fa fa-plus"></i> Consumer</a></li>
-					<li><a href="#" data-toggle="modal" data-target="#createInventoryModal"><i class="fa fa-plus"></i> Item</a></li>
+					<li class="header">You have new notifications</li>
+					<li>
+						<ul class="menu">
+							<li ng-repeat="notice in notices" class="panel">
+								<a href="#">
+									<div>
+										<i class="fa fa-comment fa-fw"></i> {{notice.subject}} <span
+											class="pull-right text-muted small">{{notice.created | date:'dd-MM-yyyy HH:mm'}}</span>
+									</div>
+									<hr style="margin: 0px;">
+									<div>
+										<p>{{notice.message}}</p>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</li>
+					<li class="footer"><a href="#">View all</a></li>
 				</ul>
-			</div>
-		</div>
-		<div ng-hide="hideSpinner" class="navbar-brand"><i id="spinner" class="fa fa-spinner fa-spin"></i></div>
-	</div>
-	<ul class="nav navbar-top-links navbar-right">
-		<li>&nbsp;&nbsp;&nbsp;<strong>{{user.name}}</strong></li>
-		<li class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-				<i class="fa fa-bell fa-fw"></i>
-				<i class="fa fa-caret-down"></i>
-			</a>
-			<ul class="dropdown-menu dropdown-alerts">
-				<li ng-repeat="notice in notices" class="panel">
-					<a href="#">
-						<div>
-							<i class="fa fa-comment fa-fw"></i> {{notice.subject}} <span
-								class="pull-right text-muted small">{{notice.created | date:'dd-MM-yyyy'}}</span>
-						</div>
-						<hr style="margin: 0px;">
-						<div>
-							<p>{{notice.message}}</p>
-						</div>
-					</a>
 				</li>
-			</ul>
-		</li>
-		<li class="dropdown">
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-				<i class="fa fa-user fa-fw"></i>
-				<i class="fa fa-caret-down"></i>
-			</a>
-			<ul class="dropdown-menu dropdown-user">
-				<li ng-if="user.access.admin"><a href="#" data-toggle="modal" data-target="#keyModal"><i class="fa fa-gear fa-fw"></i> Keys</a></li>
-				<li id="profileTabId" class="active"><a href="#" ng-click="loadProfileTab()" data-target="#profileTab" data-toggle="tab"><i class="fa fa-user fa-fw"></i> Profile</a></li>
-				<li class="divider"></li>
-				<li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-			</ul>
-		</li>
-	</ul>
-	<div class="sidebar" role="navigation">
-		<div class="sidebar-nav navbar-collapse collapse">
-			<ul class="nav" id="side-menu">
-				<br>
-				<li ng-if="user.access.admin" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-				<li style="margin-top:20px;">&nbsp;<strong>Sale</strong></li>
-				<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a id="invoiceTabNav" href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i> Invoices</a></li>
-				<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i> Payments</a></li>
-				<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i> Reports</a></li>
-				<li style="margin-top:20px;">&nbsp;<strong>Manage</strong></li>
-				<li ng-click="searchConsumer()"><a href="#" data-target="#consumerTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Consumers</a></li>
-				<li ng-click="fetchInventory()"><a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i> Inventory</a></li>
-				<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i> Invoice Settings</a></li>
-				<li ng-if="user.access.finance" style="margin-top:20px;">&nbsp;</i><strong>Subscription</strong></li>
-				<li ng-if="user.access.finance" ng-click="fetchPricings()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i> Subscriptions</a></li>
-				<li ng-if="user.access.admin" style="margin-top:20px;">&nbsp;<strong>Account</strong></li>
-				<li ng-if="user.access.admin" ng-click="fetchMyUsers()"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i> Users</a></li>
-				<li ng-if="user.access.admin"><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i> Account</a></li>
+				<li class="dropdown user user-menu">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-user"></i>
+						<span class="hidden-xs">{{user.name}}</span>
+					</a>
+					<ul class="dropdown-menu">
+						<li class="user-header">
+							<i class="fa fa-user fa-5x"></i>
+							<p>{{user.userType}} <small>Member since {{user.created | date:'dd, MMM yyyy'}}</small></p>
+						</li>
+						<li class="user-footer">
+							<div class="pull-left" id="profileTabId" class="active">
+								<a href="#" ng-click="loadProfileTab()" data-target="#profileTab" data-toggle="tab" class="btn btn-default btn-flat">Profile</a>
+							</div>
+							<div class="pull-right">
+								<a href="/logout" class="btn btn-default btn-flat">Sign out</a>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
 			</ul>
 		</div>
-	</div>
-</nav>
+
+	</nav>
+</header>
+<aside class="main-sidebar">
+	<section class="sidebar">
+		<ul class="sidebar-menu" data-widget="tree">
+			<li ng-if="user.access.admin" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+			<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a id="invoiceTabNav" href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i><span>Invoices</span></a></li>
+			<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i><span>Payments</span></a></li>
+			<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i><span>Reports</span></a></li>
+			<li ng-click="searchConsumer()"><a href="#" data-target="#consumerTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i><span>Consumers</span></a></li>
+			<li ng-click="fetchInventory()"><a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i><span>Inventory</span></a></li>
+			<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i><span>Invoice Settings</span></a></li>
+			<li ng-if="user.access.finance" ng-click="fetchPricings()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i><span>Subscriptions</span></a></li>
+			<li ng-if="user.access.admin" ng-click="fetchMyUsers()"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i><span>Users</span></a></li>
+			<li ng-if="user.access.admin"><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i><span>Account</span></a></li>
+		</ul>
+	</section>
+</aside>
