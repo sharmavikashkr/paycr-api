@@ -215,7 +215,7 @@ public class SubscriptionService {
 
 			Notification noti = new Notification();
 			noti.setMerchantId(merchant.getId());
-			noti.setMessage("New Pricing plan subscribed : " + pricing.getName());
+			noti.setMessage("New Subscription : " + pricing.getName());
 			noti.setSubject("Congratulation!");
 			noti.setCreated(timeNow);
 			noti.setRead(false);

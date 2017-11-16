@@ -103,9 +103,9 @@ public class CreateInvoiceService {
 			merPriRepo.save(merPri);
 		}
 		if (invoice.isUpdate()) {
-			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice created", true, user.getEmail());
-		} else {
 			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice updated", true, user.getEmail());
+		} else {
+			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice created", true, user.getEmail());
 		}
 		return invoice;
 	}
