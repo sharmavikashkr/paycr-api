@@ -57,6 +57,12 @@
         	<div id="profileTab" class="tab-pane fade" ng-include="templateUrl('common','profileTab')"></div>
         	<!-- <div id="myInvoicesTab" class="tab-pane fade" ng-include="templateUrl('common','myInvoicesTab')"></div> -->
     	</div>
+    	<footer class="main-footer">
+		    <div class="pull-right hidden-xs">
+		    	<b>Version</b> 1.0.1
+		    </div>
+		    <strong>Copyright &copy; 2018-2020 <a href="/">PayCr</a>.</strong> All rights reserved.
+		</footer>
 	    <div ng-if="user.access.supervisor" ng-include="templateUrl('admin','createMerchantModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('admin','createPricingModal')"></div>
 		<div ng-if="user.access.supervisor" ng-include="templateUrl('admin','createOfflineSubsModal')"></div>
@@ -68,6 +74,7 @@
 		<div ng-include="templateUrl('admin','subsDetailsModal')"></div>
 		<div ng-include="templateUrl('common','changePasswordModal')"></div>
 		<div ng-include="templateUrl('common','invoiceTimelineModal')"></div>
+		<div ng-include="templateUrl('admin','adminSettings')"></div>
 	</div>
     <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="${staticUrl}/vendor/metisMenu/metisMenu.min.js"></script>
