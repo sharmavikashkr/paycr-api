@@ -19,7 +19,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
-		"numberPattern" : "\\d{1,4}",
+		"numberPattern" : "\\d{1,5}",
 		"passPattern" : /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
 	}
 	$scope.dismissServerAlert = function() {

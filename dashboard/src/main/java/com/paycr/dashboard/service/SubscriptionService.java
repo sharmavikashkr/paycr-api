@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,7 +73,11 @@ public class SubscriptionService {
 	private PdfUtil pdfUtil;
 
 	public Subscription getSubscriptionByCode(String subscriptionCode) {
-		return subsRepo.findBySubscriptionCode(subscriptionCode);
+		Subscription subs = subsRepo.findBySubscriptionCode(subscriptionCode);
+		if(subs == null) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Subscription not found");
+		}
+		return subs;
 	}
 
 	public Subscription getSubscription(Integer pricingId) {

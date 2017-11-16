@@ -102,13 +102,13 @@ public class ConsumerController {
 		}
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/categories")
 	public List<String> getCategories(HttpServletResponse response) {
 		return conSer.getCategories();
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/category/{category}")
 	public List<String> getCategoryValues(@PathVariable String category, HttpServletResponse response) {
 		return conSer.getCategoryValues(category);

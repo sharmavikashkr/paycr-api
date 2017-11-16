@@ -8,13 +8,14 @@
     <title>PayCr</title>
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="${staticUrl}/dist/css/AdminLTE.min.css">
     <style type="text/css">
     	table {
 			font-size: 14px;
 		}
     </style>
 </head>
-<body style="background:lightyellow;">
+<body style="background:#ecf0f5;">
 	<nav id="mainNav" class="navbar navbar-default navbar-fixed-top" style="background: darksalmon;">
         <div class="container">
             <div class="navbar-header">
@@ -182,7 +183,7 @@
 							    data-prefill.name="${invoice.consumer.name}"
 							    data-prefill.email="${invoice.consumer.email}"
 							    data-prefill.contact="${invoice.consumer.mobile}"
-							    data-theme.color="cadetblue"
+							    data-theme.color="#3c8dbc"
 							></script>
 							<input type="hidden" value="${invoice.invoiceCode}" name="invoiceCode">
 							<#list invoice.customParams as param>

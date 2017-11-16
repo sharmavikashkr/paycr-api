@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.exception.PaycrException;
+import com.paycr.common.util.Constants;
 import com.paycr.invoice.service.InvoiceService;
 import com.paycr.invoice.service.PaymentReceiptService;
 
@@ -49,10 +51,7 @@ public class PaymentResponseController {
 			mv.addObject("show", show);
 			return mv;
 		} catch (Exception ex) {
-			ModelAndView mv = new ModelAndView("html/errorpage");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("message", "Requested Resource is not found");
-			return mv;
+			throw new PaycrException(Constants.FAILURE, "Invoice not found");
 		}
 	}
 
