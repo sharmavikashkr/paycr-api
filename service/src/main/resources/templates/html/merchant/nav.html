@@ -12,9 +12,9 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Quick Links <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="#" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal"><i class="fa fa-plus"></i> Invoice</a></li>
-						<li><a href="#" data-toggle="modal" data-target="#createConsumerModal"><i class="fa fa-plus"></i> Consumer</a></li>
-						<li><a href="#" data-toggle="modal" data-target="#createInventoryModal"><i class="fa fa-plus"></i> Item</a></li>
+						<li ng-if="user.access.finance"><a href="#" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal"><i class="fa fa-plus"></i> Invoice</a></li>
+						<li ng-if="user.access.finance"><a href="#" data-toggle="modal" data-target="#createConsumerModal"><i class="fa fa-plus"></i> Consumer</a></li>
+						<li ng-if="user.access.finance"><a href="#" data-toggle="modal" data-target="#createInventoryModal"><i class="fa fa-plus"></i> Item</a></li>
 						<li class="divider"></li>
 						<li><a href="#">Report an issue</a></li>
 						<li class="divider"></li>

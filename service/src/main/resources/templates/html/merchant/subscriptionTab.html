@@ -1,60 +1,63 @@
 <div ng-controller="PricingController">
-	<br>
-	<div class="row text-center">
-		<div class="col-md-10 col-md-offset-1">
-			<h4>Subscriptions</h4>
-			<table class="table table-bordered table-responsive">
-				<thead>
-					<tr>
-						<td class="text-center"><strong>Name</strong></td>
-						<td class="text-center hidden-xs"><strong>Start Date</strong></td>
-						<td class="text-center"><strong>End Date</strong></td>
-						<td class="text-center"><strong>Used (Limit)</strong></td>
-						<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
-					</tr>
-				</thead>
-				<tbody id="itemBody">
-					<tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" title="{{merpricing.status}}">
-						<td class="text-center">{{merpricing.pricing.name}}</td>
-						<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy'}}</td>
-						<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy'}}</td>
-						<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
-						<td class="text-center hidden-xs"><i class="fa fa-rupee"></i> {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<hr>
-	<div class="row text-center">
-		<div class="col-md-10 col-md-offset-1">
-			<h4>Buy new Subscription</h4>
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<td class="text-center"><strong>Name</strong></td>
-						<td class="text-center hidden-xs"><strong>Duration</strong></td>
-						<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
-						<td class="text-center hidden-xs"><strong>Limit</strong></td>
-						<td class="text-center"><strong>Rate</strong></td>
-						<td class="text-center"><strong>Quantity</strong></td>
-						<td class="text-center"><strong>Action</strong></td>
-					</tr>
-				</thead>
-				<tbody id="itemBody">
-					<tr ng-repeat="pricing in pricings" ng-if="pricing.active && pricing.rate > 0">
-						<td class="text-center">{{pricing.name}}</td>
-						<td class="text-center hidden-xs">{{pricing.duration}}</td>
-						<td class="text-center hidden-xs"><i class="fa fa-rupee"></i> {{pricing.startAmount}} - {{pricing.endAmount}}</td>
-						<td class="text-center hidden-xs">{{pricing.invoiceLimit}}</td>
-						<td class="text-center">{{pricing.rate}}</td>
-						<td class="text-center col-sm-1 col-xs-2"><input class="form-control" ng-model="priceQuant[$index]" ng-init="priceQuant[$index] = 1" type="number" placeholder="Quantity" step="1" required></td>
-						<td class="text-center">
-							<a href="/subscription/new/online?pricing_id={{pricing.id}}&quantity={{priceQuant[$index]}}&access_token={{access_token}}" class="btn btn-xs btn-success" target="_blank">BUY</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel-body text-center">
+				<div class="col-md-10 col-md-offset-1">
+					<h4>Subscriptions</h4>
+					<table class="table table-bordered table-responsive">
+						<thead>
+							<tr>
+								<td class="text-center"><strong>Name</strong></td>
+								<td class="text-center hidden-xs"><strong>Start Date</strong></td>
+								<td class="text-center"><strong>End Date</strong></td>
+								<td class="text-center"><strong>Used (Limit)</strong></td>
+								<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
+							</tr>
+						</thead>
+						<tbody id="itemBody">
+							<tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" title="{{merpricing.status}}">
+								<td class="text-center">{{merpricing.pricing.name}}</td>
+								<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy'}}</td>
+								<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy'}}</td>
+								<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
+								<td class="text-center hidden-xs"><i class="fa fa-rupee"></i> {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<hr>
+			<div class="panel-body text-center">
+				<div class="col-md-10 col-md-offset-1">
+					<h4>Buy new Subscription</h4>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td class="text-center"><strong>Name</strong></td>
+								<td class="text-center hidden-xs"><strong>Duration</strong></td>
+								<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
+								<td class="text-center hidden-xs"><strong>Limit</strong></td>
+								<td class="text-center"><strong>Rate</strong></td>
+								<td class="text-center"><strong>Quantity</strong></td>
+								<td class="text-center"><strong>Action</strong></td>
+							</tr>
+						</thead>
+						<tbody id="itemBody">
+							<tr ng-repeat="pricing in pricings" ng-if="pricing.active && pricing.rate > 0">
+								<td class="text-center">{{pricing.name}}</td>
+								<td class="text-center hidden-xs">{{pricing.duration}}</td>
+								<td class="text-center hidden-xs"><i class="fa fa-rupee"></i> {{pricing.startAmount}} - {{pricing.endAmount}}</td>
+								<td class="text-center hidden-xs">{{pricing.invoiceLimit}}</td>
+								<td class="text-center">{{pricing.rate}}</td>
+								<td class="text-center col-sm-1 col-xs-2"><input class="form-control" ng-model="priceQuant[$index]" ng-init="priceQuant[$index] = 1" type="number" placeholder="Quantity" step="1" required></td>
+								<td class="text-center">
+									<a href="/subscription/new/online?pricing_id={{pricing.id}}&quantity={{priceQuant[$index]}}&access_token={{access_token}}" class="btn btn-xs btn-success" target="_blank">BUY</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -8,7 +8,6 @@
     <meta name="author" content="">
     <title>PayCr</title>
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link href="${staticUrl}/dist/css/sb-admin-2.css" rel="stylesheet"> -->
     <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="${staticUrl}/dist/css/AdminLTE.min.css">
   	<link rel="stylesheet" href="${staticUrl}/dist/css/skins/_all-skins.min.css">
@@ -40,9 +39,9 @@
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini" ng-app="payCrMerchantApp" ng-controller="MerchantController" ng-cloak>
-    <div ng-init="prepare()" class="wrapper" id="wrapper">
+    <div ng-init="prepare()" class="wrapper">
         <div ng-include="templateUrl('merchant','nav')"></div>
-        <div class="tab-content bordered content-wrapper" id="page-wrapper">
+        <div class="tab-content content-wrapper" id="content-wrapper">
         	<div ng-include="templateUrl('common','alert')"></div>
         	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
 	        <div ng-class="(user.access.admin)?'':'active'" id="invoiceTab" class="tab-pane" ng-include="templateUrl('merchant','invoiceTab')"></div>
@@ -57,12 +56,7 @@
 	        <div id="profileTab" class="tab-pane fade" ng-include="templateUrl('common','profileTab')"></div>
 	        <!-- <div id="myInvoicesTab" class="tab-pane fade" ng-include="templateUrl('common','myInvoicesTab')"></div> -->
 		</div>
-		<footer class="main-footer">
-		    <div class="pull-right hidden-xs">
-		    	<b>Version</b> 1.0.1
-		    </div>
-		    <strong>Copyright &copy; 2018-2020 <a href="/">PayCr</a>.</strong> All rights reserved.
-		</footer>
+		<div ng-include="templateUrl('common','footer')"></div>
 	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInvoiceModal')"></div>
 	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInvoiceXsModal')"></div>
 	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','addItemXsModal')"></div>
@@ -87,14 +81,18 @@
 		<div ng-include="templateUrl('merchant','attachmentModal')"></div>
 		<div ng-include="templateUrl('common','changePasswordModal')"></div>
 		<div ng-include="templateUrl('common','invoiceTimelineModal')"></div>
-		<div ng-include="templateUrl('merchant','merchantSettings')"></div>
+		<div ng-include="templateUrl('merchant','merchantControl')"></div>
     </div>
     <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="${staticUrl}/vendor/metisMenu/metisMenu.min.js"></script>
-    <!-- <script src="${staticUrl}/dist/js/sb-admin-2.js"></script> -->
     <script src="${staticUrl}/dist/js/adminlte.min.js"></script>
     <script src="${staticUrl}/js/moment.js"></script>
 	<script src="${staticUrl}/vendor/raphael/raphael.min.js"></script>
 	<script src="${staticUrl}/vendor/morrisjs/morris.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#content-wrapper").css("min-height", "540px");
+		});
+	</script>
 </body>
 </html>

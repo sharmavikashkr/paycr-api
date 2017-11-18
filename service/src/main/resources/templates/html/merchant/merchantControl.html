@@ -1,0 +1,93 @@
+<aside class="control-sidebar control-sidebar-dark">
+	<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+		<li class="active">
+			<a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a>
+		</li>
+		<li style="display:none;">
+			<a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="control-sidebar-home-tab">
+			<h3 ng-if="user.access.finance" class="control-sidebar-heading">Subscription Progress</h3>
+			<ul ng-if="user.access.finance" class="control-sidebar-menu">
+				<li ng-repeat="merpricing in merchant.pricings" ng-if="merpricing.status=='ACTIVE'">
+					<a href="#" title="{{merpricing.status}}">
+						<h4 class="control-sidebar-subheading">
+							{{merpricing.pricing.name}} <span class="label pull-right label-success">{{(merpricing.invCount * 100) / (merpricing.pricing.invoiceLimit * merpricing.quantity)}}%</span>
+						</h4>
+						<div class="progress progress-xxs">
+							<div class="progress-bar progress-bar-success" style="width: {{(merpricing.invCount * 100) / (merpricing.pricing.invoiceLimit * merpricing.quantity)}}%"></div>
+						</div>
+					</a>
+				</li>
+			</ul>
+			<h3 class="control-sidebar-heading">Help Us</h3>
+			<ul class="control-sidebar-menu">
+				<li>
+					<a href="#"> <i
+						class="menu-icon fa fa-warning"></i>
+						<div class="menu-info">
+							<h4 class="control-sidebar-subheading">Report an issue</h4>
+							<p>How can we help you?</p>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a href="#"> <i
+						class="menu-icon fa fa-comments-o"></i>
+						<div class="menu-info">
+							<h4 class="control-sidebar-subheading">Send feedback</h4>
+							<p>Are you satisfied?</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<div style="display:none;" class="tab-pane" id="control-sidebar-settings-tab">
+			<form method="post">
+				<h3 class="control-sidebar-heading">General Settings</h3>
+
+				<div class="form-group">
+					<label class="control-sidebar-subheading"> Report panel
+						usage <input type="checkbox" class="pull-right" checked>
+					</label>
+
+					<p>Some information about this general settings option</p>
+				</div>
+				<div class="form-group">
+					<label class="control-sidebar-subheading"> Allow mail
+						redirect <input type="checkbox" class="pull-right" checked>
+					</label>
+
+					<p>Other sets of options are available</p>
+				</div>
+				<div class="form-group">
+					<label class="control-sidebar-subheading"> Expose author
+						name in posts <input type="checkbox" class="pull-right" checked>
+					</label>
+
+					<p>Allow the user to show his name in blog posts</p>
+				</div>
+				<h3 class="control-sidebar-heading">Chat Settings</h3>
+				<div class="form-group">
+					<label class="control-sidebar-subheading"> Show me as
+						online <input type="checkbox" class="pull-right" checked>
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="control-sidebar-subheading"> Turn off
+						notifications <input type="checkbox" class="pull-right">
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="control-sidebar-subheading"> Delete chat
+						history <a href="javascript:void(0)" class="text-red pull-right"><i
+							class="fa fa-trash-o"></i></a>
+					</label>
+				</div>
+			</form>
+		</div>
+	</div>
+</aside>
+<div class="control-sidebar-bg"></div>

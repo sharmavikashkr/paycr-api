@@ -134,7 +134,8 @@ public class InvoiceService {
 	public void enquire(String invoiceCode) throws RazorpayException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
+		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) && !InvoiceStatus.PAID.equals(invoice.getStatus())
+				&& invoice.getPayment() != null) {
 			payService.enquire(invoice);
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Enquiry Not allowed");
