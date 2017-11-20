@@ -79,7 +79,7 @@
 <aside class="main-sidebar">
 	<section class="sidebar">
 		<ul class="sidebar-menu" data-widget="tree">
-			<li ng-if="user.access.admin" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+			<li ng-if="user.access.admin" class="active" ng-click="loadDashboard()"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
 			<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a id="invoiceTabNav" href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i><span>Invoices</span></a></li>
 			<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i><span>Payments</span></a></li>
 			<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i><span>Reports</span></a></li>

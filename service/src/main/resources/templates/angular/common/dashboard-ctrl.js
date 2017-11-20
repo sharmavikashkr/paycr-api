@@ -1,7 +1,7 @@
 app.controller('DashboardController', function($scope, $rootScope, $http,
 		$cookies) {
 	$scope.timeRange = 'LAST_WEEK';
-	$scope.loadDashboard = function() {
+	$rootScope.loadDashboard = function() {
 		var req = {
 			method : 'GET',
 			url : "/common/dashboard/" + $scope.timeRange,
@@ -22,9 +22,9 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	}
 	
 	$scope.loadCharts = function() {
-		$('#amount-donut').html('');
-		$('#count-donut').html('');
-		$('#per-day-bar').html('');
+		$('#amount-donut').empty();
+		$('#count-donut').empty();
+		$('#per-day-bar').empty();
 		Morris.Donut({
 	        element: 'amount-donut',
 	        colors : ['#3c763d', '#31708f', '#333', '#faf2cc', '#a94442'],

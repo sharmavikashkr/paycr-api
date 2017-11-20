@@ -76,7 +76,9 @@ public class CommonService {
 		if ("LAST_WEEK".equalsIgnoreCase(timeRange)) {
 			calFrom.add(Calendar.DATE, -7);
 		} else if ("LAST_MONTH".equalsIgnoreCase(timeRange)) {
-			calFrom.add(Calendar.DATE, -31);
+			calFrom.add(Calendar.DATE, -30);
+		} else if("LAST_2WEEK".equalsIgnoreCase(timeRange)) {
+			calFrom.add(Calendar.DATE, -14);
 		}
 		StatsResponse response = new StatsResponse();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

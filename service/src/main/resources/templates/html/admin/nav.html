@@ -80,7 +80,7 @@
 <aside class="main-sidebar">
 	<section class="sidebar">
 		<ul class="sidebar-menu" data-widget="tree">
-			<li ng-if="user.access.supervisor" class="active"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i><span>Dashboard</span></a></li>
+			<li ng-if="user.access.supervisor" class="active" ng-click="loadDashboard()"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i><span>Dashboard</span></a></li>
 			<li ng-class="(user.access.supervisor)?'':'active'" ng-click="searchMerchant()"><a href="#" data-target="#merchantsTab" data-toggle="tab"><i class="fa fa-institution fa-fw"></i><span>Merchants</span></a></li>
 			<li ng-click="searchInvoice()"><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i><span>Invoices</span></a></li>
 			<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i><span>Payments</span></a></li>
