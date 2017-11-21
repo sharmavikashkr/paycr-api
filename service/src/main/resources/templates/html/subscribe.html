@@ -9,36 +9,34 @@
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="${staticUrl}/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${staticUrl}/dist/css/skins/_all-skins.min.css">
     <style>
     	table {
 			font-size: 14px;
 		}
     </style>
 </head>
-<body style="background:#ecf0f5;height:auto;">
-	<nav id="mainNav" class="navbar navbar-default navbar-fixed-top" style="background: darksalmon;">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand page-scroll" target="_blank" href="/#page-top">PayCr</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a class="page-scroll" target="_blank" href="/#download">Download</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" target="_blank" href="/#features">Features</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" target="_blank" href="/#contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<body class="hold-transition skin-blue sidebar-mini" style="background:#ecf0f5;">
+	<header class="main-header">
+		<a target="_blank" href="/" class="logo">
+			<span class="logo-lg"><b>PayCr</b></span>
+		</a>
+		<nav class="navbar navbar-static-top">
+			<div class="navbar-custom-menu">
+				<ul class="nav navbar-nav">
+					<li class="dropdown notifications-menu">
+						<a target="_blank" href="/#download">Download</a>
+					</li>
+					<li class="dropdown notifications-menu">
+						<a target="_blank" href="/#features">Features</a>
+					</li>
+					<li class="dropdown notifications-menu">
+						<a target="_blank" href="/#contact">Contact</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
     <div id="subsModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -94,7 +92,9 @@
 			</div>
 		</div>
 	</div>
-	<section style="margin-top:140px;">
+	<section style="margin-top:100px;" class="hidden-xs"></section>
+	<section style="margin-top:20px;" class="visible-xs"></section>
+	<section>
         <div class="container text-center">
 			<div class="col-sm-8 col-sm-offset-2">
 				<div class="row panel panel-primary" style="background: cadetblue;">
