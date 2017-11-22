@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
@@ -24,7 +25,7 @@ import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
-import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.PayMode;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.HmacSignerUtil;
@@ -34,9 +35,6 @@ import com.paycr.dashboard.validation.PricingValidator;
 
 @Service
 public class AdminService {
-
-	@Autowired
-	private SecurityService secSer;
 
 	@Autowired
 	private UserRepository userRepo;
@@ -71,8 +69,12 @@ public class AdminService {
 	@Autowired
 	private AdminSettingRepository adsetRepo;
 
-	public void createMerchant(Merchant merchant) {
+	@Autowired
+	private SubscriptionService subsService;
+
+	public void createMerchant(Merchant merchant, String createdBy) {
 		merValidator.validate(merchant);
+		boolean enableWelcome = merchant.isEnableWelcome();
 		Date timeNow = new Date();
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
 				String.valueOf(timeNow.getTime()));
@@ -112,7 +114,7 @@ public class AdminService {
 		user.setPassword(bcPassEncode.encode("password@123"));
 		user.setMobile(merchant.getMobile());
 		user.setUserType(UserType.ADMIN);
-		user.setCreatedBy(secSer.findLoggedInUser().getEmail());
+		user.setCreatedBy(createdBy);
 		List<UserRole> userRoles = new ArrayList<UserRole>();
 		UserRole userRole = new UserRole();
 		userRole.setRole(Role.ROLE_MERCHANT);
@@ -130,11 +132,25 @@ public class AdminService {
 
 		Notification noti = new Notification();
 		noti.setMerchantId(merchant.getId());
-		noti.setMessage("Take a tour of the features..");
+		noti.setMessage("Happy Invoicing..");
 		noti.setSubject("Welcome to Paycr");
 		noti.setCreated(timeNow);
 		noti.setRead(false);
 		notiRepo.save(noti);
+
+		if (enableWelcome) {
+			Pricing welcomePricing = pricingRepo.findByNameAndActive("WELCOME", true);
+			if (welcomePricing == null) {
+				return;
+			}
+			OfflineSubscription offSubs = new OfflineSubscription();
+			offSubs.setMerchantId(merchant.getId());
+			offSubs.setPricingId(welcomePricing.getId());
+			offSubs.setPaymentRefNo("auto-enabled");
+			offSubs.setPayMode(PayMode.CASH);
+			offSubs.setQuantity(1);
+			subsService.offlineSubscription(offSubs);
+		}
 	}
 
 	public void createPricing(Pricing pricing) {

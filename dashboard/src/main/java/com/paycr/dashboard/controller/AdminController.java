@@ -88,7 +88,7 @@ public class AdminController {
 	@RequestMapping("/merchant/new")
 	public void newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
 		try {
-			adminService.createMerchant(merchant);
+			adminService.createMerchant(merchant, secSer.findLoggedInUser().getEmail());
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

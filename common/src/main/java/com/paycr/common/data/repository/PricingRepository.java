@@ -8,4 +8,6 @@ import com.paycr.common.data.domain.Pricing;
 @Repository
 public interface PricingRepository extends JpaRepository<Pricing, Integer> {
 
+	public Pricing findByNameAndActive(String name, boolean active);
+
 }

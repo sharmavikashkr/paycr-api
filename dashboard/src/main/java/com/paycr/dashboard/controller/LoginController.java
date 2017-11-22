@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ResetStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
+import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.service.LoginService;
 import com.paycr.dashboard.service.UserService;
 
@@ -37,6 +40,9 @@ public class LoginController {
 	private UserService userService;
 
 	@Autowired
+	private AdminService adminService;
+
+	@Autowired
 	private Company company;
 
 	@RequestMapping("/")
@@ -51,6 +57,36 @@ public class LoginController {
 		response.addCookie(new Cookie("access_token", ""));
 		ModelAndView mv = new ModelAndView("html/login");
 		mv.addObject("staticUrl", company.getStaticUrl());
+		return mv;
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public ModelAndView register() {
+		ModelAndView mv = new ModelAndView("html/register");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		mv.addObject("error", false);
+		mv.addObject("errorMessage", "");
+		return mv;
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ModelAndView register(Merchant merchant) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("staticUrl", company.getStaticUrl());
+		try {
+			adminService.createMerchant(merchant, "SELF");
+			mv.setViewName("html/login");
+			mv.addObject("staticUrl", company.getStaticUrl());
+			return mv;
+		} catch (Exception ex) {
+			mv.setViewName("html/register");
+			mv.addObject("error", true);
+			String errorMessage = "Something went wrong";
+			if (ex instanceof PaycrException) {
+				errorMessage = ex.getMessage();
+			}
+			mv.addObject("errorMessage", errorMessage);
+		}
 		return mv;
 	}
 
