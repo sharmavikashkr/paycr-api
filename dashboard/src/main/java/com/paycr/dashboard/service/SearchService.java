@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.bean.SearchConsumerRequest;
+import com.paycr.common.bean.SearchInventoryRequest;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.bean.SearchPaymentRequest;
@@ -25,11 +26,13 @@ import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.dao.ConsumerDao;
+import com.paycr.common.data.dao.InventoryDao;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.dao.MerchantDao;
 import com.paycr.common.data.dao.PaymentDao;
 import com.paycr.common.data.dao.SubscriptionDao;
 import com.paycr.common.data.domain.Consumer;
+import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
@@ -67,6 +70,9 @@ public class SearchService {
 
 	@Autowired
 	private ConsumerDao conDao;
+
+	@Autowired
+	private InventoryDao invenDao;
 
 	@Autowired
 	private SubscriptionDao subsDao;
@@ -204,6 +210,15 @@ public class SearchService {
 		if (calFrom.before(calTo)) {
 			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 90 days");
 		}
+	}
+
+	public List<Inventory> fetchInventoryList(SearchInventoryRequest request) {
+		vaidateRequest(request);
+		Merchant merchant = null;
+		if (request.getMerchant() != null) {
+			merchant = merRepo.findOne(request.getMerchant());
+		}
+		return invenDao.findInventory(request, merchant);
 	}
 
 }

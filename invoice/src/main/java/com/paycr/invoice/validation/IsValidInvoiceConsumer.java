@@ -45,6 +45,9 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 		}
 		Consumer exstConsumer = consRepo.findConsumerForMerchant(invoice.getMerchant(), consumer.getEmail(),
 				consumer.getMobile());
+		if (!exstConsumer.isActive()) {
+			throw new PaycrException(Constants.FAILURE, "Consumer not active");
+		}
 		if (CommonUtil.isNull(exstConsumer)) {
 			consumer.setMerchant(invoice.getMerchant());
 			consumer.setActive(true);

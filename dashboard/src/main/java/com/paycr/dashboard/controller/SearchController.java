@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.SearchConsumerRequest;
+import com.paycr.common.bean.SearchInventoryRequest;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
 import com.paycr.common.bean.SearchPaymentRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.domain.Consumer;
+import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
@@ -156,6 +158,23 @@ public class SearchController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return subs;
+	}
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping("/inventory")
+	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request, HttpServletResponse response) {
+		List<Inventory> inventoryList = new ArrayList<>();
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			if (CommonUtil.isNotNull(merchant)) {
+				request.setMerchant(merchant.getId());
+			}
+			inventoryList = serSer.fetchInventoryList(request);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return inventoryList;
 	}
 
 }

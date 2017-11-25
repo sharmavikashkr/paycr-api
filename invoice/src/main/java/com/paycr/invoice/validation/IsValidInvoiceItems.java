@@ -51,11 +51,15 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
 		Inventory inventory = invnRepo.findByMerchantAndCode(invoice.getMerchant(), item.getInventory().getCode());
-		if (!inventory.getRate().equals(item.getInventory().getRate())
-				|| !inventory.getName().equals(item.getInventory().getName())) {
-			throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
-		}
-		if (CommonUtil.isNull(inventory)) {
+		if (CommonUtil.isNotNull(inventory)) {
+			if (!(inventory.getRate().equals(item.getInventory().getRate())
+					&& inventory.getName().equals(item.getInventory().getName()))) {
+				throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
+			}
+			if (!inventory.isActive()) {
+				throw new PaycrException(Constants.FAILURE, "Inventory not active");
+			}
+		} else {
 			inventory = new Inventory();
 			inventory.setCreated(new Date());
 			inventory.setMerchant(invoice.getMerchant());
@@ -63,6 +67,7 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 			inventory.setName(item.getInventory().getName());
 			inventory.setRate(item.getInventory().getRate());
 			inventory.setCreatedBy(invoice.getCreatedBy());
+			inventory.setActive(true);
 			invnRepo.save(inventory);
 		}
 		item.setInventory(inventory);

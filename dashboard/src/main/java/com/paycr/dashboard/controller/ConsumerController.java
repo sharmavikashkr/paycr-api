@@ -39,18 +39,6 @@ public class ConsumerController {
 	@Autowired
 	private SecurityService secSer;
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping("/get")
-	public List<Consumer> getAllConsumer(HttpServletResponse response) {
-		try {
-			return conSer.getAllConsumer();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
-	}
-
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
 	public void newConsumer(@RequestBody Consumer consumer, HttpServletResponse response) {
@@ -125,11 +113,10 @@ public class ConsumerController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 	}
-	
+
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload", method = RequestMethod.POST)
-	public void uploadConsumers(@RequestParam("consumers") MultipartFile consumers,
-			HttpServletResponse response) {
+	public void uploadConsumers(@RequestParam("consumers") MultipartFile consumers, HttpServletResponse response) {
 		try {
 			PcUser user = secSer.findLoggedInUser();
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -139,7 +126,7 @@ public class ConsumerController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 	}
-	
+
 	@RequestMapping("/bulk/upload/format")
 	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String content = "Name1,Email1,Mobile1,category-name(optional),category-value(optional)\r\nName2,Email2,Mobile2,category-name(optional),category-value(optional)";
@@ -163,7 +150,7 @@ public class ConsumerController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
 	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
 		try {

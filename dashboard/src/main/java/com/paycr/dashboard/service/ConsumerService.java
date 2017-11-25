@@ -60,11 +60,6 @@ public class ConsumerService {
 	@Autowired
 	private ConsumerDao conDao;
 
-	public List<Consumer> getAllConsumer() {
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		return conRepo.findByMerchant(merchant);
-	}
-
 	public Consumer newConsumer(Consumer consumer, Merchant merchant, String createdBy) {
 		consumer.setMerchant(merchant);
 		consumer.setEmailOnPay(true);
@@ -78,6 +73,10 @@ public class ConsumerService {
 
 	public void updateConsumer(Consumer consumer, Integer consumerId) {
 		Consumer exstCon = conRepo.findOne(consumerId);
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (exstCon.getMerchant().getId() != merchant.getId()) {
+			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+		}
 		exstCon.setActive(consumer.isActive());
 		exstCon.setAddress(consumer.getAddress());
 		exstCon.setEmailOnPay(consumer.isEmailOnPay());

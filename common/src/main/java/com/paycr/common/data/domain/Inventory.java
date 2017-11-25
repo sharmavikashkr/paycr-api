@@ -27,6 +27,7 @@ public class Inventory {
 	private String description;
 	private BigDecimal rate;
 	private String createdBy;
+	private boolean active;
 
 	@JsonIgnore
 	@ManyToOne
@@ -90,6 +91,14 @@ public class Inventory {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

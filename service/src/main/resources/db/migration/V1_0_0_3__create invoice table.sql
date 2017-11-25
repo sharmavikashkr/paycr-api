@@ -79,6 +79,7 @@ CREATE TABLE if not exists pc_inventory (
 	description varchar(255) DEFAULT NULL,
 	rate float NOT NULL,
 	created_by varchar(50) NOT NULL,
+	active boolean NOT NULL,
     merchant_id int REFERENCES pc_merchant
 );
 

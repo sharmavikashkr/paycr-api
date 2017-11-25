@@ -1,4 +1,4 @@
-app.controller('ManageController', function($scope, $http, $rootScope,
+app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$cookies, $httpParamSerializer) {
 	$rootScope.searchConsumerReq = {
 		"email" : "",
@@ -45,20 +45,6 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		for (var i = 1; i <= noOfPages; i++) {
 			$rootScope.consumerResp.allPages.push(i);
 		}
-	}
-	$rootScope.fetchInventory = function() {
-		var req = {
-			method : 'GET',
-			url : "/inventory/get",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(inventory) {
-			$rootScope.inventoryList = inventory.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
 	}
 	$scope.updateConsumer = function(consumer) {
 		var req = {
@@ -242,27 +228,6 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.createInventory = function() {
-		if (!this.addItemForm.$valid) {
-			return false;
-		}
-		var req = {
-			method : 'POST',
-			url : "/inventory/new",
-			headers : {
-				"Authorization" : "Bearer " + $cookies.get("access_token")
-			},
-			data : this.newinventory
-		}
-		$http(req).then(function(data) {
-			$scope.serverMessage(data);
-			$scope.fetchInventory();
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		angular.element(document.querySelector('#createInventoryModal')).modal(
-				'hide');
-	}
 	$scope.updateInvoiceConsumer = function(consumer) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
 		$rootScope.saveinvoice.consumer = consumer;
@@ -276,30 +241,6 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
 		$rootScope.searchInvoiceReq.itemCode = null;
 		$rootScope.searchInvoice();
-	}
-	$scope.seachItemInvoice = function(code) {
-		$rootScope.searchInvoiceReq.email = null;
-		$rootScope.searchInvoiceReq.mobile = null;
-		$rootScope.searchInvoiceReq.invoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceType = null;
-		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceStatus = null;
-		$rootScope.searchInvoiceReq.itemCode = code;
-		$rootScope.searchInvoice();
-	}
-	$scope.updateInvoiceItem = function(inventory) {
-		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
-		var inventory = {
-			"code" : inventory.code,
-			"name" : inventory.name,
-			"rate" : inventory.rate,
-		}
-		$scope.saveinvoice.items.push({
-			"inventory" : inventory,
-			"quantity" : 1,
-			"price" : 0
-		});
-		$rootScope.calculateTotal();
 	}
 	$scope.addFilter = function(newFilter) {
 		$rootScope.searchConsumerReq.conCatList.push(angular.copy(newFilter));
