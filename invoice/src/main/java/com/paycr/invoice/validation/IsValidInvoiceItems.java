@@ -42,19 +42,24 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 	}
 
 	private void validateItem(Invoice invoice, Item item) {
-		if ("".equals(item.getInventory().getName()) || CommonUtil.isNull(item.getInventory().getRate())
-				|| CommonUtil.isNull(item.getPrice()) || 0 == item.getQuantity()) {
+		if (CommonUtil.isEmpty(item.getInventory().getName()) || CommonUtil.isNull(item.getInventory().getRate())
+				|| CommonUtil.isEmpty(item.getInventory().getCode()) || CommonUtil.isNull(item.getPrice())
+				|| 0 == item.getQuantity()) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Items entered");
 		}
 		if (!item.getPrice().equals(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity())))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
-		Inventory inventory = invnRepo.findByMerchantAndNameAndRate(invoice.getMerchant(),
-				item.getInventory().getName(), item.getInventory().getRate());
+		Inventory inventory = invnRepo.findByMerchantAndCode(invoice.getMerchant(), item.getInventory().getCode());
+		if (!inventory.getRate().equals(item.getInventory().getRate())
+				|| !inventory.getName().equals(item.getInventory().getName())) {
+			throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
+		}
 		if (CommonUtil.isNull(inventory)) {
 			inventory = new Inventory();
 			inventory.setCreated(new Date());
 			inventory.setMerchant(invoice.getMerchant());
+			inventory.setCode(item.getInventory().getCode());
 			inventory.setName(item.getInventory().getName());
 			inventory.setRate(item.getInventory().getRate());
 			inventory.setCreatedBy(invoice.getCreatedBy());

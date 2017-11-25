@@ -58,13 +58,26 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			}
 		}
 	}
-	$scope.setInventory = function(item) {
-		for(var index in $rootScope.inventoryList) {
-			var invn = $rootScope.inventoryList[index];
-			if(invn.name == item.inventory.name){
-				item.inventory.rate = invn.rate;
-				$scope.calculateTotal();
-				break;
+	$scope.setInventory = function(item, from) {
+		if(from == "CODE") {
+			for(var index in $rootScope.inventoryList) {
+				var invn = $rootScope.inventoryList[index];
+				if(invn.code == item.inventory.code){
+					item.inventory.name = invn.name;
+					item.inventory.rate = invn.rate;
+					$scope.calculateTotal();
+					break;
+				}
+			}
+		} else {
+			for(var index in $rootScope.inventoryList) {
+				var invn = $rootScope.inventoryList[index];
+				if(invn.name == item.inventory.name){
+					item.inventory.code = invn.code;
+					item.inventory.rate = invn.rate;
+					$scope.calculateTotal();
+					break;
+				}
 			}
 		}
 	}
@@ -113,6 +126,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.addItemXs = function(item) {
 		if ($scope.saveinvoice.items.length < 5) {
 			var inventory = {
+				"code" : item.inventory.code,
 				"name" : item.inventory.name,
 				"rate" : item.inventory.rate
 			}
@@ -390,6 +404,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.mobile = '';
 		$rootScope.searchInvoiceReq.invoiceCode = '';
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.searchInvoiceReq.itemCode = null;
 		$rootScope.searchInvoice();
 	}
 	$scope.searchConsumerInvoices = function(invoice) {
@@ -399,6 +414,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.mobile = invoice.consumer.mobile;
 		$rootScope.searchInvoiceReq.invoiceCode = null;
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.searchInvoiceReq.itemCode = null;
 		$rootScope.searchInvoice();
 	}
 	$scope.updateRecurrInvoiceInfo = function(invoice) {

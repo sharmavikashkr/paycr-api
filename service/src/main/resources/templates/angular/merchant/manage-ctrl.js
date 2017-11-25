@@ -274,11 +274,23 @@ app.controller('ManageController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.invoiceType = null;
 		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.searchInvoiceReq.itemCode = null;
+		$rootScope.searchInvoice();
+	}
+	$scope.seachItemInvoice = function(code) {
+		$rootScope.searchInvoiceReq.email = null;
+		$rootScope.searchInvoiceReq.mobile = null;
+		$rootScope.searchInvoiceReq.invoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceType = null;
+		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.searchInvoiceReq.itemCode = code;
 		$rootScope.searchInvoice();
 	}
 	$scope.updateInvoiceItem = function(inventory) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
 		var inventory = {
+			"code" : inventory.code,
 			"name" : inventory.name,
 			"rate" : inventory.rate,
 		}

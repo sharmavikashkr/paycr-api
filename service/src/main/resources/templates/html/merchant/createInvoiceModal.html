@@ -1,6 +1,6 @@
 <div ng-controller="InvoiceController" id="createInvoiceModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content" style="min-width: 170%; margin-left: -35%;">
+		<div class="modal-content" style="min-width: 200%; margin-left: -50%;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<div class="col-md-4">
@@ -94,26 +94,35 @@
 										<table id="itemsTable" class="table table-bordered table-responsive">
 											<thead>
 												<tr>
-													<td class="text-center"><strong>Actions</strong></td>
-													<td class="text-center"><strong>Item Name</strong></td>
-													<td class="text-center"><strong>Item Rate</strong></td>
-													<td class="text-center"><strong>Item Quantity</strong></td>
-													<td class="text-right"><strong>Total</strong></td>
+													<th class="text-center"><strong>Actions</strong></th>
+													<th class="text-center"><strong>Item Code</strong></th>
+													<th class="text-center"><strong>Item Name</strong></th>
+													<th class="text-center"><strong>Item Rate</strong></th>
+													<th class="text-center"><strong>Item Quantity</strong></th>
+													<th class="text-right"><strong>Total</strong></th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr ng-if="saveinvoice.addItems" ng-repeat="item in saveinvoice.items">
 													<td>
-														<div class="text-center" style="width: 65px;">
-															<button ng-click="deleteItem($index)" type="button" class="col-lg-6 btn btn-danger btn-circle btn-md">
+														<div class="text-center">
+															<button ng-click="deleteItem($index)" type="button" class="btn btn-danger btn-sm">
 																<i class="fa fa-times"></i>
 															</button>
 														</div>
 													</td>
 													<td>
+														<div ng-class="(createInvoiceForm.itemCode{{$index}}.$valid)?'':'has-error'" class="form-group">
+															<input class="form-control text-center" list="item-code-auto-complete" ng-change="setInventory(item,'CODE')" ng-model="item.inventory.code" name="itemCode{{$index}}" autocomplete="off" placeholder="Item Code" type="text" ng-pattern="patterns.paramNamePattern" required />
+															<datalist id="item-code-auto-complete">
+																<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.code">
+															</datalist>
+														</div>
+													</td>
+													<td>
 														<div ng-class="(createInvoiceForm.itemName{{$index}}.$valid)?'':'has-error'" class="form-group">
-															<input class="form-control text-center" list="item-auto-complete" ng-change="setInventory(item)" ng-model="item.inventory.name" name="itemName{{$index}}" autocomplete="off" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
-															<datalist id="item-auto-complete">
+															<input class="form-control text-center" list="item-name-auto-complete" ng-change="setInventory(item,'NAME')" ng-model="item.inventory.name" name="itemName{{$index}}" autocomplete="off" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
+															<datalist id="item-name-auto-complete">
 																<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.name">
 															</datalist>
 														</div>
@@ -144,6 +153,7 @@
 													<td class="highrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow text-center"><strong>Total</strong></td>
 													<td class="emptyrow">
 														<div class="input-group">
@@ -156,6 +166,7 @@
 												</tr>
 												<tr>
 													<td class="highrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow text-center"><strong>Tax({{saveinvoice.taxName}}) %</strong></td>
@@ -172,6 +183,7 @@
 													<td class="highrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow text-center"><strong>Discount</strong></td>
 													<td class="emptyrow">
 														<div class="input-group">
@@ -184,6 +196,7 @@
 												</tr>
 												<tr>
 													<td class="highrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow text-center"><strong>Pay Amount</strong></td>

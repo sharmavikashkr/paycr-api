@@ -1,6 +1,5 @@
 package com.paycr.common.data.repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +13,5 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 
 	public List<Inventory> findByMerchant(Merchant merchant);
 
-	public Inventory findByMerchantAndNameAndRate(Merchant merchant, String name, BigDecimal rate);
+	public Inventory findByMerchantAndCode(Merchant merchant, String code);
 }

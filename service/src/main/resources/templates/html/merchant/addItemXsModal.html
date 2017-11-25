@@ -14,9 +14,20 @@
 									<tr>
 										<td>
 											<div ng-class="(addItemForm.name.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Code</label>
+												<input name="name" class="form-control" list="item-code-auto-complete" ng-change="setInventory(item,'CODE')" autocomplete="off" placeholder="Code" ng-model="item.inventory.code" ng-pattern="patterns.paramNamePattern" required />
+												<datalist id="item-code-auto-complete">
+													<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.code">
+												</datalist>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(addItemForm.name.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Name</label>
-												<input name="name" class="form-control" list="item-auto-complete" ng-change="setInventory(item)" autocomplete="off" placeholder="Name" ng-model="item.inventory.name" ng-pattern="patterns.namePattern" required />
-												<datalist id="item-auto-complete">
+												<input name="name" class="form-control" list="item-name-auto-complete" ng-change="setInventory(item,'NAME')" autocomplete="off" placeholder="Name" ng-model="item.inventory.name" ng-pattern="patterns.namePattern" required />
+												<datalist id="item-name-auto-complete">
 													<option ng-repeat="invnitem in inventoryList" ng-value="invnitem.name">
 												</datalist>
 											</div>

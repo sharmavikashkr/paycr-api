@@ -80,9 +80,11 @@
 										<h5 class="col-xs-6 col-lg-6">
 											<strong>Order summary</strong>
 										</h5>
-										<button ng-if="saveinvoice.addItems" type="button" class="col-lg-6 btn btn-success btn-circle btn-md" data-toggle="modal" data-target="#addItemXsModal">
-											<i class="fa fa-plus"></i>
-										</button>
+										<div class="col-sm-1 col-md-offset-3">
+											<button ng-if="saveinvoice.addItems" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addItemXsModal">
+												<i class="fa fa-plus"></i>
+											</button>
+										</div>
 									</div>
 								</div>
 								<div class="panel-body">
@@ -99,13 +101,13 @@
 												<tr ng-if="saveinvoice.addItems" ng-repeat="item in saveinvoice.items">
 													<td>
 														<div class="text-center">
-															<button ng-click="deleteItem($index)" type="button" class="col-lg-6 btn btn-danger btn-circle btn-md">
+															<button ng-click="deleteItem($index)" type="button" class="btn btn-danger btn-xs">
 																<i class="fa fa-times"></i>
 															</button>
 														</div>
 													</td>
 													<td>
-														<div>{{item.inventory.name}} <strong>X</strong> {{item.quantity}}</div>
+														<div>{{item.inventory.name}} ({{item.inventory.code}}) <strong>X</strong> {{item.quantity}}</div>
 													</td>
 													<td>
 														<div class="input-group">

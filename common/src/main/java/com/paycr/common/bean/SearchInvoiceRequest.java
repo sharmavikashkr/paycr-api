@@ -18,6 +18,7 @@ public class SearchInvoiceRequest {
 	private String mobile;
 	private BigDecimal amount;
 	private InvoiceStatus invoiceStatus;
+	private String itemCode;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdFrom;
@@ -103,6 +104,14 @@ public class SearchInvoiceRequest {
 
 	public void setParentInvoiceCode(String parentInvoiceCode) {
 		this.parentInvoiceCode = parentInvoiceCode;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
 	}
 
 }

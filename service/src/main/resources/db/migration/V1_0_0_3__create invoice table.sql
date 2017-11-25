@@ -75,6 +75,8 @@ CREATE TABLE if not exists pc_inventory (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	name varchar(50) NOT NULL,
+	code varchar(20) NOT NULL,
+	description varchar(255) DEFAULT NULL,
 	rate float NOT NULL,
 	created_by varchar(50) NOT NULL,
     merchant_id int REFERENCES pc_merchant

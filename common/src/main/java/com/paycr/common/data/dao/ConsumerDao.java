@@ -1,6 +1,8 @@
 package com.paycr.common.data.dao;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -77,7 +79,19 @@ public class ConsumerDao {
 				if (!CommonUtil.isEmpty(searchReq.getMobile())) {
 					query.setParameter("mobile", searchReq.getMobile());
 				}
-				conSet.addAll(query.getResultList());
+				List<Consumer> conList = query.getResultList();
+				if(conSet.isEmpty()) {
+					conSet.addAll(conList);
+				} else {
+					List<Consumer> uniqueConList = new ArrayList<>();
+					for(Consumer con : conSet) {
+						if(conList.contains(con)) {
+							uniqueConList.add(con);
+						}
+					}
+					conSet.clear();
+					conSet.addAll(uniqueConList);
+				}
 			}
 		}
 		return conSet;

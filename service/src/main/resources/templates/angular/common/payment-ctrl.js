@@ -76,4 +76,13 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.seachPayInvoice = function(invoiceCode) {
+		$rootScope.searchInvoiceReq.email = null;
+		$rootScope.searchInvoiceReq.mobile = null;
+		$rootScope.searchInvoiceReq.invoiceCode = invoiceCode;
+		$rootScope.searchInvoiceReq.invoiceType = null;
+		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.searchInvoice();
+	}
 });

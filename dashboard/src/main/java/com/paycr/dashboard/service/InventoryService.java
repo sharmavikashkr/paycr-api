@@ -32,13 +32,13 @@ public class InventoryService {
 	public void newInventory(Inventory inventory) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		if (CommonUtil.isEmpty(inventory.getName()) || CommonUtil.isNull(inventory.getRate())) {
+		if (CommonUtil.isEmpty(inventory.getName()) || CommonUtil.isNull(inventory.getRate())
+				|| CommonUtil.isEmpty(inventory.getCode())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
-		Inventory exstingInvn = invnRepo.findByMerchantAndNameAndRate(merchant, inventory.getName(),
-				inventory.getRate());
-		if (exstingInvn != null) {
-			throw new PaycrException(Constants.FAILURE, "Item Already Exists");
+		Inventory exstingInvn = invnRepo.findByMerchantAndCode(merchant, inventory.getCode());
+		if (CommonUtil.isNull(exstingInvn)) {
+			throw new PaycrException(Constants.FAILURE, "Item with this code already exists");
 		}
 		inventory.setCreated(new Date());
 		inventory.setMerchant(merchant);

@@ -23,6 +23,8 @@ public class Inventory {
 	private Date created;
 
 	private String name;
+	private String code;
+	private String description;
 	private BigDecimal rate;
 	private String createdBy;
 
@@ -72,6 +74,22 @@ public class Inventory {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
