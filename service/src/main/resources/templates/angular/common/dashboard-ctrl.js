@@ -27,7 +27,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 		$('#per-day-bar').empty();
 		Morris.Donut({
 	        element: 'amount-donut',
-	        colors : ['#3c763d', '#31708f', '#333', '#faf2cc', '#a94442'],
+	        colors : ['#00a65a', '#dd4b39', '#d2d6de', '#faf2cc', '#f39c12'],
 	        data: [{
 	            label: "Paid",
 	            value: $rootScope.statsResponse.salePaySum
@@ -48,7 +48,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	    });
 		Morris.Donut({
 	        element: 'count-donut',
-	        colors : ['#3c763d', '#a94442', '#333', '#faf2cc', '#f39c12'],
+	        colors : ['#00a65a', '#dd4b39', '#d2d6de', '#faf2cc', '#f39c12'],
 	        data: [{
 	            label: "Paid",
 	            value: $rootScope.statsResponse.salePayCount
