@@ -83,7 +83,10 @@
 							</td>
 						</tr>
 						<tr>
-							<td><button ng-click="searchInvoice()" type="button" class="btn btn-info">Search</button></td>
+							<td>
+								<button ng-click="searchInvoice()" type="button" class="btn btn-info">Search</button>
+								<button ng-click="clearInvoiceSearch()" type="button" class="btn btn-basic">Clear</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -158,7 +161,7 @@
 											<button ng-if="invoice.invoiceType == 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" ng-click="updateBulkInvoiceInfo(invoice)" title="Upload Consumers" type="button" class="btn btn-basic btn-md" data-toggle="modal" data-target="#bulkUploadModal">
 												<i class="fa fa-upload"></i>
 											</button>
-											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
+											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice.invoiceCode)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
 												<i class="fa fa-search"></i>
 											</button>
 											<button ng-if="invoice.invoiceType == 'RECURRING'" ng-click="updateRecurrInvoiceInfo(invoice)" title="Schedule invoices" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#recurrInvoiceModal">

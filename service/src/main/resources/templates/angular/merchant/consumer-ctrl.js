@@ -239,14 +239,7 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$rootScope.saveinvoice.consumer = consumer;
 	}
 	$scope.seachConInvoice = function(consumer) {
-		$rootScope.searchInvoiceReq.email = consumer.email;
-		$rootScope.searchInvoiceReq.mobile = consumer.mobile;
-		$rootScope.searchInvoiceReq.invoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceType = null;
-		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceStatus = null;
-		$rootScope.searchInvoiceReq.itemCode = null;
-		$rootScope.searchInvoice();
+		$rootScope.searchConsumerInvoices();
 	}
 	$scope.addFilter = function(newFilter) {
 		$rootScope.searchConsumerReq.conCatList.push(angular.copy(newFilter));
@@ -269,5 +262,12 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 	}
 	$scope.removeNewCategory = function(pos) {
 		$scope.newconsumer.conCats.splice(pos, 1);
+	}
+	$scope.clearConsumerSearch = function() {
+		$rootScope.searchConsumerReq = {
+			"email" : "",
+			"mobile" : "",
+			"conCatList" : []
+		}
 	}
 });

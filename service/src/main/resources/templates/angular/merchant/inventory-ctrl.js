@@ -76,12 +76,7 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 				'hide');
 	}
 	$scope.seachItemInvoice = function(code) {
-		$rootScope.searchInvoiceReq.email = null;
-		$rootScope.searchInvoiceReq.mobile = null;
-		$rootScope.searchInvoiceReq.invoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceType = null;
-		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceStatus = null;
+		$rootScope.clearInvoiceSearch();
 		$rootScope.searchInvoiceReq.itemCode = code;
 		$rootScope.searchInvoice();
 	}
@@ -98,5 +93,11 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 			"price" : 0
 		});
 		$rootScope.calculateTotal();
+	}
+	$scope.clearInventorySearch = function() {
+		$rootScope.searchInventoryReq = {
+			"code" : "",
+			"name" : ""
+		}
 	}
 });

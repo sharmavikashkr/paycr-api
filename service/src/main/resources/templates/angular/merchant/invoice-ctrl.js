@@ -397,24 +397,24 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		});
 		angular.element(document.querySelector('#bulkUploadModal')).modal('hide');
 	}
-	$scope.searchChildInvoices = function(invoice) {
-		$rootScope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
+	$rootScope.clearInvoiceSearch = function() {
+		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
 		$rootScope.searchInvoiceReq.invoiceType = null;
 		$rootScope.searchInvoiceReq.email = '';
 		$rootScope.searchInvoiceReq.mobile = '';
 		$rootScope.searchInvoiceReq.invoiceCode = '';
 		$rootScope.searchInvoiceReq.invoiceStatus = null;
-		$rootScope.searchInvoiceReq.itemCode = null;
+		$rootScope.searchInvoiceReq.itemCode = '';
+	}
+	$scope.searchChildInvoices = function(invoiceCode) {
+		$rootScope.clearInvoiceSearch();
+		$rootScope.searchInvoiceReq.parentInvoiceCode = invoiceCode;
 		$rootScope.searchInvoice();
 	}
-	$scope.searchConsumerInvoices = function(invoice) {
-		$rootScope.searchInvoiceReq.parentInvoiceCode = null;
-		$rootScope.searchInvoiceReq.invoiceType = null;
+	$rootScope.searchConsumerInvoices = function(invoice) {
+		$rootScope.clearInvoiceSearch();
 		$rootScope.searchInvoiceReq.email = invoice.consumer.email;
 		$rootScope.searchInvoiceReq.mobile = invoice.consumer.mobile;
-		$rootScope.searchInvoiceReq.invoiceCode = null;
-		$rootScope.searchInvoiceReq.invoiceStatus = null;
-		$rootScope.searchInvoiceReq.itemCode = null;
 		$rootScope.searchInvoice();
 	}
 	$scope.updateRecurrInvoiceInfo = function(invoice) {

@@ -75,7 +75,10 @@
 							</td>
 						</tr>
 						<tr>
-							<td><button ng-click="searchInvoice()" type="button" class="btn btn-info">Search</button></td>
+							<td>
+								<button ng-click="searchInvoice()" type="button" class="btn btn-info">Search</button>
+								<button ng-click="clearInvoiceSearch()" type="button" class="btn btn-basic">Clear</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -117,7 +120,7 @@
 											<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
 												<i class="fa fa-file-pdf-o"></i>
 											</a>
-											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
+											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice.invoiceCode)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
 												<i class="fa fa-search"></i>
 											</button>
 											<button ng-click="fetchTimelines(invoice)" title="Invoice Timelines" type="button" class="btn btn-info btn-md hidden-xs" data-toggle="modal" data-target="#invoiceTimelineModal">

@@ -59,34 +59,28 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.searchChildInvoices = function(invoice) {
-		$scope.searchInvoiceReq.merchant = null;
-		$scope.searchInvoiceReq.parentInvoiceCode = invoice.invoiceCode;
-		$scope.searchInvoiceReq.invoiceType = 'SINGLE';
-		$scope.searchInvoiceReq.email = null;
-		$scope.searchInvoiceReq.mobile = null;
-		$scope.searchInvoiceReq.invoiceCode = null;
-		$scope.searchInvoiceReq.invoiceStatus = null;
+	$rootScope.clearInvoiceSearch = function() {
+		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceType = null;
+		$rootScope.searchInvoiceReq.email = '';
+		$rootScope.searchInvoiceReq.mobile = '';
+		$rootScope.searchInvoiceReq.invoiceCode = '';
+		$rootScope.searchInvoiceReq.invoiceStatus = null;
+	}
+	$scope.searchChildInvoices = function(invoiceCode) {
+		$rootScope.clearInvoiceSearch();
+		$scope.searchInvoiceReq.parentInvoiceCode = invoiceCode;
 		$scope.searchInvoice();
 	}
 	$scope.searchMerchantInvoices = function(invoice) {
+		$rootScope.clearInvoiceSearch();
 		$scope.searchInvoiceReq.merchant = invoice.merchant.id;
-		$scope.searchInvoiceReq.parentInvoiceCode = null;
-		$scope.searchInvoiceReq.invoiceType = null;
-		$scope.searchInvoiceReq.email = null;
-		$scope.searchInvoiceReq.mobile = null;
-		$scope.searchInvoiceReq.invoiceCode = null;
-		$scope.searchInvoiceReq.invoiceStatus = null;
 		$scope.searchInvoice();
 	}
 	$scope.searchConsumerInvoices = function(invoice) {
-		$scope.searchInvoiceReq.merchant = null;
-		$scope.searchInvoiceReq.parentInvoiceCode = null;
-		$scope.searchInvoiceReq.invoiceType = null;
+		$rootScope.clearInvoiceSearch();
 		$scope.searchInvoiceReq.email = invoice.consumer.email;
 		$scope.searchInvoiceReq.mobile = invoice.consumer.mobile;
-		$scope.searchInvoiceReq.invoiceCode = null;
-		$scope.searchInvoiceReq.invoiceStatus = null;
 		$scope.searchInvoice();
 	}
 	$scope.fetchTimelines = function(invoice) {

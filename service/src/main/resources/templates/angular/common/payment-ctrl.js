@@ -77,12 +77,13 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 		});
 	}
 	$scope.seachPayInvoice = function(invoiceCode) {
-		$rootScope.searchInvoiceReq.email = null;
-		$rootScope.searchInvoiceReq.mobile = null;
+		$rootScope.clearInvoiceSearch();
 		$rootScope.searchInvoiceReq.invoiceCode = invoiceCode;
-		$rootScope.searchInvoiceReq.invoiceType = null;
-		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
-		$rootScope.searchInvoiceReq.invoiceStatus = null;
 		$rootScope.searchInvoice();
+	}
+	$scope.clearPaymentSearch = function() {
+		$rootScope.searchPaymentReq.invoiceCode = '';
+		$rootScope.searchPaymentReq.paymentRefNo = '';
+		$rootScope.searchPaymentReq.payType = null;
 	}
 });
