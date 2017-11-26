@@ -95,6 +95,9 @@ public class InvoiceSchedulerService {
 			ArrayList<InvoiceNotify> invNots = new ArrayList<>();
 			invNots.add(invNot);
 			childInvoice.setInvoiceNotices(invNots);
+			if (InvoiceStatus.CREATED.equals(childInvoice.getStatus())) {
+				childInvoice.setStatus(InvoiceStatus.UNPAID);
+			}
 			invRepo.save(childInvoice);
 			Date nextInvDate;
 			if (RecurrType.WEEKLY.equals(recInv.getRecurr())) {
