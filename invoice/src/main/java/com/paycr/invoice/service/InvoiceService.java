@@ -10,9 +10,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.Server;
@@ -82,6 +85,8 @@ public class InvoiceService {
 
 	@Autowired
 	private TimelineService tlService;
+
+	private final ExecutorService exec = Executors.newFixedThreadPool(5);
 
 	public Invoice getInvoice(String invoiceCode) {
 		return invRepo.findByInvoiceCode(invoiceCode);
@@ -215,6 +220,7 @@ public class InvoiceService {
 		return Files.readAllBytes(path);
 	}
 
+	@Transactional
 	public void recurr(String invoiceCode, RecurringInvoice recInv, String createdBy) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (invoice == null || !InvoiceType.RECURRING.equals(invoice.getInvoiceType())
@@ -239,8 +245,7 @@ public class InvoiceService {
 		recInvRepo.save(recInv);
 		if (start.before(recInv.getStartDate()) && end.after(recInv.getStartDate())) {
 			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), InvoiceType.SINGLE, createdBy);
-			Thread th = new Thread(invSchSer.processInvoice(recInv, childInvoice, timeNow));
-			th.start();
+			exec.execute(invSchSer.processInvoice(recInv, childInvoice, timeNow));
 		}
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Recurr setting added", true, createdBy);
 	}

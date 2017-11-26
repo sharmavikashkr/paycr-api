@@ -125,7 +125,7 @@
 					</thead>
 					<tbody ng-repeat="consumer in consumerResp.consumerList">
 						<tr
-							ng-class="(consumer.active)?'success':'warning'"
+							ng-class="(consumer.active)?'success':'danger'"
 							data-toggle="collapse"
 							data-target="#condetails-{{consumer.id}}"
 							class="accordion-toggle">
@@ -166,7 +166,7 @@
 												<span class="btn btn-danger glyphicon glyphicon-edit"></span>
 											</a>
 											&nbsp;&nbsp;&nbsp;
-											<div class="panel visible-lg-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in consumer.conCats">
+											<div class="panel visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in consumer.conCats">
 												<a href="#"><strong>{{conCat.name}} : </strong>{{conCat.value}}</a>
 												<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a> 
 											</div>

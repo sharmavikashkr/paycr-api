@@ -41,6 +41,10 @@ public class RecurringInvoice {
 	@ManyToOne
 	private Invoice invoice;
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public RecurrType getRecurr() {
 		return recurr;
 	}

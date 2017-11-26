@@ -43,13 +43,14 @@ public class InvoiceSchedulerService {
 	@Autowired
 	private TimelineService tlService;
 
+	private final ExecutorService exec = Executors.newFixedThreadPool(5);
+
 	@Transactional
 	public void recurrInvoice() {
 		Date timeNow = new Date();
 		Date start = DateUtil.getStartOfDay(timeNow);
 		Date end = DateUtil.getEndOfDay(timeNow);
 		List<RecurringInvoice> recInvList = recInvRepo.findTodaysRecurringInvoices(start, end);
-		ExecutorService exec = Executors.newFixedThreadPool(5);
 		for (RecurringInvoice recInv : recInvList) {
 			if (recInv.getRemaining() != 0) {
 				Invoice invoice = recInv.getInvoice();
@@ -74,6 +75,7 @@ public class InvoiceSchedulerService {
 		invRepo.save(expiredList);
 	}
 
+	@Transactional
 	public Runnable processInvoice(RecurringInvoice recInv, Invoice childInvoice, Date timeNow) {
 		return () -> {
 			InvoiceSetting invSetting = childInvoice.getMerchant().getInvoiceSetting();

@@ -11,6 +11,12 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		"emailOnRefund" : true,
 		"active" : true
 	}
+	$scope.newconsumer = {
+		"conCats" : [],
+		"email" : "",
+		"mobile" : "",
+		"name" : ""
+	}
 	$rootScope.searchConsumer = function() {
 		var req = {
 			method : 'POST',
@@ -92,7 +98,7 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
-			data : this.newconsumer
+			data : $scope.newconsumer
 		}
 		$http(req).then(function(data) {
 			$scope.serverMessage(data);
@@ -257,5 +263,11 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 	}
 	$scope.deleteUpdateFilter = function(pos) {
 		$rootScope.updateConsumerReq.conCatList.splice(pos, 1);
+	}
+	$scope.addNewCategory = function(newConCat) {
+		$scope.newconsumer.conCats.push(angular.copy(newConCat));
+	}
+	$scope.removeNewCategory = function(pos) {
+		$scope.newconsumer.conCats.splice(pos, 1);
 	}
 });

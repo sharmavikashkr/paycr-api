@@ -30,6 +30,7 @@ import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.PcUser;
+import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.BulkCategoryRepository;
 import com.paycr.common.data.repository.BulkUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -124,7 +125,12 @@ public class CreateInvoiceService {
 		consumer.setCreatedBy(createdBy);
 		invHelp.updateConsumer(childInvoice, consumer);
 		if (InvoiceType.RECURRING.equals(chldInvReq.getInvoiceType())) {
-			invSer.recurr(childInvoice.getInvoiceCode(), chldInvReq.getRecInv(), createdBy);
+			RecurringInvoice recReq = chldInvReq.getRecInv();
+			RecurringInvoice recInv = new RecurringInvoice();
+			recInv.setRecurr(recReq.getRecurr());
+			recInv.setTotal(recReq.getTotal());
+			recInv.setStartDate(recReq.getStartDate());
+			invSer.recurr(childInvoice.getInvoiceCode(), recInv, createdBy);
 		} else {
 			InvoiceSetting invSetting = childInvoice.getMerchant().getInvoiceSetting();
 			InvoiceNotify invNot = new InvoiceNotify();

@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +61,8 @@ public class ConsumerService {
 	@Autowired
 	private ConsumerDao conDao;
 
-	public Consumer newConsumer(Consumer consumer, Merchant merchant, String createdBy) {
+	public void newConsumer(Consumer consumer, Merchant merchant, String createdBy) {
+		List<ConsumerCategory> conCats = consumer.getConCats();
 		consumer.setMerchant(merchant);
 		consumer.setEmailOnPay(true);
 		consumer.setEmailOnRefund(true);
@@ -68,7 +70,10 @@ public class ConsumerService {
 		consumer.setActive(true);
 		consumer.setCreated(new Date());
 		consumer.setCreatedBy(createdBy);
-		return conRepo.save(consumer);
+		conRepo.save(consumer);
+		for(ConsumerCategory conCat : conCats) {
+			addCategory(consumer.getId(), conCat, merchant);
+		}
 	}
 
 	public void updateConsumer(Consumer consumer, Integer consumerId) {
@@ -180,13 +185,15 @@ public class ConsumerService {
 					con.setName(consumer[0].trim());
 					con.setEmail(consumer[1].trim());
 					con.setMobile(consumer[2].trim());
-					con = newConsumer(con, merchant, createdBy);
 					if (consumer.length == 5) {
 						ConsumerCategory conCat = new ConsumerCategory();
 						conCat.setName(consumer[3].trim());
 						conCat.setValue(consumer[4].trim());
-						addCategory(con.getId(), conCat, merchant);
+						List<ConsumerCategory> conCats = new ArrayList<ConsumerCategory>();
+						conCats.add(conCat);
+						con.setConCats(conCats);
 					}
+					newConsumer(con, merchant, createdBy);
 					reason = "CREATED";
 				} catch (PaycrException ex) {
 					reason = ex.getMessage();

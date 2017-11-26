@@ -52,7 +52,7 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 		}
 		Inventory inventory = invnRepo.findByMerchantAndCode(invoice.getMerchant(), item.getInventory().getCode());
 		if (CommonUtil.isNotNull(inventory)) {
-			if (!(inventory.getRate().equals(item.getInventory().getRate())
+			if (!(inventory.getRate().setScale(2, BigDecimal.ROUND_UP).compareTo(item.getInventory().getRate()) == 0
 					&& inventory.getName().equals(item.getInventory().getName()))) {
 				throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
 			}
