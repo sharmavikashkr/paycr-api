@@ -48,7 +48,7 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createReportModal')).modal('hide');
+		angular.element(document.querySelector('#createReportXsModal')).modal('hide');
 	}
 	$scope.downloadReport = function(report) {
 		var req = {

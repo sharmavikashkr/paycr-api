@@ -48,7 +48,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	    });
 		Morris.Donut({
 	        element: 'count-donut',
-	        colors : ['#3c763d', '#31708f', '#333', '#faf2cc', '#a94442'],
+	        colors : ['#3c763d', '#a94442', '#333', '#faf2cc', '#f39c12'],
 	        data: [{
 	            label: "Paid",
 	            value: $rootScope.statsResponse.salePayCount
