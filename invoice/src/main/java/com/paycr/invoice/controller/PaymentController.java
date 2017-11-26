@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.util.Constants;
 import com.paycr.invoice.service.PaymentService;
 
 @RestController
@@ -46,7 +47,7 @@ public class PaymentController {
 		try {
 			invoiceCode = paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			throw new PaycrException(Constants.FAILURE, ex.getMessage());
 		}
 		response.sendRedirect("/" + invoiceCode);
 	}
@@ -56,7 +57,7 @@ public class PaymentController {
 		try {
 			paySer.decline(invoiceCode);
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			throw new PaycrException(Constants.FAILURE, ex.getMessage());
 		}
 		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
@@ -66,8 +67,8 @@ public class PaymentController {
 		String invoiceCode = null;
 		try {
 			invoiceCode = paySer.purchase(formData);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (Exception ex) {
+			throw new PaycrException(Constants.FAILURE, ex.getMessage());
 		}
 		response.sendRedirect("/payment/response/" + invoiceCode);
 	}

@@ -82,6 +82,9 @@ public class PaymentService {
 		if (CommonUtil.isNull(invoice)) {
 			throw new PaycrException(Constants.FAILURE, "Requested Resource is not found");
 		}
+		if (InvoiceType.RECURRING.equals(invoice.getInvoiceType())) {
+			throw new PaycrException(Constants.FAILURE, "This invoice cannot be paid");
+		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "This invoice is already paid");
 		}
