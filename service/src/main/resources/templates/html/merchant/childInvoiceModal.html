@@ -95,7 +95,10 @@
 										<td>
 											<div ng-class="(childInvoiceForm.name.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Name</label>
-												<input class="form-control" ng-model="childInvoiceReq.consumer.name" name="name" placeholder="Name" ng-pattern="patterns.namePattern" required />
+												<input class="form-control" ng-model="childInvoiceReq.consumer.name" list="name-auto-complete" ng-change="setConsumer(childInvoiceReq.consumer,'NAME')" autocomplete="off" name="name" placeholder="Name" ng-pattern="patterns.namePattern" required />
+												<datalist id="name-auto-complete">
+													<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.name">
+												</datalist>
 											</div>
 										</td>
 									</tr>
@@ -103,7 +106,10 @@
 										<td>
 											<div ng-class="(childInvoiceForm.email.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Email</label>
-												<input class="form-control" ng-model="childInvoiceReq.consumer.email" name="email" type="email" placeholder="Email" ng-pattern="patterns.emailPattern" required />
+												<input class="form-control" ng-model="childInvoiceReq.consumer.email" list="email-auto-complete" ng-change="setConsumer(childInvoiceReq.consumer,'EMAIL')" autocomplete="off" name="email" type="email" placeholder="Email" ng-pattern="patterns.emailPattern" required />
+												<datalist id="email-auto-complete">
+													<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.email">
+												</datalist>
 											</div>
 										</td>
 									</tr>
@@ -111,7 +117,10 @@
 										<td>
 											<div ng-class="(childInvoiceForm.mobile.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Mobile</label>
-												<input class="form-control" ng-model="childInvoiceReq.consumer.mobile" name="mobile" type="number" placeholder="Mobile" ng-pattern="patterns.mobilePattern" required />
+												<input class="form-control" ng-model="childInvoiceReq.consumer.mobile" list="mobile-auto-complete" ng-change="setConsumer(childInvoiceReq.consumer,'mobile')" name="mobile" autocomplete="off" type="text" placeholder="Mobile" ng-pattern="patterns.mobilePattern" required />
+												<datalist id="mobile-auto-complete">
+													<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.mobile">
+												</datalist>
 											</div>
 										</td>
 									</tr>

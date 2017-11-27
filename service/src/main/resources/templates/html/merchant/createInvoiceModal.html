@@ -23,21 +23,21 @@
 								<div class="panel-body">
 									<div ng-class="(createInvoiceForm.conname.$valid)?'':'has-error'" class="form-group">
 										<label class="control-label">Name:</label>&nbsp;
-										<input ng-model="saveinvoice.consumer.name" list="name-auto-complete" ng-change="setConsumer('NAME')" name="conname" autocomplete="off" class="form-control" placeholder="Consumer Name" type="text" ng-pattern="patterns.namePattern" required autofocus />
+										<input ng-model="saveinvoice.consumer.name" list="name-auto-complete" ng-change="setConsumer(saveinvoice.consumer,'NAME')" name="conname" autocomplete="off" class="form-control" placeholder="Consumer Name" type="text" ng-pattern="patterns.namePattern" required autofocus />
 										<datalist id="name-auto-complete">
 											<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.name">
 										</datalist>
 									</div>
 									<div ng-class="(createInvoiceForm.conemail.$valid)?'':'has-error'" class="form-group">
 										<label class="control-label">Email:</label>&nbsp;
-										<input ng-model="saveinvoice.consumer.email" list="email-auto-complete" ng-change="setConsumer('EMAIL')" name="conemail" autocomplete="off" class="form-control" placeholder="Consumer Email" type="email" ng-pattern="patterns.emailPattern" required />
+										<input ng-model="saveinvoice.consumer.email" list="email-auto-complete" ng-change="setConsumer(saveinvoice.consumer,'EMAIL')" name="conemail" autocomplete="off" class="form-control" placeholder="Consumer Email" type="email" ng-pattern="patterns.emailPattern" required />
 										<datalist id="email-auto-complete">
 											<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.email">
 										</datalist>
 									</div>
 									<div ng-class="(createInvoiceForm.conmobile.$valid)?'':'has-error'" class="form-group">
 										<label class="control-label">Mobile:</label>&nbsp;
-										<input ng-model="saveinvoice.consumer.mobile" list="mobile-auto-complete" ng-change="setConsumer('MOBILE')" name="conmobile" autocomplete="off" class="form-control" placeholder="Consumer Mobile" type="text" ng-pattern="patterns.mobilePattern" required />
+										<input ng-model="saveinvoice.consumer.mobile" list="mobile-auto-complete" ng-change="setConsumer(saveinvoice.consumer,'MOBILE')" name="conmobile" autocomplete="off" class="form-control" placeholder="Consumer Mobile" type="text" ng-pattern="patterns.mobilePattern" required />
 										<datalist id="mobile-auto-complete">
 											<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.mobile">
 										</datalist>

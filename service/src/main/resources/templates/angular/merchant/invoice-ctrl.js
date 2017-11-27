@@ -22,37 +22,37 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.setConsumer = function(from) {
+	$scope.setConsumer = function(newcon, from) {
 		if(from == "EMAIL") {
-			var email = this.saveinvoice.consumer.email;
+			var email = newcon.email;
 			for(var index in $rootScope.consumerList) {
 				var consumer = $rootScope.consumerList[index];
 				if(consumer.email == email){
-					this.saveinvoice.consumer.email = consumer.email;
-					this.saveinvoice.consumer.mobile = consumer.mobile;
-					this.saveinvoice.consumer.name = consumer.name;
+					newcon.email = consumer.email;
+					newcon.mobile = consumer.mobile;
+					newcon.name = consumer.name;
 					break;
 				}
 			}
 		} else if(from == "MOBILE") {
-			var mobile = this.saveinvoice.consumer.mobile;
+			var mobile = newcon.mobile;
 			for(var index in $rootScope.consumerList) {
 				var consumer = $rootScope.consumerList[index];
 				if(consumer.mobile == mobile){
-					this.saveinvoice.consumer.email = consumer.email;
-					this.saveinvoice.consumer.mobile = consumer.mobile;
-					this.saveinvoice.consumer.name = consumer.name;
+					newcon.email = consumer.email;
+					newcon.mobile = consumer.mobile;
+					newcon.name = consumer.name;
 					break;
 				}
 			}
 		} else if(from == "NAME") {
-			var name = this.saveinvoice.consumer.name;
+			var name = newcon.name;
 			for(var index in $rootScope.consumerList) {
 				var consumer = $rootScope.consumerList[index];
 				if(consumer.name == name){
-					this.saveinvoice.consumer.email = consumer.email;
-					this.saveinvoice.consumer.mobile = consumer.mobile;
-					this.saveinvoice.consumer.name = consumer.name;
+					newcon.email = consumer.email;
+					newcon.mobile = consumer.mobile;
+					newcon.name = consumer.name;
 					break;
 				}
 			}
