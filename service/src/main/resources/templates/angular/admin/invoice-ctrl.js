@@ -77,10 +77,10 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$scope.searchInvoiceReq.merchant = invoice.merchant.id;
 		$scope.searchInvoice();
 	}
-	$scope.searchConsumerInvoices = function(invoice) {
+	$scope.searchConsumerInvoices = function(consumer) {
 		$rootScope.clearInvoiceSearch();
-		$scope.searchInvoiceReq.email = invoice.consumer.email;
-		$scope.searchInvoiceReq.mobile = invoice.consumer.mobile;
+		$scope.searchInvoiceReq.email = consumer.email;
+		$scope.searchInvoiceReq.mobile = consumer.mobile;
 		$scope.searchInvoice();
 	}
 	$scope.fetchTimelines = function(invoice) {

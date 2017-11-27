@@ -16,7 +16,7 @@
 								</div>
 								<div class="panel-body">
 									<div class="row">
-									<textarea rows="3" style="width:100%" readonly>Hi {{invoiceInfo.consumer.name}}, {{merchant.name}} has requested you to pay INR {{invoiceInfo.payAmount}} online. Click on http://www.paycr.in/{{invoiceInfo.invoiceCode}} to proceed.</textarea>
+									<textarea rows="3" style="width:100%;padding:5px;" readonly>Hi {{invoiceInfo.consumer.name}}, {{merchant.name}} has requested you to pay INR {{invoiceInfo.payAmount}} online. Click on http://www.paycr.in/{{invoiceInfo.invoiceCode}} to proceed.</textarea>
 									</div>
 								</div>
 							</fieldset>
@@ -47,33 +47,17 @@
 									</table>
 								</div>
 								<div class="panel-body">
-									<div class="row text-center" style="background:darksalmon;">
+									<div class="row text-center" style="background:#323341;">
 										<div class="panel-body">
-											<h5>Invoice request from <strong>{{merchant.name}}</strong></h5>
-											<div>Invoice Id : <strong>{{invoiceInfo.invoiceCode}}</strong></div>
+											<h3 style="color:white;">Invoice request from <strong>{{merchant.name}}</strong></h3>
+											<div style="color:white;">Invoice Id : <strong>{{invoiceInfo.invoiceCode}}</strong></div>
+										</div>
+									</div>
+									<div class="row text-center">
+										<div class="panel-body" style="background:#61626f;">
 											<div class="form-group" ng-class="(invoiceNotifyForm.note.$valid)?'':'has-error'"><input class="form-control" name="note" ng-model="invoiceNotify.emailNote" ng-pattern="patterns.namePattern" required></div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="panel-body" style="background:white;">
-											<div>Billed To : </div>
-											<p><strong>{{invoiceInfo.consumer.email}}</strong></p>
-											<br>
-											<div>Pay By : </div>
-											<p><strong>{{invoiceInfo.expiry | date:'dd-MM-yyyy'}}</strong></p>
-										</div>
-									</div>
-									<div class="row" style="background:darksalmon;">
-										<div class="panel-body">
-											<div class="row">
-												<div class="col-xs-6">
-													<div>Pay Amount : </div>
-													<p><strong>INR {{invoiceInfo.payAmount}}</strong></p>
-												</div>
-												<div class="col-xs-6 pull-right text-right">
-													<a href="#" type="button" class="btn btn-info">Proceed to Pay</a>
-												</div>
-											</div>
+											<div style="color:white;">Proceed to pay <strong>INR {{invoiceInfo.payAmount}}</strong> for your order.</div><br>
+											<div><a href="#" type="button" class="btn btn-warning">Proceed to Pay</a></div>
 										</div>
 									</div>
 								</div>

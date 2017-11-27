@@ -239,7 +239,7 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$rootScope.saveinvoice.consumer = consumer;
 	}
 	$scope.seachConInvoice = function(consumer) {
-		$rootScope.searchConsumerInvoices();
+		$rootScope.searchConsumerInvoices(consumer);
 	}
 	$scope.addFilter = function(newFilter) {
 		$rootScope.searchConsumerReq.conCatList.push(angular.copy(newFilter));

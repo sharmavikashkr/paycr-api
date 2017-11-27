@@ -101,9 +101,10 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
 		templateProps.put("note", invoiceNotify.getEmailNote());
+		templateProps.put("baseUrl", company.getAppUrl());
 		templateProps.put("staticUrl", company.getStaticUrl());
 		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());
-		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email_new.ftl"),
+		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
 				templateProps);
 	}
 

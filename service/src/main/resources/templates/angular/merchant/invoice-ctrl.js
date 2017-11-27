@@ -411,10 +411,10 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.parentInvoiceCode = invoiceCode;
 		$rootScope.searchInvoice();
 	}
-	$rootScope.searchConsumerInvoices = function(invoice) {
+	$rootScope.searchConsumerInvoices = function(consumer) {
 		$rootScope.clearInvoiceSearch();
-		$rootScope.searchInvoiceReq.email = invoice.consumer.email;
-		$rootScope.searchInvoiceReq.mobile = invoice.consumer.mobile;
+		$rootScope.searchInvoiceReq.email = consumer.email;
+		$rootScope.searchInvoiceReq.mobile = consumer.mobile;
 		$rootScope.searchInvoice();
 	}
 	$scope.updateRecurrInvoiceInfo = function(invoice) {
