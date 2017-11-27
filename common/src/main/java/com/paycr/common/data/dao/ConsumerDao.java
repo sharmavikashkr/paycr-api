@@ -1,7 +1,7 @@
 package com.paycr.common.data.dao;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +24,7 @@ public class ConsumerDao {
 	private EntityManager em;
 
 	public Set<Consumer> findConsumers(SearchConsumerRequest searchReq, Merchant merchant) {
-		Set<Consumer> conSet = new HashSet<>();
+		Set<Consumer> conSet = new LinkedHashSet<>();
 		if (searchReq.getConCatList().isEmpty()) {
 			StringBuilder squery = new StringBuilder("SELECT c FROM Consumer c WHERE");
 			if (!CommonUtil.isNull(merchant)) {
@@ -64,7 +64,7 @@ public class ConsumerDao {
 				if (!CommonUtil.isEmpty(searchReq.getMobile())) {
 					squery.append(" cc.consumer.mobile = :mobile AND");
 				}
-				squery.append(" cc.id > 0 ORDER BY cc.id DESC");
+				squery.append(" cc.consumer.id > 0 ORDER BY cc.consumer.id DESC");
 
 				TypedQuery<Consumer> query = em.createQuery(squery.toString(), Consumer.class);
 
@@ -80,12 +80,12 @@ public class ConsumerDao {
 					query.setParameter("mobile", searchReq.getMobile());
 				}
 				List<Consumer> conList = query.getResultList();
-				if(conSet.isEmpty()) {
+				if (conSet.isEmpty()) {
 					conSet.addAll(conList);
 				} else {
 					List<Consumer> uniqueConList = new ArrayList<>();
-					for(Consumer con : conSet) {
-						if(conList.contains(con)) {
+					for (Consumer con : conSet) {
+						if (conList.contains(con)) {
 							uniqueConList.add(con);
 						}
 					}
