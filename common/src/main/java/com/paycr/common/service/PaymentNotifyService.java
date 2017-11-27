@@ -1,27 +1,25 @@
 package com.paycr.common.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.paycr.common.bean.Company;
-import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.communicate.NotifyService;
-import com.paycr.common.communicate.Sms;
-import com.paycr.common.communicate.SmsEngine;
+import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.InvoiceNotify;
-import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Payment;
-import com.paycr.common.util.PdfUtil;
+import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.type.PayType;
 
 import freemarker.template.Configuration;
 
@@ -29,7 +27,7 @@ import freemarker.template.Configuration;
 public class PaymentNotifyService implements NotifyService<Payment> {
 
 	@Autowired
-	private SmsEngine smsEngine;
+	private InvoiceRepository invRepo;
 
 	@Autowired
 	private EmailEngine emailEngine;
@@ -40,28 +38,54 @@ public class PaymentNotifyService implements NotifyService<Payment> {
 	@Autowired
 	private Configuration fmConfiguration;
 
-	@Autowired
-	private Server server;
-
-	@Autowired
-	private PdfUtil pdfUtil;
-
-	public void notify(Payment payment) {}
+	@Async
+	@Transactional
+	public void notify(Payment payment) {
+		Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
+		Consumer consumer = invoice.getConsumer();
+		if (!consumer.isEmailOnPay()) {
+			return;
+		}
+		List<String> to = new ArrayList<>();
+		to.add(invoice.getConsumer().getEmail());
+		List<String> cc = new ArrayList<>();
+		Email email = new Email(company.getContactName(), company.getContactEmail(), company.getContactPassword(), to,
+				cc);
+		if (PayType.SALE.equals(payment.getPayType())) {
+			email.setSubject("Payment successful for invoice");
+			email.setMessage(
+					"Hi " + invoice.getConsumer().getName() + ", we have received successful payment towards invoice : "
+							+ invoice.getInvoiceCode() + " for INR " + invoice.getPayAmount());
+		} else {
+			email.setSubject("Refund processed for invoice");
+			email.setMessage(
+					"Hi " + invoice.getConsumer().getName() + ", successful refund processed towards invoice : "
+							+ invoice.getInvoiceCode() + " for INR " + invoice.getPayAmount());
+		}
+		try {
+			email.setMessage(getEmail(payment));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		emailEngine.sendViaGmail(email);
+	}
 
 	public String getEmail(Payment payment) throws Exception {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("payment", payment);
-		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + payment.getInvoiceCode());
-		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
+		templateProps.put("baseUrl", company.getAppUrl());
+		templateProps.put("staticUrl", company.getStaticUrl());
+		if (PayType.SALE.equals(payment.getPayType())) {
+			templateProps.put("message", "Successful payment received for your invoice from");
+		} else {
+			templateProps.put("message", "Refund processed for your invoice from");
+		}
+		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/payment_email.ftl"),
 				templateProps);
 	}
 
 	public String getSms(Payment payment) throws Exception {
-		Map<String, Object> templateProps = new HashMap<>();
-		templateProps.put("payment", payment);
-		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + payment.getInvoiceCode());
-		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("sms/invoice_sms.ftl"),
-				templateProps);
+		return null;
 	}
 
 }

@@ -69,7 +69,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 			Email email = new Email(company.getContactName(), company.getContactEmail(), company.getContactPassword(),
 					to, cc);
 			email.setSubject(invoiceNotify.getEmailSubject());
-			email.setMessage("Hi, " + invoice.getConsumer().getName() + " please click on this link : " + invoiceUrl
+			email.setMessage("Hi " + invoice.getConsumer().getName() + ", please click on this link : " + invoiceUrl
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
 			try {
 				email.setMessage(getEmail(invoiceNotify));

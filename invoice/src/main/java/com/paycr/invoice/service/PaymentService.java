@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
@@ -42,6 +43,9 @@ public class PaymentService {
 
 	@Autowired
 	private PaymentRepository payRepo;
+
+	@Autowired
+	private NotifyService<Payment> payNotSer;
 
 	@Autowired
 	private Company company;
@@ -154,6 +158,9 @@ public class PaymentService {
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
 				"Payment : " + payment.getPaymentRefNo() + " captured with status : " + payment.getStatus(), true,
 				invoice.getConsumer().getEmail());
+		if ("captured".equals(payment.getStatus())) {
+			payNotSer.notify(payment);
+		}
 	}
 
 	public void refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
@@ -193,6 +200,9 @@ public class PaymentService {
 		payRepo.save(refPay);
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice refunded with amount : " + amount, true,
 				createdBy);
+		if ("captured".equals(payment.getStatus())) {
+			payNotSer.notify(payment);
+		}
 	}
 
 	private InvoiceStatus getStatus(String rzpStatus) {
