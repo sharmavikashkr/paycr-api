@@ -2,7 +2,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$cookies) {
 	var dateNow = moment().toDate();
 	var dateStart = moment().subtract(30, 'day').toDate();
-	$scope.searchInvoiceReq = {
+	$rootScope.searchInvoiceReq = {
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
@@ -60,6 +60,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		});
 	}
 	$rootScope.clearInvoiceSearch = function() {
+		$rootScope.searchInvoiceReq.merchant = null;
 		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
 		$rootScope.searchInvoiceReq.invoiceType = null;
 		$rootScope.searchInvoiceReq.email = '';

@@ -104,4 +104,9 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		angular.element(document.querySelector('#createMerchantModal')).modal(
 				'hide');
 	}
+	$scope.clearMerchantSearch = function() {
+		$scope.searchMerchantReq.email = null;
+		$scope.searchMerchantReq.mobile = null;
+		$scope.searchMerchantReq.name = null;
+	}
 });

@@ -40,4 +40,10 @@ app.controller('SubscriptionController', function($scope, $http, $rootScope,
 			$rootScope.subsResp.allPages.push(i);
 		}
 	}
+	$scope.clearSubscriptionSearch = function() {
+		$scope.searchSubsReq.merchant = null;
+		$scope.searchSubsReq.pricing = null;
+		$scope.searchSubsReq.subsMode = null;
+		$scope.searchSubsReq.subsCode = null;
+	}
 });
