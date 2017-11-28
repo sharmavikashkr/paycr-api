@@ -75,6 +75,25 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#createInventoryModal')).modal(
 				'hide');
 	}
+	$scope.fetchInventoryStats = function(inventory) {
+		var req = {
+			method : 'GET',
+			url : "/inventory/stats/" + inventory.id,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			invnStats = data.data;
+			if(invnStats != null) {
+				invnStats.totalNo = invnStats.createdNo + invnStats.paidNo + invnStats.unpaidNo + invnStats.expiredNo + invnStats.declinedNo;
+				invnStats.totalSum = invnStats.createdSum + invnStats.paidSum + invnStats.unpaidSum + invnStats.expiredSum + invnStats.declinedSum;
+			}
+			inventory.itemStats = angular.copy(invnStats);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.seachItemInvoice = function(code) {
 		$rootScope.clearInvoiceSearch();
 		$rootScope.searchInvoiceReq.itemCode = code;

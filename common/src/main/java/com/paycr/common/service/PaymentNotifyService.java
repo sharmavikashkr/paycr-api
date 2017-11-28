@@ -43,7 +43,8 @@ public class PaymentNotifyService implements NotifyService<Payment> {
 	public void notify(Payment payment) {
 		Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 		Consumer consumer = invoice.getConsumer();
-		if (!consumer.isEmailOnPay()) {
+		if ((!consumer.isEmailOnPay() && PayType.SALE.equals(payment.getPayType()))
+				|| (!consumer.isEmailOnRefund() && PayType.REFUND.equals(payment.getPayType()))) {
 			return;
 		}
 		List<String> to = new ArrayList<>();

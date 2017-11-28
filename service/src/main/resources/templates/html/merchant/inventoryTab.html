@@ -112,6 +112,48 @@
 											</fieldset>
 											<button type="button" ng-click="updateInventory(inventory)" class="btn btn-info">Save</button>
 										</div>
+										<br>
+										<div class="col-lg-6">
+											<div class="panel panel-default">
+												<div class="panel-heading"> Item Stats
+													<span style="float: right;">
+														<button type="button" class="btn btn-warning btn-xs" ng-click="fetchInventoryStats(inventory)" title="Fetch Stats">
+															<i class="fa fa-spinner"></i>
+														</button>
+													</span>
+												</div>
+												<div class="panel-body">
+													<table class="table table-striped table-bordered table-responsive">
+														<tbody>
+															<tr>
+																<td><strong>Created</strong></td>
+																<td>{{inventory.itemStats.createdNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.createdSum}} )</strong></td>
+															</tr>
+															<tr>
+																<td><strong>Unpaid</strong></td>
+																<td>{{inventory.itemStats.unpaidNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.unpaidSum}} )</strong></td>
+															</tr>
+															<tr>
+																<td><strong>Paid</strong></td>
+																<td>{{inventory.itemStats.paidNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.paidSum}} )</strong></td>
+															</tr>
+															<tr>
+																<td><strong>Declined</strong></td>
+																<td>{{inventory.itemStats.declinedNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.declinedSum}} )</strong></td>
+															</tr>
+															<tr>
+																<td><strong>Expired</strong></td>
+																<td>{{inventory.itemStats.declinedNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.declinedSum}} )</strong></td>
+															</tr>
+															<tr>
+																<td><strong>Total</strong></td>
+																<td>{{inventory.itemStats.totalNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.totalSum}} )</strong></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</td>
