@@ -80,14 +80,16 @@
 						<div class="col-lg-12">
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h5 class="row text-right">
-										<strong class="col-md-6">Order summary</strong>
-										<div class="col-sm-1 col-md-offset-3">
-											<button ng-if="saveinvoice.addItems" ng-click="addItem()" type="button" class="btn btn-success btn-sm">
+									<div class="row">
+										<h5 class="col-md-11">
+											<strong>Order summary</strong>
+										</h5>
+										<div>
+											<button ng-if="saveinvoice.addItems" ng-click="addItem()" type="button" class="btn btn-flat btn-success btn-sm">
 												<i class="fa fa-plus"></i>
 											</button>
 										</div>
-									</h5>
+									</div>
 								</div>
 								<div class="panel-body">
 									<div class="table-responsive">
@@ -106,7 +108,7 @@
 												<tr ng-if="saveinvoice.addItems" ng-repeat="item in saveinvoice.items">
 													<td>
 														<div class="text-center">
-															<button ng-click="deleteItem($index)" type="button" class="btn btn-danger btn-sm">
+															<button ng-click="deleteItem($index)" type="button" class="btn btn-flat btn-danger btn-sm">
 																<i class="fa fa-times"></i>
 															</button>
 														</div>

@@ -77,11 +77,11 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<div class="row">
-										<h5 class="col-xs-6 col-lg-6">
+										<h5 class="col-xs-6">
 											<strong>Order summary</strong>
 										</h5>
-										<div class="col-sm-1 col-md-offset-3">
-											<button ng-if="saveinvoice.addItems" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addItemXsModal">
+										<div class="col-xs-6 text-right">
+											<button ng-if="saveinvoice.addItems" type="button" class="btn btn-flat btn-success btn-sm" data-toggle="modal" data-target="#addItemXsModal">
 												<i class="fa fa-plus"></i>
 											</button>
 										</div>
@@ -101,7 +101,7 @@
 												<tr ng-if="saveinvoice.addItems" ng-repeat="item in saveinvoice.items">
 													<td>
 														<div class="text-center">
-															<button ng-click="deleteItem($index)" type="button" class="btn btn-danger btn-xs">
+															<button ng-click="deleteItem($index)" type="button" class="btn btn-flat btn-danger btn-xs">
 																<i class="fa fa-times"></i>
 															</button>
 														</div>

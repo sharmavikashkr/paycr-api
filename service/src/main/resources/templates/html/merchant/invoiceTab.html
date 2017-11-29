@@ -94,14 +94,14 @@
 			<div class="panel-body col-md-9">
 				<div ng-if="user.access.finance" class="row hidden-xs">
 					<div class="col-md-2 col-md-offset-10">
-						<button title="Create Invoice" type="button" class="btn btn-info btn-sm" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal">
+						<button title="Create Invoice" class="btn btn-info btn-sm" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceModal">
 							<i class="fa fa-plus"></i> Invoice
 						</button>
 					</div>
 				</div>
 				<div ng-if="user.access.finance" class="row visible-xs">
-					<div class="col-xs-6 col-xs-offset-6">
-						<button type="button" class="btn btn-info btn-sm" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
+					<div class="col-md-2 col-md-offset-10">
+						<button class="btn btn-info btn-sm" ng-click="updateSaveInvoice(newinvoice)" data-toggle="modal" data-target="#createInvoiceXsModal">
 							<i class="fa fa-plus"></i> Invoice
 						</button>
 					</div>
