@@ -92,13 +92,13 @@
 												<div class="box-header with-border">
 													<h5 class="box-title">Item Settings</h5>
 													<div class="box-tools pull-right">
-														<button ng-if="user.access.finance" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editConPrefs = !$parent.editConPrefs" title="Edit Settings">
+														<button ng-if="user.access.finance" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editItemPrefs = !$parent.editItemPrefs" title="Edit Settings">
 															<i class="fa fa-pencil"></i>
 														</button>
 													</div>
 												</div>
 												<div class="box-body">
-													<fieldset class="panel-body" ng-disabled="!editConPrefs">
+													<fieldset ng-disabled="!editItemPrefs">
 														<table class="table table-striped table-bordered table-responsive">
 															<tbody>
 																<tr>
@@ -117,7 +117,7 @@
 														</table>
 													</fieldset>
 												</div>
-												<div class="box-footer">
+												<div ng-if="editItemPrefs" class="box-footer">
 									            	<div class="input-group">
 									                	<span class="input-group-btn">
 								                        	<button ng-click="updateInventory(inventory)" class="btn btn-info">Save</button>
