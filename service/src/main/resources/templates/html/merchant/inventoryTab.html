@@ -83,71 +83,91 @@
 												data-toggle="tab">
 												<i class="fa fa-search"></i>
 											</button>
-											<a title="Edit Consumer" href="#" ng-click="$parent.editConPrefs = !$parent.editConPrefs" ng-if="user.access.finance">
-												<span class="btn btn-danger glyphicon glyphicon-edit"></span>
-											</a>
 										</div>
 									</div>
 									<br>
 									<div class="row">
-										<div class="col-lg-6">
-											<h5>Item Settings</h5>
-											<fieldset ng-disabled="!editConPrefs">
-												<table class="table table-striped table-bordered table-responsive">
-													<tbody>
-														<tr>
-															<td><strong>Created</strong></td>
-															<td>{{inventory.created | date:'dd-MM-yyyy'}}</td>
-														</tr>
-														<tr>
-															<td><strong>Description</strong></td>
-															<td><input class="form-control" ng-model="inventory.description"/></td>
-														</tr>
-														<tr>
-															<td><strong>Active</strong></td>
-															<td><input ng-model="inventory.active" type="checkbox"/></td>
-														</tr>
-													</tbody>
-												</table>
-											</fieldset>
-											<button type="button" ng-click="updateInventory(inventory)" class="btn btn-info">Save</button>
+										<div class="col-md-6">
+											<div class="box box-warning">
+												<div class="box-header with-border">
+													<h5 class="box-title">Item Settings</h5>
+													<div class="box-tools pull-right">
+														<button ng-if="user.access.finance" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editConPrefs = !$parent.editConPrefs" title="Edit Settings">
+															<i class="fa fa-pencil"></i>
+														</button>
+													</div>
+												</div>
+												<div class="box-body">
+													<fieldset class="panel-body" ng-disabled="!editConPrefs">
+														<table class="table table-striped table-bordered table-responsive">
+															<tbody>
+																<tr>
+																	<td><strong>Created</strong></td>
+																	<td>{{inventory.created | date:'dd-MM-yyyy'}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Description</strong></td>
+																	<td><input class="form-control" ng-model="inventory.description"/></td>
+																</tr>
+																<tr>
+																	<td><strong>Active</strong></td>
+																	<td><input ng-model="inventory.active" type="checkbox"/></td>
+																</tr>
+															</tbody>
+														</table>
+													</fieldset>
+												</div>
+												<div class="box-footer">
+									            	<div class="input-group">
+									                	<span class="input-group-btn">
+								                        	<button ng-click="updateInventory(inventory)" class="btn btn-info">Save</button>
+								                    	</span>
+									                </div>
+									            </div>
+											</div>
 										</div>
-										<br>
-										<div class="col-lg-6">
-											<div class="panel panel-default">
-												<div class="panel-heading"> Item Stats
-													<span style="float: right;">
-														<button type="button" class="btn btn-warning btn-xs" ng-click="fetchInventoryStats(inventory)" title="Fetch Stats">
+										<div class="col-md-6">
+											<div class="box box-success">
+												<div class="box-header with-border">
+													<h5 class="box-title">Item Stats</h5>
+													<div class="box-tools pull-right">
+														<button type="button" class="btn btn-flat btn-xs btn-success" ng-click="fetchInventoryStats(inventory)" title="Load Stats">
 															<i class="fa fa-spinner"></i>
 														</button>
-													</span>
+													</div>
 												</div>
-												<div class="panel-body">
+												<div class="box-body">
 													<table class="table table-striped table-bordered table-responsive">
+														<thead>
+															<tr>
+																<th>Invoice Status</th>
+																<th>Items in state</th>
+															</tr>
+														</thead>
 														<tbody>
 															<tr>
-																<td><strong>Created</strong></td>
-																<td>{{inventory.itemStats.createdNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.createdSum}} )</strong></td>
+																<td>Created</td>
+																<td>{{inventory.itemStats.createdNo}} (<i class="fa fa-rupee"></i> {{inventory.itemStats.createdSum}})</td>
 															</tr>
 															<tr>
-																<td><strong>Unpaid</strong></td>
-																<td>{{inventory.itemStats.unpaidNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.unpaidSum}} )</strong></td>
+																<td>Unpaid</td>
+																<td>{{inventory.itemStats.unpaidNo}} (<i class="fa fa-rupee"></i> {{inventory.itemStats.unpaidSum}})</td>
 															</tr>
 															<tr>
-																<td><strong>Paid</strong></td>
-																<td>{{inventory.itemStats.paidNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.paidSum}} )</strong></td>
+																<td>Paid</td>
+																<td>{{inventory.itemStats.paidNo}} (<i class="fa fa-rupee"></i>{{inventory.itemStats.paidSum}})</td>
 															</tr>
 															<tr>
-																<td><strong>Declined</strong></td>
-																<td>{{inventory.itemStats.declinedNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.declinedSum}} )</strong></td>
+																<td>Declined</td>
+																<td>{{inventory.itemStats.declinedNo}} (<i class="fa fa-rupee"></i> {{inventory.itemStats.declinedSum}})</td>
 															</tr>
 															<tr>
-																<td><strong>Expired</strong></td>
-																<td>{{inventory.itemStats.declinedNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.declinedSum}} )</strong></td>
+																<td>Expired</td>
+																<td>{{inventory.itemStats.declinedNo}} (<i class="fa fa-rupee"></i> {{inventory.itemStats.declinedSum}})</td>
 															</tr>
 															<tr>
-																<td><strong>Total</strong></td>
-																<td>{{inventory.itemStats.totalNo}} <strong>( <i class="fa fa-rupee"></i> {{inventory.itemStats.totalSum}} )</strong></td>
+																<td><Strong>Total</Strong></td>
+																<td><strong>{{inventory.itemStats.totalNo}} (<i class="fa fa-rupee"></i> {{inventory.itemStats.totalSum}})</strong></td>
 															</tr>
 														</tbody>
 													</table>

@@ -1,14 +1,17 @@
 <div ng-controller="InvoiceSettingController">
 	<div class="panel-body">
 		<div class="col-lg-4">
-			<div class="panel panel-default">
-				<div class="panel-heading"> Payment Setting
-					<a href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs">
-						<span class="btn glyphicon glyphicon-edit" style="float: right; padding: 0px;"></span>
-					</a>
+			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h5 class="box-title">Payment Setting</h5>
+					<div class="box-tools pull-right">
+						<button class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editPaySets = !$parent.editPaySets" title="Edit Settings">
+							<i class="fa fa-pencil"></i>
+						</button>
+					</div>
 				</div>
-				<div class="panel-body">
-					<fieldset ng-disabled="!editPayPrefs">
+				<div class="box-body">
+					<fieldset ng-disabled="!editPaySets">
 						<div class="form-group">
 							<label class="control-label">RazorPay Merchant Id</label>
 							<input class="form-control" ng-model="merchant.paymentSetting.rzpMerchantId" />
@@ -21,21 +24,26 @@
 							<label class="control-label">RazorPay Secret Id</label>
 							<input class="form-control" ng-model="merchant.paymentSetting.rzpSecretId" />
 						</div>
-						<div>
-							<button ng-click="savePaymentSetting(merchant.paymentSetting)" class="btn btn-info">Save</button>
-						</div>
 					</fieldset>
 				</div>
+				<div ng-if="editPaySets" class="box-footer">
+		           	<div class="input-group">
+		               	<span class="input-group-btn">
+	                      	<button ng-click="savePaymentSetting(merchant.paymentSetting)" class="btn btn-info">Save</button>
+	                  	</span>
+	               </div>
+	           </div>
 			</div>
-			<div class="panel panel-default">
-				<div class="panel-heading"> Custom Params
-					<span style="float: right;">
-						<button type="button" class="btn btn-info btn-circle btn-xs" data-toggle="modal" data-target="#createParamModal">
+			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h5 class="box-title">Custom Params</h5>
+					<div class="box-tools pull-right">
+						<button class="btn btn-flat btn-info btn-xs" data-toggle="modal" data-target="#createParamModal" title="Add Param">
 							<i class="fa fa-plus"></i>
 						</button>
-					</span>
+					</div>
 				</div>
-				<div class="panel-body">
+				<div class="box-body">
 					<table class="table table-striped table-bordered table-hover table-responsive">
 						<thead>
 							<tr>
@@ -49,7 +57,7 @@
 								<td>{{param.paramName}}</td>
 								<td>{{param.provider}}</td>
 								<td>
-									<button ng-click="deleteParam(param.id, param.paramName)" style="margin-top: -5px;" type="button" class="btn btn-danger btn-xs">
+									<button ng-click="deleteParam(param.id, param.paramName)" class="btn btn-flat btn-danger btn-xs">
 										<i class="fa fa-times"></i>
 									</button>
 								</td>
@@ -60,51 +68,64 @@
 			</div>
 		</div>
 		<div class="col-lg-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">Invoice Preference</div>
-				<div class="panel-body">
-					<table class="table table-striped table-bordered table-hover table-responsive">
-						<tr>
-							<td>Send Email</td>
-							<td><input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail"></td>
-						</tr>
-						<tr>
-							<td>Send Sms</td>
-							<td><input type="checkbox" ng-model="merchant.invoiceSetting.sendSms"></td>
-						</tr>
-						<tr>
-							<td>Add Items</td>
-							<td><input type="checkbox" ng-model="merchant.invoiceSetting.addItems"></td>
-						</tr>
-						<tr>
-							<td>CC Me</td>
-							<td><input type="checkbox" ng-model="merchant.invoiceSetting.ccMe"></td>
-						</tr>
-						<tr>
-							<td>Expiry Days</td>
-							<td><input class="form-control" ng-model="merchant.invoiceSetting.expiryDays" type="number" required /></td>
-						</tr>
-						<tr>
-							<td>Tax Name</td>
-							<td><input class="form-control" ng-model="merchant.invoiceSetting.taxName" required /></td>
-						</tr>
-						<tr>
-							<td>Tax Value %</td>
-							<td><input class="form-control" ng-model="merchant.invoiceSetting.taxValue" type="number" required /></td>
-						</tr>
-						<tr>
-							<td>Email Subject</td>
-							<td><input class="form-control" ng-model="merchant.invoiceSetting.emailSubject" required /></td>
-						</tr>
-						<tr>
-							<td>Email Note</td>
-							<td><input class="form-control" ng-model="merchant.invoiceSetting.emailNote" required /></td>
-						</tr>
-					</table>
-					<div>
-						<button ng-click="saveInvoiceSetting(merchant.invoiceSetting)" class="btn btn-info">Save</button>
+			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h5 class="box-title">Invoice Preference</h5>
+					<div class="box-tools pull-right">
+						<button class="btn btn-flat btn-info btn-xs"  ng-click="$parent.editPayPrefs = !$parent.editPayPrefs" title="Edit Settings">
+							<i class="fa fa-pencil"></i>
+						</button>
 					</div>
 				</div>
+				<div class="box-body">
+					<fieldset ng-disabled="!editPayPrefs">
+						<table class="table table-striped table-bordered table-hover table-responsive">
+							<tr>
+								<td>Send Email</td>
+								<td><input type="checkbox" ng-model="merchant.invoiceSetting.sendEmail"></td>
+							</tr>
+							<tr>
+								<td>Send Sms</td>
+								<td><input type="checkbox" ng-model="merchant.invoiceSetting.sendSms"></td>
+							</tr>
+							<tr>
+								<td>Add Items</td>
+								<td><input type="checkbox" ng-model="merchant.invoiceSetting.addItems"></td>
+							</tr>
+							<tr>
+								<td>CC Me</td>
+								<td><input type="checkbox" ng-model="merchant.invoiceSetting.ccMe"></td>
+							</tr>
+							<tr>
+								<td>Expiry Days</td>
+								<td><input class="form-control" ng-model="merchant.invoiceSetting.expiryDays" type="number" required /></td>
+							</tr>
+							<tr>
+								<td>Tax Name</td>
+								<td><input class="form-control" ng-model="merchant.invoiceSetting.taxName" required /></td>
+							</tr>
+							<tr>
+								<td>Tax Value %</td>
+								<td><input class="form-control" ng-model="merchant.invoiceSetting.taxValue" type="number" required /></td>
+							</tr>
+							<tr>
+								<td>Email Subject</td>
+								<td><input class="form-control" ng-model="merchant.invoiceSetting.emailSubject" required /></td>
+							</tr>
+							<tr>
+								<td>Email Note</td>
+								<td><input class="form-control" ng-model="merchant.invoiceSetting.emailNote" required /></td>
+							</tr>
+						</table>
+					</fieldset>
+				</div>
+				<div ng-if="editPayPrefs" class="box-footer">
+		           	<div class="input-group">
+		               	<span class="input-group-btn">
+	                      	<button ng-click="saveInvoiceSetting(merchant.invoiceSetting)" class="btn btn-info">Save</button>
+	                  	</span>
+	               </div>
+	           </div>
 			</div>
 			<div class="form-group">
 				<label class="control-label">Banner (80x80) </label>
