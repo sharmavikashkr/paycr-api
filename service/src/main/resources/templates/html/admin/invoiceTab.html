@@ -111,19 +111,19 @@
 								<div style="padding:10px" class="accordion-body collapse" id="invdetails-{{invoice.invoiceCode}}">
 									<div class="row">
 										<div class="col-md-6">
-											<button ng-click="updateInvoiceInfo(invoice)" title="Info" type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#invoiceInfoModal">
+											<button ng-click="updateInvoiceInfo(invoice)" title="Info" class="btn btn-flat btn-info btn-md" data-toggle="modal" data-target="#invoiceInfoModal">
 												<i class="fa fa-info"></i>
 											</button>
-											<button ng-if="invoice.invoiceType != 'BULK'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
+											<button ng-if="invoice.invoiceType != 'BULK'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 												<i class="fa fa-rupee"></i>
 											</button>
-											<a title="Download Pdf" type="button" class="btn btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
+											<a title="Download Pdf" class="btn btn-flat btn-default btn-md" href="/invoice/receipt/download/{{invoice.invoiceCode}}">
 												<i class="fa fa-file-pdf-o"></i>
 											</a>
-											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice.invoiceCode)" title="Search child invoices" type="button" class="btn btn-warning btn-md">
+											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice.invoiceCode)" title="Search child invoices" class="btn btn-flat btn-warning btn-md">
 												<i class="fa fa-search"></i>
 											</button>
-											<button ng-click="fetchTimelines(invoice)" title="Invoice Timelines" type="button" class="btn btn-info btn-md hidden-xs" data-toggle="modal" data-target="#invoiceTimelineModal">
+											<button ng-click="fetchTimelines(invoice)" title="Invoice Timelines" class="btn btn-flat btn-info btn-md hidden-xs" data-toggle="modal" data-target="#invoiceTimelineModal">
 												<i class="fa fa-level-down"></i>
 											</button>
 										</div>
@@ -188,7 +188,7 @@
 														<td class="hidden-xs">{{invoice.merchant.email}}</td>
 														<td class="hidden-xs">{{invoice.merchant.mobile}}</td>
 														<td>
-															<button ng-click="searchMerchantInvoices(invoice)" title="Search merchant invoices" type="button" class="btn btn-warning btn-xs">
+															<button ng-click="searchMerchantInvoices(invoice)" title="Search merchant invoices" class="btn btn-flat btn-warning btn-xs">
 																<i class="fa fa-search"></i>
 															</button>
 														</td>
@@ -215,7 +215,7 @@
 														<td class="hidden-xs">{{invoice.consumer.email}}</td>
 														<td>{{invoice.consumer.mobile}}</td>
 														<td>
-															<button ng-click="searchConsumerInvoices(invoice.consumer)" title="Search consumer invoices" type="button" class="btn btn-warning btn-xs">
+															<button ng-click="searchConsumerInvoices(invoice.consumer)" title="Search consumer invoices" class="btn btn-flat btn-warning btn-xs">
 																<i class="fa fa-search"></i>
 															</button>
 														</td>

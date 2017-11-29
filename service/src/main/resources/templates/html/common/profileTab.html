@@ -1,9 +1,11 @@
 <div ng-controller="ProfileController" id="profileTab">
 	<div class="panel-body">
 		<div class="col-lg-6 text-center">
-			<div class="panel panel-default">
-				<div class="panel-heading">Profile Details</div>
-				<div class="panel-body">
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h5 class="box-title">Profile Details</h5>
+				</div>
+				<div class="box-body">
 					<table class="table table-striped table-bordered table-hover table-responsive">
 						<tbody>
 							<tr>
@@ -27,13 +29,15 @@
 				</div>
 			</div>
 			<div class="panel-body">
-				<button class="btn btn-info" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+				<button class="btn btn-flat btn-danger" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
 			</div>
 		</div>
 		<div class="col-lg-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">Address</div>
-				<div class="panel-body">
+			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h5 class="box-title">Address</h5>
+				</div>
+				<div class="box-body">
 					<div class="form-group">
 						<label class="control-label">Address Line 1</label>
 						<input class="form-control" ng-model="user.address.addressLine1" />

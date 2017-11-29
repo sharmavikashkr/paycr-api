@@ -29,10 +29,10 @@
 						<td class="hidden-xs">{{myuser.createdBy}}</td>
 						<td class="hidden-xs">{{myuser.created | date:'dd:MM:yyyy'}}</td>
 						<td>
-							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-danger btn-xs">
+							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-flat btn-danger btn-xs">
 								<i class="fa fa-minus"></i>
 							</button>
-							<button title="ACTIVATE" ng-if="!myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-success btn-xs">
+							<button title="ACTIVATE" ng-if="!myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-flat btn-success btn-xs">
 								<i class="fa fa-check"></i>
 							</button>
 						</td>

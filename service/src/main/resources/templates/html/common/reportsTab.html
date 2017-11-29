@@ -1,10 +1,10 @@
 <div ng-controller="ReportsController">
 	<div class="panel-body">
 		<div class="col-sm-2 col-sm-offset-9">
-			<button type="button" class="visible-xs-inline btn btn-info btn-sm" data-toggle="modal" data-target="#createReportXsModal">
+			<button class="visible-xs-inline btn btn-info btn-sm" data-toggle="modal" data-target="#createReportXsModal">
 				<i class="fa fa-plus"></i> Report
 			</button>
-			<button ng-click="getSchedule()" type="button" class="btn btn-danger btn-sm" title="Schedule" data-toggle="modal" data-target="#recurrReportModal">
+			<button ng-click="getSchedule()" class="btn btn-danger btn-sm" title="Schedule" data-toggle="modal" data-target="#recurrReportModal">
 				<i class="fa fa-clock-o"></i> Schedule
 			</button>
 		</div>
@@ -46,8 +46,8 @@
 							</select>
 						</td>
 						<td>
-							<button ng-click="createReport()" type="button" class="btn btn-success btn-xs" title="Create"><i class="fa fa-plus"></i></button>
-							<button ng-click="loadReport(newreport)" type="button" class="btn btn-info btn-xs" title="Load"><i class="fa fa-retweet"></i></button>
+							<button ng-click="createReport()" class="btn btn-flat btn-success btn-xs" title="Create"><i class="fa fa-plus"></i></button>
+							<button ng-click="loadReport(newreport)" class="btn btn-flat btn-info btn-xs" title="Load"><i class="fa fa-retweet"></i></button>
 						</td>
 					</tr>
 					<tr ng-class="(report.merchant!=null)?'success':''" ng-repeat="report in reports">
@@ -57,8 +57,8 @@
 						<td class="hidden-xs">{{report.payMode}}</td>
 						<td class="hidden-xs">{{report.payStatus}}</td>
 						<td>
-							<button ng-click="loadReport(report)" type="button" class="btn btn-info btn-xs" title="Load"><i class="fa fa-retweet"></i></button>
-							<button ng-if="report.merchant!=null" ng-click="deleteReport(report.id, report.name)" type="button" class="btn btn-danger btn-xs" title="Delete">
+							<button ng-click="loadReport(report)" class="btn btn-flat btn-info btn-xs" title="Load"><i class="fa fa-retweet"></i></button>
+							<button ng-if="report.merchant!=null" ng-click="deleteReport(report.id, report.name)" class="btn btn-flat btn-danger btn-xs" title="Delete">
 								<i class="fa fa-times"></i>
 							</button>
 						</td>

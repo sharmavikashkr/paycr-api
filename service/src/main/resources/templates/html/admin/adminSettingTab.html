@@ -1,14 +1,17 @@
 <div ng-controller="AdminSettingController">
 	<div class="panel-body">
 		<div class="col-sm-4">
-			<div class="panel panel-default">
-				<div class="panel-heading"> Payment Setting
-					<a href="#" ng-click="$parent.editPayPrefs = !$parent.editPayPrefs">
-						<span class="btn glyphicon glyphicon-edit" style="float: right; padding: 0px;"></span>
-					</a>
+			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h5 class="box-title">Payment Setting</h5>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editAdminSets = !$parent.editAdminSets" title="Edit">
+							<i class="fa fa-pencil"></i>
+						</button>
+					</div>
 				</div>
-				<div class="panel-body">
-					<fieldset ng-disabled="!editPayPrefs">
+				<div class="box-body">
+					<fieldset ng-disabled="!editAdminSets">
 						<div class="form-group">
 							<label class="control-label">RazorPay Merchant Id</label>
 							<input class="form-control" ng-model="adminSetting.paymentSetting.rzpMerchantId" />
@@ -29,11 +32,15 @@
 							<label class="control-label">Tax Value %</label>
 							<input class="form-control" ng-model="adminSetting.taxValue" type="number" required />
 						</div>
-						<div>
-							<button ng-click="saveAdminSetting(adminSetting)" class="btn btn-info">Save</button>
-						</div>
 					</fieldset>
 				</div>
+				<div ng-if="editAdminSets" class="box-footer">
+		        	<div class="input-group">
+		            	<span class="input-group-btn">
+		                   	<button ng-click="updateInventory(inventory)" class="btn btn-info">Save</button>
+		               	</span>
+		            </div>
+		        </div>
 			</div>
 			<div class="form-group">
 				<label class="control-label">Banner (80x80)</label>
