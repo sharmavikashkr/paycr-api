@@ -544,6 +544,9 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		this.newInvComment = "";
 	}
 	$scope.addFilter = function(newFilter) {
+		if(newFilter.value == null || newFilter.value == "" || newFilter.name == null || newFilter.name == "") {
+			return;
+		}
 		$rootScope.childInvoiceReq.conCatList.push(angular.copy(newFilter));
 		this.newFilter = {"name":"","value":""};
 	}

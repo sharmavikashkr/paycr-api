@@ -49,8 +49,9 @@
 							<label>Add Category Consumers</label>
 							<div>
 								<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in childInvoiceReq.conCatList">
-									<a class="panel panel-default" href="#"><strong>{{conCatFilter.name}} : </strong>{{conCatFilter.value}}</a>
-									<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteFilter($index)"><i class="fa fa-minus"></i></a> 
+									<label class="panel"><strong>{{conCatFilter.name}} : </strong>{{conCatFilter.value}}
+										<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteFilter($index)"><i class="fa fa-minus"></i></a>
+									</label>&nbsp; 
 								</div>
 								<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline">
 									<select ng-model="newFilter.name" ng-change="fetchCategoryValues(newFilter.name)">
@@ -59,7 +60,7 @@
 									<select ng-model="newFilter.value">
 										<option ng-repeat="catValue in catValues" ng-value="catValue">{{catValue}}</option>
 									</select>
-									<a class="btn btn-success btn-xs" title="add filter" ng-click="addFilter(newFilter)"><i class="fa fa-plus"></i></a>
+									<a class="btn btn-flat btn-success btn-xs" title="add filter" ng-click="addFilter(newFilter)"><i class="fa fa-plus"></i></a>
 								</div>
 								<a ng-if="childInvoiceReq.conCatList.length > 0" ng-click="fetchCategoryConsumer()" data-toggle="modal" data-target="#categoryConsumerModal" href="#">View Consumers</a>
 							</div>

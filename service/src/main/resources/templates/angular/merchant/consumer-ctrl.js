@@ -242,6 +242,9 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$rootScope.searchConsumerInvoices(consumer);
 	}
 	$scope.addFilter = function(newFilter) {
+		if(newFilter.value == null || newFilter.value == "" || newFilter.name == null || newFilter.name == "") {
+			return;
+		}
 		$rootScope.searchConsumerReq.conCatList.push(angular.copy(newFilter));
 		this.newFilter = {"name":"","value":""};
 		$rootScope.catValues = [];
@@ -249,8 +252,11 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 	$scope.deleteFilter = function(pos) {
 		$rootScope.searchConsumerReq.conCatList.splice(pos, 1);
 	}
-	$scope.addUpdateFilter = function(udpateFilter) {
-		$rootScope.updateConsumerReq.conCatList.push(angular.copy(udpateFilter));
+	$scope.addUpdateFilter = function(updateFilter) {
+		if(updateFilter.value == null || updateFilter.value == "" || updateFilter.name == null || updateFilter.name == "") {
+			return;
+		}
+		$rootScope.updateConsumerReq.conCatList.push(angular.copy(updateFilter));
 		this.updateFilter = {"name":"","value":""};
 		$rootScope.updateCatValues = [];
 	}
@@ -258,6 +264,9 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$rootScope.updateConsumerReq.conCatList.splice(pos, 1);
 	}
 	$scope.addNewCategory = function(newConCat) {
+		if(newConCat.value == null || newConCat.value == "" || newConCat.name == null || newConCat.name == "") {
+			return;
+		}
 		$scope.newconsumer.conCats.push(angular.copy(newConCat));
 	}
 	$scope.removeNewCategory = function(pos) {

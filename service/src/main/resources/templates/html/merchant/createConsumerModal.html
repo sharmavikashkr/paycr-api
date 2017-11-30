@@ -37,9 +37,10 @@
 									</tr>
 									<tr>
 										<td>
-											<div class="panel visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in newconsumer.conCats">
-												<a href="#"><strong>{{conCat.name}} : </strong>{{conCat.value}}</a>
-												<a class="btn btn-danger btn-xs" title="remove category" ng-click="removeNewCategory($index)"><i class="fa fa-minus"></i></a> 
+											<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in newconsumer.conCats">
+												<label class="panel">{{conCat.name}} : {{conCat.value}}
+													<a class="btn btn-flat btn-danger btn-xs" title="remove category" ng-click="removeNewCategory($index)"><i class="fa fa-minus"></i></a>
+												</label>&nbsp;
 											</div>
 										</td>
 									</tr>

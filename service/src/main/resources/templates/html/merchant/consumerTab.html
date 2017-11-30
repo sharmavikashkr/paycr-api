@@ -9,9 +9,10 @@
 							<td>
 								<div>
 									<label class="control-label">Consumer Category</label><br>
-									<div class="form-group" class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in searchConsumerReq.conCatList">
-										<a class="panel panel-default" href="#"><strong>{{conCatFilter.name}} : </strong>{{conCatFilter.value}}</a>
-										<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteFilter($index)"><i class="fa fa-minus"></i></a> 
+									<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in searchConsumerReq.conCatList">
+										<label class="panel">{{conCatFilter.name}} : {{conCatFilter.value}}
+											<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteFilter($index)"><i class="fa fa-minus"></i></a>
+										</label>&nbsp;
 									</div>
 									<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline">
 										<select ng-model="newFilter.name" ng-change="fetchCategoryValues(newFilter.name)">
@@ -57,9 +58,10 @@
 							<td>
 								<div>
 									<label class="control-label">New Consumer Category</label><br>
-									<div class="form-group" class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in updateConsumerReq.conCatList">
-										<a class="panel panel-default" href="#"><strong>{{conCatFilter.name}} : </strong>{{conCatFilter.value}}</a>
-										<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteUpdateFilter($index)"><i class="fa fa-minus"></i></a> 
+									<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCatFilter in updateConsumerReq.conCatList">
+										<label class="panel">{{conCatFilter.name}} : {{conCatFilter.value}}
+											<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteUpdateFilter($index)"><i class="fa fa-minus"></i></a>
+										</label>&nbsp;
 									</div>
 									<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline">
 										<input placeholder="category name" type="text" ng-model="updateFilter.name" list="update-cat-auto-complete" ng-init="updateFilter.name = ''" /> 
@@ -172,9 +174,10 @@
 												<i class="fa fa-pencil"></i>
 											</button>
 											&nbsp;&nbsp;&nbsp;
-											<div class="panel visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in consumer.conCats">
-												<a href="#"><strong>{{conCat.name}} : </strong>{{conCat.value}}</a>
-												<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a> 
+											<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in consumer.conCats">
+												<label class="panel" href="#">{{conCat.name}} : {{conCat.value}}
+													<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a>
+												</label>&nbsp;
 											</div>
 										</div>
 									</div>
