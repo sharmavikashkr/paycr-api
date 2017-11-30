@@ -20,7 +20,7 @@
 										<select ng-model="newFilter.value">
 											<option ng-repeat="catValue in catValues" ng-value="catValue">{{catValue}}</option>
 										</select>
-										<a class="btn btn-success btn-xs" title="add filter" ng-click="addFilter(newFilter)"><i class="fa fa-plus"></i></a>
+										<a class="btn btn-flat btn-success btn-xs" title="add filter" ng-click="addFilter(newFilter)"><i class="fa fa-plus"></i></a>
 									</div>
 								</div>
 							</td>
@@ -70,7 +70,7 @@
 										<datalist id="update-value-auto-complete">
 											<option ng-repeat="updateCatValue in updateCatValues" ng-value="updateCatValue">
 										</datalist>
-										<a class="btn btn-success btn-xs" title="add filter" ng-click="addUpdateFilter(updateFilter)"><i class="fa fa-plus"></i></a>
+										<a class="btn btn-flat btn-success btn-sm" title="add filter" ng-click="addUpdateFilter(updateFilter)"><i class="fa fa-plus"></i></a>
 									</div>
 								</div>
 							</td>
@@ -174,7 +174,7 @@
 											&nbsp;&nbsp;&nbsp;
 											<div class="panel visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in consumer.conCats">
 												<a href="#"><strong>{{conCat.name}} : </strong>{{conCat.value}}</a>
-												<a class="btn btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a> 
+												<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a> 
 											</div>
 										</div>
 									</div>
@@ -186,22 +186,25 @@
 												<table class="table table-striped table-bordered table-responsive">
 													<tbody>
 														<tr>
-															<td>
-																<input placeholder="category name" class="form-control" type="text" ng-model="newConCat.name" list="cat-auto-complete" ng-init="newConCat.name = ''" />
-																<datalist id="cat-auto-complete">
-																	<option ng-repeat="category in categories" ng-value="category">
-																</datalist>
-															</td>
-															<td>
+															<!-- <td>
+																
+															</td> -->
+															<td colspan="2">
 																<div class="row">
-																	<div class="col-lg-9 col-md-9 col-sm-9 col-xs-8">
+																	<div class="col-sm-5">
+																		<input placeholder="category name" class="form-control" type="text" ng-model="newConCat.name" list="cat-auto-complete" ng-init="newConCat.name = ''" />
+																		<datalist id="cat-auto-complete">
+																			<option ng-repeat="category in categories" ng-value="category">
+																		</datalist>
+																	</div>
+																	<div class="col-sm-5">
 																		<input placeholder="category value" class="form-control" ng-disabled="newConCat.name == ''" type="text" ng-focus="fetchNewCategoryValues(newConCat.name)" ng-model="newConCat.value" list="catValue-auto-complete" ng-init="newConCat.value = ''" /> 
 																		<datalist id="catValue-auto-complete">
 																			<option ng-repeat="newCatValue in newCatValues" ng-value="newCatValue">
 																		</datalist>
 																	</div>
-																	<div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
-																		<a class="btn btn-flat btn-success btn-xs" title="add category" ng-click="addCategory(consumer.id, newConCat)"><i class="fa fa-plus"></i></a>
+																	<div class="col-sm-2">
+																		<a class="btn btn-flat btn-success btn-sm" title="add category" ng-click="addCategory(consumer.id, newConCat)"><i class="fa fa-plus"></i></a>
 																	</div>
 																</div>
 															</td>
