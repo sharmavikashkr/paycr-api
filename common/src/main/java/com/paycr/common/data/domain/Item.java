@@ -22,6 +22,9 @@ public class Item {
 	private int quantity;
 	private BigDecimal price;
 
+	@ManyToOne
+	private TaxMaster tax;
+
 	@JsonIgnore
 	@ManyToOne
 	private Invoice invoice;
@@ -63,6 +66,14 @@ public class Item {
 
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
+	}
+
+	public TaxMaster getTax() {
+		return tax;
+	}
+
+	public void setTax(TaxMaster tax) {
+		this.tax = tax;
 	}
 
 }

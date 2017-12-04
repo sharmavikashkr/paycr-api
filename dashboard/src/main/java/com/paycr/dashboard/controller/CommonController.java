@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paycr.common.bean.StatsResponse;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.util.RoleUtil;
@@ -44,6 +45,12 @@ public class CommonController {
 	@RequestMapping("/pricings")
 	public List<Pricing> getPricings() {
 		return comSer.getPricings();
+	}
+	
+	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
+	@RequestMapping("/taxes")
+	public List<TaxMaster> getTaxes() {
+		return comSer.getTaxes();
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)

@@ -13,6 +13,15 @@ CREATE TABLE if not exists pc_admin_setting (
 	payment_setting_id int REFERENCES pc_payment_setting
 );
 
+CREATE TABLE if not exists pc_tax_master (
+	id SERIAL PRIMARY KEY NOT NULL,
+	name varchar(20) NOT NULL,
+	value float NOT NULL,
+	active boolean NOT NULL,
+	is_parent boolean NOT NULL,
+	parent_id int REFERENCES pc_tax_master
+);
+
 CREATE TABLE if not exists pc_invoice_setting (
 	id SERIAL PRIMARY KEY NOT NULL,
 	send_email boolean NOT NULL,
@@ -23,9 +32,7 @@ CREATE TABLE if not exists pc_invoice_setting (
 	expiry_days int NOT NULL,
 	email_note varchar(50) DEFAULT NULL,
 	email_subject varchar(50) DEFAULT NULL,
-	banner varchar(20) DEFAULT NULL,
-	tax_name varchar(10) NOT NULL,
-	tax_value float NOT NULL
+	banner varchar(20) DEFAULT NULL
 );
 
 CREATE TABLE if not exists pc_merchant_custom_param (

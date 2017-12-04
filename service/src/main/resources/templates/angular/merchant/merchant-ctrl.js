@@ -77,6 +77,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		$scope.fetchUser();
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
+		$scope.fetchTaxes();
 		$rootScope.access_token = $cookies.get("access_token");
 	}
 	$scope.fetchEnums = function() {
@@ -252,12 +253,25 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.fetchTaxes = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/taxes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(taxes) {
+			$rootScope.taxList = taxes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 	$scope.refreshSetting = function(invoicesetting) {
 		$rootScope.newInvSetting = invoicesetting;
 		$rootScope.newinvoice.addItems = angular.copy(invoicesetting.addItems);
 		$rootScope.newinvoice.expiresIn = angular.copy(invoicesetting.expiryDays);
-		$rootScope.newinvoice.taxValue = angular.copy(invoicesetting.taxValue);
-		$rootScope.newinvoice.taxName = angular.copy(invoicesetting.taxName);
 		$rootScope.newinvoice.customParams = [];
 		for (var param in invoicesetting.customParams) {
 			var copyParam = angular.copy(invoicesetting.customParams[param]);

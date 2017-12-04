@@ -13,6 +13,7 @@ import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Item;
 import com.paycr.common.data.repository.InventoryRepository;
+import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -24,6 +25,9 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 
 	@Autowired
 	private InventoryRepository invnRepo;
+
+	@Autowired
+	private TaxMasterRepository taxMRepo;
 
 	@Override
 	public void validate(Invoice invoice) {
@@ -47,7 +51,12 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 				|| 0 == item.getQuantity()) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Items entered");
 		}
-		if (!item.getPrice().equals(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity())))) {
+		if (CommonUtil.isNull(item.getTax())) {
+			item.setTax(taxMRepo.findByName("NO_TAX"));
+		}
+		BigDecimal expPrice = item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()));
+		expPrice = expPrice.add(expPrice.multiply(new BigDecimal(item.getTax().getValue())).divide(new BigDecimal(100)));
+		if (!item.getPrice().equals(expPrice.setScale(2, BigDecimal.ROUND_UP))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
 		Inventory inventory = invnRepo.findByMerchantAndCode(invoice.getMerchant(), item.getInventory().getCode());
@@ -66,6 +75,7 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 			inventory.setCode(item.getInventory().getCode());
 			inventory.setName(item.getInventory().getName());
 			inventory.setRate(item.getInventory().getRate());
+			inventory.setTax(item.getTax());
 			inventory.setCreatedBy(invoice.getCreatedBy());
 			inventory.setActive(true);
 			invnRepo.save(inventory);

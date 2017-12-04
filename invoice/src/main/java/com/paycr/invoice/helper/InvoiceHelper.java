@@ -60,6 +60,7 @@ public class InvoiceHelper {
 			newItem.setInventory(item.getInventory());
 			newItem.setQuantity(item.getQuantity());
 			newItem.setPrice(item.getPrice());
+			newItem.setTax(item.getTax());
 			newItem.setInvoice(childInvoice);
 			newItems.add(newItem);
 		}

@@ -46,10 +46,8 @@ public class Invoice implements Cloneable {
 	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
-	private String taxName;
-
 	@Column(precision = 10, scale = 2)
-	private Float taxValue;
+	private BigDecimal shipping;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
@@ -261,22 +259,6 @@ public class Invoice implements Cloneable {
 		this.invoiceNotices = invoiceNotices;
 	}
 
-	public String getTaxName() {
-		return taxName;
-	}
-
-	public void setTaxName(String taxName) {
-		this.taxName = taxName;
-	}
-
-	public Float getTaxValue() {
-		return taxValue;
-	}
-
-	public void setTaxValue(Float taxValue) {
-		this.taxValue = taxValue;
-	}
-
 	public List<Attachment> getAttachments() {
 		return attachments;
 	}
@@ -327,5 +309,13 @@ public class Invoice implements Cloneable {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public BigDecimal getShipping() {
+		return shipping;
+	}
+
+	public void setShipping(BigDecimal shipping) {
+		this.shipping = shipping;
 	}
 }

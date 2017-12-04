@@ -37,7 +37,7 @@ public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
 			}
 		}
 		BigDecimal finalAmount = invoice.getTotal()
-				.add(invoice.getTotal().multiply(new BigDecimal(invoice.getTaxValue())).divide(new BigDecimal(100)))
+				.add(invoice.getShipping())
 				.subtract(invoice.getDiscount());
 		if (finalAmount.setScale(2, BigDecimal.ROUND_UP).compareTo(invoice.getPayAmount()) != 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount calculation mismatch");

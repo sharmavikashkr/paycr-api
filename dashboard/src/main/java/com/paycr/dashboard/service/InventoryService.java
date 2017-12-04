@@ -12,6 +12,7 @@ import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InventoryRepository;
+import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
@@ -23,6 +24,9 @@ public class InventoryService {
 
 	@Autowired
 	private InventoryRepository invnRepo;
+
+	@Autowired
+	private TaxMasterRepository taxMRepo;
 
 	@Autowired
 	private SecurityService secSer;
@@ -37,6 +41,9 @@ public class InventoryService {
 		Inventory exstingInvn = invnRepo.findByMerchantAndCode(merchant, inventory.getCode());
 		if (!CommonUtil.isNull(exstingInvn)) {
 			throw new PaycrException(Constants.FAILURE, "Item with this code already exists");
+		}
+		if (CommonUtil.isNull(inventory.getTax())) {
+			inventory.setTax(taxMRepo.findByName("NO_TAX"));
 		}
 		inventory.setCreated(new Date());
 		inventory.setMerchant(merchant);
@@ -53,6 +60,8 @@ public class InventoryService {
 		}
 		exstInvn.setActive(inventory.isActive());
 		exstInvn.setDescription(inventory.getDescription());
+		exstInvn.setTax(inventory.getTax());
+		exstInvn.setHsnsac(inventory.getHsnsac());
 		invnRepo.save(exstInvn);
 	}
 

@@ -99,6 +99,13 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 		$rootScope.searchInvoiceReq.itemCode = code;
 		$rootScope.searchInvoice();
 	}
+	$scope.setDefaultTax = function() {
+		for(var tax in $rootScope.taxList) {
+			if(this.inventory.tax.id == $rootScope.taxList[tax].id) {
+				this.inventory.tax = $rootScope.taxList[tax];
+			}
+		}
+	}
 	$scope.updateInvoiceItem = function(inventory) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
 		var inventory = {

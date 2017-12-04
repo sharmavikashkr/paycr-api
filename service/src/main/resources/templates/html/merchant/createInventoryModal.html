@@ -29,6 +29,24 @@
 									</tr>
 									<tr>
 										<td>
+											<div class="form-group">
+												<label class="control-label">HSN/SAC</label>
+												<input name="hscsac" class="form-control" placeholder="HSN/SAC" ng-model="newinventory.hsnsac" ng-pattern="patterns.paramNamePattern" />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="control-label">Tax</label>
+												<select class="form-control" ng-model="newinventory.tax">
+													<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
 											<div ng-class="(addItemForm.desc.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Description</label>
 												<input name="desc" class="form-control" placeholder="Description" ng-model="newinventory.description" ng-pattern="patterns.namePattern" />

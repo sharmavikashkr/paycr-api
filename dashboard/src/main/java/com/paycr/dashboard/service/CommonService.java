@@ -19,11 +19,13 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
@@ -41,6 +43,9 @@ public class CommonService {
 
 	@Autowired
 	private InvoiceRepository invRepo;
+
+	@Autowired
+	private TaxMasterRepository taxMRepo;
 
 	@Autowired
 	private NotificationRepository notiRepo;
@@ -77,7 +82,7 @@ public class CommonService {
 			calFrom.add(Calendar.DATE, -7);
 		} else if ("LAST_MONTH".equalsIgnoreCase(timeRange)) {
 			calFrom.add(Calendar.DATE, -30);
-		} else if("LAST_2WEEK".equalsIgnoreCase(timeRange)) {
+		} else if ("LAST_2WEEK".equalsIgnoreCase(timeRange)) {
 			calFrom.add(Calendar.DATE, -14);
 		}
 		StatsResponse response = new StatsResponse();
@@ -149,6 +154,10 @@ public class CommonService {
 		tl.setCreated(new Date());
 		tl.setInternal(true);
 		tlRepo.save(tl);
+	}
+
+	public List<TaxMaster> getTaxes() {
+		return taxMRepo.findByActive(true);
 	}
 
 }

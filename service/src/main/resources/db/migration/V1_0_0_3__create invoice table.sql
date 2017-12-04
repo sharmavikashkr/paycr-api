@@ -39,8 +39,7 @@ CREATE TABLE if not exists pc_invoice(
 	invoice_code varchar(20) NOT NULL,
 	invoice_type  varchar(10) NOT NULL,
 	total float NOT NULL,
-	tax_name varchar(10) NOT NULL,
-	tax_value float NOT NULL,
+	shipping float DEFAULT NULL,
 	discount float DEFAULT NULL,
 	pay_amount float NOT NULL,
 	add_items BOOLEAN NOT NULL,
@@ -76,10 +75,12 @@ CREATE TABLE if not exists pc_inventory (
 	created timestamp NOT NULL,
 	name varchar(50) NOT NULL,
 	code varchar(20) NOT NULL,
+	hsnsac varchar(10) DEFAULT NULL,
 	description varchar(255) DEFAULT NULL,
 	rate float NOT NULL,
 	created_by varchar(50) NOT NULL,
 	active boolean NOT NULL,
+	tax_id int REFERENCES pc_tax_master,
     merchant_id int REFERENCES pc_merchant
 );
 
@@ -88,6 +89,7 @@ CREATE TABLE if not exists pc_item (
 	quantity int NOT NULL,
 	price float NOT NULL,
     invoice_id int REFERENCES pc_invoice,
+	tax_id int REFERENCES pc_tax_master,
     inventory_id int REFERENCES pc_inventory
 );
 

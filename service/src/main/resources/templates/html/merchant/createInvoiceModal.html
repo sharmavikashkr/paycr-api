@@ -96,11 +96,12 @@
 										<table id="itemsTable" class="table table-bordered table-responsive">
 											<thead>
 												<tr>
-													<th class="text-center"><strong>Actions</strong></th>
-													<th class="text-center"><strong>Item Code</strong></th>
-													<th class="text-center"><strong>Item Name</strong></th>
-													<th class="text-center"><strong>Item Rate</strong></th>
-													<th class="text-center"><strong>Item Quantity</strong></th>
+													<th class="text-center"></th>
+													<th class="text-center"><strong>Code</strong></th>
+													<th class="text-center"><strong>Name</strong></th>
+													<th class="text-center"><strong>Rate</strong></th>
+													<th class="text-center"><strong>Qty</strong></th>
+													<th class="text-center"><strong>Tax</strong></th>
 													<th class="text-right"><strong>Total</strong></th>
 												</tr>
 											</thead>
@@ -115,7 +116,7 @@
 													</td>
 													<td>
 														<div ng-class="(createInvoiceForm.itemCode{{$index}}.$valid)?'':'has-error'" class="form-group">
-															<input class="form-control text-center" list="item-code-auto-complete" ng-change="setInventory(item,'CODE')" ng-model="item.inventory.code" name="itemCode{{$index}}" autocomplete="off" placeholder="Item Code" type="text" ng-pattern="patterns.paramNamePattern" required />
+															<input class="form-control text-center" list="item-code-auto-complete" ng-change="setInventory(item,'CODE')" ng-model="item.inventory.code" name="itemCode{{$index}}" autocomplete="off" placeholder="Code" type="text" ng-pattern="patterns.paramNamePattern" required />
 															<datalist id="item-code-auto-complete">
 																<option ng-repeat="invnitem in inventoryList" ng-if="invnitem.active" ng-value="invnitem.code">
 															</datalist>
@@ -123,7 +124,7 @@
 													</td>
 													<td>
 														<div ng-class="(createInvoiceForm.itemName{{$index}}.$valid)?'':'has-error'" class="form-group">
-															<input class="form-control text-center" list="item-name-auto-complete" ng-change="setInventory(item,'NAME')" ng-model="item.inventory.name" name="itemName{{$index}}" autocomplete="off" placeholder="Item Name" type="text" ng-pattern="patterns.namePattern" required />
+															<input class="form-control text-center" list="item-name-auto-complete" ng-change="setInventory(item,'NAME')" ng-model="item.inventory.name" name="itemName{{$index}}" autocomplete="off" placeholder="Name" type="text" ng-pattern="patterns.namePattern" required />
 															<datalist id="item-name-auto-complete">
 																<option ng-repeat="invnitem in inventoryList" ng-if="invnitem.active" ng-value="invnitem.name">
 															</datalist>
@@ -143,6 +144,13 @@
 														</div>
 													</td>
 													<td>
+														<div class="form-group">
+															<select class="form-control" ng-model="item.tax" ng-change="calculateTotal()">
+																<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+															</select>
+														</div>
+													</td>
+													<td>
 														<div class="input-group">
 															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
 															<div class="form-group">
@@ -153,6 +161,7 @@
 												</tr>
 												<tr>
 													<td class="highrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
@@ -171,18 +180,20 @@
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
-													<td class="emptyrow text-center"><strong>Tax({{saveinvoice.taxName}}) %</strong></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Shipping</strong></td>
 													<td class="emptyrow">
 														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
 															<div class="form-group">
-																<input class="form-control text-right" ng-change="calculateTotal()" ng-model="saveinvoice.taxValue" placeholder="18.00" type="number" step="0.01" />
+																<input class="form-control text-right" ng-change="calculateTotal()" ng-model="saveinvoice.shipping" placeholder="40.00" type="number" step="0.01" />
 															</div>
-															<div class="input-group-addon">%</div>
 														</div>
 													</td>
 												</tr>
 												<tr>
 													<td class="highrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
@@ -198,6 +209,7 @@
 												</tr>
 												<tr>
 													<td class="highrow"></td>
+													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>
 													<td class="emptyrow"></td>

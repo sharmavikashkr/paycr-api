@@ -65,6 +65,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				if(invn.code == item.inventory.code){
 					item.inventory.name = invn.name;
 					item.inventory.rate = invn.rate;
+					for(var tax in $rootScope.taxList) {
+						if(invn.tax.id == $rootScope.taxList[tax].id) {
+							item.tax = $rootScope.taxList[tax];
+						}
+					}
 					$scope.calculateTotal();
 					break;
 				}
@@ -75,6 +80,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				if(invn.name == item.inventory.name){
 					item.inventory.code = invn.code;
 					item.inventory.rate = invn.rate;
+					for(var tax in $rootScope.taxList) {
+						if(invn.tax.id == $rootScope.taxList[tax].id) {
+							item.tax = $rootScope.taxList[tax];
+						}
+					}
 					$scope.calculateTotal();
 					break;
 				}
@@ -124,6 +134,8 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}
 	}
 	$scope.addItemXs = function(item) {
+		/*var itemTotal = parseFloat(item.inventory.rate) * parseFloat(item.quantity);
+		var price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2))*/
 		if ($scope.saveinvoice.items.length < 5) {
 			var inventory = {
 				"code" : item.inventory.code,
@@ -133,7 +145,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.saveinvoice.items.push({
 				"inventory" : inventory,
 				"quantity" : item.quantity,
-				"price" : parseFloat(item.inventory.rate) * parseFloat(item.quantity)
+				"price" : 0
 			});
 		}
 		angular.element(document.querySelector('#addItemXsModal')).modal('hide');
@@ -148,28 +160,33 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		var totals = 0;
 		if($scope.saveinvoice.addItems) {
 			for ( var item in $scope.saveinvoice.items) {
+				var itemTax = 0;
 				if ($scope.saveinvoice.items[item].inventory.rate == null) {
 					$scope.saveinvoice.items[item].inventory.rate = 0;
 				}
 				if ($scope.saveinvoice.items[item].quantity == null) {
 					$scope.saveinvoice.items[item].quantity = 0;
 				}
-				$scope.saveinvoice.items[item].price = parseFloat((parseFloat($scope.saveinvoice.items[item].inventory.rate)
+				if ($scope.saveinvoice.items[item].tax != null) {
+					itemTax = parseFloat($scope.saveinvoice.items[item].tax.value).toFixed(2);
+				}
+				var itemTotal = parseFloat((parseFloat($scope.saveinvoice.items[item].inventory.rate)
 						* parseFloat($scope.saveinvoice.items[item].quantity)).toFixed(2));
+				$scope.saveinvoice.items[item].price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2));
 				totals = totals + parseFloat($scope.saveinvoice.items[item].price);
 			}
 			$scope.saveinvoice.total = parseFloat(totals.toFixed(2));
 		} else {
 			totals = $scope.saveinvoice.total;
 		}
-		if ($scope.saveinvoice.taxValue == null) {
-			$scope.saveinvoice.taxValue = 0;
+		if ($scope.saveinvoice.shipping == null) {
+			$scope.saveinvoice.shipping = 0;
 		}
 		if ($scope.saveinvoice.discount == null) {
 			$scope.saveinvoice.discount = 0;
 		}
 		$scope.saveinvoice.payAmount = parseFloat((totals
-				+ parseFloat((parseFloat($scope.saveinvoice.taxValue) * totals) / 100)
+				+ parseFloat($scope.saveinvoice.shipping)
 				- parseFloat($scope.saveinvoice.discount)).toFixed(2));
 	}
 	$scope.createInvoice = function() {

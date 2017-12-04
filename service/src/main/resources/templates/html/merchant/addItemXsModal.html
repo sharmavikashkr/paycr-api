@@ -51,6 +51,15 @@
 											</div>
 										</td>
 									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<select class="form-control" ng-model="item.tax">
+													<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+												</select>
+											</div>
+										</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>

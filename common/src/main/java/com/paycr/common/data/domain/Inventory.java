@@ -24,10 +24,14 @@ public class Inventory {
 
 	private String name;
 	private String code;
+	private String hsnsac;
 	private String description;
 	private BigDecimal rate;
 	private String createdBy;
 	private boolean active;
+
+	@ManyToOne
+	private TaxMaster tax;
 
 	@JsonIgnore
 	@ManyToOne
@@ -99,6 +103,22 @@ public class Inventory {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public String getHsnsac() {
+		return hsnsac;
+	}
+
+	public void setHsnsac(String hsnsac) {
+		this.hsnsac = hsnsac;
+	}
+
+	public TaxMaster getTax() {
+		return tax;
+	}
+
+	public void setTax(TaxMaster tax) {
+		this.tax = tax;
 	}
 
 }

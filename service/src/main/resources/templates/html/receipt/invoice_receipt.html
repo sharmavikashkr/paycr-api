@@ -90,7 +90,8 @@
 								<tr>
 				                    <th class="text-center">Item</td>
 				                    <th class="text-center">Rate</td>
-				                    <th class="text-center">Quantity</td>
+				                    <th class="text-center">Qty</td>
+				                    <th class="text-center">Tax</td>
 				                    <th class="text-right">Price</td>
 				                </tr>
 							</thead>
@@ -100,10 +101,12 @@
 				                    <td class="text-center">${item.inventory.name}</td>
 				                    <td class="text-center"><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
 				                    <td class="text-center">${item.quantity}</td>
+				                    <td class="text-center">${item.tax.name} ${item.tax.value}%</td>
 				                    <td class="text-right"><i class="fa fa-rupee"></i> ${item.price}</td>
 				                </tr>
 				                </#list>
 				                <tr>
+				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
 				                    <td class="text-center">Total</td>
@@ -112,16 +115,19 @@
 				                <tr>
 				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
-				                    <td class="text-center">Tax(${invoice.taxName})</td>
-				                    <td class="text-right">${invoice.taxValue}%</td>
+				                    <td class="text-center"></td>
+				                    <td class="text-center">Shipping</td>
+				                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.shipping}</td>
 				                </tr>
 				                <tr>
+				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
 				                    <td class="text-center">Discount</td>
 				                    <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.discount}</td>
 				                </tr>
 				                <tr>
+				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
 				                    <td class="text-center"></td>
 				                    <td class="text-center"><strong>Pay Amount</strong></td>

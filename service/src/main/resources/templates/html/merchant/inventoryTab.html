@@ -49,6 +49,7 @@
 					</thead>
 					<tbody ng-repeat="inventory in inventoryResp.inventoryList">
 						<tr ng-class="(inventory.active)?'success':'danger'"
+							ng-click="setDefaultTax()"
 							data-toggle="collapse"
 							data-target="#itemdetails-{{inventory.id}}"
 							class="accordion-toggle">
@@ -104,6 +105,18 @@
 																<tr>
 																	<td><strong>Created</strong></td>
 																	<td>{{inventory.created | date:'dd-MM-yyyy'}}</td>
+																</tr>
+																<tr>
+																	<td><strong>HSN/SAC</strong></td>
+																	<td><input class="form-control" ng-model="inventory.hsnsac"/></td>
+																</tr>
+																<tr>
+																	<td><strong>Tax</strong></td>
+																	<td>
+																		<select class="form-control" ng-model="inventory.tax">
+																			<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+																		</select>
+																	</td>
 																</tr>
 																<tr>
 																	<td><strong>Description</strong></td>

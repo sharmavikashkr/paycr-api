@@ -62,6 +62,7 @@
 									<td>Name</td>
 									<td class="hidden-xs">Rate</td>
 									<td class="hidden-xs">Quantity</td>
+									<td class="hidden-xs">Tax</td>
 									<td>Price</td>
 								</tr>
 							</thead>
@@ -71,6 +72,7 @@
 									<td>{{item.inventory.name}}</td>
 									<td class="hidden-xs"><i class="fa fa-rupee"></i> {{item.inventory.rate}}</td>
 									<td class="hidden-xs">{{item.quantity}}</td>
+									<td class="hidden-xs">{{item.tax.name}} {{item.tax.value}}%</td>
 									<td><i class="fa fa-rupee"></i> {{item.price}}</td>
 								</tr>
 							</tbody>

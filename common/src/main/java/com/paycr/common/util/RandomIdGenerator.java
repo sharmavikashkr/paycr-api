@@ -9,7 +9,7 @@ public class RandomIdGenerator {
 	public static String generateInvoiceCode(char[] charset) {
 		Random random = new Random();
 		String randomCode = "";
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 11; i++) {
 			int idx = random.nextInt(charset.length);
 			randomCode += charset[idx];
 		}

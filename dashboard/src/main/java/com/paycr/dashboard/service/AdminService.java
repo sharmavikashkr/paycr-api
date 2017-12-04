@@ -102,8 +102,6 @@ public class AdminService {
 		invoiceSetting.setEmailNote("Thankyou for avaling our service");
 		invoiceSetting.setEmailSubject("Invoice for your order");
 		invoiceSetting.setExpiryDays(7);
-		invoiceSetting.setTaxValue(0.0F);
-		invoiceSetting.setTaxName("");
 		merchant.setInvoiceSetting(invoiceSetting);
 		merRepo.save(merchant);
 

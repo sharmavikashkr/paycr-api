@@ -27,8 +27,6 @@ public class InvoiceSetting {
 	private String emailNote;
 	private String emailSubject;
 	private String banner;
-	private String taxName;
-	private float taxValue;
 
 	@OneToMany(mappedBy = "invoiceSetting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MerchantCustomParam> customParams;
@@ -119,22 +117,6 @@ public class InvoiceSetting {
 
 	public void setEmailSubject(String emailSubject) {
 		this.emailSubject = emailSubject;
-	}
-
-	public String getTaxName() {
-		return taxName;
-	}
-
-	public void setTaxName(String taxName) {
-		this.taxName = taxName;
-	}
-
-	public float getTaxValue() {
-		return taxValue;
-	}
-
-	public void setTaxValue(float taxValue) {
-		this.taxValue = taxValue;
 	}
 
 }

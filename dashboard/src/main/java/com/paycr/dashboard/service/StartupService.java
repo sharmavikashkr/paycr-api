@@ -1,5 +1,6 @@
 package com.paycr.dashboard.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,9 +13,11 @@ import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
+import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.NotificationRepository;
+import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
@@ -31,6 +34,9 @@ public class StartupService {
 
 	@Autowired
 	private AdminSettingRepository adsetRepo;
+
+	@Autowired
+	private PricingRepository priRepo;
 
 	public void createSuperAdmin() {
 		Date timeNow = new Date();
@@ -73,6 +79,20 @@ public class StartupService {
 		adset.setPaymentSetting(payset);
 
 		adsetRepo.save(adset);
+	}
+
+	public void createWelcomePricing() {
+		Pricing pricing = new Pricing();
+		pricing.setActive(true);
+		pricing.setCreated(new Date());
+		pricing.setDescription("Welcome Plan");
+		pricing.setDuration(90);
+		pricing.setEndAmount(new BigDecimal(10000));
+		pricing.setInvoiceLimit(1000);
+		pricing.setName("WELCOME");
+		pricing.setRate(new BigDecimal(0));
+		pricing.setStartAmount(new BigDecimal(0));
+		priRepo.save(pricing);
 	}
 
 }
