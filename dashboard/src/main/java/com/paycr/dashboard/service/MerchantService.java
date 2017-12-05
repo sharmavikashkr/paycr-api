@@ -23,6 +23,7 @@ public class MerchantService {
 
 	public void updateAccount(Merchant merchant, Merchant mer) {
 		merchant.setName(mer.getName());
+		merchant.setGstin(mer.getGstin());
 		if (mer.getAddress() != null) {
 			Address address = merchant.getAddress();
 			if (address == null) {

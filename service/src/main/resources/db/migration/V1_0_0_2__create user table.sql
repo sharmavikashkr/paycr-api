@@ -7,14 +7,8 @@ CREATE TABLE if not exists pc_user (
     created_by varchar(50) NOT NULL,
     user_type varchar(20) NOT NULL,
     password varchar(100) NOT NULL,
-    address_line1 varchar(255) DEFAULT NULL,
-    address_line2 varchar(255) DEFAULT NULL,
-    city varchar(30) DEFAULT NULL,
-    district varchar(30) DEFAULT NULL,
-    state varchar(50) DEFAULT NULL,
-    country varchar(50) DEFAULT NULL,
-    pincode varchar(10) DEFAULT NULL,
-    active boolean NOT NULL
+    active boolean NOT NULL,
+    address_id int REFERENCES pc_address
 );
 
 CREATE TABLE if not exists pc_user_role(

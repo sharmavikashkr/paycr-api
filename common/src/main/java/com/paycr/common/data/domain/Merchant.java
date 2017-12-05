@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,12 +27,13 @@ public class Merchant {
 	private String mobile;
 	private String accessKey;
 	private String secretKey;
+	private String gstin;
 	private boolean active;
 
 	@Transient
 	private boolean enableWelcome;
 
-	@Embedded
+	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
 
 	@OneToMany(mappedBy = "merchant")
@@ -143,5 +143,13 @@ public class Merchant {
 
 	public void setEnableWelcome(boolean enableWelcome) {
 		this.enableWelcome = enableWelcome;
+	}
+
+	public String getGstin() {
+		return gstin;
+	}
+
+	public void setGstin(String gstin) {
+		this.gstin = gstin;
 	}
 }

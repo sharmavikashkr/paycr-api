@@ -1,9 +1,22 @@
 package com.paycr.common.data.domain;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Embeddable
+import org.springframework.data.annotation.Transient;
+
+import com.paycr.common.type.AddressType;
+
+@Entity
+@Table(name = "pc_address")
 public class Address {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
 	private String addressLine1;
 	private String addressLine2;
@@ -12,6 +25,9 @@ public class Address {
 	private String state;
 	private String country;
 	private String pincode;
+
+	@Transient
+	private AddressType type;
 
 	public String getAddressLine1() {
 		return addressLine1;
@@ -67,5 +83,17 @@ public class Address {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public AddressType getType() {
+		return type;
+	}
+
+	public void setType(AddressType type) {
+		this.type = type;
 	}
 }

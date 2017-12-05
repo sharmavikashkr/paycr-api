@@ -70,6 +70,7 @@
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','bulkUploadModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','recurrInvoiceModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','refundModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','editAddressModal')"></div>
 		<div ng-if="user.access.admin" ng-include="templateUrl('common','createUserModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportXsModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','recurrReportModal')"></div>

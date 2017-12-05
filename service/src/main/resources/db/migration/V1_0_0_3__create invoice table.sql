@@ -6,16 +6,11 @@ CREATE TABLE if not exists pc_consumer (
     mobile varchar(15) DEFAULT NULL,
     email_on_pay BOOLEAN NOT NULL,
     email_on_refund BOOLEAN NOT NULL,
-    address_line1 varchar(255) DEFAULT NULL,
-    address_line2 varchar(255) DEFAULT NULL,
-    city varchar(30) DEFAULT NULL,
-    district varchar(30) DEFAULT NULL,
-    state varchar(50) DEFAULT NULL,
-    country varchar(50) DEFAULT NULL,
-    pincode varchar(10) DEFAULT NULL,
     active boolean NOT NULL,
     created_by varchar(50) NOT NULL,
-	merchant_id int REFERENCES pc_merchant
+	merchant_id int REFERENCES pc_merchant,
+	billing_address_id int REFERENCES pc_address,
+	shipping_address_id int REFERENCES pc_address
 );
 
 CREATE TABLE if not exists pc_payment (

@@ -234,6 +234,35 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.updateEditAddress = function(addressType) {
+		if(addressType == 'BILLING') {
+			$rootScope.editAddress = angular.copy(this.consumer.billingAddress);
+		} else {
+			$rootScope.editAddress = angular.copy(this.consumer.shippingAddress);
+		}
+		if($rootScope.editAddress == null) {
+			$rootScope.editAddress = {};
+		}
+		$rootScope.editAddress.type = addressType;
+		$rootScope.editAddress.consumerId = this.consumer.id;
+	}
+	$scope.saveAddress = function() {
+		var req = {
+			method : 'POST',
+			url : "/consumer/address/update/" + this.editAddress.consumerId,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			},
+			data : this.editAddress
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+			$scope.searchConsumer();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#editAddressModal')).modal('hide');
+	}
 	$scope.updateInvoiceConsumer = function(consumer) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
 		$rootScope.saveinvoice.consumer = consumer;

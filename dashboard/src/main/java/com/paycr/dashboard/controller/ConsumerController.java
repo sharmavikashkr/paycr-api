@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.UpdateConsumerRequest;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.BulkConsumerUpload;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
@@ -58,6 +59,18 @@ public class ConsumerController {
 			HttpServletResponse response) {
 		try {
 			conSer.updateConsumer(consumer, consumerId);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/address/update/{consumerId}")
+	public void updateConsumerAddress(@RequestBody Address address, @PathVariable Integer consumerId,
+			HttpServletResponse response) {
+		try {
+			conSer.updateConsumerAddress(address, consumerId);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

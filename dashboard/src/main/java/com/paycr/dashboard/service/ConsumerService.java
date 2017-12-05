@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.UpdateConsumerRequest;
 import com.paycr.common.data.dao.ConsumerDao;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.BulkConsumerUpload;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
@@ -30,6 +31,7 @@ import com.paycr.common.data.repository.ConsumerCategoryRepository;
 import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.AddressType;
 import com.paycr.common.util.Constants;
 import com.paycr.dashboard.validation.ConsumerValidator;
 
@@ -71,7 +73,7 @@ public class ConsumerService {
 		consumer.setCreated(new Date());
 		consumer.setCreatedBy(createdBy);
 		conRepo.save(consumer);
-		for(ConsumerCategory conCat : conCats) {
+		for (ConsumerCategory conCat : conCats) {
 			addCategory(consumer.getId(), conCat, merchant);
 		}
 	}
@@ -83,7 +85,6 @@ public class ConsumerService {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
 		}
 		exstCon.setActive(consumer.isActive());
-		exstCon.setAddress(consumer.getAddress());
 		exstCon.setEmailOnPay(consumer.isEmailOnPay());
 		exstCon.setEmailOnRefund(consumer.isEmailOnRefund());
 		conRepo.save(exstCon);
@@ -221,5 +222,19 @@ public class ConsumerService {
 	public byte[] downloadFile(String filename) throws IOException {
 		Path path = Paths.get(server.getBulkConsumerLocation() + filename);
 		return Files.readAllBytes(path);
+	}
+
+	public void updateConsumerAddress(Address address, Integer consumerId) {
+		Consumer consumer = conRepo.findOne(consumerId);
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (consumer.getMerchant().getId() != merchant.getId()) {
+			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+		}
+		if (AddressType.BILLING.equals(address.getType())) {
+			consumer.setBillingAddress(address);
+		} else {
+			consumer.setShippingAddress(address);
+		}
+		conRepo.save(consumer);
 	}
 }

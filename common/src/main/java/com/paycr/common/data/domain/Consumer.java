@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,8 +40,11 @@ public class Consumer {
 	@ManyToOne
 	private Merchant merchant;
 
-	@Embedded
-	private Address address;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Address billingAddress;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Address shippingAddress;
 
 	public String getName() {
 		return name;
@@ -67,12 +70,20 @@ public class Consumer {
 		this.mobile = mobile;
 	}
 
-	public Address getAddress() {
-		return address;
+	public Address getBillingAddress() {
+		return billingAddress;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setBillingAddress(Address billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+
+	public Address getShippingAddress() {
+		return shippingAddress;
+	}
+
+	public void setShippingAddress(Address shippingAddress) {
+		this.shippingAddress = shippingAddress;
 	}
 
 	public Integer getId() {
