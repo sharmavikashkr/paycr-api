@@ -246,14 +246,27 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$rootScope.editAddress.type = addressType;
 		$rootScope.editAddress.consumerId = this.consumer.id;
 	}
-	$scope.saveAddress = function() {
+	$scope.copyBillingAddress = function() {
+		if (!confirm('Copy billing address to shipping?')) {
+			return false;
+		}
+		$rootScope.editAddress = angular.copy(this.consumer.billingAddress);
+		if($rootScope.editAddress == null) {
+			return;
+		}
+		$rootScope.editAddress.id = null;
+		$rootScope.editAddress.type = 'SHIPPING';
+		$rootScope.editAddress.consumerId = this.consumer.id;
+		$scope.saveAddress($rootScope.editAddress);
+	}
+	$scope.saveAddress = function(editAddress) {
 		var req = {
 			method : 'POST',
-			url : "/consumer/address/update/" + this.editAddress.consumerId,
+			url : "/consumer/address/update/" + editAddress.consumerId,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
-			data : this.editAddress
+			data : editAddress
 		}
 		$http(req).then(function(data) {
 			$scope.serverMessage(data);

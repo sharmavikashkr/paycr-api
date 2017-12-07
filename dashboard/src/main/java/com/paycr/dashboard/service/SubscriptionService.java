@@ -74,7 +74,7 @@ public class SubscriptionService {
 
 	public Subscription getSubscriptionByCode(String subscriptionCode) {
 		Subscription subs = subsRepo.findBySubscriptionCode(subscriptionCode);
-		if(subs == null) {
+		if (subs == null) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Subscription not found");
 		}
 		return subs;
@@ -93,10 +93,9 @@ public class SubscriptionService {
 		Subscription subs = new Subscription();
 		BigDecimal total = pricing.getRate().multiply(new BigDecimal(offline.getQuantity()));
 		subs.setTotal(total);
-		subs.setTaxName(adset.getTaxName());
-		subs.setTaxValue(adset.getTaxValue());
+		subs.setTax(adset.getTax());
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(adset.getTaxValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(new BigDecimal(adset.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setCreated(timeNow);
@@ -139,10 +138,9 @@ public class SubscriptionService {
 		Subscription subs = new Subscription();
 		BigDecimal total = pricing.getRate().multiply(new BigDecimal(quantity));
 		subs.setTotal(total);
-		subs.setTaxName(adset.getTaxName());
-		subs.setTaxValue(adset.getTaxValue());
+		subs.setTax(adset.getTax());
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(adset.getTaxValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(new BigDecimal(adset.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setPayMode(PayMode.PAYCR);

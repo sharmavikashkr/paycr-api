@@ -4,6 +4,7 @@ CREATE TABLE if not exists pc_consumer (
 	name varchar(50) DEFAULT NULL,
     email varchar(50) DEFAULT NULL,
     mobile varchar(15) DEFAULT NULL,
+    gstin varchar(50) DEFAULT NULL,
     email_on_pay BOOLEAN NOT NULL,
     email_on_refund BOOLEAN NOT NULL,
     active boolean NOT NULL,

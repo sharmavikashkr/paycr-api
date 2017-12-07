@@ -49,6 +49,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		$scope.fetchUser();
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
+		$scope.fetchTaxes();
 	}
 	$scope.fetchEnums = function() {
 		var req = {
@@ -160,6 +161,21 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		}
 		$http(req).then(function(user) {
 			$rootScope.user = user.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.fetchTaxes = function() {
+		var req = {
+			method : 'GET',
+			url : "/common/taxes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(taxes) {
+			$rootScope.taxList = taxes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

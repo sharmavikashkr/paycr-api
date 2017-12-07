@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.paycr.common.type.Currency;
@@ -30,10 +31,9 @@ public class Subscription implements Serializable {
 	private String subscriptionCode;
 	private Date created;
 	private BigDecimal total;
-	private String taxName;
 
-	@Column(precision = 10, scale = 2)
-	private float taxValue;
+	@OneToOne(cascade = CascadeType.ALL)
+	private TaxMaster tax;
 
 	private BigDecimal payAmount;
 	private int quantity;
@@ -82,22 +82,6 @@ public class Subscription implements Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
-	}
-
-	public String getTaxName() {
-		return taxName;
-	}
-
-	public void setTaxName(String taxName) {
-		this.taxName = taxName;
-	}
-
-	public float getTaxValue() {
-		return taxValue;
-	}
-
-	public void setTaxValue(float taxValue) {
-		this.taxValue = taxValue;
 	}
 
 	public BigDecimal getPayAmount() {
@@ -186,6 +170,14 @@ public class Subscription implements Serializable {
 
 	public void setPayMode(PayMode payMode) {
 		this.payMode = payMode;
+	}
+
+	public TaxMaster getTax() {
+		return tax;
+	}
+
+	public void setTax(TaxMaster tax) {
+		this.tax = tax;
 	}
 
 }

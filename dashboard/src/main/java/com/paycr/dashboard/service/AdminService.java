@@ -173,8 +173,8 @@ public class AdminService {
 	public void saveSetting(AdminSetting setting) {
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		adset.setBanner(setting.getBanner());
-		adset.setTaxName(setting.getTaxName());
-		adset.setTaxValue(setting.getTaxValue());
+		adset.setTax(setting.getTax());
+		adset.setGstin(setting.getGstin());
 		PaymentSetting payset = adset.getPaymentSetting();
 		payset.setRzpMerchantId(setting.getPaymentSetting().getRzpMerchantId());
 		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());

@@ -1,7 +1,6 @@
 package com.paycr.common.data.domain;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,15 +16,15 @@ public class AdminSetting {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private String taxName;
-
-	@Column(precision = 10, scale = 2)
-	private Float taxValue;
-
-	private String banner;
+	private String gstin;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private PaymentSetting paymentSetting;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private TaxMaster tax;
+
+	private String banner;
 
 	public Integer getId() {
 		return id;
@@ -47,20 +46,20 @@ public class AdminSetting {
 		this.paymentSetting = paymentSetting;
 	}
 
-	public String getTaxName() {
-		return taxName;
+	public TaxMaster getTax() {
+		return tax;
 	}
 
-	public void setTaxName(String taxName) {
-		this.taxName = taxName;
+	public void setTax(TaxMaster tax) {
+		this.tax = tax;
 	}
 
-	public Float getTaxValue() {
-		return taxValue;
+	public String getGstin() {
+		return gstin;
 	}
 
-	public void setTaxValue(Float taxValue) {
-		this.taxValue = taxValue;
+	public void setGstin(String gstin) {
+		this.gstin = gstin;
 	}
 
 }

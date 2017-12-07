@@ -27,6 +27,7 @@ public class Consumer {
 	private String name;
 	private String email;
 	private String mobile;
+	private String gstin;
 	private boolean emailOnPay;
 	private boolean emailOnRefund;
 
@@ -144,6 +145,14 @@ public class Consumer {
 
 	public void setConCats(List<ConsumerCategory> conCats) {
 		this.conCats = conCats;
+	}
+
+	public String getGstin() {
+		return gstin;
+	}
+
+	public void setGstin(String gstin) {
+		this.gstin = gstin;
 	}
 
 }

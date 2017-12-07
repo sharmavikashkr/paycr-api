@@ -25,19 +25,21 @@
 							<input class="form-control" ng-model="adminSetting.paymentSetting.rzpSecretId" />
 						</div>
 						<div class="form-group">
-							<label class="control-label">Tax Name</label>
-							<input class="form-control" ng-model="adminSetting.taxName" required />
+							<label class="control-label">GSTIN</label>
+							<input class="form-control" ng-model="adminSetting.gstin" />
 						</div>
 						<div class="form-group">
-							<label class="control-label">Tax Value %</label>
-							<input class="form-control" ng-model="adminSetting.taxValue" type="number" required />
+							<label class="control-label">Tax</label>
+							<select class="form-control" ng-model="adminSetting.tax">
+								<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+							</select>
 						</div>
 					</fieldset>
 				</div>
 				<div ng-if="editAdminSets" class="box-footer">
 		        	<div class="input-group">
 		            	<span class="input-group-btn">
-		                   	<button ng-click="updateInventory(inventory)" class="btn btn-info">Save</button>
+		                   	<button ng-click="saveAdminSetting(adminSetting)" class="btn btn-info">Save</button>
 		               	</span>
 		            </div>
 		        </div>

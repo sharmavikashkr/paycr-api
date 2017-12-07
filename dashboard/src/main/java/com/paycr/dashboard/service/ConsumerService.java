@@ -84,6 +84,7 @@ public class ConsumerService {
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
 		}
+		exstCon.setGstin(consumer.getGstin());
 		exstCon.setActive(consumer.isActive());
 		exstCon.setEmailOnPay(consumer.isEmailOnPay());
 		exstCon.setEmailOnRefund(consumer.isEmailOnRefund());

@@ -224,6 +224,10 @@
 																	<td>{{consumer.created | date:'dd-MM-yyyy'}}</td>
 																</tr>
 																<tr>
+																	<td><strong>GSTIN</strong></td>
+																	<td><input class="form-control" ng-model="consumer.gstin"/></td>
+																</tr>
+																<tr>
 																	<td><strong>Email On Pay</strong></td>
 																	<td><input ng-model="consumer.emailOnPay" type="checkbox"/></td>
 																</tr>
@@ -253,7 +257,7 @@
 												<div class="box-header with-border">
 													<h5 class="box-title">Billing Address</h5>
 													<div class="box-tools pull-right">
-														<button ng-if="user.access.finance" ng-click="updateEditAddress('BILLING')" data-toggle="modal" data-target="#editAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Billing Settings">
+														<button ng-if="user.access.finance" ng-click="updateEditAddress('BILLING')" data-toggle="modal" data-target="#editAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Billing Address">
 															<i class="fa fa-pencil"></i>
 														</button>
 													</div>
@@ -272,7 +276,10 @@
 												<div class="box-header with-border">
 													<h5 class="box-title">Shipping Address</h5>
 													<div class="box-tools pull-right">
-														<button ng-if="user.access.finance" ng-click="updateEditAddress('SHIPPING')" data-toggle="modal" data-target="#editAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Billing Settings">
+														<button ng-if="user.access.finance" ng-click="copyBillingAddress()" class="btn btn-flat btn-xs btn-info" title="Copy Billing Address">
+															<i class="fa fa-file-o"></i>
+														</button>
+														<button ng-if="user.access.finance" ng-click="updateEditAddress('SHIPPING')" data-toggle="modal" data-target="#editAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Shipping Address">
 															<i class="fa fa-pencil"></i>
 														</button>
 													</div>

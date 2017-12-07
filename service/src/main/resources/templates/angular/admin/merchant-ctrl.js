@@ -18,6 +18,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		$http(req).then(function(merchants) {
 			$rootScope.merchantList = merchants.data;
 			$scope.loadMerchantPage(1);
+			$rootScope.loadAdminSetting();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -61,7 +62,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		if(this.offlinesubs.pricing != null && this.offlinesubs.quantity != null) {
 			var total = parseFloat(this.offlinesubs.pricing.rate) * parseFloat(this.offlinesubs.quantity);
 			this.offlinesubs.total = total;
-			this.offlinesubs.payAmount = total + parseFloat((parseFloat($scope.adminSetting.taxValue) * total) / 100);
+			this.offlinesubs.payAmount = total + parseFloat((parseFloat($scope.adminSetting.tax.value) * total) / 100);
 		}
 	}
 	$scope.createOfflineSubs = function(merchantId) {
