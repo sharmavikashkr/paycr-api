@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table(name = "pc_tax_master")
@@ -18,14 +18,16 @@ public class TaxMaster {
 	private Integer id;
 
 	private String name;
-	private String value;
+	private Float value;
 
 	private boolean active;
-	private boolean isParent;
+	private boolean child;
 
-	@JsonIgnore
 	@ManyToOne
 	private TaxMaster parent;
+
+	@Transient
+	private Integer parentTaxId;
 
 	public Integer getId() {
 		return id;
@@ -39,20 +41,12 @@ public class TaxMaster {
 		this.name = name;
 	}
 
-	public String getValue() {
+	public Float getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Float value) {
 		this.value = value;
-	}
-
-	public boolean isParent() {
-		return isParent;
-	}
-
-	public void setParent(boolean isParent) {
-		this.isParent = isParent;
 	}
 
 	public TaxMaster getParent() {
@@ -69,6 +63,22 @@ public class TaxMaster {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean isChild() {
+		return child;
+	}
+
+	public void setChild(boolean child) {
+		this.child = child;
+	}
+
+	public Integer getParentTaxId() {
+		return parentTaxId;
+	}
+
+	public void setParentTaxId(Integer parentTaxId) {
+		this.parentTaxId = parentTaxId;
 	}
 
 }

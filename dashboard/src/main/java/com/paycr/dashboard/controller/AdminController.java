@@ -19,6 +19,7 @@ import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.AdminService;
@@ -82,6 +83,17 @@ public class AdminController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return null;
+	}
+	
+	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
+	@RequestMapping("/setting/tax/new")
+	public void newTaxMaster(@RequestBody TaxMaster tax, HttpServletResponse response) {
+		try {
+			adminService.newTaxMaster(tax);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)

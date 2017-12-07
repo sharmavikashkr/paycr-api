@@ -1,6 +1,6 @@
 <div ng-controller="AdminSettingController">
 	<div class="panel-body">
-		<div class="col-sm-4">
+		<div class="col-md-4">
 			<div class="box box-warning">
 				<div class="box-header with-border">
 					<h5 class="box-title">Payment Setting</h5>
@@ -50,6 +50,39 @@
 			</div>
 			Uploaded File -> <a target="_blank" href="/banner/admin/{{adminSetting.banner}}">{{adminSetting.banner}}</a>
 		</div>
-		<br>
+		<div class="col-md-6">
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h5 class="box-title">Tax Master</h5>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-flat btn-xs btn-success" data-toggle="modal" data-target="#addTaxModal" title="Add new">
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<table class="table table-bordered table-responsive">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Tax Name</th>
+								<th>Tax Value</th>
+								<th>Child</th>
+								<th>Parent</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="tax in taxList">
+								<td>{{tax.id}}</td>
+								<td>{{tax.name}}</td>
+								<td>{{tax.value}}%</td>
+								<td>{{tax.child}}</td>
+								<td><div ng-if="tax.child">{{tax.parent.id}}. {{tax.parent.name}} {{tax.parent.value}}%</div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

@@ -14,7 +14,7 @@ CREATE TABLE if not exists pc_tax_master (
 	name varchar(20) NOT NULL,
 	value float NOT NULL,
 	active boolean NOT NULL,
-	is_parent boolean NOT NULL,
+	child boolean NOT NULL,
 	parent_id int REFERENCES pc_tax_master
 );
 

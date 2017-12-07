@@ -18,16 +18,21 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
+import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -68,6 +73,9 @@ public class AdminService {
 
 	@Autowired
 	private AdminSettingRepository adsetRepo;
+
+	@Autowired
+	private TaxMasterRepository taxMRepo;
 
 	@Autowired
 	private SubscriptionService subsService;
@@ -180,6 +188,24 @@ public class AdminService {
 		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());
 		payset.setRzpSecretId(setting.getPaymentSetting().getRzpSecretId());
 		adsetRepo.save(adset);
+	}
+
+	public void newTaxMaster(TaxMaster tax) {
+		if (CommonUtil.isNull(tax) || CommonUtil.isNull(tax.getName()) || CommonUtil.isNull(tax.getValue())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Tax request");
+		}
+		if (tax.isChild()) {
+			if (CommonUtil.isNull(tax.getParentTaxId())) {
+				throw new PaycrException(Constants.FAILURE, "Child tax must have a parent");
+			}
+			TaxMaster parent = taxMRepo.findOne(tax.getParentTaxId());
+			if (CommonUtil.isNull(parent) || !parent.isActive()) {
+				throw new PaycrException(Constants.FAILURE, "Parent tax not found");
+			}
+			tax.setTaxParent(parent);
+		}
+		tax.setActive(true);
+		taxMRepo.save(tax);
 	}
 
 }

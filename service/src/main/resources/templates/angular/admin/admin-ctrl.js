@@ -20,6 +20,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
 		"numberPattern" : "\\d{1,5}",
+		"taxValuePattern" : "\\d{1,2}",
 		"passPattern" : /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
 	}
 	$scope.dismissServerAlert = function() {
@@ -49,7 +50,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		$scope.fetchUser();
 		$scope.fetchNotifications();
 		$scope.fetchEnums();
-		$scope.fetchTaxes();
+		$rootScope.fetchTaxes();
 	}
 	$scope.fetchEnums = function() {
 		var req = {
@@ -165,7 +166,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.fetchTaxes = function() {
+	$rootScope.fetchTaxes = function() {
 		var req = {
 			method : 'GET',
 			url : "/common/taxes",
