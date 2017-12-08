@@ -2,10 +2,12 @@ package com.paycr.dashboard.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import com.paycr.common.data.domain.ResetPassword;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ResetStatus;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.AdminService;
 import com.paycr.dashboard.service.LoginService;
@@ -96,6 +99,17 @@ public class LoginController {
 		ModelAndView mv = new ModelAndView("html/adminlogin");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
+	}
+
+	@RequestMapping(value = "/secure/login", method = RequestMethod.POST)
+	public LinkedHashMap secureLogin(@RequestParam("email") String email, @RequestParam("password") String password,
+			HttpServletResponse response) {
+		try {
+			return loginService.secureLogin(email, password);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.UNAUTHORIZED_401);
+			throw new PaycrException(Constants.FAILURE, "Invalid credentials");
+		}
 	}
 
 	@RequestMapping("/forgotPassword")

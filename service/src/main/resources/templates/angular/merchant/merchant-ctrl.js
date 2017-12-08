@@ -276,6 +276,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		for (var param in invoicesetting.customParams) {
 			var copyParam = angular.copy(invoicesetting.customParams[param]);
 			copyParam.id = null;
+			copyParam.include = true;
 			$rootScope.newinvoice.customParams.push(copyParam);
 		}
 		$rootScope.invoiceNotify.sendEmail = angular.copy(invoicesetting.sendEmail);

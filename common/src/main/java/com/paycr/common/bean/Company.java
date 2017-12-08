@@ -11,9 +11,12 @@ public class Company {
 
 	@Value("${company.app.url}")
 	private String appUrl;
-	
+
 	@Value("${company.static.url}")
 	private String staticUrl;
+
+	@Value("${company.oauth.url}")
+	private String oauthUrl;
 
 	@Value("${company.contact.name}")
 	private String contactName;
@@ -70,6 +73,14 @@ public class Company {
 
 	public void setStaticUrl(String staticUrl) {
 		this.staticUrl = staticUrl;
+	}
+
+	public String getOauthUrl() {
+		return oauthUrl;
+	}
+
+	public void setOauthUrl(String oauthUrl) {
+		this.oauthUrl = oauthUrl;
 	}
 
 }

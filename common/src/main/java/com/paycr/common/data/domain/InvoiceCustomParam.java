@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.Transient;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.ParamValueProvider;
 
@@ -29,6 +31,9 @@ public class InvoiceCustomParam {
 	@JsonIgnore
 	@ManyToOne
 	private Invoice invoice;
+
+	@Transient
+	private boolean include;
 
 	public ParamValueProvider getProvider() {
 		return provider;
@@ -64,6 +69,14 @@ public class InvoiceCustomParam {
 
 	public void setParamValue(String paramValue) {
 		this.paramValue = paramValue;
+	}
+
+	public boolean isInclude() {
+		return include;
+	}
+
+	public void setInclude(boolean include) {
+		this.include = include;
 	}
 
 }

@@ -1,6 +1,5 @@
 var app = angular.module('payCrAppAdmin', ["ngRoute","ngCookies"]);
-app.controller('LoginController', 
-  function($scope, $http, $cookies, $httpParamSerializer) {
+app.controller('LoginController', function($scope, $http, $cookies, $httpParamSerializer) {
 	$scope.invalidcreds = false;
     $scope.data = {
         grant_type:"password",
@@ -20,7 +19,7 @@ app.controller('LoginController',
             data: $httpParamSerializer($scope.data)
         }
         $http(req).then(function(data) {
-        	$http.defaults.headers.common.Authorization = 'Bearer ' + data.data.access_token;
+        	//$http.defaults.headers.common.Authorization = 'Bearer ' + data.data.access_token;
             $cookies.put("access_token", data.data.access_token);
             window.location.href="/admin";
         }, function(data) {
