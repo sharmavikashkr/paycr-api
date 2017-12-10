@@ -68,6 +68,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 					for(var tax in $rootScope.taxList) {
 						if(invn.tax.id == $rootScope.taxList[tax].id) {
 							item.tax = $rootScope.taxList[tax];
+							break;
 						}
 					}
 					$scope.calculateTotal();
@@ -83,6 +84,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 					for(var tax in $rootScope.taxList) {
 						if(invn.tax.id == $rootScope.taxList[tax].id) {
 							item.tax = $rootScope.taxList[tax];
+							break;
 						}
 					}
 					$scope.calculateTotal();
@@ -134,8 +136,6 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}
 	}
 	$scope.addItemXs = function(item) {
-		/*var itemTotal = parseFloat(item.inventory.rate) * parseFloat(item.quantity);
-		var price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2))*/
 		if ($scope.saveinvoice.items.length < 5) {
 			var inventory = {
 				"code" : item.inventory.code,
@@ -145,6 +145,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$scope.saveinvoice.items.push({
 				"inventory" : inventory,
 				"quantity" : item.quantity,
+				"tax" : item.tax,
 				"price" : 0
 			});
 		}
