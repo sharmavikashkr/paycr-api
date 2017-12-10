@@ -157,7 +157,8 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$scope.calculateTotal();
 	}
 	$rootScope.calculateTotal = function() {
-		var totals = 0;
+		var totalPrice = 0;
+		var totalRate = 0;
 		if($scope.saveinvoice.addItems) {
 			for ( var item in $scope.saveinvoice.items) {
 				var itemTax = 0;
@@ -173,11 +174,14 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				var itemTotal = parseFloat((parseFloat($scope.saveinvoice.items[item].inventory.rate)
 						* parseFloat($scope.saveinvoice.items[item].quantity)).toFixed(2));
 				$scope.saveinvoice.items[item].price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2));
-				totals = totals + parseFloat($scope.saveinvoice.items[item].price);
+				totalRate = itemTotal;
+				totalPrice = totalPrice + parseFloat($scope.saveinvoice.items[item].price);
 			}
-			$scope.saveinvoice.total = parseFloat(totals.toFixed(2));
+			$scope.saveinvoice.total = parseFloat(totalRate.toFixed(2));
+			$scope.saveinvoice.totalPrice = parseFloat(totalPrice.toFixed(2));
 		} else {
-			totals = $scope.saveinvoice.total;
+			totalPrice = $scope.saveinvoice.total;
+			$scope.saveinvoice.totalPrice = parseFloat(totalPrice.toFixed(2));
 		}
 		if ($scope.saveinvoice.shipping == null) {
 			$scope.saveinvoice.shipping = 0;
@@ -185,7 +189,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		if ($scope.saveinvoice.discount == null) {
 			$scope.saveinvoice.discount = 0;
 		}
-		$scope.saveinvoice.payAmount = parseFloat((totals
+		$scope.saveinvoice.payAmount = parseFloat((totalPrice
 				+ parseFloat($scope.saveinvoice.shipping)
 				- parseFloat($scope.saveinvoice.discount)).toFixed(2));
 	}

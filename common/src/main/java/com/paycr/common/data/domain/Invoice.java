@@ -99,6 +99,9 @@ public class Invoice implements Cloneable {
 	@Transient
 	private boolean update;
 
+	@Transient
+	private BigDecimal totalPrice;
+
 	public Integer getId() {
 		return id;
 	}
@@ -317,5 +320,13 @@ public class Invoice implements Cloneable {
 
 	public void setShipping(BigDecimal shipping) {
 		this.shipping = shipping;
+	}
+
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 }

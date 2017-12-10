@@ -30,10 +30,9 @@ public class InvoiceReceiptService {
 
 	public ModelAndView getReceiptModelAndView(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		ModelAndView mv = new ModelAndView("html/receipt/invoice_receipt");
+		ModelAndView mv = new ModelAndView("receipt/invoice");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("invoice", invoice);
-		mv.addObject("invoice_url", company.getAppUrl() + "/" + invoiceCode);
 		return mv;
 	}
 
