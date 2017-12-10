@@ -14,4 +14,6 @@ public interface TaxMasterRepository extends JpaRepository<TaxMaster, Integer> {
 
 	public TaxMaster findByName(String name);
 
+	public List<TaxMaster> findByParent(TaxMaster parent);
+
 }

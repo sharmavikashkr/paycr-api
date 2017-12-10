@@ -31,6 +31,9 @@
 						</#if>
 						<br><i class="fa fa-phone"></i> ${invoice.merchant.mobile}
 						<br><i class="fa fa-envelope"></i> ${invoice.merchant.email}
+						<#if invoice.merchant.gstin??>
+						<br><b>GSTIN: </b>${invoice.merchant.gstin}
+						</#if>
 					</address>
 				</div>
 				<div class="col-sm-4 invoice-col">
@@ -44,15 +47,18 @@
 						<br>${invoice.consumer.billingAddress.city}, ${invoice.consumer.billingAddress.district}
 						<br>${invoice.consumer.billingAddress.state}, ${invoice.consumer.billingAddress.pincode}
 						<br>${invoice.consumer.billingAddress.country}
+						</#if>
 						<br><i class="fa fa-phone"></i> ${invoice.consumer.mobile}
 						<br><i class="fa fa-envelope"></i> ${invoice.consumer.email}
+						<#if invoice.merchant.gstin??>
+						<br><b>GSTIN: </b>${invoice.consumer.gstin}
 						</#if>
 					</address>
 					</#if>
 				</div>
 				<div class="col-sm-4 invoice-col">
 					<b>Invoice#</b> ${invoice.invoiceCode}<br>
-					<b>Payment Due:</b> ${invoice.expiry}<br><br><br>
+					<b>Payment Due:</b> ${invoice.expiry}<br><br>
 					<#list invoice.customParams as param>
 	                	<b>${param.paramName}:</b> ${param.paramValue}<br>
 	                </#list>
@@ -91,7 +97,7 @@
 					<p class="lead">Payment Methods:</p>
 					<img src="${staticUrl}/dist/img/credit/visa.png" alt="Visa">
 					<img src="${staticUrl}/dist/img/credit/mastercard.png" alt="Mastercard">
-					<img src="${staticUrl}/dist/img/credit/maestro.png" alt="Maestro">
+					<img src="${staticUrl}/dist/img/credit/mestro.png" alt="Maestro">
 					<p class="text-muted well well-sm no-shadow"
 						style="margin-top: 10px;">Choose from many available option like CreditCard, DebitCard, NetBanking, 
 						Mobile Wallets, UPI, etc to pay your dues.</p>
@@ -105,10 +111,12 @@
 								<th style="width: 50%">Subtotal:</th>
 								<td><i class="fa fa-rupee"></i> ${invoice.total}</td>
 							</tr>
+							<#list taxes as tax>
 							<tr>
-								<th>Tax (9.3%)</th>
-								<td>$10.34</td>
+								<th>${tax.tax.name} (${tax.tax.value}%)</th>
+								<td>${tax.amount}</td>
 							</tr>
+							</#list>
 							<tr>
 								<th>Shipping:</th>
 								<td><i class="fa fa-rupee"></i> ${invoice.shipping}</td>
