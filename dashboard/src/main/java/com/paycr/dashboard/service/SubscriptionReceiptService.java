@@ -11,8 +11,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.AdminSetting;
+import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.repository.AdminSettingRepository;
+import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.PdfUtil;
@@ -25,6 +27,9 @@ public class SubscriptionReceiptService {
 
 	@Autowired
 	private AdminSettingRepository adsetRepo;
+
+	@Autowired
+	private MerchantPricingRepository merPriRepo;
 
 	@Autowired
 	private Server server;
@@ -63,5 +68,10 @@ public class SubscriptionReceiptService {
 		mv.addObject("admin", adset);
 		mv.addObject("company", company);
 		return mv;
+	}
+
+	public String getPricingReceipt(Integer pricingId) {
+		MerchantPricing merPricing = merPriRepo.findOne(pricingId);
+		return merPricing.getSubscription().getSubscriptionCode();
 	}
 }

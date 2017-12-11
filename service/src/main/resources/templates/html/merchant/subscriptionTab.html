@@ -12,6 +12,7 @@
 								<td class="text-center"><strong>End Date</strong></td>
 								<td class="text-center"><strong>Used (Limit)</strong></td>
 								<td class="text-center hidden-xs"><strong>Amount Limits</strong></td>
+								<td class="text-center"><strong>Receipt</strong></td>
 							</tr>
 						</thead>
 						<tbody id="itemBody">
@@ -21,6 +22,11 @@
 								<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy'}}</td>
 								<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
 								<td class="text-center hidden-xs"><i class="fa fa-rupee"></i> {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
+								<td>
+									<a class="btn btn-default btn-flat btn-sm" href="/subscription/receipt/pricing/{{merpricing.id}}" target="_blank">
+										<i class="fa fa-file-pdf-o"></i>
+									</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>

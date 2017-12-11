@@ -36,6 +36,16 @@ public class SubscriptionReceiptController {
 		}
 	}
 
+	@RequestMapping(value = "/pricing/{pricingId}", method = RequestMethod.GET)
+	public void getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
+		try {
+			String subsCode = subsRecSer.getPricingReceipt(pricingId);
+			response.sendRedirect("/subscription/receipt/" + subsCode);
+		} catch (Exception ex) {
+			throw new PaycrException(Constants.FAILURE, "Subscription not found");
+		}
+	}
+
 	@RequestMapping(value = "/download/{subscriptionCode}", method = RequestMethod.GET)
 	public void download(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
 		File pdfFile = subsRecSer.downloadPdf(subscriptionCode);
