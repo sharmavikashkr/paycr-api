@@ -14,10 +14,12 @@ import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.domain.UserRole;
 import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
+import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
@@ -34,6 +36,9 @@ public class StartupService {
 
 	@Autowired
 	private AdminSettingRepository adsetRepo;
+
+	@Autowired
+	private TaxMasterRepository taxMRepo;
 
 	@Autowired
 	private PricingRepository priRepo;
@@ -80,6 +85,10 @@ public class StartupService {
 	}
 
 	public void createWelcomePricing() {
+		Pricing welcomePri = priRepo.findByNameAndActive("WELCOME", true);
+		if (CommonUtil.isNotNull(welcomePri)) {
+			return;
+		}
 		Pricing pricing = new Pricing();
 		pricing.setActive(true);
 		pricing.setCreated(new Date());
@@ -91,6 +100,19 @@ public class StartupService {
 		pricing.setRate(new BigDecimal(0));
 		pricing.setStartAmount(new BigDecimal(0));
 		priRepo.save(pricing);
+	}
+
+	public void createNoTaxMaster() {
+		TaxMaster noTax = taxMRepo.findByName("NO_TAX");
+		if (CommonUtil.isNotNull(noTax)) {
+			return;
+		}
+		TaxMaster tax = new TaxMaster();
+		tax.setActive(true);
+		tax.setChild(false);
+		tax.setName("NO_TAX");
+		tax.setValue(0F);
+		taxMRepo.save(tax);
 	}
 
 }
