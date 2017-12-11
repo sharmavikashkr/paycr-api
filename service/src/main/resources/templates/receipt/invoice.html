@@ -50,7 +50,7 @@
 						</#if>
 						<br><i class="fa fa-phone"></i> ${invoice.consumer.mobile}
 						<br><i class="fa fa-envelope"></i> ${invoice.consumer.email}
-						<#if invoice.merchant.gstin??>
+						<#if invoice.consumer.gstin??>
 						<br><b>GSTIN: </b>${invoice.consumer.gstin}
 						</#if>
 					</address>
@@ -58,7 +58,7 @@
 				</div>
 				<div class="col-sm-4 invoice-col">
 					<b>Invoice#</b> ${invoice.invoiceCode}<br>
-					<b>Payment Due:</b> ${invoice.expiry}<br><br>
+					<b>Payment Due:</b> ${invoice.expiry?date}<br><br>
 					<#list invoice.customParams as param>
 	                	<b>${param.paramName}:</b> ${param.paramValue}<br>
 	                </#list>
@@ -80,7 +80,7 @@
 						<tbody>
 							<#list invoice.items as item>
 							<tr>
-								<td>${item.inventory.name}</td>
+								<td>${item.inventory.name}<#if item.inventory.description??><br><small>(${item.inventory.description})</small></#if></td>
 								<td><#if item.inventory.hsnsac??> ${item.inventory.hsnsac}</#if></td>
 								<td><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
 								<td>${item.quantity}</td>
@@ -103,7 +103,7 @@
 						Mobile Wallets, UPI, etc to pay your dues.</p>
 				</div>
 				<div class="col-xs-6">
-					<p class="lead">Amount Due by ${invoice.expiry}</p>
+					<p class="lead">Amount Due by ${invoice.expiry?date}</p>
 	
 					<div class="table-responsive">
 						<table class="table">

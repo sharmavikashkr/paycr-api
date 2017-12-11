@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
@@ -33,7 +34,7 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
+
 	@Autowired
 	private Company company;
 
@@ -84,7 +85,20 @@ public class AdminController {
 		}
 		return null;
 	}
-	
+
+	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
+	@RequestMapping("/setting/address/new")
+	public AdminSetting updateAddress(@RequestBody Address newAddr, HttpServletResponse response) {
+		try {
+			adminService.saveAddress(newAddr);
+			return adminService.getSetting();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
+	}
+
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/tax/new")
 	public void newTaxMaster(@RequestBody TaxMaster tax, HttpServletResponse response) {

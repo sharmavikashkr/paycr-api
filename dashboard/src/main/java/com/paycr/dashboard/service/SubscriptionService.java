@@ -223,13 +223,13 @@ public class SubscriptionService {
 	}
 
 	public File downloadPdf(String subscriptionCode) throws IOException {
-		String pdfPath = server.getSubscriptionLocation() + subscriptionCode + ".pdf";
+		String pdfPath = server.getSubscriptionLocation() + "/receipt" + subscriptionCode + ".pdf";
 		File pdfFile = new File(pdfPath);
 		if (pdfFile.exists()) {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getAppUrl() + "/subscription/response/" + subscriptionCode + "?show=false",
+		pdfUtil.makePdf(company.getAppUrl() + "/subscription/receipt/" + subscriptionCode,
 				pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
@@ -238,5 +238,16 @@ public class SubscriptionService {
 		Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
 		subs.setStatus("declined");
 		subsRepo.save(subs);
+	}
+
+	public ModelAndView getSubscriptionReceipt(String subscriptionCode) {
+		AdminSetting adset = adsetRepo.findAll().get(0);
+		Subscription subs = getSubscriptionByCode(subscriptionCode);
+		ModelAndView mv = new ModelAndView("receipt/subscription");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		mv.addObject("subs", subs);
+		mv.addObject("admin", adset);
+		mv.addObject("company", company);
+		return mv;
 	}
 }

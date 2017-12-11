@@ -9,6 +9,12 @@ public class Company {
 	@Value("${company.name}")
 	private String name;
 
+	@Value("${company.email}")
+	private String email;
+
+	@Value("${company.mobile}")
+	private String mobile;
+
 	@Value("${company.app.url}")
 	private String appUrl;
 
@@ -81,6 +87,22 @@ public class Company {
 
 	public void setOauthUrl(String oauthUrl) {
 		this.oauthUrl = oauthUrl;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 }

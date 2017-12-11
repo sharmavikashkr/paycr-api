@@ -1,16 +1,11 @@
 package com.paycr.dashboard.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Subscription;
@@ -42,9 +36,6 @@ public class SubscriptionController {
 
 	@Autowired
 	private SubscriptionService subsSer;
-
-	@Autowired
-	private Company company;
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
@@ -99,43 +90,6 @@ public class SubscriptionController {
 			System.out.println(ex.getMessage());
 		}
 		response.sendRedirect("/subscription/response/" + subscriptionCode);
-	}
-
-	@RequestMapping(value = "/response/{subscriptionCode}", method = RequestMethod.GET)
-	public ModelAndView response(@PathVariable String subscriptionCode,
-			@RequestParam(value = "show", required = false) Boolean show, HttpServletResponse response)
-			throws IOException {
-		try {
-			ModelAndView mv = new ModelAndView("html/subs-response");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			Subscription subs = subsSer.getSubscriptionByCode(subscriptionCode);
-			mv.addObject("subs", subs);
-			show = (show != null) ? show : true;
-			mv.addObject("show", show);
-			return mv;
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Subscription not found");
-		}
-	}
-
-	@RequestMapping(value = "/receipt/download/{subscriptionCode}", method = RequestMethod.GET)
-	public void download(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
-		File pdfFile = subsSer.downloadPdf(subscriptionCode);
-		response.setContentType("application/pdf");
-
-		FileInputStream fis = null;
-		byte[] bFile = new byte[(int) pdfFile.length()];
-		fis = new FileInputStream(pdfFile);
-		fis.read(bFile);
-		fis.close();
-
-		response.setHeader("Content-Disposition",
-				"attachment; filename=\"SubscriptionReceipt-" + subscriptionCode + ".pdf\"");
-		response.setContentType("application/pdf");
-		InputStream is = new ByteArrayInputStream(bFile);
-		IOUtils.copy(is, response.getOutputStream());
-		response.setContentLength(bFile.length);
-		response.flushBuffer();
 	}
 
 }

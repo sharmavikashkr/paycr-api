@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.OfflineSubscription;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
@@ -183,10 +184,28 @@ public class AdminService {
 		adset.setBanner(setting.getBanner());
 		adset.setTax(setting.getTax());
 		adset.setGstin(setting.getGstin());
+		adset.setHsnsac(setting.getHsnsac());
 		PaymentSetting payset = adset.getPaymentSetting();
 		payset.setRzpMerchantId(setting.getPaymentSetting().getRzpMerchantId());
 		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());
 		payset.setRzpSecretId(setting.getPaymentSetting().getRzpSecretId());
+		adsetRepo.save(adset);
+	}
+
+	public void saveAddress(Address newAddr) {
+		AdminSetting adset = adsetRepo.findAll().get(0);
+		Address exstAddr = adset.getAddress();
+		if (CommonUtil.isNull(exstAddr)) {
+			exstAddr = new Address();
+		}
+		exstAddr.setAddressLine1(newAddr.getAddressLine1());
+		exstAddr.setAddressLine1(newAddr.getAddressLine2());
+		exstAddr.setCity(newAddr.getCity());
+		exstAddr.setDistrict(newAddr.getCity());
+		exstAddr.setState(newAddr.getState());
+		exstAddr.setPincode(newAddr.getPincode());
+		exstAddr.setCountry(newAddr.getCountry());
+		adset.setAddress(exstAddr);
 		adsetRepo.save(adset);
 	}
 

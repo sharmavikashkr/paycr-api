@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -17,11 +18,15 @@ public class AdminSetting {
 	private Integer id;
 
 	private String gstin;
+	private String hsnsac;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private PaymentSetting paymentSetting;
 
 	@OneToOne(cascade = CascadeType.ALL)
+	private Address address;
+
+	@ManyToOne
 	private TaxMaster tax;
 
 	private String banner;
@@ -60,6 +65,22 @@ public class AdminSetting {
 
 	public void setGstin(String gstin) {
 		this.gstin = gstin;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public String getHsnsac() {
+		return hsnsac;
+	}
+
+	public void setHsnsac(String hsnsac) {
+		this.hsnsac = hsnsac;
 	}
 
 }
