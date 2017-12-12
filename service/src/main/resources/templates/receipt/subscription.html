@@ -24,7 +24,7 @@
 						<strong><i class="fa fa-institution"></i> PayCr</strong>
 						<#if admin.address??>
 						<br>${admin.address.addressLine1}
-						<br>${admin.address.addressLine2}
+						<br><#if admin.address.addressLine2??>${admin.address.addressLine2}</#if>
 						<br>${admin.address.city}, ${admin.address.district}
 						<br>${admin.address.state}, ${admin.address.pincode}
 						<br>${admin.address.country}
@@ -42,7 +42,7 @@
 						<strong><i class="fa fa-institution"></i> ${subs.merchant.name}</strong>
 						<#if subs.merchant.address??>
 						<br>${subs.merchant.address.addressLine1}
-						<br>${subs.merchant.address.addressLine2}
+						<br><#if subs.merchant.address.addressLine2??>${subs.merchant.address.addressLine2}</#if>
 						<br>${subs.merchant.address.city}, ${subs.merchant.address.district}
 						<br>${subs.merchant.address.state}, ${subs.merchant.address.pincode}
 						<br>${subs.merchant.address.country}

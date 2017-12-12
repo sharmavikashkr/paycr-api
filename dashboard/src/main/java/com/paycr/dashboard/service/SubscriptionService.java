@@ -95,7 +95,7 @@ public class SubscriptionService {
 		subs.setTotal(total);
 		subs.setTax(adset.getTax());
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(adset.getTax().getValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(new BigDecimal(subs.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setCreated(timeNow);
@@ -229,8 +229,7 @@ public class SubscriptionService {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getAppUrl() + "/subscription/receipt/" + subscriptionCode,
-				pdfFile.getAbsolutePath());
+		pdfUtil.makePdf(company.getAppUrl() + "/subscription/receipt/" + subscriptionCode, pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
 

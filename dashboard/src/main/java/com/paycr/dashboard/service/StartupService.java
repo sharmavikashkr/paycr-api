@@ -78,7 +78,9 @@ public class StartupService {
 		payset.setRzpKeyId("");
 		payset.setRzpSecretId("");
 
+		TaxMaster noTax = createNoTaxMaster();
 		AdminSetting adset = new AdminSetting();
+		adset.setTax(noTax);
 		adset.setPaymentSetting(payset);
 
 		adsetRepo.save(adset);
@@ -89,30 +91,30 @@ public class StartupService {
 		if (CommonUtil.isNotNull(welcomePri)) {
 			return;
 		}
-		Pricing pricing = new Pricing();
-		pricing.setActive(true);
-		pricing.setCreated(new Date());
-		pricing.setDescription("Welcome Plan");
-		pricing.setDuration(90);
-		pricing.setEndAmount(new BigDecimal(10000));
-		pricing.setInvoiceLimit(1000);
-		pricing.setName("WELCOME");
-		pricing.setRate(new BigDecimal(0));
-		pricing.setStartAmount(new BigDecimal(0));
-		priRepo.save(pricing);
+		welcomePri = new Pricing();
+		welcomePri.setActive(true);
+		welcomePri.setCreated(new Date());
+		welcomePri.setDescription("Welcome Plan");
+		welcomePri.setDuration(90);
+		welcomePri.setEndAmount(new BigDecimal(10000));
+		welcomePri.setInvoiceLimit(1000);
+		welcomePri.setName("WELCOME");
+		welcomePri.setRate(new BigDecimal(0));
+		welcomePri.setStartAmount(new BigDecimal(0));
+		priRepo.save(welcomePri);
 	}
 
-	public void createNoTaxMaster() {
+	private TaxMaster createNoTaxMaster() {
 		TaxMaster noTax = taxMRepo.findByName("NO_TAX");
 		if (CommonUtil.isNotNull(noTax)) {
-			return;
+			return noTax;
 		}
-		TaxMaster tax = new TaxMaster();
-		tax.setActive(true);
-		tax.setChild(false);
-		tax.setName("NO_TAX");
-		tax.setValue(0F);
-		taxMRepo.save(tax);
+		noTax = new TaxMaster();
+		noTax.setActive(true);
+		noTax.setChild(false);
+		noTax.setName("NO_TAX");
+		noTax.setValue(0F);
+		return taxMRepo.save(noTax);
 	}
 
 }

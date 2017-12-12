@@ -78,7 +78,7 @@ public class LoginController {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		try {
 			adminService.createMerchant(merchant, "SELF");
-			mv.setViewName("html/login");
+			mv.setViewName("html/register-success");
 			mv.addObject("staticUrl", company.getStaticUrl());
 			return mv;
 		} catch (Exception ex) {

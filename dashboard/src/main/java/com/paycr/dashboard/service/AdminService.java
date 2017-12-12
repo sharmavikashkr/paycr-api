@@ -199,7 +199,7 @@ public class AdminService {
 			exstAddr = new Address();
 		}
 		exstAddr.setAddressLine1(newAddr.getAddressLine1());
-		exstAddr.setAddressLine1(newAddr.getAddressLine2());
+		exstAddr.setAddressLine2(newAddr.getAddressLine2());
 		exstAddr.setCity(newAddr.getCity());
 		exstAddr.setDistrict(newAddr.getCity());
 		exstAddr.setState(newAddr.getState());

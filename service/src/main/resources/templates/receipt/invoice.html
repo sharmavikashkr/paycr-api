@@ -24,7 +24,7 @@
 						<strong><i class="fa fa-institution"></i> ${invoice.merchant.name}</strong>
 						<#if invoice.merchant.address??>
 						<br>${invoice.merchant.address.addressLine1}
-						<br>${invoice.merchant.address.addressLine2}
+						<br><#if invoice.merchant.address.addressLine2??>${invoice.merchant.address.addressLine2}<#/if>
 						<br>${invoice.merchant.address.city}, ${invoice.merchant.address.district}
 						<br>${invoice.merchant.address.state}, ${invoice.merchant.address.pincode}
 						<br>${invoice.merchant.address.country}
@@ -43,7 +43,7 @@
 						<strong><i class="fa fa-user"></i> ${invoice.consumer.name}</strong>
 						<#if invoice.consumer.billingAddress??>
 						<br>${invoice.consumer.billingAddress.addressLine1}
-						<br>${invoice.consumer.billingAddress.addressLine2}
+						<br><#if invoice.consumer.billingAddress.addressLine2??>${invoice.consumer.billingAddress.addressLine2}<#/if>
 						<br>${invoice.consumer.billingAddress.city}, ${invoice.consumer.billingAddress.district}
 						<br>${invoice.consumer.billingAddress.state}, ${invoice.consumer.billingAddress.pincode}
 						<br>${invoice.consumer.billingAddress.country}
