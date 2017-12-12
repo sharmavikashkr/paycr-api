@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.admin.controller;
 
 import java.io.IOException;
 
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.admin.service.AdminService;
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.AdminSetting;
@@ -23,7 +24,7 @@ import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.AdminService;
+import com.paycr.dashboard.service.RegisterService;
 
 @RestController
 @RequestMapping("/admin")
@@ -34,6 +35,9 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+
+	@Autowired
+	private RegisterService registerService;
 
 	@Autowired
 	private Company company;
@@ -114,7 +118,7 @@ public class AdminController {
 	@RequestMapping("/merchant/new")
 	public void newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
 		try {
-			adminService.createMerchant(merchant, secSer.findLoggedInUser().getEmail());
+			registerService.createMerchant(merchant, secSer.findLoggedInUser().getEmail());
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

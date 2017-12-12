@@ -1,4 +1,4 @@
-package com.paycr.dashboard.validation;
+package com.paycr.admin.validation;
 
 import java.util.List;
 
