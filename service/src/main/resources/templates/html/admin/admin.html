@@ -65,10 +65,12 @@
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportXsModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','recurrReportModal')"></div>
 		<div ng-if="user.access.supervisor" ng-include="templateUrl('admin','addTaxModal')"></div>
+		<div ng-if="user.access.supervisor" ng-include="templateUrl('admin','editAddressModal')"></div>
 		<div ng-include="templateUrl('common','invoiceInfoModal')"></div>
 		<div ng-include="templateUrl('common','invoicePaymentModal')"></div>
 		<div ng-include="templateUrl('admin','subsDetailsModal')"></div>
 		<div ng-include="templateUrl('common','changePasswordModal')"></div>
+		<div ng-include="templateUrl('common','editProfileAddressModal')"></div>
 		<div ng-include="templateUrl('common','invoiceTimelineModal')"></div>
 		<div ng-include="templateUrl('admin','adminControl')"></div>
 	</div>

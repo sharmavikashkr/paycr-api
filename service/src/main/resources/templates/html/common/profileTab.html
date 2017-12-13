@@ -1,6 +1,6 @@
 <div ng-controller="ProfileController" id="profileTab">
 	<div class="panel-body">
-		<div class="col-lg-6 text-center">
+		<div class="col-lg-4 text-center">
 			<div class="box box-success">
 				<div class="box-header with-border">
 					<h5 class="box-title">Profile Details</h5>
@@ -32,8 +32,27 @@
 				<button class="btn btn-flat btn-danger" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
 			</div>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-4">
 			<div class="box box-warning">
+				<div class="box-header with-border">
+					<h5 class="box-title">Address</h5>
+					<div class="box-tools pull-right">
+						<button data-toggle="modal" data-target="#editProfileAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Address">
+							<i class="fa fa-pencil"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<p ng-if="user.address != null">
+						{{user.address.addressLine1}},<br>
+						{{user.address.addressLine2}},<br>
+						{{user.address.city}},<br>
+						{{user.address.district}}, {{user.address.state}} - {{user.address.pincode}},<br>
+						{{user.address.country}}
+					</p>
+				</div>
+			</div>
+			<!-- <div class="box box-warning">
 				<div class="box-header with-border">
 					<h5 class="box-title">Address</h5>
 				</div>
@@ -68,7 +87,7 @@
 					</div>
 					<button class="btn btn-info" ng-click="updateAddress()">Save</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>

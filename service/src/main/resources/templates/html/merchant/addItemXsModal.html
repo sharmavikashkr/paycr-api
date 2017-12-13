@@ -13,9 +13,9 @@
 								<tbody>
 									<tr>
 										<td>
-											<div ng-class="(addItemForm.name.$valid)?'':'has-error'" class="form-group">
+											<div ng-class="(addItemForm.code.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Code</label>
-												<input name="name" class="form-control" list="item-code-auto-complete" ng-change="setInventory(item,'CODE')" autocomplete="off" placeholder="Code" ng-model="item.inventory.code" ng-pattern="patterns.paramNamePattern" required />
+												<input name="code" class="form-control" list="item-code-auto-complete" ng-change="setInventory(item,'CODE')" autocomplete="off" placeholder="Code" ng-model="item.inventory.code" ng-pattern="patterns.paramNamePattern" required />
 												<datalist id="item-code-auto-complete">
 													<option ng-repeat="invnitem in inventoryList" ng-if="invnitem.active" ng-value="invnitem.code">
 												</datalist>

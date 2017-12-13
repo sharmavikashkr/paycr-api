@@ -38,20 +38,21 @@ app.controller('AdminSettingController', function($scope, $rootScope, $http,
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.saveAddress = function(newaddress) {
+	$scope.saveAddress = function() {
 		var req = {
 			method : 'POST',
 			url : "/admin/setting/address/new",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
-			data : newaddress
+			data : $rootScope.adminSetting.address
 		}
 		$http(req).then(function(data) {
 			$scope.serverMessage(data);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
+		angular.element(document.querySelector('#editAddressModal')).modal('hide');
 	}
 	$scope.createTax = function(tax) {
 		if (!this.newTaxForm.$valid) {

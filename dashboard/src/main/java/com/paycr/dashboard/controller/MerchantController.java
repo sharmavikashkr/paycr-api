@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
@@ -72,6 +73,20 @@ public class MerchantController {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.updateAccount(merchant, mer);
+			return getMerchant();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+			return null;
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
+	@RequestMapping("/address/update")
+	public Merchant updateAddress(@RequestBody Address addr, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			merSer.updateAddress(merchant, addr);
 			return getMerchant();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);

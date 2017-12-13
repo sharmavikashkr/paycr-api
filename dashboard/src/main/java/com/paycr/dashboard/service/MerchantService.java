@@ -24,18 +24,22 @@ public class MerchantService {
 	public void updateAccount(Merchant merchant, Merchant mer) {
 		merchant.setName(mer.getName());
 		merchant.setGstin(mer.getGstin());
-		if (mer.getAddress() != null) {
+		merRepo.save(merchant);
+	}
+
+	public void updateAddress(Merchant merchant, Address addr) {
+		if (addr != null) {
 			Address address = merchant.getAddress();
 			if (address == null) {
 				address = new Address();
 			}
-			address.setAddressLine1(mer.getAddress().getAddressLine1());
-			address.setAddressLine2(mer.getAddress().getAddressLine2());
-			address.setCity(mer.getAddress().getCity());
-			address.setDistrict(mer.getAddress().getDistrict());
-			address.setState(mer.getAddress().getState());
-			address.setCountry(mer.getAddress().getCountry());
-			address.setPincode(mer.getAddress().getPincode());
+			address.setAddressLine1(addr.getAddressLine1());
+			address.setAddressLine2(addr.getAddressLine2());
+			address.setCity(addr.getCity());
+			address.setDistrict(addr.getDistrict());
+			address.setState(addr.getState());
+			address.setCountry(addr.getCountry());
+			address.setPincode(addr.getPincode());
 			merchant.setAddress(address);
 		}
 		merRepo.save(merchant);

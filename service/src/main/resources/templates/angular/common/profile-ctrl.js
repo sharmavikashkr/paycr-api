@@ -16,6 +16,7 @@ app.controller('ProfileController',
 			}, function(data) {
 				$scope.serverMessage(data);
 			});
+			angular.element(document.querySelector('#editProfileAddressModal')).modal('hide');
 		}
 		$rootScope.loadProfileTab = function() {
 			angular.element(document.querySelector('#profileTabId')).removeClass('active');
@@ -43,8 +44,6 @@ app.controller('ProfileController',
 				alert('FAILURE! relogin');
 				$scope.logout();
 			});
-			angular.element(
-					document.querySelector('#changePasswordModal'))
-					.modal('hide');
+			angular.element(document.querySelector('#changePasswordModal')).modal('hide');
 		}
 	});
