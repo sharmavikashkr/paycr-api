@@ -38,64 +38,6 @@
 			</div>
 		</nav>
 	</header>
-    <div id="itemsModal" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h5 class="modal-title"> Invoice# <strong>${invoice.invoiceCode}</strong></h5>
-				</div>
-				<div class="modal-body">
-					<table class="table table-bordered">
-                           <thead>
-                               <tr>
-                                   <th class="text-center">Item Name</th>
-                                   <th class="text-center">Rate</th>
-                                   <th class="text-center">Quantity</th>
-                                   <th class="text-center">Tax</th>
-                                   <th class="text-right">Total</th>
-                               </tr>
-                           </thead>
-                           <tbody id="itemBody">
-                           	<#list invoice.items as item>
-                               <tr id="itemRow">
-                                   <td class="text-center">${item.inventory.name}</td>
-                                   <td class="text-center"><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
-                                   <td class="text-center">${item.quantity}</td>
-                                   <td class="text-center">${item.tax.name} ${item.tax.value}%</td>
-                                   <td class="text-right"><i class="fa fa-rupee"></i> ${item.price}</td>
-                               </tr>
-                               </#list>
-                               <tr>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"></td>
-			                       <td class="text-center"><strong>Shipping</strong></td>
-                                   <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.shipping}</td>
-                               </tr>
-                               <tr>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"><strong>Discount</strong></td>
-                                   <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.discount}</td>
-                               </tr>
-                               <tr>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"></td>
-                                   <td class="text-center"><strong>Pay Amount</strong></td>
-                                   <td class="text-right"><i class="fa fa-rupee"></i> ${invoice.payAmount}</td>
-                               </tr>
-                           </tbody>
-                       </table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	<div id="paramsModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -143,8 +85,8 @@
 	                    		<div><small>${invoice.consumer.email}</small></div>
 	                    		<div><small>${invoice.consumer.mobile}</small></div>
 	                    	</div>
-	                    	<div class="col-md-3 col-xs-3">
-	                    		<a href="#" data-toggle="modal" data-target="#remindModal" title="remind me later"><i class="fa fa-calendar fa-3x"></i></a>
+	                    	<div class="col-md-3 col-xs-3 visible-xs">
+	                    		<a target="_blank" href="/invoice/receipt/${invoice.invoiceCode}" title="Invoice Receipt"><i class="fa fa-file-pdf-o fa-3x"></i></a>
 	                    	</div>
 	                    </div>
 	                    <hr class="hidden-xs">
@@ -152,8 +94,7 @@
 	                    	<h3 class="section-heading">PAY YOUR INVOICE</h3>
 	                    </div>
 	                    <div class="row hidden-xs">
-	                    	<h3 class="section-heading"><a target="_blank" href="/invoice/receipt/${invoice.invoiceCode}" title="Invoice Receipt"><i class="fa fa-file-pdf-o fa-5x"></i></a></h3>
-	                    	<!-- <a href="#" data-toggle="modal" data-target="#itemsModal">View Bill</a> -->
+	                    	<h3 class="section-heading"><a target="_blank" href="/invoice/receipt/${invoice.invoiceCode}" title="Invoice Receipt"><i class="fa fa-file-pdf-o fa-3x"></i></a></h3>
 	                    </div>
 	                    <div class="row hidden-xs">
 	                    	<br><br>
@@ -163,7 +104,7 @@
 	                <div class="col-md-6" style="padding:20px;">
 	                	<div class="row hidden-xs">
 	                		<div class="col-md-2 col-md-offset-5">
-	                    		<h3 class="section-heading"><img style="max-height:100%;max-width:100%" alt="PAYCR" src="${banner}"></h3>
+	                    		<h3 class="section-heading"><img style="max-height:100%;max-width:100%" src="${banner}"></h3>
 	                    	</div>
 	                    </div>
 	                	<div class="row">

@@ -6,6 +6,11 @@
     <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="${staticUrl}/dist/css/AdminLTE.min.css" rel="stylesheet">
     <script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
+    <style type="text/css">
+    	table {
+			font-size: 14px;
+		}
+    </style>
 </head>
 <body>
 	<section class="invoice">
@@ -13,13 +18,25 @@
 			<div class="row">
 				<div class="col-xs-12">
 					<h2 class="page-header">
-						Tax Invoice <small class="pull-right">Date: ${subs.created}</small>
+						Tax Invoice <small class="pull-right"><b>Date:</b> ${subs.created}</small>
 					</h2>
 				</div>
 			</div>
 			<div class="row invoice-info">
 				<div class="col-sm-4 invoice-col">
-					From
+					<b>Invoice#</b> ${subs.subscriptionCode}
+				</div>
+				<div class="col-sm-4 invoice-col">
+					<b>Invoice Date:</b> ${subs.created?date}
+				</div>
+				<div class="col-sm-4 invoice-col">
+					<b>Payment Due:</b> ${subs.created?date}
+				</div>
+			</div>
+			<hr>
+			<div class="row invoice-info">
+				<div class="col-sm-4 invoice-col">
+					<u>From</u>
 					<address>
 						<strong><i class="fa fa-institution"></i> PayCr</strong>
 						<#if admin.address??>
@@ -37,7 +54,7 @@
 					</address>
 				</div>
 				<div class="col-sm-4 invoice-col">
-					To
+					<u>Billed To</u>
 					<address>
 						<strong><i class="fa fa-institution"></i> ${subs.merchant.name}</strong>
 						<#if subs.merchant.address??>
@@ -55,8 +72,19 @@
 					</address>
 				</div>
 				<div class="col-sm-4 invoice-col">
-					<b>Invoice#</b> ${subs.subscriptionCode}<br>
-					<b>Payment Due:</b> ${subs.created?date}<br><br>
+					<u>Shipping To</u>
+					<address>
+						<strong><i class="fa fa-institution"></i> ${subs.merchant.name}</strong>
+						<#if subs.merchant.address??>
+						<br>${subs.merchant.address.addressLine1}
+						<br><#if subs.merchant.address.addressLine2??>${subs.merchant.address.addressLine2}</#if>
+						<br>${subs.merchant.address.city}, ${subs.merchant.address.district}
+						<br>${subs.merchant.address.state}, ${subs.merchant.address.pincode}
+						<br>${subs.merchant.address.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${subs.merchant.mobile}
+						<br><i class="fa fa-envelope"></i> ${subs.merchant.email}
+					</address>
 				</div>
 			</div>
 			<div class="row">
