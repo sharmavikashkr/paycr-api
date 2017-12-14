@@ -154,7 +154,10 @@ public class ConsumerService {
 				conCatRepo.deleteForConsumer(consumer);
 			}
 			for (ConsumerCategory conCat : updateReq.getConCatList()) {
-				addCategory(consumer.getId(), conCat, merchant);
+				ConsumerCategory newConCat = new ConsumerCategory();
+				newConCat.setName(conCat.getName());
+				newConCat.setValue(conCat.getValue());
+				addCategory(consumer.getId(), newConCat, merchant);
 			}
 		}
 	}

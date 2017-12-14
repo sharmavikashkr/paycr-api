@@ -228,8 +228,12 @@ public class CreateInvoiceService {
 			searchReq.setConCatList(chldInvReq.getConCatList());
 			Set<Consumer> consumerSet = conDao.findConsumers(searchReq, merchant);
 			for (Consumer consumer : consumerSet) {
-				chldInvReq.setConsumer(consumer);
-				createChild(invoiceCode, chldInvReq, createdBy);
+				ChildInvoiceRequest chldInvReqNew = new ChildInvoiceRequest();
+				chldInvReqNew.setConsumer(consumer);
+				chldInvReqNew.setInvoiceType(chldInvReq.getInvoiceType());
+				chldInvReqNew.setConCatList(chldInvReq.getConCatList());
+				chldInvReqNew.setRecInv(chldInvReq.getRecInv());
+				createChild(invoiceCode, chldInvReqNew, createdBy);
 			}
 			StringBuilder sb = new StringBuilder("");
 			for (ConsumerCategory conCat : chldInvReq.getConCatList()) {
