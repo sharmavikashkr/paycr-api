@@ -2,6 +2,9 @@ app.controller('ProfileController',
 	function($scope, $rootScope, $http, $cookies,
 			$httpParamSerializer) {
 		$scope.updateAddress = function() {
+			if (!this.editAddressForm.$valid) {
+				return false;
+			}
 			var req = {
 				method : 'POST',
 				url : "/profile/update/address",

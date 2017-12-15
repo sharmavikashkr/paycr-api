@@ -17,6 +17,9 @@ app.controller('AccountController', function($scope, $rootScope, $http,
 		});
 	}
 	$scope.saveAccAddress = function() {
+		if (!this.editAddressForm.$valid) {
+			return false;
+		}
 		var req = {
 			method : 'POST',
 			url : "/merchant/address/update",

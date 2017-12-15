@@ -38,8 +38,7 @@ public class ProfileController {
 	public void updateAddress(@RequestBody Address address, HttpServletResponse response) {
 		try {
 			PcUser user = secSer.findLoggedInUser();
-			user.setAddress(address);
-			userService.saveUser(user);
+			userService.saveAddress(user, address);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

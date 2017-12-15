@@ -28,6 +28,11 @@ public class MerchantService {
 	}
 
 	public void updateAddress(Merchant merchant, Address addr) {
+		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
+				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
+				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+		}
 		if (addr != null) {
 			Address address = merchant.getAddress();
 			if (address == null) {

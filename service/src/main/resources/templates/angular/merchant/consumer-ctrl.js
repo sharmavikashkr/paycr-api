@@ -260,6 +260,9 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$scope.saveAddress($rootScope.editAddress);
 	}
 	$scope.saveAddress = function(editAddress) {
+		if (!this.editAddressForm.$valid) {
+			return false;
+		}
 		var req = {
 			method : 'POST',
 			url : "/consumer/address/update/" + editAddress.consumerId,

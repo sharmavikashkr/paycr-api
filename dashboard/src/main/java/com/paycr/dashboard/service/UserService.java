@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Access;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantUser;
@@ -22,6 +23,7 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.dashboard.validation.UserValidator;
 
@@ -53,6 +55,27 @@ public class UserService {
 	private InvoiceRepository invRepo;
 
 	public PcUser saveUser(PcUser user) {
+		return userRepo.save(user);
+	}
+
+	public PcUser saveAddress(PcUser user, Address addr) {
+		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
+				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
+				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+		}
+		Address address = user.getAddress();
+		if (address == null) {
+			address = new Address();
+		}
+		address.setAddressLine1(addr.getAddressLine1());
+		address.setAddressLine2(addr.getAddressLine2());
+		address.setCity(addr.getCity());
+		address.setDistrict(addr.getDistrict());
+		address.setState(addr.getState());
+		address.setCountry(addr.getCountry());
+		address.setPincode(addr.getPincode());
+		user.setAddress(address);
 		return userRepo.save(user);
 	}
 

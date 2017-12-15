@@ -39,6 +39,9 @@ app.controller('AdminSettingController', function($scope, $rootScope, $http,
 		});
 	}
 	$scope.saveAddress = function() {
+		if (!this.editAddressForm.$valid) {
+			return false;
+		}
 		var req = {
 			method : 'POST',
 			url : "/admin/setting/address/new",

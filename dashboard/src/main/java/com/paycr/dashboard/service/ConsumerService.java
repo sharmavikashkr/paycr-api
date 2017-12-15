@@ -32,6 +32,7 @@ import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.AddressType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.dashboard.validation.ConsumerValidator;
 
@@ -228,17 +229,39 @@ public class ConsumerService {
 		return Files.readAllBytes(path);
 	}
 
-	public void updateConsumerAddress(Address address, Integer consumerId) {
+	public void updateConsumerAddress(Address addr, Integer consumerId) {
+		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
+				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
+				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+		}
 		Consumer consumer = conRepo.findOne(consumerId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (consumer.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
 		}
-		if (AddressType.BILLING.equals(address.getType())) {
+		Address address = null;
+		if (AddressType.BILLING.equals(addr.getType())) {
+			address = consumer.getBillingAddress();
+			if (address == null) {
+				address = new Address();
+			}
 			consumer.setBillingAddress(address);
+
 		} else {
+			address = consumer.getShippingAddress();
+			if (address == null) {
+				address = new Address();
+			}
 			consumer.setShippingAddress(address);
 		}
+		address.setAddressLine1(addr.getAddressLine1());
+		address.setAddressLine2(addr.getAddressLine2());
+		address.setCity(addr.getCity());
+		address.setDistrict(addr.getDistrict());
+		address.setState(addr.getState());
+		address.setCountry(addr.getCountry());
+		address.setPincode(addr.getPincode());
 		conRepo.save(consumer);
 	}
 }

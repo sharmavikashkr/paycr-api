@@ -64,6 +64,11 @@ public class AdminService {
 	}
 
 	public void saveAddress(Address newAddr) {
+		if (CommonUtil.isNull(newAddr) || CommonUtil.isEmpty(newAddr.getAddressLine1()) || CommonUtil.isEmpty(newAddr.getCity())
+				|| CommonUtil.isEmpty(newAddr.getDistrict()) || CommonUtil.isEmpty(newAddr.getState())
+				|| CommonUtil.isEmpty(newAddr.getPincode()) || CommonUtil.isEmpty(newAddr.getCountry())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+		}
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		Address exstAddr = adset.getAddress();
 		if (CommonUtil.isNull(exstAddr)) {
