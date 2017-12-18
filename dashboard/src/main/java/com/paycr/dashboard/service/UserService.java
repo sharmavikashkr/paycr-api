@@ -46,7 +46,7 @@ public class UserService {
 	private MerchantUserRepository merUserRepo;
 
 	@Autowired
-	private LoginService userService;
+	private AccessService accessService;
 
 	@Autowired
 	private UserValidator userValidator;
@@ -181,7 +181,7 @@ public class UserService {
 			merUser.setMerchantId(merchant.getId());
 			merUser.setUserId(user.getId());
 			merUserRepo.save(merUser);
-			userService.sendResetLink(user);
+			accessService.sendResetLink(user);
 		} else {
 			user.setCreated(timeNow);
 			user.setPassword(bcPassEncode.encode("password@123"));

@@ -2,12 +2,9 @@ package com.paycr.dashboard.controller;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.LinkedHashMap;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,22 +17,20 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
-import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ResetStatus;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
-import com.paycr.dashboard.service.LoginService;
+import com.paycr.dashboard.service.AccessService;
 import com.paycr.dashboard.service.UserService;
 
 @RestController
-public class LoginController {
+public class AccessController {
 
 	@Autowired
 	private BCryptPasswordEncoder bcPassEncode;
 
 	@Autowired
-	private LoginService loginService;
+	private AccessService accessService;
 
 	@Autowired
 	private UserService userService;
@@ -48,25 +43,6 @@ public class LoginController {
 		ModelAndView mv = new ModelAndView("html/index");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
-	}
-
-	@RequestMapping("/login")
-	public ModelAndView login(HttpServletResponse response) {
-		response.addCookie(new Cookie("access_token", ""));
-		ModelAndView mv = new ModelAndView("html/login");
-		mv.addObject("staticUrl", company.getStaticUrl());
-		return mv;
-	}
-
-	@RequestMapping(value = "/secure/login", method = RequestMethod.POST)
-	public LinkedHashMap secureLogin(@RequestParam("email") String email, @RequestParam("password") String password,
-			HttpServletResponse response) {
-		try {
-			return loginService.secureLogin(email, password);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.UNAUTHORIZED_401);
-			throw new PaycrException(Constants.FAILURE, "Invalid credentials");
-		}
 	}
 
 	@RequestMapping("/forgotPassword")
@@ -94,10 +70,10 @@ public class LoginController {
 		Date timeNow = new Date();
 		if (CommonUtil.isNotNull(user)) {
 			Date yesterday = DateUtil.addDays(timeNow, -1);
-			if (loginService.findResetCount(userEmail, yesterday, timeNow) >= 3) {
+			if (accessService.findResetCount(userEmail, yesterday, timeNow) >= 3) {
 				response.sendRedirect("/forgotPassword?error=2");
 			} else {
-				loginService.sendResetLink(user);
+				accessService.sendResetLink(user);
 				response.sendRedirect("/login");
 			}
 		} else {
@@ -107,13 +83,13 @@ public class LoginController {
 
 	@RequestMapping("/resetPassword/{resetCode}")
 	public ModelAndView resetPasswordGet(@PathVariable String resetCode) {
-		ResetPassword resetPassword = loginService.getResetPassword(resetCode);
+		ResetPassword resetPassword = accessService.getResetPassword(resetCode);
 		ModelAndView mvError = validateResetRequest(resetPassword);
 		if (CommonUtil.isNotNull(mvError)) {
 			return mvError;
 		}
 		resetPassword.setStatus(ResetStatus.INTITIATED);
-		loginService.saveResetPassword(resetPassword);
+		accessService.saveResetPassword(resetPassword);
 		ModelAndView mv = new ModelAndView("html/reset-password");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("email", resetPassword.getEmail());
@@ -123,7 +99,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/resetPassword/{resetCode}", method = RequestMethod.POST)
 	public ModelAndView resetPasswordPost(@PathVariable String resetCode, @RequestParam("password") String password) {
-		ResetPassword resetPassword = loginService.getResetPassword(resetCode);
+		ResetPassword resetPassword = accessService.getResetPassword(resetCode);
 		ModelAndView mvError = validateResetRequest(resetPassword);
 		if (CommonUtil.isNotNull(mvError)) {
 			return mvError;
@@ -132,7 +108,7 @@ public class LoginController {
 		user.setPassword(bcPassEncode.encode(password));
 		userService.saveUser(user);
 		resetPassword.setStatus(ResetStatus.SUCCESS);
-		loginService.saveResetPassword(resetPassword);
+		accessService.saveResetPassword(resetPassword);
 		ModelAndView mv = new ModelAndView("html/login");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;

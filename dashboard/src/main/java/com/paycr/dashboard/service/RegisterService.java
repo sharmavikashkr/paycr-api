@@ -49,7 +49,7 @@ public class RegisterService {
 	private HmacSignerUtil hmacSigner;
 
 	@Autowired
-	private LoginService userService;
+	private AccessService accessService;
 
 	@Autowired
 	private NotificationRepository notiRepo;
@@ -117,7 +117,7 @@ public class RegisterService {
 		merUser.setMerchantId(merchant.getId());
 		merUser.setUserId(user.getId());
 		merUserRepo.save(merUser);
-		userService.sendResetLink(user);
+		accessService.sendResetLink(user);
 
 		Notification noti = new Notification();
 		noti.setMerchantId(merchant.getId());
