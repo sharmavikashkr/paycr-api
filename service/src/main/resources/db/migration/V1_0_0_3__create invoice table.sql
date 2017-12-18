@@ -89,6 +89,13 @@ CREATE TABLE if not exists pc_item (
     inventory_id int REFERENCES pc_inventory
 );
 
+CREATE TABLE if not exists pc_merchant_custom_param (
+	id SERIAL PRIMARY KEY NOT NULL,
+	param_name varchar(20) NOT NULL,
+	provider varchar(20) NOT NULL,
+    invoice_setting_id int REFERENCES pc_invoice_setting
+);
+
 CREATE TABLE if not exists pc_invoice_custom_param (
 	id SERIAL PRIMARY KEY NOT NULL,
 	param_name varchar(20) NOT NULL,

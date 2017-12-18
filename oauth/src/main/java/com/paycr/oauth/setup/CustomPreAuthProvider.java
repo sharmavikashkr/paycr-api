@@ -1,4 +1,4 @@
-package com.paycr.service;
+package com.paycr.oauth.setup;
 
 import javax.annotation.PostConstruct;
 

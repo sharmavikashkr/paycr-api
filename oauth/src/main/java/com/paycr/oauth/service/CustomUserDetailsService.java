@@ -1,4 +1,4 @@
-package com.paycr.common.service;
+package com.paycr.oauth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.paycr.common.data.domain.CustomUserDetails;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.service.UserRoleService;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

@@ -26,6 +26,16 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>oauth</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>invoice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>dashboard</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -36,7 +46,7 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>invoice</artifactId>
+			<artifactId>merchant</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -1,4 +1,4 @@
-package com.paycr.service;
+package com.paycr.oauth.setup;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 
-import com.paycr.common.service.CustomUserDetailsService;
+import com.paycr.oauth.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

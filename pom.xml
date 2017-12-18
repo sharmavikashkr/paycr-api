@@ -23,6 +23,8 @@
 		<module>invoice</module>
 		<module>scheduler</module>
 		<module>admin</module>
+		<module>merchant</module>
+		<module>oauth</module>
 	</modules>
 
 	<parent>

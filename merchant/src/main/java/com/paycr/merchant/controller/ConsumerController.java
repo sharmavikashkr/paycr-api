@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.merchant.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.ConsumerService;
+import com.paycr.merchant.service.ConsumerService;
 
 @RestController
 @RequestMapping("/consumer")

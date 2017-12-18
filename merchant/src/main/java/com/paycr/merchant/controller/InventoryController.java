@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.merchant.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paycr.common.bean.InventoryStats;
 import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.InventoryService;
+import com.paycr.merchant.service.InventoryService;
 
 @RestController
 @RequestMapping("/inventory")

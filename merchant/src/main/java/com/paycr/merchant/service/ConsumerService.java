@@ -1,4 +1,4 @@
-package com.paycr.dashboard.service;
+package com.paycr.merchant.service;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,7 +34,7 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.AddressType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
-import com.paycr.dashboard.validation.ConsumerValidator;
+import com.paycr.merchant.validation.ConsumerValidator;
 
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;

@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.paycr.dashboard.service.StartupService;
+import com.paycr.admin.service.StartupService;
 
 @Component
 public class ApplicationStartUp implements ApplicationListener<ContextRefreshedEvent> {

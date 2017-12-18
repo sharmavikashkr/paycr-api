@@ -1,4 +1,4 @@
-package com.paycr.dashboard.service;
+package com.paycr.admin.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

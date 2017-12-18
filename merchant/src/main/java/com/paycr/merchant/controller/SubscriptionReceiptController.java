@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.merchant.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -13,38 +13,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.paycr.common.bean.Company;
-import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.Constants;
-import com.paycr.dashboard.service.SubscriptionResponseService;
+import com.paycr.merchant.service.SubscriptionReceiptService;
 
 @RestController
-@RequestMapping("/subscription/response")
-public class SubscriptionResponseController {
+@RequestMapping("/subscription/receipt")
+public class SubscriptionReceiptController {
 
 	@Autowired
-	private SubscriptionResponseService subsRespSer;
-
-	@Autowired
-	private Company company;
+	private SubscriptionReceiptService subsRecSer;
 
 	@RequestMapping(value = "/{subscriptionCode}", method = RequestMethod.GET)
-	public ModelAndView response(@PathVariable String subscriptionCode,
-			@RequestParam(value = "show", required = false) Boolean show, HttpServletResponse response)
-					throws IOException {
+	public ModelAndView receipt(@PathVariable String subscriptionCode, HttpServletResponse response) {
 		try {
-			ModelAndView mv = new ModelAndView("html/subs-response");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			Subscription subs = subsRespSer.getSubscriptionByCode(subscriptionCode);
-			mv.addObject("subs", subs);
-			show = (show != null) ? show : true;
-			mv.addObject("show", show);
-			return mv;
+			return subsRecSer.getSubscriptionReceipt(subscriptionCode);
+		} catch (Exception ex) {
+			throw new PaycrException(Constants.FAILURE, "Subscription not found");
+		}
+	}
+
+	@RequestMapping(value = "/pricing/{pricingId}", method = RequestMethod.GET)
+	public void getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
+		try {
+			String subsCode = subsRecSer.getPricingReceipt(pricingId);
+			response.sendRedirect("/subscription/receipt/" + subsCode);
 		} catch (Exception ex) {
 			throw new PaycrException(Constants.FAILURE, "Subscription not found");
 		}
@@ -52,7 +48,7 @@ public class SubscriptionResponseController {
 
 	@RequestMapping(value = "/download/{subscriptionCode}", method = RequestMethod.GET)
 	public void download(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
-		File pdfFile = subsRespSer.downloadPdf(subscriptionCode);
+		File pdfFile = subsRecSer.downloadPdf(subscriptionCode);
 		response.setContentType("application/pdf");
 
 		FileInputStream fis = null;

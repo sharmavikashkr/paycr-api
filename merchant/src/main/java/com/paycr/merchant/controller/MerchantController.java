@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.merchant.controller;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.MerchantService;
+import com.paycr.merchant.service.MerchantService;
 
 @RestController
 @RequestMapping("/merchant")

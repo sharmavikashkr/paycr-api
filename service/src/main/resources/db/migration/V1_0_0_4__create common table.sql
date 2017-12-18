@@ -1,9 +1,3 @@
-CREATE TABLE if not exists pc_merchant_user(
-	id SERIAL PRIMARY KEY NOT NULL,
-	merchant_id int NOT NULL,
-	user_id int NOT NULL
-);
-
 CREATE TABLE if not exists pc_notification(
 	id SERIAL PRIMARY KEY NOT NULL,
 	merchant_id int DEFAULT NULL,

@@ -17,6 +17,12 @@ CREATE TABLE if not exists pc_user_role(
 	role varchar(50) NOT NULL
 );
 
+CREATE TABLE if not exists pc_merchant_user(
+	id SERIAL PRIMARY KEY NOT NULL,
+	merchant_id int NOT NULL,
+	user_id int NOT NULL
+);
+
 CREATE TABLE if not exists pc_reset_password (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
