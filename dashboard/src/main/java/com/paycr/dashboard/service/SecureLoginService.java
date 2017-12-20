@@ -1,4 +1,4 @@
-package com.paycr.merchant.service;
+package com.paycr.dashboard.service;
 
 import java.util.LinkedHashMap;
 
@@ -19,7 +19,7 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.Constants;
 
 @Service
-public class MerchantLoginService {
+public class SecureLoginService {
 
 	@Autowired
 	private Company company;
