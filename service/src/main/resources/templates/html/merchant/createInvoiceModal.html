@@ -52,9 +52,11 @@
 									<input type="checkbox" ng-change="calculateTotal()" ng-model="saveinvoice.addItems">&nbsp;<strong>Add Items</strong><br>
 									<hr>
 									<div ng-class="(createInvoiceForm.expiresIn.$valid)?'':'has-error'" class="form-group">
-										<label class="control-label">Expires in (days):</label>
+										<div class="col-md-12">
+											<label class="control-label">Expires in (days):</label>
+										</div>
 										<div class="col-md-6">
-											<input class="form-control" ng-model="saveinvoice.expiresIn" name="expiresIn" type="number" ng-pattern="patterns.numberPattern" required />
+											<input class="form-control" ng-model="saveinvoice.expiresIn" name="expiresIn" type="number" ng-pattern="patterns.numberPattern" required ng-readonly="saveinvoice.neverExpire"/>
 										</div>
 										<div class="col-md-6">
 											<input type="checkbox" ng-model="saveinvoice.neverExpire">&nbsp;<strong>Never</strong>

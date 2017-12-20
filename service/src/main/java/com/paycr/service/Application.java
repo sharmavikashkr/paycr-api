@@ -18,8 +18,8 @@ import org.springframework.web.context.request.RequestContextListener;
 @EntityScan(basePackages = { "com.paycr.common.data.domain" })
 @EnableJpaRepositories(basePackages = { "com.paycr.common.data.repository" })
 @EnableAsync
-@PropertySource(value = { "classpath:application.properties",
-		"classpath:local.properties" }, ignoreResourceNotFound = true)
+/*@PropertySource(value = { "classpath:application.properties",
+		"classpath:local.properties" }, ignoreResourceNotFound = true)*/
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
