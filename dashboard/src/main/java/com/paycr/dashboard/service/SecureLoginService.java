@@ -2,6 +2,8 @@ package com.paycr.dashboard.service;
 
 import java.util.LinkedHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +23,13 @@ import com.paycr.common.util.Constants;
 @Service
 public class SecureLoginService {
 
+	private static final Logger logger = LoggerFactory.getLogger(SecureLoginService.class);
+
 	@Autowired
 	private Company company;
 
 	public LinkedHashMap secureLogin(String email, String password) {
+		logger.info("Secure OAUTH request received for email : {}", email);
 		try {
 			RestTemplate restTemplate = RestTemplateClient.getRestTemplate();
 			HttpHeaders header = new HttpHeaders();
@@ -37,8 +42,10 @@ public class SecureLoginService {
 			HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, header);
 			ResponseEntity<LinkedHashMap> response = restTemplate.exchange(company.getOauthUrl() + "/oauth/token",
 					HttpMethod.POST, httpEntity, LinkedHashMap.class);
+			logger.info("Secure OAUTH token generated for email : {}", email);
 			return response.getBody();
 		} catch (Exception ex) {
+			logger.error("Execption while generating secure OAUTH token email : {}", email, ex);
 			throw new PaycrException(Constants.FAILURE, "Something went wrong");
 		}
 	}
