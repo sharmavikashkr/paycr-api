@@ -21,7 +21,7 @@ import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.domain.BulkCategory;
-import com.paycr.common.data.domain.BulkUpload;
+import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
 import com.paycr.common.data.domain.Invoice;
@@ -32,7 +32,7 @@ import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.BulkCategoryRepository;
-import com.paycr.common.data.repository.BulkUploadRepository;
+import com.paycr.common.data.repository.BulkInvoiceUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.exception.PaycrException;
@@ -80,7 +80,7 @@ public class CreateInvoiceService {
 	private Server server;
 
 	@Autowired
-	private BulkUploadRepository bulkUpdRepo;
+	private BulkInvoiceUploadRepository bulkUpdRepo;
 
 	@Autowired
 	private BulkCategoryRepository bulkCatRepo;
@@ -158,10 +158,10 @@ public class CreateInvoiceService {
 	@Async
 	@Transactional
 	public void uploadConsumers(String invoiceCode, MultipartFile consumers, String createdBy) throws IOException {
-		List<BulkUpload> bulkUploads = bulkUpdRepo.findByInvoiceCode(invoiceCode);
+		List<BulkInvoiceUpload> bulkUploads = bulkUpdRepo.findByInvoiceCode(invoiceCode);
 		Invoice parenInv = invRepo.findByInvoiceCode(invoiceCode);
 		String fileName = invoiceCode + "-" + bulkUploads.size() + ".csv";
-		String updatedCsv = server.getBulkCsvLocation() + fileName;
+		String updatedCsv = server.getBulkInvoiceLocation() + fileName;
 		CSVWriter writer = new CSVWriter(new FileWriter(updatedCsv, true));
 		Reader reader = new InputStreamReader(consumers.getInputStream());
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
@@ -200,7 +200,7 @@ public class CreateInvoiceService {
 		}
 		writer.close();
 		Date timeNow = new Date();
-		BulkUpload bun = new BulkUpload();
+		BulkInvoiceUpload bun = new BulkInvoiceUpload();
 		bun.setCreated(timeNow);
 		bun.setFileName(fileName);
 		bun.setInvoiceCode(invoiceCode);

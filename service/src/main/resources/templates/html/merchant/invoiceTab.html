@@ -158,7 +158,7 @@
 											<button ng-if="invoice.invoiceType == 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" ng-click="updateBulkInvoiceInfo(invoice)" title="Add child invoice" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#childInvoiceModal">
 												<i class="fa fa-plus"></i>
 											</button>
-											<button ng-if="invoice.invoiceType == 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" ng-click="updateBulkInvoiceInfo(invoice)" title="Upload Consumers" class="btn btn-flat btn-basic btn-md" data-toggle="modal" data-target="#bulkUploadModal">
+											<button ng-if="invoice.invoiceType == 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" ng-click="updateBulkInvoiceInfo(invoice)" title="Upload Consumers" class="btn btn-flat btn-basic btn-md" data-toggle="modal" data-target="#bulkInvoiceUploadModal">
 												<i class="fa fa-upload"></i>
 											</button>
 											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice.invoiceCode)" title="Search child invoices" class="btn btn-flat btn-warning btn-md">

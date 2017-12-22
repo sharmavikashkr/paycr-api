@@ -142,7 +142,7 @@ public class ConsumerController {
 
 	@RequestMapping("/bulk/upload/format")
 	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String content = "Name1,Email1,Mobile1,category-name(optional),category-value(optional)\r\nName2,Email2,Mobile2,category-name(optional),category-value(optional)";
+		String content = "Name1,Email1,Mobile1,GSTIN1,category,value,Addr Line1,Addr Line2,city,district,state,pincode,country\r\nName2,Email2,Mobile2,GSTIN2,category,value,Addr Line1,Addr Line2,city,district,state,pincode,country";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkConsumer.csv\"");
 		response.setContentType("application/csv");
 		InputStream is = new ByteArrayInputStream(content.getBytes());

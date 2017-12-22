@@ -257,10 +257,10 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		$rootScope.editAddress.id = null;
 		$rootScope.editAddress.type = 'SHIPPING';
 		$rootScope.editAddress.consumerId = this.consumer.id;
-		$scope.saveAddress($rootScope.editAddress);
+		$scope.saveAddress($rootScope.editAddress, true);
 	}
-	$scope.saveAddress = function(editAddress) {
-		if (!this.editAddressForm.$valid) {
+	$scope.saveAddress = function(editAddress, isCopy) {
+		if (!isCopy && !this.editAddressForm.$valid) {
 			return false;
 		}
 		var req = {

@@ -1,0 +1,43 @@
+<div id="bulkInventoryUploadModal" ng-controller="InventoryController" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h5 class="modal-title">Upload Inventory</h5>
+			</div>
+			<div class="modal-body">
+				<form name="childInvoiceForm">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Upload Items (CSV): (<a href="/inventory/bulk/upload/format">Download format</a>)</label>
+								<input type="file" onchange="angular.element(this).scope().uploadInventory(this.files)" accept=".csv" />
+							</div>
+							<br>
+							<label>History</label>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="hidden-xs">Uploaded On</th>
+										<th class="hidden-xs">Uploaded By</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="bulkUpload in bulkInventoryUploads">
+										<td><a target="_blank" href="/inventory/bulk/download/{{bulkUpload.fileName}}">{{bulkUpload.fileName}}</a></td>
+										<td class="hidden-xs">{{bulkUpload.created | date:'dd-MM-yyyy'}}</td>
+										<td class="hidden-xs">{{bulkUpload.createdBy}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -22,7 +22,7 @@ import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Attachment;
 import com.paycr.common.data.domain.BulkCategory;
-import com.paycr.common.data.domain.BulkUpload;
+import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Merchant;
@@ -30,7 +30,7 @@ import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.BulkCategoryRepository;
-import com.paycr.common.data.repository.BulkUploadRepository;
+import com.paycr.common.data.repository.BulkInvoiceUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
@@ -78,7 +78,7 @@ public class InvoiceService {
 	private RecurringInvoiceRepository recInvRepo;
 
 	@Autowired
-	private BulkUploadRepository bulkUpdRepo;
+	private BulkInvoiceUploadRepository bulkUpdRepo;
 
 	@Autowired
 	private BulkCategoryRepository bulkCatRepo;
@@ -255,12 +255,12 @@ public class InvoiceService {
 		return recInvRepo.findByInvoice(invoice);
 	}
 
-	public List<BulkUpload> getUploads(String invoiceCode) {
+	public List<BulkInvoiceUpload> getUploads(String invoiceCode) {
 		return bulkUpdRepo.findByInvoiceCode(invoiceCode);
 	}
 
 	public byte[] downloadFile(String filename) throws IOException {
-		Path path = Paths.get(server.getBulkCsvLocation() + filename);
+		Path path = Paths.get(server.getBulkInvoiceLocation() + filename);
 		return Files.readAllBytes(path);
 	}
 

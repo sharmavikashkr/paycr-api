@@ -112,7 +112,7 @@ CREATE TABLE if not exists pc_attachment (
     invoice_id int REFERENCES pc_invoice
 );
 
-CREATE TABLE if not exists pc_bulk_upload (
+CREATE TABLE if not exists pc_bulk_invoice_upload (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	file_name varchar(20) NOT NULL,

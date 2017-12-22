@@ -75,6 +75,40 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#createInventoryModal')).modal(
 				'hide');
 	}
+	$scope.updateBulkInventoryUploads = function() {
+		var req = {
+			method : 'GET',
+			url : "/inventory/bulk/uploads/all",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(bulkInventoryUploads) {
+			$rootScope.bulkInventoryUploads = bulkInventoryUploads.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.uploadInventory = function(files) {
+		if (!confirm('Upload Items?')) {
+			return false;
+		}
+		var fd = new FormData();
+		fd.append("inventory", files[0]);
+		$http.post("/inventory/bulk/upload", fd, {
+			transformRequest : angular.identity,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				'Content-Type' : undefined
+			}
+		}).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		angular.element(document.querySelector('#bulkInventoryUploadModal')).modal('hide');
+	}
 	$scope.fetchInventoryStats = function(inventory) {
 		var req = {
 			method : 'GET',

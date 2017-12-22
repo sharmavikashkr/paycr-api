@@ -12,11 +12,14 @@ public class Server {
 	@Value("${merchant.banner.location}")
 	private String merchantLocation;
 
-	@Value("${bulk.csv.location}")
-	private String bulkCsvLocation;
+	@Value("${bulk.invoice.location}")
+	private String bulkInvoiceLocation;
 
 	@Value("${bulk.consumer.location}")
 	private String bulkConsumerLocation;
+
+	@Value("${bulk.inventory.location}")
+	private String bulkInventoryLocation;
 
 	@Value("${report.pdf.location}")
 	private String reportLocation;
@@ -89,20 +92,28 @@ public class Server {
 		this.merchantLocation = merchantLocation;
 	}
 
-	public String getBulkCsvLocation() {
-		return bulkCsvLocation;
-	}
-
-	public void setBulkCsvLocation(String bulkCsvLocation) {
-		this.bulkCsvLocation = bulkCsvLocation;
-	}
-
 	public String getBulkConsumerLocation() {
 		return bulkConsumerLocation;
 	}
 
 	public void setBulkConsumerLocation(String bulkConsumerLocation) {
 		this.bulkConsumerLocation = bulkConsumerLocation;
+	}
+
+	public String getBulkInvoiceLocation() {
+		return bulkInvoiceLocation;
+	}
+
+	public void setBulkInvoiceLocation(String bulkInvoiceLocation) {
+		this.bulkInvoiceLocation = bulkInvoiceLocation;
+	}
+
+	public String getBulkInventoryLocation() {
+		return bulkInventoryLocation;
+	}
+
+	public void setBulkInventoryLocation(String bulkInventoryLocation) {
+		this.bulkInventoryLocation = bulkInventoryLocation;
 	}
 
 }

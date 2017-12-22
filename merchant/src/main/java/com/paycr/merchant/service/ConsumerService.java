@@ -185,19 +185,34 @@ public class ConsumerService {
 				record[i] = consumer[i];
 			}
 			String reason = "Invalid format";
-			if (consumer.length == 3 || consumer.length == 5) {
+			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 6 || consumer.length == 13) {
 				try {
 					Consumer con = new Consumer();
 					con.setName(consumer[0].trim());
 					con.setEmail(consumer[1].trim());
 					con.setMobile(consumer[2].trim());
-					if (consumer.length == 5) {
+					if (consumer.length > 3) {
+						con.setGstin(consumer[3].trim());
+					}
+					if (consumer.length > 4) {
 						ConsumerCategory conCat = new ConsumerCategory();
-						conCat.setName(consumer[3].trim());
-						conCat.setValue(consumer[4].trim());
+						conCat.setName(consumer[4].trim());
+						conCat.setValue(consumer[5].trim());
 						List<ConsumerCategory> conCats = new ArrayList<ConsumerCategory>();
 						conCats.add(conCat);
 						con.setConCats(conCats);
+					}
+					if (consumer.length > 6) {
+						Address billAddr = new Address();
+						billAddr.setAddressLine1(consumer[6].trim());
+						billAddr.setAddressLine2(consumer[7].trim());
+						billAddr.setCity(consumer[8].trim());
+						billAddr.setDistrict(consumer[9].trim());
+						billAddr.setState(consumer[10].trim());
+						billAddr.setPincode(consumer[11].trim());
+						billAddr.setCountry(consumer[12].trim());
+						validateAddress(billAddr);
+						con.setBillingAddress(billAddr);
 					}
 					newConsumer(con, merchant, createdBy);
 					reason = "CREATED";
@@ -230,11 +245,7 @@ public class ConsumerService {
 	}
 
 	public void updateConsumerAddress(Address addr, Integer consumerId) {
-		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
-				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
-				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Address");
-		}
+		validateAddress(addr);
 		Consumer consumer = conRepo.findOne(consumerId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (consumer.getMerchant().getId() != merchant.getId()) {
@@ -263,5 +274,13 @@ public class ConsumerService {
 		address.setCountry(addr.getCountry());
 		address.setPincode(addr.getPincode());
 		conRepo.save(consumer);
+	}
+
+	private void validateAddress(Address addr) {
+		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
+				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
+				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+		}
 	}
 }

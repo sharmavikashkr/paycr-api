@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.data.domain.BulkCategory;
-import com.paycr.common.data.domain.BulkUpload;
+import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
@@ -176,7 +176,7 @@ public class InvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all/{invoiceCode}", method = RequestMethod.GET)
-	public List<BulkUpload> uploadConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
+	public List<BulkInvoiceUpload> uploadConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
 			return invSer.getUploads(invoiceCode);
 		} catch (Exception ex) {

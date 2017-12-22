@@ -30,8 +30,8 @@ public class IsValidConsumer implements RequestValidator<Consumer> {
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Consumer");
 		}
-		if (!(match(consumer.getEmail(), EMAIL_PATTERN) || match(consumer.getMobile(), MOBILE_PATTERN)
-				|| match(consumer.getName(), NAME_PATTERN))) {
+		if (!(match(consumer.getEmail(), EMAIL_PATTERN) && match(consumer.getMobile(), MOBILE_PATTERN)
+				&& match(consumer.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
 		Consumer extConsumer = consRepo.findConsumerForMerchant(consumer.getMerchant(), consumer.getEmail(),

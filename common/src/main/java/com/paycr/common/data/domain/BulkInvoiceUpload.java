@@ -9,8 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pc_bulk_upload")
-public class BulkUpload {
+@Table(name = "pc_bulk_invoice_upload")
+public class BulkInvoiceUpload {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

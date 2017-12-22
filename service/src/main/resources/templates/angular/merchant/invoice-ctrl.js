@@ -417,7 +417,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#bulkUploadModal')).modal('hide');
+		angular.element(document.querySelector('#bulkInvoiceUploadModal')).modal('hide');
 	}
 	$rootScope.clearInvoiceSearch = function() {
 		$rootScope.searchInvoiceReq.parentInvoiceCode = '';
