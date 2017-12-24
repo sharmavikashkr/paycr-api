@@ -14,6 +14,13 @@ CREATE TABLE if not exists pc_consumer (
 	shipping_address_id int REFERENCES pc_address
 );
 
+CREATE TABLE if not exists pc_consumer_category (
+	id SERIAL PRIMARY KEY NOT NULL,
+	name varchar(50) NOT NULL,
+	value varchar(50) NOT NULL,
+    consumer_id int REFERENCES pc_consumer
+);
+
 CREATE TABLE if not exists pc_payment (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -89,13 +96,6 @@ CREATE TABLE if not exists pc_item (
     inventory_id int REFERENCES pc_inventory
 );
 
-CREATE TABLE if not exists pc_merchant_custom_param (
-	id SERIAL PRIMARY KEY NOT NULL,
-	param_name varchar(20) NOT NULL,
-	provider varchar(20) NOT NULL,
-    invoice_setting_id int REFERENCES pc_invoice_setting
-);
-
 CREATE TABLE if not exists pc_invoice_custom_param (
 	id SERIAL PRIMARY KEY NOT NULL,
 	param_name varchar(20) NOT NULL,
@@ -110,22 +110,4 @@ CREATE TABLE if not exists pc_attachment (
 	name varchar(50) NOT NULL,
 	created_by varchar(50) NOT NULL,
     invoice_id int REFERENCES pc_invoice
-);
-
-CREATE TABLE if not exists pc_bulk_invoice_upload (
-	id SERIAL PRIMARY KEY NOT NULL,
-	created timestamp NOT NULL,
-	file_name varchar(20) NOT NULL,
-	created_by varchar(50) NOT NULL,
-    invoice_code varchar(20) NOT NULL
-);
-
-CREATE TABLE if not exists pc_bulk_category (
-	id SERIAL PRIMARY KEY NOT NULL,
-	created timestamp NOT NULL,
-	categories varchar(255) NOT NULL,
-	invoice_type  varchar(10) NOT NULL,
-	created_by varchar(50) NOT NULL,
-	message varchar(255) NOT NULL,
-    invoice_code varchar(20) NOT NULL
 );
