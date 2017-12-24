@@ -36,4 +36,22 @@ app.controller('AccountController', function($scope, $rootScope, $http,
 		});
 		angular.element(document.querySelector('#editAccAddressModal')).modal('hide');
 	}
+	$scope.uploadBanner = function(files) {
+		if (!confirm('Upload Banner?')) {
+			return false;
+		}
+		var fd = new FormData();
+		fd.append("banner", files[0]);
+		$http.post("/banner/upload", fd, {
+			transformRequest : angular.identity,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				'Content-Type' : undefined
+			}
+		}).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 });

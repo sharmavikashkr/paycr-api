@@ -7,8 +7,7 @@ CREATE TABLE if not exists pc_invoice_setting (
 	cc_me boolean NOT NULL,
 	expiry_days int NOT NULL,
 	email_note varchar(50) DEFAULT NULL,
-	email_subject varchar(50) DEFAULT NULL,
-	banner varchar(20) DEFAULT NULL
+	email_subject varchar(50) DEFAULT NULL
 );
 
 CREATE TABLE if not exists pc_merchant_custom_param (
@@ -27,6 +26,7 @@ CREATE TABLE if not exists pc_merchant (
     access_key varchar(50) NOT NULL,
     secret_key varchar(50) NOT NULL,
     gstin varchar(50) DEFAULT NULL,
+	banner varchar(20) DEFAULT NULL,
     active boolean NOT NULL,
     payment_setting_id int REFERENCES pc_payment_setting,
 	invoice_setting_id int REFERENCES pc_invoice_setting,

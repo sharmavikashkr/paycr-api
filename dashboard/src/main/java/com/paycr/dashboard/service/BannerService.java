@@ -42,7 +42,7 @@ public class BannerService {
 		if (merchant != null) {
 			String bannerName = merchant.getAccessKey() + extension;
 			file = new File(server.getMerchantLocation() + "banner/" + bannerName);
-			merchant.getInvoiceSetting().setBanner(bannerName);
+			merchant.setBanner(bannerName);
 			merRepo.save(merchant);
 		} else {
 			String bannerName = "paycr" + extension;

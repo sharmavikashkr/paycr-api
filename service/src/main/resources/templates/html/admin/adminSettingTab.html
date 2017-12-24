@@ -3,6 +3,23 @@
 		<div class="col-md-4">
 			<div class="box box-warning">
 				<div class="box-header with-border">
+					<div class="form-group">
+						<div class="image-upload">
+							<div class="col-xs-3">
+							    <label for="file-input" title="Upload new Banner">
+							        <img src="/banner/admin/{{adminSetting.banner}}" style="max-height:50px;max-width:50px;" alt="Banner (80x80)"/>
+							    </label>
+							    <input id="file-input" style="display:none;"type="file" onchange="angular.element(this).scope().uploadBanner(this.files)" accept=".png,.jpg"/>
+						    </div>
+						    <div class="col-xs-9">
+						    	<small>(Banner will appear on your payment checkout screens)</small>
+						    </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box box-warning">
+				<div class="box-header with-border">
 					<h5 class="box-title">Payment Setting</h5>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editAdminSets = !$parent.editAdminSets" title="Edit">
@@ -48,11 +65,6 @@
 		            </div>
 		        </div>
 			</div>
-			<div class="form-group">
-				<label class="control-label">Banner (80x80)</label>
-				<input type="file" onchange="angular.element(this).scope().uploadBanner(this.files)" accept=".png,.jpg" />
-			</div>
-			Uploaded File -> <a target="_blank" href="/banner/admin/{{adminSetting.banner}}">{{adminSetting.banner}}</a>
 		</div>
 		<div class="col-md-6">
 			<div class="box box-warning">

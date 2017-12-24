@@ -29,6 +29,7 @@ public class Merchant {
 	private String secretKey;
 	private String gstin;
 	private boolean active;
+	private String banner;
 
 	@Transient
 	private boolean enableWelcome;
@@ -151,5 +152,13 @@ public class Merchant {
 
 	public void setGstin(String gstin) {
 		this.gstin = gstin;
+	}
+
+	public String getBanner() {
+		return banner;
+	}
+
+	public void setBanner(String banner) {
+		this.banner = banner;
 	}
 }

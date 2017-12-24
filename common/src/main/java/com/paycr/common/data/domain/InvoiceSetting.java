@@ -26,7 +26,6 @@ public class InvoiceSetting {
 	private int expiryDays;
 	private String emailNote;
 	private String emailSubject;
-	private String banner;
 
 	@OneToMany(mappedBy = "invoiceSetting", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MerchantCustomParam> customParams;
@@ -77,14 +76,6 @@ public class InvoiceSetting {
 
 	public void setAddItems(boolean addItems) {
 		this.addItems = addItems;
-	}
-
-	public String getBanner() {
-		return banner;
-	}
-
-	public void setBanner(String banner) {
-		this.banner = banner;
 	}
 
 	public boolean isEmailPdf() {
