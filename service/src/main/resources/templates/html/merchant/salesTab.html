@@ -1,0 +1,22 @@
+<div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+					<li class="active" ng-click="searchInvoice()"><a href="#invoiceTab" data-toggle="tab">Invoices</a></li>
+					<li ng-click="searchPayment()"><a href="#paymentTab" data-toggle="tab">Payments</a></li>
+					<li ng-click="searchConsumer()"><a href="#consumerTab" data-toggle="tab">Consumers</a></li>
+					<li ng-click="searchInventory()"><a href="#inventoryTab" data-toggle="tab">Inventory</a></li>
+					<li><a href="#invoiceSettingTab" data-toggle="tab">Invoice Settings</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="invoiceTab" class="active tab-pane" ng-include="templateUrl('merchant','invoiceTab')"></div>
+			        <div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="templateUrl('common','paymentTab')"></div>
+			        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="templateUrl('merchant','invoiceSettingTab')"></div>
+			        <div id="consumerTab" class="tab-pane fade" ng-include="templateUrl('merchant','consumerTab')"></div>
+			        <div id="inventoryTab" class="tab-pane fade" ng-include="templateUrl('merchant','inventoryTab')"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

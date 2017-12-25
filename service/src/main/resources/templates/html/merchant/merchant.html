@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="${staticUrl}/images/ico/favicon.png">
     <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="${staticUrl}/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="${staticUrl}/dist/css/AdminLTE.css">
   	<link rel="stylesheet" href="${staticUrl}/dist/css/skins/_all-skins.min.css">
     <link href="${staticUrl}/vendor/angular/angular-material.min.css" rel="stylesheet">
     <script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
@@ -46,11 +46,7 @@
         <div class="tab-content content-wrapper" id="content-wrapper">
         	<div ng-include="templateUrl('common','alert')"></div>
         	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
-	        <div ng-class="(user.access.admin)?'':'active'" id="invoiceTab" class="tab-pane" ng-include="templateUrl('merchant','invoiceTab')"></div>
-	        <div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="templateUrl('common','paymentTab')"></div>
-	        <div ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane fade" ng-include="templateUrl('merchant','invoiceSettingTab')"></div>
-	        <div id="consumerTab" class="tab-pane fade" ng-include="templateUrl('merchant','consumerTab')"></div>
-	        <div id="inventoryTab" class="tab-pane fade" ng-include="templateUrl('merchant','inventoryTab')"></div>
+        	<div id="salesTab" class="tab-pane fade" ng-include="templateUrl('merchant','salesTab')"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="templateUrl('merchant','subscriptionTab')"></div>
 	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="templateUrl('common','reportsTab')"></div>
 	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="templateUrl('common','usersTab')"></div>

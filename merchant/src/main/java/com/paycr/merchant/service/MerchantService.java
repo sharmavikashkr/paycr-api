@@ -57,8 +57,8 @@ public class MerchantService {
 				|| CommonUtil.isNull(customParam.getProvider())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Custom Param");
 		}
-		if (customParams.size() >= 5) {
-			throw new PaycrException(Constants.FAILURE, "Cannot configure more than 5 custom params");
+		if (customParams.size() >= 10) {
+			throw new PaycrException(Constants.FAILURE, "Cannot configure more than 10 custom params");
 		}
 		for (MerchantCustomParam param : customParams) {
 			if (param.getParamName().equalsIgnoreCase(customParam.getParamName())) {

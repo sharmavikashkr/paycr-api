@@ -81,12 +81,9 @@
 		<ul class="sidebar-menu" data-widget="tree">
 			<li class="header">MAIN NAVIGATION</li>
 			<li ng-if="user.access.admin" class="active" ng-click="loadDashboard()"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
-			<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a id="invoiceTabNav" href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i><span>Invoices</span></a></li>
-			<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee fa-fw"></i><span>Payments</span></a></li>
+			<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a id="salesTabNav" href="#" data-target="#salesTab" data-toggle="tab"><i class="fa fa-file-text fa-fw"></i><span>Sales</span></a></li>
 			<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print fa-fw"></i><span>Reports</span></a></li>
-			<li ng-click="searchConsumer()"><a href="#" data-target="#consumerTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i><span>Consumers</span></a></li>
-			<li ng-click="searchInventory()"><a href="#" data-target="#inventoryTab" data-toggle="tab"><i class="fa fa-cloud fa-fw"></i><span>Inventory</span></a></li>
-			<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i><span>Invoice Settings</span></a></li>
+			<li ng-if="user.access.finance"><a href="#" data-target="#invoiceSettingTab" data-toggle="tab"><i class="fa fa-gears fa-fw"></i><span>Invoice Settings</span></a></li> -->
 			<li ng-if="user.access.finance" ng-click="fetchPricings()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle fa-fw"></i><span>Subscriptions</span></a></li>
 			<li ng-if="user.access.admin" ng-click="fetchMyUsers()"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users fa-fw"></i><span>Users</span></a></li>
 			<li ng-if="user.access.admin"><a href="#" data-target="#accountTab" data-toggle="tab"><i class="fa fa-gear fa-fw"></i><span>Account</span></a></li>
