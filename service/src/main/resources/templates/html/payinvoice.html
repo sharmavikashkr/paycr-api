@@ -55,10 +55,12 @@
                            </thead>
                            <tbody id="itemBody">
                            	<#list invoice.customParams as param>
+                           		<#if param.provider == 'CONSUMER'>
                                <tr id="itemRow">
                                    <td class="text-center">${param.paramName}</td>
                                    <td><input class="form-control" id="paramValue" ref="${param.paramName}" provider="${param.provider}" value="${param.paramValue}"/></td>
                                </tr>
+                               </#if>
                                </#list>
                            </tbody>
                        </table>
@@ -111,7 +113,7 @@
 	                    	<h3 class="section-heading">Hi ${invoice.consumer.name}, <span style="color:white;">${invoice.merchant.name}</span> has requested you to pay <span style="color:white;"><i class="fa fa-rupee"></i> ${invoice.payAmount}</span></h3>
 	                    </div>
 	                    <div class="hidden-xs">
-	                    	<br><br>
+	                    	<br>
 	                    </div>
 	                    <a id="paramsLink" href="#" data-toggle="modal" data-target="#paramsModal">View Params</a>
 	                    <hr>

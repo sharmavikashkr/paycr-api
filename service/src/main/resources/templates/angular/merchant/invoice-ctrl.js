@@ -214,7 +214,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				$rootScope.invoiceInfo = angular.copy(invoice.data);
 				angular.element(document.querySelector('#invoiceNotifyModal')).modal('show');
 			} else if(invoice.data.invoiceType == 'RECURRING') {
-				$rootScope.recurrInvoiceInfo = angular.copy(invoice.data);
+				$scope.updateRecurrInvoiceInfo(invoice.data);
 				angular.element(document.querySelector('#recurrInvoiceModal')).modal('show');
 			}
 		}, function(data) {
