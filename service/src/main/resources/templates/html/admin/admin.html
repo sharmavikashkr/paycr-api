@@ -46,8 +46,7 @@
     		<div ng-include="templateUrl('common','alert')"></div>
     		<div ng-if="user.access.supervisor" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
             <div ng-class="(user.access.supervisor)?'':'active'" id="merchantsTab" class="tab-pane" ng-include="templateUrl('admin','merchantTab')"></div>
-        	<div id="invoiceTab" class="tab-pane fade" ng-include="templateUrl('admin','invoiceTab')"></div>
-        	<div ng-if="user.access.finance" id="paymentTab" class="tab-pane" ng-include="templateUrl('common','paymentTab')"></div>
+        	<div id="salesTab" class="tab-pane" ng-include="templateUrl('admin','salesTab')"></div>
         	<div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="templateUrl('admin','subscriptionTab')"></div>
         	<div ng-if="user.access.finance" id="pricingTab" class="tab-pane fade" ng-include="templateUrl('admin','pricingTab')"></div>
 		    <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="templateUrl('common','reportsTab')"></div>

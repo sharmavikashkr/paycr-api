@@ -1,0 +1,16 @@
+<div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="nav-tabs-custom tab-danger">
+				<ul class="nav nav-tabs">
+					<li class="active" ng-click="searchInvoice()"><a href="#invoiceTab" data-toggle="tab">Invoices</a></li>
+					<li ng-click="searchPayment()"><a href="#paymentTab" data-toggle="tab">Payments</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="invoiceTab" class="active tab-pane" ng-include="templateUrl('admin','invoiceTab')"></div>
+			        <div id="paymentTab" class="tab-pane" ng-include="templateUrl('common','paymentTab')"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

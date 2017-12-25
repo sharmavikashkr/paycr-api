@@ -46,8 +46,8 @@ public class CommonController {
 	public List<Pricing> getPricings() {
 		return comSer.getPricings();
 	}
-	
-	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/taxes")
 	public List<TaxMaster> getTaxes() {
 		return comSer.getTaxes();

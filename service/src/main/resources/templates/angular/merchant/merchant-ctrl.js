@@ -34,8 +34,6 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		"items" : [],
 		"addItems" : false,
 		"total" : 0.00,
-		"taxValue" : 0.00,
-		"taxName" : "",
 		"discount" : 0,
 		"payAmount" : 0,
 		"currency" : "INR",

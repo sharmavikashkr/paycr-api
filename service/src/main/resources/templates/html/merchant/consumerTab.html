@@ -176,7 +176,7 @@
 											&nbsp;&nbsp;&nbsp;
 											<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in consumer.conCats">
 												<label class="panel" href="#">{{conCat.name}} : {{conCat.value}}
-													<a class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a>
+													<a ng-if="user.access.finance" class="btn btn-flat btn-danger btn-xs" title="delete category" ng-click="deleteCategory(consumer.id, conCat.id)"><i class="fa fa-minus"></i></a>
 												</label>&nbsp;
 											</div>
 										</div>

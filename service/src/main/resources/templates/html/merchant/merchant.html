@@ -45,7 +45,7 @@
         <div class="tab-content content-wrapper" id="content-wrapper">
         	<div ng-include="templateUrl('common','alert')"></div>
         	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
-        	<div id="salesTab" class="tab-pane fade" ng-include="templateUrl('merchant','salesTab')"></div>
+        	<div ng-class="(user.access.admin)?'':'active'" id="salesTab" class="tab-pane" ng-include="templateUrl('merchant','salesTab')"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="templateUrl('merchant','subscriptionTab')"></div>
 	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="templateUrl('common','reportsTab')"></div>
 	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="templateUrl('common','usersTab')"></div>

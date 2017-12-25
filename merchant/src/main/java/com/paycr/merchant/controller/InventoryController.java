@@ -111,7 +111,7 @@ public class InventoryController {
 		return null;
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/stats/{inventoryId}")
 	public InventoryStats updateInventory(@PathVariable Integer inventoryId, HttpServletResponse response) {
 		try {

@@ -83,9 +83,9 @@
 			<li class="header">MAIN NAVIGATION</li>
 			<li ng-if="user.access.supervisor" class="active" ng-click="loadDashboard()"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
 			<li ng-class="(user.access.supervisor)?'':'active'" ng-click="searchMerchant()"><a href="#" data-target="#merchantsTab" data-toggle="tab"><i class="fa fa-institution"></i><span>Merchants</span></a></li>
-			<li ng-click="searchInvoice()"><a href="#" data-target="#invoiceTab" data-toggle="tab"><i class="fa fa-file-text"></i><span>Invoices</span></a></li>
-			<li ng-if="user.access.finance" ng-click="searchPayment()"><a href="#" data-target="#paymentTab" data-toggle="tab"><i class="fa fa-rupee"></i><span>Payments</span></a></li>
+			<li ng-click="searchInvoice()"><a href="#" data-target="#salesTab" data-toggle="tab"><i class="fa fa-shopping-bag"></i><span>Sales</span></a></li>
 			<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print"></i><span>Reports</span></a></li>
+			<li class="header"></li>
 			<li ng-if="user.access.finance"><a href="#" data-target="#pricingTab" data-toggle="tab"><i class="fa fa-rupee"></i><span>Pricing</span></a></li>
 			<li ng-if="user.access.finance" ng-click="searchSubscription()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle"></i><span>Subscriptions</span></a></li>
 			<li ng-if="user.access.supervisor" ng-click="fetchMyUsers()"><a href="#" data-target="#usersTab" data-toggle="tab"><i class="fa fa-users"></i><span>Users</span></a></li>

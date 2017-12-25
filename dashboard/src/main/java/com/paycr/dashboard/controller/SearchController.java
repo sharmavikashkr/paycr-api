@@ -61,7 +61,7 @@ public class SearchController {
 		return invoiceList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment")
 	public List<Payment> searchPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
 		List<Payment> paymentList = new ArrayList<>();
@@ -95,7 +95,7 @@ public class SearchController {
 		return consumerList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
 		try {
@@ -118,7 +118,7 @@ public class SearchController {
 		}
 	}
 
-	@PreAuthorize(RoleUtil.ALL_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/mail")
 	public void mailPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
 		try {
