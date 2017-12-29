@@ -14,7 +14,7 @@ import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Item;
+import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
@@ -41,7 +41,7 @@ public class InvoiceReceiptService {
 	public ModelAndView getReceiptModelAndView(String invoiceCode) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		List<TaxAmount> taxes = new ArrayList<>();
-		for (Item item : invoice.getItems()) {
+		for (InvoiceItem item : invoice.getItems()) {
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			TaxMaster tax = item.getTax();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);

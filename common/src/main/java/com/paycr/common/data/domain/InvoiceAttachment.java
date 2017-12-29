@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "pc_attachment")
-public class Attachment {
+@Table(name = "pc_invoice_attachment")
+public class InvoiceAttachment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

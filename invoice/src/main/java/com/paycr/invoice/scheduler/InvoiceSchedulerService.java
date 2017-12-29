@@ -94,7 +94,7 @@ public class InvoiceSchedulerService {
 					"Scheduler");
 			ArrayList<InvoiceNotify> invNots = new ArrayList<>();
 			invNots.add(invNot);
-			childInvoice.setInvoiceNotices(invNots);
+			childInvoice.setNotices(invNots);
 			if (InvoiceStatus.CREATED.equals(childInvoice.getStatus())) {
 				childInvoice.setStatus(InvoiceStatus.UNPAID);
 			}

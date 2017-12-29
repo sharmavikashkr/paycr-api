@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.InvoiceNotify;
-import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.service.SecurityService;
@@ -42,7 +42,7 @@ public class InvoiceController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping(value = "/payments/{invoiceCode}", method = RequestMethod.GET)
-	public List<Payment> payments(@PathVariable String invoiceCode, HttpServletResponse response) {
+	public List<InvoicePayment> payments(@PathVariable String invoiceCode, HttpServletResponse response) {
 		try {
 			return invSer.payments(invoiceCode);
 		} catch (Exception ex) {
@@ -100,7 +100,7 @@ public class InvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
-	public void markPaid(@RequestBody Payment payment, HttpServletResponse response) {
+	public void markPaid(@RequestBody InvoicePayment payment, HttpServletResponse response) {
 		try {
 			invSer.markPaid(payment);
 		} catch (Exception ex) {

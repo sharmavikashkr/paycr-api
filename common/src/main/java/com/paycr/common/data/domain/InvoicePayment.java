@@ -18,8 +18,8 @@ import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
 @Entity
-@Table(name = "pc_payment")
-public class Payment {
+@Table(name = "pc_invoice_payment")
+public class InvoicePayment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

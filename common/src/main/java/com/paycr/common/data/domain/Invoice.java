@@ -62,22 +62,22 @@ public class Invoice implements Cloneable {
 	private Consumer consumer;
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-	private List<Item> items;
+	private List<InvoiceItem> items;
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<InvoiceCustomParam> customParams;
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-	private List<InvoiceNotify> invoiceNotices;
+	private List<InvoiceNotify> notices;
 
 	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
-	private List<Attachment> attachments;
+	private List<InvoiceAttachment> attachments;
 
 	@ManyToOne
 	private MerchantPricing merchantPricing;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private Payment payment;
+	private InvoicePayment payment;
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
@@ -142,11 +142,11 @@ public class Invoice implements Cloneable {
 		this.expiry = expiry;
 	}
 
-	public List<Item> getItems() {
+	public List<InvoiceItem> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<InvoiceItem> items) {
 		this.items = items;
 	}
 
@@ -158,11 +158,11 @@ public class Invoice implements Cloneable {
 		this.consumer = consumer;
 	}
 
-	public Payment getPayment() {
+	public InvoicePayment getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Payment payment) {
+	public void setPayment(InvoicePayment payment) {
 		this.payment = payment;
 	}
 
@@ -254,19 +254,11 @@ public class Invoice implements Cloneable {
 		this.addItems = addItems;
 	}
 
-	public List<InvoiceNotify> getInvoiceNotices() {
-		return invoiceNotices;
-	}
-
-	public void setInvoiceNotices(List<InvoiceNotify> invoiceNotices) {
-		this.invoiceNotices = invoiceNotices;
-	}
-
-	public List<Attachment> getAttachments() {
+	public List<InvoiceAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(List<Attachment> attachments) {
+	public void setAttachments(List<InvoiceAttachment> attachments) {
 		this.attachments = attachments;
 	}
 
@@ -328,5 +320,13 @@ public class Invoice implements Cloneable {
 
 	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public List<InvoiceNotify> getNotices() {
+		return notices;
+	}
+
+	public void setNotices(List<InvoiceNotify> notices) {
+		this.notices = notices;
 	}
 }

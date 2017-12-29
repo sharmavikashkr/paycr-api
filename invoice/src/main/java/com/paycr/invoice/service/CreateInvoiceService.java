@@ -146,7 +146,7 @@ public class CreateInvoiceService {
 			invNotSer.notify(invNot);
 			List<InvoiceNotify> invNots = new ArrayList<>();
 			invNots.add(invNot);
-			childInvoice.setInvoiceNotices(invNots);
+			childInvoice.setNotices(invNots);
 			childInvoice.setStatus(InvoiceStatus.UNPAID);
 			invRepo.save(childInvoice);
 			tlService.saveToTimeline(childInvoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,

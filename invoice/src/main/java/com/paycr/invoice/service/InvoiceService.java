@@ -20,19 +20,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.NotifyService;
-import com.paycr.common.data.domain.Attachment;
 import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceAttachment;
 import com.paycr.common.data.domain.InvoiceNotify;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.BulkCategoryRepository;
 import com.paycr.common.data.repository.BulkInvoiceUploadRepository;
+import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.PaymentRepository;
 import com.paycr.common.data.repository.RecurringInvoiceRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
@@ -57,7 +57,7 @@ public class InvoiceService {
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private PaymentRepository payRepo;
+	private InvoicePaymentRepository payRepo;
 
 	@Autowired
 	private InvoiceHelper invHelp;
@@ -115,16 +115,16 @@ public class InvoiceService {
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice expired", true, user.getEmail());
 	}
 
-	public void notify(String invoiceCode, InvoiceNotify invoiceNotify) {
+	public void notify(String invoiceCode, InvoiceNotify notify) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())
 				&& !InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
-			invoiceNotify.setCreated(new Date());
-			invoiceNotify.setInvoice(invoice);
-			invNotSer.notify(invoiceNotify);
-			invoice.getInvoiceNotices().add(invoiceNotify);
+			notify.setCreated(new Date());
+			notify.setInvoice(invoice);
+			invNotSer.notify(notify);
+			invoice.getNotices().add(notify);
 			if (InvoiceStatus.CREATED.equals(invoice.getStatus())) {
 				invoice.setStatus(InvoiceStatus.UNPAID);
 			}
@@ -154,9 +154,9 @@ public class InvoiceService {
 		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
 		}
-		List<Payment> refunds = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), PayType.REFUND);
+		List<InvoicePayment> refunds = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), PayType.REFUND);
 		BigDecimal refundAllowed = invoice.getPayAmount();
-		for (Payment refund : refunds) {
+		for (InvoicePayment refund : refunds) {
 			if ("refund".equalsIgnoreCase(refund.getStatus())) {
 				refundAllowed = refundAllowed.subtract(refund.getAmount());
 			}
@@ -168,7 +168,7 @@ public class InvoiceService {
 		}
 	}
 
-	public void markPaid(Payment payment) {
+	public void markPaid(InvoicePayment payment) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
@@ -177,6 +177,7 @@ public class InvoiceService {
 		}
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
+		payment.setAmount(invoice.getPayAmount());
 		payment.setStatus("captured");
 		payment.setPayType(PayType.SALE);
 		payment.setInvoiceCode(invoice.getInvoiceCode());
@@ -190,14 +191,14 @@ public class InvoiceService {
 	public void saveAttach(String invoiceCode, MultipartFile attach) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = getInvoice(invoiceCode);
-		List<Attachment> attachments = invoice.getAttachments();
+		List<InvoiceAttachment> attachments = invoice.getAttachments();
 		if (attachments == null) {
 			attachments = new ArrayList<>();
 		}
 		if (attachments.size() >= 5) {
 			throw new PaycrException(Constants.FAILURE, "Max 5 attachments allowed");
 		}
-		Attachment attachment = new Attachment();
+		InvoiceAttachment attachment = new InvoiceAttachment();
 		attachment.setName(attach.getOriginalFilename());
 		attachment.setCreated(new Date());
 		attachment.setCreatedBy(user.getEmail());
@@ -264,7 +265,7 @@ public class InvoiceService {
 		return Files.readAllBytes(path);
 	}
 
-	public List<Payment> payments(String invoiceCode) {
+	public List<InvoicePayment> payments(String invoiceCode) {
 		return payRepo.findByInvoiceCode(invoiceCode);
 	}
 

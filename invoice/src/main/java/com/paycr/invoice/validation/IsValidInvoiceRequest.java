@@ -77,8 +77,8 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoice.setInvoiceType(InvoiceType.SINGLE);
 		}
 		invoice.setStatus(InvoiceStatus.CREATED);
-		if (CommonUtil.isNotNull(invoice.getInvoiceNotices())) {
-			for (InvoiceNotify invNot : invoice.getInvoiceNotices()) {
+		if (CommonUtil.isNotNull(invoice.getNotices())) {
+			for (InvoiceNotify invNot : invoice.getNotices()) {
 				invNot.setInvoice(invoice);
 			}
 		}

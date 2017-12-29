@@ -27,6 +27,9 @@ public class Server {
 	@Value("${invoice.pdf.location}")
 	private String invoiceLocation;
 
+	@Value("${expense.pdf.location}")
+	private String expenseLocation;
+
 	@Value("${payment.pdf.location}")
 	private String paymentLocation;
 
@@ -114,6 +117,14 @@ public class Server {
 
 	public void setBulkInventoryLocation(String bulkInventoryLocation) {
 		this.bulkInventoryLocation = bulkInventoryLocation;
+	}
+
+	public String getExpenseLocation() {
+		return expenseLocation;
+	}
+
+	public void setExpenseLocation(String expenseLocation) {
+		this.expenseLocation = expenseLocation;
 	}
 
 }

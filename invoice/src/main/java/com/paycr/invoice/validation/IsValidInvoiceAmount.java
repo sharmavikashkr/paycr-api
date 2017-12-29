@@ -7,7 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Item;
+import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -30,7 +30,7 @@ public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
 		if (invoice.isAddItems()) {
 			BigDecimal totalRate = new BigDecimal(0);
 			BigDecimal totalPrice = new BigDecimal(0);
-			for (Item item : invoice.getItems()) {
+			for (InvoiceItem item : invoice.getItems()) {
 				totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_UP);
 				totalRate = totalRate.add(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity())))
 						.setScale(2, BigDecimal.ROUND_UP);

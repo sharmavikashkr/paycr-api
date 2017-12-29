@@ -6,10 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.paycr.common.type.PayType;
 
-public class SearchPaymentRequest {
+public class SearchExpensePaymentRequest {
 
 	private Integer merchant;
-	private String invoiceCode;
+	private String expenseCode;
 	private String paymentRefNo;
 	private PayType payType;
 
@@ -18,14 +18,6 @@ public class SearchPaymentRequest {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdTo;
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
-	}
 
 	public Integer getMerchant() {
 		return merchant;
@@ -65,6 +57,14 @@ public class SearchPaymentRequest {
 
 	public void setPayType(PayType payType) {
 		this.payType = payType;
+	}
+
+	public String getExpenseCode() {
+		return expenseCode;
+	}
+
+	public void setExpenseCode(String expenseCode) {
+		this.expenseCode = expenseCode;
 	}
 
 }

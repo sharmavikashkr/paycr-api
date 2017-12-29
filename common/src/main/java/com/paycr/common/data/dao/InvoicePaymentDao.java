@@ -8,20 +8,20 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.bean.SearchPaymentRequest;
+import com.paycr.common.bean.SearchInvoicePaymentRequest;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Payment;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 
 @Component
-public class PaymentDao {
+public class InvoicePaymentDao {
 
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<Payment> findPayments(SearchPaymentRequest searchReq, Merchant merchant) {
-		StringBuilder squery = new StringBuilder("SELECT p FROM Payment p WHERE");
+	public List<InvoicePayment> findPayments(SearchInvoicePaymentRequest searchReq, Merchant merchant) {
+		StringBuilder squery = new StringBuilder("SELECT p FROM InvoicePayment p WHERE");
 		if (!CommonUtil.isNull(merchant)) {
 			squery.append(" p.merchant = :merchant AND");
 		}
@@ -39,7 +39,7 @@ public class PaymentDao {
 		}
 		squery.append(" p.id > 0 ORDER BY p.id DESC");
 
-		TypedQuery<Payment> query = em.createQuery(squery.toString(), Payment.class);
+		TypedQuery<InvoicePayment> query = em.createQuery(squery.toString(), InvoicePayment.class);
 
 		if (!CommonUtil.isNull(merchant)) {
 			query.setParameter("merchant", merchant);

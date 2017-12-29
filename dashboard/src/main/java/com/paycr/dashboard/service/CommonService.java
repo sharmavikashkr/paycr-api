@@ -23,7 +23,7 @@ import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
-import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.data.repository.TimelineRepository;
@@ -51,7 +51,7 @@ public class CommonService {
 	private NotificationRepository notiRepo;
 
 	@Autowired
-	private PaymentRepository payRepo;
+	private InvoicePaymentRepository payRepo;
 
 	@Autowired
 	private TimelineRepository tlRepo;

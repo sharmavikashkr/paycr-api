@@ -18,7 +18,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 	public Inventory findByMerchantAndCode(Merchant merchant, String code);
 
 	@Query(value = "SELECT SUM(i.quantity) as count, SUM(i.inventory.rate * i.quantity) as sum "
-			+ "FROM Item i WHERE i.invoice.merchant = ?1 AND i.inventory.id = ?2 AND "
+			+ "FROM InvoiceItem i WHERE i.invoice.merchant = ?1 AND i.inventory.id = ?2 AND "
 			+ "i.invoice.status = ?3", nativeQuery = false)
 	public List<Object[]> findCountAndSumForMerchant(Merchant merchant, Integer inventoryId, InvoiceStatus status);
 }

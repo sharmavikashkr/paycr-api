@@ -21,13 +21,13 @@ import com.paycr.common.bean.SearchConsumerRequest;
 import com.paycr.common.bean.SearchInventoryRequest;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchPaymentRequest;
+import com.paycr.common.bean.SearchInvoicePaymentRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
@@ -63,8 +63,8 @@ public class SearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment")
-	public List<Payment> searchPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
-		List<Payment> paymentList = new ArrayList<>();
+	public List<InvoicePayment> searchPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
+		List<InvoicePayment> paymentList = new ArrayList<>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
@@ -97,7 +97,7 @@ public class SearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/download")
-	public void downloadPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
+	public void downloadPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
@@ -120,7 +120,7 @@ public class SearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/mail")
-	public void mailPayments(@RequestBody SearchPaymentRequest request, HttpServletResponse response) {
+	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {

@@ -175,7 +175,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				var itemTotal = parseFloat((parseFloat($scope.saveinvoice.items[item].inventory.rate)
 						* parseFloat($scope.saveinvoice.items[item].quantity)).toFixed(2));
 				$scope.saveinvoice.items[item].price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2));
-				totalRate = itemTotal;
+				totalRate = totalRate + itemTotal;
 				totalPrice = totalPrice + parseFloat($scope.saveinvoice.items[item].price);
 			}
 			$scope.saveinvoice.total = parseFloat(totalRate.toFixed(2));

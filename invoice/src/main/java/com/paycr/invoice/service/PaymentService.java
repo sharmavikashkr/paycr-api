@@ -15,10 +15,10 @@ import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.InvoiceRepository;
-import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
@@ -42,10 +42,10 @@ public class PaymentService {
 	private InvoiceRepository invRepo;
 
 	@Autowired
-	private PaymentRepository payRepo;
+	private InvoicePaymentRepository payRepo;
 
 	@Autowired
-	private NotifyService<Payment> payNotSer;
+	private NotifyService<InvoicePayment> payNotSer;
 
 	@Autowired
 	private Company company;
@@ -115,7 +115,7 @@ public class PaymentService {
 			}
 		}
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
-		Payment payment = new Payment();
+		InvoicePayment payment = new InvoicePayment();
 		payment.setCreated(new Date());
 		payment.setInvoiceCode(invoice.getInvoiceCode());
 		payment.setMerchant(merchant);
@@ -131,12 +131,12 @@ public class PaymentService {
 	}
 
 	public void enquire(Invoice invoice) throws RazorpayException {
-		Payment payment = invoice.getPayment();
+		InvoicePayment payment = invoice.getPayment();
 		PaymentSetting paymentSetting = invoice.getMerchant().getPaymentSetting();
 		capturePayment(invoice, payment, paymentSetting);
 	}
 
-	private void capturePayment(Invoice invoice, Payment payment, PaymentSetting paymentSetting)
+	private void capturePayment(Invoice invoice, InvoicePayment payment, PaymentSetting paymentSetting)
 			throws RazorpayException {
 		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
 		com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(payment.getPaymentRefNo());
@@ -165,10 +165,10 @@ public class PaymentService {
 
 	public void refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
 		Date timeNow = new Date();
-		Payment payment = invoice.getPayment();
+		InvoicePayment payment = invoice.getPayment();
 		Merchant merchant = invoice.getMerchant();
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
-			Payment refPay = new Payment();
+			InvoicePayment refPay = new InvoicePayment();
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
@@ -187,7 +187,7 @@ public class PaymentService {
 		JSONObject refundRequest = new JSONObject();
 		refundRequest.put("amount", refundAmount);
 		Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
-		Payment refPay = new Payment();
+		InvoicePayment refPay = new InvoicePayment();
 		refPay.setAmount(amount);
 		refPay.setCreated(timeNow);
 		refPay.setInvoiceCode(invoice.getInvoiceCode());

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Item;
+import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.repository.InventoryRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
@@ -32,8 +32,8 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 	@Override
 	public void validate(Invoice invoice) {
 		if (invoice.isAddItems()) {
-			List<Item> items = new ArrayList<Item>();
-			for (Item item : invoice.getItems()) {
+			List<InvoiceItem> items = new ArrayList<InvoiceItem>();
+			for (InvoiceItem item : invoice.getItems()) {
 				validateItem(invoice, item);
 				item.setInvoice(invoice);
 				items.add(item);
@@ -45,7 +45,7 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 		}
 	}
 
-	private void validateItem(Invoice invoice, Item item) {
+	private void validateItem(Invoice invoice, InvoiceItem item) {
 		if (CommonUtil.isEmpty(item.getInventory().getName()) || CommonUtil.isNull(item.getInventory().getRate())
 				|| CommonUtil.isEmpty(item.getInventory().getCode()) || CommonUtil.isNull(item.getPrice())
 				|| 0 == item.getQuantity()) {

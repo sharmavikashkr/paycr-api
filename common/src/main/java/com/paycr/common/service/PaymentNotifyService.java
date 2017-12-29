@@ -17,14 +17,14 @@ import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.PayType;
 
 import freemarker.template.Configuration;
 
 @Service
-public class PaymentNotifyService implements NotifyService<Payment> {
+public class PaymentNotifyService implements NotifyService<InvoicePayment> {
 
 	@Autowired
 	private InvoiceRepository invRepo;
@@ -40,7 +40,7 @@ public class PaymentNotifyService implements NotifyService<Payment> {
 
 	@Async
 	@Transactional
-	public void notify(Payment payment) {
+	public void notify(InvoicePayment payment) {
 		Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 		Consumer consumer = invoice.getConsumer();
 		if ((!consumer.isEmailOnPay() && PayType.SALE.equals(payment.getPayType()))
@@ -71,7 +71,7 @@ public class PaymentNotifyService implements NotifyService<Payment> {
 		emailEngine.sendViaGmail(email);
 	}
 
-	public String getEmail(Payment payment) throws Exception {
+	public String getEmail(InvoicePayment payment) throws Exception {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("payment", payment);
 		templateProps.put("baseUrl", company.getAppUrl());
@@ -85,7 +85,7 @@ public class PaymentNotifyService implements NotifyService<Payment> {
 				templateProps);
 	}
 
-	public String getSms(Payment payment) throws Exception {
+	public String getSms(InvoicePayment payment) throws Exception {
 		return null;
 	}
 

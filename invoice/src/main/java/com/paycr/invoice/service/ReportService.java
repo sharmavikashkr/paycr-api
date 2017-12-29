@@ -18,12 +18,12 @@ import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringReport;
 import com.paycr.common.data.domain.RecurringReportUser;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.PaymentRepository;
+import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.data.repository.RecurringReportRepository;
 import com.paycr.common.data.repository.RecurringReportUserRepository;
 import com.paycr.common.data.repository.ReportRepository;
@@ -49,7 +49,7 @@ public class ReportService {
 	private ReportHelper repHelp;
 
 	@Autowired
-	private PaymentRepository payRepo;
+	private InvoicePaymentRepository payRepo;
 
 	@Autowired
 	private Company company;
@@ -86,7 +86,7 @@ public class ReportService {
 
 	public List<InvoiceReport> loadReport(Report report, Merchant merchant) {
 		isValidReport(report);
-		List<Payment> allPayments = new ArrayList<>();
+		List<InvoicePayment> allPayments = new ArrayList<>();
 		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
 		if (merchant == null) {
 			allPayments.addAll(payRepo.findPaysWithMode(report.getPayMode(), report.getPayType(),

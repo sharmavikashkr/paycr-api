@@ -18,9 +18,9 @@ import com.paycr.common.bean.Company;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.bean.SearchConsumerRequest;
 import com.paycr.common.bean.SearchInventoryRequest;
+import com.paycr.common.bean.SearchInvoicePaymentRequest;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchPaymentRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
@@ -28,14 +28,14 @@ import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.dao.InventoryDao;
 import com.paycr.common.data.dao.InvoiceDao;
+import com.paycr.common.data.dao.InvoicePaymentDao;
 import com.paycr.common.data.dao.MerchantDao;
-import com.paycr.common.data.dao.PaymentDao;
 import com.paycr.common.data.dao.SubscriptionDao;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Payment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -63,7 +63,7 @@ public class SearchService {
 	private MerchantRepository merRepo;
 
 	@Autowired
-	private PaymentDao payDao;
+	private InvoicePaymentDao invPayDao;
 
 	@Autowired
 	private MerchantDao merDao;
@@ -96,14 +96,14 @@ public class SearchService {
 		return invDao.findInvoices(request, merchant);
 	}
 
-	public List<Payment> fetchPaymentList(SearchPaymentRequest request) {
+	public List<InvoicePayment> fetchPaymentList(SearchInvoicePaymentRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
-		return payDao.findPayments(request, merchant);
+		return invPayDao.findPayments(request, merchant);
 	}
 
 	public Set<Consumer> fetchConsumerList(SearchConsumerRequest request) {
@@ -115,10 +115,10 @@ public class SearchService {
 		return conDao.findConsumers(request, merchant);
 	}
 
-	public String downloadPayments(SearchPaymentRequest request) throws IOException {
-		List<Payment> paymentList = fetchPaymentList(request);
+	public String downloadPayments(SearchInvoicePaymentRequest request) throws IOException {
+		List<InvoicePayment> paymentList = fetchPaymentList(request);
 		List<InvoiceReport> invoiceReports = new ArrayList<>();
-		for (Payment payment : paymentList) {
+		for (InvoicePayment payment : paymentList) {
 			Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 			InvoiceReport invReport = new InvoiceReport();
 			invReport.setCreated(payment.getCreated());
@@ -155,7 +155,7 @@ public class SearchService {
 		return writer.toString();
 	}
 
-	public void mailPayments(SearchPaymentRequest request) throws IOException {
+	public void mailPayments(SearchInvoicePaymentRequest request) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		Date timeNow = new Date();
 		String repCsv = downloadPayments(request);

@@ -25,6 +25,7 @@
 		<module>admin</module>
 		<module>merchant</module>
 		<module>oauth</module>
+		<module>expense</module>
 	</modules>
 
 	<parent>

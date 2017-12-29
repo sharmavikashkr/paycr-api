@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.Payment;
+import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Report;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.PayStatus;
@@ -80,9 +80,9 @@ public class ReportHelper {
 		return records;
 	}
 
-	public List<InvoiceReport> prepareReport(Report report, List<Payment> payments) {
+	public List<InvoiceReport> prepareReport(Report report, List<InvoicePayment> payments) {
 		List<InvoiceReport> invoiceReports = new ArrayList<>();
-		for (Payment payment : payments) {
+		for (InvoicePayment payment : payments) {
 			if (include(report.getPayStatus(), payment.getStatus())) {
 				Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 				InvoiceReport invReport = new InvoiceReport();

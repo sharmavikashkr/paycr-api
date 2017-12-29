@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
-import com.paycr.common.data.domain.Item;
+import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
@@ -54,9 +54,9 @@ public class InvoiceHelper {
 		childInvoice.setCreatedBy(createdBy);
 		childInvoice.setMerchant(invoice.getMerchant());
 		childInvoice.setConsumer(invoice.getConsumer());
-		List<Item> newItems = new ArrayList<>();
-		for (Item item : invoice.getItems()) {
-			Item newItem = new Item();
+		List<InvoiceItem> newItems = new ArrayList<>();
+		for (InvoiceItem item : invoice.getItems()) {
+			InvoiceItem newItem = new InvoiceItem();
 			newItem.setInventory(item.getInventory());
 			newItem.setQuantity(item.getQuantity());
 			newItem.setPrice(item.getPrice());
@@ -66,7 +66,7 @@ public class InvoiceHelper {
 		}
 		childInvoice.setItems(newItems);
 		childInvoice.setAttachments(null);
-		childInvoice.setInvoiceNotices(null);
+		childInvoice.setNotices(null);
 		isValidRequest.validate(childInvoice);
 		isValidPricing.validate(childInvoice);
 		List<InvoiceCustomParam> params = new ArrayList<InvoiceCustomParam>();
