@@ -1,0 +1,179 @@
+<div ng-controller="SupplierController" ng-init="searchSupplier()">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel-body col-md-3">
+				<h5>Search Supplier</h5>
+				<table class="table table-striped table-bordered table-hover table-responsive">
+					<tbody>
+						<tr>
+							<td>
+								<div class="form-group">
+									<label class="control-label">Supplier Email</label>
+									<input class="form-control" ng-model="searchSupplierReq.email" placeholder="name@email.com" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group">
+									<label class="control-label">Supplier Mobile</label>
+									<input class="form-control" ng-model="searchSupplierReq.mobile" type="text" placeholder="9999999999" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button ng-click="searchSupplier()" type="button" class="btn btn-info">Search</button>
+								<button ng-click="clearSupplierSearch()" type="button" class="btn btn-basic">Clear</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-body col-md-9">
+				<div ng-if="user.access.finance" class="row">
+					<div class="col-sm-4 col-sm-offset-8">
+						<button title="Upload Supplier" ng-click="updateBulkSupplierUploads()" type="button" class="btn btn-basic btn-sm" data-toggle="modal" data-target="#bulkSupplierUploadModal">
+							<i class="fa fa-upload"></i> Supplier
+						</button>&nbsp;
+						<button title="Create Supplier" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#createSupplierModal">
+							<i class="fa fa-plus"></i> Supplier
+						</button>
+					</div>
+				</div>
+				<br>
+				<table class="table table-bordered table-responsive">
+					<thead>
+						<tr>
+							<td class="text-center"><strong>Name</strong></td>
+							<td class="text-center hidden-xs"><strong>Email</strong></td>
+							<td class="text-center"><strong>Mobile</strong></td>
+							<td class="text-center hidden-xs"><strong>Created By</strong></td>
+						</tr>
+					</thead>
+					<tbody ng-repeat="supplier in supplierResp.supplierList">
+						<tr
+							ng-class="(supplier.active)?'success':'danger'"
+							data-toggle="collapse"
+							data-target="#supdetails-{{supplier.id}}"
+							class="accordion-toggle">
+							<td class="text-center">{{supplier.name}}</td>
+							<td class="text-center hidden-xs">{{supplier.email}}</td>
+							<td class="text-center">{{supplier.mobile}}</td>
+							<td class="text-center hidden-xs">{{supplier.createdBy}}</td>
+						</tr>
+						<tr>
+							<td colspan="12" style="padding: 0px; border: 0px;">
+								<div style="padding:10px;" class="accordion-body collapse" id="supdetails-{{supplier.id}}">
+									<div class="row">
+										<div class="col-md-12">
+											<button title="Add Expense" type="button"
+												class="btn btn-flat btn-info btn-md hidden-xs"
+												ng-if="user.access.finance"
+												ng-click="updateExpenseSupplier(supplier)"
+												data-toggle="modal"
+												data-target="#createExpenseModal">
+												<i class="fa fa-plus"></i>
+											</button>
+											<button title="Add Expense" type="button"
+												class="btn btn-flat btn-info btn-md visible-xs-inline"
+												ng-if="user.access.finance"
+												ng-click="updateExpenseSupplier(supplier)"
+												data-toggle="modal"
+												data-target="#createExpenseXsModal">
+												<i class="fa fa-plus"></i>
+											</button>
+											<button title="Search Expense" type="button"
+												class="btn btn-flat btn-success btn-md"
+												ng-click="seachConExpense(supplier)"
+												data-target="#expenseTab"
+												data-toggle="tab">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="box box-warning">
+												<div class="box-header with-border">
+													<h5 class="box-title">Supplier Settings</h5>
+													<div class="box-tools pull-right">
+														<button ng-if="user.access.finance" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editConPrefs = !$parent.editConPrefs" title="Edit Settings">
+															<i class="fa fa-pencil"></i>
+														</button>
+													</div>
+												</div>
+												<div class="box-body">
+													<fieldset ng-disabled="!editConPrefs">
+														<table class="table table-striped table-bordered table-responsive">
+															<tbody>
+																<tr>
+																	<td><strong>Created</strong></td>
+																	<td>{{supplier.created | date:'dd-MM-yyyy'}}</td>
+																</tr>
+																<tr>
+																	<td><strong>GSTIN</strong></td>
+																	<td><input class="form-control" ng-model="supplier.gstin"/></td>
+																</tr>
+																<tr>
+																	<td><strong>Email On Pay</strong></td>
+																	<td><input ng-model="supplier.emailOnPay" type="checkbox"/></td>
+																</tr>
+																<tr>
+																	<td><strong>Email On Refund</strong></td>
+																	<td><input ng-model="supplier.emailOnRefund" type="checkbox"/></td>
+																</tr>
+																<tr>
+																	<td><strong>Active</strong></td>
+																	<td><input ng-model="supplier.active" type="checkbox"/></td>
+																</tr>
+															</tbody>
+														</table>
+													</fieldset>
+												</div>
+												<div ng-if="editConPrefs" class="box-footer">
+									            	<div class="input-group">
+									                	<span class="input-group-btn">
+								                        	<button type="button" ng-click="updateSupplier(supplier)" class="btn btn-info">Save</button>
+								                    	</span>
+									                </div>
+									            </div>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="box box-warning">
+												<div class="box-header with-border">
+													<h5 class="box-title">Address</h5>
+													<div class="box-tools pull-right">
+														<button ng-if="user.access.finance" ng-click="updateEditAddress()" data-toggle="modal" data-target="#editSupAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Billing Address">
+															<i class="fa fa-pencil"></i>
+														</button>
+													</div>
+												</div>
+												<div class="box-body">
+													<p ng-if="supplier.billingAddress != null">
+														{{supplier.billingAddress.addressLine1}},<br>
+														{{supplier.billingAddress.addressLine2}},<br>
+														{{supplier.billingAddress.city}},<br>
+														{{supplier.billingAddress.district}}, {{supplier.billingAddress.state}} - {{supplier.billingAddress.pincode}},<br>
+														{{supplier.billingAddress.country}}
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<ul class="pagination" style="float:right;">
+					<li ng-class="(supplierResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(supplierResp.page <= 1) || loadSupplierPage(supplierResp.page-1)" href="#">Previous</a></li>
+					<li ng-repeat="page in supplierResp.allPages" ng-class="(page == supplierResp.page)?'active':''"><a ng-click="loadSupplierPage(page)" href="#">{{page}}</a></li>
+					<li ng-class="(supplierResp.page >= supplierResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(supplierResp.page >= supplierResp.allPages.length) || loadSupplierPage(supplierResp.page+1)" href="#">Next</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

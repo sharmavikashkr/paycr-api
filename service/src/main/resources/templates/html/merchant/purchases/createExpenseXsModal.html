@@ -1,0 +1,159 @@
+<div ng-controller="ExpenseController" id="createExpenseXsModal" style="overflow-y:scroll;" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="col-md-4">
+					<h5 class="modal-title">
+						<span>Expense for purchase <strong>: {{saveexpense.expenseCode}}</strong></span>
+					</h5>
+				</div>
+				<div class="col-md-4">
+					<select class="form-control" ng-model="saveexpense.expenseType">
+						<option ng-repeat="expenseType in expenseTypes" value="{{expenseType}}">{{expenseType}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="modal-body">
+				<form name="createExpenseForm">
+					<div class="row">
+						<div class="col-xs-12">
+							<div ng-if="!(saveexpense.expenseType == 'BULK')" class="panel panel-default">
+								<div class="panel-heading">Supplier Details</div>
+								<div class="panel-body">
+									<div ng-class="(createExpenseForm.conname.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Name:</label>&nbsp;
+										<input ng-model="saveexpense.supplier.name" list="name-auto-complete" ng-change="setSupplier(saveexpense.supplier,'NAME')" name="conname" class="form-control" placeholder="Supplier Name" type="text" ng-pattern="patterns.namePattern" required autofocus />
+										<datalist id="name-auto-complete">
+											<option ng-repeat="supplier in supplierList" ng-if="supplier.active" ng-value="supplier.name">
+										</datalist>
+									</div>
+									<div ng-class="(createExpenseForm.conemail.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Email:</label>&nbsp;
+										<input ng-model="saveexpense.supplier.email" list="email-auto-complete" ng-change="setSupplier(saveexpense.supplier,'EMAIL')" name="conemail" class="form-control" placeholder="Supplier Email" type="email" ng-pattern="patterns.emailPattern" required />
+										<datalist id="email-auto-complete">
+											<option ng-repeat="supplier in supplierList" ng-if="supplier.active" ng-value="supplier.email">
+										</datalist>
+									</div>
+									<div ng-class="(createExpenseForm.conmobile.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Mobile:</label>&nbsp;
+										<input ng-model="saveexpense.supplier.mobile" list="mobile-auto-complete" ng-change="setSupplier(saveexpense.supplier,'MOBILE')" name="conmobile" class="form-control" placeholder="Supplier Mobile" type="text" ng-pattern="patterns.mobilePattern" required />
+										<datalist id="mobile-auto-complete">
+											<option ng-repeat="supplier in supplierList" ng-if="supplier.active" ng-value="supplier.mobile">
+										</datalist>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">Expense Preferences</div>
+								<div class="panel-body">
+									<input type="checkbox" ng-change="calculateTotal()" ng-model="saveexpense.addItems">&nbsp;<strong>Add Items</strong><br>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<div class="row">
+										<h5 class="col-xs-6">
+											<strong>Order summary</strong>
+										</h5>
+										<div class="col-xs-6 text-right">
+											<button ng-if="saveexpense.addItems" type="button" class="btn btn-flat btn-success btn-sm" data-toggle="modal" data-target="#addExpenseItemXsModal">
+												<i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="panel-body">
+									<div class="table-responsive">
+										<table id="itemsTable" class="table table-bordered table-responsive">
+											<thead>
+												<tr>
+													<td class="text-center"><strong>Actions</strong></td>
+													<td class="text-center"><strong>Item</strong></td>
+													<td class="text-right"><strong>Total</strong></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-if="saveexpense.addItems" ng-repeat="item in saveexpense.items">
+													<td>
+														<div class="text-center">
+															<button ng-click="deleteItem($index)" type="button" class="btn btn-flat btn-danger btn-xs">
+																<i class="fa fa-times"></i>
+															</button>
+														</div>
+													</td>
+													<td>
+														<div>{{item.asset.name}} ({{item.asset.code}}) <strong>X</strong> {{item.quantity}}</div>
+													</td>
+													<td>
+														<div class="input-group">
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="item.price" readonly />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow text-center"><strong>Total</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="form-group">
+																<input class="form-control text-right" ng-readonly="saveexpense.addItems" ng-change="calculateTotal()" ng-model="saveexpense.total" placeholder="1200.00" type="number" step="0.01" />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow text-center"><strong>Shipping</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="form-group">
+																<input class="form-control text-right" ng-change="calculateTotal()" ng-model="saveexpense.shipping" placeholder="18.00" type="number" step="0.01" />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow text-center"><strong>Discount</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="form-group">
+																<input class="form-control text-right" ng-change="calculateTotal()" ng-model="saveexpense.discount" placeholder="40.00" type="number" step="0.01" />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow text-center"><strong>Pay Amount</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="saveexpense.payAmount" placeholder="4360.00" type="number" step="0.01" readonly required />
+															</div>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createExpense()">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

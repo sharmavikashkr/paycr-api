@@ -3,7 +3,7 @@
 		<div class="col-md-12">
 			<div class="nav-tabs-custom tab-danger">
 				<ul class="nav nav-tabs">
-					<li class="active" ng-click="searchInvoice()"><a href="#expenseTab" data-toggle="tab">Expenses</a></li>
+					<li class="active" ng-click="searchExpense()"><a href="#expenseTab" data-toggle="tab">Expenses</a></li>
 					<li ng-click="searchExpensePayment()"><a href="#expensePaymentTab" data-toggle="tab">Payments</a></li>
 					<li ng-click="searchSupplier()"><a href="#supplierTab" data-toggle="tab">Suppliers</a></li>
 					<li ng-click="searchAsset()"><a href="#assetTab" data-toggle="tab">Assets</a></li>
@@ -16,5 +16,19 @@
 				</div>
 			</div>
 		</div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','createExpenseModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','createExpenseXsModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','addExpenseItemXsModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','markExpensePaidModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','expenseRefundModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','createSupplierModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','bulkSupplierUploadModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','editConAddressModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','createAssetModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/purchases','bulkAssetUploadModal')"></div>
+		<div ng-include="templateUrl('merchant/purchases','expenseInfoModal')"></div>
+		<div ng-include="templateUrl('merchant/purchases','expensePaymentModal')"></div>
+		<div ng-include="templateUrl('merchant/purchases','expenseAttachmentModal')"></div>
+		<div ng-include="templateUrl('merchant/purchases','expenseTimelineModal')"></div>
 	</div>
 </div>
