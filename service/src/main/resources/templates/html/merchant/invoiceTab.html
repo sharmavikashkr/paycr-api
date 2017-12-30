@@ -149,7 +149,7 @@
 											<a title="Download Pdf" class="btn btn-flat btn-default btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
 												<i class="fa fa-file-pdf-o"></i>
 											</a>
-											<button ng-click="updateInvoiceInfo(invoice)" title="Attachments" class="btn btn-flat btn-info btn-md" data-toggle="modal" data-target="#attachmentModal">
+											<button ng-click="updateInvoiceInfo(invoice)" title="Attachments" class="btn btn-flat btn-info btn-md" data-toggle="modal" data-target="#invoiceAttachmentModal">
 												<i class="fa fa-paperclip"></i>
 											</button>
 											<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoiceInfo(invoice)" title="Notifications" class="btn btn-flat btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">
@@ -245,7 +245,7 @@
 												<button style="margin: 5px;"
 													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status != 'PAID' && user.access.finance"
 													ng-click="updateInvoiceInfo(invoice)"
-													data-toggle="modal" data-target="#markPaidModal"
+													data-toggle="modal" data-target="#markInvoicePaidModal"
 													type="button" class="btn btn-success">Mark Paid</button>
 												<button style="margin: 5px;"
 													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status != 'PAID'"
@@ -263,7 +263,7 @@
 												<button style="margin: 5px;"
 													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && user.access.finance"
 													ng-click="updateInvoiceInfo(invoice)"
-													data-toggle="modal" data-target="#refundModal"
+													data-toggle="modal" data-target="#invoiceRefundModal"
 													type="button" class="btn btn-danger">Refund</button>
 											</div>
 										</div>

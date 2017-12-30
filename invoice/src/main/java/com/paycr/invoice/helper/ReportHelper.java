@@ -72,7 +72,7 @@ public class ReportHelper {
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
 			records.add(new String[] { invr.getCreated().toString(), invr.getInvoiceCode(),
-					invr.getInvoiceStatus().name(), invr.getInvAmount().toString(), invr.getTax().toString(),
+					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
 					invr.getDiscount().toString(), invr.getAmount().toString(), invr.getCurrency().name(),
 					invr.getPaymentRefNo(), invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod(),
 					invr.getPayStatus() });
@@ -89,7 +89,7 @@ public class ReportHelper {
 				invReport.setCreated(payment.getCreated());
 				invReport.setInvoiceCode(invoice.getInvoiceCode());
 				invReport.setInvoiceStatus(invoice.getStatus());
-				invReport.setInvAmount(invoice.getPayAmount());
+				invReport.setPayAmount(invoice.getPayAmount());
 				invReport.setAmount(payment.getAmount());
 				invReport.setTax(invoice.getPayAmount().add(invoice.getDiscount()).subtract(invoice.getTotal()));
 				invReport.setDiscount(invoice.getDiscount());

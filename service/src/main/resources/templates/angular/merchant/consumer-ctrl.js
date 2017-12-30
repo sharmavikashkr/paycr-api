@@ -20,7 +20,7 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 	$rootScope.searchConsumer = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/consumer",
+			url : "/invoice/search/consumer",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},

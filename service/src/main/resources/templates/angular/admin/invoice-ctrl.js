@@ -9,7 +9,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$rootScope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/invoice",
+			url : "/invoice/search/invoice",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},

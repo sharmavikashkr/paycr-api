@@ -17,93 +17,75 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.SearchConsumerRequest;
-import com.paycr.common.bean.SearchInventoryRequest;
-import com.paycr.common.bean.SearchInvoiceRequest;
-import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchInvoicePaymentRequest;
-import com.paycr.common.bean.SearchSubsRequest;
-import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.Inventory;
-import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.bean.SearchAssetRequest;
+import com.paycr.common.bean.SearchExpensePaymentRequest;
+import com.paycr.common.bean.SearchExpenseRequest;
+import com.paycr.common.bean.SearchExpensePaymentRequest;
+import com.paycr.common.bean.SearchSupplierRequest;
+import com.paycr.common.data.domain.Asset;
+import com.paycr.common.data.domain.Expense;
+import com.paycr.common.data.domain.ExpensePayment;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.InvoicePayment;
-import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.data.domain.Supplier;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.SearchService;
+import com.paycr.dashboard.service.ExpenseSearchService;
 
 @RestController
-@RequestMapping("/search")
-public class SearchController {
+@RequestMapping("/expense/search")
+public class ExpenseSearchController {
 
 	@Autowired
 	private SecurityService secSer;
 
 	@Autowired
-	private SearchService serSer;
+	private ExpenseSearchService expSerSer;
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/invoice")
-	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request, HttpServletResponse response) {
-		List<Invoice> invoiceList = new ArrayList<>();
+	@RequestMapping("/expense")
+	public List<Expense> searchExpenses(@RequestBody SearchExpenseRequest request, HttpServletResponse response) {
+		List<Expense> expenseList = new ArrayList<>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
 				request.setMerchant(merchant.getId());
 			}
-			invoiceList = serSer.fetchInvoiceList(request);
+			expenseList = expSerSer.fetchExpenseList(request);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
-		return invoiceList;
+		return expenseList;
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment")
-	public List<InvoicePayment> searchPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
-		List<InvoicePayment> paymentList = new ArrayList<>();
+	public List<ExpensePayment> searchPayments(@RequestBody SearchExpensePaymentRequest request,
+			HttpServletResponse response) {
+		List<ExpensePayment> paymentList = new ArrayList<>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
 				request.setMerchant(merchant.getId());
 			}
-			paymentList = serSer.fetchPaymentList(request);
+			paymentList = expSerSer.fetchPaymentList(request);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return paymentList;
 	}
-
-	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/consumer")
-	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request, HttpServletResponse response) {
-		Set<Consumer> consumerList = new HashSet<>();
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			consumerList = serSer.fetchConsumerList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return consumerList;
-	}
-
+	
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/download")
-	public void downloadPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
+	public void downloadPayments(@RequestBody SearchExpensePaymentRequest request, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
 				request.setMerchant(merchant.getId());
 			}
-			String csv = serSer.downloadPayments(request);
+			String csv = expSerSer.downloadPayments(request);
 			response.setContentType("text/csv");
 			byte[] data = csv.getBytes();
 			response.setHeader("Content-Disposition", "attachment; filename=\"payments.csv\"");
@@ -120,61 +102,51 @@ public class SearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/mail")
-	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
+	public void mailPayments(@RequestBody SearchExpensePaymentRequest request, HttpServletResponse response) {
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
 				request.setMerchant(merchant.getId());
 			}
-			serSer.mailPayments(request);
+			expSerSer.mailPayments(request);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
-	}
-
-	@PreAuthorize(RoleUtil.PAYCR_AUTH)
-	@RequestMapping("/merchant")
-	public List<Merchant> searchMerchants(@RequestBody SearchMerchantRequest request, HttpServletResponse response) {
-		List<Merchant> merchants = new ArrayList<>();
-		try {
-			merchants = serSer.fetchMerchantList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return merchants;
-	}
-
-	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/subscription")
-	public List<Subscription> searchSubscriptions(@RequestBody SearchSubsRequest request,
-			HttpServletResponse response) {
-		List<Subscription> subs = new ArrayList<>();
-		try {
-			subs = serSer.fetchSubsList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return subs;
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/inventory")
-	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request, HttpServletResponse response) {
-		List<Inventory> inventoryList = new ArrayList<>();
+	@RequestMapping("/supplier")
+	public Set<Supplier> searchSuppliers(@RequestBody SearchSupplierRequest request, HttpServletResponse response) {
+		Set<Supplier> supplierList = new HashSet<>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			if (CommonUtil.isNotNull(merchant)) {
 				request.setMerchant(merchant.getId());
 			}
-			inventoryList = serSer.fetchInventoryList(request);
+			supplierList = expSerSer.fetchSupplierList(request);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
-		return inventoryList;
+		return supplierList;
+	}
+
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@RequestMapping("/asset")
+	public List<Asset> searchAsset(@RequestBody SearchAssetRequest request, HttpServletResponse response) {
+		List<Asset> assetList = new ArrayList<>();
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			if (CommonUtil.isNotNull(merchant)) {
+				request.setMerchant(merchant.getId());
+			}
+			assetList = expSerSer.fetchAssetList(request);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return assetList;
 	}
 
 }

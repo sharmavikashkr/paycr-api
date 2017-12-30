@@ -7,7 +7,7 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 	$rootScope.searchInventory = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/inventory",
+			url : "/invoice/search/inventory",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},

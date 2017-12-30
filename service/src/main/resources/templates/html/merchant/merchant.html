@@ -24,7 +24,7 @@
 	<script src="/angular/merchant/merchant-ctrl.js"></script>
 	<script src="/angular/common/dashboard-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-ctrl.js"></script>
-	<script src="/angular/common/payment-ctrl.js"></script>
+	<script src="/angular/common/invoice-payment-ctrl.js"></script>
 	<script src="/angular/merchant/consumer-ctrl.js"></script>
 	<script src="/angular/merchant/inventory-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-setting-ctrl.js"></script>
@@ -46,6 +46,7 @@
         	<div ng-include="templateUrl('common','alert')"></div>
         	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
         	<div ng-class="(user.access.admin)?'':'active'" id="salesTab" class="tab-pane" ng-include="templateUrl('merchant','salesTab')"></div>
+        	<div id="purchasesTab" class="tab-pane" ng-include="templateUrl('merchant','purchasesTab')"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="templateUrl('merchant','subscriptionTab')"></div>
 	        <div ng-if="user.access.ops" id="reportsTab" class="tab-pane fade" ng-include="templateUrl('common','reportsTab')"></div>
 	        <div ng-if="user.access.admin" id="usersTab" class="tab-pane fade" ng-include="templateUrl('common','usersTab')"></div>
@@ -53,34 +54,19 @@
 	        <div id="profileTab" class="tab-pane fade" ng-include="templateUrl('common','profileTab')"></div>
 		</div>
 		<div ng-include="templateUrl('common','footer')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInvoiceModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInvoiceXsModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','addItemXsModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','invoiceNotifyModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','createParamModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','markPaidModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','childInvoiceModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','categoryConsumerModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','bulkInvoiceUploadModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','recurrInvoiceModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','refundModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','editAddressModal')"></div>
-		<div ng-if="user.access.admin" ng-include="templateUrl('common','createUserModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportXsModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','recurrReportModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','createConsumerModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','bulkConsumerUploadModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','editAddressModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInventoryModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','bulkInventoryUploadModal')"></div>
+		<div ng-if="user.access.admin" ng-include="templateUrl('common','createUserModal')"></div>
 		<div ng-if="user.access.admin" ng-include="templateUrl('merchant','keyModal')"></div>
 		<div ng-if="user.access.admin" ng-include="templateUrl('merchant','editAccAddressModal')"></div>
-		<div ng-include="templateUrl('common','invoiceInfoModal')"></div>
-		<div ng-include="templateUrl('common','invoicePaymentModal')"></div>
-		<div ng-include="templateUrl('merchant','invoiceNoticeModal')"></div>
-		<div ng-include="templateUrl('merchant','attachmentModal')"></div>
 		<div ng-include="templateUrl('common','changePasswordModal')"></div>
 		<div ng-include="templateUrl('common','editProfileAddressModal')"></div>
-		<div ng-include="templateUrl('common','invoiceTimelineModal')"></div>
 		<div ng-include="templateUrl('merchant','merchantControl')"></div>
     </div>
     <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>

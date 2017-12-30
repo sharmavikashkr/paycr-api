@@ -1,4 +1,4 @@
-app.controller('PaymentController', function($scope, $http, $rootScope,
+app.controller('InvoicePaymentController', function($scope, $http, $rootScope,
 		$cookies, $httpParamSerializer) {
 	var dateNow = moment().toDate();
 	var dateStart = moment().subtract(30, 'day').toDate();
@@ -6,10 +6,10 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
-	$rootScope.searchPayment = function() {
+	$rootScope.searchInvoicePayment = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/payment",
+			url : "/invoice/search/payment",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
@@ -43,7 +43,7 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 	$scope.downloadCsv = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/payment/download",
+			url : "/invoice/search/payment/download",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token"),
 				"Accept" : "text/csv"
@@ -55,7 +55,7 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 			hiddenElement.href = 'data:attachment/csv,'
 					+ encodeURI(content.data);
 			hiddenElement.target = '_blank';
-			hiddenElement.download = 'payments.csv';
+			hiddenElement.download = 'invoice-payments.csv';
 			hiddenElement.click();
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -64,7 +64,7 @@ app.controller('PaymentController', function($scope, $http, $rootScope,
 	$scope.mailCsv = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/payment/mail",
+			url : "/invoice/search/payment/mail",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},

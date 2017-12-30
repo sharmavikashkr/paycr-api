@@ -9,7 +9,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$rootScope.searchInvoice = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/invoice",
+			url : "/invoice/search/invoice",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
@@ -149,7 +149,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 				"price" : 0
 			});
 		}
-		angular.element(document.querySelector('#addItemXsModal')).modal('hide');
+		angular.element(document.querySelector('#addInvoiceItemXsModal')).modal('hide');
 		angular.element(document.querySelector('#createInvoiceXsModal')).modal('show');
 		$scope.calculateTotal();
 	}
@@ -318,7 +318,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#refundModal')).modal('hide');
+		angular.element(document.querySelector('#invoiceRefundModal')).modal('hide');
 	}
 	$scope.markPaidInvoice = function(invoiceCode) {
 		if(!this.markPaidForm.$valid) {
@@ -340,7 +340,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#markPaidModal')).modal('hide');
+		angular.element(document.querySelector('#markInvoicePaidModal')).modal('hide');
 	}
 	$scope.uploadAttachment = function(files) {
 		if (!confirm('Upload Attachment?')) {
@@ -360,7 +360,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#attachmentModal')).modal('hide');
+		angular.element(document.querySelector('#invoiceAttachmentModal')).modal('hide');
 		$rootScope.searchInvoice();
 	}
 	$scope.createChildInvoice = function(invoiceCode) {

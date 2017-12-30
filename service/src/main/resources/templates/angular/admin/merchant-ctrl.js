@@ -9,7 +9,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 	$rootScope.searchMerchant = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/merchant",
+			url : "/admin/search/merchant",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},

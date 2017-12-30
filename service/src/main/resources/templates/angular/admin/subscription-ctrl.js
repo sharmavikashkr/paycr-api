@@ -9,7 +9,7 @@ app.controller('SubscriptionController', function($scope, $http, $rootScope,
 	$rootScope.searchSubscription = function() {
 		var req = {
 			method : 'POST',
-			url : "/search/subscription",
+			url : "/admin/search/subscription",
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},

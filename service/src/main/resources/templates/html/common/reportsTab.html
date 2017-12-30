@@ -80,7 +80,7 @@
 							<tr>
 								<td class="text-center hidden-xs"><strong>Created</strong></td>
 								<td class="text-center hidden-xs"><strong>Invoice Code</strong></td>
-								<td class="text-center"><strong>Amount</strong></td>
+								<td class="text-center"><strong>Pay Amount</strong></td>
 								<td class="text-center"><strong>Currency</strong></td>
 								<td class="text-center hidden-xs"><strong>Invoice Status</strong></td>
 								<td class="text-center hidden-xs"><strong>Payment Ref No</strong></td>
@@ -94,7 +94,7 @@
 							<tr ng-repeat="invoiceReport in reportsResp.invoiceReports">
 								<td class="hidden-xs">{{invoiceReport.created | date:'dd-MM-yyyy'}}</td>
 								<td class="hidden-xs">{{invoiceReport.invoiceCode}}</td>
-								<td>{{invoiceReport.amount}}</td>
+								<td>{{invoiceReport.payAmount}}</td>
 								<td>{{invoiceReport.currency}}</td>
 								<td class="hidden-xs">{{invoiceReport.invoiceStatus}}</td>
 								<td class="hidden-xs">{{invoiceReport.paymentRefNo}}</td>

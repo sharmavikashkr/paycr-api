@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.paycr.common.type.Currency;
-import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
-public class InvoiceReport {
+public class ExpenseReport {
 
 	private Date created;
-	private String invoiceCode;
-	private InvoiceStatus invoiceStatus;
+	private String expenseCode;
+	private ExpenseStatus expenseStatus;
 	private BigDecimal payAmount;
 	private BigDecimal tax;
 	private BigDecimal discount;
@@ -30,14 +30,6 @@ public class InvoiceReport {
 
 	public void setCreated(Date created) {
 		this.created = created;
-	}
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
 	}
 
 	public Currency getCurrency() {
@@ -80,14 +72,6 @@ public class InvoiceReport {
 		this.payMethod = payMethod;
 	}
 
-	public InvoiceStatus getInvoiceStatus() {
-		return invoiceStatus;
-	}
-
-	public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-		this.invoiceStatus = invoiceStatus;
-	}
-
 	public BigDecimal getTax() {
 		return tax;
 	}
@@ -118,6 +102,22 @@ public class InvoiceReport {
 
 	public void setPayStatus(String payStatus) {
 		this.payStatus = payStatus;
+	}
+
+	public String getExpenseCode() {
+		return expenseCode;
+	}
+
+	public void setExpenseCode(String expenseCode) {
+		this.expenseCode = expenseCode;
+	}
+
+	public ExpenseStatus getExpenseStatus() {
+		return expenseStatus;
+	}
+
+	public void setExpenseStatus(ExpenseStatus expenseStatus) {
+		this.expenseStatus = expenseStatus;
 	}
 
 	public BigDecimal getPayAmount() {
