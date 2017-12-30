@@ -7,10 +7,13 @@
 					<li ng-click="searchInvoicePayment()"><a href="#invoicePaymentTab" data-toggle="tab">Payments</a></li>
 				</ul>
 				<div class="tab-content">
-					<div id="invoiceTab" class="active tab-pane" ng-include="templateUrl('admin','invoiceTab')"></div>
-			        <div id="invoicePaymentTab" class="tab-pane" ng-include="templateUrl('common','invoicePaymentTab')"></div>
+					<div id="invoiceTab" class="active tab-pane" ng-include="templateUrl('admin/sales','invoiceTab')"></div>
+			        <div id="invoicePaymentTab" class="tab-pane" ng-include="templateUrl('common/sales','invoicePaymentTab')"></div>
 				</div>
 			</div>
 		</div>
+		<div ng-include="templateUrl('common/sales','invoiceInfoModal')"></div>
+		<div ng-include="templateUrl('common/sales','invoicePaymentModal')"></div>
+		<div ng-include="templateUrl('common/sales','invoiceTimelineModal')"></div>
 	</div>
 </div>

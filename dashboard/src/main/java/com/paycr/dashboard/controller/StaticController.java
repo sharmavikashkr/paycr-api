@@ -52,6 +52,24 @@ public class StaticController {
 		return new ModelAndView("html/" + folder + "/" + file);
 	}
 
+	@RequestMapping("/html/{folder}/{subfolder}/{file}")
+	public ModelAndView getSubTemplate(@PathVariable String folder, @PathVariable String subfolder,
+			@PathVariable String file, @RequestParam("access_token") String accessToken, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		PcUser user = secSer.findLoggedInUser(accessToken);
+		if (user == null) {
+			response.sendRedirect("/login");
+		}
+		boolean isPaycr = secSer.isPaycrUser(accessToken);
+		if ("admin".equals(folder) && !isPaycr) {
+			response.sendRedirect("/login");
+		}
+		if ("merchant".equals(folder) && isPaycr) {
+			response.sendRedirect("/adminlogin");
+		}
+		return new ModelAndView("html/" + folder + "/" + subfolder + "/" + file);
+	}
+
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/enum/{type}")
 	public List<String> getEnum(@PathVariable String type) {

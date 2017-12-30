@@ -9,10 +9,10 @@
 					<li ng-click="searchAsset()"><a href="#assetTab" data-toggle="tab">Assets</a></li>
 				</ul>
 				<div class="tab-content">
-					<div id="expenseTab" class="active tab-pane" ng-include="templateUrl('merchant','expenseTab')"></div>
-			        <div id="expensePaymentTab" class="tab-pane" ng-include="templateUrl('common','expensePaymentTab')"></div>
-			        <div id="supplierTab" class="tab-pane fade" ng-include="templateUrl('merchant','supplierTab')"></div>
-			        <div id="assetTab" class="tab-pane fade" ng-include="templateUrl('merchant','assetTab')"></div>
+					<div id="expenseTab" class="active tab-pane" ng-include="templateUrl('merchant/purchases','expenseTab')"></div>
+			        <div id="expensePaymentTab" class="tab-pane" ng-include="templateUrl('merchant/purchases','expensePaymentTab')"></div>
+			        <div id="supplierTab" class="tab-pane fade" ng-include="templateUrl('merchant/purchases','supplierTab')"></div>
+			        <div id="assetTab" class="tab-pane fade" ng-include="templateUrl('merchant/purchases','assetTab')"></div>
 				</div>
 			</div>
 		</div>

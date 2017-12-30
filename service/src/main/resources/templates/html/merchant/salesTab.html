@@ -9,27 +9,32 @@
 					<li ng-click="searchInventory()"><a href="#inventoryTab" data-toggle="tab">Inventory</a></li>
 				</ul>
 				<div class="tab-content">
-					<div id="invoiceTab" class="active tab-pane" ng-include="templateUrl('merchant','invoiceTab')"></div>
-			        <div id="invoicePaymentTab" class="tab-pane" ng-include="templateUrl('common','invoicePaymentTab')"></div>
-			        <div id="consumerTab" class="tab-pane fade" ng-include="templateUrl('merchant','consumerTab')"></div>
-			        <div id="inventoryTab" class="tab-pane fade" ng-include="templateUrl('merchant','inventoryTab')"></div>
+					<div id="invoiceTab" class="active tab-pane" ng-include="templateUrl('merchant/sales','invoiceTab')"></div>
+			        <div id="invoicePaymentTab" class="tab-pane" ng-include="templateUrl('common/sales','invoicePaymentTab')"></div>
+			        <div id="consumerTab" class="tab-pane fade" ng-include="templateUrl('merchant/sales','consumerTab')"></div>
+			        <div id="inventoryTab" class="tab-pane fade" ng-include="templateUrl('merchant/sales','inventoryTab')"></div>
 				</div>
 			</div>
 		</div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInvoiceModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','createInvoiceXsModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','addInvoiceItemXsModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','invoiceNotifyModal')"></div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant','markInvoicePaidModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','childInvoiceModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','categoryConsumerModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','bulkInvoiceUploadModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','recurrInvoiceModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','invoiceRefundModal')"></div>
-		<div ng-include="templateUrl('common','invoiceInfoModal')"></div>
-		<div ng-include="templateUrl('common','invoicePaymentModal')"></div>
-		<div ng-include="templateUrl('merchant','invoiceNoticeModal')"></div>
-		<div ng-include="templateUrl('merchant','invoiceAttachmentModal')"></div>
-		<div ng-include="templateUrl('common','invoiceTimelineModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createInvoiceModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createInvoiceXsModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','addInvoiceItemXsModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','invoiceNotifyModal')"></div>
+	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','markInvoicePaidModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','childInvoiceModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','categoryConsumerModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkInvoiceUploadModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','recurrInvoiceModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','invoiceRefundModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createConsumerModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkConsumerUploadModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','editAddressModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createInventoryModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkInventoryUploadModal')"></div>
+		<div ng-include="templateUrl('common/sales','invoiceInfoModal')"></div>
+		<div ng-include="templateUrl('common/sales','invoicePaymentModal')"></div>
+		<div ng-include="templateUrl('merchant/sales','invoiceNoticeModal')"></div>
+		<div ng-include="templateUrl('merchant/sales','invoiceAttachmentModal')"></div>
+		<div ng-include="templateUrl('common/sales','invoiceTimelineModal')"></div>
 	</div>
 </div>
