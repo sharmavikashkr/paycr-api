@@ -40,12 +40,12 @@
 					<u>From</u>
 					<address>
 						<strong><i class="fa fa-user"></i> ${expense.supplier.name}</strong>
-						<#if expense.supplier.billingAddress??>
-						<br>${expense.supplier.billingAddress.addressLine1}
-						<br><#if expense.supplier.billingAddress.addressLine2??>${expense.supplier.billingAddress.addressLine2}</#if>
-						<br>${expense.supplier.billingAddress.city}, ${expense.supplier.billingAddress.district}
-						<br>${expense.supplier.billingAddress.state}, ${expense.supplier.billingAddress.pincode}
-						<br>${expense.supplier.billingAddress.country}
+						<#if expense.supplier.address??>
+						<br>${expense.supplier.address.addressLine1}
+						<br><#if expense.supplier.address.addressLine2??>${expense.supplier.address.addressLine2}</#if>
+						<br>${expense.supplier.address.city}, ${expense.supplier.address.district}
+						<br>${expense.supplier.address.state}, ${expense.supplier.address.pincode}
+						<br>${expense.supplier.address.country}
 						</#if>
 						<br><i class="fa fa-phone"></i> ${expense.supplier.mobile}
 						<br><i class="fa fa-envelope"></i> ${expense.supplier.email}
@@ -118,15 +118,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-6">
-					<!-- <p class="lead">Payment Methods:</p>
-					<img src="${staticUrl}/dist/img/credit/visa.png" alt="Visa">
-					<img src="${staticUrl}/dist/img/credit/mastercard.png" alt="Mastercard">
-					<img src="${staticUrl}/dist/img/credit/mestro.png" alt="Maestro">
-					<p class="text-muted well well-sm no-shadow"
-						style="margin-top: 10px;">Choose from many available option like CreditCard, DebitCard, NetBanking, 
-						Mobile Wallets, UPI, etc to pay your dues.</p> -->
-				</div>
+				<div class="col-xs-6"></div>
 				<div class="col-xs-6">
 					<p class="lead">Amount Due by ${expense.orderDate?date}</p>
 	

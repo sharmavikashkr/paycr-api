@@ -3,7 +3,9 @@ package com.paycr.dashboard.service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
@@ -15,21 +17,32 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.bean.Server;
+import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.AdminSetting;
+import com.paycr.common.data.domain.Asset;
+import com.paycr.common.data.domain.Expense;
+import com.paycr.common.data.domain.ExpenseItem;
+import com.paycr.common.data.domain.ExpensePayment;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.data.domain.Supplier;
 import com.paycr.common.data.repository.AdminSettingRepository;
+import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.Currency;
+import com.paycr.common.type.ExpenseStatus;
+import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayMode;
+import com.paycr.common.type.PayType;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -37,6 +50,7 @@ import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.PdfUtil;
 import com.paycr.common.util.RandomIdGenerator;
+import com.paycr.expense.validation.ExpenseValidator;
 import com.razorpay.RazorpayClient;
 
 @Service
@@ -50,6 +64,15 @@ public class SubscriptionService {
 
 	@Autowired
 	private PricingRepository priRepo;
+
+	@Autowired
+	private ExpenseRepository expRepo;
+
+	@Autowired
+	private TimelineService tlService;
+
+	@Autowired
+	private ExpenseValidator expVal;
 
 	@Autowired
 	private SubscriptionRepository subsRepo;
@@ -125,6 +148,7 @@ public class SubscriptionService {
 		merPricing.setMerchant(merchant);
 		merPricing.setSubscription(subs);
 		merPriRepo.save(merPricing);
+		addToExpense(merchant, subs, "SYSTEM");
 	}
 
 	public ModelAndView onlineSubscription(Integer pricingId, Integer quantity, Merchant merchant) {
@@ -218,8 +242,75 @@ public class SubscriptionService {
 			noti.setCreated(timeNow);
 			noti.setRead(false);
 			notiRepo.save(noti);
+
+			addToExpense(merchant, subs, "SYSTEM");
 		}
 		return subs;
+	}
+
+	private void addToExpense(Merchant merchant, Subscription subs, String createdBy) {
+		Date timeNow = new Date();
+		AdminSetting adset = adsetRepo.findAll().get(0);
+		Expense expense = new Expense();
+		expense.setAddItems(true);
+		expense.setCreated(timeNow);
+		expense.setCreatedBy(createdBy);
+		expense.setCurrency(Currency.INR);
+		expense.setMerchant(merchant);
+		expense.setOrderDate(subs.getCreated());
+		expense.setOrderId(subs.getSubscriptionCode());
+		expense.setPayAmount(subs.getPayAmount());
+		expense.setTotal(subs.getTotal());
+		expense.setTotalPrice(subs.getPayAmount());
+		expense.setShipping(new BigDecimal(0));
+		expense.setDiscount(new BigDecimal(0));
+		ExpenseItem item = new ExpenseItem();
+		Asset asset = new Asset();
+		asset.setCode(subs.getPricing().getName());
+		asset.setName(subs.getPricing().getName());
+		asset.setHsnsac(adset.getHsnsac());
+		asset.setRate(subs.getPricing().getRate());
+		asset.setTax(adset.getTax());
+		asset.setDescription(subs.getPricing().getDescription());
+		item.setAsset(asset);
+		item.setPrice(subs.getPayAmount());
+		item.setQuantity(subs.getQuantity());
+		item.setTax(adset.getTax());
+		List<ExpenseItem> itemList = new ArrayList<ExpenseItem>();
+		itemList.add(item);
+		expense.setItems(itemList);
+		Supplier supplier = new Supplier();
+		supplier.setName(company.getName());
+		supplier.setEmail(company.getEmail());
+		supplier.setMobile(company.getMobile());
+		supplier.setGstin(adset.getGstin());
+		Address addr = new Address();
+		addr.setAddressLine1(adset.getAddress().getAddressLine1());
+		addr.setAddressLine2(adset.getAddress().getAddressLine2());
+		addr.setCity(adset.getAddress().getCity());
+		addr.setCountry(adset.getAddress().getCountry());
+		addr.setDistrict(adset.getAddress().getDistrict());
+		addr.setPincode(adset.getAddress().getPincode());
+		supplier.setAddress(addr);
+		expense.setSupplier(supplier);
+		expVal.validate(expense);
+		expRepo.save(expense);
+		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense created", true, createdBy);
+		ExpensePayment expPay = new ExpensePayment();
+		expPay.setBank(subs.getBank());
+		expPay.setCreated(timeNow);
+		expPay.setStatus("captured");
+		expPay.setAmount(expense.getPayAmount());
+		expPay.setPayType(PayType.SALE);
+		expPay.setExpenseCode(expense.getExpenseCode());
+		expPay.setMethod(subs.getMethod());
+		expPay.setPaymentRefNo(subs.getPaymentRefNo());
+		expPay.setPayMode(subs.getPayMode());
+		expPay.setMerchant(merchant);
+		expense.setPayment(expPay);
+		expense.setStatus(ExpenseStatus.PAID);
+		expRepo.save(expense);
+		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense marked paid", true, createdBy);
 	}
 
 	public File downloadPdf(String subscriptionCode) throws IOException {
