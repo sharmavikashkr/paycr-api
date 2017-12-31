@@ -72,7 +72,7 @@ public class ExpenseReceiptService {
 		ModelAndView mv = new ModelAndView("receipt/expense");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("taxes", taxes);
-		mv.addObject("invoice", expense);
+		mv.addObject("expense", expense);
 		return mv;
 	}
 

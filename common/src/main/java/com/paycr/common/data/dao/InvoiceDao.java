@@ -84,7 +84,7 @@ public class InvoiceDao {
 			}
 			return query.getResultList();
 		} else {
-			StringBuilder squery = new StringBuilder("SELECT i.invoice FROM Item i WHERE");
+			StringBuilder squery = new StringBuilder("SELECT i.invoice FROM InvoiceItem i WHERE");
 			squery.append(" i.inventory.code = :itemCode AND");
 			if (!CommonUtil.isNull(merchant)) {
 				squery.append(" i.invoice.merchant = :merchant AND");

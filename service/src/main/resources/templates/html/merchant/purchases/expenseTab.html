@@ -25,6 +25,14 @@
 						<tr>
 							<td>
 								<div class="form-group">
+									<label class="control-label">Order Id</label>
+									<input class="form-control" ng-model="searchExpenseReq.orderId" placeholder="orderId" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group">
 									<label class="control-label">Expense Status</label>
 									<select class="form-control" ng-model="searchExpenseReq.expenseStatus">
 										<option ng-repeat="expenseStatus in expenseStatuses" value="{{expenseStatus}}">{{expenseStatus}}</option>

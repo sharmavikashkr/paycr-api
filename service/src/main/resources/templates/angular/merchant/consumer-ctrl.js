@@ -277,7 +277,7 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#editAddressModal')).modal('hide');
+		angular.element(document.querySelector('#editConAddressModal')).modal('hide');
 	}
 	$scope.updateInvoiceConsumer = function(consumer) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);

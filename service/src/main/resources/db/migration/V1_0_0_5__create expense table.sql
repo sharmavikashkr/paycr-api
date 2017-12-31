@@ -30,6 +30,8 @@ CREATE TABLE if not exists pc_expense(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	expense_code varchar(20) NOT NULL,
+	order_id varchar(30) NOT NULL,
+	order_date timestamp NOT NULL,
 	total float NOT NULL,
 	shipping float DEFAULT NULL,
 	discount float DEFAULT NULL,

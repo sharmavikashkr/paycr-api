@@ -99,6 +99,7 @@ public class ExpenseService {
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
 		payment.setStatus("captured");
+		payment.setAmount(expense.getPayAmount());
 		payment.setPayType(PayType.SALE);
 		payment.setExpenseCode(expense.getExpenseCode());
 		payment.setMerchant(merchant);

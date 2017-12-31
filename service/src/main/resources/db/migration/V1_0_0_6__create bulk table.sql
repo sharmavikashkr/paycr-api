@@ -31,3 +31,19 @@ CREATE TABLE if not exists pc_bulk_inventory_upload (
 	created_by varchar(50) NOT NULL,
     merchant_id int REFERENCES pc_merchant
 );
+
+CREATE TABLE if not exists pc_bulk_supplier_upload (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	file_name varchar(20) NOT NULL,
+	created_by varchar(50) NOT NULL,
+    merchant_id int REFERENCES pc_merchant
+);
+
+CREATE TABLE if not exists pc_bulk_asset_upload (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	file_name varchar(20) NOT NULL,
+	created_by varchar(50) NOT NULL,
+    merchant_id int REFERENCES pc_merchant
+);

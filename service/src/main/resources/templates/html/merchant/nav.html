@@ -82,7 +82,7 @@
 			<li class="header">MAIN NAVIGATION</li>
 			<li ng-if="user.access.admin" class="active" ng-click="loadDashboard()"><a href="#" data-target="#dashboardTab" data-toggle="tab"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
 			<li ng-class="(user.access.admin)?'':'active'" ng-click="searchInvoice()"><a href="#" data-target="#salesTab" data-toggle="tab"><i class="fa fa-shopping-bag"></i><span>Sales</span></a></li>
-			<li><a href="#" data-target="#purchasesTab" data-toggle="tab"><i class="fa fa-shopping-cart"></i><span>Purchases</span><span class="pull-right-container"><small class="label pull-right bg-green">coming soon</small></span></a></li>
+			<li ng-click="searchExpense()"><a href="#" data-target="#purchasesTab" data-toggle="tab"><i class="fa fa-shopping-cart"></i><span>Purchases</span><span class="pull-right-container"><small class="label pull-right bg-green">coming soon</small></span></a></li>
 			<li ng-if="user.access.ops" ng-click="fetchReports()"><a href="#" data-target="#reportsTab" data-toggle="tab"><i class="fa fa-print"></i><span>Reports</span></a></li>
 			<li class="header"></li>
 			<li ng-if="user.access.finance" ng-click="fetchPricings()"><a href="#" data-target="#subscriptionTab" data-toggle="tab"><i class="fa fa-recycle"></i><span>Subscriptions</span></a></li>

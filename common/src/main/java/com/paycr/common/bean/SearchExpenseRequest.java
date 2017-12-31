@@ -11,6 +11,7 @@ public class SearchExpenseRequest {
 
 	private Integer merchant;
 	private String expenseCode;
+	private String orderId;
 	private String email;
 	private String mobile;
 	private BigDecimal amount;
@@ -93,6 +94,14 @@ public class SearchExpenseRequest {
 
 	public void setCreatedTo(Date createdTo) {
 		this.createdTo = createdTo;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 }

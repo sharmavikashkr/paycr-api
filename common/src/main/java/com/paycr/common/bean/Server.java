@@ -18,8 +18,14 @@ public class Server {
 	@Value("${bulk.consumer.location}")
 	private String bulkConsumerLocation;
 
+	@Value("${bulk.supplier.location}")
+	private String bulkSupplierLocation;
+
 	@Value("${bulk.inventory.location}")
 	private String bulkInventoryLocation;
+
+	@Value("${bulk.asset.location}")
+	private String bulkAssetLocation;
 
 	@Value("${report.pdf.location}")
 	private String reportLocation;
@@ -125,6 +131,22 @@ public class Server {
 
 	public void setExpenseLocation(String expenseLocation) {
 		this.expenseLocation = expenseLocation;
+	}
+
+	public String getBulkSupplierLocation() {
+		return bulkSupplierLocation;
+	}
+
+	public void setBulkSupplierLocation(String bulkSupplierLocation) {
+		this.bulkSupplierLocation = bulkSupplierLocation;
+	}
+
+	public String getBulkAssetLocation() {
+		return bulkAssetLocation;
+	}
+
+	public void setBulkAssetLocation(String bulkAssetLocation) {
+		this.bulkAssetLocation = bulkAssetLocation;
 	}
 
 }

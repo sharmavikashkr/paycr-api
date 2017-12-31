@@ -29,11 +29,14 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				squery.append(" i.expenseCode = :expenseCode AND");
 			}
+			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
+				squery.append(" i.orderId = :orderId AND");
+			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" i.consumer.email = :email AND");
+				squery.append(" i.supplier.email = :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" i.consumer.mobile = :mobile AND");
+				squery.append(" i.supplier.mobile = :mobile AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				squery.append(" i.payAmount = :amount AND");
@@ -54,6 +57,9 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				query.setParameter("expenseCode", searchReq.getExpenseCode());
 			}
+			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
+				query.setParameter("orderId", searchReq.getOrderId());
+			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
 				query.setParameter("email", searchReq.getEmail());
 			}
@@ -72,7 +78,7 @@ public class ExpenseDao {
 			}
 			return query.getResultList();
 		} else {
-			StringBuilder squery = new StringBuilder("SELECT i.expense FROM Item i WHERE");
+			StringBuilder squery = new StringBuilder("SELECT i.expense FROM ExpenseItem i WHERE");
 			squery.append(" i.asset.code = :itemCode AND");
 			if (!CommonUtil.isNull(merchant)) {
 				squery.append(" i.expense.merchant = :merchant AND");
@@ -80,11 +86,14 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				squery.append(" i.expense.expenseCode = :expenseCode AND");
 			}
+			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
+				squery.append(" i.orderId = :orderId AND");
+			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" i.expense.consumer.email = :email AND");
+				squery.append(" i.expense.supplier.email = :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" i.expense.consumer.mobile = :mobile AND");
+				squery.append(" i.expense.supplier.mobile = :mobile AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				squery.append(" i.expense.payAmount = :amount AND");
@@ -105,6 +114,9 @@ public class ExpenseDao {
 			}
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				query.setParameter("expenseCode", searchReq.getExpenseCode());
+			}
+			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
+				query.setParameter("orderId", searchReq.getOrderId());
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
 				query.setParameter("email", searchReq.getEmail());

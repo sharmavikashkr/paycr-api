@@ -85,7 +85,7 @@
 											</button>
 											<button title="Search Expense" type="button"
 												class="btn btn-flat btn-success btn-md"
-												ng-click="seachConExpense(supplier)"
+												ng-click="seachSupExpense(supplier)"
 												data-target="#expenseTab"
 												data-toggle="tab">
 												<i class="fa fa-search"></i>
@@ -99,13 +99,13 @@
 												<div class="box-header with-border">
 													<h5 class="box-title">Supplier Settings</h5>
 													<div class="box-tools pull-right">
-														<button ng-if="user.access.finance" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editConPrefs = !$parent.editConPrefs" title="Edit Settings">
+														<button ng-if="user.access.finance" class="btn btn-flat btn-xs btn-warning" ng-click="$parent.editSupPrefs = !$parent.editSupPrefs" title="Edit Settings">
 															<i class="fa fa-pencil"></i>
 														</button>
 													</div>
 												</div>
 												<div class="box-body">
-													<fieldset ng-disabled="!editConPrefs">
+													<fieldset ng-disabled="!editSupPrefs">
 														<table class="table table-striped table-bordered table-responsive">
 															<tbody>
 																<tr>
@@ -117,14 +117,6 @@
 																	<td><input class="form-control" ng-model="supplier.gstin"/></td>
 																</tr>
 																<tr>
-																	<td><strong>Email On Pay</strong></td>
-																	<td><input ng-model="supplier.emailOnPay" type="checkbox"/></td>
-																</tr>
-																<tr>
-																	<td><strong>Email On Refund</strong></td>
-																	<td><input ng-model="supplier.emailOnRefund" type="checkbox"/></td>
-																</tr>
-																<tr>
 																	<td><strong>Active</strong></td>
 																	<td><input ng-model="supplier.active" type="checkbox"/></td>
 																</tr>
@@ -132,7 +124,7 @@
 														</table>
 													</fieldset>
 												</div>
-												<div ng-if="editConPrefs" class="box-footer">
+												<div ng-if="editSupPrefs" class="box-footer">
 									            	<div class="input-group">
 									                	<span class="input-group-btn">
 								                        	<button type="button" ng-click="updateSupplier(supplier)" class="btn btn-info">Save</button>
@@ -152,12 +144,12 @@
 													</div>
 												</div>
 												<div class="box-body">
-													<p ng-if="supplier.billingAddress != null">
-														{{supplier.billingAddress.addressLine1}},<br>
-														{{supplier.billingAddress.addressLine2}},<br>
-														{{supplier.billingAddress.city}},<br>
-														{{supplier.billingAddress.district}}, {{supplier.billingAddress.state}} - {{supplier.billingAddress.pincode}},<br>
-														{{supplier.billingAddress.country}}
+													<p ng-if="supplier.address != null">
+														{{supplier.address.addressLine1}},<br>
+														{{supplier.address.addressLine2}},<br>
+														{{supplier.address.city}},<br>
+														{{supplier.address.district}}, {{supplier.address.state}} - {{supplier.address.pincode}},<br>
+														{{supplier.address.country}}
 													</p>
 												</div>
 											</div>

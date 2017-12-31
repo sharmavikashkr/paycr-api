@@ -50,6 +50,19 @@
 									<input type="checkbox" ng-change="calculateTotal()" ng-model="saveexpense.addItems">&nbsp;<strong>Add Items</strong><br>
 								</div>
 							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">Order Params</div>
+								<div class="panel-body">
+									<div ng-class="(createExpenseForm.orderId.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Order Id:</label>
+										<input ng-model="saveexpense.orderId" name="orderId" autocomplete="off" class="form-control" placeholder="Order Id" type="text" ng-pattern="patterns.paramNamePattern" required />
+									</div>
+									<div ng-class="(createExpenseForm.orderDate.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Order Date:</label>
+										<md-datepicker ng-model="saveexpense.orderDate"></md-datepicker>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="row">

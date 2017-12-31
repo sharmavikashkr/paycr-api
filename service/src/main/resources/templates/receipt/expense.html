@@ -1,0 +1,185 @@
+<html>
+<head>
+	<title>PayCr</title>
+	<link rel="shortcut icon" href="${staticUrl}/images/ico/favicon.png">
+    <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${staticUrl}/dist/css/AdminLTE.min.css" rel="stylesheet">
+    <script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
+    <style type="text/css">
+    	table {
+			font-size: 14px;
+		}
+    </style>
+</head>
+<body>
+	<section class="invoice">
+		<div id="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<h2 class="page-header">
+						Expense Receipt <small class="pull-right"><b>Date:</b> ${expense.created}</small>
+					</h2>
+				</div>
+			</div>
+			<div class="row expense-info">
+				<div class="col-sm-4 expense-col">
+					<b>Expense#</b> ${expense.expenseCode}
+				</div>
+				<div class="col-sm-4 expense-col">
+					<b>Expense Date:</b> ${expense.created?date}
+				</div>
+				<div class="col-sm-4 expense-col">
+					<b>Payment Due:</b> ${expense.orderDate?date}
+				</div>
+			</div>
+			<hr>
+			<div class="row expense-info">
+				<div class="col-sm-4 expense-col">
+					<#if expense.supplier??>
+					<u>From</u>
+					<address>
+						<strong><i class="fa fa-user"></i> ${expense.supplier.name}</strong>
+						<#if expense.supplier.billingAddress??>
+						<br>${expense.supplier.billingAddress.addressLine1}
+						<br><#if expense.supplier.billingAddress.addressLine2??>${expense.supplier.billingAddress.addressLine2}</#if>
+						<br>${expense.supplier.billingAddress.city}, ${expense.supplier.billingAddress.district}
+						<br>${expense.supplier.billingAddress.state}, ${expense.supplier.billingAddress.pincode}
+						<br>${expense.supplier.billingAddress.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${expense.supplier.mobile}
+						<br><i class="fa fa-envelope"></i> ${expense.supplier.email}
+						<#if expense.supplier.gstin??>
+						<br><b>GSTIN: </b>${expense.supplier.gstin}
+						</#if>
+					</address>
+					</#if>
+				</div>
+				<div class="col-sm-4 expense-col">
+					<u>Billed To</u>
+					<address>
+						<strong><i class="fa fa-institution"></i> ${expense.merchant.name}</strong>
+						<#if expense.merchant.address??>
+						<br>${expense.merchant.address.addressLine1}
+						<br><#if expense.merchant.address.addressLine2??>${expense.merchant.address.addressLine2}</#if>
+						<br>${expense.merchant.address.city}, ${expense.merchant.address.district}
+						<br>${expense.merchant.address.state}, ${expense.merchant.address.pincode}
+						<br>${expense.merchant.address.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${expense.merchant.mobile}
+						<br><i class="fa fa-envelope"></i> ${expense.merchant.email}
+						<#if expense.merchant.gstin??>
+						<br><b>GSTIN: </b>${expense.merchant.gstin}
+						</#if>
+					</address>
+				</div>
+				<div class="col-sm-4 expense-col">
+					<u>Shipped To</u>
+					<address>
+						<strong><i class="fa fa-institution"></i> ${expense.merchant.name}</strong>
+						<#if expense.merchant.address??>
+						<br>${expense.merchant.address.addressLine1}
+						<br><#if expense.merchant.address.addressLine2??>${expense.merchant.address.addressLine2}</#if>
+						<br>${expense.merchant.address.city}, ${expense.merchant.address.district}
+						<br>${expense.merchant.address.state}, ${expense.merchant.address.pincode}
+						<br>${expense.merchant.address.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${expense.merchant.mobile}
+						<br><i class="fa fa-envelope"></i> ${expense.merchant.email}
+					</address>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>HSN/SAC</th>
+								<th>Rate</th>
+								<th>Qty</th>
+								<th>Tax</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<#list expense.items as item>
+							<tr>
+								<td>${item.asset.name}<#if item.asset.description??><br><small>(${item.asset.description})</small></#if></td>
+								<td><#if item.asset.hsnsac??> ${item.asset.hsnsac}</#if></td>
+								<td><i class="fa fa-rupee"></i> ${item.asset.rate}</td>
+								<td>${item.quantity}</td>
+								<td>${item.tax.name} ${item.tax.value}%</td>
+								<td><i class="fa fa-rupee"></i> ${item.price}</td>
+							</tr>
+							</#list>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<!-- <p class="lead">Payment Methods:</p>
+					<img src="${staticUrl}/dist/img/credit/visa.png" alt="Visa">
+					<img src="${staticUrl}/dist/img/credit/mastercard.png" alt="Mastercard">
+					<img src="${staticUrl}/dist/img/credit/mestro.png" alt="Maestro">
+					<p class="text-muted well well-sm no-shadow"
+						style="margin-top: 10px;">Choose from many available option like CreditCard, DebitCard, NetBanking, 
+						Mobile Wallets, UPI, etc to pay your dues.</p> -->
+				</div>
+				<div class="col-xs-6">
+					<p class="lead">Amount Due by ${expense.orderDate?date}</p>
+	
+					<div class="table-responsive">
+						<table class="table">
+							<tr>
+								<th style="width: 50%">Total:</th>
+								<td><i class="fa fa-rupee"></i> ${expense.total}</td>
+							</tr>
+							<#list taxes as tax>
+							<tr>
+								<th>${tax.tax.name} (${tax.tax.value}%)</th>
+								<td>${tax.amount}</td>
+							</tr>
+							</#list>
+							<tr>
+								<th>Shipping:</th>
+								<td><i class="fa fa-rupee"></i> ${expense.shipping}</td>
+							</tr>
+							<tr>
+								<th>Discount:</th>
+								<td><i class="fa fa-rupee"></i> ${expense.discount}</td>
+							</tr>
+							<tr>
+								<th>Pay Amount:</th>
+								<td><i class="fa fa-rupee"></i> ${expense.payAmount}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row no-print">
+			<div class="col-xs-12">
+				<a onclick="printDiv()" class="btn btn-default">
+					<i class="fa fa-print"></i> Print
+				</a>
+				<a href="/expense/receipt/download/${expense.expenseCode}" class="btn btn-primary pull-right">
+					<i class="fa fa-download"></i> Generate PDF
+				</a>
+			</div>
+		</div>
+	</section>
+	<script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
+    <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+		function printDiv() {
+		     var printContents = document.getElementById('container').innerHTML;
+		     var originalContents = document.body.innerHTML;
+		     document.body.innerHTML = printContents;
+		     window.print();
+		     document.body.innerHTML = originalContents;
+		}
+	</script>
+</body>
+</html>

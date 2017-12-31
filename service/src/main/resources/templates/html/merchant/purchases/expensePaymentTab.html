@@ -71,7 +71,7 @@
 						<tr
 							ng-class="(payment.status=='captured')?'success':(payment.status=='refund')?'danger':'warning'"
 							data-toggle="collapse"
-							data-target="#paydetails-{{payment.id}}"
+							data-target="#exppaydetails-{{payment.id}}"
 							class="accordion-toggle">
 							<td class="hidden-xs">{{payment.expenseCode}}</td>
 							<td>{{payment.paymentRefNo}}</td>
@@ -81,7 +81,7 @@
 						</tr>
 						<tr>
 							<td colspan="12" style="padding: 0px; border: 0px;">
-								<div style="padding:10px;" class="accordion-body collapse" id="paydetails-{{payment.id}}">
+								<div style="padding:10px;" class="accordion-body collapse" id="exppaydetails-{{payment.id}}">
 									<div class="row">
 										<div class="col-md-12">
 											<button title="Search Expense" type="button"

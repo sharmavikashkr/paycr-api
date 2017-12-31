@@ -46,6 +46,23 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		} ]
 	}
 	$rootScope.saveinvoice = $rootScope.newinvoice;
+	$rootScope.newexpense = {
+		"expenseCode" : "",
+		"orderId" : "",
+		"orderDate" : dateNow,
+		"supplier" : {
+			"email" : "",
+			"mobile" : "",
+			"name" : ""
+		},
+		"items" : [],
+		"addItems" : true,
+		"total" : 0.00,
+		"discount" : 0,
+		"payAmount" : 0,
+		"currency" : "INR"
+	}
+	$rootScope.saveexpense = $rootScope.newexpense;
 	$rootScope.invoiceNotify = {}
 	$scope.dismissServerAlert = function() {
 		$scope.server.hideMessage = true;
@@ -145,6 +162,20 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}
 		$http(req).then(function(invoicestatuses) {
 			$rootScope.invoiceStatuses = invoicestatuses.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/expensestatuses",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(expensestatuses) {
+			$rootScope.expenseStatuses = expensestatuses.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
