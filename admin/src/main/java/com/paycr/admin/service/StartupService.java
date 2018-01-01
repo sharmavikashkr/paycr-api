@@ -21,6 +21,7 @@ import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.type.PricingType;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.CommonUtil;
@@ -78,29 +79,31 @@ public class StartupService {
 		payset.setRzpKeyId("");
 		payset.setRzpSecretId("");
 
-		TaxMaster noTax = createNoTaxMaster();
 		AdminSetting adset = new AdminSetting();
-		adset.setTax(noTax);
 		adset.setPaymentSetting(payset);
 
 		adsetRepo.save(adset);
 	}
 
 	public void createWelcomePricing() {
-		Pricing welcomePri = priRepo.findByNameAndActive("WELCOME", true);
+		Pricing welcomePri = priRepo.findByCodeAndActive("PPC-P-001", true);
 		if (CommonUtil.isNotNull(welcomePri)) {
 			return;
 		}
 		welcomePri = new Pricing();
+		welcomePri.setCode("PPC-P-001");
 		welcomePri.setActive(true);
 		welcomePri.setCreated(new Date());
 		welcomePri.setDescription("Welcome Plan");
 		welcomePri.setDuration(90);
-		welcomePri.setEndAmount(new BigDecimal(10000));
-		welcomePri.setInvoiceLimit(1000);
 		welcomePri.setName("WELCOME");
 		welcomePri.setRate(new BigDecimal(0));
 		welcomePri.setStartAmount(new BigDecimal(0));
+		welcomePri.setEndAmount(new BigDecimal(10000));
+		welcomePri.setInvoiceLimit(1000);
+		welcomePri.setType(PricingType.PUBLIC);
+		TaxMaster noTax = createNoTaxMaster();
+		welcomePri.setTax(noTax);
 		priRepo.save(welcomePri);
 	}
 

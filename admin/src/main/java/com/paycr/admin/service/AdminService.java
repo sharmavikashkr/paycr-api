@@ -53,9 +53,7 @@ public class AdminService {
 	public void saveSetting(AdminSetting setting) {
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		adset.setBanner(setting.getBanner());
-		adset.setTax(setting.getTax());
 		adset.setGstin(setting.getGstin());
-		adset.setHsnsac(setting.getHsnsac());
 		PaymentSetting payset = adset.getPaymentSetting();
 		payset.setRzpMerchantId(setting.getPaymentSetting().getRzpMerchantId());
 		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());
@@ -64,8 +62,8 @@ public class AdminService {
 	}
 
 	public void saveAddress(Address newAddr) {
-		if (CommonUtil.isNull(newAddr) || CommonUtil.isEmpty(newAddr.getAddressLine1()) || CommonUtil.isEmpty(newAddr.getCity())
-				|| CommonUtil.isEmpty(newAddr.getDistrict()) || CommonUtil.isEmpty(newAddr.getState())
+		if (CommonUtil.isNull(newAddr) || CommonUtil.isEmpty(newAddr.getAddressLine1())
+				|| CommonUtil.isEmpty(newAddr.getCity()) || CommonUtil.isEmpty(newAddr.getState())
 				|| CommonUtil.isEmpty(newAddr.getPincode()) || CommonUtil.isEmpty(newAddr.getCountry())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Address");
 		}
@@ -77,7 +75,6 @@ public class AdminService {
 		exstAddr.setAddressLine1(newAddr.getAddressLine1());
 		exstAddr.setAddressLine2(newAddr.getAddressLine2());
 		exstAddr.setCity(newAddr.getCity());
-		exstAddr.setDistrict(newAddr.getCity());
 		exstAddr.setState(newAddr.getState());
 		exstAddr.setPincode(newAddr.getPincode());
 		exstAddr.setCountry(newAddr.getCountry());

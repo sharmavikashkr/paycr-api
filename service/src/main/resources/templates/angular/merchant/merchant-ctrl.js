@@ -15,7 +15,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		"isSuccess" : true
 	}
 	$scope.patterns = {
-		"paramNamePattern" : "\\w{1,10}",
+		"paramNamePattern" : "[0-9a-zA-Z_\\-]{1,20}",
 		"namePattern" : "[0-9a-zA-Z_\\- ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",

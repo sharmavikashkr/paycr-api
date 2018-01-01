@@ -42,7 +42,7 @@
 						<#if invoice.merchant.address??>
 						<br>${invoice.merchant.address.addressLine1}
 						<br><#if invoice.merchant.address.addressLine2??>${invoice.merchant.address.addressLine2}</#if>
-						<br>${invoice.merchant.address.city}, ${invoice.merchant.address.district}
+						<br>${invoice.merchant.address.city}
 						<br>${invoice.merchant.address.state}, ${invoice.merchant.address.pincode}
 						<br>${invoice.merchant.address.country}
 						</#if>
@@ -61,7 +61,7 @@
 						<#if invoice.consumer.billingAddress??>
 						<br>${invoice.consumer.billingAddress.addressLine1}
 						<br><#if invoice.consumer.billingAddress.addressLine2??>${invoice.consumer.billingAddress.addressLine2}</#if>
-						<br>${invoice.consumer.billingAddress.city}, ${invoice.consumer.billingAddress.district}
+						<br>${invoice.consumer.billingAddress.city}
 						<br>${invoice.consumer.billingAddress.state}, ${invoice.consumer.billingAddress.pincode}
 						<br>${invoice.consumer.billingAddress.country}
 						</#if>
@@ -81,7 +81,7 @@
 						<#if invoice.consumer.shippingAddress??>
 						<br>${invoice.consumer.shippingAddress.addressLine1}
 						<br><#if invoice.consumer.shippingAddress.addressLine2??>${invoice.consumer.shippingAddress.addressLine2}</#if>
-						<br>${invoice.consumer.shippingAddress.city}, ${invoice.consumer.shippingAddress.district}
+						<br>${invoice.consumer.shippingAddress.city}
 						<br>${invoice.consumer.shippingAddress.state}, ${invoice.consumer.shippingAddress.pincode}
 						<br>${invoice.consumer.shippingAddress.country}
 						</#if>

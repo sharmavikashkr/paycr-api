@@ -13,6 +13,14 @@
 								<tbody>
 									<tr>
 										<td>
+											<div ng-class="(createPricingForm.code.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Code</label>
+												<input class="form-control" ng-model="newpricing.code" name="code" placeholder="Pricing Code" ng-pattern="patterns.paramNamePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
 											<div ng-class="(createPricingForm.name.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Name</label>
 												<input class="form-control" ng-model="newpricing.name" name="name" placeholder="Pricing Name" ng-pattern="patterns.namePattern" required />
@@ -24,6 +32,16 @@
 											<div ng-class="(createPricingForm.description.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Description</label>
 												<input class="form-control" ng-model="newpricing.description" name="description" placeholder="Pricing Description" ng-pattern="patterns.namePattern" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.type.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Pricing Type</label>
+												<select class="form-control" name="type" ng-model="newpricing.type">
+													<option ng-repeat="type in pricingTypes" value="{{type}}">{{type}}</option>
+												</select>
 											</div>
 										</td>
 									</tr>
@@ -73,6 +91,24 @@
 													<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
 													<input class="form-control" ng-model="newpricing.rate" name="rate" type="number" placeholder="Rate" ng-pattern="patterns.amountPattern" required />
 												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div class="form-group">
+												<label class="control-label">HSN/SAC</label>
+												<input class="form-control" ng-model="newpricing.hsnsac" />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.tax.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Tax</label>
+												<select class="form-control" name="tax" ng-model="newpricing.tax">
+													<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+												</select>
 											</div>
 										</td>
 									</tr>

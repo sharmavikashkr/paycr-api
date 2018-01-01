@@ -21,7 +21,6 @@ public class Address {
 	private String addressLine1;
 	private String addressLine2;
 	private String city;
-	private String district;
 	private String state;
 	private String country;
 	private String pincode;
@@ -51,14 +50,6 @@ public class Address {
 
 	public void setCity(String city) {
 		this.city = city;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
 	}
 
 	public String getState() {

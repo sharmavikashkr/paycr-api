@@ -42,7 +42,7 @@
 						<#if admin.address??>
 						<br>${admin.address.addressLine1}
 						<br><#if admin.address.addressLine2??>${admin.address.addressLine2}</#if>
-						<br>${admin.address.city}, ${admin.address.district}
+						<br>${admin.address.city}
 						<br>${admin.address.state}, ${admin.address.pincode}
 						<br>${admin.address.country}
 						</#if>
@@ -60,7 +60,7 @@
 						<#if subs.merchant.address??>
 						<br>${subs.merchant.address.addressLine1}
 						<br><#if subs.merchant.address.addressLine2??>${subs.merchant.address.addressLine2}</#if>
-						<br>${subs.merchant.address.city}, ${subs.merchant.address.district}
+						<br>${subs.merchant.address.city}
 						<br>${subs.merchant.address.state}, ${subs.merchant.address.pincode}
 						<br>${subs.merchant.address.country}
 						</#if>
@@ -78,7 +78,7 @@
 						<#if subs.merchant.address??>
 						<br>${subs.merchant.address.addressLine1}
 						<br><#if subs.merchant.address.addressLine2??>${subs.merchant.address.addressLine2}</#if>
-						<br>${subs.merchant.address.city}, ${subs.merchant.address.district}
+						<br>${subs.merchant.address.city}
 						<br>${subs.merchant.address.state}, ${subs.merchant.address.pincode}
 						<br>${subs.merchant.address.country}
 						</#if>
@@ -103,7 +103,7 @@
 						<tbody>
 							<tr>
 								<td>${subs.pricing.name} Pricing Plan<br><small>(${subs.pricing.description})</small></td>
-								<td><#if admin.hsnsac??> ${admin.hsnsac}</#if></td>
+								<td><#if subs.pricing.hsnsac??> ${subs.pricing.hsnsac}</#if></td>
 								<td><i class="fa fa-rupee"></i> ${subs.pricing.rate}</td>
 								<td>${subs.quantity}</td>
 								<td>${subs.tax.name} ${subs.tax.value}%</td>

@@ -185,7 +185,7 @@ public class ConsumerService {
 				record[i] = consumer[i];
 			}
 			String reason = "Invalid format";
-			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 6 || consumer.length == 13) {
+			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 6 || consumer.length == 12) {
 				try {
 					Consumer con = new Consumer();
 					con.setName(consumer[0].trim());
@@ -207,10 +207,9 @@ public class ConsumerService {
 						billAddr.setAddressLine1(consumer[6].trim());
 						billAddr.setAddressLine2(consumer[7].trim());
 						billAddr.setCity(consumer[8].trim());
-						billAddr.setDistrict(consumer[9].trim());
-						billAddr.setState(consumer[10].trim());
-						billAddr.setPincode(consumer[11].trim());
-						billAddr.setCountry(consumer[12].trim());
+						billAddr.setState(consumer[9].trim());
+						billAddr.setPincode(consumer[10].trim());
+						billAddr.setCountry(consumer[11].trim());
 						validateAddress(billAddr);
 						con.setBillingAddress(billAddr);
 					}
@@ -269,7 +268,6 @@ public class ConsumerService {
 		address.setAddressLine1(addr.getAddressLine1());
 		address.setAddressLine2(addr.getAddressLine2());
 		address.setCity(addr.getCity());
-		address.setDistrict(addr.getDistrict());
 		address.setState(addr.getState());
 		address.setCountry(addr.getCountry());
 		address.setPincode(addr.getPincode());
@@ -278,8 +276,8 @@ public class ConsumerService {
 
 	private void validateAddress(Address addr) {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
-				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
-				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
+				|| CommonUtil.isEmpty(addr.getCountry())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Address");
 		}
 	}

@@ -43,7 +43,7 @@
 						<#if expense.supplier.address??>
 						<br>${expense.supplier.address.addressLine1}
 						<br><#if expense.supplier.address.addressLine2??>${expense.supplier.address.addressLine2}</#if>
-						<br>${expense.supplier.address.city}, ${expense.supplier.address.district}
+						<br>${expense.supplier.address.city}
 						<br>${expense.supplier.address.state}, ${expense.supplier.address.pincode}
 						<br>${expense.supplier.address.country}
 						</#if>
@@ -62,7 +62,7 @@
 						<#if expense.merchant.address??>
 						<br>${expense.merchant.address.addressLine1}
 						<br><#if expense.merchant.address.addressLine2??>${expense.merchant.address.addressLine2}</#if>
-						<br>${expense.merchant.address.city}, ${expense.merchant.address.district}
+						<br>${expense.merchant.address.city}
 						<br>${expense.merchant.address.state}, ${expense.merchant.address.pincode}
 						<br>${expense.merchant.address.country}
 						</#if>
@@ -80,7 +80,7 @@
 						<#if expense.merchant.address??>
 						<br>${expense.merchant.address.addressLine1}
 						<br><#if expense.merchant.address.addressLine2??>${expense.merchant.address.addressLine2}</#if>
-						<br>${expense.merchant.address.city}, ${expense.merchant.address.district}
+						<br>${expense.merchant.address.city}
 						<br>${expense.merchant.address.state}, ${expense.merchant.address.pincode}
 						<br>${expense.merchant.address.country}
 						</#if>

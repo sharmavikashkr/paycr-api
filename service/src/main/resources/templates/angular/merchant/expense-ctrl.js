@@ -114,7 +114,7 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 	$scope.updateExpenseInfo = function(expense) {
 		$rootScope.expenseInfo = angular.copy(expense);
 	}
-	$scope.updateSaveExpense = function(expense) {
+	$rootScope.updateSaveExpense = function(expense) {
 		$rootScope.saveexpense = angular.copy(expense);
 		if(expense.id != null) {
 			$rootScope.saveexpense.update = true;

@@ -8,27 +8,33 @@
 	</div>
 	<div class="panel-body">
 		<div class="text-center">
-			<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-12">
 				<table class="table table-striped table-bordered table-hover table-responsive">
 					<thead>
 						<tr>
+							<th class="text-center">Code</th>
 							<th class="text-center">Name</th>
 							<th class="text-center hidden-xs">Duration</th>
 							<th class="text-center">Rate</th>
 							<th class="text-center hidden-xs">Invoice Limit</th>
 							<th class="text-center hidden-xs">Start Amount</th>
 							<th class="text-center hidden-xs">End Amount</th>
+							<th class="text-center hidden-xs">HSN/SAC</th>
+							<th class="text-center hidden-xs">Tax</th>
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-class="(pricing.active)?'success':'warning'" ng-repeat="pricing in pricings" title="ACTIVE = {{pricing.active}}">
+							<td>{{pricing.code}}</td>
 							<td>{{pricing.name}}</td>
 							<td class="hidden-xs">{{pricing.duration}}</td>
 							<td><i class="fa fa-rupee"></i> {{pricing.rate}}</td>
 							<td class="hidden-xs">{{pricing.invoiceLimit}}</td>
 							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.startAmount}}</td>
 							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.endAmount}}</td>
+							<td class="hidden-xs">{{pricing.hsnsac}}</td>
+							<td class="hidden-xs">{{pricing.tax.name}} {{pricing.tax.value}}%</td>
 							<td ng-if="pricing.active">
 								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
 							</td>

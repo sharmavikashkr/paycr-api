@@ -112,11 +112,10 @@ public class SubscriptionService {
 		Date timeNow = new Date();
 		Merchant merchant = merRepo.findOne(offline.getMerchantId());
 		Pricing pricing = priRepo.findOne(offline.getPricingId());
-		AdminSetting adset = adsetRepo.findAll().get(0);
 		Subscription subs = new Subscription();
 		BigDecimal total = pricing.getRate().multiply(new BigDecimal(offline.getQuantity()));
 		subs.setTotal(total);
-		subs.setTax(adset.getTax());
+		subs.setTax(pricing.getTax());
 		BigDecimal payAmount = total
 				.add(total.multiply(new BigDecimal(subs.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
@@ -148,7 +147,7 @@ public class SubscriptionService {
 		merPricing.setMerchant(merchant);
 		merPricing.setSubscription(subs);
 		merPriRepo.save(merPricing);
-		addToExpense(merchant, subs, "SYSTEM");
+		addToExpense(merchant, subs);
 	}
 
 	public ModelAndView onlineSubscription(Integer pricingId, Integer quantity, Merchant merchant) {
@@ -162,9 +161,9 @@ public class SubscriptionService {
 		Subscription subs = new Subscription();
 		BigDecimal total = pricing.getRate().multiply(new BigDecimal(quantity));
 		subs.setTotal(total);
-		subs.setTax(adset.getTax());
+		subs.setTax(pricing.getTax());
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(adset.getTax().getValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(new BigDecimal(pricing.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setPayMode(PayMode.PAYCR);
@@ -243,12 +242,16 @@ public class SubscriptionService {
 			noti.setRead(false);
 			notiRepo.save(noti);
 
-			addToExpense(merchant, subs, "SYSTEM");
+			addToExpense(merchant, subs);
 		}
 		return subs;
 	}
 
-	private void addToExpense(Merchant merchant, Subscription subs, String createdBy) {
+	private void addToExpense(Merchant merchant, Subscription subs) {
+		if(subs.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+			return;
+		}
+		String createdBy = "SYSTEM";
 		Date timeNow = new Date();
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		Expense expense = new Expense();
@@ -266,16 +269,17 @@ public class SubscriptionService {
 		expense.setDiscount(new BigDecimal(0));
 		ExpenseItem item = new ExpenseItem();
 		Asset asset = new Asset();
-		asset.setCode(subs.getPricing().getName());
+		asset.setCode(subs.getPricing().getCode());
 		asset.setName(subs.getPricing().getName());
-		asset.setHsnsac(adset.getHsnsac());
+		asset.setDescription(subs.getPricing().getDescription());
+		asset.setHsnsac(subs.getPricing().getHsnsac());
 		asset.setRate(subs.getPricing().getRate());
-		asset.setTax(adset.getTax());
+		asset.setTax(subs.getPricing().getTax());
 		asset.setDescription(subs.getPricing().getDescription());
 		item.setAsset(asset);
 		item.setPrice(subs.getPayAmount());
 		item.setQuantity(subs.getQuantity());
-		item.setTax(adset.getTax());
+		item.setTax(subs.getPricing().getTax());
 		List<ExpenseItem> itemList = new ArrayList<ExpenseItem>();
 		itemList.add(item);
 		expense.setItems(itemList);
@@ -288,9 +292,9 @@ public class SubscriptionService {
 		addr.setAddressLine1(adset.getAddress().getAddressLine1());
 		addr.setAddressLine2(adset.getAddress().getAddressLine2());
 		addr.setCity(adset.getAddress().getCity());
-		addr.setCountry(adset.getAddress().getCountry());
-		addr.setDistrict(adset.getAddress().getDistrict());
+		addr.setState(adset.getAddress().getState());
 		addr.setPincode(adset.getAddress().getPincode());
+		addr.setCountry(adset.getAddress().getCountry());
 		supplier.setAddress(addr);
 		expense.setSupplier(supplier);
 		expVal.validate(expense);

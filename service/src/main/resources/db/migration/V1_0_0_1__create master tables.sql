@@ -3,7 +3,6 @@ CREATE TABLE if not exists pc_address (
     address_line1 varchar(255) DEFAULT NULL,
     address_line2 varchar(255) DEFAULT NULL,
     city varchar(30) DEFAULT NULL,
-    district varchar(30) DEFAULT NULL,
     state varchar(50) DEFAULT NULL,
     country varchar(50) DEFAULT NULL,
     pincode varchar(10) DEFAULT NULL
@@ -28,9 +27,7 @@ CREATE TABLE if not exists pc_payment_setting (
 CREATE TABLE if not exists pc_admin_setting (
 	id SERIAL PRIMARY KEY NOT NULL,
 	gstin varchar(50) DEFAULT NULL,
-	hsnsac varchar(10) DEFAULT NULL,
 	banner varchar(20) DEFAULT NULL,
-	tax_id int REFERENCES pc_tax_master,
 	address_id int REFERENCES pc_address,
 	payment_setting_id int REFERENCES pc_payment_setting
 );

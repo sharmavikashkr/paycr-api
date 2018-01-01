@@ -45,16 +45,6 @@
 							<label class="control-label">GSTIN</label>
 							<input class="form-control" ng-model="adminSetting.gstin" />
 						</div>
-						<div class="form-group">
-							<label class="control-label">HSN/SAC</label>
-							<input class="form-control" ng-model="adminSetting.hsnsac" />
-						</div>
-						<div class="form-group">
-							<label class="control-label">Tax</label>
-							<select class="form-control" ng-model="adminSetting.tax">
-								<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
-							</select>
-						</div>
 					</fieldset>
 				</div>
 				<div ng-if="editAdminSets" class="box-footer">
@@ -81,7 +71,7 @@
 						{{adminSetting.address.addressLine1}},<br>
 						{{adminSetting.address.addressLine2}},<br>
 						{{adminSetting.address.city}},<br>
-						{{adminSetting.address.district}}, {{adminSetting.address.state}} - {{adminSetting.address.pincode}},<br>
+						{{adminSetting.address.state}} - {{adminSetting.address.pincode}},<br>
 						{{adminSetting.address.country}}
 					</p>
 				</div>

@@ -14,7 +14,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		"isSuccess" : true
 	}
 	$scope.patterns = {
-		"paramNamePattern" : "\\w{1,10}",
+		"paramNamePattern" : "[0-9a-zA-Z_\\-]{1,20}",
 		"namePattern" : "[0-9a-zA-Z_\\- ]{1,50}",
 		"emailPattern" : "([a-zA-Z0-9_.]{1,})((@[a-zA-Z]{2,})[\\\.]([a-zA-Z]{2}|[a-zA-Z]{3}))",
 		"mobilePattern" : "\\d{10}",
@@ -77,6 +77,20 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		}
 		$http(req).then(function(usertypes) {
 			$rootScope.userTypes = usertypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/pricingtypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(pricingtypes) {
+			$rootScope.pricingTypes = pricingtypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

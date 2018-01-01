@@ -128,7 +128,7 @@ public class RegisterService {
 		notiRepo.save(noti);
 
 		if (enableWelcome) {
-			Pricing welcomePricing = pricingRepo.findByNameAndActive("WELCOME", true);
+			Pricing welcomePricing = pricingRepo.findByCodeAndActive("PPC-P-001", true);
 			if (welcomePricing == null) {
 				return;
 			}

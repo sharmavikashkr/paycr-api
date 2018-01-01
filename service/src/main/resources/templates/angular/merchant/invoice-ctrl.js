@@ -114,7 +114,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.updateInvoiceInfo = function(invoice) {
 		$rootScope.invoiceInfo = angular.copy(invoice);
 	}
-	$scope.updateSaveInvoice = function(invoice) {
+	$rootScope.updateSaveInvoice = function(invoice) {
 		$rootScope.saveinvoice = angular.copy(invoice);
 		if(invoice.id != null) {
 			$rootScope.saveinvoice.update = true;

@@ -93,7 +93,7 @@ public class SupplierService {
 				record[i] = supplier[i];
 			}
 			String reason = "Invalid format";
-			if (supplier.length == 3 || supplier.length == 4 || supplier.length == 11) {
+			if (supplier.length == 3 || supplier.length == 4 || supplier.length == 10) {
 				try {
 					Supplier con = new Supplier();
 					con.setName(supplier[0].trim());
@@ -107,10 +107,9 @@ public class SupplierService {
 						billAddr.setAddressLine1(supplier[4].trim());
 						billAddr.setAddressLine2(supplier[5].trim());
 						billAddr.setCity(supplier[6].trim());
-						billAddr.setDistrict(supplier[7].trim());
-						billAddr.setState(supplier[8].trim());
-						billAddr.setPincode(supplier[9].trim());
-						billAddr.setCountry(supplier[10].trim());
+						billAddr.setState(supplier[7].trim());
+						billAddr.setPincode(supplier[8].trim());
+						billAddr.setCountry(supplier[9].trim());
 						validateAddress(billAddr);
 						con.setAddress(billAddr);
 					}
@@ -159,7 +158,6 @@ public class SupplierService {
 		address.setAddressLine1(addr.getAddressLine1());
 		address.setAddressLine2(addr.getAddressLine2());
 		address.setCity(addr.getCity());
-		address.setDistrict(addr.getDistrict());
 		address.setState(addr.getState());
 		address.setCountry(addr.getCountry());
 		address.setPincode(addr.getPincode());
@@ -168,8 +166,8 @@ public class SupplierService {
 
 	private void validateAddress(Address addr) {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
-				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
-				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
+				|| CommonUtil.isEmpty(addr.getCountry())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Address");
 		}
 	}

@@ -60,8 +60,8 @@ public class UserService {
 
 	public PcUser saveAddress(PcUser user, Address addr) {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
-				|| CommonUtil.isEmpty(addr.getDistrict()) || CommonUtil.isEmpty(addr.getState())
-				|| CommonUtil.isEmpty(addr.getPincode()) || CommonUtil.isEmpty(addr.getCountry())) {
+				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
+				|| CommonUtil.isEmpty(addr.getCountry())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Address");
 		}
 		Address address = user.getAddress();
@@ -71,7 +71,6 @@ public class UserService {
 		address.setAddressLine1(addr.getAddressLine1());
 		address.setAddressLine2(addr.getAddressLine2());
 		address.setCity(addr.getCity());
-		address.setDistrict(addr.getDistrict());
 		address.setState(addr.getState());
 		address.setCountry(addr.getCountry());
 		address.setPincode(addr.getPincode());

@@ -10,17 +10,9 @@ app.controller('AdminSettingController', function($scope, $rootScope, $http,
 		}
 		$http(req).then(function(setting) {
 			$rootScope.adminSetting = setting.data;
-			$scope.setDefaultTax();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-	}
-	$scope.setDefaultTax = function() {
-		for(var tax in $rootScope.taxList) {
-			if(this.adminSetting.tax.id == $rootScope.taxList[tax].id) {
-				this.adminSetting.tax = $rootScope.taxList[tax];
-			}
-		}
 	}
 	$scope.saveAdminSetting = function(adminSetting) {
 		var req = {

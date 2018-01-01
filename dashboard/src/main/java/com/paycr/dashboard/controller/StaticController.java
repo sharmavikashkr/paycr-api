@@ -24,6 +24,7 @@ import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayStatus;
 import com.paycr.common.type.PayType;
+import com.paycr.common.type.PricingType;
 import com.paycr.common.type.RecurrType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
@@ -96,6 +97,10 @@ public class StaticController {
 				enumList.add(UserType.FINANCE.name());
 				enumList.add(UserType.OPERATIONS.name());
 				enumList.add(UserType.ADVISOR.name());
+			}
+		} else if ("pricingtypes".equals(type)) {
+			for (PricingType pricingType : PricingType.values()) {
+				enumList.add(pricingType.name());
 			}
 		} else if ("timeranges".equals(type)) {
 			for (TimeRange timeRange : TimeRange.values()) {
