@@ -22,7 +22,7 @@
   	<script src="${staticUrl}/vendor/angular/angular-messages.min.js"></script>
   	<script src="${staticUrl}/vendor/angular/angular-material.min.js"></script>
 	<script src="/angular/merchant/merchant-ctrl.js"></script>
-	<script src="/angular/common/dashboard-ctrl.js"></script>
+	<script src="/angular/merchant/dashboard-ctrl.js"></script>
 	<script src="/angular/merchant/invoice-ctrl.js"></script>
 	<script src="/angular/common/invoice-payment-ctrl.js"></script>
 	<script src="/angular/merchant/consumer-ctrl.js"></script>
@@ -48,7 +48,7 @@
         <div ng-include="templateUrl('merchant','nav')"></div>
         <div class="tab-content content-wrapper" id="content-wrapper">
         	<div ng-include="templateUrl('common','alert')"></div>
-        	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('common','dashboardTab')"></div>
+        	<div ng-if="user.access.admin" id="dashboardTab" class="tab-pane active" ng-include="templateUrl('merchant','dashboardTab')"></div>
         	<div ng-class="(user.access.admin)?'':'active'" id="salesTab" class="tab-pane" ng-include="templateUrl('merchant','salesTab')"></div>
         	<div id="purchasesTab" class="tab-pane" ng-include="templateUrl('merchant','purchasesTab')"></div>
 	        <div ng-if="user.access.finance" id="subscriptionTab" class="tab-pane fade" ng-include="templateUrl('merchant','subscriptionTab')"></div>

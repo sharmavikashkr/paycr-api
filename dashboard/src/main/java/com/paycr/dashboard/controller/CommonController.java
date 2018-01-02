@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.StatsResponse;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.TaxMaster;
@@ -28,12 +27,6 @@ public class CommonController {
 
 	@Autowired
 	private CommonService comSer;
-
-	@PreAuthorize(RoleUtil.ALL_ADMIN_AUTH)
-	@RequestMapping("/dashboard/{timeRange}")
-	public StatsResponse getDashboard(@PathVariable String timeRange) {
-		return comSer.loadDashboard(timeRange);
-	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/notifications")

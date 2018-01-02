@@ -1,0 +1,189 @@
+<div ng-controller="DashboardController" id="dashboardTab" ng-init="loadDashboard()">
+	<div class="row">
+		<div class="panel-body col-md-12">
+			<div class="form-group">
+				<div class="col-xs-6 col-sm-3">
+					<select class="form-control" ng-model="timeRange" ng-init="timeRange = 'LAST_WEEK'">
+						<option value="LAST_WEEK">Last 7 days</option>
+						<option value="LAST_2WEEK">Last 14 days</option>
+						<option value="LAST_MONTH">Last 30 days</option>
+					</select>
+				</div>
+				<div class="col-xs-3 col-sm-2">
+					<button class="btn btn-primary" ng-click="loadDashboard()">Load</button>
+				</div>
+			</div>
+			<hr>
+			<div class="col-md-6">
+				<div class="panel-body text-center">
+					<h3><Strong>Sales</Strong></h3>
+					<div class="row">
+						<div class="col-md-6 col-xs-12">
+							<div class="info-box bg-yellow">
+								<span class="info-box-icon">
+									<i class="fa fa-times"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">Declined</span>
+									<span class="info-box-number">{{statsResponse.declinedInvCount}}</span>
+									<div class="progress">
+										<div class="progress-bar" style="width:100%;"></div>
+									</div>
+									<span class="progress-description"><i class="fa fa-rupee"></i> {{statsResponse.declinedInvSum}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<div class="info-box bg-gray">
+								<span class="info-box-icon">
+									<i class="fa fa-stop-circle"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">Expired</span>
+									<span class="info-box-number">{{statsResponse.expiredInvCount}}</span>
+									<div class="progress">
+										<div class="progress-bar" style="width:100%;"></div>
+									</div>
+									<span class="progress-description"><i class="fa fa-rupee"></i> {{statsResponse.expiredInvSum}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-xs-12">
+							<div class="info-box bg-green">
+								<span class="info-box-icon">
+									<i class="fa fa-check"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">Paid</span>
+									<span class="info-box-number">{{statsResponse.saleInvPayCount}}</span>
+									<div class="progress">
+										<div class="progress-bar" style="width:100%;"></div>
+									</div>
+									<span class="progress-description"><i class="fa fa-rupee"></i> {{statsResponse.saleInvPaySum}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<div class="info-box bg-red">
+								<span class="info-box-icon">
+									<i class="fa fa-mail-reply"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">Refund</span>
+									<span class="info-box-number">{{statsResponse.refundInvPayCount}}</span>
+									<div class="progress">
+										<div class="progress-bar" style="width:100%;"></div>
+									</div>
+									<span class="progress-description"><i class="fa fa-rupee"></i> {{statsResponse.refundInvPaySum}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body row">
+					<div class="col-md-12">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<h5 class="box-title">Invoice Payment/Refund per day</h5>
+							</div>
+							<div class="box-body">
+								<div id="inv-per-day-bar"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<h5 class="box-title">Invoice Distribution by amount</h5>
+							</div>
+							<div class="box-body">
+								<div id="inv-amount-donut"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<h5 class="box-title">Invoice Distribution by count</h5>
+							</div>
+							<div class="box-body">
+								<div id="inv-count-donut"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel-body text-center">
+					<h3><Strong>Purchases</Strong></h3>
+					<div class="row">
+						<div class="col-md-6 col-xs-12">
+							<div class="info-box bg-green">
+								<span class="info-box-icon">
+									<i class="fa fa-check"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">Paid</span>
+									<span class="info-box-number">{{statsResponse.saleExpPayCount}}</span>
+									<div class="progress">
+										<div class="progress-bar" style="width:100%;"></div>
+									</div>
+									<span class="progress-description"><i class="fa fa-rupee"></i> {{statsResponse.saleExpPaySum}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<div class="info-box bg-red">
+								<span class="info-box-icon">
+									<i class="fa fa-mail-reply"></i>
+								</span>
+								<div class="info-box-content">
+									<span class="info-box-text">Refund</span>
+									<span class="info-box-number">{{statsResponse.refundExpPayCount}}</span>
+									<div class="progress">
+										<div class="progress-bar" style="width:100%;"></div>
+									</div>
+									<span class="progress-description"><i class="fa fa-rupee"></i> {{statsResponse.refundExpPaySum}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body row">
+					<div class="col-md-12">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<h5 class="box-title">Expense Payment/Refund per day</h5>
+							</div>
+							<div class="box-body">
+								<div id="exp-per-day-bar"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<h5 class="box-title">Expense Distribution by amount</h5>
+							</div>
+							<div class="box-body">
+								<div id="exp-amount-donut"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="box box-success">
+							<div class="box-header with-border">
+								<h5 class="box-title">Expense Distribution by count</h5>
+							</div>
+							<div class="box-body">
+								<div id="exp-count-donut"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

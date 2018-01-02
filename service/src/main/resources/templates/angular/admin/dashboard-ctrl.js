@@ -4,14 +4,14 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	$rootScope.loadDashboard = function() {
 		var req = {
 			method : 'GET',
-			url : "/common/dashboard/" + $scope.timeRange,
+			url : "/admin/dashboard/" + $scope.timeRange,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			}
 		}
 		$http(req).then(function(response) {
 			$rootScope.statsResponse = response.data;
-			if($rootScope.statsResponse.dailyPayList.length > 0) {
+			if($rootScope.statsResponse.dailyInvPayList.length > 0) {
 				$scope.loadCharts();				
 			} else {
 				$rootScope.hideSpinner = true;
@@ -30,10 +30,10 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        colors : ['#00a65a', '#dd4b39', '#d2d6de', '#faf2cc', '#f39c12'],
 	        data: [{
 	            label: "Paid",
-	            value: $rootScope.statsResponse.salePaySum
+	            value: $rootScope.statsResponse.saleInvPaySum
 	        }, {
 	            label: "Refunded",
-	            value: $rootScope.statsResponse.refundPaySum
+	            value: $rootScope.statsResponse.refundInvPaySum
 	        }, {
 	            label: "Expired",
 	            value: $rootScope.statsResponse.expiredInvSum
@@ -51,10 +51,10 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        colors : ['#00a65a', '#dd4b39', '#d2d6de', '#faf2cc', '#f39c12'],
 	        data: [{
 	            label: "Paid",
-	            value: $rootScope.statsResponse.salePayCount
+	            value: $rootScope.statsResponse.saleInvPayCount
 	        }, {
 	            label: "Refunded",
-	            value: $rootScope.statsResponse.refundPayCount
+	            value: $rootScope.statsResponse.refundInvPayCount
 	        }, {
 	            label: "Expired",
 	            value: $rootScope.statsResponse.expiredInvCount
@@ -68,11 +68,11 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        resize: true
 	    });
 		var areaData = [];
-		for(var dailyPay in $rootScope.statsResponse.dailyPayList) {
+		for(var dailyPay in $rootScope.statsResponse.dailyInvPayList) {
 			areaData.push({
-				period: $rootScope.statsResponse.dailyPayList[dailyPay].created,
-				paid: $rootScope.statsResponse.dailyPayList[dailyPay].salePaySum,
-				refund: $rootScope.statsResponse.dailyPayList[dailyPay].refundPaySum
+				period: $rootScope.statsResponse.dailyInvPayList[dailyPay].created,
+				paid: $rootScope.statsResponse.dailyInvPayList[dailyPay].salePaySum,
+				refund: $rootScope.statsResponse.dailyInvPayList[dailyPay].refundPaySum
 			});
 		}
 		Morris.Bar({

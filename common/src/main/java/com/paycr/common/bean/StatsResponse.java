@@ -6,25 +6,82 @@ import java.util.List;
 
 public class StatsResponse {
 
-	private BigDecimal salePaySum;
+	private BigDecimal saleInvPaySum;
 	private BigDecimal unpaidInvSum;
 	private BigDecimal declinedInvSum;
 	private BigDecimal expiredInvSum;
-	private BigDecimal refundPaySum;
-	private BigInteger salePayCount;
+	private BigDecimal refundInvPaySum;
+	private BigInteger saleInvPayCount;
 	private BigInteger unpaidInvCount;
 	private BigInteger declinedInvCount;
 	private BigInteger expiredInvCount;
-	private BigInteger refundPayCount;
-	private List<DailyPay> dailyPayList;
+	private BigInteger refundInvPayCount;
+	private List<DailyPay> dailyInvPayList;
 
-	public BigInteger getSalePayCount() {
-		return salePayCount;
+	private BigDecimal saleExpPaySum;
+	private BigDecimal unpaidExpSum;
+	private BigDecimal refundExpPaySum;
+	private BigInteger saleExpPayCount;
+	private BigInteger unpaidExpCount;
+	private BigInteger refundExpPayCount;
+
+	public BigDecimal getSaleExpPaySum() {
+		return saleExpPaySum;
 	}
 
-	public void setSalePayCount(BigInteger salePayCount) {
-		this.salePayCount = salePayCount;
+	public void setSaleExpPaySum(BigDecimal saleExpPaySum) {
+		this.saleExpPaySum = saleExpPaySum;
 	}
+
+	public BigDecimal getUnpaidExpSum() {
+		return unpaidExpSum;
+	}
+
+	public void setUnpaidExpSum(BigDecimal unpaidExpSum) {
+		this.unpaidExpSum = unpaidExpSum;
+	}
+
+	public BigDecimal getRefundExpPaySum() {
+		return refundExpPaySum;
+	}
+
+	public void setRefundExpPaySum(BigDecimal refundExpPaySum) {
+		this.refundExpPaySum = refundExpPaySum;
+	}
+
+	public BigInteger getSaleExpPayCount() {
+		return saleExpPayCount;
+	}
+
+	public void setSaleExpPayCount(BigInteger saleExpPayCount) {
+		this.saleExpPayCount = saleExpPayCount;
+	}
+
+	public BigInteger getUnpaidExpCount() {
+		return unpaidExpCount;
+	}
+
+	public void setUnpaidExpCount(BigInteger unpaidExpCount) {
+		this.unpaidExpCount = unpaidExpCount;
+	}
+
+	public BigInteger getRefundExpPayCount() {
+		return refundExpPayCount;
+	}
+
+	public void setRefundExpPayCount(BigInteger refundExpPayCount) {
+		this.refundExpPayCount = refundExpPayCount;
+	}
+
+	public List<DailyPay> getDailyExpPayList() {
+		return dailyExpPayList;
+	}
+
+	public void setDailyExpPayList(List<DailyPay> dailyExpPayList) {
+		this.dailyExpPayList = dailyExpPayList;
+	}
+
+	private List<DailyPay> dailyExpPayList;
 
 	public BigInteger getUnpaidInvCount() {
 		return unpaidInvCount;
@@ -48,14 +105,6 @@ public class StatsResponse {
 
 	public void setExpiredInvCount(BigInteger expiredInvCount) {
 		this.expiredInvCount = expiredInvCount;
-	}
-
-	public BigInteger getRefundPayCount() {
-		return refundPayCount;
-	}
-
-	public void setRefundPayCount(BigInteger refundPayCount) {
-		this.refundPayCount = refundPayCount;
 	}
 
 	public BigDecimal getUnpaidInvSum() {
@@ -82,28 +131,44 @@ public class StatsResponse {
 		this.expiredInvSum = expiredInvSum;
 	}
 
-	public BigDecimal getRefundPaySum() {
-		return refundPaySum;
+	public BigDecimal getSaleInvPaySum() {
+		return saleInvPaySum;
 	}
 
-	public void setRefundPaySum(BigDecimal refundPaySum) {
-		this.refundPaySum = refundPaySum;
+	public void setSaleInvPaySum(BigDecimal saleInvPaySum) {
+		this.saleInvPaySum = saleInvPaySum;
 	}
 
-	public BigDecimal getSalePaySum() {
-		return salePaySum;
+	public BigDecimal getRefundInvPaySum() {
+		return refundInvPaySum;
 	}
 
-	public void setSalePaySum(BigDecimal salePaySum) {
-		this.salePaySum = salePaySum;
+	public void setRefundInvPaySum(BigDecimal refundInvPaySum) {
+		this.refundInvPaySum = refundInvPaySum;
 	}
 
-	public List<DailyPay> getDailyPayList() {
-		return dailyPayList;
+	public BigInteger getSaleInvPayCount() {
+		return saleInvPayCount;
 	}
 
-	public void setDailyPayList(List<DailyPay> dailyPayList) {
-		this.dailyPayList = dailyPayList;
+	public void setSaleInvPayCount(BigInteger saleInvPayCount) {
+		this.saleInvPayCount = saleInvPayCount;
+	}
+
+	public BigInteger getRefundInvPayCount() {
+		return refundInvPayCount;
+	}
+
+	public void setRefundInvPayCount(BigInteger refundInvPayCount) {
+		this.refundInvPayCount = refundInvPayCount;
+	}
+
+	public List<DailyPay> getDailyInvPayList() {
+		return dailyInvPayList;
+	}
+
+	public void setDailyInvPayList(List<DailyPay> dailyInvPayList) {
+		this.dailyInvPayList = dailyInvPayList;
 	}
 
 }

@@ -248,7 +248,7 @@ public class SubscriptionService {
 	}
 
 	private void addToExpense(Merchant merchant, Subscription subs) {
-		if(subs.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+		if (subs.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
 			return;
 		}
 		String createdBy = "SYSTEM";
@@ -288,14 +288,16 @@ public class SubscriptionService {
 		supplier.setEmail(company.getEmail());
 		supplier.setMobile(company.getMobile());
 		supplier.setGstin(adset.getGstin());
-		Address addr = new Address();
-		addr.setAddressLine1(adset.getAddress().getAddressLine1());
-		addr.setAddressLine2(adset.getAddress().getAddressLine2());
-		addr.setCity(adset.getAddress().getCity());
-		addr.setState(adset.getAddress().getState());
-		addr.setPincode(adset.getAddress().getPincode());
-		addr.setCountry(adset.getAddress().getCountry());
-		supplier.setAddress(addr);
+		if (CommonUtil.isNotNull(adset.getAddress())) {
+			Address addr = new Address();
+			addr.setAddressLine1(adset.getAddress().getAddressLine1());
+			addr.setAddressLine2(adset.getAddress().getAddressLine2());
+			addr.setCity(adset.getAddress().getCity());
+			addr.setState(adset.getAddress().getState());
+			addr.setPincode(adset.getAddress().getPincode());
+			addr.setCountry(adset.getAddress().getCountry());
+			supplier.setAddress(addr);
+		}
 		expense.setSupplier(supplier);
 		expVal.validate(expense);
 		expRepo.save(expense);

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paycr.common.bean.SearchAssetRequest;
 import com.paycr.common.bean.SearchExpensePaymentRequest;
 import com.paycr.common.bean.SearchExpenseRequest;
-import com.paycr.common.bean.SearchExpensePaymentRequest;
 import com.paycr.common.bean.SearchSupplierRequest;
 import com.paycr.common.data.domain.Asset;
 import com.paycr.common.data.domain.Expense;
@@ -76,7 +75,7 @@ public class ExpenseSearchController {
 		}
 		return paymentList;
 	}
-	
+
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchExpensePaymentRequest request, HttpServletResponse response) {
