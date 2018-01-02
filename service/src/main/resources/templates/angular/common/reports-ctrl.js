@@ -30,7 +30,7 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			$scope.serverMessage(data);
 		});
 		this.newreport = null;
-		angular.element(document.querySelector('#createReportXsModal')).modal('hide');
+		angular.element(document.querySelector('#createReportModal')).modal('hide');
 	}
 	$scope.loadReport = function(report) {
 		var req = {
@@ -41,14 +41,37 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			},
 			data : report
 		}
-		$http(req).then(function(invoiceReports) {
-			$rootScope.invoiceReports = invoiceReports.data;
+		$http(req).then(function(reportData) {
+			$rootScope.reportData = reportData.data;
 			$rootScope.loadedreport = angular.copy(report);
+			$rootScope.reportsResp = {};
 			$scope.loadReportPage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createReportXsModal')).modal('hide');
+		angular.element(document.querySelector('#createReportModal')).modal('hide');
+	}
+	$scope.loadReportPage = function(page) {
+		var pageSize = 15;
+		$rootScope.reportsResp = {};
+		if($rootScope.loadedreport.reportType == 'INVOICE') {
+			$rootScope.reportsResp.invoiceReports = angular.copy($rootScope.reportData);
+			$rootScope.reportsResp.invoiceReports.splice(pageSize * page, $rootScope.reportData.length - pageSize);
+			$rootScope.reportsResp.invoiceReports.splice(0, pageSize * (page - 1));
+		} else if($rootScope.loadedreport.reportType == 'EXPENSE') {
+			$rootScope.reportsResp.expenseReports = angular.copy($rootScope.reportData);
+			$rootScope.reportsResp.expenseReports.splice(pageSize * page, $rootScope.reportData.length - pageSize);
+			$rootScope.reportsResp.expenseReports.splice(0, pageSize * (page - 1));
+		}
+		$rootScope.reportsResp.page = page;
+		$rootScope.reportsResp.allPages = [];
+		var noOfPages = $rootScope.reportData.length / pageSize;
+		if ($rootScope.reportData.length % pageSize != 0) {
+			noOfPages = noOfPages + 1;
+		}
+		for (var i = 1; i <= noOfPages; i++) {
+			$rootScope.reportsResp.allPages.push(i);
+		}
 	}
 	$scope.downloadReport = function(report) {
 		var req = {
@@ -103,24 +126,6 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-	}
-	$scope.loadReportPage = function(page) {
-		var pageSize = 15;
-		$rootScope.reportsResp = {};
-		$rootScope.reportsResp.invoiceReports = angular
-				.copy($rootScope.invoiceReports);
-		$rootScope.reportsResp.invoiceReports.splice(pageSize * page,
-				$rootScope.invoiceReports.length - pageSize);
-		$rootScope.reportsResp.invoiceReports.splice(0, pageSize * (page - 1));
-		$rootScope.reportsResp.page = page;
-		$rootScope.reportsResp.allPages = [];
-		var noOfPages = $rootScope.invoiceReports.length / pageSize;
-		if ($rootScope.invoiceReports.length % pageSize != 0) {
-			noOfPages = noOfPages + 1;
-		}
-		for (var i = 1; i <= noOfPages; i++) {
-			$rootScope.reportsResp.allPages.push(i);
-		}
 	}
 	$scope.getSchedule = function() {
 		var req = {

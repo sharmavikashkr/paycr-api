@@ -59,7 +59,7 @@
 		</div>
 		<div ng-include="templateUrl('common','footer')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant','createParamModal')"></div>
-		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportXsModal')"></div>
+		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','recurrReportModal')"></div>
 		<div ng-if="user.access.admin" ng-include="templateUrl('common','createUserModal')"></div>
 		<div ng-if="user.access.admin" ng-include="templateUrl('merchant','keyModal')"></div>

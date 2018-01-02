@@ -86,9 +86,10 @@ CREATE TABLE if not exists pc_report(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	name varchar(50) NOT NULL,
+	description varchar(255) DEFAULT NULL,
 	time_range varchar(20) NOT NULL,
-	pay_status varchar(20) NOT NULL,
-	pay_type varchar(20) NOT NULL,
-	pay_mode varchar(20) NOT NULL,
+	report_type varchar(20) NOT NULL,
+	pay_type varchar(20) DEFAULT NULL,
+	pay_mode varchar(20) DEFAULT NULL,
 	merchant_id int REFERENCES pc_merchant
 );

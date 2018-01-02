@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.paycr.common.data.domain.ExpensePayment;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
 @Repository
@@ -42,11 +41,10 @@ public interface ExpensePaymentRepository extends JpaRepository<ExpensePayment, 
 			+ "GROUP BY CAST(p.created as DATE) ORDER BY CAST(p.created as DATE);", nativeQuery = true)
 	public List<Object[]> findDailyPayListForMerchant(Date startDate, Date endDate, Integer merchantId);
 
-	@Query("SELECT p from ExpensePayment p WHERE p.payMode = ?1 AND p.payType = ?2 AND p.created BETWEEN ?3 AND ?4")
-	public List<ExpensePayment> findPaysWithMode(PayMode payMode, PayType payType, Date startDate, Date endDate);
+	@Query("SELECT p from ExpensePayment p WHERE p.created BETWEEN ?1 AND ?2")
+	public List<ExpensePayment> findPaysForAdmin(Date startDate, Date endDate);
 
-	@Query("SELECT p from ExpensePayment p WHERE p.payMode = ?1 AND p.payType = ?2 AND p.merchant = ?3 AND p.created BETWEEN ?4 AND ?5")
-	public List<ExpensePayment> findPaysWithModeForMerchant(PayMode payMode, PayType payType, Merchant merchant,
-			Date startDate, Date endDate);
+	@Query("SELECT p from ExpensePayment p WHERE p.merchant = ?1 AND p.created BETWEEN ?2 AND ?3")
+	public List<ExpensePayment> findPaysForMerchant(Merchant merchant, Date startDate, Date endDate);
 
 }

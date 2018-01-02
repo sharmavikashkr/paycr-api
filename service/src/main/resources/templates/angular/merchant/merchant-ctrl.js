@@ -196,20 +196,6 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		
 		var req = {
 			method : 'GET',
-			url : "/enum/paystatuses",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(paystatuses) {
-			$rootScope.payStatuses = paystatuses.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
 			url : "/enum/invoicetypes",
 			headers : {
 				"Authorization" : "Bearer "
@@ -232,6 +218,20 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}
 		$http(req).then(function(recurrtypes) {
 			$rootScope.recurrTypes = recurrtypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/reporttypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(reporttypes) {
+			$rootScope.reportTypes = reporttypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

@@ -1,4 +1,4 @@
-package com.paycr.invoice.controller;
+package com.paycr.report.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringReportUser;
 import com.paycr.common.data.domain.Report;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.invoice.service.ReportService;
+import com.paycr.report.service.ReportService;
 
 @RestController
 @RequestMapping("/reports")
@@ -59,17 +58,17 @@ public class ReportController {
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/load")
-	public List<InvoiceReport> loadReport(@RequestBody Report report, HttpServletResponse response) {
-		List<InvoiceReport> invoiceReport = new ArrayList<>();
+	public List<?> loadInvoiceReport(@RequestBody Report report, HttpServletResponse response) {
+		List<?> reportData = new ArrayList<>();
 		try {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			report.setMerchant(merchant);
-			invoiceReport = repSer.loadReport(report, merchant);
+			reportData = repSer.loadReport(report, merchant);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
-		return invoiceReport;
+		return reportData;
 	}
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)

@@ -1,4 +1,4 @@
-<div id="createReportXsModal" ng-controller="ReportsController" class="modal fade" role="dialog">
+<div id="createReportModal" ng-controller="ReportsController" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div id="newInvoice" class="modal-content">
 			<div class="modal-header">
@@ -21,9 +21,25 @@
 									</tr>
 									<tr>
 										<td>
+											<div ng-class="(createPricingForm.description.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Description</label>
+												<input class="form-control" ng-model="newreport.description" name="description" placeholder="Pricing Name" required />
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
 											<label class="control-label">Time Range</label>
 											<select class="form-control" ng-model="newreport.timeRange">
 												<option ng-repeat="timeRange in timeRanges" value="{{timeRange}}">{{timeRange}}</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="control-label">Report Type</label>
+											<select class="form-control" ng-model="newreport.reportType">
+												<option ng-repeat="reportType in reportTypes" value="{{reportType}}">{{reportType}}</option>
 											</select>
 										</td>
 									</tr>
@@ -40,14 +56,6 @@
 											<label class="control-label">Pay Mode</label>
 											<select class="form-control" ng-model="newreport.payMode">
 												<option ng-repeat="payMode in payModes" value="{{payMode}}">{{payMode}}</option>
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<label class="control-label">Pay Status</label>
-											<select class="form-control" ng-model="newreport.payStatus">
-												<option ng-repeat="payStatus in payStatuses" value="{{payStatus}}">{{payStatus}}</option>
 											</select>
 										</td>
 									</tr>

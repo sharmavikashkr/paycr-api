@@ -1,4 +1,4 @@
-package com.paycr.invoice.scheduler;
+package com.paycr.report.scheduler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import com.paycr.common.data.repository.RecurringReportRepository;
 import com.paycr.common.data.repository.RecurringReportUserRepository;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.util.DateUtil;
-import com.paycr.invoice.service.ReportService;
+import com.paycr.report.service.ReportService;
 
 @Service
 public class ReportSchedulerService {

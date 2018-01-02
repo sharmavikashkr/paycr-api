@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.paycr.common.type.PayMode;
-import com.paycr.common.type.PayStatus;
 import com.paycr.common.type.PayType;
+import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
 
 @Entity
@@ -26,18 +26,19 @@ public class Report {
 
 	private Date created;
 	private String name;
+	private String description;
 
 	@Enumerated(EnumType.STRING)
 	private TimeRange timeRange;
+
+	@Enumerated(EnumType.STRING)
+	private ReportType reportType;
 
 	@Enumerated(EnumType.STRING)
 	private PayType payType;
 
 	@Enumerated(EnumType.STRING)
 	private PayMode payMode;
-
-	@Enumerated(EnumType.STRING)
-	private PayStatus payStatus;
 
 	@ManyToOne
 	private Merchant merchant;
@@ -94,12 +95,20 @@ public class Report {
 		this.payMode = payMode;
 	}
 
-	public PayStatus getPayStatus() {
-		return payStatus;
+	public ReportType getReportType() {
+		return reportType;
 	}
 
-	public void setPayStatus(PayStatus payStatus) {
-		this.payStatus = payStatus;
+	public void setReportType(ReportType reportType) {
+		this.reportType = reportType;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

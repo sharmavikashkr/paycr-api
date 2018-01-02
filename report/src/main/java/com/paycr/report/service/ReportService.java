@@ -1,4 +1,4 @@
-package com.paycr.invoice.service;
+package com.paycr.report.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,25 +13,25 @@ import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.DateFilter;
+import com.paycr.common.bean.ExpenseReport;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringReport;
 import com.paycr.common.data.domain.RecurringReportUser;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.data.repository.RecurringReportRepository;
 import com.paycr.common.data.repository.RecurringReportUserRepository;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
-import com.paycr.invoice.helper.ReportHelper;
 
 @Service
 public class ReportService {
@@ -49,7 +49,10 @@ public class ReportService {
 	private ReportHelper repHelp;
 
 	@Autowired
-	private InvoicePaymentRepository payRepo;
+	private InvoiceReportService invRepSer;
+
+	@Autowired
+	private ExpenseReportService expRepSer;
 
 	@Autowired
 	private Company company;
@@ -79,25 +82,6 @@ public class ReportService {
 		repRepo.save(report);
 	}
 
-	public String downloadReport(Report report, Merchant merchant) throws IOException {
-		List<InvoiceReport> invReport = loadReport(report, merchant);
-		return repHelp.getCsv(invReport);
-	}
-
-	public List<InvoiceReport> loadReport(Report report, Merchant merchant) {
-		isValidReport(report);
-		List<InvoicePayment> allPayments = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
-		if (merchant == null) {
-			allPayments.addAll(payRepo.findPaysWithMode(report.getPayMode(), report.getPayType(),
-					dateFilter.getStartDate(), dateFilter.getEndDate()));
-		} else {
-			allPayments.addAll(payRepo.findPaysWithModeForMerchant(report.getPayMode(), report.getPayType(), merchant,
-					dateFilter.getStartDate(), dateFilter.getEndDate()));
-		}
-		return repHelp.prepareReport(report, allPayments);
-	}
-
 	public void deleteReport(Integer reportId, Merchant merchant) {
 		if (merchant == null) {
 			throw new PaycrException(Constants.FAILURE, "Report cannot be deleted");
@@ -110,8 +94,8 @@ public class ReportService {
 	}
 
 	private void isValidReport(Report report) {
-		if (report.getName() == null || report.getPayStatus() == null || report.getTimeRange() == null
-				|| report.getPayType() == null || report.getPayMode() == null) {
+		if (CommonUtil.isEmpty(report.getName()) || CommonUtil.isNull(report.getTimeRange())
+				|| CommonUtil.isNull(report.getReportType())) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
 		}
 	}
@@ -173,6 +157,27 @@ public class ReportService {
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
+	}
+
+	public List<?> loadReport(Report report, Merchant merchant) {
+		isValidReport(report);
+		if (ReportType.EXPENSE.equals(report.getReportType())) {
+			return expRepSer.loadExpenseReport(report, merchant);
+		} else if (ReportType.INVOICE.equals(report.getReportType())) {
+			return invRepSer.loadInvoiceReport(report, merchant);
+		}
+		return null;
+	}
+
+	public String downloadReport(Report report, Merchant merchant) throws IOException {
+		if (ReportType.EXPENSE.equals(report.getReportType())) {
+			List<ExpenseReport> expReport = expRepSer.loadExpenseReport(report, merchant);
+			return expRepSer.getExpCsv(expReport);
+		} else if (ReportType.INVOICE.equals(report.getReportType())) {
+			List<InvoiceReport> invReport = invRepSer.loadInvoiceReport(report, merchant);
+			return invRepSer.getInvCsv(invReport);
+		}
+		return null;
 	}
 
 	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {

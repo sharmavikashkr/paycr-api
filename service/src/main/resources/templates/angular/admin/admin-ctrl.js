@@ -139,20 +139,6 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		
 		var req = {
 			method : 'GET',
-			url : "/enum/paystatuses",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(paystatuses) {
-			$rootScope.payStatuses = paystatuses.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
 			url : "/enum/invoicetypes",
 			headers : {
 				"Authorization" : "Bearer "
@@ -161,6 +147,20 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		}
 		$http(req).then(function(invoicetypes) {
 			$rootScope.invoiceTypes = invoicetypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/reporttypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(reporttypes) {
+			$rootScope.reportTypes = reporttypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
