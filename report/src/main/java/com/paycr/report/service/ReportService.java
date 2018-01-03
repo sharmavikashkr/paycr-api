@@ -11,10 +11,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.bean.AssetReport;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.ConsumerReport;
 import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.ExpenseReport;
+import com.paycr.common.bean.InventoryReport;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.SupplierReport;
@@ -61,6 +63,12 @@ public class ReportService {
 
 	@Autowired
 	private ConsumerReportService conRepSer;
+
+	@Autowired
+	private InventoryReportService invnRepSer;
+
+	@Autowired
+	private AssetReportService astRepSer;
 
 	@Autowired
 	private Company company;
@@ -180,6 +188,10 @@ public class ReportService {
 			return conRepSer.loadConsumerReport(report, merchant);
 		} else if (ReportType.SUPPLIER.equals(report.getReportType())) {
 			return supRepSer.loadSupplierReport(report, merchant);
+		} else if (ReportType.INVENTORY.equals(report.getReportType())) {
+			return invnRepSer.loadInventoryReport(report, merchant);
+		} else if (ReportType.ASSET.equals(report.getReportType())) {
+			return astRepSer.loadAssetReport(report, merchant);
 		}
 		return null;
 	}
@@ -197,6 +209,12 @@ public class ReportService {
 		} else if (ReportType.SUPPLIER.equals(report.getReportType())) {
 			List<SupplierReport> supReport = supRepSer.loadSupplierReport(report, merchant);
 			return supRepSer.getSupCsv(supReport);
+		} else if (ReportType.INVENTORY.equals(report.getReportType())) {
+			List<InventoryReport> invnReport = invnRepSer.loadInventoryReport(report, merchant);
+			return invnRepSer.getInvnCsv(invnReport);
+		} else if (ReportType.ASSET.equals(report.getReportType())) {
+			List<AssetReport> astReport = astRepSer.loadAssetReport(report, merchant);
+			return astRepSer.getAstCsv(astReport);
 		}
 		return null;
 	}

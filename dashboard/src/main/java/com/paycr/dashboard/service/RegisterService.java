@@ -65,7 +65,6 @@ public class RegisterService {
 
 	public void createMerchant(Merchant merchant, String createdBy) {
 		merValidator.validate(merchant);
-		boolean enableWelcome = merchant.isEnableWelcome();
 		Date timeNow = new Date();
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),
 				String.valueOf(timeNow.getTime()));
@@ -127,19 +126,17 @@ public class RegisterService {
 		noti.setRead(false);
 		notiRepo.save(noti);
 
-		if (enableWelcome) {
-			Pricing welcomePricing = pricingRepo.findByCodeAndActive("PPC-P-001", true);
-			if (welcomePricing == null) {
-				return;
-			}
-			OfflineSubscription offSubs = new OfflineSubscription();
-			offSubs.setMerchantId(merchant.getId());
-			offSubs.setPricingId(welcomePricing.getId());
-			offSubs.setPaymentRefNo("auto-enabled");
-			offSubs.setPayMode(PayMode.CASH);
-			offSubs.setQuantity(1);
-			subsService.offlineSubscription(offSubs);
+		Pricing welcomePricing = pricingRepo.findByCodeAndActive("PPC-P-001", true);
+		if (welcomePricing == null) {
+			return;
 		}
+		OfflineSubscription offSubs = new OfflineSubscription();
+		offSubs.setMerchantId(merchant.getId());
+		offSubs.setPricingId(welcomePricing.getId());
+		offSubs.setPaymentRefNo("auto-enabled");
+		offSubs.setPayMode(PayMode.CASH);
+		offSubs.setQuantity(1);
+		subsService.offlineSubscription(offSubs);
 	}
 
 }

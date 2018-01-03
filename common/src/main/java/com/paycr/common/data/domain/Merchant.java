@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "pc_merchant")
@@ -30,9 +29,6 @@ public class Merchant {
 	private String gstin;
 	private boolean active;
 	private String banner;
-
-	@Transient
-	private boolean enableWelcome;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
@@ -136,14 +132,6 @@ public class Merchant {
 
 	public void setInvoiceSetting(InvoiceSetting invoiceSetting) {
 		this.invoiceSetting = invoiceSetting;
-	}
-
-	public boolean isEnableWelcome() {
-		return enableWelcome;
-	}
-
-	public void setEnableWelcome(boolean enableWelcome) {
-		this.enableWelcome = enableWelcome;
 	}
 
 	public String getGstin() {

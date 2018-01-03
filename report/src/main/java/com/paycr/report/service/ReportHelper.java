@@ -19,6 +19,7 @@ public class ReportHelper {
 			Date aTimeYesterday = DateUtil.addDays(calendar.getTime(), -1);
 			Date start = DateUtil.getStartOfDay(aTimeYesterday);
 			Date end = DateUtil.getEndOfDay(aTimeYesterday);
+			end = new Date();
 			dateFilter = new DateFilter(start, end);
 		} else if (TimeRange.LAST_WEEK.equals(range)) {
 			Date aDayInLastWeek = DateUtil.addDays(calendar.getTime(), -7);

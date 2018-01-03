@@ -215,6 +215,78 @@
 						</ul>
 					</div>
 				</div>
+				<div ng-if="reportsResp.inventoryReports != null" class="box box-success text-center">
+					<div class="box-header with-border">
+						<h5 class="box-title">Inventory Report ({{loadedreport.name}})</h5>
+						<div class="box-tools pull-right">
+							<button title="Download CSV" class="btn btn-flat btn-success btn-xs" ng-click="downloadReport(loadedreport)"><i class="fa fa-book"></i></button>
+							<button title="Mail CSV" class="btn btn-flat btn-danger btn-xs" ng-click="mailReport(loadedreport)"><i class="fa fa-envelope"></i></button>
+						</div>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<td class="text-center"><strong>Code</strong></td>
+									<td class="text-center hidden-xs"><strong>Name</strong></td>
+									<td class="text-center hidden-xs"><strong>Rate</strong></td>
+									<td class="text-center"><strong>Sale Quantity</strong></td>
+									<td class="text-center"><strong>Sale Amount</strong></td>
+								</tr>
+							</thead>
+							<tbody id="itemBody">
+								<tr ng-repeat="inventoryReport in reportsResp.inventoryReports">
+									<td>{{inventoryReport.code}}</td>
+									<td class="hidden-xs">{{inventoryReport.name}}</td>
+									<td class="hidden-xs">{{inventoryReport.rate}}</td>
+									<td>{{inventoryReport.saleQuantity}}</td>
+									<td>{{inventoryReport.saleAmt}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<ul class="pagination" style="float:right;">
+							<li ng-class="(reportsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(reportsResp.page <= 1) || loadReportPage(reportsResp.page-1)" href="#">Previous</a></li>
+							<li ng-repeat="page in reportsResp.allPages" ng-class="(page == reportsResp.page)?'active':''"><a ng-click="loadReportPage(page)" href="#">{{page}}</a></li>
+							<li ng-class="(reportsResp.page >= reportsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(reportsResp.page >= reportsResp.allPages.length) || loadReportPage(reportsResp.page+1)" href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
+				<div ng-if="reportsResp.assetReports != null" class="box box-success text-center">
+					<div class="box-header with-border">
+						<h5 class="box-title">Asset Report ({{loadedreport.name}})</h5>
+						<div class="box-tools pull-right">
+							<button title="Download CSV" class="btn btn-flat btn-success btn-xs" ng-click="downloadReport(loadedreport)"><i class="fa fa-book"></i></button>
+							<button title="Mail CSV" class="btn btn-flat btn-danger btn-xs" ng-click="mailReport(loadedreport)"><i class="fa fa-envelope"></i></button>
+						</div>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<td class="text-center"><strong>Code</strong></td>
+									<td class="text-center hidden-xs"><strong>Name</strong></td>
+									<td class="text-center hidden-xs"><strong>Rate</strong></td>
+									<td class="text-center"><strong>Sale Quantity</strong></td>
+									<td class="text-center"><strong>Sale Amount</strong></td>
+								</tr>
+							</thead>
+							<tbody id="itemBody">
+								<tr ng-repeat="assetReport in reportsResp.assetReports">
+									<td>{{assetReport.code}}</td>
+									<td class="hidden-xs">{{assetReport.name}}</td>
+									<td class="hidden-xs">{{assetReport.rate}}</td>
+									<td>{{assetReport.saleQuantity}}</td>
+									<td>{{assetReport.saleAmt}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<ul class="pagination" style="float:right;">
+							<li ng-class="(reportsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(reportsResp.page <= 1) || loadReportPage(reportsResp.page-1)" href="#">Previous</a></li>
+							<li ng-repeat="page in reportsResp.allPages" ng-class="(page == reportsResp.page)?'active':''"><a ng-click="loadReportPage(page)" href="#">{{page}}</a></li>
+							<li ng-class="(reportsResp.page >= reportsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(reportsResp.page >= reportsResp.allPages.length) || loadReportPage(reportsResp.page+1)" href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

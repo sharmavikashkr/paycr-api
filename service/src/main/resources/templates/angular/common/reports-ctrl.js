@@ -70,6 +70,14 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 			$rootScope.reportsResp.supplierReports = angular.copy($rootScope.reportData);
 			$rootScope.reportsResp.supplierReports.splice(pageSize * page, $rootScope.reportData.length - pageSize);
 			$rootScope.reportsResp.supplierReports.splice(0, pageSize * (page - 1));
+		} else if($rootScope.loadedreport.reportType == 'INVENTORY') {
+			$rootScope.reportsResp.inventoryReports = angular.copy($rootScope.reportData);
+			$rootScope.reportsResp.inventoryReports.splice(pageSize * page, $rootScope.reportData.length - pageSize);
+			$rootScope.reportsResp.inventoryReports.splice(0, pageSize * (page - 1));
+		} else if($rootScope.loadedreport.reportType == 'ASSET') {
+			$rootScope.reportsResp.assetReports = angular.copy($rootScope.reportData);
+			$rootScope.reportsResp.assetReports.splice(pageSize * page, $rootScope.reportData.length - pageSize);
+			$rootScope.reportsResp.assetReports.splice(0, pageSize * (page - 1));
 		}
 		$rootScope.reportsResp.page = page;
 		$rootScope.reportsResp.allPages = [];
