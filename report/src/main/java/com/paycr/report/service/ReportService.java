@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
+import com.paycr.common.bean.ConsumerReport;
 import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.ExpenseReport;
 import com.paycr.common.bean.InvoiceReport;
 import com.paycr.common.bean.Server;
+import com.paycr.common.bean.SupplierReport;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.domain.Merchant;
@@ -53,6 +55,12 @@ public class ReportService {
 
 	@Autowired
 	private ExpenseReportService expRepSer;
+
+	@Autowired
+	private SupplierReportService supRepSer;
+
+	@Autowired
+	private ConsumerReportService conRepSer;
 
 	@Autowired
 	private Company company;
@@ -117,17 +125,20 @@ public class ReportService {
 			recRep.setReport(report);
 			Date nextDate = new Date();
 			Calendar calendar = Calendar.getInstance();
-			if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
+			if (TimeRange.YESTERDAY.equals(report.getTimeRange())) {
+				Date aTimeTomorrow = DateUtil.addDays(calendar.getTime(), 1);
+				nextDate = aTimeTomorrow;
+			} else if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
 				Date aDayInNextWeek = DateUtil.addDays(calendar.getTime(), 7);
 				nextDate = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
 			} else if (TimeRange.LAST_MONTH.equals(report.getTimeRange())) {
 				calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
 				Date aDayInNextMonth = DateUtil.addDays(calendar.getTime(), 35);
 				nextDate = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
-			} else if (TimeRange.LAST_QUARTER.equals(report.getTimeRange())) {
-				calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-				Date aDayInNextQr = DateUtil.addDays(calendar.getTime(), 35);
-				nextDate = DateUtil.getFirstDayOfMonth(aDayInNextQr);
+			} else if (TimeRange.LAST_YEAR.equals(report.getTimeRange())) {
+				calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH));
+				Date aDayInNextYear = DateUtil.addDays(calendar.getTime(), 100);
+				nextDate = DateUtil.getFirstDayOfYear(aDayInNextYear);
 			}
 			recRep.setStartDate(nextDate);
 			recRep.setNextDate(nextDate);
@@ -165,6 +176,10 @@ public class ReportService {
 			return expRepSer.loadExpenseReport(report, merchant);
 		} else if (ReportType.INVOICE.equals(report.getReportType())) {
 			return invRepSer.loadInvoiceReport(report, merchant);
+		} else if (ReportType.CONSUMER.equals(report.getReportType())) {
+			return conRepSer.loadConsumerReport(report, merchant);
+		} else if (ReportType.SUPPLIER.equals(report.getReportType())) {
+			return supRepSer.loadSupplierReport(report, merchant);
 		}
 		return null;
 	}
@@ -176,6 +191,12 @@ public class ReportService {
 		} else if (ReportType.INVOICE.equals(report.getReportType())) {
 			List<InvoiceReport> invReport = invRepSer.loadInvoiceReport(report, merchant);
 			return invRepSer.getInvCsv(invReport);
+		} else if (ReportType.CONSUMER.equals(report.getReportType())) {
+			List<ConsumerReport> supReport = conRepSer.loadConsumerReport(report, merchant);
+			return conRepSer.getConCsv(supReport);
+		} else if (ReportType.SUPPLIER.equals(report.getReportType())) {
+			List<SupplierReport> supReport = supRepSer.loadSupplierReport(report, merchant);
+			return supRepSer.getSupCsv(supReport);
 		}
 		return null;
 	}

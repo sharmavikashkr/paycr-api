@@ -8,7 +8,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="row">
-			<div class="col-md-4" ng-repeat="report in reports">
+			<div class="col-md-3" ng-repeat="report in reports">
 				<div class="box box-warning">
 					<div class="box-header with-border">
 						<h5 class="box-title">{{report.name}}</h5>
@@ -25,7 +25,7 @@
 						</div>
 					</div>
 					<div class="box-body">
-						<span class="text-blue" class="product-description">{{report.description}}</span>
+						<span class="text-blue"><small>{{report.description}}</small></span>
 					</div>
 					<div class="box-footer no-padding">
 						<small>
@@ -89,7 +89,6 @@
 						</ul>
 					</div>
 				</div>
-				<br>
 				<div ng-if="reportsResp.expenseReports != null" class="box box-success text-center">
 					<div class="box-header with-border">
 						<h5 class="box-title">Expense Report ({{loadedreport.name}})</h5>
@@ -126,6 +125,78 @@
 									<td>{{expenseReport.payMode}}</td>
 									<td class="hidden-xs">{{expenseReport.payMethod}}</td>
 									<td class="hidden-xs">{{expenseReport.payStatus}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<ul class="pagination" style="float:right;">
+							<li ng-class="(reportsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(reportsResp.page <= 1) || loadReportPage(reportsResp.page-1)" href="#">Previous</a></li>
+							<li ng-repeat="page in reportsResp.allPages" ng-class="(page == reportsResp.page)?'active':''"><a ng-click="loadReportPage(page)" href="#">{{page}}</a></li>
+							<li ng-class="(reportsResp.page >= reportsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(reportsResp.page >= reportsResp.allPages.length) || loadReportPage(reportsResp.page+1)" href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
+				<div ng-if="reportsResp.consumerReports != null" class="box box-success text-center">
+					<div class="box-header with-border">
+						<h5 class="box-title">Supplier Report ({{loadedreport.name}})</h5>
+						<div class="box-tools pull-right">
+							<button title="Download CSV" class="btn btn-flat btn-success btn-xs" ng-click="downloadReport(loadedreport)"><i class="fa fa-book"></i></button>
+							<button title="Mail CSV" class="btn btn-flat btn-danger btn-xs" ng-click="mailReport(loadedreport)"><i class="fa fa-envelope"></i></button>
+						</div>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<td class="text-center"><strong>Name</strong></td>
+									<td class="text-center"><strong>Email</strong></td>
+									<td class="text-center"><strong>Mobile</strong></td>
+									<td class="text-center"><strong>Sale</strong></td>
+									<td class="text-center"><strong>Refund</strong></td>
+								</tr>
+							</thead>
+							<tbody id="itemBody">
+								<tr ng-repeat="consumerReport in reportsResp.consumerReports">
+									<td>{{consumerReport.name}}</td>
+									<td>{{consumerReport.email}}</td>
+									<td>{{consumerReport.mobile}}</td>
+									<td>{{consumerReport.sale}}</td>
+									<td>{{consumerReport.refund}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<ul class="pagination" style="float:right;">
+							<li ng-class="(reportsResp.page <= 1)?'disabled':''" class="paginate_button previous"><a ng-click="(reportsResp.page <= 1) || loadReportPage(reportsResp.page-1)" href="#">Previous</a></li>
+							<li ng-repeat="page in reportsResp.allPages" ng-class="(page == reportsResp.page)?'active':''"><a ng-click="loadReportPage(page)" href="#">{{page}}</a></li>
+							<li ng-class="(reportsResp.page >= reportsResp.allPages.length)?'disabled':''" class="paginate_button next"><a ng-click="(reportsResp.page >= reportsResp.allPages.length) || loadReportPage(reportsResp.page+1)" href="#">Next</a></li>
+						</ul>
+					</div>
+				</div>
+				<div ng-if="reportsResp.supplierReports != null" class="box box-success text-center">
+					<div class="box-header with-border">
+						<h5 class="box-title">Supplier Report ({{loadedreport.name}})</h5>
+						<div class="box-tools pull-right">
+							<button title="Download CSV" class="btn btn-flat btn-success btn-xs" ng-click="downloadReport(loadedreport)"><i class="fa fa-book"></i></button>
+							<button title="Mail CSV" class="btn btn-flat btn-danger btn-xs" ng-click="mailReport(loadedreport)"><i class="fa fa-envelope"></i></button>
+						</div>
+					</div>
+					<div class="box-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<td class="text-center"><strong>Name</strong></td>
+									<td class="text-center"><strong>Email</strong></td>
+									<td class="text-center"><strong>Mobile</strong></td>
+									<td class="text-center"><strong>Sale</strong></td>
+									<td class="text-center"><strong>Refund</strong></td>
+								</tr>
+							</thead>
+							<tbody id="itemBody">
+								<tr ng-repeat="supplierReport in reportsResp.supplierReports">
+									<td>{{supplierReport.name}}</td>
+									<td>{{supplierReport.email}}</td>
+									<td>{{supplierReport.mobile}}</td>
+									<td>{{supplierReport.sale}}</td>
+									<td>{{supplierReport.refund}}</td>
 								</tr>
 							</tbody>
 						</table>

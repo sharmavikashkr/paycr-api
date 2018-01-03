@@ -63,7 +63,7 @@ public class MerchantDashboardService {
 				calTo.getTime());
 		declined = invRepo.findCountAndSumForMerchant(merchant.getId(), InvoiceStatus.DECLINED.name(),
 				calFrom.getTime(), calTo.getTime());
-		dailyPays = invPayRepo.findDailyPayListForMerchant(calFrom.getTime(), calTo.getTime(), merchant.getId());
+		dailyPays = invPayRepo.findDailyPayListForMerchant(merchant.getId(), calFrom.getTime(), calTo.getTime());
 
 		response.setSaleInvPayCount((BigInteger) salePays.get(0)[0]);
 		response.setSaleInvPaySum(
@@ -102,7 +102,7 @@ public class MerchantDashboardService {
 				calTo.getTime());
 		unpaid = expPayRepo.findCountAndSumForMerchant(merchant.getId(), ExpenseStatus.UNPAID.name(), calFrom.getTime(),
 				calTo.getTime());
-		dailyPays = expPayRepo.findDailyPayListForMerchant(calFrom.getTime(), calTo.getTime(), merchant.getId());
+		dailyPays = expPayRepo.findDailyPayListForMerchant(merchant.getId(), calFrom.getTime(), calTo.getTime());
 
 		response.setSaleExpPayCount((BigInteger) salePays.get(0)[0]);
 		response.setSaleExpPaySum(

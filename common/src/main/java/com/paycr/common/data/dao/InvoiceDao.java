@@ -4,13 +4,16 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
+import com.paycr.common.bean.DateFilter;
 import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Report;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 
@@ -148,6 +151,40 @@ public class InvoiceDao {
 			}
 			return query.getResultList();
 		}
+	}
+
+	public List<Object[]> getConsumerReport(Report report, Merchant merchant, DateFilter dateFilter) {
+		StringBuilder squery = new StringBuilder("SELECT c.name as name,c.email as email,c.mobile as mobile,"
+				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as sale,"
+				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refund FROM pc_invoice i"
+				+ " JOIN pc_invoice_payment p ON i.invoice_code = p.invoice_code"
+				+ " JOIN pc_consumer c ON i.consumer_id = c.id WHERE");
+		if (!CommonUtil.isNull(merchant)) {
+			squery.append(" i.merchant_id = :merchantId AND");
+		}
+		if (CommonUtil.isNotNull(report.getPayType())) {
+			squery.append(" p.pay_type = :payType AND");
+		}
+		if (CommonUtil.isNotNull(report.getPayMode())) {
+			squery.append(" p.pay_mode = :payMode AND");
+		}
+		squery.append(" p.created BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" GROUP BY c.name,c.email,c.mobile;");
+
+		Query query = em.createNativeQuery(squery.toString());
+
+		if (!CommonUtil.isNull(merchant)) {
+			query.setParameter("merchantId", merchant.getId());
+		}
+		if (CommonUtil.isNotNull(report.getPayType())) {
+			query.setParameter("payType", report.getPayType().name());
+		}
+		if (CommonUtil.isNotNull(report.getPayMode())) {
+			query.setParameter("payMode", report.getPayMode());
+		}
+		query.setParameter("start", dateFilter.getStartDate());
+		query.setParameter("end", dateFilter.getEndDate());
+		return query.getResultList();
 	}
 
 }

@@ -60,17 +60,20 @@ public class ReportSchedulerService {
 
 				Date nextDate = new Date();
 				Calendar calendar = Calendar.getInstance();
-				if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
+				if (TimeRange.YESTERDAY.equals(report.getTimeRange())) {
+					Date aTimeTomorrow = DateUtil.addDays(calendar.getTime(), 1);
+					nextDate = aTimeTomorrow;
+				} else if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
 					Date aDayInNextWeek = DateUtil.addDays(calendar.getTime(), 7);
 					nextDate = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
 				} else if (TimeRange.LAST_MONTH.equals(report.getTimeRange())) {
 					calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
 					Date aDayInNextMonth = DateUtil.addDays(calendar.getTime(), 35);
 					nextDate = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
-				} else if (TimeRange.LAST_QUARTER.equals(report.getTimeRange())) {
-					calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-					Date aDayInNextQr = DateUtil.addDays(calendar.getTime(), 100);
-					nextDate = DateUtil.getFirstDayOfMonth(aDayInNextQr);
+				} else if (TimeRange.LAST_YEAR.equals(report.getTimeRange())) {
+					calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH));
+					Date aDayInNextYear = DateUtil.addDays(calendar.getTime(), 100);
+					nextDate = DateUtil.getFirstDayOfYear(aDayInNextYear);
 				}
 				recRep.setNextDate(nextDate);
 				recRepRepo.save(recRep);

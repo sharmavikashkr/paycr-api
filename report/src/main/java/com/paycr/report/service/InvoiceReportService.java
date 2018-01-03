@@ -68,7 +68,7 @@ public class InvoiceReportService {
 	}
 
 	public List<InvoiceReport> prepareInvReport(Report report, List<InvoicePayment> payments) {
-		List<InvoiceReport> invoiceReports = new ArrayList<>();
+		List<InvoiceReport> invReports = new ArrayList<>();
 		payments = payments.stream()
 				.filter(t -> t.getStatus().equalsIgnoreCase("captured") || t.getStatus().equalsIgnoreCase("refund"))
 				.collect(Collectors.toList());
@@ -100,9 +100,9 @@ public class InvoiceReportService {
 			invReport.setPayMode(payment.getPayMode());
 			invReport.setPayMethod(payment.getMethod());
 			invReport.setPayStatus(payment.getStatus());
-			invoiceReports.add(invReport);
+			invReports.add(invReport);
 		}
-		return invoiceReports;
+		return invReports;
 	}
 
 }

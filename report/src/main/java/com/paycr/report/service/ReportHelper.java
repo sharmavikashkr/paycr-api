@@ -15,7 +15,12 @@ public class ReportHelper {
 	public DateFilter getDateFilter(TimeRange range) {
 		DateFilter dateFilter = null;
 		Calendar calendar = Calendar.getInstance();
-		if (TimeRange.LAST_WEEK.equals(range)) {
+		if (TimeRange.YESTERDAY.equals(range)) {
+			Date aTimeYesterday = DateUtil.addDays(calendar.getTime(), -1);
+			Date start = DateUtil.getStartOfDay(aTimeYesterday);
+			Date end = DateUtil.getEndOfDay(aTimeYesterday);
+			dateFilter = new DateFilter(start, end);
+		} else if (TimeRange.LAST_WEEK.equals(range)) {
 			Date aDayInLastWeek = DateUtil.addDays(calendar.getTime(), -7);
 			Date start = DateUtil.getFirstDayOfWeek(aDayInLastWeek);
 			Date end = DateUtil.getLastDayOfWeek(aDayInLastWeek);
@@ -26,12 +31,12 @@ public class ReportHelper {
 			Date start = DateUtil.getFirstDayOfMonth(aDayInLastMonth);
 			Date end = DateUtil.getLastDayOfMonth(aDayInLastMonth);
 			dateFilter = new DateFilter(start, end);
-		} else if (TimeRange.LAST_QUARTER.equals(range)) {
+		} else if (TimeRange.LAST_YEAR.equals(range)) {
+			calendar.set(Calendar.MONTH, calendar.getActualMinimum(Calendar.MONTH));
 			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-			Date aDayIn3LastMonth = DateUtil.addDays(calendar.getTime(), -70);
-			Date aDayInLastMonth = DateUtil.addDays(calendar.getTime(), -20);
-			Date start = DateUtil.getFirstDayOfMonth(aDayIn3LastMonth);
-			Date end = DateUtil.getLastDayOfMonth(aDayInLastMonth);
+			Date aDayInLastYear = DateUtil.addDays(calendar.getTime(), -10);
+			Date start = DateUtil.getFirstDayOfYear(aDayInLastYear);
+			Date end = DateUtil.getLastDayOfYear(aDayInLastYear);
 			dateFilter = new DateFilter(start, end);
 		}
 		return dateFilter;

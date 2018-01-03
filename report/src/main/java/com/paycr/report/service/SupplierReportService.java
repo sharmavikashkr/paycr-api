@@ -5,20 +5,15 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.ExpenseReport;
-import com.paycr.common.data.domain.Expense;
-import com.paycr.common.data.domain.ExpensePayment;
+import com.paycr.common.bean.SupplierReport;
+import com.paycr.common.data.dao.ExpenseDao;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.ExpensePaymentRepository;
-import com.paycr.common.data.repository.ExpenseRepository;
-import com.paycr.common.util.CommonUtil;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -29,80 +24,44 @@ public class SupplierReportService {
 	private ReportHelper repHelp;
 
 	@Autowired
-	private ExpensePaymentRepository expPayRepo;
+	private ExpenseDao expenseDao;
 
-	@Autowired
-	private ExpenseRepository expRepo;
-
-	public List<ExpenseReport> loadSupplierReport(Report report, Merchant merchant) {
-		List<ExpensePayment> allExpPayments = new ArrayList<>();
+	public List<SupplierReport> loadSupplierReport(Report report, Merchant merchant) {
+		List<Object[]> dbReport = new ArrayList<>();
 		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
-		if (merchant == null) {
-			allExpPayments.addAll(expPayRepo.findPaysForAdmin(dateFilter.getStartDate(), dateFilter.getEndDate()));
-		} else {
-			allExpPayments.addAll(
-					expPayRepo.findPaysForMerchant(merchant, dateFilter.getStartDate(), dateFilter.getEndDate()));
-		}
-		return prepareSupReport(report, allExpPayments);
+		dbReport.addAll(expenseDao.getSupplierReport(report, merchant, dateFilter));
+		return prepareSupReport(dbReport);
 	}
 
-	public String getSupCsv(List<ExpenseReport> expReport) throws IOException {
+	public String getSupCsv(List<SupplierReport> supReport) throws IOException {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Created", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
-				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
+		records.add(new String[] { "Name", "Email", "Mobile", "Sale", "Refund" });
 
-		Iterator<ExpenseReport> it = expReport.iterator();
+		Iterator<SupplierReport> it = supReport.iterator();
 		while (it.hasNext()) {
-			ExpenseReport expr = it.next();
-			records.add(new String[] { expr.getCreated().toString(), expr.getExpenseCode(),
-					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
-					expr.getDiscount().toString(), expr.getAmount().toString(), expr.getCurrency().name(),
-					expr.getPaymentRefNo(), expr.getPayType().name(), expr.getPayMode().name(), expr.getPayMethod(),
-					expr.getPayStatus() });
+			SupplierReport supr = it.next();
+			records.add(new String[] { supr.getName(), supr.getEmail(), supr.getMobile(), supr.getSale().toString(),
+					supr.getRefund().toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();
 		return writer.toString();
 	}
 
-	public List<ExpenseReport> prepareSupReport(Report report, List<ExpensePayment> payments) {
-		List<ExpenseReport> ExpenseReports = new ArrayList<>();
-		payments = payments.stream()
-				.filter(t -> t.getStatus().equalsIgnoreCase("captured") || t.getStatus().equalsIgnoreCase("refund"))
-				.collect(Collectors.toList());
-		if (CommonUtil.isNotNull(report.getPayType())) {
-			payments = payments.stream().filter(t -> t.getPayType().equals(report.getPayType()))
-					.collect(Collectors.toList());
+	public List<SupplierReport> prepareSupReport(List<Object[]> dbReport) {
+		List<SupplierReport> supReports = new ArrayList<>();
+		for (Object[] dbData : dbReport) {
+			SupplierReport supReport = new SupplierReport();
+			supReport.setName((String) dbData[0]);
+			supReport.setEmail((String) dbData[1]);
+			supReport.setMobile((String) dbData[2]);
+			supReport.setSale((Double) dbData[3]);
+			supReport.setRefund((Double) dbData[4]);
+			supReports.add(supReport);
 		}
-		if (CommonUtil.isNotNull(report.getPayType())) {
-			payments = payments.stream().filter(t -> t.getPayType().equals(report.getPayType()))
-					.collect(Collectors.toList());
-		}
-		if (CommonUtil.isNotNull(report.getPayMode())) {
-			payments = payments.stream().filter(t -> t.getPayMode().equals(report.getPayMode()))
-					.collect(Collectors.toList());
-		}
-		for (ExpensePayment payment : payments) {
-			Expense Expense = expRepo.findByExpenseCode(payment.getExpenseCode());
-			ExpenseReport expReport = new ExpenseReport();
-			expReport.setCreated(payment.getCreated());
-			expReport.setExpenseCode(Expense.getExpenseCode());
-			expReport.setExpenseStatus(Expense.getStatus());
-			expReport.setPayAmount(Expense.getPayAmount());
-			expReport.setAmount(payment.getAmount());
-			expReport.setTax(Expense.getPayAmount().add(Expense.getDiscount()).subtract(Expense.getTotal()));
-			expReport.setDiscount(Expense.getDiscount());
-			expReport.setCurrency(Expense.getCurrency());
-			expReport.setPaymentRefNo(payment.getPaymentRefNo());
-			expReport.setPayType(payment.getPayType());
-			expReport.setPayMode(payment.getPayMode());
-			expReport.setPayMethod(payment.getMethod());
-			expReport.setPayStatus(payment.getStatus());
-			ExpenseReports.add(expReport);
-		}
-		return ExpenseReports;
+		return supReports;
 	}
 
 }

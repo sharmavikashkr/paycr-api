@@ -37,9 +37,9 @@ public interface ExpensePaymentRepository extends JpaRepository<ExpensePayment, 
 	@Query(value = "SELECT CAST(CAST(p.created as DATE) as VARCHAR(10)) as date,"
 			+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as sale,"
 			+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refund "
-			+ "FROM pc_expense_payment p WHERE p.merchant_id = ?3 AND p.created BETWEEN ?1 AND ?2 AND p.status in ('captured','refund') "
+			+ "FROM pc_expense_payment p WHERE p.merchant_id = ?1 AND p.created BETWEEN ?2 AND ?3 AND p.status in ('captured','refund') "
 			+ "GROUP BY CAST(p.created as DATE) ORDER BY CAST(p.created as DATE);", nativeQuery = true)
-	public List<Object[]> findDailyPayListForMerchant(Date startDate, Date endDate, Integer merchantId);
+	public List<Object[]> findDailyPayListForMerchant(Integer merchantId, Date startDate, Date endDate);
 
 	@Query("SELECT p from ExpensePayment p WHERE p.created BETWEEN ?1 AND ?2")
 	public List<ExpensePayment> findPaysForAdmin(Date startDate, Date endDate);

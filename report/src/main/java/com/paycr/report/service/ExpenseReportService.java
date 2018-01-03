@@ -68,7 +68,7 @@ public class ExpenseReportService {
 	}
 
 	public List<ExpenseReport> prepareExpReport(Report report, List<ExpensePayment> payments) {
-		List<ExpenseReport> ExpenseReports = new ArrayList<>();
+		List<ExpenseReport> expReports = new ArrayList<>();
 		payments = payments.stream()
 				.filter(t -> t.getStatus().equalsIgnoreCase("captured") || t.getStatus().equalsIgnoreCase("refund"))
 				.collect(Collectors.toList());
@@ -100,9 +100,9 @@ public class ExpenseReportService {
 			expReport.setPayMode(payment.getPayMode());
 			expReport.setPayMethod(payment.getMethod());
 			expReport.setPayStatus(payment.getStatus());
-			ExpenseReports.add(expReport);
+			expReports.add(expReport);
 		}
-		return ExpenseReports;
+		return expReports;
 	}
 
 }
