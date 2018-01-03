@@ -32,8 +32,8 @@
 	              			<ul class="nav nav-pills nav-stacked">
 			                	<li><a>Time Range <span class="pull-right text-red">{{report.timeRange}}</span></a></li>
 			                	<li><a>Report Type <span class="pull-right text-green">{{report.reportType}}</span></a></li>
-			                	<li><a>Pay Type <span class="pull-right text-yellow">{{report.payType}}</span></a></li>
-			                	<li><a>Pay Mode <span class="pull-right text-blue">{{report.payMode}}</span></a></li>
+			                	<li ng-if="report.payType != null"><a>Pay Type <span class="pull-right text-yellow">{{report.payType}}</span></a></li>
+			                	<li ng-if="report.payMode != null"><a>Pay Mode <span class="pull-right text-blue">{{report.payMode}}</span></a></li>
 			            	</ul>
 		            	</small>
             		</div>
