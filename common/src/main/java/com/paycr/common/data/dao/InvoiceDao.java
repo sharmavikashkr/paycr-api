@@ -153,10 +153,13 @@ public class InvoiceDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Object[]> getConsumerReport(Report report, Merchant merchant, DateFilter dateFilter) {
 		StringBuilder squery = new StringBuilder("SELECT c.name as name,c.email as email,c.mobile as mobile,"
-				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as sale,"
-				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refund FROM pc_invoice i"
+				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN 1 ELSE 0 END) as invoices,"
+				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN 1 ELSE 0 END) as refunded,"
+				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as invoiceAmt,"
+				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refundAmt FROM pc_invoice i"
 				+ " JOIN pc_invoice_payment p ON i.invoice_code = p.invoice_code"
 				+ " JOIN pc_consumer c ON i.consumer_id = c.id WHERE");
 		if (!CommonUtil.isNull(merchant)) {

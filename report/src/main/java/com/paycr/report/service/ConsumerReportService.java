@@ -2,6 +2,7 @@ package com.paycr.report.service;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,13 +38,14 @@ public class ConsumerReportService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Name", "Email", "Mobile", "Sale", "Refund" });
+		records.add(
+				new String[] { "Name", "Email", "Mobile", "Invoices", "Refunded", "Invoice Amount", "Refund Amount" });
 
 		Iterator<ConsumerReport> it = conReport.iterator();
 		while (it.hasNext()) {
 			ConsumerReport conr = it.next();
-			records.add(new String[] { conr.getName(), conr.getEmail(), conr.getMobile(), conr.getSale().toString(),
-					conr.getRefund().toString() });
+			records.add(new String[] { conr.getName(), conr.getEmail(), conr.getMobile(), conr.getInvoices().toString(),
+					conr.getRefunded().toString(), conr.getInvoiceAmt().toString(), conr.getRefundAmt().toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();
@@ -57,8 +59,10 @@ public class ConsumerReportService {
 			conReport.setName((String) dbData[0]);
 			conReport.setEmail((String) dbData[1]);
 			conReport.setMobile((String) dbData[2]);
-			conReport.setSale((Double) dbData[3]);
-			conReport.setRefund((Double) dbData[4]);
+			conReport.setInvoices((BigInteger) dbData[3]);
+			conReport.setRefunded((BigInteger) dbData[4]);
+			conReport.setInvoiceAmt((Double) dbData[5]);
+			conReport.setRefundAmt((Double) dbData[6]);
 			conReports.add(conReport);
 		}
 		return conReports;

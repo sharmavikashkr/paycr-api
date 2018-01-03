@@ -11,7 +11,7 @@
 			<div class="col-md-3" ng-repeat="report in reports">
 				<div class="box box-warning">
 					<div class="box-header with-border">
-						<h5 class="box-title">{{report.name}}</h5>
+						<div class="box-title"><small>{{report.name}}</small></div>
 						<div class="box-tools pull-right">
 							<button ng-click="loadReport(report)" class="btn btn-flat btn-xs btn-info" title="Load Report">
 								<i class="fa fa-retweet"></i>
@@ -137,7 +137,7 @@
 				</div>
 				<div ng-if="reportsResp.consumerReports != null" class="box box-success text-center">
 					<div class="box-header with-border">
-						<h5 class="box-title">Supplier Report ({{loadedreport.name}})</h5>
+						<h5 class="box-title">Consumer Report ({{loadedreport.name}})</h5>
 						<div class="box-tools pull-right">
 							<button title="Download CSV" class="btn btn-flat btn-success btn-xs" ng-click="downloadReport(loadedreport)"><i class="fa fa-book"></i></button>
 							<button title="Mail CSV" class="btn btn-flat btn-danger btn-xs" ng-click="mailReport(loadedreport)"><i class="fa fa-envelope"></i></button>
@@ -148,19 +148,23 @@
 							<thead>
 								<tr>
 									<td class="text-center"><strong>Name</strong></td>
-									<td class="text-center"><strong>Email</strong></td>
+									<td class="text-center hidden-xs"><strong>Email</strong></td>
 									<td class="text-center"><strong>Mobile</strong></td>
-									<td class="text-center"><strong>Sale</strong></td>
-									<td class="text-center"><strong>Refund</strong></td>
+									<td class="text-center hidden-xs"><strong>Invoices</strong></td>
+									<td class="text-center hidden-xs"><strong>Refunded</strong></td>
+									<td class="text-center"><strong>Invoice Amount</strong></td>
+									<td class="text-center"><strong>Refund Amount</strong></td>
 								</tr>
 							</thead>
 							<tbody id="itemBody">
 								<tr ng-repeat="consumerReport in reportsResp.consumerReports">
 									<td>{{consumerReport.name}}</td>
-									<td>{{consumerReport.email}}</td>
+									<td class="hidden-xs">{{consumerReport.email}}</td>
 									<td>{{consumerReport.mobile}}</td>
-									<td>{{consumerReport.sale}}</td>
-									<td>{{consumerReport.refund}}</td>
+									<td class="hidden-xs">{{consumerReport.invoices}}</td>
+									<td class="hidden-xs">{{consumerReport.refunded}}</td>
+									<td class="hidden-xs">{{consumerReport.invoiceAmt}}</td>
+									<td class="hidden-xs">{{consumerReport.refundAmt}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -184,19 +188,23 @@
 							<thead>
 								<tr>
 									<td class="text-center"><strong>Name</strong></td>
-									<td class="text-center"><strong>Email</strong></td>
+									<td class="text-center hidden-xs"><strong>Email</strong></td>
 									<td class="text-center"><strong>Mobile</strong></td>
-									<td class="text-center"><strong>Sale</strong></td>
-									<td class="text-center"><strong>Refund</strong></td>
+									<td class="text-center hidden-xs"><strong>Expenses</strong></td>
+									<td class="text-center hidden-xs"><strong>Refunded</strong></td>
+									<td class="text-center"><strong>Expense Amount</strong></td>
+									<td class="text-center"><strong>Refund Amount</strong></td>
 								</tr>
 							</thead>
 							<tbody id="itemBody">
 								<tr ng-repeat="supplierReport in reportsResp.supplierReports">
 									<td>{{supplierReport.name}}</td>
-									<td>{{supplierReport.email}}</td>
+									<td class="hidden-xs">{{supplierReport.email}}</td>
 									<td>{{supplierReport.mobile}}</td>
-									<td>{{supplierReport.sale}}</td>
-									<td>{{supplierReport.refund}}</td>
+									<td class="hidden-xs">{{supplierReport.expenses}}</td>
+									<td class="hidden-xs">{{supplierReport.refunded}}</td>
+									<td>{{supplierReport.expenseAmt}}</td>
+									<td>{{supplierReport.refundAmt}}</td>
 								</tr>
 							</tbody>
 						</table>

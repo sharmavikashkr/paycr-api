@@ -141,10 +141,13 @@ public class ExpenseDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Object[]> getSupplierReport(Report report, Merchant merchant, DateFilter dateFilter) {
 		StringBuilder squery = new StringBuilder("SELECT s.name as name,s.email as email,s.mobile as mobile,"
-				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as sale,"
-				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refund FROM pc_expense e"
+				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN 1 ELSE 0 END) as expenses,"
+				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN 1 ELSE 0 END) as refunded,"
+				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN p.amount ELSE 0 END) as expenseAmt,"
+				+ "SUM(CASE WHEN p.pay_type = 'REFUND' THEN p.amount ELSE 0 END) as refundAmt FROM pc_expense e"
 				+ " JOIN pc_expense_payment p ON e.expense_code = p.expense_code"
 				+ " JOIN pc_supplier s ON e.supplier_id = s.id WHERE");
 		if (!CommonUtil.isNull(merchant)) {
@@ -168,7 +171,7 @@ public class ExpenseDao {
 			query.setParameter("payType", report.getPayType().name());
 		}
 		if (CommonUtil.isNotNull(report.getPayMode())) {
-			query.setParameter("payMode", report.getPayMode());
+			query.setParameter("payMode", report.getPayMode().name());
 		}
 		query.setParameter("start", dateFilter.getStartDate());
 		query.setParameter("end", dateFilter.getEndDate());

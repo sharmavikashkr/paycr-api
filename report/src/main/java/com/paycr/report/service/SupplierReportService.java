@@ -2,6 +2,7 @@ package com.paycr.report.service;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -37,13 +38,14 @@ public class SupplierReportService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Name", "Email", "Mobile", "Sale", "Refund" });
+		records.add(
+				new String[] { "Name", "Email", "Mobile", "Expenses", "Refunded", "Expense Amount", "Refund Amount" });
 
 		Iterator<SupplierReport> it = supReport.iterator();
 		while (it.hasNext()) {
 			SupplierReport supr = it.next();
-			records.add(new String[] { supr.getName(), supr.getEmail(), supr.getMobile(), supr.getSale().toString(),
-					supr.getRefund().toString() });
+			records.add(new String[] { supr.getName(), supr.getEmail(), supr.getMobile(), supr.getExpenses().toString(),
+					supr.getRefunded().toString(), supr.getExpenseAmt().toString(), supr.getRefundAmt().toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();
@@ -57,8 +59,10 @@ public class SupplierReportService {
 			supReport.setName((String) dbData[0]);
 			supReport.setEmail((String) dbData[1]);
 			supReport.setMobile((String) dbData[2]);
-			supReport.setSale((Double) dbData[3]);
-			supReport.setRefund((Double) dbData[4]);
+			supReport.setExpenses((BigInteger) dbData[3]);
+			supReport.setRefunded((BigInteger) dbData[4]);
+			supReport.setExpenseAmt((Double) dbData[5]);
+			supReport.setRefundAmt((Double) dbData[6]);
 			supReports.add(supReport);
 		}
 		return supReports;
