@@ -36,7 +36,8 @@ public class InvoiceReportService {
 
 	public List<InvoiceReport> loadInvoiceReport(Report report, Merchant merchant) {
 		List<InvoicePayment> allInvPayments = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
+		repHelp.setDateFilterInUTC(dateFilter);
 		if (merchant == null) {
 			allInvPayments.addAll(invPayRepo.findPaysForAdmin(dateFilter.getStartDate(), dateFilter.getEndDate()));
 		} else {

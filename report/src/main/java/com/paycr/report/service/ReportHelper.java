@@ -12,14 +12,14 @@ import com.paycr.common.util.DateUtil;
 @Component
 public class ReportHelper {
 
-	public DateFilter getDateFilter(TimeRange range) {
+	public DateFilter getDateFilterInIST(TimeRange range) {
 		DateFilter dateFilter = null;
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(DateUtil.getUTCTimeInIST(new Date()));
 		if (TimeRange.YESTERDAY.equals(range)) {
 			Date aTimeYesterday = DateUtil.addDays(calendar.getTime(), -1);
 			Date start = DateUtil.getStartOfDay(aTimeYesterday);
 			Date end = DateUtil.getEndOfDay(aTimeYesterday);
-			end = new Date();
 			dateFilter = new DateFilter(start, end);
 		} else if (TimeRange.LAST_WEEK.equals(range)) {
 			Date aDayInLastWeek = DateUtil.addDays(calendar.getTime(), -7);
@@ -41,6 +41,11 @@ public class ReportHelper {
 			dateFilter = new DateFilter(start, end);
 		}
 		return dateFilter;
+	}
+
+	public void setDateFilterInUTC(DateFilter dateFilter) {
+		dateFilter.setStartDate(DateUtil.getISTTimeInUTC(dateFilter.getStartDate()));
+		dateFilter.setEndDate(DateUtil.getISTTimeInUTC(dateFilter.getEndDate()));
 	}
 
 }

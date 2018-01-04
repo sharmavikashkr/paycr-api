@@ -29,7 +29,8 @@ public class AssetReportService {
 
 	public List<AssetReport> loadAssetReport(Report report, Merchant merchant) {
 		List<Object[]> dbReport = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
+		repHelp.setDateFilterInUTC(dateFilter);
 		dbReport.addAll(astDao.getAssetReport(report, merchant, dateFilter));
 		return prepareAstReport(dbReport);
 	}

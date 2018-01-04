@@ -29,7 +29,8 @@ public class ConsumerReportService {
 
 	public List<ConsumerReport> loadConsumerReport(Report report, Merchant merchant) {
 		List<Object[]> dbReport = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
+		repHelp.setDateFilterInUTC(dateFilter);
 		dbReport.addAll(invenseDao.getConsumerReport(report, merchant, dateFilter));
 		return prepareConReport(dbReport);
 	}

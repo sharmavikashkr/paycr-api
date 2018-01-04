@@ -1,6 +1,7 @@
 package com.paycr.invoice.scheduler;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -59,7 +60,7 @@ public class InvoiceSchedulerService {
 				}
 				Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), InvoiceType.SINGLE,
 						"Scheduler");
-				exec.execute(processInvoice(recInv, childInvoice, timeNow));
+				exec.execute(processInvoice(recInv, childInvoice));
 			}
 		}
 	}
@@ -76,11 +77,11 @@ public class InvoiceSchedulerService {
 	}
 
 	@Transactional
-	public Runnable processInvoice(RecurringInvoice recInv, Invoice childInvoice, Date timeNow) {
+	public Runnable processInvoice(RecurringInvoice recInv, Invoice childInvoice) {
 		return () -> {
 			InvoiceSetting invSetting = childInvoice.getMerchant().getInvoiceSetting();
 			InvoiceNotify invNot = new InvoiceNotify();
-			invNot.setCreated(timeNow);
+			invNot.setCreated(new Date());
 			invNot.setInvoice(childInvoice);
 			invNot.setCcMe(invSetting.isCcMe());
 			invNot.setCcEmail(childInvoice.getCreatedBy());
@@ -99,13 +100,18 @@ public class InvoiceSchedulerService {
 				childInvoice.setStatus(InvoiceStatus.UNPAID);
 			}
 			invRepo.save(childInvoice);
-			Date nextInvDate;
+			Date nextDate = recInv.getNextDate();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(nextDate);
 			if (RecurrType.WEEKLY.equals(recInv.getRecurr())) {
-				nextInvDate = DateUtil.addDays(timeNow, 7);
+				calendar.add(Calendar.DATE, 7);
 			} else {
-				nextInvDate = DateUtil.addDays(timeNow, 30);
+				calendar.add(Calendar.MONTH, 1);
 			}
-			recInv.setNextDate(nextInvDate);
+			calendar.setTime(DateUtil.getStartOfDay(calendar.getTime()));
+			calendar.set(Calendar.HOUR_OF_DAY, 22);
+			calendar.set(Calendar.MINUTE, 0);
+			recInv.setNextDate(calendar.getTime());
 			recInv.setRemaining(recInv.getRemaining() - 1);
 			recInvRepo.save(recInv);
 		};

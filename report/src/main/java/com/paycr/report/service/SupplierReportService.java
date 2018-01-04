@@ -29,7 +29,8 @@ public class SupplierReportService {
 
 	public List<SupplierReport> loadSupplierReport(Report report, Merchant merchant) {
 		List<Object[]> dbReport = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
+		repHelp.setDateFilterInUTC(dateFilter);
 		dbReport.addAll(expenseDao.getSupplierReport(report, merchant, dateFilter));
 		return prepareSupReport(dbReport);
 	}

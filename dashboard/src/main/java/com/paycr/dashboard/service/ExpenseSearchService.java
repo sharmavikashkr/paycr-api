@@ -78,6 +78,8 @@ public class ExpenseSearchService {
 	public List<Expense> fetchExpenseList(SearchExpenseRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(request.getCreatedFrom())));
+		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(request.getCreatedTo())));
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -88,6 +90,8 @@ public class ExpenseSearchService {
 	public List<ExpensePayment> fetchPaymentList(SearchExpensePaymentRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(request.getCreatedFrom())));
+		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(request.getCreatedTo())));
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -137,7 +141,7 @@ public class ExpenseSearchService {
 
 	public void mailPayments(SearchExpensePaymentRequest request) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
-		Date timeNow = new Date();
+		Date timeNow = DateUtil.getUTCTimeInIST(new Date());
 		String repCsv = downloadPayments(request);
 		String fileName = "Expense Payment - " + timeNow.getTime() + ".csv";
 		String filePath = server.getPaymentLocation() + fileName;
@@ -188,6 +192,8 @@ public class ExpenseSearchService {
 		if (from == null || to == null) {
 			throw new PaycrException(Constants.FAILURE, "From/To dates cannot be null");
 		}
+		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(from));
+		to = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(to));
 		Calendar calTo = Calendar.getInstance();
 		calTo.setTime(to);
 		Calendar calFrom = Calendar.getInstance();

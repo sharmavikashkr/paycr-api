@@ -131,25 +131,29 @@ public class ReportService {
 			recRep.setActive(true);
 			recRep.setMerchant(merchant);
 			recRep.setReport(report);
-			Date nextDate = new Date();
+			Date nextDateInIST = DateUtil.getUTCTimeInIST(new Date());
 			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(nextDateInIST);
 			if (TimeRange.YESTERDAY.equals(report.getTimeRange())) {
 				Date aTimeTomorrow = DateUtil.addDays(calendar.getTime(), 1);
-				nextDate = aTimeTomorrow;
+				nextDateInIST = DateUtil.getStartOfDay(aTimeTomorrow);
 			} else if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
 				Date aDayInNextWeek = DateUtil.addDays(calendar.getTime(), 7);
-				nextDate = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
+				nextDateInIST = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
 			} else if (TimeRange.LAST_MONTH.equals(report.getTimeRange())) {
 				calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
 				Date aDayInNextMonth = DateUtil.addDays(calendar.getTime(), 35);
-				nextDate = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
+				nextDateInIST = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
 			} else if (TimeRange.LAST_YEAR.equals(report.getTimeRange())) {
 				calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH));
 				Date aDayInNextYear = DateUtil.addDays(calendar.getTime(), 100);
-				nextDate = DateUtil.getFirstDayOfYear(aDayInNextYear);
+				nextDateInIST = DateUtil.getFirstDayOfYear(aDayInNextYear);
 			}
-			recRep.setStartDate(nextDate);
-			recRep.setNextDate(nextDate);
+			calendar.setTime(DateUtil.getISTTimeInUTC(nextDateInIST));
+			calendar.set(Calendar.HOUR_OF_DAY, 20);
+			calendar.set(Calendar.MINUTE, 0);
+			recRep.setStartDate(calendar.getTime());
+			recRep.setNextDate(calendar.getTime());
 			recRepRepo.save(recRep);
 		}
 		int schedules = recRepUserRepo.findByPcUser(user).size();
@@ -221,7 +225,7 @@ public class ReportService {
 
 	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {
 		String repCsv = downloadReport(report, merchant);
-		DateFilter df = repHelp.getDateFilter(report.getTimeRange());
+		DateFilter df = repHelp.getDateFilterInIST(report.getTimeRange());
 		String fileName = "";
 		if (merchant != null) {
 			fileName = merchant.getAccessKey() + " - " + report.getId() + ".csv";

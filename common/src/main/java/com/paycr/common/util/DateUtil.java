@@ -39,9 +39,9 @@ public class DateUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, validityDays);
-		calendar.set(Calendar.HOUR_OF_DAY, 23);
-		calendar.set(Calendar.MINUTE, 59);
-		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.HOUR_OF_DAY, 18);
+		calendar.set(Calendar.MINUTE, 30);
+		calendar.set(Calendar.SECOND, 00);
 		return calendar.getTime();
 	}
 
@@ -49,6 +49,22 @@ public class DateUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, days);
+		return calendar.getTime();
+	}
+
+	public static Date getISTTimeInUTC(Date istDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(istDate);
+		calendar.add(Calendar.HOUR_OF_DAY, -5);
+		calendar.add(Calendar.MINUTE, -30);
+		return calendar.getTime();
+	}
+
+	public static Date getUTCTimeInIST(Date utcDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(utcDate);
+		calendar.add(Calendar.HOUR_OF_DAY, 5);
+		calendar.add(Calendar.MINUTE, 30);
 		return calendar.getTime();
 	}
 

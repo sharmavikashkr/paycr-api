@@ -58,24 +58,28 @@ public class ReportSchedulerService {
 				}
 				repSer.mailReport(report, merchant, mailTo);
 
-				Date nextDate = new Date();
+				Date nextDateInIST = DateUtil.getUTCTimeInIST(recRep.getNextDate());
 				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(nextDateInIST);
 				if (TimeRange.YESTERDAY.equals(report.getTimeRange())) {
 					Date aTimeTomorrow = DateUtil.addDays(calendar.getTime(), 1);
-					nextDate = aTimeTomorrow;
+					nextDateInIST = DateUtil.getStartOfDay(aTimeTomorrow);
 				} else if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
 					Date aDayInNextWeek = DateUtil.addDays(calendar.getTime(), 7);
-					nextDate = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
+					nextDateInIST = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
 				} else if (TimeRange.LAST_MONTH.equals(report.getTimeRange())) {
 					calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
 					Date aDayInNextMonth = DateUtil.addDays(calendar.getTime(), 35);
-					nextDate = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
+					nextDateInIST = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
 				} else if (TimeRange.LAST_YEAR.equals(report.getTimeRange())) {
 					calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH));
 					Date aDayInNextYear = DateUtil.addDays(calendar.getTime(), 100);
-					nextDate = DateUtil.getFirstDayOfYear(aDayInNextYear);
+					nextDateInIST = DateUtil.getFirstDayOfYear(aDayInNextYear);
 				}
-				recRep.setNextDate(nextDate);
+				calendar.setTime(DateUtil.getISTTimeInUTC(nextDateInIST));
+				calendar.set(Calendar.HOUR_OF_DAY, 20);
+				calendar.set(Calendar.MINUTE, 0);
+				recRep.setNextDate(calendar.getTime());
 				recRepRepo.save(recRep);
 			} catch (IOException e) {
 				e.printStackTrace();

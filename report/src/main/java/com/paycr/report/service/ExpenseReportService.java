@@ -36,7 +36,8 @@ public class ExpenseReportService {
 
 	public List<ExpenseReport> loadExpenseReport(Report report, Merchant merchant) {
 		List<ExpensePayment> allExpPayments = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
+		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
+		repHelp.setDateFilterInUTC(dateFilter);
 		if (merchant == null) {
 			allExpPayments.addAll(expPayRepo.findPaysForAdmin(dateFilter.getStartDate(), dateFilter.getEndDate()));
 		} else {

@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -228,25 +229,34 @@ public class InvoiceService {
 				|| InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid invoice");
 		}
-		RecurringInvoice ext = recInvRepo.findByInvoiceAndActive(invoice, true);
-		if (ext != null) {
-			ext.setActive(false);
-			recInvRepo.save(ext);
-		}
-		Date timeNow = new Date();
-		Date start = DateUtil.getStartOfDay(timeNow);
-		Date end = DateUtil.getEndOfDay(timeNow);
-		if (recInv.getStartDate() == null || start.after(recInv.getStartDate())) {
+		if (recInv.getStartDate() == null) {
 			throw new PaycrException(Constants.FAILURE, "Invalid start date");
 		}
 		recInv.setActive(true);
 		recInv.setInvoice(invoice);
 		recInv.setRemaining(recInv.getTotal());
-		recInv.setNextDate(recInv.getStartDate());
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(recInv.getStartDate())));
+		calendar.set(Calendar.HOUR_OF_DAY, 22);
+		calendar.set(Calendar.MINUTE, 0);
+		recInv.setNextDate(calendar.getTime());
+		recInv.setStartDate(calendar.getTime());
+
+		Date timeNow = new Date();
+		Date start = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(timeNow));
+		Date end = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(timeNow));
+		if (start.after(recInv.getStartDate())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid start date");
+		}
+		RecurringInvoice ext = recInvRepo.findByInvoiceAndActive(invoice, true);
+		if (ext != null) {
+			ext.setActive(false);
+			recInvRepo.save(ext);
+		}
 		recInvRepo.save(recInv);
 		if (start.before(recInv.getStartDate()) && end.after(recInv.getStartDate())) {
 			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), InvoiceType.SINGLE, createdBy);
-			exec.execute(invSchSer.processInvoice(recInv, childInvoice, timeNow));
+			exec.execute(invSchSer.processInvoice(recInv, childInvoice));
 		}
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Recurr setting added", true, createdBy);
 	}
