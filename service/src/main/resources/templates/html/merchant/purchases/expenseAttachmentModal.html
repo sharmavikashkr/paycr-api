@@ -26,7 +26,7 @@
 								<tr ng-repeat="attach in expenseInfo.attachments">
 									<td><a target="_blank" href="/expense/{{expenseInfo.expenseCode}}/attachment/{{attach.name}}">{{attach.name}}</a></td>
 									<td class="hidden-xs">{{attach.createdBy}}</td>
-									<td class="hidden-xs">{{attach.created | date:'dd-MM-yyyy'}}</td>
+									<td class="hidden-xs">{{attach.created | date:'dd-MM-yyyy HH:mm'}}</td>
 								</tr>
 							</tbody>
 						</table>

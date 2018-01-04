@@ -27,7 +27,7 @@
 						<td class="hidden-xs">{{myuser.mobile}}</td>
 						<td>{{myuser.userType}}</td>
 						<td class="hidden-xs">{{myuser.createdBy}}</td>
-						<td class="hidden-xs">{{myuser.created | date:'dd:MM:yyyy'}}</td>
+						<td class="hidden-xs">{{myuser.created | date:'dd:MM:yyyy HH:mm'}}</td>
 						<td>
 							<button title="DEACTIVATE" ng-if="myuser.active" ng-click="toggleUser(myuser.id)" type="button" class="btn btn-flat btn-danger btn-xs">
 								<i class="fa fa-minus"></i>

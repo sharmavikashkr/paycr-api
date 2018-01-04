@@ -72,7 +72,7 @@
 							<td>{{merchant.name}}</td>
 							<td>{{merchant.email}}</td>
 							<td class="hidden-xs">{{merchant.mobile}}</td>
-							<td class="hidden-xs">{{merchant.created | date:'dd-MM-yyyy'}}</td>
+							<td class="hidden-xs">{{merchant.created | date:'dd-MM-yyyy HH:mm'}}</td>
 						</tr>
 						<tr>
 							<td colspan="12" style="padding: 0px; border: 0px;">
@@ -111,8 +111,8 @@
 														data-target="#subsDetailsModal">
 														<td class="text-center">{{merpricing.pricing.name}}</td>
 														<td class="text-center">{{merpricing.quantity}}</td>
-														<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy'}}</td>
-														<td class="text-center hidden-xs">{{merpricing.endDate | date:'dd-MM-yyyy'}}</td>
+														<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+														<td class="text-center hidden-xs">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
 														<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
 														<td class="text-center"><i class="fa fa-rupee"></i> {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
 													</tr>

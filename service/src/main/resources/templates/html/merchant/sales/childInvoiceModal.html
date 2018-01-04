@@ -82,7 +82,7 @@
 									<tr ng-class="(bulkCategory.message == 'SUCCESS')?'success':'danger'" ng-repeat="bulkCategory in bulkCategories">
 										<td>{{bulkCategory.categories}}</td>
 										<td>{{bulkCategory.invoiceType}}</td>
-										<td class="hidden-xs">{{bulkCategory.created | date:'dd-MM-yyyy'}}</td>
+										<td class="hidden-xs">{{bulkCategory.created | date:'dd-MM-yyyy HH:mm'}}</td>
 										<td class="hidden-xs">{{bulkCategory.createdBy}}</td>
 										<td>{{bulkCategory.message}}</td>
 									</tr>

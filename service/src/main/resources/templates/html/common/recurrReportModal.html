@@ -23,8 +23,8 @@
 								<tr ng-class="(recRepUser.recurringReport.active)?'success':'danger'" ng-repeat="recRepUser in recRepUsers" title="{{recRepUser.recurringReport.active}}">
 									<td>{{recRepUser.recurringReport.report.name}}</td>
 									<td class="hidden-xs">{{recRepUser.recurringReport.report.timeRange}}</td>
-									<td class="hidden-xs">{{recRepUser.recurringReport.startDate | date:'dd-MM-yyyy'}}</td>
-									<td class="hidden-xs">{{recRepUser.recurringReport.nextDate | date:'dd-MM-yyyy'}}</td>
+									<td class="hidden-xs">{{recRepUser.recurringReport.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+									<td class="hidden-xs">{{recRepUser.recurringReport.nextDate | date:'dd-MM-yyyy HH:mm'}}</td>
 									<td>
 										<button ng-click="removeSchedule(recRepUser.id)" type="button" class="btn btn-danger btn-xs" title="Delete">
 											<i class="fa fa-times"></i>

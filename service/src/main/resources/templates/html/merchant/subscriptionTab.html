@@ -18,8 +18,8 @@
 						<tbody id="itemBody">
 							<tr ng-class="(merpricing.status=='ACTIVE')?'success':'danger'" ng-repeat="merpricing in merchant.pricings" title="{{merpricing.status}}">
 								<td class="text-center">{{merpricing.pricing.name}}</td>
-								<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy'}}</td>
-								<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy'}}</td>
+								<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+								<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
 								<td class="text-center">{{merpricing.invCount}} ({{merpricing.pricing.invoiceLimit * merpricing.quantity}})</td>
 								<td class="text-center hidden-xs"><i class="fa fa-rupee"></i> {{merpricing.pricing.startAmount}} - {{merpricing.pricing.endAmount}}</td>
 								<td>

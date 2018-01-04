@@ -26,7 +26,7 @@
 								<tbody>
 									<tr ng-repeat="bulkUpload in bulkAssetUploads">
 										<td><a target="_blank" href="/asset/bulk/download/{{bulkUpload.fileName}}">{{bulkUpload.fileName}}</a></td>
-										<td class="hidden-xs">{{bulkUpload.created | date:'dd-MM-yyyy'}}</td>
+										<td class="hidden-xs">{{bulkUpload.created | date:'dd-MM-yyyy HH:mm'}}</td>
 										<td class="hidden-xs">{{bulkUpload.createdBy}}</td>
 									</tr>
 								</tbody>

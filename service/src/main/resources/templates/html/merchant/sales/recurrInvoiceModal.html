@@ -22,8 +22,8 @@
 							</thead>
 							<tbody id="itemBody">
 								<tr ng-class="(recurrInvoice.active)?'success':'danger'" ng-repeat="recurrInvoice in recurrInvoices" title="{{recurrInvoice.active}}">
-									<td class="hidden-xs">{{recurrInvoice.startDate | date:'dd-MM-yyyy'}}</td>
-									<td class="hidden-xs">{{recurrInvoice.nextDate | date:'dd-MM-yyyy'}}</td>
+									<td class="hidden-xs">{{recurrInvoice.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
+									<td class="hidden-xs">{{recurrInvoice.nextDate | date:'dd-MM-yyyy HH:mm'}}</td>
 									<td>{{recurrInvoice.recurr}}</td>
 									<td>{{recurrInvoice.total}}</td>
 									<td>{{recurrInvoice.remaining}}</td>
