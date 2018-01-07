@@ -16,7 +16,6 @@
 				</div>
 			</div>
 		</div>
-	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createInvoiceModal')"></div>
 	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createInvoiceXsModal')"></div>
 	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','addInvoiceItemXsModal')"></div>
 	    <div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','invoiceNotifyModal')"></div>
@@ -26,10 +25,8 @@
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkInvoiceUploadModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','recurrInvoiceModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','invoiceRefundModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createConsumerModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkConsumerUploadModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','editConAddressModal')"></div>
-		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createInventoryModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkInventoryUploadModal')"></div>
 		<div ng-include="templateUrl('common/sales','invoiceInfoModal')"></div>
 		<div ng-include="templateUrl('common/sales','invoicePaymentModal')"></div>

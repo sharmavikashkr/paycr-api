@@ -15,10 +15,8 @@
 						<li ng-if="user.access.supervisor"><a href="#" data-toggle="modal" data-target="#createMerchantModal"><i class="fa fa-plus"></i> Merchant</a></li>
 						<li ng-if="user.access.finance"><a href="#" data-toggle="modal" data-target="#createPricingModal"><i class="fa fa-plus"></i> Pricing</a></li>
 						<li ng-if="user.access.supervisor"><a href="#" data-toggle="modal" data-target="#createUserModal"><i class="fa fa-plus"></i> User</a></li>
-						<li class="divider"></li>
+						<li ng-if="user.access.finance" class="divider"></li>
 						<li><a href="#">Report an issue</a></li>
-						<li class="divider"></li>
-						<li><a href="#">Send Feedback</a></li>
 					</ul>
 				</li>
 			</ul>
