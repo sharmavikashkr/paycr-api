@@ -100,7 +100,7 @@ public class CreateInvoiceService {
 		invRepo.save(invoice);
 		if (!invoice.isUpdate()) {
 			MerchantPricing merPri = invoice.getMerchantPricing();
-			merPri.setInvCount(merPri.getInvCount() + 1);
+			merPri.setUseCount(merPri.getUseCount() + 1);
 			merPriRepo.save(merPri);
 		}
 		if (invoice.isUpdate()) {

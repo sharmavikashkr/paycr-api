@@ -12,6 +12,7 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.PricingRule;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
@@ -27,15 +28,19 @@ public class IsValidPricingRequest implements RequestValidator<Pricing> {
 			throw new PaycrException(Constants.FAILURE, "Invalid create pricing request");
 		}
 		if (CommonUtil.isEmpty(pricing.getCode()) || CommonUtil.isEmpty(pricing.getName())
-				|| CommonUtil.isNull(pricing.getStartAmount()) || CommonUtil.isNull(pricing.getEndAmount())
-				|| CommonUtil.isEmpty(pricing.getDescription()) || CommonUtil.isNull(pricing.getRate())
-				|| CommonUtil.isNull(pricing.getType()) || pricing.getDuration() <= 0) {
+				|| CommonUtil.isEmpty(pricing.getDescription()) || CommonUtil.isNull(pricing.getType())) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
+		}
+		if (pricing.getDuration() < 50 || pricing.getLimit() < 500
+				|| (pricing.getLimit() / pricing.getDuration() < 10)) {
+			throw new PaycrException(Constants.FAILURE,
+					"Duration must be greater than 50 days and limit/duration must be greater than 10");
 		}
 		if (CommonUtil.isNull(pricing.getTax())) {
 			TaxMaster noTax = taxMRepo.findByName("NO_TAX");
 			pricing.setTax(noTax);
 		}
+		pricing.setRate(PricingRule.getPricingRate(pricing.getLimit(), pricing.getDuration()));
 		pricing.setCreated(new Date());
 		pricing.setActive(true);
 	}

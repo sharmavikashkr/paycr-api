@@ -1,4 +1,4 @@
-package com.paycr.invoice.validation;
+package com.paycr.expense.validation;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
@@ -15,24 +15,24 @@ import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
-@Order(5)
-public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> {
+@Order(4)
+public class IsValidExpenseMerchantPricing implements RequestValidator<Expense> {
 
 	@Autowired
 	private MerchantRepository merRepo;
 
 	@Override
-	public void validate(Invoice invoice) {
-		if (invoice.isUpdate()) {
+	public void validate(Expense expense) {
+		if (expense.isUpdate()) {
 			return;
 		}
-		List<MerchantPricing> merPricings = invoice.getMerchant().getPricings();
+		List<MerchantPricing> merPricings = expense.getMerchant().getPricings();
 		MerchantPricing selectedMerPricing = null;
 		boolean noActivePlan = true;
 		boolean hasPlanChanged = false;
 		for (MerchantPricing merPricing : merPricings) {
 			if (PricingStatus.ACTIVE.equals(merPricing.getStatus())) {
-				if (merPricing.getEndDate().compareTo(invoice.getCreated()) < 0
+				if (merPricing.getEndDate().compareTo(expense.getCreated()) < 0
 						|| merPricing.getUseCount() >= merPricing.getPricing().getLimit() * merPricing.getQuantity()) {
 					merPricing.setStatus(PricingStatus.INACTIVE);
 					hasPlanChanged = true;
@@ -44,11 +44,11 @@ public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> 
 			}
 		}
 		if (hasPlanChanged) {
-			merRepo.save(invoice.getMerchant());
+			merRepo.save(expense.getMerchant());
 		}
 		if (noActivePlan) {
 			throw new PaycrException(Constants.FAILURE, "No active pricing plan found");
 		}
-		invoice.setMerchantPricing(selectedMerPricing);
+		expense.setMerchantPricing(selectedMerPricing);
 	}
 }

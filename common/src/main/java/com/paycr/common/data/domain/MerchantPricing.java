@@ -42,7 +42,7 @@ public class MerchantPricing {
 	@OneToOne
 	private Subscription subscription;
 
-	private int invCount;
+	private int useCount;
 
 	public Integer getId() {
 		return id;
@@ -104,20 +104,20 @@ public class MerchantPricing {
 		this.subscription = subscription;
 	}
 
-	public int getInvCount() {
-		return invCount;
-	}
-
-	public void setInvCount(int invCount) {
-		this.invCount = invCount;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public int getUseCount() {
+		return useCount;
+	}
+
+	public void setUseCount(int useCount) {
+		this.useCount = useCount;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.paycr.admin.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -145,6 +148,30 @@ public class AdminController {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
+	@RequestMapping(value = "/pricing/merchant/add", method = RequestMethod.POST)
+	public void addPricingMerchant(@RequestParam("pricingId") Integer pricingId,
+			@RequestParam("merchantId") Integer merchantId, HttpServletResponse response) {
+		try {
+			adminService.addPricingMerchant(pricingId, merchantId);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
+	@RequestMapping("/pricing/merchants/{pricingId}")
+	public List<Merchant> getPricingMerchant(@PathVariable Integer pricingId, HttpServletResponse response) {
+		try {
+			return adminService.getMerchantForPricing(pricingId);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return null;
 	}
 
 }

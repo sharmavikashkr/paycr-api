@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.ExpenseRepository;
+import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.ObjectType;
@@ -19,6 +21,9 @@ public class CreateExpenseService {
 
 	@Autowired
 	private ExpenseRepository expRepo;
+	
+	@Autowired
+	private MerchantPricingRepository merPriRepo;
 
 	@Autowired
 	private ExpenseValidator expValidator;
@@ -36,6 +41,11 @@ public class CreateExpenseService {
 		}
 		expValidator.validate(expense);
 		expRepo.save(expense);
+		if (!expense.isUpdate()) {
+			MerchantPricing merPri = expense.getMerchantPricing();
+			merPri.setUseCount(merPri.getUseCount() + 1);
+			merPriRepo.save(merPri);
+		}
 		if (expense.isUpdate()) {
 			tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense updated", true, user.getEmail());
 		} else {

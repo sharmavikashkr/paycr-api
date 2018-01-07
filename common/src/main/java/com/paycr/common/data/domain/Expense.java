@@ -63,6 +63,9 @@ public class Expense {
 	@OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
 	private List<ExpenseAttachment> attachments;
 
+	@ManyToOne
+	private MerchantPricing merchantPricing;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private ExpensePayment payment;
 
@@ -251,5 +254,13 @@ public class Expense {
 
 	public void setUpdate(boolean update) {
 		this.update = update;
+	}
+
+	public MerchantPricing getMerchantPricing() {
+		return merchantPricing;
+	}
+
+	public void setMerchantPricing(MerchantPricing merchantPricing) {
+		this.merchantPricing = merchantPricing;
 	}
 }

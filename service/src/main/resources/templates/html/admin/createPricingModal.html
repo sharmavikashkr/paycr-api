@@ -47,31 +47,9 @@
 									</tr>
 									<tr>
 										<td>
-											<div ng-class="(createPricingForm.invoiceLimit.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label">Invoice Limit</label>
-												<input class="form-control" ng-model="newpricing.invoiceLimit" type="number" name="invoiceLimit" placeholder="Invoice limit" ng-pattern="patterns.numberPattern" required />
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div ng-class="(createPricingForm.startAmount.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label">Start Amount</label>
-												<div class="input-group">
-													<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
-													<input class="form-control" ng-model="newpricing.startAmount" name="startAmount" type="number" placeholder="Start Amount" ng-pattern="patterns.amountPattern" required />
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div ng-class="(createPricingForm.endAmount.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label">End Amount</label>
-												<div class="input-group">
-													<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
-													<input class="form-control" ng-model="newpricing.endAmount" name="endAmount" type="number" placeholder="End Amount" ng-pattern="patterns.amountPattern" required />
-												</div>
+											<div ng-class="(createPricingForm.limit.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Limit</label>
+												<input class="form-control" ng-model="newpricing.limit" type="number" name="limit" placeholder="Limit" ng-pattern="patterns.numberPattern" required />
 											</div>
 										</td>
 									</tr>
@@ -80,17 +58,6 @@
 											<div ng-class="(createPricingForm.duration.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Duration (Days)</label>
 												<input class="form-control" ng-model="newpricing.duration" name="duration" type="number" placeholder="Duration" ng-pattern="patterns.numberPattern" required />
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<div ng-class="(createPricingForm.rate.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label">Rate</label>
-												<div class="input-group">
-													<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
-													<input class="form-control" ng-model="newpricing.rate" name="rate" type="number" placeholder="Rate" ng-pattern="patterns.amountPattern" required />
-												</div>
 											</div>
 										</td>
 									</tr>

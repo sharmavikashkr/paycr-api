@@ -14,10 +14,10 @@
 				<li ng-repeat="merpricing in merchant.pricings" ng-if="merpricing.status=='ACTIVE'">
 					<a href="#" title="{{merpricing.status}}">
 						<h4 class="control-sidebar-subheading">
-							{{merpricing.pricing.name}} <span class="label pull-right label-success">{{(merpricing.invCount * 100) / (merpricing.pricing.invoiceLimit * merpricing.quantity)}}%</span>
+							{{merpricing.pricing.name}} <span class="label pull-right label-success">{{(merpricing.useCount * 100) / (merpricing.pricing.limit * merpricing.quantity)}}%</span>
 						</h4>
 						<div class="progress progress-xxs">
-							<div class="progress-bar progress-bar-success" style="width: {{(merpricing.invCount * 100) / (merpricing.pricing.invoiceLimit * merpricing.quantity)}}%"></div>
+							<div class="progress-bar progress-bar-success" style="width: {{(merpricing.useCount * 100) / (merpricing.pricing.limit * merpricing.quantity)}}%"></div>
 						</div>
 					</a>
 				</li>

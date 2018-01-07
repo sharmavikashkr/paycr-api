@@ -1,18 +1,25 @@
 package com.paycr.admin.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.admin.validation.PricingValidator;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.AdminSetting;
+import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.Pricing;
+import com.paycr.common.data.domain.PricingMerchant;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.AdminSettingRepository;
+import com.paycr.common.data.repository.MerchantRepository;
+import com.paycr.common.data.repository.PricingMerchantRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.type.PricingType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 
@@ -24,6 +31,12 @@ public class AdminService {
 
 	@Autowired
 	private PricingRepository pricingRepo;
+
+	@Autowired
+	private PricingMerchantRepository priMerRepo;
+
+	@Autowired
+	private MerchantRepository merRepo;
 
 	@Autowired
 	private AdminSettingRepository adsetRepo;
@@ -98,6 +111,32 @@ public class AdminService {
 		}
 		tax.setActive(true);
 		taxMRepo.save(tax);
+	}
+
+	public void addPricingMerchant(Integer pricingId, Integer merchantId) {
+		try {
+			Pricing pricing = pricingRepo.findOne(pricingId);
+			Merchant merchant = merRepo.findOne(merchantId);
+			if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant)
+					|| PricingType.PUBLIC.equals(pricing.getType())) {
+				throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			}
+			PricingMerchant priMerExt = priMerRepo.findByMerchantAndPricing(merchant, pricing);
+			if (CommonUtil.isNotNull(priMerExt)) {
+				throw new PaycrException(Constants.FAILURE, "Pricing already active for merchant");
+			}
+			priMerExt = new PricingMerchant();
+			priMerExt.setMerchant(merchant);
+			priMerExt.setPricing(pricing);
+			priMerRepo.save(priMerExt);
+		} catch (Exception ex) {
+			throw new PaycrException(Constants.FAILURE, ex.getMessage());
+		}
+	}
+
+	public List<Merchant> getMerchantForPricing(Integer pricingId) {
+		Pricing pricing = pricingRepo.findOne(pricingId);
+		return priMerRepo.findMerchantsForPricing(pricing);
 	}
 
 }

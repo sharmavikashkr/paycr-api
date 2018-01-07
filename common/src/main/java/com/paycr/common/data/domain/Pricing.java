@@ -3,6 +3,7 @@ package com.paycr.common.data.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,9 +27,9 @@ public class Pricing {
 	private String code;
 	private String name;
 	private String description;
-	private int invoiceLimit;
-	private BigDecimal startAmount;
-	private BigDecimal endAmount;
+
+	@Column(name = "use_limit")
+	private int limit;
 	private BigDecimal rate;
 	private int duration;
 
@@ -126,28 +127,12 @@ public class Pricing {
 		this.type = type;
 	}
 
-	public int getInvoiceLimit() {
-		return invoiceLimit;
+	public int getLimit() {
+		return limit;
 	}
 
-	public void setInvoiceLimit(int invoiceLimit) {
-		this.invoiceLimit = invoiceLimit;
-	}
-
-	public BigDecimal getStartAmount() {
-		return startAmount;
-	}
-
-	public void setStartAmount(BigDecimal startAmount) {
-		this.startAmount = startAmount;
-	}
-
-	public BigDecimal getEndAmount() {
-		return endAmount;
-	}
-
-	public void setEndAmount(BigDecimal endAmount) {
-		this.endAmount = endAmount;
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 }

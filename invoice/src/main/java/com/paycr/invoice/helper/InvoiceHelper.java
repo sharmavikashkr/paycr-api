@@ -81,7 +81,7 @@ public class InvoiceHelper {
 		childInvoice.setInvoiceType(invoiceType);
 		childInvoice = invRepo.save(childInvoice);
 		MerchantPricing merPri = childInvoice.getMerchantPricing();
-		merPri.setInvCount(merPri.getInvCount() + 1);
+		merPri.setUseCount(merPri.getUseCount() + 1);
 		merPriRepo.save(merPri);
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
 				"Child invoice created : " + childInvoice.getInvoiceCode(), true, createdBy);

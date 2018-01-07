@@ -40,6 +40,7 @@ CREATE TABLE if not exists pc_expense(
 	currency varchar(10) NOT NULL,
 	merchant_id int REFERENCES pc_merchant,
 	supplier_id int REFERENCES pc_supplier,
+	merchant_pricing_id int REFERENCES pc_merchant_pricing,
 	payment_id int REFERENCES pc_expense_payment,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,

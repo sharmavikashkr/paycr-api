@@ -57,6 +57,7 @@
     	<div ng-include="templateUrl('common','footer')"></div>
 	    <div ng-if="user.access.supervisor" ng-include="templateUrl('admin','createMerchantModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('admin','createPricingModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('admin','addPricingMerchantModal')"></div>
 		<div ng-if="user.access.supervisor" ng-include="templateUrl('admin','createOfflineSubsModal')"></div>
 		<div ng-if="user.access.supervisor" ng-include="templateUrl('common','createUserModal')"></div>
 		<div ng-if="user.access.ops" ng-include="templateUrl('common','createReportModal')"></div>

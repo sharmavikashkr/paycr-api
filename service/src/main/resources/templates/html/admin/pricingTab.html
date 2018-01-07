@@ -14,11 +14,10 @@
 						<tr>
 							<th class="text-center">Code</th>
 							<th class="text-center">Name</th>
-							<th class="text-center hidden-xs">Duration</th>
+							<th class="text-center">Duration</th>
 							<th class="text-center">Rate</th>
-							<th class="text-center hidden-xs">Invoice Limit</th>
-							<th class="text-center hidden-xs">Start Amount</th>
-							<th class="text-center hidden-xs">End Amount</th>
+							<th class="text-center">Limit</th>
+							<th class="text-center">Type</th>
 							<th class="text-center hidden-xs">HSN/SAC</th>
 							<th class="text-center hidden-xs">Tax</th>
 							<th class="text-center">Action</th>
@@ -28,18 +27,16 @@
 						<tr ng-class="(pricing.active)?'success':'warning'" ng-repeat="pricing in pricings" title="ACTIVE = {{pricing.active}}">
 							<td>{{pricing.code}}</td>
 							<td>{{pricing.name}}</td>
-							<td class="hidden-xs">{{pricing.duration}}</td>
+							<td>{{pricing.duration}}</td>
 							<td><i class="fa fa-rupee"></i> {{pricing.rate}}</td>
-							<td class="hidden-xs">{{pricing.invoiceLimit}}</td>
-							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.startAmount}}</td>
-							<td class="hidden-xs"><i class="fa fa-rupee"></i> {{pricing.endAmount}}</td>
+							<td>{{pricing.limit}}</td>
+							<td class="hidden-xs">{{pricing.type}}</td>
 							<td class="hidden-xs">{{pricing.hsnsac}}</td>
 							<td class="hidden-xs">{{pricing.tax.name}} {{pricing.tax.value}}%</td>
-							<td ng-if="pricing.active">
-								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
-							</td>
-							<td ng-if="!pricing.active">
-								<button ng-click="togglePricing(pricing.id)" type="button" class="btn btn-success btn-xs">Activate</button>
+							<td>
+								<button ng-if="pricing.type == 'CUSTOM'" ng-click="updatePricingMerchant(pricing)" data-toggle="modal" data-target="#addPricingMerchantModal" type="button" class="btn btn-success btn-xs">Merchant</button>
+								<button ng-if="pricing.active" ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
+								<button ng-if="!pricing.active" ng-click="togglePricing(pricing.id)" type="button" class="btn btn-success btn-xs">Activate</button>
 							</td>
 						</tr>
 					</tbody>

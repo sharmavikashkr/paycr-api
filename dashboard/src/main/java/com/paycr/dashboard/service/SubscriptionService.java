@@ -143,7 +143,7 @@ public class SubscriptionService {
 		merPricing.setPricing(pricing);
 		merPricing.setQuantity(offline.getQuantity());
 		merPricing.setStatus(PricingStatus.ACTIVE);
-		merPricing.setInvCount(0);
+		merPricing.setUseCount(0);
 		merPricing.setMerchant(merchant);
 		merPricing.setSubscription(subs);
 		merPriRepo.save(merPricing);
@@ -229,7 +229,7 @@ public class SubscriptionService {
 			merPricing.setPricing(pricing);
 			merPricing.setQuantity(subs.getQuantity());
 			merPricing.setStatus(PricingStatus.ACTIVE);
-			merPricing.setInvCount(0);
+			merPricing.setUseCount(0);
 			merPricing.setMerchant(merchant);
 			merPricing.setSubscription(subs);
 			merPriRepo.save(merPricing);

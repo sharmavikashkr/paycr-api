@@ -98,9 +98,7 @@ public class StartupService {
 		welcomePri.setDuration(90);
 		welcomePri.setName("WELCOME");
 		welcomePri.setRate(new BigDecimal(0));
-		welcomePri.setStartAmount(new BigDecimal(0));
-		welcomePri.setEndAmount(new BigDecimal(10000));
-		welcomePri.setInvoiceLimit(1000);
+		welcomePri.setLimit(1000);
 		welcomePri.setType(PricingType.PUBLIC);
 		TaxMaster noTax = createNoTaxMaster();
 		welcomePri.setTax(noTax);

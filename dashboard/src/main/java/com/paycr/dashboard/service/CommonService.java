@@ -17,17 +17,23 @@ import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.domain.Timeline;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.NotificationRepository;
+import com.paycr.common.data.repository.PricingMerchantRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.data.repository.TimelineRepository;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.ObjectType;
+import com.paycr.common.type.PricingType;
+import com.paycr.common.util.CommonUtil;
 
 @Service
 public class CommonService {
 
 	@Autowired
 	private PricingRepository priceRepo;
+
+	@Autowired
+	private PricingMerchantRepository priMerRepo;
 
 	@Autowired
 	private SecurityService secSer;
@@ -49,7 +55,14 @@ public class CommonService {
 	}
 
 	public List<Pricing> getPricings() {
-		return priceRepo.findAll();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNull(merchant)) {
+			return priceRepo.findAll();
+		} else {
+			List<Pricing> priMerList = priceRepo.findByTypeAndActive(PricingType.PUBLIC, true);
+			priMerList.addAll(priMerRepo.findPricingForMerchant(merchant));
+			return priMerList;
+		}
 	}
 
 	public List<Notification> getNotifications() {

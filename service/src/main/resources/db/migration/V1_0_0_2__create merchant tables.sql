@@ -40,14 +40,18 @@ CREATE TABLE if not exists pc_pricing (
 	name varchar(50) NOT NULL,
 	description varchar(255) NOT NULL,
 	rate float NOT NULL,
-	invoice_limit int NOT NULL,
-    start_amount float NOT NULL,
-    end_amount float NOT NULL,
+	use_limit int NOT NULL,
     type varchar(20) NOT NULL,
 	hsnsac varchar(10) DEFAULT NULL,
     duration int NOT NULL,
     active boolean NOT NULL,
 	tax_id int REFERENCES pc_tax_master
+);
+
+CREATE TABLE if not exists pc_pricing_merchant (
+	id SERIAL PRIMARY KEY NOT NULL,
+	merchant_id int REFERENCES pc_merchant,
+	pricing_id int REFERENCES pc_pricing
 );
 
 CREATE TABLE if not exists pc_subscription(
@@ -76,7 +80,7 @@ CREATE TABLE if not exists pc_merchant_pricing (
 	end_date timestamp NOT NULL,
 	status varchar(20) NOT NULL,
 	quantity int NOT NULL,
-	inv_count int NOT NULL,
+	use_count int NOT NULL,
     merchant_id int REFERENCES pc_merchant,
     pricing_id int REFERENCES pc_pricing,
     subscription_id int REFERENCES pc_subscription
