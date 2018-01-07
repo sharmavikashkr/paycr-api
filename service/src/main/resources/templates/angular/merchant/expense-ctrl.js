@@ -6,6 +6,9 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
+	$rootScope.markpaid = {
+		"paidOn" : dateNow
+	}
 	$rootScope.searchExpense = function() {
 		var req = {
 			method : 'POST',

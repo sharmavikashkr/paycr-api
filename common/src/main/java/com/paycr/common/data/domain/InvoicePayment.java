@@ -32,6 +32,7 @@ public class InvoicePayment {
 	private String method;
 	private String bank;
 	private String wallet;
+	private Date paidOn;
 
 	@ManyToOne
 	@JsonIgnore
@@ -136,6 +137,14 @@ public class InvoicePayment {
 
 	public void setMerchant(Merchant merchant) {
 		this.merchant = merchant;
+	}
+
+	public Date getPaidOn() {
+		return paidOn;
+	}
+
+	public void setPaidOn(Date paidOn) {
+		this.paidOn = paidOn;
 	}
 
 }

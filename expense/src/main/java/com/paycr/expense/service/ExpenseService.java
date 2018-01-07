@@ -30,6 +30,7 @@ import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.Constants;
+import com.paycr.common.util.DateUtil;
 import com.razorpay.RazorpayException;
 
 @Service
@@ -74,6 +75,7 @@ public class ExpenseService {
 			ExpensePayment refPay = new ExpensePayment();
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
+			refPay.setPaidOn(timeNow);
 			refPay.setExpenseCode(expense.getExpenseCode());
 			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(payment.getPaymentRefNo());
@@ -98,6 +100,7 @@ public class ExpenseService {
 		}
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
+		payment.setPaidOn(DateUtil.getISTTimeInUTC(payment.getPaidOn()));
 		payment.setStatus("captured");
 		payment.setAmount(expense.getPayAmount());
 		payment.setPayType(PayType.SALE);

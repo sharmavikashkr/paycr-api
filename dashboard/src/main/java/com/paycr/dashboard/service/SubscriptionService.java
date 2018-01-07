@@ -305,6 +305,7 @@ public class SubscriptionService {
 		ExpensePayment expPay = new ExpensePayment();
 		expPay.setBank(subs.getBank());
 		expPay.setCreated(timeNow);
+		expPay.setPaidOn(subs.getCreated());
 		expPay.setStatus("captured");
 		expPay.setAmount(expense.getPayAmount());
 		expPay.setPayType(PayType.SALE);

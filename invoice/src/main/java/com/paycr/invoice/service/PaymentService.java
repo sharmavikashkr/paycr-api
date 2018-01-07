@@ -14,11 +14,11 @@ import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
-import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.InvoicePayment;
+import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PaymentSetting;
-import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.InvoicePaymentRepository;
+import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.InvoiceStatus;
@@ -67,8 +67,7 @@ public class PaymentService {
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType()) || CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");
 			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("banner",
-					company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
+			mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 			mv.addObject("invoice", invoice);
 			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
 			return mv;
@@ -78,7 +77,8 @@ public class PaymentService {
 		mv.addObject("invoice", invoice);
 		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
-		mv.addObject("payAmount", String.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_UP).multiply(new BigDecimal(100))));
+		mv.addObject("payAmount",
+				String.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_UP).multiply(new BigDecimal(100))));
 		return mv;
 	}
 
@@ -104,6 +104,7 @@ public class PaymentService {
 	}
 
 	public String purchase(Map<String, String> formData) throws RazorpayException {
+		Date timeNow = new Date();
 		String rzpPayId = formData.get("razorpay_payment_id");
 		String invoiceCode = formData.get("invoiceCode");
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
@@ -116,7 +117,8 @@ public class PaymentService {
 		}
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
 		InvoicePayment payment = new InvoicePayment();
-		payment.setCreated(new Date());
+		payment.setCreated(timeNow);
+		payment.setPaidOn(timeNow);
 		payment.setInvoiceCode(invoice.getInvoiceCode());
 		payment.setMerchant(merchant);
 		payment.setPaymentRefNo(rzpPayId);
@@ -171,6 +173,7 @@ public class PaymentService {
 			InvoicePayment refPay = new InvoicePayment();
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
+			refPay.setPaidOn(timeNow);
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(payment.getPaymentRefNo());
@@ -190,6 +193,7 @@ public class PaymentService {
 		InvoicePayment refPay = new InvoicePayment();
 		refPay.setAmount(amount);
 		refPay.setCreated(timeNow);
+		refPay.setPaidOn(timeNow);
 		refPay.setInvoiceCode(invoice.getInvoiceCode());
 		refPay.setMerchant(merchant);
 		refPay.setPaymentRefNo(refund.get("id"));

@@ -17,6 +17,7 @@ CREATE TABLE if not exists pc_expense_payment (
 	expense_code varchar(20) NOT NULL,
 	payment_ref_no varchar(50) NOT NULL,
 	amount float NOT NULL,
+	paid_on timestamp NOT NULL,
 	status varchar(20) NOT NULL,
 	method varchar(20) NOT NULL,
 	bank varchar(20) DEFAULT NULL,

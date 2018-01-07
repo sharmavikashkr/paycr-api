@@ -32,6 +32,7 @@ public class ExpensePayment {
 	private String method;
 	private String bank;
 	private String wallet;
+	private Date paidOn;
 
 	@ManyToOne
 	@JsonIgnore
@@ -136,6 +137,14 @@ public class ExpensePayment {
 
 	public void setExpenseCode(String expenseCode) {
 		this.expenseCode = expenseCode;
+	}
+
+	public Date getPaidOn() {
+		return paidOn;
+	}
+
+	public void setPaidOn(Date paidOn) {
+		this.paidOn = paidOn;
 	}
 
 }

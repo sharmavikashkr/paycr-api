@@ -178,6 +178,7 @@ public class InvoiceService {
 		}
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
+		payment.setPaidOn(DateUtil.getISTTimeInUTC(payment.getPaidOn()));
 		payment.setAmount(invoice.getPayAmount());
 		payment.setStatus("captured");
 		payment.setPayType(PayType.SALE);
