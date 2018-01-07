@@ -10,7 +10,8 @@
 								<td class="text-center"><strong>Name</strong></td>
 								<td class="text-center hidden-xs"><strong>Start Date</strong></td>
 								<td class="text-center"><strong>End Date</strong></td>
-								<td class="text-center"><strong>Used (Limit)</strong></td>
+								<td class="text-center"><strong>Used</strong></td>
+								<td class="text-center"><strong>Limit</strong></td>
 								<td class="text-center"><strong>Receipt</strong></td>
 							</tr>
 						</thead>
@@ -19,7 +20,8 @@
 								<td class="text-center">{{merpricing.pricing.name}}</td>
 								<td class="text-center hidden-xs">{{merpricing.startDate | date:'dd-MM-yyyy HH:mm'}}</td>
 								<td class="text-center">{{merpricing.endDate | date:'dd-MM-yyyy HH:mm'}}</td>
-								<td class="text-center">{{merpricing.useCount}} ({{merpricing.pricing.limit * merpricing.quantity}})</td>
+								<td class="text-center">{{merpricing.useCount}}</td>
+								<td class="text-center">{{merpricing.pricing.limit * merpricing.quantity}}</td>
 								<td>
 									<a class="btn btn-default btn-flat btn-sm" href="/subscription/receipt/pricing/{{merpricing.id}}" target="_blank">
 										<i class="fa fa-file-pdf-o"></i>
@@ -46,7 +48,7 @@
 							</tr>
 						</thead>
 						<tbody id="itemBody">
-							<tr ng-repeat="pricing in pricings" ng-if="pricing.rate > 0">
+							<tr ng-repeat="pricing in pricings" ng-if="pricing.active && pricing.rate > 0">
 								<td class="text-center">{{pricing.name}}</td>
 								<td class="text-center hidden-xs">{{pricing.duration}}</td>
 								<td class="text-center hidden-xs">{{pricing.limit}}</td>

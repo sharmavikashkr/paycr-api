@@ -85,4 +85,25 @@ app.controller('PricingController', function($scope, $rootScope, $http, $cookies
 			$scope.serverMessage(data);
 		});
 	}
+	$scope.removePricingMerchant = function(pricing, merchantId) {
+		var removeReq = {
+			"pricingId" : pricing.id,
+			"merchantId" : merchantId
+		}
+		var req = {
+			method : 'POST',
+			url : "/admin/pricing/merchant/remove",
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token"),
+				"Content-type": "application/x-www-form-urlencoded; charset=utf-8"
+			},
+			data : $httpParamSerializer(removeReq)
+		}
+		$http(req).then(function(data) {
+			$scope.updatePricingMerchant(pricing);
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
 });

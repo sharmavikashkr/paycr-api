@@ -139,4 +139,20 @@ public class AdminService {
 		return priMerRepo.findMerchantsForPricing(pricing);
 	}
 
+	public void removePricingMerchant(Integer pricingId, Integer merchantId) {
+		try {
+			Pricing pricing = pricingRepo.findOne(pricingId);
+			Merchant merchant = merRepo.findOne(merchantId);
+			if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant)
+					|| PricingType.PUBLIC.equals(pricing.getType())) {
+				throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			}
+			PricingMerchant priMer = priMerRepo.findByMerchantAndPricing(merchant, pricing);
+			priMerRepo.delete(priMer.getId());
+		} catch (Exception ex) {
+			throw new PaycrException(Constants.FAILURE, ex.getMessage());
+		}
+
+	}
+
 }

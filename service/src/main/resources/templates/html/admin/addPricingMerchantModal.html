@@ -9,7 +9,7 @@
 				<form name="createPricingForm">
 					<div class="row">
 						<div class="col-md-12">
-							<div class="row">
+							<div class="row" ng-if="customPricing.active">
 								<div class="col-md-4">
 									<input class="form-control" ng-model="newPricingMerchant" placeholder="Merchant Id" type="number"/>
 								</div>
@@ -37,7 +37,7 @@
 												<td>{{merchant.email}}</td>
 												<td>{{merchant.mobile}}</td>
 												<td>
-													<button class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
+													<button class="btn btn-danger btn-xs" ng-click="removePricingMerchant(customPricing,merchant.id)"><i class="fa fa-times"></i></button>
 												</td>
 											</tr>
 										</tbody>

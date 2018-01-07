@@ -34,7 +34,7 @@
 							<td class="hidden-xs">{{pricing.hsnsac}}</td>
 							<td class="hidden-xs">{{pricing.tax.name}} {{pricing.tax.value}}%</td>
 							<td>
-								<button ng-if="pricing.type == 'CUSTOM'" ng-click="updatePricingMerchant(pricing)" data-toggle="modal" data-target="#addPricingMerchantModal" type="button" class="btn btn-success btn-xs">Merchant</button>
+								<button ng-if="pricing.type == 'CUSTOM'" ng-click="updatePricingMerchant(pricing)" data-toggle="modal" data-target="#addPricingMerchantModal" type="button" class="btn btn-info btn-xs">Merchants</button>
 								<button ng-if="pricing.active" ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>
 								<button ng-if="!pricing.active" ng-click="togglePricing(pricing.id)" type="button" class="btn btn-success btn-xs">Activate</button>
 							</td>

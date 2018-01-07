@@ -173,5 +173,17 @@ public class AdminController {
 		}
 		return null;
 	}
+	
+	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
+	@RequestMapping(value = "/pricing/merchant/remove", method = RequestMethod.POST)
+	public void removePricingMerchant(@RequestParam("pricingId") Integer pricingId,
+			@RequestParam("merchantId") Integer merchantId, HttpServletResponse response) {
+		try {
+			adminService.removePricingMerchant(pricingId, merchantId);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
 
 }
