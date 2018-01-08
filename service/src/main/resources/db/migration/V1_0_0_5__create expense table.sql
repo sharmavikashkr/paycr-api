@@ -20,8 +20,6 @@ CREATE TABLE if not exists pc_expense_payment (
 	paid_on timestamp NOT NULL,
 	status varchar(20) NOT NULL,
 	method varchar(20) NOT NULL,
-	bank varchar(20) DEFAULT NULL,
-	wallet varchar(20) DEFAULT NULL,
 	pay_mode varchar(20) NOT NULL,
 	pay_type varchar(10) NOT NULL,
 	merchant_id int REFERENCES pc_merchant

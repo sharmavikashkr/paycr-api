@@ -44,8 +44,6 @@ public class Subscription implements Serializable {
 	private String paymentRefNo;
 	private String status;
 	private String method;
-	private String bank;
-	private String wallet;
 
 	@ManyToOne
 	private Pricing pricing;
@@ -110,22 +108,6 @@ public class Subscription implements Serializable {
 
 	public void setMethod(String method) {
 		this.method = method;
-	}
-
-	public String getBank() {
-		return bank;
-	}
-
-	public void setBank(String bank) {
-		this.bank = bank;
-	}
-
-	public String getWallet() {
-		return wallet;
-	}
-
-	public void setWallet(String wallet) {
-		this.wallet = wallet;
 	}
 
 	public Pricing getPricing() {

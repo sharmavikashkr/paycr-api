@@ -7,6 +7,7 @@ public class OfflineSubscription {
 	private int merchantId;
 	private int pricingId;
 	private PayMode payMode;
+	private String method;
 	private String paymentRefNo;
 	private int quantity;
 
@@ -48,6 +49,14 @@ public class OfflineSubscription {
 
 	public void setPayMode(PayMode payMode) {
 		this.payMode = payMode;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 }

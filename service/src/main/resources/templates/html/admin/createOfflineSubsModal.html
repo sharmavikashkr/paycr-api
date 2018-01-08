@@ -13,6 +13,16 @@
 								<tbody>
 									<tr>
 										<td>
+											<div ng-class="(createOfflineSubsForm.pricing.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Pricing</label>
+												<select name="pricing" class="form-control" ng-model="offlinesubs.pricing" ng-change="calculateSubsAmount()" required>
+													<option ng-repeat="pricing in pricings" ng-value="pricing">{{pricing.name}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
 											<div ng-class="(createOfflineSubsForm.payMode.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Pay Mode</label>
 												<select class="form-control" ng-model="offlinesubs.payMode" name="payMode" required>
@@ -23,11 +33,9 @@
 									</tr>
 									<tr>
 										<td>
-											<div ng-class="(createOfflineSubsForm.pricing.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label">Pricing</label>
-												<select name="pricing" class="form-control" ng-model="offlinesubs.pricing" ng-change="calculateSubsAmount()" required>
-													<option ng-repeat="pricing in pricings" ng-value="pricing">{{pricing.name}}</option>
-												</select>
+											<div ng-class="(createOfflineSubsForm.method.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Payment Method</label>
+												<input class="form-control" ng-model="offlinesubs.method" name="method" placeholder="Payment Method" ng-pattern="patterns.namePattern" required/>
 											</div>
 										</td>
 									</tr>

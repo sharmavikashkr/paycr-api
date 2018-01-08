@@ -30,8 +30,6 @@ public class ExpensePayment {
 	private String paymentRefNo;
 	private String status;
 	private String method;
-	private String bank;
-	private String wallet;
 	private Date paidOn;
 
 	@ManyToOne
@@ -81,22 +79,6 @@ public class ExpensePayment {
 
 	public void setMethod(String method) {
 		this.method = method;
-	}
-
-	public String getBank() {
-		return bank;
-	}
-
-	public void setBank(String bank) {
-		this.bank = bank;
-	}
-
-	public String getWallet() {
-		return wallet;
-	}
-
-	public void setWallet(String wallet) {
-		this.wallet = wallet;
 	}
 
 	public PayMode getPayMode() {

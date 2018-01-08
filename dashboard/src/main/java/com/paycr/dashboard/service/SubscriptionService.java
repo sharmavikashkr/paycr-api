@@ -125,7 +125,6 @@ public class SubscriptionService {
 		subs.setPricing(pricing);
 		subs.setQuantity(offline.getQuantity());
 		subs.setPaymentRefNo(offline.getPaymentRefNo());
-		subs.setMethod(offline.getPayMode().name());
 		subs.setStatus("captured");
 		String charset = hmacSigner.signWithSecretKey(merchant.getSecretKey(), String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
@@ -135,6 +134,7 @@ public class SubscriptionService {
 		} while ("".equals(subsCode) || CommonUtil.isNotNull(subsRepo.findBySubscriptionCode(subsCode)));
 		subs.setSubscriptionCode(subsCode);
 		subs.setPayMode(offline.getPayMode());
+		subs.setMethod(offline.getMethod());
 		subsRepo.save(subs);
 		MerchantPricing merPricing = new MerchantPricing();
 		merPricing.setCreated(timeNow);
@@ -216,9 +216,10 @@ public class SubscriptionService {
 		}
 		subs.setPaymentRefNo(rzpPayId);
 		subs.setStatus(rzpPayment.get("status"));
-		subs.setMethod(rzpPayment.get("method"));
-		subs.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
-		subs.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
+		StringBuilder method = rzpPayment.get("method");
+		method.append(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : " - " + rzpPayment.get("bank"));
+		method.append(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : " - " + rzpPayment.get("wallet"));
+		subs.setMethod(method.toString());
 		subsRepo.save(subs);
 		mv.addObject("subs", subs);
 		if ("captured".equals(subs.getStatus())) {
@@ -303,7 +304,6 @@ public class SubscriptionService {
 		expRepo.save(expense);
 		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense created", true, createdBy);
 		ExpensePayment expPay = new ExpensePayment();
-		expPay.setBank(subs.getBank());
 		expPay.setCreated(timeNow);
 		expPay.setPaidOn(subs.getCreated());
 		expPay.setStatus("captured");

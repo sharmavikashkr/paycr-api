@@ -34,6 +34,9 @@ public class ExpensePaymentDao {
 		if (!CommonUtil.isNull(searchReq.getPayType())) {
 			squery.append(" p.payType = :payType AND");
 		}
+		if (!CommonUtil.isNull(searchReq.getPayType())) {
+			squery.append(" p.payMode = :payMode AND");
+		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			squery.append(" p.created between :startDate AND :endDate AND");
 		}
@@ -52,6 +55,9 @@ public class ExpensePaymentDao {
 		}
 		if (!CommonUtil.isNull(searchReq.getPayType())) {
 			query.setParameter("payType", searchReq.getPayType());
+		}
+		if (!CommonUtil.isNull(searchReq.getPayType())) {
+			query.setParameter("payMode", searchReq.getPayMode());
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));

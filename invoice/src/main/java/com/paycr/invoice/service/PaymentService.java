@@ -149,12 +149,13 @@ public class PaymentService {
 		}
 		payment.setStatus(rzpPayment.get("status"));
 		invoice.setStatus(getStatus(rzpPayment.get("status")));
-		payment.setMethod(rzpPayment.get("method"));
 		payment.setAmount(invoice.getPayAmount());
 		payment.setPayMode(PayMode.PAYCR);
 		payment.setPayType(PayType.SALE);
-		payment.setBank(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : rzpPayment.get("bank"));
-		payment.setWallet(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : rzpPayment.get("wallet"));
+		StringBuilder method = rzpPayment.get("method");
+		method.append(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : " - " + rzpPayment.get("bank"));
+		method.append(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : " - " + rzpPayment.get("wallet"));
+		payment.setMethod(method.toString());
 		invoice.setPayment(payment);
 		invRepo.save(invoice);
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,

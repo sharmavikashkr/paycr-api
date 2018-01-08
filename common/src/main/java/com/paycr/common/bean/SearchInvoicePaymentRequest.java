@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
 public class SearchInvoicePaymentRequest {
@@ -12,6 +13,7 @@ public class SearchInvoicePaymentRequest {
 	private String invoiceCode;
 	private String paymentRefNo;
 	private PayType payType;
+	private PayMode payMode;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdFrom;
@@ -65,6 +67,14 @@ public class SearchInvoicePaymentRequest {
 
 	public void setPayType(PayType payType) {
 		this.payType = payType;
+	}
+
+	public PayMode getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(PayMode payMode) {
+		this.payMode = payMode;
 	}
 
 }

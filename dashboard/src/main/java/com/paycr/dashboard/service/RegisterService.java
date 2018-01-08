@@ -135,6 +135,7 @@ public class RegisterService {
 		offSubs.setPricingId(welcomePricing.getId());
 		offSubs.setPaymentRefNo("auto-enabled");
 		offSubs.setPayMode(PayMode.CASH);
+		offSubs.setMethod(PayMode.CASH.name());
 		offSubs.setQuantity(1);
 		subsService.offlineSubscription(offSubs);
 	}

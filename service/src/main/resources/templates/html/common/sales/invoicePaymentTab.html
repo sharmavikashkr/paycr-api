@@ -42,6 +42,16 @@
 						</tr>
 						<tr>
 							<td>
+								<div class="form-group">
+									<label class="control-label">Pay Mode</label>
+									<select class="form-control" ng-model="searchPaymentReq.payMode">
+										<option ng-repeat="payMode in payModes" value="{{payMode}}">{{payMode}}</option>
+									</select>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
 								<button ng-click="searchPayment()" type="button" class="btn btn-info">Search</button>
 								<button ng-click="clearPaymentSearch()" type="button" class="btn btn-basic">Clear</button>
 							</td>
@@ -102,17 +112,15 @@
 														<th>Paid On</th>
 														<th>Status</th>
 														<th>Pay Mode</th>
-														<th>Bank</th>
-														<th>Wallet</th>
+														<th>Pay Method</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr>
 														<td>{{payment.paidOn | date:'dd-MM-yyyy HH:mm'}}</td>
 														<td>{{payment.status}}</td>
+														<td>{{payment.payMode}}</td>
 														<td>{{payment.method}}</td>
-														<td>{{payment.bank}}</td>
-														<td>{{payment.wallet}}</td>
 													</tr>
 												</tbody>
 											</table>
