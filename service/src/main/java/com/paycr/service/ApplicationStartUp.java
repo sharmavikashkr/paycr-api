@@ -5,18 +5,28 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.paycr.admin.service.StartupService;
+import com.paycr.admin.service.StartupAdminService;
+import com.paycr.admin.service.StartupPricingService;
+import com.paycr.admin.service.StartupReportService;
 
 @Component
 public class ApplicationStartUp implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
-	private StartupService startupService;
+	private StartupAdminService startupAdminService;
+
+	@Autowired
+	private StartupPricingService startupPricingService;
+
+	@Autowired
+	private StartupReportService startupReportService;
 
 	@Override
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
-		startupService.createSuperAdmin();
-		startupService.createWelcomePricing();
+		startupAdminService.createSuperAdmin();
+		startupPricingService.createWelcomePricing();
+		startupPricingService.createGstTaxMaster();
+		startupReportService.createMasterReports();
 	}
 
 }
