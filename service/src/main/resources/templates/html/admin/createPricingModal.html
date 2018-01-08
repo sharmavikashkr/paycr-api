@@ -39,7 +39,7 @@
 										<td>
 											<div ng-class="(createPricingForm.type.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Pricing Type</label>
-												<select class="form-control" name="type" ng-model="newpricing.type">
+												<select class="form-control" name="type" ng-model="newpricing.type" required>
 													<option ng-repeat="type in pricingTypes" value="{{type}}">{{type}}</option>
 												</select>
 											</div>

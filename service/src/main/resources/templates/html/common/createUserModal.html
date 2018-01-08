@@ -37,9 +37,9 @@
 									</tr>
 									<tr>
 										<td>
-											<div class="form-group">
+											<div ng-class="(addUserForm.userType.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Role</label>
-												<select class="form-control" ng-model="newuser.userType">
+												<select name="userType" class="form-control" ng-model="newuser.userType" required>
 													<option ng-repeat="userType in userTypes" value="{{userType}}">{{userType}}</option>
 												</select>
 											</div>

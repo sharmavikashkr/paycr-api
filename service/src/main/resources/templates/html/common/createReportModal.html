@@ -29,18 +29,22 @@
 									</tr>
 									<tr>
 										<td>
-											<label ng-class="(createPricingForm.timeRange.$valid)?'':'has-error'" class="control-label">Time Range</label>
-											<select class="form-control" ng-model="newreport.timeRange" name="timeRange" required>
-												<option ng-repeat="timeRange in timeRanges" value="{{timeRange}}">{{timeRange}}</option>
-											</select>
+											<div  ng-class="(createPricingForm.timeRange.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Time Range</label>
+												<select class="form-control" ng-model="newreport.timeRange" name="timeRange" required>
+													<option ng-repeat="timeRange in timeRanges" value="{{timeRange}}">{{timeRange}}</option>
+												</select>
+											</div>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											<label ng-class="(createPricingForm.reportType.$valid)?'':'has-error'" class="control-label">Report Type</label>
-											<select class="form-control" ng-model="newreport.reportType" name="reportType" required>
-												<option ng-repeat="reportType in reportTypes" value="{{reportType}}">{{reportType}}</option>
-											</select>
+											<div ng-class="(createPricingForm.reportType.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Report Type</label>
+												<select class="form-control" ng-model="newreport.reportType" name="reportType" required>
+													<option ng-repeat="reportType in reportTypes" value="{{reportType}}">{{reportType}}</option>
+												</select>
+											</div>
 										</td>
 									</tr>
 									<tr>

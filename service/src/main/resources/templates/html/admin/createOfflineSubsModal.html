@@ -13,9 +13,9 @@
 								<tbody>
 									<tr>
 										<td>
-											<div class="form-group">
+											<div ng-class="(createOfflineSubsForm.payMode.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Pay Mode</label>
-												<select class="form-control" ng-model="offlinesubs.payMode">
+												<select class="form-control" ng-model="offlinesubs.payMode" name="payMode" required>
 													<option ng-repeat="payMode in payModes" ng-if="payMode != 'PAYCR'" value="{{payMode}}">{{payMode}}</option>
 												</select>
 											</div>
@@ -23,9 +23,9 @@
 									</tr>
 									<tr>
 										<td>
-											<div class="form-group">
+											<div ng-class="(createOfflineSubsForm.pricing.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Pricing</label>
-												<select class="form-control" ng-model="offlinesubs.pricing" ng-change="calculateSubsAmount()">
+												<select name="pricing" class="form-control" ng-model="offlinesubs.pricing" ng-change="calculateSubsAmount()" required>
 													<option ng-repeat="pricing in pricings" ng-value="pricing">{{pricing.name}}</option>
 												</select>
 											</div>
