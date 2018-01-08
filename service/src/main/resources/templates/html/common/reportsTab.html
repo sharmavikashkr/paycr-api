@@ -16,7 +16,7 @@
 							<button ng-click="loadReport(report)" class="btn btn-flat btn-xs btn-info" title="Load Report">
 								<i class="fa fa-retweet"></i>
 							</button>
-							<button ng-click="getSchedule()" data-toggle="modal" data-target="#recurrReportModal" class="btn btn-flat btn-xs btn-success" title="Schedule Report">
+							<button ng-click="getSchedule(report.id)" data-toggle="modal" data-target="#recurrReportModal" class="btn btn-flat btn-xs btn-success" title="Schedule Report">
 								<i class="fa fa-clock-o"></i>
 							</button>
 							<button ng-if="report.merchant!=null" ng-click="deleteReport(report.id, report.name)" class="btn btn-flat btn-xs btn-danger" title="Delete Report">

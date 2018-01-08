@@ -46,7 +46,7 @@
 											<div class="form-group">
 												<label class="control-label">Select Report</label>
 												<select class="form-control" ng-model="addScheduleReport">
-													<option ng-repeat="report in reports" value="{{report.id}}" selected>{{report.name}}</option>
+													<option ng-repeat="report in reports" value="{{report.id}}" ng-selected="report.id == scheduleReportId">{{report.name}}</option>
 												</select>
 											</div>
 										</td>
