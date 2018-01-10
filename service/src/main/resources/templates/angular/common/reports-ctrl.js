@@ -156,7 +156,7 @@ app.controller('ReportsController', function($scope, $rootScope, $http,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		$rootScope.scheduleReportId = reportId;
+		//$rootScope.addScheduleReport = reportId;
 	}
 	$scope.addSchedule = function(reportId) {
 		var req = {
