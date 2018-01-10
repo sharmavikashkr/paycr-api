@@ -59,7 +59,7 @@
 									</div>
 									<div ng-class="(createExpenseForm.orderDate.$valid)?'':'has-error'" class="form-group">
 										<label class="control-label">Order Date:</label>
-										<md-datepicker ng-model="saveexpense.orderDate"></md-datepicker>
+										<md-datepicker onkeydown="return false" ng-model="saveexpense.orderDate"></md-datepicker>
 									</div>
 								</div>
 							</div>

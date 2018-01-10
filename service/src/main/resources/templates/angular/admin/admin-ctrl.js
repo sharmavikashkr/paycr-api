@@ -1,7 +1,7 @@
 var app = angular.module('payCrAdminApp', [ "ngRoute", "ngCookies", "ngMaterial" ]);
 app.config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {
-       return moment(date).format('YYYY-MM-DD');
+       return date ? moment(date).format('YYYY-MM-DD') : '';
     };
 });
 app.controller('AdminController',
