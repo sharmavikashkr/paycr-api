@@ -146,14 +146,11 @@
 											<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 												<i class="fa fa-rupee"></i>
 											</button>
-											<a title="Download Pdf" class="btn btn-flat btn-default btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
+											<a title="Download Pdf" class="btn btn-flat bg-navy btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
 												<i class="fa fa-file-pdf-o"></i>
 											</a>
-											<button ng-click="updateInvoiceInfo(invoice)" title="Attachments" class="btn btn-flat btn-warning btn-md" data-toggle="modal" data-target="#invoiceAttachmentModal">
+											<button ng-click="updateInvoiceInfo(invoice)" title="Attachments" class="btn btn-flat bg-maroon btn-md" data-toggle="modal" data-target="#invoiceAttachmentModal">
 												<i class="fa fa-paperclip"></i>
-											</button>
-											<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoiceInfo(invoice)" title="Notifications" class="btn btn-flat btn-danger btn-md" data-toggle="modal" data-target="#invoiceNoticeModal">
-												<i class="fa fa-bell"></i>
 											</button>
 											<button ng-if="invoice.invoiceType == 'BULK' && invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance" ng-click="updateBulkInvoiceInfo(invoice)" title="Add child invoice" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#childInvoiceModal">
 												<i class="fa fa-plus"></i>
@@ -167,9 +164,16 @@
 											<button ng-if="invoice.invoiceType == 'RECURRING'" ng-click="updateRecurrInvoiceInfo(invoice)" title="Schedule invoices" class="btn btn-flat btn-danger btn-md" data-toggle="modal" data-target="#recurrInvoiceModal">
 												<i class="fa fa-clock-o"></i>
 											</button>
-											<button ng-click="fetchTimelines(invoice)" title="Invoice Timelines" class="btn btn-flat btn-info btn-md hidden-xs" data-toggle="modal" data-target="#invoiceTimelineModal">
-												<i class="fa fa-level-down"></i>
-											</button>
+											<span class="dropdown">
+											    <button class="btn bg-purple btn-flat dropdown-toggle" type="button" data-toggle="dropdown">More <span class="caret"></span></button>
+											    <ul class="dropdown-menu" style="margin:10px 0 0;">
+											    	<li ng-if="invoice.invoiceType == 'SINGLE'"><a href="#" ng-click="updateMakeRecurringInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceModal">Make Recurring</a></li>
+													<li><a href="#" ng-click="updateCloneInvoice(invoice)" data-toggle="modal" data-target="#createInvoiceModal">Clone</a></li>
+													<li class="divider"></li>
+													<li ng-click="updateInvoiceInfo(invoice)" ng-if="invoice.invoiceType == 'SINGLE'"><a href="#" data-toggle="modal" data-target="#invoiceNoticeModal">Reminders</a></li>
+													<li ng-click="fetchTimelines(invoice)"><a href="#" data-toggle="modal" data-target="#invoiceTimelineModal">Timeline</a></li>
+											    </ul>
+											</span>
 										</div>
 									</div>
 									<div class="row">

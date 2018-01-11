@@ -74,7 +74,6 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 							break;
 						}
 					}
-					$scope.calculateTotal();
 					break;
 				}
 			}
@@ -90,11 +89,11 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 							break;
 						}
 					}
-					$scope.calculateTotal();
 					break;
 				}
 			}
 		}
+		$rootScope.calculateTotal();
 	}
 	$scope.loadInvoicePage = function(page) {
 		var pageSize = 15;
@@ -123,6 +122,35 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			$rootScope.saveinvoice.update = true;
 		} else {
 			$rootScope.saveinvoice.update = false;
+		}
+		$rootScope.setTaxForInvoice();
+		$rootScope.calculateTotal();
+	}
+	$rootScope.updateCloneInvoice = function(invoice) {
+		$rootScope.saveinvoice = angular.copy(invoice);
+		$rootScope.saveinvoice.id = null;
+		$rootScope.saveinvoice.invoiceCode = null;
+		$rootScope.saveinvoice.update = false;
+		$rootScope.setTaxForInvoice();
+		$rootScope.calculateTotal();
+	}
+	$rootScope.updateMakeRecurringInvoice = function(invoice) {
+		$rootScope.saveinvoice = angular.copy(invoice);
+		$rootScope.saveinvoice.id = null;
+		$rootScope.saveinvoice.invoiceCode = null;
+		$rootScope.saveinvoice.update = false;
+		$rootScope.saveinvoice.invoiceType = "RECURRING";
+		$rootScope.setTaxForInvoice();
+		$rootScope.calculateTotal();
+	}
+	$rootScope.setTaxForInvoice = function() {
+		for(var index in $rootScope.saveinvoice.items) {
+			for(var tax in $rootScope.taxList) {
+				if($rootScope.saveinvoice.items[index].tax.id == $rootScope.taxList[tax].id) {
+					$rootScope.saveinvoice.items[index].tax = $rootScope.taxList[tax];
+					break;
+				}
+			}
 		}
 	}
 	$scope.addItem = function() {

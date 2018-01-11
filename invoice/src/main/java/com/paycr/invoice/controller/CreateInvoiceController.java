@@ -3,6 +3,8 @@ package com.paycr.invoice.controller;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,8 @@ import com.paycr.invoice.service.CreateInvoiceService;
 @RequestMapping("/invoice")
 public class CreateInvoiceController {
 
+	private static final Logger logger = LoggerFactory.getLogger(CreateInvoiceController.class);
+
 	@Autowired
 	private CreateInvoiceService crtInvSer;
 
@@ -37,6 +41,7 @@ public class CreateInvoiceController {
 		try {
 			return crtInvSer.single(invoice);
 		} catch (Exception ex) {
+			logger.error("Execption while creating invoice : ", ex);
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
 		}
@@ -69,7 +74,7 @@ public class CreateInvoiceController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 	}
-	
+
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/category/{invoiceCode}", method = RequestMethod.POST)
 	public void createCategory(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq,

@@ -53,6 +53,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			if (!invoice.getInvoiceType().equals(extInvoice.getInvoiceType())) {
 				throw new PaycrException(Constants.FAILURE, "Invoice type cannot be modified");
 			}
+			invoice.setParent(extInvoice.getParent());
 			invoice.setUpdated(timeNow);
 		} else {
 			do {

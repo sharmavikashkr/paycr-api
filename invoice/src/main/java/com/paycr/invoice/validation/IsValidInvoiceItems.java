@@ -82,6 +82,9 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 			invnRepo.save(inventory);
 		}
 		item.setInventory(inventory);
+		if(!invoice.isUpdate()) {
+			item.setId(null);
+		}
 	}
 
 }
