@@ -146,10 +146,12 @@ app.controller('AssetController', function($scope, $http, $rootScope,
 			"code" : asset.code,
 			"name" : asset.name,
 			"rate" : asset.rate,
+			"tax" : asset.tax,
 		}
 		$scope.saveexpense.items.push({
 			"asset" : asset,
 			"quantity" : 1,
+			"tax" : asset.tax,
 			"price" : 0
 		});
 		$rootScope.calculateExpTotal();

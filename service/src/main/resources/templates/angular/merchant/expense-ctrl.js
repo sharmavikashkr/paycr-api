@@ -31,9 +31,7 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.supplierList) {
 				var supplier = $rootScope.supplierList[index];
 				if(supplier.email == email){
-					newsup.email = supplier.email;
-					newsup.mobile = supplier.mobile;
-					newsup.name = supplier.name;
+					this.saveexpense.supplier = angular.copy(supplier);
 					break;
 				}
 			}
@@ -42,9 +40,7 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.supplierList) {
 				var supplier = $rootScope.supplierList[index];
 				if(supplier.mobile == mobile){
-					newsup.email = supplier.email;
-					newsup.mobile = supplier.mobile;
-					newsup.name = supplier.name;
+					this.saveexpense.supplier = angular.copy(supplier);
 					break;
 				}
 			}
@@ -53,9 +49,7 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.supplierList) {
 				var supplier = $rootScope.supplierList[index];
 				if(supplier.name == name){
-					newsup.email = supplier.email;
-					newsup.mobile = supplier.mobile;
-					newsup.name = supplier.name;
+					this.saveexpense.supplier = angular.copy(supplier);
 					break;
 				}
 			}
@@ -123,6 +117,18 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			$rootScope.saveexpense.update = true;
 		} else {
 			$rootScope.saveexpense.update = false;
+		}
+		$rootScope.setTaxForExpense();
+		$rootScope.calculateExpTotal();
+	}
+	$rootScope.setTaxForExpense = function() {
+		for(var index in $rootScope.saveexpense.items) {
+			for(var tax in $rootScope.taxList) {
+				if($rootScope.saveexpense.items[index].tax.id == $rootScope.taxList[tax].id) {
+					$rootScope.saveexpense.items[index].tax = $rootScope.taxList[tax];
+					break;
+				}
+			}
 		}
 	}
 	$scope.addItem = function() {

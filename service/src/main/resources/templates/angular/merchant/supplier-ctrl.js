@@ -143,7 +143,7 @@ app.controller('SupplierController', function($scope, $http, $rootScope,
 	}
 	$scope.updateExpenseSupplier = function(supplier) {
 		$rootScope.saveexpense = angular.copy($rootScope.newexpense);
-		$rootScope.saveexpense.supplier = supplier;
+		$rootScope.saveexpense.supplier = angular.copy(supplier);
 	}
 	$scope.seachSupExpense = function(supplier) {
 		$rootScope.searchSupplierExpenses(supplier);

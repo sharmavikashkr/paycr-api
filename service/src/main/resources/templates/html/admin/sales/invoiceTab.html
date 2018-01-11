@@ -117,7 +117,7 @@
 											<button ng-if="invoice.invoiceType != 'BULK'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 												<i class="fa fa-rupee"></i>
 											</button>
-											<a title="Download Pdf" class="btn btn-flat btn-default btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
+											<a title="Download Pdf" class="btn btn-flat bg-navy btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
 												<i class="fa fa-file-pdf-o"></i>
 											</a>
 											<button ng-if="invoice.invoiceType != 'SINGLE'" ng-click="searchChildInvoices(invoice.invoiceCode)" title="Search child invoices" class="btn btn-flat btn-warning btn-md">

@@ -115,31 +115,20 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-3">
-					<#if subs.status == 'captured'>
-					<p class="lead">Payment Details:</p>
-					<table class="table table-striped text-muted well well-sm no-shadow">
-						<tbody>
-							<tr>
-								<td>Payment Reference No:</td>
-								<td>${subs.paymentRefNo}</td>
-							</tr>
-							<tr>
-								<td>Payment Mode:</td>
-								<td>${subs.payMode}</td>
-							</tr>
-							<tr>
-								<td>Payment Status:</td>
-								<td>${subs.status}</td>
-							</tr>
-						</tbody>
-					</table>
-					</#if>
+					<u>Payment Methods:</u>
+					<!-- <img src="${staticUrl}/dist/img/credit/visa.png" alt="Visa">
+					<img src="${staticUrl}/dist/img/credit/mastercard.png" alt="Mastercard">
+					<img src="${staticUrl}/dist/img/credit/mestro.png" alt="Maestro"> -->
+					<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+					Choose from many available option like CreditCard, DebitCard, NetBanking, 
+						Mobile Wallets, UPI, etc to pay your dues.
+					</p>
 				</div>
 				<div class="col-xs-3"></div>
 				<div class="col-xs-6">
-					<p class="lead">Amount Due by ${subs.created?date}</p>
-	
+					<u>Amount Due by ${subs.created?date}</u>
 					<div class="table-responsive">
+						<br>
 						<table class="table">
 							<tr>
 								<th style="width: 50%">Total:</th>
@@ -159,6 +148,14 @@
 							</tr>
 						</table>
 					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4 text-center pull-right">
+					<br><hr>
+					<strong>PayCr</strong>
+					<div>(Authorised Signatory)</div>
+					<br>
 				</div>
 			</div>
 		</div>

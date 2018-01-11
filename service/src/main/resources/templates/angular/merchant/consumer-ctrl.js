@@ -281,7 +281,7 @@ app.controller('ConsumerController', function($scope, $http, $rootScope,
 	}
 	$scope.updateInvoiceConsumer = function(consumer) {
 		$rootScope.saveinvoice = angular.copy($rootScope.newinvoice);
-		$rootScope.saveinvoice.consumer = consumer;
+		$rootScope.saveinvoice.consumer = angular.copy(consumer);
 	}
 	$scope.seachConInvoice = function(consumer) {
 		$rootScope.searchConsumerInvoices(consumer);

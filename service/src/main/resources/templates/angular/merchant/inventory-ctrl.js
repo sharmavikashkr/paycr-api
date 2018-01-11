@@ -146,10 +146,12 @@ app.controller('InventoryController', function($scope, $http, $rootScope,
 			"code" : inventory.code,
 			"name" : inventory.name,
 			"rate" : inventory.rate,
+			"tax" : inventory.tax,
 		}
 		$scope.saveinvoice.items.push({
 			"inventory" : inventory,
 			"quantity" : 1,
+			"tax" : inventory.tax,
 			"price" : 0
 		});
 		$rootScope.calculateTotal();

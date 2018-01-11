@@ -31,9 +31,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.consumerList) {
 				var consumer = $rootScope.consumerList[index];
 				if(consumer.email == email){
-					newcon.email = consumer.email;
-					newcon.mobile = consumer.mobile;
-					newcon.name = consumer.name;
+					this.saveinvoice.consumer = angular.copy(consumer);
 					break;
 				}
 			}
@@ -42,9 +40,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.consumerList) {
 				var consumer = $rootScope.consumerList[index];
 				if(consumer.mobile == mobile){
-					newcon.email = consumer.email;
-					newcon.mobile = consumer.mobile;
-					newcon.name = consumer.name;
+					this.saveinvoice.consumer = angular.copy(consumer);
 					break;
 				}
 			}
@@ -53,9 +49,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.consumerList) {
 				var consumer = $rootScope.consumerList[index];
 				if(consumer.name == name){
-					newcon.email = consumer.email;
-					newcon.mobile = consumer.mobile;
-					newcon.name = consumer.name;
+					this.saveinvoice.consumer = angular.copy(consumer);
 					break;
 				}
 			}
