@@ -78,8 +78,9 @@ public class ExpenseSearchService {
 	public List<Expense> fetchExpenseList(SearchExpenseRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(request.getCreatedFrom())));
-		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(request.getCreatedTo())));
+		request.setCreatedFrom(
+				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
+		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -90,8 +91,8 @@ public class ExpenseSearchService {
 	public List<ExpensePayment> fetchPaymentList(SearchExpensePaymentRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(request.getCreatedFrom())));
-		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(request.getCreatedTo())));
+		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
+		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -192,8 +193,8 @@ public class ExpenseSearchService {
 		if (from == null || to == null) {
 			throw new PaycrException(Constants.FAILURE, "From/To dates cannot be null");
 		}
-		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(from));
-		to = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(to));
+		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(from)));
+		to = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(to)));
 		Calendar calTo = Calendar.getInstance();
 		calTo.setTime(to);
 		Calendar calFrom = Calendar.getInstance();
