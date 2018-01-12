@@ -237,17 +237,17 @@ public class InvoiceService {
 		recInv.setInvoice(invoice);
 		recInv.setRemaining(recInv.getTotal());
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(recInv.getStartDate())));
+		calendar.setTime(DateUtil.getStartOfDay(recInv.getStartDate()));
 		calendar.set(Calendar.HOUR_OF_DAY, 22);
 		calendar.set(Calendar.MINUTE, 0);
 		recInv.setNextDate(calendar.getTime());
 		recInv.setStartDate(calendar.getTime());
 
 		Date timeNow = new Date();
-		Date start = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(timeNow));
-		Date end = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(timeNow));
+		Date start = DateUtil.getStartOfDay(timeNow);
+		Date end = DateUtil.getEndOfDay(timeNow);
 		if (start.after(recInv.getStartDate())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid start date");
+			throw new PaycrException(Constants.FAILURE, "Cannot schedule from older date");
 		}
 		RecurringInvoice ext = recInvRepo.findByInvoiceAndActive(invoice, true);
 		if (ext != null) {
