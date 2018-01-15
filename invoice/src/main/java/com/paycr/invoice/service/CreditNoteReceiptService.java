@@ -14,6 +14,7 @@ import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.data.domain.InvoiceCreditNote;
 import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -21,7 +22,7 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.util.PdfUtil;
 
 @Service
-public class InvoiceReceiptService {
+public class CreditNoteReceiptService {
 
 	@Autowired
 	private InvoiceRepository invRepo;
@@ -38,10 +39,11 @@ public class InvoiceReceiptService {
 	@Autowired
 	private PdfUtil pdfUtil;
 
-	public ModelAndView getReceiptModelAndView(String invoiceCode) {
-		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
+	public ModelAndView getReceiptModelAndView(String noteCode) {
+		Invoice invoice = invRepo.findByCreditNoteCode(noteCode);
+		InvoiceCreditNote creditNote = invoice.getCreditNote();
 		List<TaxAmount> taxes = new ArrayList<>();
-		for (InvoiceItem item : invoice.getItems()) {
+		for (InvoiceItem item : creditNote.getItems()) {
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			TaxMaster tax = item.getTax();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);
@@ -69,21 +71,21 @@ public class InvoiceReceiptService {
 						.setScale(2, BigDecimal.ROUND_UP));
 			}
 		}
-		ModelAndView mv = new ModelAndView("receipt/invoice");
+		ModelAndView mv = new ModelAndView("receipt/creditNote");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("taxes", taxes);
 		mv.addObject("invoice", invoice);
 		return mv;
 	}
 
-	public File downloadPdf(String invoiceCode) throws IOException {
-		String pdfPath = server.getInvoiceLocation() + "Invoice-" + invoiceCode + ".pdf";
+	public File downloadPdf(String noteCode) throws IOException {
+		String pdfPath = server.getInvoiceLocation() + "CreditNote-" + noteCode + ".pdf";
 		File pdfFile = new File(pdfPath);
 		if (pdfFile.exists()) {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getAppUrl() + "/invoice/receipt/" + invoiceCode, pdfFile.getAbsolutePath());
+		pdfUtil.makePdf(company.getAppUrl() + "/creditNote/receipt/" + noteCode, pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
 

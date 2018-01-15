@@ -8,6 +8,8 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-md-12">
+						<div><a href="/creditNote/receipt/{{invoiceInfo.creditNote.noteCode}}" target="_blank" title="Credit Note Pdf" class="btn bg-navy"><i class="fa fa-file-pdf-o"></i></a></div>
+						<hr>
 						<p><strong>Credit Note#</strong> - {{invoiceInfo.creditNote.noteCode}}</p>
 						<p><strong>Created By</strong> - {{invoiceInfo.creditNote.createdBy}}</p>
 						<p><strong>Created</strong> - {{invoiceInfo.creditNote.created | date:"dd-MM-yyyy HH:mm"}}</p>

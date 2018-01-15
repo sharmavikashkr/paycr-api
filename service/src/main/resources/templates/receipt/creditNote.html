@@ -1,0 +1,181 @@
+<html>
+<head>
+	<title>PayCr</title>
+	<link rel="shortcut icon" href="${staticUrl}/images/ico/favicon.png">
+    <link href="${staticUrl}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${staticUrl}/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${staticUrl}/dist/css/AdminLTE.min.css" rel="stylesheet">
+    <script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
+    <style type="text/css">
+    	table {
+			font-size: 14px;
+		}
+    </style>
+</head>
+<body>
+	<section class="invoice">
+		<div id="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<h2 class="page-header">
+						Credit Note <small class="pull-right"><b>Date:</b> ${invoice.creditNote.created}</small>
+					</h2>
+				</div>
+			</div>
+			<div class="row invoice-info">
+				<div class="col-sm-4 invoice-col">
+					<b>Invoice#</b> ${invoice.invoiceCode}
+				</div>
+				<div class="col-sm-4 invoice-col">
+					<b>Credit Note#:</b> ${invoice.creditNote.noteCode}
+				</div>
+				<div class="col-sm-4 invoice-col">
+					<b>Invoice Date:</b> ${invoice.created?date}
+				</div>
+			</div>
+			<hr>
+			<div class="row invoice-info">
+				<div class="col-sm-4 invoice-col">
+					<u>From</u>
+					<address>
+						<strong><i class="fa fa-institution"></i> ${invoice.merchant.name}</strong>
+						<#if invoice.merchant.address??>
+						<br>${invoice.merchant.address.addressLine1}
+						<br><#if invoice.merchant.address.addressLine2??>${invoice.merchant.address.addressLine2}</#if>
+						<br>${invoice.merchant.address.city}
+						<br>${invoice.merchant.address.state}, ${invoice.merchant.address.pincode}
+						<br>${invoice.merchant.address.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${invoice.merchant.mobile}
+						<br><i class="fa fa-envelope"></i> ${invoice.merchant.email}
+						<#if invoice.merchant.gstin??>
+						<br><b>GSTIN: </b>${invoice.merchant.gstin}
+						</#if>
+					</address>
+				</div>
+				<div class="col-sm-4 invoice-col">
+					<#if invoice.consumer??>
+					<u>Billed To</u>
+					<address>
+						<strong><i class="fa fa-user"></i> ${invoice.consumer.name}</strong>
+						<#if invoice.consumer.billingAddress??>
+						<br>${invoice.consumer.billingAddress.addressLine1}
+						<br><#if invoice.consumer.billingAddress.addressLine2??>${invoice.consumer.billingAddress.addressLine2}</#if>
+						<br>${invoice.consumer.billingAddress.city}
+						<br>${invoice.consumer.billingAddress.state}, ${invoice.consumer.billingAddress.pincode}
+						<br>${invoice.consumer.billingAddress.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${invoice.consumer.mobile}
+						<br><i class="fa fa-envelope"></i> ${invoice.consumer.email}
+						<#if invoice.consumer.gstin??>
+						<br><b>GSTIN: </b>${invoice.consumer.gstin}
+						</#if>
+					</address>
+					</#if>
+				</div>
+				<div class="col-sm-4 invoice-col">
+					<#if invoice.consumer??>
+					<u>Shipped To</u>
+					<address>
+						<strong><i class="fa fa-user"></i> ${invoice.consumer.name}</strong>
+						<#if invoice.consumer.shippingAddress??>
+						<br>${invoice.consumer.shippingAddress.addressLine1}
+						<br><#if invoice.consumer.shippingAddress.addressLine2??>${invoice.consumer.shippingAddress.addressLine2}</#if>
+						<br>${invoice.consumer.shippingAddress.city}
+						<br>${invoice.consumer.shippingAddress.state}, ${invoice.consumer.shippingAddress.pincode}
+						<br>${invoice.consumer.shippingAddress.country}
+						</#if>
+						<br><i class="fa fa-phone"></i> ${invoice.consumer.mobile}
+						<br><i class="fa fa-envelope"></i> ${invoice.consumer.email}
+					</address>
+					</#if>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>HSN/SAC</th>
+								<th>Rate</th>
+								<th>Qty</th>
+								<th>Tax</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<#list invoice.creditNote.items as item>
+							<tr>
+								<td>${item.inventory.name}<#if item.inventory.description??><br><small>(${item.inventory.description})</small></#if></td>
+								<td><#if item.inventory.hsnsac??> ${item.inventory.hsnsac}</#if></td>
+								<td><i class="fa fa-rupee"></i> ${item.inventory.rate}</td>
+								<td>${item.quantity}</td>
+								<td>${item.tax.name} ${item.tax.value}%</td>
+								<td><i class="fa fa-rupee"></i> ${item.price}</td>
+							</tr>
+							</#list>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3"></div>
+				<div class="col-xs-3"></div>
+				<div class="col-xs-6">
+					<u>Amount Refundable</u>
+					<small><div class="table-responsive">
+						<br>
+						<table class="table">
+							<tr>
+								<th style="width: 50%">Total:</th>
+								<td><i class="fa fa-rupee"></i> ${invoice.creditNote.total}</td>
+							</tr>
+							<#list taxes as tax>
+							<tr>
+								<th>${tax.tax.name} (${tax.tax.value}%)</th>
+								<td>${tax.amount}</td>
+							</tr>
+							</#list>
+							<tr>
+								<th>Pay Amount:</th>
+								<td><i class="fa fa-rupee"></i> ${invoice.creditNote.payAmount}</td>
+							</tr>
+						</table>
+					</div>
+					</small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-4 text-center pull-right">
+					<br><hr>
+					<strong>${invoice.merchant.name}</strong>
+					<div>(Authorised Signatory)</div>
+					<br>
+				</div>
+			</div>
+		</div>
+		<div class="row no-print">
+			<div class="col-xs-12">
+				<a onclick="printDiv()" class="btn btn-default">
+					<i class="fa fa-print"></i> Print
+				</a>
+				<a href="/creditNote/receipt/download/${invoice.creditNote.noteCode}" class="btn btn-primary pull-right">
+					<i class="fa fa-download"></i> Generate PDF
+				</a>
+			</div>
+		</div>
+	</section>
+	<script src="${staticUrl}/vendor/jquery/jquery.min.js"></script>
+    <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+		function printDiv() {
+		     var printContents = document.getElementById('container').innerHTML;
+		     var originalContents = document.body.innerHTML;
+		     document.body.innerHTML = printContents;
+		     window.print();
+		     document.body.innerHTML = originalContents;
+		}
+	</script>
+</body>
+</html>

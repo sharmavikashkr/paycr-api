@@ -89,8 +89,8 @@ public class StartupPricingService {
 		cgst.setChild(false);
 		cgst.setName("CGST");
 		cgst.setValue(9F);
-		sgst.setChild(true);
-		sgst.setTaxParent(gst);
+		cgst.setChild(true);
+		cgst.setTaxParent(gst);
 		taxMRepo.save(cgst);
 	}
 
