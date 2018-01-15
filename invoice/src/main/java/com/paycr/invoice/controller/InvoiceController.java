@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
+import com.paycr.common.data.domain.InvoiceCreditNote;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.PcUser;
@@ -36,7 +37,7 @@ public class InvoiceController {
 
 	@Autowired
 	private InvoiceService invSer;
-	
+
 	@Autowired
 	private SecurityService secSer;
 
@@ -92,6 +93,17 @@ public class InvoiceController {
 			@RequestParam(value = "invoiceCode", required = true) String invoiceCode, HttpServletResponse response) {
 		try {
 			invSer.refund(amount, invoiceCode);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/creditNote/new", method = RequestMethod.POST)
+	public void newCreditNote(@RequestBody InvoiceCreditNote creditNote, HttpServletResponse response) {
+		try {
+			invSer.newCreditNote(creditNote);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());
@@ -185,7 +197,7 @@ public class InvoiceController {
 		}
 		return null;
 	}
-	
+
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/categories/{invoiceCode}", method = RequestMethod.GET)
 	public List<BulkCategory> categoryConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {

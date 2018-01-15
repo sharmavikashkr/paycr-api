@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.eclipse.jetty.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,7 @@ import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceAttachment;
+import com.paycr.common.data.domain.InvoiceCreditNote;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
@@ -46,10 +50,13 @@ import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.scheduler.InvoiceSchedulerService;
+import com.paycr.invoice.validation.CreditNoteValidator;
 import com.razorpay.RazorpayException;
 
 @Service
 public class InvoiceService {
+
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
 
 	@Autowired
 	private SecurityService secSer;
@@ -59,6 +66,9 @@ public class InvoiceService {
 
 	@Autowired
 	private InvoicePaymentRepository payRepo;
+
+	@Autowired
+	private CreditNoteValidator creditNoteValid;
 
 	@Autowired
 	private InvoiceHelper invHelp;
@@ -148,7 +158,7 @@ public class InvoiceService {
 		}
 	}
 
-	public void refund(BigDecimal amount, String invoiceCode) throws RazorpayException {
+	public InvoicePayment refund(BigDecimal amount, String invoiceCode) throws RazorpayException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
@@ -163,9 +173,29 @@ public class InvoiceService {
 			}
 		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
-			payService.refund(invoice, amount, user.getEmail());
+			return payService.refund(invoice, amount, user.getEmail());
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
+		}
+	}
+
+	public void newCreditNote(InvoiceCreditNote creditNote) {
+		Date timeNow = new Date();
+		try {
+			PcUser user = secSer.findLoggedInUser();
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			Invoice invoice = invRepo.findByInvoiceCode(creditNote.getInvoiceCode());
+			creditNote.setCreated(timeNow);
+			creditNote.setCreatedBy(user.getEmail());
+			creditNote.setMerchant(merchant);
+			creditNoteValid.validate(creditNote);
+			InvoicePayment refPay = refund(creditNote.getPayAmount(), invoice.getInvoiceCode());
+			creditNote.setPayment(refPay);
+			invoice.setCreditNote(creditNote);
+			invRepo.save(invoice);
+		} catch (Exception e) {
+			logger.error("Create credit note failed for invoice : {} ", creditNote.getInvoiceCode(), e);
+			throw new PaycrException(HttpStatus.BAD_REQUEST_400, e.getMessage());
 		}
 	}
 

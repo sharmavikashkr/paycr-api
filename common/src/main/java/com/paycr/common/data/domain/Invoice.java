@@ -79,6 +79,9 @@ public class Invoice implements Cloneable {
 	@OneToOne(cascade = CascadeType.ALL)
 	private InvoicePayment payment;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	private InvoiceCreditNote creditNote;
+
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
 
@@ -328,5 +331,13 @@ public class Invoice implements Cloneable {
 
 	public void setNotices(List<InvoiceNotify> notices) {
 		this.notices = notices;
+	}
+
+	public InvoiceCreditNote getCreditNote() {
+		return creditNote;
+	}
+
+	public void setCreditNote(InvoiceCreditNote creditNote) {
+		this.creditNote = creditNote;
 	}
 }

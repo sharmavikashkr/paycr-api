@@ -25,11 +25,13 @@
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkInvoiceUploadModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','recurrInvoiceModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','invoiceRefundModal')"></div>
+		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','createCreditNoteModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkConsumerUploadModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','updateConsumerBulkModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','editConAddressModal')"></div>
 		<div ng-if="user.access.finance" ng-include="templateUrl('merchant/sales','bulkInventoryUploadModal')"></div>
 		<div ng-include="templateUrl('common/sales','invoiceInfoModal')"></div>
+		<div ng-include="templateUrl('common/sales','creditNoteModal')"></div>
 		<div ng-include="templateUrl('common/sales','invoicePaymentModal')"></div>
 		<div ng-include="templateUrl('merchant/sales','invoiceNoticeModal')"></div>
 		<div ng-include="templateUrl('merchant/sales','invoiceAttachmentModal')"></div>

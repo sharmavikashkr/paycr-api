@@ -38,7 +38,6 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		"payAmount" : 0,
 		"currency" : "INR",
 		"expiresIn" : "",
-		"invoiceSettingId" : 0,
 		"customParams" : [ {
 			"paramName" : "",
 			"paramValue" : "",
@@ -73,7 +72,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 			$scope.server.isSuccess = true;
 			$scope.server.respStatus = "SUCCESS!";
 			$scope.server.respMsg = "operation successful";
-		} else if(data.status==401) {
+		} else if(data.status==401 || data.status==403) {
 			$scope.server.isSuccess = false;
 			$scope.server.respStatus = "FAILURE!";
 			$scope.server.respMsg = "unauthorized request";

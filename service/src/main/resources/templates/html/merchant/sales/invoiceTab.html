@@ -146,6 +146,9 @@
 											<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 												<i class="fa fa-rupee"></i>
 											</button>
+											<button ng-if="invoice.creditNote != null" ng-click="updateInvoiceInfo(invoice)" title="Credit Note" class="btn btn-flat bg-red btn-md" data-toggle="modal" data-target="#creditNoteModal">
+												<i class="fa fa-undo"></i>
+											</button>
 											<a title="Download Pdf" class="btn btn-flat bg-navy btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
 												<i class="fa fa-file-pdf-o"></i>
 											</a>
@@ -264,11 +267,16 @@
 													ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
 													ng-click="expireInvoice(invoice.invoiceCode)"
 													type="button" class="btn btn-default">Expire</button>
-												<button style="margin: 5px;"
+												<!-- <button style="margin: 5px;"
 													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && user.access.finance"
 													ng-click="updateInvoiceInfo(invoice)"
 													data-toggle="modal" data-target="#invoiceRefundModal"
-													type="button" class="btn btn-danger">Refund</button>
+													type="button" class="btn btn-danger">Refund</button> -->
+												<button style="margin: 5px;"
+													ng-if="invoice.creditNote == null && user.access.finance"
+													ng-click="updateCreditNote(invoice)"
+													data-toggle="modal" data-target="#createCreditNoteModal"
+													type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Credit Note</button>
 											</div>
 										</div>
 									</div>

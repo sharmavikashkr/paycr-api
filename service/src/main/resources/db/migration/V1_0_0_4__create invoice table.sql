@@ -35,7 +35,21 @@ CREATE TABLE if not exists pc_invoice_payment (
 	merchant_id int REFERENCES pc_merchant
 );
 
-CREATE TABLE if not exists pc_invoice(
+CREATE TABLE if not exists pc_invoice_credit_note (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	invoice_code varchar(20) NOT NULL,
+	note_code varchar(20) NOT NULL,
+	total float NOT NULL,
+	pay_amount float NOT NULL,
+	currency varchar(10) NOT NULL,
+	merchant_id int REFERENCES pc_merchant,
+	consumer_id int REFERENCES pc_consumer,
+	payment_id int REFERENCES pc_invoice_payment,
+	created_by varchar(50) NOT NULL
+);
+
+CREATE TABLE if not exists pc_invoice (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
 	invoice_code varchar(20) NOT NULL,
@@ -51,6 +65,7 @@ CREATE TABLE if not exists pc_invoice(
 	consumer_id int REFERENCES pc_consumer,
 	merchant_pricing_id int REFERENCES pc_merchant_pricing,
 	payment_id int REFERENCES pc_invoice_payment,
+	credit_note_id int REFERENCES pc_invoice_credit_note,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
 	expires_in int NOT null,
@@ -91,6 +106,7 @@ CREATE TABLE if not exists pc_invoice_item (
 	quantity int NOT NULL,
 	price float NOT NULL,
     invoice_id int REFERENCES pc_invoice,
+    invoice_credit_note_id int REFERENCES pc_invoice_credit_note,
 	tax_id int REFERENCES pc_tax_master,
     inventory_id int REFERENCES pc_inventory
 );

@@ -166,12 +166,12 @@ public class PaymentService {
 		}
 	}
 
-	public void refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
+	public InvoicePayment refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
 		Date timeNow = new Date();
 		InvoicePayment payment = invoice.getPayment();
 		Merchant merchant = invoice.getMerchant();
+		InvoicePayment refPay = new InvoicePayment();
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
-			InvoicePayment refPay = new InvoicePayment();
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
 			refPay.setPaidOn(timeNow);
@@ -183,31 +183,31 @@ public class PaymentService {
 			refPay.setMethod(payment.getMethod());
 			refPay.setPayType(PayType.REFUND);
 			payRepo.save(refPay);
-			return;
+		} else {
+			PaymentSetting paymentSetting = merchant.getPaymentSetting();
+			RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
+			String refundAmount = String.valueOf(amount.multiply(new BigDecimal(100)));
+			JSONObject refundRequest = new JSONObject();
+			refundRequest.put("amount", refundAmount);
+			Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
+			refPay.setAmount(amount);
+			refPay.setCreated(timeNow);
+			refPay.setPaidOn(timeNow);
+			refPay.setInvoiceCode(invoice.getInvoiceCode());
+			refPay.setMerchant(merchant);
+			refPay.setPaymentRefNo(refund.get("id"));
+			refPay.setStatus(refund.get("entity"));
+			refPay.setPayMode(PayMode.PAYCR);
+			refPay.setMethod(payment.getMethod());
+			refPay.setPayType(PayType.REFUND);
+			payRepo.save(refPay);
 		}
-		PaymentSetting paymentSetting = merchant.getPaymentSetting();
-		RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
-		String refundAmount = String.valueOf(amount.multiply(new BigDecimal(100)));
-		JSONObject refundRequest = new JSONObject();
-		refundRequest.put("amount", refundAmount);
-		Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
-		InvoicePayment refPay = new InvoicePayment();
-		refPay.setAmount(amount);
-		refPay.setCreated(timeNow);
-		refPay.setPaidOn(timeNow);
-		refPay.setInvoiceCode(invoice.getInvoiceCode());
-		refPay.setMerchant(merchant);
-		refPay.setPaymentRefNo(refund.get("id"));
-		refPay.setStatus(refund.get("entity"));
-		refPay.setPayMode(PayMode.PAYCR);
-		refPay.setMethod(payment.getMethod());
-		refPay.setPayType(PayType.REFUND);
-		payRepo.save(refPay);
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice refunded with amount : " + amount, true,
 				createdBy);
 		if ("captured".equals(payment.getStatus())) {
 			payNotSer.notify(payment);
 		}
+		return refPay;
 	}
 
 	private InvoiceStatus getStatus(String rzpStatus) {

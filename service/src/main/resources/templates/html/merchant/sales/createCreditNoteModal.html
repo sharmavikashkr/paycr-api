@@ -1,0 +1,135 @@
+<div ng-controller="InvoiceController" id="createCreditNoteModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content" style="min-width: 200%; margin-left: -50%;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="col-md-4">
+					<h5 class="modal-title">
+						<span>Credit Note for Invoice <strong>: {{newcreditnote.invoiceCode}}</strong></span>
+					</h5>
+				</div>
+			</div>
+			<div class="modal-body">
+				<form name="createCnForm">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<div class="row">
+										<h5 class="col-md-11">
+											<strong>Order summary</strong>
+										</h5>
+										<div>
+											<button ng-click="addCnItem()" type="button" class="btn btn-flat btn-success btn-sm">
+												<i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="panel-body">
+									<div class="table-responsive">
+										<table id="itemsTable" class="table table-bordered table-responsive">
+											<thead>
+												<tr>
+													<th class="text-center"></th>
+													<th class="text-center"><strong>Code</strong></th>
+													<th class="text-center"><strong>Name</strong></th>
+													<th class="text-center"><strong>Rate</strong></th>
+													<th class="text-center"><strong>Qty</strong></th>
+													<th class="text-center"><strong>Tax</strong></th>
+													<th class="text-right"><strong>Total</strong></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="item in newcreditnote.items">
+													<td>
+														<div class="text-center">
+															<button ng-click="deleteCnItem($index)" type="button" class="btn btn-flat btn-danger btn-sm">
+																<i class="fa fa-times"></i>
+															</button>
+														</div>
+													</td>
+													<td>
+														<div ng-class="(createCnForm.itemCode{{$index}}.$valid)?'':'has-error'" class="form-group">
+															<input class="form-control text-center" list="cn-item-code-auto-complete" ng-change="setInventory(item,'CODE')" ng-model="item.inventory.code" name="itemCode{{$index}}" autocomplete="off" placeholder="Code" type="text" ng-pattern="patterns.paramNamePattern" required />
+															<datalist id="cn-item-code-auto-complete">
+																<option ng-repeat="invnitem in inventoryList" ng-if="invnitem.active" ng-value="invnitem.code">
+															</datalist>
+														</div>
+													</td>
+													<td>
+														<div ng-class="(createCnForm.itemName{{$index}}.$valid)?'':'has-error'" class="form-group">
+															<input class="form-control text-center" list="cn-item-name-auto-complete" ng-change="setInventory(item,'NAME')" ng-model="item.inventory.name" name="itemName{{$index}}" autocomplete="off" placeholder="Name" type="text" ng-pattern="patterns.namePattern" required />
+															<datalist id="cn-item-name-auto-complete">
+																<option ng-repeat="invnitem in inventoryList" ng-if="invnitem.active" ng-value="invnitem.name">
+															</datalist>
+														</div>
+													</td>
+													<td>
+														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
+															<div class="form-group">
+																<input class="form-control text-center" ng-change="calculateCnTotal()" ng-model="item.inventory.rate" placeholder="2000.00" type="number" step="0.01" required />
+															</div>
+														</div>
+													</td>
+													<td>
+														<div class="form-group">
+															<input class="form-control text-center" ng-change="calculateCnTotal()" ng-model="item.quantity" placeholder="2" type="number" required />
+														</div>
+													</td>
+													<td>
+														<div class="form-group">
+															<select class="form-control" ng-model="item.tax" ng-change="calculateCnTotal()">
+																<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+															</select>
+														</div>
+													</td>
+													<td>
+														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="item.price" placeholder="4000.00" type="number" step="0.01" readonly />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-change="calculateCnTotal()" ng-model="newcreditnote.total" placeholder="1200.00" type="number" step="0.01" readonly/>
+															</div>
+														</div>
+													</td>
+													<td class="emptyrow text-center"><strong>Total</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="newcreditnote.payAmount" placeholder="1200.00" type="number" step="0.01" readonly/>
+															</div>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" ng-click="createCreditNote()">Create</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
