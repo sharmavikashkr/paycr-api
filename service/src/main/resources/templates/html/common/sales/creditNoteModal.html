@@ -7,12 +7,41 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-md-12">
-						<div><a href="/creditNote/receipt/{{invoiceInfo.creditNote.noteCode}}" target="_blank" title="Credit Note Pdf" class="btn bg-navy"><i class="fa fa-file-pdf-o"></i></a></div>
-						<hr>
-						<p><strong>Credit Note#</strong> - {{invoiceInfo.creditNote.noteCode}}</p>
-						<p><strong>Created By</strong> - {{invoiceInfo.creditNote.createdBy}}</p>
-						<p><strong>Created</strong> - {{invoiceInfo.creditNote.created | date:"dd-MM-yyyy HH:mm"}}</p>
+					<div class="col-lg-6">
+						<table class="table table-bordered table-responsive">
+							<tbody>
+								<tr>
+									<td class="text-center"><p><strong>Credit Note#</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.creditNote.noteCode}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><p><strong>Total</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.creditNote.total}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><p><strong>Refund Amount</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.creditNote.payAmount}}</p></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-lg-6">
+						<table class="table table-bordered table-responsive">
+							<tbody>
+								<tr>
+									<td class="text-center"><p><strong>Receipt</strong></p></td>
+									<td class="text-center"><div><a href="/creditNote/receipt/{{invoiceInfo.creditNote.noteCode}}" target="_blank" title="Credit Note Pdf" class="btn btn-sm bg-navy"><i class="fa fa-file-pdf-o"></i></a></div></td>
+								</tr>
+								<tr>
+									<td class="text-center"><p><strong>Created</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.creditNote.created | date:"dd-MM-yyyy HH:mm"}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><p><strong>Created By</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.creditNote.createdBy}}</p></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 				<hr>
@@ -22,12 +51,12 @@
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<thead>
 								<tr>
-									<td>Code</td>
-									<td>Name</td>
-									<td class="hidden-xs">Rate</td>
-									<td class="hidden-xs">Quantity</td>
-									<td class="hidden-xs">Tax</td>
-									<td>Price</td>
+									<th>Code</th>
+									<th>Name</th>
+									<th class="hidden-xs">Rate</th>
+									<th class="hidden-xs">Quantity</th>
+									<th class="hidden-xs">Tax</th>
+									<th>Price</th>
 								</tr>
 							</thead>
 							<tbody>

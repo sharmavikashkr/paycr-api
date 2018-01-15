@@ -17,23 +17,23 @@
 						<table class="table table-bordered table-responsive">
 							<tbody>
 								<tr>
-									<td class="text-center"><p>Add Items</p></td>
+									<td class="text-center"><p><strong>Add Items</strong></p></td>
 									<td class="text-center"><p>{{invoiceInfo.addItems}}</p></td>
 								</tr>
 								<tr>
-									<td class="text-center"><p>Created</p></td>
+									<td class="text-center"><p><strong>Created</strong></p></td>
 									<td class="text-center"><p>{{invoiceInfo.created | date:"dd-MM-yyyy HH:mm"}}</p></td>
 								</tr>
 								<tr>
-									<td class="text-center"><p>Expiry</p></td>
+									<td class="text-center"><p><strong>Expiry</strong></p></td>
 									<td class="text-center"><p>{{invoiceInfo.expiry | date:'dd-MM-yyyy HH:mm'}}</p></td>
 								</tr>
 								<tr>
-									<td class="text-center"><p>Never Expire</p></td>
+									<td class="text-center"><p><strong>Never Expire</strong></p></td>
 									<td class="text-center"><p>{{invoiceInfo.neverExpire}}</p></td>
 								</tr>
 								<tr>
-									<td class="text-center"><p>Updated</p></td>
+									<td class="text-center"><p><strong>Updated</strong></p></td>
 									<td class="text-center"><p>{{invoiceInfo.updated | date:'dd-MM-yyyy HH:mm'}}</p></td>
 								</tr>
 							</tbody>
@@ -44,7 +44,7 @@
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<tbody>
 								<tr ng-repeat="param in invoiceInfo.customParams">
-									<td class="text-center"><p>{{param.paramName}}</p></td>
+									<td class="text-center"><p><strong>{{param.paramName}}</strong></p></td>
 									<td class="text-center"><p>{{param.paramValue}}</p></td>
 								</tr>
 							</tbody>
@@ -58,12 +58,12 @@
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<thead>
 								<tr>
-									<td>Code</td>
-									<td>Name</td>
-									<td class="hidden-xs">Rate</td>
-									<td class="hidden-xs">Quantity</td>
-									<td class="hidden-xs">Tax</td>
-									<td>Price</td>
+									<th>Code</th>
+									<th>Name</th>
+									<th class="hidden-xs">Rate</th>
+									<th class="hidden-xs">Quantity</th>
+									<th class="hidden-xs">Tax</th>
+									<th>Price</th>
 								</tr>
 							</thead>
 							<tbody>
