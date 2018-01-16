@@ -152,7 +152,7 @@ public class PaymentService {
 		payment.setAmount(invoice.getPayAmount());
 		payment.setPayMode(PayMode.PAYCR);
 		payment.setPayType(PayType.SALE);
-		StringBuilder method = rzpPayment.get("method");
+		StringBuilder method = new StringBuilder(rzpPayment.get("method"));
 		method.append(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : " - " + rzpPayment.get("bank"));
 		method.append(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : " - " + rzpPayment.get("wallet"));
 		payment.setMethod(method.toString());

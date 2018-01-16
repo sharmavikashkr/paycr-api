@@ -216,7 +216,7 @@ public class SubscriptionService {
 		}
 		subs.setPaymentRefNo(rzpPayId);
 		subs.setStatus(rzpPayment.get("status"));
-		StringBuilder method = rzpPayment.get("method");
+		StringBuilder method = new StringBuilder(rzpPayment.get("method"));
 		method.append(JSONObject.NULL.equals(rzpPayment.get("bank")) ? null : " - " + rzpPayment.get("bank"));
 		method.append(JSONObject.NULL.equals(rzpPayment.get("wallet")) ? null : " - " + rzpPayment.get("wallet"));
 		subs.setMethod(method.toString());

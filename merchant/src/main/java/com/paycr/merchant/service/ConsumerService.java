@@ -185,7 +185,7 @@ public class ConsumerService {
 				record[i] = consumer[i];
 			}
 			String reason = "Invalid format";
-			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 6 || consumer.length == 12) {
+			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 6 || consumer.length == 12 || consumer.length == 13) {
 				try {
 					Consumer con = new Consumer();
 					con.setName(consumer[0].trim());
@@ -212,6 +212,19 @@ public class ConsumerService {
 						billAddr.setCountry(consumer[11].trim());
 						validateAddress(billAddr);
 						con.setBillingAddress(billAddr);
+					}
+					if(consumer.length > 12) {
+						if("YES".equalsIgnoreCase(consumer[12].trim())) {
+							Address shipAddr = new Address();
+							shipAddr.setAddressLine1(consumer[6].trim());
+							shipAddr.setAddressLine2(consumer[7].trim());
+							shipAddr.setCity(consumer[8].trim());
+							shipAddr.setState(consumer[9].trim());
+							shipAddr.setPincode(consumer[10].trim());
+							shipAddr.setCountry(consumer[11].trim());
+							validateAddress(shipAddr);
+							con.setShippingAddress(shipAddr);
+						}
 					}
 					newConsumer(con, merchant, createdBy);
 					reason = "CREATED";
