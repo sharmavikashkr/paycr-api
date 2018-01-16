@@ -175,7 +175,7 @@
                                  <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:20px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
                                     <div class="img-container center  autowidth " style="padding-right: 0px;  padding-left: 0px;">
                                        <a href="${baseUrl}" target="_blank">
-                                       <img class="center  autowidth " align="center" border="0" src="${staticUrl}/images/logo_new.png" alt="PayCr" title="PayCr" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 94px" width="94">
+                                       <img class="center  autowidth " border="0" src="${staticUrl}/images/logo_new.png" alt="PayCr" title="PayCr" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 94px" width="94">
                                        </a>
                                     </div>
                                  </div>
@@ -184,55 +184,10 @@
                            <div class="col num6" style="max-width: 320px;min-width: 250px;display: table-cell;vertical-align: top;">
                               <div style="background-color: transparent; width: 100% !important;">
                                  <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:20px; padding-bottom:20px; padding-right: 0px; padding-left: 0px;">
-                                    <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:150%;color:#6E6F7A; padding-right: 10px; padding-left: 10px; padding-top: 20px; padding-bottom: 20px;">
+                                    <div align="right" style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:150%;color:#6E6F7A; padding-right: 10px; padding-left: 10px; padding-top: 20px; padding-bottom: 20px;">
                                        <div style="font-size:12px;line-height:18px;color:#6E6F7A;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                          <p style="margin: 0;font-size: 12px;line-height: 18px">Pay By : ${invoice.expiry?date}</p>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px">${promotion.created?date}</p>
                                        </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div style="background-color:#323341;">
-                     <div style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
-                        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
-                           <div class="col num12" style="min-width: 320px;max-width: 500px;display: table-cell;vertical-align: top;">
-                              <div style="background-color: transparent; width: 100% !important;">
-                                 <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:0px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
-                                    <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;color:#ffffff; padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 30px;">
-                                       <div style="font-size:12px;line-height:14px;color:#ffffff;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                          <p style="margin: 0;font-size: 14px;line-height: 17px;text-align: center"><span style="font-size: 28px; line-height: 33px;">Invoice request from <strong>${invoice.merchant.name}</strong></span></p><br>
-                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Invoice Id : ${invoice.invoiceCode}</p>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div style="background-color:#61626F;">
-                     <div style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
-                        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
-                           <div class="col num12" style="min-width: 320px;max-width: 500px;display: table-cell;vertical-align: top;">
-                              <div style="background-color: transparent; width: 100% !important;">
-                                 <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:30px; padding-bottom:30px; padding-right: 0px; padding-left: 0px;">
-                                    <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;color:#ffffff; padding-right: 10px; padding-left: 10px; padding-top: 25px; padding-bottom: 10px;">
-                                       <div style="font-size:12px;line-height:14px;color:#ffffff;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                          <p style="margin: 0;font-size: 18px;line-height: 22px;text-align: center">${note}</p>
-                                       </div>
-                                    </div>
-                                    <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:150%;color:#B8B8C0; padding-right: 10px; padding-left: 10px; padding-top: 0px; padding-bottom: 10px;">
-                                       <div style="font-size:12px;line-height:18px;color:#B8B8C0;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                          <p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">Proceed to pay <strong>INR ${invoice.payAmount}</strong> for your order.</p>
-                                       </div>
-                                    </div>
-                                    <div align="center" class="button-container center" style="padding-right: 10px; padding-left: 10px; padding-top:15px; padding-bottom:10px;">
-                                       <div style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
-											<a href="${invoiceUrl}" type="button" class="btn btn-info" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;background-color: #f39c12;color: #fff;text-decoration: underline;display: inline-block;padding: 6px 12px;margin-bottom: 0;font-size: 14px;font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;border-radius: 4px;border-color: #46b8da;">Proceed to Pay</a>
-										</div>
                                     </div>
                                  </div>
                               </div>
@@ -241,6 +196,27 @@
                      </div>
                   </div>
                   <div style="background-color:#ffffff;">
+                     <div style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
+                        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                           <div class="col num12" style="min-width: 320px;max-width: 500px;display: table-cell;vertical-align: top;">
+                              <div style="background-color: transparent; width: 100% !important;">
+                                 <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:0px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
+                                    <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%; padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 30px;">
+                                       <div style="font-size:12px;line-height:14px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
+                                          <p style="margin: 0;font-size: 14px;line-height: 17px;"><span style="font-size: 28px; line-height: 33px;">Greetings from PayCr!</span></p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;">We are a team of enthusiasts who believe in change.</p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;">We introduce you to the world of PayCr, an excellent new web based accounting tool which is GST ready.</p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;">PayCr takes care of your accounting needs while you can concentrate on what you are best at. PayCr does numerous tasks for you such and invoicing, creating bulk/recurring invoices, sending mails to payee, managing the record books, filing GST returns etc in few clicks.</p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;">We have selected your esteemed organization as our testing partner for this exciting tool. Please register <span><a href="${baseUrl}/register">here</a></span></p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div style="background-color:#2C2D37;">
                      <div style="Margin: 0 auto;min-width: 320px;max-width: 500px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
                         <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
                            <div class="col num12" style="min-width: 320px;max-width: 500px;display: table-cell;vertical-align: top;">

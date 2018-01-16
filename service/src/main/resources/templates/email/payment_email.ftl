@@ -173,7 +173,7 @@
                            <div class="col num6" style="max-width: 320px;min-width: 250px;display: table-cell;vertical-align: top;">
                               <div style="background-color: transparent; width: 100% !important;">
                                  <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:20px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
-                                    <div align="center" class="img-container center  autowidth " style="padding-right: 0px;  padding-left: 0px;">
+                                    <div class="img-container center  autowidth " style="padding-right: 0px;  padding-left: 0px;">
                                        <a href="${baseUrl}" target="_blank">
                                        <img class="center  autowidth " align="center" border="0" src="${staticUrl}/images/logo_new.png" alt="PayCr" title="PayCr" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 94px" width="94">
                                        </a>
@@ -224,7 +224,7 @@
                                     <div align="center" style="padding-right: 10px; padding-left: 10px; padding-bottom: 10px;">
                                        <div style="line-height:10px;font-size:1px">&#160;</div>
                                        <div style="display: table; max-width:151px;">
-                                          <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;Margin-right: 5px">
+                                          <table border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;Margin-right: 5px">
                                              <tbody>
                                                 <tr style="vertical-align: top">
                                                    <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">

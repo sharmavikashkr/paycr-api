@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.admin.service.AdminSearchService;
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchPromotionRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Promotion;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.util.RoleUtil;
 
@@ -51,6 +53,19 @@ public class AdminSearchController {
 			response.addHeader("error_message", ex.getMessage());
 		}
 		return subs;
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_AUTH)
+	@RequestMapping("/promotion")
+	public List<Promotion> searchPromotion(@RequestBody SearchPromotionRequest request, HttpServletResponse response) {
+		List<Promotion> promotions = new ArrayList<>();
+		try {
+			promotions = adminSerSer.fetchPromotionList(request);
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+		}
+		return promotions;
 	}
 
 }

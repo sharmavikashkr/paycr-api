@@ -273,7 +273,7 @@
 													data-toggle="modal" data-target="#invoiceRefundModal"
 													type="button" class="btn btn-danger">Refund</button> -->
 												<button style="margin: 5px;"
-													ng-if="invoice.creditNote == null && user.access.finance"
+													ng-if="invoice.creditNote == null && invoice.status == 'PAID' && user.access.finance"
 													ng-click="updateCreditNote(invoice)"
 													data-toggle="modal" data-target="#createCreditNoteModal"
 													type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Credit Note</button>

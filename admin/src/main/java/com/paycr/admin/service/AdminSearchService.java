@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.SearchMerchantRequest;
+import com.paycr.common.bean.SearchPromotionRequest;
 import com.paycr.common.bean.SearchSubsRequest;
 import com.paycr.common.data.dao.MerchantDao;
+import com.paycr.common.data.dao.PromotionDao;
 import com.paycr.common.data.dao.SubscriptionDao;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.Promotion;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.Constants;
@@ -26,20 +29,37 @@ public class AdminSearchService {
 	@Autowired
 	private SubscriptionDao subsDao;
 
+	@Autowired
+	private PromotionDao promoDao;
+
 	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(
+				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
+		request.setCreatedTo(
+				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		return merDao.findMerchants(request);
 	}
 
 	public List<Subscription> fetchSubsList(SearchSubsRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(
+				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
+		request.setCreatedTo(
+				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		return subsDao.findSubscriptions(request);
+	}
+
+	public List<Promotion> fetchPromotionList(SearchPromotionRequest request) {
+		vaidateRequest(request);
+		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		request.setCreatedFrom(
+				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
+		request.setCreatedTo(
+				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		return promoDao.findPromotions(request);
 	}
 
 	private void vaidateRequest(Object request) {
