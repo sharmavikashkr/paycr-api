@@ -276,7 +276,6 @@ public class SubscriptionService {
 		asset.setHsnsac(subs.getPricing().getHsnsac());
 		asset.setRate(subs.getPricing().getRate());
 		asset.setTax(subs.getPricing().getTax());
-		asset.setDescription(subs.getPricing().getDescription());
 		item.setAsset(asset);
 		item.setPrice(subs.getPayAmount());
 		item.setQuantity(subs.getQuantity());

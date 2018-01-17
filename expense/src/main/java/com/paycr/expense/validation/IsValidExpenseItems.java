@@ -57,7 +57,8 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 		BigDecimal expPrice = item.getAsset().getRate().multiply(new BigDecimal(item.getQuantity()));
 		expPrice = expPrice
 				.add(expPrice.multiply(new BigDecimal(item.getTax().getValue())).divide(new BigDecimal(100)));
-		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP).equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
+		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
+				.equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
 		Asset asset = asstRepo.findByMerchantAndCode(expense.getMerchant(), item.getAsset().getCode());
@@ -75,7 +76,9 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 			asset.setMerchant(expense.getMerchant());
 			asset.setCode(item.getAsset().getCode());
 			asset.setName(item.getAsset().getName());
+			asset.setDescription(item.getAsset().getDescription());
 			asset.setRate(item.getAsset().getRate());
+			asset.setHsnsac(item.getAsset().getHsnsac());
 			asset.setTax(item.getTax());
 			asset.setCreatedBy(expense.getCreatedBy());
 			asset.setActive(true);
