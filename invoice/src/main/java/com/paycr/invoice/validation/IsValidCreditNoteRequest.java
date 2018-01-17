@@ -1,5 +1,6 @@
 package com.paycr.invoice.validation;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.eclipse.jetty.http.HttpStatus;
@@ -44,6 +45,9 @@ public class IsValidCreditNoteRequest implements RequestValidator<InvoiceCreditN
 			noteCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 			creditNote.setNoteCode(noteCode);
 		} while (CommonUtil.isNotNull(invRepo.findByCreditNoteCode(noteCode)));
+		if (CommonUtil.isNull(creditNote.getAdjustment())) {
+			creditNote.setAdjustment(new BigDecimal(0));
+		}
 		creditNote.setCreated(timeNow);
 		creditNote.setConsumer(invoice.getConsumer());
 	}

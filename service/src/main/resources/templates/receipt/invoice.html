@@ -26,9 +26,13 @@
 				<div class="col-sm-4 invoice-col">
 					<b>Invoice#</b> ${invoice.invoiceCode}
 				</div>
-				<div class="col-sm-4 invoice-col">
-					<b>Invoice Date:</b> ${invoice.created?date}
-				</div>
+				<#if invoice.consumer??>
+					<#if invoice.consumer.shippingAddress??>
+						<div class="col-sm-4 invoice-col">
+							<b>Place of Supply:</b> ${invoice.consumer.shippingAddress.state}
+						</div>
+					</#if>
+				</#if>
 				<div class="col-sm-4 invoice-col">
 					<b>Payment Due:</b> ${invoice.expiry?date}
 				</div>

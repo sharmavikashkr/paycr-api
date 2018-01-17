@@ -26,9 +26,11 @@
 				<div class="col-sm-4 expense-col">
 					<b>Expense#</b> ${expense.expenseCode}
 				</div>
-				<div class="col-sm-4 expense-col">
-					<b>Expense Date:</b> ${expense.created?date}
-				</div>
+				<#if expense.merchant.address??>
+					<div class="col-sm-4 invoice-col">
+						<b>Place of Supply:</b> ${expense.merchant.address.state}
+					</div>
+				</#if>
 				<div class="col-sm-4 expense-col">
 					<b>Payment Due:</b> ${expense.orderDate?date}
 				</div>

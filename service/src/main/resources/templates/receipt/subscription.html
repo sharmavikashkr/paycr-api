@@ -26,9 +26,11 @@
 				<div class="col-sm-4 invoice-col">
 					<b>Invoice#</b> ${subs.subscriptionCode}
 				</div>
-				<div class="col-sm-4 invoice-col">
-					<b>Invoice Date:</b> ${subs.created?date}
-				</div>
+				<#if subs.merchant.address??>
+					<div class="col-sm-4 invoice-col">
+						<b>Place of Supply:</b> ${subs.merchant.address.state}
+					</div>
+				</#if>
 				<div class="col-sm-4 invoice-col">
 					<b>Payment Due:</b> ${subs.created?date}
 				</div>
