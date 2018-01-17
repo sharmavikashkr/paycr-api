@@ -13,6 +13,8 @@ public interface PricingRepository extends JpaRepository<Pricing, Integer> {
 
 	public Pricing findByCodeAndActive(String code, boolean active);
 
+	public Pricing findByCode(String code);
+
 	public List<Pricing> findByTypeAndActive(PricingType type, boolean active);
 
 }

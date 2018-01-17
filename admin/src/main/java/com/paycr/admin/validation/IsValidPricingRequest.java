@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.TaxMaster;
+import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -22,6 +23,9 @@ public class IsValidPricingRequest implements RequestValidator<Pricing> {
 	@Autowired
 	private TaxMasterRepository taxMRepo;
 
+	@Autowired
+	private PricingRepository pricingRepo;
+
 	@Override
 	public void validate(Pricing pricing) {
 		if (CommonUtil.isNull(pricing)) {
@@ -30,6 +34,9 @@ public class IsValidPricingRequest implements RequestValidator<Pricing> {
 		if (CommonUtil.isEmpty(pricing.getCode()) || CommonUtil.isEmpty(pricing.getName())
 				|| CommonUtil.isEmpty(pricing.getDescription()) || CommonUtil.isNull(pricing.getType())) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
+		}
+		if (CommonUtil.isNotNull(pricingRepo.findByCode(pricing.getCode()))) {
+			throw new PaycrException(Constants.FAILURE, "Code already used");
 		}
 		if (pricing.getDuration() < 50 || pricing.getLimit() < 500
 				|| (pricing.getLimit() / pricing.getDuration() < 10)) {

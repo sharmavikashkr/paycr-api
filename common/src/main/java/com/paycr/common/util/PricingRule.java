@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class PricingRule {
 
 	public static BigDecimal getPricingRate(int limit, int duration) {
-		return BigDecimal.valueOf((limit / duration) * 48.6).setScale(2, BigDecimal.ROUND_UP);
+		return BigDecimal.valueOf(((float)limit / duration) * 48.60).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 }
