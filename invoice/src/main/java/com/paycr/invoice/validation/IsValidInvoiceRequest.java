@@ -68,6 +68,8 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 				invoice.setExpiresIn(-1);
 			}
 			invoice.setNotices(null);
+			invoice.setCreditNote(null);
+			invoice.setPayment(null);
 		}
 		if (CommonUtil.isNull(invoice.getShipping())) {
 			invoice.setShipping(new BigDecimal(0));

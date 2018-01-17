@@ -66,7 +66,7 @@ public class InvoiceReceiptService {
 				}
 				taxAmt.setAmount(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()))
 						.multiply(new BigDecimal(itemTax.getValue())).divide(new BigDecimal(100))
-						.setScale(2, BigDecimal.ROUND_UP));
+						.setScale(2, BigDecimal.ROUND_HALF_UP));
 			}
 		}
 		ModelAndView mv = new ModelAndView("receipt/invoice");

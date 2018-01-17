@@ -78,7 +78,7 @@ public class PaymentService {
 		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount",
-				String.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_UP).multiply(new BigDecimal(100))));
+				String.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100))));
 		return mv;
 	}
 

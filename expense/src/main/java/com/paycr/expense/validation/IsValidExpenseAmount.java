@@ -31,17 +31,17 @@ public class IsValidExpenseAmount implements RequestValidator<Expense> {
 			BigDecimal totalRate = new BigDecimal(0);
 			BigDecimal totalPrice = new BigDecimal(0);
 			for (ExpenseItem item : expense.getItems()) {
-				totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_UP);
+				totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
 				totalRate = totalRate.add(item.getAsset().getRate().multiply(new BigDecimal(item.getQuantity())))
-						.setScale(2, BigDecimal.ROUND_UP);
+						.setScale(2, BigDecimal.ROUND_HALF_UP);
 			}
-			if (totalRate.compareTo(expense.getTotal().setScale(2, BigDecimal.ROUND_UP)) != 0
-					|| totalPrice.compareTo(expense.getTotalPrice().setScale(2, BigDecimal.ROUND_UP)) != 0) {
+			if (totalRate.compareTo(expense.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0
+					|| totalPrice.compareTo(expense.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
 				throw new PaycrException(Constants.FAILURE, "Items do not amount to total");
 			}
 		}
 		BigDecimal finalAmount = expense.getTotalPrice().add(expense.getShipping()).subtract(expense.getDiscount());
-		if (finalAmount.setScale(2, BigDecimal.ROUND_UP).compareTo(expense.getPayAmount()) != 0) {
+		if (finalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(expense.getPayAmount()) != 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount calculation mismatch");
 		}
 	}

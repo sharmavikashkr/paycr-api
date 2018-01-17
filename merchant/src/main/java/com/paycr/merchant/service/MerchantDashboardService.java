@@ -68,22 +68,22 @@ public class MerchantDashboardService {
 		response.setSaleInvPayCount((BigInteger) salePays.get(0)[0]);
 		response.setSaleInvPaySum(
 				BigDecimal.valueOf((Double) salePays.get(0)[1] == null ? 0D : (Double) salePays.get(0)[1]).setScale(2,
-						BigDecimal.ROUND_FLOOR));
+						BigDecimal.ROUND_HALF_UP));
 		response.setRefundInvPayCount((BigInteger) refundPays.get(0)[0]);
 		response.setRefundInvPaySum(
 				BigDecimal.valueOf((Double) refundPays.get(0)[1] == null ? 0D : (Double) refundPays.get(0)[1])
-						.setScale(2, BigDecimal.ROUND_FLOOR));
+						.setScale(2, BigDecimal.ROUND_HALF_UP));
 		response.setUnpaidInvCount((BigInteger) unpaid.get(0)[0]);
 		response.setUnpaidInvSum(BigDecimal.valueOf((Double) unpaid.get(0)[1] == null ? 0D : (Double) unpaid.get(0)[1])
-				.setScale(2, BigDecimal.ROUND_FLOOR));
+				.setScale(2, BigDecimal.ROUND_HALF_UP));
 		response.setExpiredInvCount((BigInteger) expired.get(0)[0]);
 		response.setExpiredInvSum(
 				BigDecimal.valueOf((Double) expired.get(0)[1] == null ? 0D : (Double) expired.get(0)[1]).setScale(2,
-						BigDecimal.ROUND_FLOOR));
+						BigDecimal.ROUND_HALF_UP));
 		response.setDeclinedInvCount((BigInteger) declined.get(0)[0]);
 		response.setDeclinedInvSum(
 				BigDecimal.valueOf((Double) declined.get(0)[1] == null ? 0D : (Double) declined.get(0)[1]).setScale(2,
-						BigDecimal.ROUND_FLOOR));
+						BigDecimal.ROUND_HALF_UP));
 		List<DailyPay> dailyInvPayList = new ArrayList<>();
 		for (Object[] obj : dailyPays) {
 			DailyPay dp = new DailyPay();
@@ -107,14 +107,14 @@ public class MerchantDashboardService {
 		response.setSaleExpPayCount((BigInteger) salePays.get(0)[0]);
 		response.setSaleExpPaySum(
 				BigDecimal.valueOf((Double) salePays.get(0)[1] == null ? 0D : (Double) salePays.get(0)[1]).setScale(2,
-						BigDecimal.ROUND_FLOOR));
+						BigDecimal.ROUND_HALF_UP));
 		response.setRefundExpPayCount((BigInteger) refundPays.get(0)[0]);
 		response.setRefundExpPaySum(
 				BigDecimal.valueOf((Double) refundPays.get(0)[1] == null ? 0D : (Double) refundPays.get(0)[1])
-						.setScale(2, BigDecimal.ROUND_FLOOR));
+						.setScale(2, BigDecimal.ROUND_HALF_UP));
 		response.setUnpaidExpCount((BigInteger) unpaid.get(0)[0]);
 		response.setUnpaidExpSum(BigDecimal.valueOf((Double) unpaid.get(0)[1] == null ? 0D : (Double) unpaid.get(0)[1])
-				.setScale(2, BigDecimal.ROUND_FLOOR));
+				.setScale(2, BigDecimal.ROUND_HALF_UP));
 
 		List<DailyPay> dailyExpPayList = new ArrayList<>();
 		for (Object[] obj : dailyPays) {

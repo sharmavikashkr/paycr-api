@@ -57,12 +57,12 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 		BigDecimal expPrice = item.getAsset().getRate().multiply(new BigDecimal(item.getQuantity()));
 		expPrice = expPrice
 				.add(expPrice.multiply(new BigDecimal(item.getTax().getValue())).divide(new BigDecimal(100)));
-		if (!item.getPrice().setScale(2, BigDecimal.ROUND_UP).equals(expPrice.setScale(2, BigDecimal.ROUND_UP))) {
+		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP).equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
 		Asset asset = asstRepo.findByMerchantAndCode(expense.getMerchant(), item.getAsset().getCode());
 		if (CommonUtil.isNotNull(asset)) {
-			if (!(asset.getRate().setScale(2, BigDecimal.ROUND_UP).compareTo(item.getAsset().getRate()) == 0
+			if (!(asset.getRate().setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(item.getAsset().getRate()) == 0
 					&& asset.getName().equals(item.getAsset().getName()))) {
 				throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
 			}
