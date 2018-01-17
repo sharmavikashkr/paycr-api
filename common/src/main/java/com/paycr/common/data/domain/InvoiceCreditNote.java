@@ -41,6 +41,9 @@ public class InvoiceCreditNote implements Cloneable {
 	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
+	@Column(precision = 10, scale = 2)
+	private BigDecimal adjustment;
+
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
@@ -156,6 +159,14 @@ public class InvoiceCreditNote implements Cloneable {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public BigDecimal getAdjustment() {
+		return adjustment;
+	}
+
+	public void setAdjustment(BigDecimal adjustment) {
+		this.adjustment = adjustment;
 	}
 
 }

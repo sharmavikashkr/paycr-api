@@ -112,7 +112,39 @@
 														<div class="input-group">
 															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
 															<div class="form-group">
-																<input class="form-control text-right" ng-model="newcreditnote.payAmount" placeholder="1200.00" type="number" step="0.01" readonly/>
+																<input class="form-control text-right" ng-model="newcreditnote.totalPrice" placeholder="1200.00" type="number" step="0.01" readonly/>
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Adjustment (-/+)</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-change="calculateCnTotal()" ng-model="newcreditnote.adjustment" placeholder="40.00" type="number" step="0.01" />
+															</div>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td class="highrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow"></td>
+													<td class="emptyrow text-center"><strong>Pay Amount</strong></td>
+													<td class="emptyrow">
+														<div class="input-group">
+															<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
+															<div class="form-group">
+																<input class="form-control text-right" ng-model="newcreditnote.payAmount" placeholder="4360.00" type="number" step="0.01" readonly required />
 															</div>
 														</div>
 													</td>

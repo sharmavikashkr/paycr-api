@@ -267,9 +267,12 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 			totalRate = totalRate + itemTotal;
 			totalPrice = totalPrice + parseFloat($scope.newcreditnote.items[item].price);
 		}
+		if ($scope.newcreditnote.adjustment == null) {
+			$scope.newcreditnote.adjustment = 0;
+		}
 		$scope.newcreditnote.total = parseFloat(totalRate.toFixed(2));
 		$scope.newcreditnote.totalPrice = parseFloat(totalPrice.toFixed(2));
-		$scope.newcreditnote.payAmount = parseFloat(totalPrice.toFixed(2));
+		$scope.newcreditnote.payAmount = parseFloat((totalPrice + parseFloat($scope.newcreditnote.adjustment)).toFixed(2));
 	}
 	$scope.createInvoice = function() {
 		if(!this.createInvoiceForm.$valid) {

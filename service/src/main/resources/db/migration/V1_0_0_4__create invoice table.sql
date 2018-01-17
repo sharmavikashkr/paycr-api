@@ -41,6 +41,7 @@ CREATE TABLE if not exists pc_invoice_credit_note (
 	invoice_code varchar(20) NOT NULL,
 	note_code varchar(20) NOT NULL,
 	total float NOT NULL,
+	adjustment float NOT NULL,
 	pay_amount float NOT NULL,
 	currency varchar(10) NOT NULL,
 	merchant_id int REFERENCES pc_merchant,

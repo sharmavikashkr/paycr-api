@@ -38,7 +38,7 @@ public class IsValidCreditNoteAmount implements RequestValidator<InvoiceCreditNo
 				|| totalPrice.compareTo(creditNote.getTotalPrice().setScale(2, BigDecimal.ROUND_UP)) != 0) {
 			throw new PaycrException(Constants.FAILURE, "Items do not amount to total");
 		}
-		BigDecimal finalAmount = creditNote.getTotalPrice();
+		BigDecimal finalAmount = creditNote.getTotalPrice().add(creditNote.getAdjustment());
 		if (finalAmount.setScale(2, BigDecimal.ROUND_UP).compareTo(creditNote.getPayAmount()) != 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount calculation mismatch");
 		}
