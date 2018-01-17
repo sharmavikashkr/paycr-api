@@ -290,7 +290,7 @@ a[x-apple-data-detectors=true] {
                   
                     <div align="center" class="img-container center  autowidth " style="padding-right: 0px;  padding-left: 0px;">
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px;" align="center"><![endif]-->
-<div style="line-height:5px;font-size:1px">&#160;</div> <img class="center autowidth" align="center" border="0" src="${staticUrl}/images/logo_new.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: 0;height:auto;max-height: 100px;float: none;width: 100%;max-width: 193px;">
+<div style="line-height:5px;font-size:1px">&#160;</div> <img class="center autowidth" align="center" border="0" src="${staticUrl}/images/logo_new.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: 0;height:auto;max-height:60px;float:none;width:100%;max-width:122px;">
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
 
