@@ -14,15 +14,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.paycr.common.type.Currency;
+import com.paycr.common.type.NoteType;
 
 @Entity
-@Table(name = "pc_invoice_credit_note")
-public class InvoiceCreditNote implements Cloneable {
+@Table(name = "pc_invoice_note")
+public class InvoiceNote implements Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,13 @@ public class InvoiceCreditNote implements Cloneable {
 	private Date created;
 	private String noteCode;
 	private String invoiceCode;
+
+	@Enumerated(EnumType.STRING)
+	private NoteType noteType;
+
+	private String noteReason;
+
+	private boolean refundCreditNote;
 
 	@ManyToOne
 	private Merchant merchant;
@@ -50,11 +57,8 @@ public class InvoiceCreditNote implements Cloneable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Consumer consumer;
 
-	@OneToMany(mappedBy = "invoiceCreditNote", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "invoiceNote", cascade = CascadeType.ALL)
 	private List<InvoiceItem> items;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	private InvoicePayment payment;
 
 	private String createdBy;
 
@@ -133,14 +137,6 @@ public class InvoiceCreditNote implements Cloneable {
 		this.items = items;
 	}
 
-	public InvoicePayment getPayment() {
-		return payment;
-	}
-
-	public void setPayment(InvoicePayment payment) {
-		this.payment = payment;
-	}
-
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -167,6 +163,30 @@ public class InvoiceCreditNote implements Cloneable {
 
 	public void setAdjustment(BigDecimal adjustment) {
 		this.adjustment = adjustment;
+	}
+
+	public NoteType getNoteType() {
+		return noteType;
+	}
+
+	public void setNoteType(NoteType noteType) {
+		this.noteType = noteType;
+	}
+
+	public String getNoteReason() {
+		return noteReason;
+	}
+
+	public void setNoteReason(String noteReason) {
+		this.noteReason = noteReason;
+	}
+
+	public boolean isRefundCreditNote() {
+		return refundCreditNote;
+	}
+
+	public void setRefundCreditNote(boolean refundCreditNote) {
+		this.refundCreditNote = refundCreditNote;
 	}
 
 }

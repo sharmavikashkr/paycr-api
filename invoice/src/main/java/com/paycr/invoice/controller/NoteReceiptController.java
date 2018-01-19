@@ -15,24 +15,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.paycr.invoice.service.CreditNoteReceiptService;
+import com.paycr.invoice.service.NoteReceiptService;
 
 @RestController
-@RequestMapping("/creditNote/receipt")
-public class CreditNoteReceiptController {
+@RequestMapping("/note/receipt")
+public class NoteReceiptController {
 
 	@Autowired
-	private CreditNoteReceiptService creditNoteRecSer;
+	private NoteReceiptService noteRecSer;
 
 	@RequestMapping("/{noteCode}")
 	public ModelAndView getReceipt(@PathVariable String noteCode) throws Exception {
-		return creditNoteRecSer.getReceiptModelAndView(noteCode);
+		return noteRecSer.getReceiptModelAndView(noteCode);
 	}
 
 	@RequestMapping("/download/{noteCode}")
 	public void downloadReceipt(HttpServletRequest request, HttpServletResponse response, @PathVariable String NoteCode)
 			throws Exception {
-		File pdfFile = creditNoteRecSer.downloadPdf(NoteCode);
+		File pdfFile = noteRecSer.downloadPdf(NoteCode);
 
 		FileInputStream fis = null;
 		byte[] bFile = new byte[(int) pdfFile.length()];
@@ -40,7 +40,7 @@ public class CreditNoteReceiptController {
 		fis.read(bFile);
 		fis.close();
 
-		response.setHeader("Content-Disposition", "attachment; filename=\"CreditNote-" + NoteCode + ".pdf\"");
+		response.setHeader("Content-Disposition", "attachment; filename=\"Note-" + NoteCode + ".pdf\"");
 		response.setContentType("application/pdf");
 		InputStream is = new ByteArrayInputStream(bFile);
 		IOUtils.copy(is, response.getOutputStream());

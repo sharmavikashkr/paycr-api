@@ -31,7 +31,7 @@ public class InvoiceItem {
 
 	@JsonIgnore
 	@ManyToOne
-	private InvoiceCreditNote invoiceCreditNote;
+	private InvoiceNote invoiceNote;
 
 	@ManyToOne
 	private Inventory inventory;
@@ -84,12 +84,12 @@ public class InvoiceItem {
 		this.tax = tax;
 	}
 
-	public InvoiceCreditNote getInvoiceCreditNote() {
-		return invoiceCreditNote;
+	public InvoiceNote getInvoiceNote() {
+		return invoiceNote;
 	}
 
-	public void setInvoiceCreditNote(InvoiceCreditNote invoiceCreditNote) {
-		this.invoiceCreditNote = invoiceCreditNote;
+	public void setInvoiceNote(InvoiceNote invoiceNote) {
+		this.invoiceNote = invoiceNote;
 	}
 
 }

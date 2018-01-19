@@ -82,7 +82,7 @@ public class Invoice implements Cloneable {
 	private InvoicePayment payment;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private InvoiceCreditNote creditNote;
+	private InvoiceNote note;
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceStatus status;
@@ -335,19 +335,19 @@ public class Invoice implements Cloneable {
 		this.notices = notices;
 	}
 
-	public InvoiceCreditNote getCreditNote() {
-		return creditNote;
-	}
-
-	public void setCreditNote(InvoiceCreditNote creditNote) {
-		this.creditNote = creditNote;
-	}
-
 	public Date getInvoiceDate() {
 		return invoiceDate;
 	}
 
 	public void setInvoiceDate(Date invoiceDate) {
 		this.invoiceDate = invoiceDate;
+	}
+
+	public InvoiceNote getNote() {
+		return note;
+	}
+
+	public void setNote(InvoiceNote note) {
+		this.note = note;
 	}
 }

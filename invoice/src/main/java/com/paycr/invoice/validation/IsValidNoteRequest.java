@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.InvoiceCreditNote;
+import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -19,7 +19,7 @@ import com.paycr.common.validation.RequestValidator;
 
 @Component
 @Order(0)
-public class IsValidCreditNoteRequest implements RequestValidator<InvoiceCreditNote> {
+public class IsValidNoteRequest implements RequestValidator<InvoiceNote> {
 
 	@Autowired
 	private InvoiceRepository invRepo;
@@ -28,28 +28,28 @@ public class IsValidCreditNoteRequest implements RequestValidator<InvoiceCreditN
 	private HmacSignerUtil hmacSigner;
 
 	@Override
-	public void validate(InvoiceCreditNote creditNote) {
+	public void validate(InvoiceNote note) {
 		Date timeNow = new Date();
-		Invoice invoice = invRepo.findByInvoiceCode(creditNote.getInvoiceCode());
+		Invoice invoice = invRepo.findByInvoiceCode(note.getInvoiceCode());
 		if (CommonUtil.isNull(invoice)) {
 			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Invalid Invoice");
 		}
-		if (CommonUtil.isNotNull(invoice.getCreditNote())) {
-			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "CreditNote already processed for Invoice");
+		if (CommonUtil.isNotNull(invoice.getNote())) {
+			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Credit/Debit Note already processed for Invoice");
 		}
-		String charset = hmacSigner.signWithSecretKey(creditNote.getMerchant().getSecretKey(),
+		String charset = hmacSigner.signWithSecretKey(note.getMerchant().getSecretKey(),
 				String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
-		String noteCode = creditNote.getNoteCode();
+		String noteCode = note.getNoteCode();
 		do {
 			noteCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
-			creditNote.setNoteCode(noteCode);
-		} while (CommonUtil.isNotNull(invRepo.findByCreditNoteCode(noteCode)));
-		if (CommonUtil.isNull(creditNote.getAdjustment())) {
-			creditNote.setAdjustment(new BigDecimal(0));
+			note.setNoteCode(noteCode);
+		} while (CommonUtil.isNotNull(invRepo.findByNoteCode(noteCode)));
+		if (CommonUtil.isNull(note.getAdjustment())) {
+			note.setAdjustment(new BigDecimal(0));
 		}
-		creditNote.setCreated(timeNow);
-		creditNote.setConsumer(invoice.getConsumer());
+		note.setCreated(timeNow);
+		note.setConsumer(invoice.getConsumer());
 	}
 
 }

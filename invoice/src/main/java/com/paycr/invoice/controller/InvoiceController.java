@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.data.domain.BulkCategory;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
-import com.paycr.common.data.domain.InvoiceCreditNote;
+import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.PcUser;
@@ -100,10 +100,10 @@ public class InvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/creditNote/new", method = RequestMethod.POST)
-	public void newCreditNote(@RequestBody InvoiceCreditNote creditNote, HttpServletResponse response) {
+	@RequestMapping(value = "/note/new", method = RequestMethod.POST)
+	public void newNote(@RequestBody InvoiceNote note, HttpServletResponse response) {
 		try {
-			invSer.newCreditNote(creditNote);
+			invSer.newNote(note);
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

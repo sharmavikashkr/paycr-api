@@ -1,9 +1,9 @@
-<div id="creditNoteModal" class="modal fade" role="dialog">
+<div id="noteModal" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h5 class="modal-title"> CreditNote for Invoice# <span><strong>{{invoiceInfo.invoiceCode}}</strong></span></h5>
+				<h5 class="modal-title"> Note for Invoice# <span><strong>{{invoiceInfo.invoiceCode}}</strong></span>&nbsp;<span><a href="/note/receipt/{{invoiceInfo.note.noteCode}}" target="_blank" title="Note Pdf" class="btn btn-sm bg-navy"><i class="fa fa-file-pdf-o"></i></a></span></h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -12,19 +12,23 @@
 							<tbody>
 								<tr>
 									<td class="text-center"><p><strong>Credit Note#</strong></p></td>
-									<td class="text-center"><p>{{invoiceInfo.creditNote.noteCode}}</p></td>
+									<td class="text-center"><p>{{invoiceInfo.note.noteCode}}</p></td>
 								</tr>
 								<tr>
 									<td class="text-center"><p><strong>Adjustment</strong></p></td>
-									<td class="text-center"><p><i class="fa fa-rupee"></i> {{invoiceInfo.creditNote.adjustment}}</p></td>
+									<td class="text-center"><p><i class="fa fa-rupee"></i> {{invoiceInfo.note.adjustment}}</p></td>
 								</tr>
 								<tr>
 									<td class="text-center"><p><strong>Total</strong></p></td>
-									<td class="text-center"><p><i class="fa fa-rupee"></i> {{invoiceInfo.creditNote.total}}</p></td>
+									<td class="text-center"><p><i class="fa fa-rupee"></i> {{invoiceInfo.note.total}}</p></td>
 								</tr>
 								<tr>
-									<td class="text-center"><p><strong>Refund Amount</strong></p></td>
-									<td class="text-center"><p><i class="fa fa-rupee"></i> {{invoiceInfo.creditNote.payAmount}}</p></td>
+									<td class="text-center"><p><strong>Amount</strong></p></td>
+									<td class="text-center"><p><i class="fa fa-rupee"></i> {{invoiceInfo.note.payAmount}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><p><strong>Refund if Credit</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.note.refundCreditNote}}</p></td>
 								</tr>
 							</tbody>
 						</table>
@@ -33,16 +37,20 @@
 						<table class="table table-bordered table-responsive">
 							<tbody>
 								<tr>
-									<td class="text-center"><p><strong>Receipt</strong></p></td>
-									<td class="text-center"><div><a href="/creditNote/receipt/{{invoiceInfo.creditNote.noteCode}}" target="_blank" title="Credit Note Pdf" class="btn btn-sm bg-navy"><i class="fa fa-file-pdf-o"></i></a></div></td>
+									<td class="text-center"><p><strong>Note Type</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.note.noteType}}</p></td>
+								</tr>
+								<tr>
+									<td class="text-center"><p><strong>Note Reason</strong></p></td>
+									<td class="text-center"><p>{{invoiceInfo.note.noteReason}}</p></td>
 								</tr>
 								<tr>
 									<td class="text-center"><p><strong>Created</strong></p></td>
-									<td class="text-center"><p>{{invoiceInfo.creditNote.created | date:"dd-MM-yyyy HH:mm"}}</p></td>
+									<td class="text-center"><p>{{invoiceInfo.note.created | date:"dd-MM-yyyy HH:mm"}}</p></td>
 								</tr>
 								<tr>
 									<td class="text-center"><p><strong>Created By</strong></p></td>
-									<td class="text-center"><p>{{invoiceInfo.creditNote.createdBy}}</p></td>
+									<td class="text-center"><p>{{invoiceInfo.note.createdBy}}</p></td>
 								</tr>
 							</tbody>
 						</table>
@@ -64,7 +72,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="item in invoiceInfo.creditNote.items">
+								<tr ng-repeat="item in invoiceInfo.note.items">
 									<td>{{item.inventory.code}}</td>
 									<td>{{item.inventory.name}}</td>
 									<td class="hidden-xs"><i class="fa fa-rupee"></i> {{item.inventory.rate}}</td>

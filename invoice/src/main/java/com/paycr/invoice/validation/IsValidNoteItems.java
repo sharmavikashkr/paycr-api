@@ -10,8 +10,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Inventory;
-import com.paycr.common.data.domain.InvoiceCreditNote;
 import com.paycr.common.data.domain.InvoiceItem;
+import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.repository.InventoryRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
@@ -21,7 +21,7 @@ import com.paycr.common.validation.RequestValidator;
 
 @Component
 @Order(1)
-public class IsValidCreditNoteItems implements RequestValidator<InvoiceCreditNote> {
+public class IsValidNoteItems implements RequestValidator<InvoiceNote> {
 
 	@Autowired
 	private InventoryRepository invnRepo;
@@ -30,20 +30,20 @@ public class IsValidCreditNoteItems implements RequestValidator<InvoiceCreditNot
 	private TaxMasterRepository taxMRepo;
 
 	@Override
-	public void validate(InvoiceCreditNote creditNote) {
+	public void validate(InvoiceNote note) {
 		List<InvoiceItem> items = new ArrayList<InvoiceItem>();
-		for (InvoiceItem item : creditNote.getItems()) {
-			validateItem(creditNote, item);
-			item.setInvoiceCreditNote(creditNote);
+		for (InvoiceItem item : note.getItems()) {
+			validateItem(note, item);
+			item.setInvoiceNote(note);
 			items.add(item);
 		}
 		if (items.size() < 1 || items.size() > 5) {
 			throw new PaycrException(Constants.FAILURE, "Min 1 and Max 5 Items expected");
 		}
-		creditNote.setItems(items);
+		note.setItems(items);
 	}
 
-	private void validateItem(InvoiceCreditNote creditNote, InvoiceItem item) {
+	private void validateItem(InvoiceNote note, InvoiceItem item) {
 		if (CommonUtil.isEmpty(item.getInventory().getName()) || CommonUtil.isNull(item.getInventory().getRate())
 				|| CommonUtil.isEmpty(item.getInventory().getCode()) || CommonUtil.isNull(item.getPrice())
 				|| 0 == item.getQuantity()) {
@@ -55,12 +55,14 @@ public class IsValidCreditNoteItems implements RequestValidator<InvoiceCreditNot
 		BigDecimal expPrice = item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()));
 		expPrice = expPrice
 				.add(expPrice.multiply(new BigDecimal(item.getTax().getValue())).divide(new BigDecimal(100)));
-		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP).equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
+		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
+				.equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
-		Inventory inventory = invnRepo.findByMerchantAndCode(creditNote.getMerchant(), item.getInventory().getCode());
+		Inventory inventory = invnRepo.findByMerchantAndCode(note.getMerchant(), item.getInventory().getCode());
 		if (CommonUtil.isNotNull(inventory)) {
-			if (!(inventory.getRate().setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(item.getInventory().getRate()) == 0
+			if (!(inventory.getRate().setScale(2, BigDecimal.ROUND_HALF_UP)
+					.compareTo(item.getInventory().getRate()) == 0
 					&& inventory.getName().equals(item.getInventory().getName()))) {
 				throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
 			}
@@ -70,12 +72,12 @@ public class IsValidCreditNoteItems implements RequestValidator<InvoiceCreditNot
 		} else {
 			inventory = new Inventory();
 			inventory.setCreated(new Date());
-			inventory.setMerchant(creditNote.getMerchant());
+			inventory.setMerchant(note.getMerchant());
 			inventory.setCode(item.getInventory().getCode());
 			inventory.setName(item.getInventory().getName());
 			inventory.setRate(item.getInventory().getRate());
 			inventory.setTax(item.getTax());
-			inventory.setCreatedBy(creditNote.getCreatedBy());
+			inventory.setCreatedBy(note.getCreatedBy());
 			inventory.setActive(true);
 			invnRepo.save(inventory);
 		}

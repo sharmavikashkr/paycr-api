@@ -5,6 +5,7 @@ CREATE TABLE if not exists pc_invoice_setting (
 	add_items boolean NOT NULL,
 	email_pdf boolean NOT NULL,
 	cc_me boolean NOT NULL,
+	refund_credit_note boolean NOT NULL,
 	expiry_days int NOT NULL,
 	email_note varchar(50) DEFAULT NULL,
 	email_subject varchar(50) DEFAULT NULL

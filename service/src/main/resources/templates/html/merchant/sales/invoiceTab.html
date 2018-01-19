@@ -146,7 +146,7 @@
 											<button ng-if="invoice.invoiceType == 'SINGLE'" ng-click="updateInvoicePayInfo(invoice)" title="Payments" class="btn btn-flat btn-success btn-md" data-toggle="modal" data-target="#invoicePaymentModal">
 												<i class="fa fa-rupee"></i>
 											</button>
-											<button ng-if="invoice.creditNote != null" ng-click="updateInvoiceInfo(invoice)" title="Credit Note" class="btn btn-flat bg-red btn-md" data-toggle="modal" data-target="#creditNoteModal">
+											<button ng-if="invoice.note != null" ng-click="updateInvoiceInfo(invoice)" title="Note" class="btn btn-flat bg-red btn-md" data-toggle="modal" data-target="#noteModal">
 												<i class="fa fa-undo"></i>
 											</button>
 											<a title="Download Pdf" class="btn btn-flat bg-navy btn-md" href="/invoice/receipt/{{invoice.invoiceCode}}" target="_blank">
@@ -268,15 +268,15 @@
 													ng-click="expireInvoice(invoice.invoiceCode)"
 													type="button" class="btn btn-default">Expire</button>
 												<button style="margin: 5px;"
-													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && invoice.items == null && user.access.finance"
+													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && user.access.finance"
 													ng-click="updateInvoiceInfo(invoice)"
 													data-toggle="modal" data-target="#invoiceRefundModal"
 													type="button" class="btn btn-danger">Refund</button>
 												<button style="margin: 5px;"
-													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && invoice.items != null && user.access.finance && invoice.creditNote == null"
-													ng-click="updateCreditNote(invoice)"
-													data-toggle="modal" data-target="#createCreditNoteModal"
-													type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Credit Note</button>
+													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && invoice.items != null && user.access.finance && invoice.note == null"
+													ng-click="updateNote(invoice)"
+													data-toggle="modal" data-target="#createNoteModal"
+													type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Note</button>
 											</div>
 										</div>
 									</div>

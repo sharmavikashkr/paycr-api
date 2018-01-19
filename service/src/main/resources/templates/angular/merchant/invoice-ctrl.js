@@ -111,15 +111,16 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$scope.updateInvoiceInfo = function(invoice) {
 		$rootScope.invoiceInfo = angular.copy(invoice);
 	}
-	$scope.updateCreditNote = function(invoice) {
-		$rootScope.newcreditnote = {
+	$scope.updateNote = function(invoice) {
+		$rootScope.newnote = {
 			"invoiceCode" : "",
 			"items" : [],
 			"total" : 0.00,
 			"payAmount" : 0,
-			"currency" : "INR"
+			"currency" : "INR",
+			"refundCreditNote" : $rootScope.merchant.invoiceSetting.refundCreditNote
 		}
-		$rootScope.newcreditnote.invoiceCode = invoice.invoiceCode;
+		$rootScope.newnote.invoiceCode = invoice.invoiceCode;
 	}
 	$rootScope.updateSaveInvoice = function(invoice) {
 		$rootScope.saveinvoice = angular.copy(invoice);
@@ -172,12 +173,12 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}
 	}
 	$scope.addCnItem = function() {
-		if ($scope.newcreditnote.items.length < 5) {
+		if ($scope.newnote.items.length < 5) {
 			var inventory = {
 				"name" : "",
 				"rate" : 0
 			}
-			$scope.newcreditnote.items.push({
+			$scope.newnote.items.push({
 				"inventory" : inventory,
 				"quantity" : 1,
 				"price" : 0
@@ -207,7 +208,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		$scope.calculateTotal();
 	}
 	$scope.deleteCnItem = function(pos) {
-		$scope.newcreditnote.items.splice(pos, 1);
+		$scope.newnote.items.splice(pos, 1);
 		$scope.calculateCnTotal();
 	}
 	$rootScope.calculateTotal = function() {
@@ -250,29 +251,29 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 	$rootScope.calculateCnTotal = function() {
 		var totalPrice = 0;
 		var totalRate = 0;
-		for ( var item in $scope.newcreditnote.items) {
+		for ( var item in $scope.newnote.items) {
 			var itemTax = 0;
-			if ($scope.newcreditnote.items[item].inventory.rate == null) {
-				$scope.newcreditnote.items[item].inventory.rate = 0;
+			if ($scope.newnote.items[item].inventory.rate == null) {
+				$scope.newnote.items[item].inventory.rate = 0;
 			}
-			if ($scope.newcreditnote.items[item].quantity == null) {
-				$scope.newcreditnote.items[item].quantity = 0;
+			if ($scope.newnote.items[item].quantity == null) {
+				$scope.newnote.items[item].quantity = 0;
 			}
-			if ($scope.newcreditnote.items[item].tax != null) {
-				itemTax = parseFloat($scope.newcreditnote.items[item].tax.value).toFixed(2);
+			if ($scope.newnote.items[item].tax != null) {
+				itemTax = parseFloat($scope.newnote.items[item].tax.value).toFixed(2);
 			}
-			var itemTotal = parseFloat((parseFloat($scope.newcreditnote.items[item].inventory.rate)
-					* parseFloat($scope.newcreditnote.items[item].quantity)).toFixed(2));
-			$scope.newcreditnote.items[item].price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2));
+			var itemTotal = parseFloat((parseFloat($scope.newnote.items[item].inventory.rate)
+					* parseFloat($scope.newnote.items[item].quantity)).toFixed(2));
+			$scope.newnote.items[item].price = parseFloat((itemTotal + parseFloat((itemTotal * itemTax) / 100)).toFixed(2));
 			totalRate = totalRate + itemTotal;
-			totalPrice = totalPrice + parseFloat($scope.newcreditnote.items[item].price);
+			totalPrice = totalPrice + parseFloat($scope.newnote.items[item].price);
 		}
-		if ($scope.newcreditnote.adjustment == null) {
-			$scope.newcreditnote.adjustment = 0;
+		if ($scope.newnote.adjustment == null) {
+			$scope.newnote.adjustment = 0;
 		}
-		$scope.newcreditnote.total = parseFloat(totalRate.toFixed(2));
-		$scope.newcreditnote.totalPrice = parseFloat(totalPrice.toFixed(2));
-		$scope.newcreditnote.payAmount = parseFloat((totalPrice + parseFloat($scope.newcreditnote.adjustment)).toFixed(2));
+		$scope.newnote.total = parseFloat(totalRate.toFixed(2));
+		$scope.newnote.totalPrice = parseFloat(totalPrice.toFixed(2));
+		$scope.newnote.payAmount = parseFloat((totalPrice + parseFloat($scope.newnote.adjustment)).toFixed(2));
 	}
 	$scope.createInvoice = function() {
 		if(!this.createInvoiceForm.$valid) {
@@ -303,15 +304,15 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		angular.element(document.querySelector('#createInvoiceModal')).modal('hide');
 		angular.element(document.querySelector('#createInvoiceXsModal')).modal('hide');
 	}
-	$scope.createCreditNote = function() {
+	$scope.createNote = function() {
 		var req = {
 			method : 'POST',
-			url : "/invoice/creditNote/new",
+			url : "/invoice/note/new",
 			headers : {
 				"Authorization" : "Bearer "
 						+ $cookies.get("access_token")
 			},
-			data : $rootScope.newcreditnote
+			data : $rootScope.newnote
 		}
 		$http(req).then(function(data) {
 			$rootScope.searchInvoice();
@@ -319,7 +320,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
-		angular.element(document.querySelector('#createCreditNoteModal')).modal('hide');
+		angular.element(document.querySelector('#createNoteModal')).modal('hide');
 	}
 	$scope.updateInvoicePayInfo = function(invoice) {
 		$rootScope.invoicePayInfo = angular.copy(invoice);

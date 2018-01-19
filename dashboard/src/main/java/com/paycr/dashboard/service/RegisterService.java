@@ -89,6 +89,7 @@ public class RegisterService {
 		invoiceSetting.setAddItems(true);
 		invoiceSetting.setEmailPdf(false);
 		invoiceSetting.isCcMe();
+		invoiceSetting.setRefundCreditNote(true);
 		invoiceSetting.setEmailNote("Thankyou for avaling our service");
 		invoiceSetting.setEmailSubject("Invoice for your order");
 		invoiceSetting.setExpiryDays(7);

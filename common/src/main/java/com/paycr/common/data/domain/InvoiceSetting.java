@@ -22,6 +22,7 @@ public class InvoiceSetting {
 	private boolean sendEmail;
 	private boolean addItems;
 	private boolean emailPdf;
+	private boolean refundCreditNote;
 	private boolean ccMe;
 	private int expiryDays;
 	private String emailNote;
@@ -108,6 +109,14 @@ public class InvoiceSetting {
 
 	public void setEmailSubject(String emailSubject) {
 		this.emailSubject = emailSubject;
+	}
+
+	public boolean isRefundCreditNote() {
+		return refundCreditNote;
+	}
+
+	public void setRefundCreditNote(boolean refundCreditNote) {
+		this.refundCreditNote = refundCreditNote;
 	}
 
 }

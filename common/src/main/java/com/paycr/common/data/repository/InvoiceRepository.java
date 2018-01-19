@@ -30,8 +30,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 	@Query(value = "SELECT COUNT(i) as count, SUM(i.pay_amount) as sum FROM pc_invoice i WHERE i.merchant_id = ?1 AND "
 			+ "i.status = ?2 AND i.invoice_date BETWEEN ?3 AND ?4", nativeQuery = true)
 	public List<Object[]> findCountAndSumForMerchant(Integer merchantId, String status, Date startDate, Date endDate);
-	
-	@Query("SELECT i from Invoice i WHERE i.creditNote.noteCode = ?1")
-	public Invoice findByCreditNoteCode(String noteCode);
+
+	@Query("SELECT i from Invoice i WHERE i.note.noteCode = ?1")
+	public Invoice findByNoteCode(String noteCode);
 
 }
