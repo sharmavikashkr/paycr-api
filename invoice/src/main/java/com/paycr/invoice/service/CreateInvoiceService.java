@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.paycr.common.bean.ChildInvoiceRequest;
-import com.paycr.common.bean.SearchConsumerRequest;
 import com.paycr.common.bean.Server;
+import com.paycr.common.bean.search.SearchConsumerRequest;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.domain.BulkCategory;

@@ -30,7 +30,7 @@ public class ExpensePayment {
 	private String paymentRefNo;
 	private String status;
 	private String method;
-	private Date paidOn;
+	private Date paidDate;
 
 	@ManyToOne
 	@JsonIgnore
@@ -121,12 +121,12 @@ public class ExpensePayment {
 		this.expenseCode = expenseCode;
 	}
 
-	public Date getPaidOn() {
-		return paidOn;
+	public Date getPaidDate() {
+		return paidDate;
 	}
 
-	public void setPaidOn(Date paidOn) {
-		this.paidOn = paidOn;
+	public void setPaidDate(Date paidDate) {
+		this.paidDate = paidDate;
 	}
 
 }

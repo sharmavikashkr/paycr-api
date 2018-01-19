@@ -113,7 +113,7 @@
 							<th>Invoice Code</th>
 							<th>Amount</th>
 							<th>Type</th>
-							<th class="hidden-xs">Created</th>
+							<th class="hidden-xs">Invoice Date</th>
 							<th class="hidden-xs">Status</th>
 						</tr>
 					</thead>
@@ -126,7 +126,7 @@
 							<td>{{invoice.invoiceCode}}</td>
 							<td><i class="fa fa-rupee"></i> {{invoice.payAmount}}</td>
 							<td>{{invoice.invoiceType}}</td>
-							<td class="hidden-xs">{{invoice.created | date:'dd-MM-yyyy HH:mm'}}</td>
+							<td class="hidden-xs">{{invoice.invoiceDate | date:'dd-MM-yyyy'}}</td>
 							<td class="hidden-xs">{{invoice.status}}</td>
 						</tr>
 						<tr>
@@ -267,13 +267,13 @@
 													ng-if="invoice.status != 'PAID' && invoice.status != 'EXPIRED' && user.access.finance"
 													ng-click="expireInvoice(invoice.invoiceCode)"
 													type="button" class="btn btn-default">Expire</button>
-												<!-- <button style="margin: 5px;"
-													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && user.access.finance"
+												<button style="margin: 5px;"
+													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && invoice.items == null && user.access.finance"
 													ng-click="updateInvoiceInfo(invoice)"
 													data-toggle="modal" data-target="#invoiceRefundModal"
-													type="button" class="btn btn-danger">Refund</button> -->
+													type="button" class="btn btn-danger">Refund</button>
 												<button style="margin: 5px;"
-													ng-if="invoice.creditNote == null && invoice.status == 'PAID' && user.access.finance"
+													ng-if="invoice.invoiceType == 'SINGLE' && invoice.status == 'PAID' && invoice.items != null && user.access.finance && invoice.creditNote == null"
 													ng-click="updateCreditNote(invoice)"
 													data-toggle="modal" data-target="#createCreditNoteModal"
 													type="button" class="btn btn-danger"><i class="fa fa-plus"></i> Credit Note</button>

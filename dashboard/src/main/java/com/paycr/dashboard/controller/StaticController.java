@@ -17,9 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.type.ConsumerType;
 import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
+import com.paycr.common.type.ItemType;
 import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
@@ -121,6 +123,14 @@ public class StaticController {
 		} else if ("invoicetypes".equals(type)) {
 			for (InvoiceType invType : InvoiceType.values()) {
 				enumList.add(invType.name());
+			}
+		} else if ("consumertypes".equals(type)) {
+			for (ConsumerType conType : ConsumerType.values()) {
+				enumList.add(conType.name());
+			}
+		} else if ("itemtypes".equals(type)) {
+			for (ItemType itemType : ItemType.values()) {
+				enumList.add(itemType.name());
 			}
 		} else if ("recurrtypes".equals(type)) {
 			for (RecurrType recType : RecurrType.values()) {

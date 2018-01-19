@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.paycr.common.type.ItemType;
 
 @Entity
 @Table(name = "pc_asset")
@@ -28,6 +31,10 @@ public class Asset {
 	private String description;
 	private BigDecimal rate;
 	private String createdBy;
+
+	@Enumerated(EnumType.STRING)
+	private ItemType type;
+
 	private boolean active;
 
 	@ManyToOne
@@ -119,6 +126,14 @@ public class Asset {
 
 	public void setTax(TaxMaster tax) {
 		this.tax = tax;
+	}
+
+	public ItemType getType() {
+		return type;
+	}
+
+	public void setType(ItemType type) {
+		this.type = type;
 	}
 
 }

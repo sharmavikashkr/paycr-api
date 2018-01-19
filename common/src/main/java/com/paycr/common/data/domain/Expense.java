@@ -31,8 +31,8 @@ public class Expense {
 
 	private Date created;
 	private String expenseCode;
-	private String orderId;
-	private Date orderDate;
+	private String invoiceCode;
+	private Date invoiceDate;
 
 	@ManyToOne
 	private Merchant merchant;
@@ -216,22 +216,6 @@ public class Expense {
 		this.supplier = supplier;
 	}
 
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
-
 	public List<ExpenseItem> getItems() {
 		return items;
 	}
@@ -262,5 +246,21 @@ public class Expense {
 
 	public void setMerchantPricing(MerchantPricing merchantPricing) {
 		this.merchantPricing = merchantPricing;
+	}
+
+	public String getInvoiceCode() {
+		return invoiceCode;
+	}
+
+	public void setInvoiceCode(String invoiceCode) {
+		this.invoiceCode = invoiceCode;
+	}
+
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
 	}
 }

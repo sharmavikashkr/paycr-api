@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
-import com.paycr.common.bean.InvoiceReport;
-import com.paycr.common.bean.SearchConsumerRequest;
-import com.paycr.common.bean.SearchInventoryRequest;
-import com.paycr.common.bean.SearchInvoicePaymentRequest;
-import com.paycr.common.bean.SearchInvoiceRequest;
 import com.paycr.common.bean.Server;
+import com.paycr.common.bean.report.InvoiceReport;
+import com.paycr.common.bean.search.SearchConsumerRequest;
+import com.paycr.common.bean.search.SearchInventoryRequest;
+import com.paycr.common.bean.search.SearchInvoicePaymentRequest;
+import com.paycr.common.bean.search.SearchInvoiceRequest;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.dao.ConsumerDao;
@@ -118,7 +118,7 @@ public class InvoiceSearchService {
 		for (InvoicePayment payment : paymentList) {
 			Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 			InvoiceReport invReport = new InvoiceReport();
-			invReport.setCreated(payment.getCreated());
+			invReport.setPaidDate(payment.getPaidDate());
 			invReport.setInvoiceCode(invoice.getInvoiceCode());
 			invReport.setInvoiceStatus(invoice.getStatus());
 			invReport.setPayAmount(invoice.getPayAmount());
@@ -136,12 +136,12 @@ public class InvoiceSearchService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Created", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
+		records.add(new String[] { "Paid Date", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
 				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 		Iterator<InvoiceReport> it = invoiceReports.iterator();
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
-			records.add(new String[] { invr.getCreated().toString(), invr.getInvoiceCode(),
+			records.add(new String[] { invr.getPaidDate().toString(), invr.getInvoiceCode(),
 					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
 					invr.getDiscount().toString(), invr.getAmount().toString(), invr.getCurrency().name(),
 					invr.getPaymentRefNo(), invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod(),

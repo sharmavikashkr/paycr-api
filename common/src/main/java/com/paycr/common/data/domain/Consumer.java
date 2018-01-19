@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.paycr.common.type.ConsumerType;
 
 @Entity
 @Table(name = "pc_consumer")
@@ -30,6 +33,9 @@ public class Consumer {
 	private String gstin;
 	private boolean emailOnPay;
 	private boolean emailOnRefund;
+
+	@Enumerated(EnumType.STRING)
+	private ConsumerType type;
 
 	private boolean active;
 	private String createdBy;
@@ -153,6 +159,14 @@ public class Consumer {
 
 	public void setGstin(String gstin) {
 		this.gstin = gstin;
+	}
+
+	public ConsumerType getType() {
+		return type;
+	}
+
+	public void setType(ConsumerType type) {
+		this.type = type;
 	}
 
 }

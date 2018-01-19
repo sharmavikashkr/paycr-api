@@ -261,8 +261,8 @@ public class SubscriptionService {
 		expense.setCreatedBy(createdBy);
 		expense.setCurrency(Currency.INR);
 		expense.setMerchant(merchant);
-		expense.setOrderDate(subs.getCreated());
-		expense.setOrderId(subs.getSubscriptionCode());
+		expense.setInvoiceDate(subs.getCreated());
+		expense.setInvoiceCode(subs.getSubscriptionCode());
 		expense.setPayAmount(subs.getPayAmount());
 		expense.setTotal(subs.getTotal());
 		expense.setTotalPrice(subs.getPayAmount());
@@ -304,7 +304,7 @@ public class SubscriptionService {
 		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense created", true, createdBy);
 		ExpensePayment expPay = new ExpensePayment();
 		expPay.setCreated(timeNow);
-		expPay.setPaidOn(subs.getCreated());
+		expPay.setPaidDate(subs.getCreated());
 		expPay.setStatus("captured");
 		expPay.setAmount(expense.getPayAmount());
 		expPay.setPayType(PayType.SALE);

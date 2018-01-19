@@ -89,6 +89,7 @@ public class ConsumerService {
 		exstCon.setActive(consumer.isActive());
 		exstCon.setEmailOnPay(consumer.isEmailOnPay());
 		exstCon.setEmailOnRefund(consumer.isEmailOnRefund());
+		exstCon.setType(consumer.getType());
 		conRepo.save(exstCon);
 	}
 

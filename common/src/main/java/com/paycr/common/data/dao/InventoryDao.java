@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.SearchInventoryRequest;
+import com.paycr.common.bean.search.SearchInventoryRequest;
 import com.paycr.common.data.domain.Inventory;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
@@ -66,7 +66,7 @@ public class InventoryDao {
 		if (CommonUtil.isNotNull(report.getPayMode())) {
 			squery.append(" p.pay_mode = :payMode AND");
 		}
-		squery.append(" p.created BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
 		squery.append(" GROUP BY invn.code,invn.name,invn.rate;");
 
 		Query query = em.createNativeQuery(squery.toString());

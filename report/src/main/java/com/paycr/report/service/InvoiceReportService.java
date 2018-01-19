@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.InvoiceReport;
+import com.paycr.common.bean.report.InvoiceReport;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
@@ -51,13 +51,13 @@ public class InvoiceReportService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Created", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
+		records.add(new String[] { "Paid On", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
 				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 
 		Iterator<InvoiceReport> it = invReport.iterator();
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
-			records.add(new String[] { invr.getCreated().toString(), invr.getInvoiceCode(),
+			records.add(new String[] { invr.getPaidDate().toString(), invr.getInvoiceCode(),
 					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
 					invr.getDiscount().toString(), invr.getAmount().toString(), invr.getCurrency().name(),
 					invr.getPaymentRefNo(), invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod(),
@@ -88,7 +88,7 @@ public class InvoiceReportService {
 		for (InvoicePayment payment : payments) {
 			Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 			InvoiceReport invReport = new InvoiceReport();
-			invReport.setCreated(payment.getCreated());
+			invReport.setPaidDate(payment.getPaidDate());
 			invReport.setInvoiceCode(invoice.getInvoiceCode());
 			invReport.setInvoiceStatus(invoice.getStatus());
 			invReport.setPayAmount(invoice.getPayAmount());

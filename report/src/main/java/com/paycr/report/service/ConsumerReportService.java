@@ -10,8 +10,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.paycr.common.bean.ConsumerReport;
 import com.paycr.common.bean.DateFilter;
+import com.paycr.common.bean.report.ConsumerReport;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;

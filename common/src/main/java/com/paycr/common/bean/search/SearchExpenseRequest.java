@@ -1,4 +1,4 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.search;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,7 +11,7 @@ public class SearchExpenseRequest {
 
 	private Integer merchant;
 	private String expenseCode;
-	private String orderId;
+	private String invoiceCode;
 	private String email;
 	private String mobile;
 	private BigDecimal amount;
@@ -96,12 +96,12 @@ public class SearchExpenseRequest {
 		this.createdTo = createdTo;
 	}
 
-	public String getOrderId() {
-		return orderId;
+	public String getInvoiceCode() {
+		return invoiceCode;
 	}
 
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
+	public void setInvoiceCode(String invoiceCode) {
+		this.invoiceCode = invoiceCode;
 	}
 
 }

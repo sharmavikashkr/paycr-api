@@ -126,6 +126,14 @@
 																	<td><input class="form-control" ng-model="asset.description"/></td>
 																</tr>
 																<tr>
+																	<td><strong>Item Type</strong></td>
+																	<td>
+																		<select ng-model="asset.type" class="form-control">
+																			<option ng-repeat="itemType in itemTypes" value="{{itemType}}">{{itemType}}</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr>
 																	<td><strong>Active</strong></td>
 																	<td><input ng-model="asset.active" type="checkbox"/></td>
 																</tr>

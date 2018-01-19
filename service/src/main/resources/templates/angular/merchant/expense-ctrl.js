@@ -7,7 +7,7 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 		"createdTo" : dateNow
 	}
 	$rootScope.markpaid = {
-		"paidOn" : dateNow
+		"paidDate" : dateNow
 	}
 	$rootScope.searchExpense = function() {
 		var req = {

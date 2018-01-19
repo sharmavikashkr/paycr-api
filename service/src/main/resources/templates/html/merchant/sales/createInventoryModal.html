@@ -55,7 +55,17 @@
 									</tr>
 									<tr>
 										<td>
-											<label class="control-label">Price</label>
+											<div ng-class="(addItemForm.type.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Item Type</label>
+												<select ng-model="newinventory.type" class="form-control" name="type" required>
+													<option ng-repeat="itemType in itemTypes" ng-value="{{itemType}}">{{itemType}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<label class="control-label">Rate</label>
 											<div class="input-group">
 												<div class="input-group-addon"><i class="fa fa-rupee"></i></div>
 												<div ng-class="(addItemForm.rate.$valid)?'':'has-error'" class="form-group">

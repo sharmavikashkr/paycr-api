@@ -8,7 +8,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.bean.SearchPromotionRequest;
+import com.paycr.common.bean.search.SearchPromotionRequest;
 import com.paycr.common.data.domain.Promotion;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;

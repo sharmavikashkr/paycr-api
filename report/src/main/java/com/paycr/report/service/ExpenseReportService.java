@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.ExpenseReport;
+import com.paycr.common.bean.report.ExpenseReport;
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.ExpensePayment;
 import com.paycr.common.data.domain.Merchant;
@@ -51,13 +51,13 @@ public class ExpenseReportService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Created", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
+		records.add(new String[] { "Paid Date", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
 				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 
 		Iterator<ExpenseReport> it = expReport.iterator();
 		while (it.hasNext()) {
 			ExpenseReport expr = it.next();
-			records.add(new String[] { expr.getCreated().toString(), expr.getExpenseCode(),
+			records.add(new String[] { expr.getPaidDate().toString(), expr.getExpenseCode(),
 					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
 					expr.getDiscount().toString(), expr.getAmount().toString(), expr.getCurrency().name(),
 					expr.getPaymentRefNo(), expr.getPayType().name(), expr.getPayMode().name(), expr.getPayMethod(),
@@ -88,7 +88,7 @@ public class ExpenseReportService {
 		for (ExpensePayment payment : payments) {
 			Expense Expense = expRepo.findByExpenseCode(payment.getExpenseCode());
 			ExpenseReport expReport = new ExpenseReport();
-			expReport.setCreated(payment.getCreated());
+			expReport.setPaidDate(payment.getPaidDate());
 			expReport.setExpenseCode(Expense.getExpenseCode());
 			expReport.setExpenseStatus(Expense.getStatus());
 			expReport.setPayAmount(Expense.getPayAmount());

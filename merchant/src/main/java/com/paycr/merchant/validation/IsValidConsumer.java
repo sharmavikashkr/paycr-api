@@ -27,7 +27,8 @@ public class IsValidConsumer implements RequestValidator<Consumer> {
 
 	@Override
 	public void validate(Consumer consumer) {
-		if (CommonUtil.isNull(consumer)) {
+		if (CommonUtil.isNull(consumer) || CommonUtil.isEmpty(consumer.getEmail())
+				|| CommonUtil.isEmpty(consumer.getMobile()) || CommonUtil.isEmpty(consumer.getName())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Consumer");
 		}
 		if (!(match(consumer.getEmail(), EMAIL_PATTERN) && match(consumer.getMobile(), MOBILE_PATTERN)

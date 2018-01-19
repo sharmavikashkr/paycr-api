@@ -7,7 +7,7 @@ app.controller('InvoiceController', function($scope, $http, $rootScope,
 		"createdTo" : dateNow
 	}
 	$rootScope.markpaid = {
-		"paidOn" : dateNow
+		"paidDate" : dateNow
 	}
 	$rootScope.searchInvoice = function() {
 		var req = {

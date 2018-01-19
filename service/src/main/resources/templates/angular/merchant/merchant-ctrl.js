@@ -26,6 +26,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 	$rootScope.newinvoice = {
 		"invoiceCode" : "",
 		"invoiceType" : "SINGLE",
+		"invoiceDate" : dateNow,
 		"consumer" : {
 			"email" : "",
 			"mobile" : "",
@@ -47,8 +48,8 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 	$rootScope.saveinvoice = $rootScope.newinvoice;
 	$rootScope.newexpense = {
 		"expenseCode" : "",
-		"orderId" : "",
-		"orderDate" : dateNow,
+		"invoiceCode" : "",
+		"invoiceDate" : dateNow,
 		"supplier" : {
 			"email" : "",
 			"mobile" : "",
@@ -217,6 +218,34 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}
 		$http(req).then(function(recurrtypes) {
 			$rootScope.recurrTypes = recurrtypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/consumertypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(consumertypes) {
+			$rootScope.consumerTypes = consumertypes.data;
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+		
+		var req = {
+			method : 'GET',
+			url : "/enum/itemtypes",
+			headers : {
+				"Authorization" : "Bearer "
+						+ $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(itemtypes) {
+			$rootScope.itemTypes = itemtypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

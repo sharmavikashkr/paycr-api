@@ -2,6 +2,7 @@ package com.paycr.common.bean;
 
 import java.util.List;
 
+import com.paycr.common.bean.search.SearchConsumerRequest;
 import com.paycr.common.data.domain.ConsumerCategory;
 
 public class UpdateConsumerRequest {

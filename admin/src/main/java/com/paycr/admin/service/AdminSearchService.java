@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchPromotionRequest;
-import com.paycr.common.bean.SearchSubsRequest;
+import com.paycr.common.bean.search.SearchMerchantRequest;
+import com.paycr.common.bean.search.SearchPromotionRequest;
+import com.paycr.common.bean.search.SearchSubsRequest;
 import com.paycr.common.data.dao.MerchantDao;
 import com.paycr.common.data.dao.PromotionDao;
 import com.paycr.common.data.dao.SubscriptionDao;

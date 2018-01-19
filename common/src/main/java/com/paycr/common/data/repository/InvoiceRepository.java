@@ -24,11 +24,11 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 	public List<Invoice> findInvoicesToExpire(Date date, boolean neverExpire);
 
 	@Query(value = "SELECT COUNT(i) as count, SUM(i.pay_amount) as sum FROM pc_invoice i WHERE i.status = ?1 AND "
-			+ "i.created BETWEEN ?2 AND ?3", nativeQuery = true)
+			+ "i.invoice_date BETWEEN ?2 AND ?3", nativeQuery = true)
 	public List<Object[]> findCountAndSum(String status, Date startDate, Date endDate);
 
 	@Query(value = "SELECT COUNT(i) as count, SUM(i.pay_amount) as sum FROM pc_invoice i WHERE i.merchant_id = ?1 AND "
-			+ "i.status = ?2 AND i.created BETWEEN ?3 AND ?4", nativeQuery = true)
+			+ "i.status = ?2 AND i.invoice_date BETWEEN ?3 AND ?4", nativeQuery = true)
 	public List<Object[]> findCountAndSumForMerchant(Integer merchantId, String status, Date startDate, Date endDate);
 	
 	@Query("SELECT i from Invoice i WHERE i.creditNote.noteCode = ?1")

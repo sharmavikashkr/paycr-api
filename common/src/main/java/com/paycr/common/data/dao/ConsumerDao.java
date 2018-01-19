@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.bean.SearchConsumerRequest;
+import com.paycr.common.bean.search.SearchConsumerRequest;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
 import com.paycr.common.data.domain.Merchant;

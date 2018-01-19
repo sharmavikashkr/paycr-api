@@ -74,7 +74,7 @@ public class ExpenseService {
 			ExpensePayment refPay = new ExpensePayment();
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
-			refPay.setPaidOn(timeNow);
+			refPay.setPaidDate(timeNow);
 			refPay.setExpenseCode(expense.getExpenseCode());
 			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(payment.getPaymentRefNo());
@@ -99,7 +99,6 @@ public class ExpenseService {
 		}
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
-		payment.setPaidOn(payment.getPaidOn());
 		payment.setStatus("captured");
 		payment.setAmount(expense.getPayAmount());
 		payment.setPayType(PayType.SALE);

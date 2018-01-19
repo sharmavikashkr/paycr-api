@@ -8,7 +8,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.bean.SearchSubsRequest;
+import com.paycr.common.bean.search.SearchSubsRequest;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;

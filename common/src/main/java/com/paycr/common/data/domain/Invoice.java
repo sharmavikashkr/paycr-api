@@ -40,6 +40,8 @@ public class Invoice implements Cloneable {
 	@Enumerated(EnumType.STRING)
 	private InvoiceType invoiceType;
 
+	private Date invoiceDate;
+
 	@Column(precision = 10, scale = 2)
 	private BigDecimal total;
 
@@ -339,5 +341,13 @@ public class Invoice implements Cloneable {
 
 	public void setCreditNote(InvoiceCreditNote creditNote) {
 		this.creditNote = creditNote;
+	}
+
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
 	}
 }

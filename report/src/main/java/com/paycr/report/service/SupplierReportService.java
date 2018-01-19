@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.SupplierReport;
+import com.paycr.common.bean.report.SupplierReport;
 import com.paycr.common.data.dao.ExpenseDao;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;

@@ -1,15 +1,10 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.search;
 
-import java.util.List;
-
-import com.paycr.common.data.domain.ConsumerCategory;
-
-public class SearchConsumerRequest {
+public class SearchSupplierRequest {
 
 	private Integer merchant;
 	private String email;
 	private String mobile;
-	private List<ConsumerCategory> conCatList;
 
 	public Integer getMerchant() {
 		return merchant;
@@ -33,13 +28,5 @@ public class SearchConsumerRequest {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-
-	public List<ConsumerCategory> getConCatList() {
-		return conCatList;
-	}
-
-	public void setConCatList(List<ConsumerCategory> conCatList) {
-		this.conCatList = conCatList;
 	}
 }

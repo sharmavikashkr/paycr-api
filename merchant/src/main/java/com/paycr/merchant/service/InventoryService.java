@@ -55,7 +55,7 @@ public class InventoryService {
 
 	public void newInventory(Inventory inventory, Merchant merchant, String createdBy) {
 		if (CommonUtil.isEmpty(inventory.getName()) || CommonUtil.isNull(inventory.getRate())
-				|| CommonUtil.isEmpty(inventory.getCode())) {
+				|| CommonUtil.isEmpty(inventory.getCode()) || CommonUtil.isNull(inventory.getType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
 		Inventory exstingInvn = invnRepo.findByMerchantAndCode(merchant, inventory.getCode());
@@ -82,6 +82,7 @@ public class InventoryService {
 		exstInvn.setDescription(inventory.getDescription());
 		exstInvn.setTax(inventory.getTax());
 		exstInvn.setHsnsac(inventory.getHsnsac());
+		exstInvn.setType(inventory.getType());
 		invnRepo.save(exstInvn);
 	}
 

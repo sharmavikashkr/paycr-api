@@ -18,15 +18,15 @@
 							<td>
 								<div class="form-group">
 									<label class="control-label">Expense Code</label>
-									<input class="form-control" ng-model="searchExpenseReq.expenseCode" placeholder="expenseCode" />
+									<input class="form-control" ng-model="searchExpenseReq.expenseCode" placeholder="Expense Code" />
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<div class="form-group">
-									<label class="control-label">Order Id</label>
-									<input class="form-control" ng-model="searchExpenseReq.orderId" placeholder="orderId" />
+									<label class="control-label">Invoice Code</label>
+									<input class="form-control" ng-model="searchExpenseReq.invoiceCode" placeholder="Invoice Code" />
 								</div>
 							</td>
 						</tr>
@@ -102,7 +102,7 @@
 						<tr>
 							<th>Expense Code</th>
 							<th>Amount</th>
-							<th>Order Id</th>
+							<th>Invoice Code</th>
 							<th class="hidden-xs">Created</th>
 							<th class="hidden-xs">Status</th>
 						</tr>
@@ -115,7 +115,7 @@
 							class="accordion-toggle">
 							<td>{{expense.expenseCode}}</td>
 							<td><i class="fa fa-rupee"></i> {{expense.payAmount}}</td>
-							<td>{{expense.orderId}}</td>
+							<td>{{expense.invoiceCode}}</td>
 							<td class="hidden-xs">{{expense.created | date:'dd-MM-yyyy HH:mm'}}</td>
 							<td class="hidden-xs">{{expense.status}}</td>
 						</tr>

@@ -21,11 +21,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 	public List<Expense> findExpensesForSupplier(String email, String mobile);
 
 	@Query(value = "SELECT COUNT(e) as count, SUM(e.pay_amount) as sum FROM pc_expense e WHERE e.status = ?1 AND "
-			+ "e.created BETWEEN ?2 AND ?3", nativeQuery = true)
+			+ "e.invoice_date BETWEEN ?2 AND ?3", nativeQuery = true)
 	public List<Object[]> findCountAndSum(String status, Date startDate, Date endDate);
 
 	@Query(value = "SELECT COUNT(e) as count, SUM(e.pay_amount) as sum FROM pc_expense e WHERE e.merchant_id = ?1 AND "
-			+ "e.status = ?2 AND e.created BETWEEN ?3 AND ?4", nativeQuery = true)
+			+ "e.status = ?2 AND e.invoice_date BETWEEN ?3 AND ?4", nativeQuery = true)
 	public List<Object[]> findCountAndSumForMerchant(Integer merchantId, String status, Date startDate, Date endDate);
 
 }

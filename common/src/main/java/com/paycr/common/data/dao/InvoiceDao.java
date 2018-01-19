@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.SearchInvoiceRequest;
+import com.paycr.common.bean.search.SearchInvoiceRequest;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
@@ -171,7 +171,7 @@ public class InvoiceDao {
 		if (CommonUtil.isNotNull(report.getPayMode())) {
 			squery.append(" p.pay_mode = :payMode AND");
 		}
-		squery.append(" p.created BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
 		squery.append(" GROUP BY c.name,c.email,c.mobile;");
 
 		Query query = em.createNativeQuery(squery.toString());

@@ -1,23 +1,23 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.report;
 
 import java.math.BigInteger;
 
-public class ConsumerReport {
+public class SupplierReport {
 
 	private String name;
 	private String email;
 	private String mobile;
-	private BigInteger invoices;
+	private BigInteger expenses;
 	private BigInteger refunded;
-	private Double invoiceAmt;
+	private Double expenseAmt;
 	private Double refundAmt;
 
-	public BigInteger getInvoices() {
-		return invoices;
+	public BigInteger getExpenses() {
+		return expenses;
 	}
 
-	public void setInvoices(BigInteger invoices) {
-		this.invoices = invoices;
+	public void setExpenses(BigInteger expenses) {
+		this.expenses = expenses;
 	}
 
 	public BigInteger getRefunded() {
@@ -28,12 +28,12 @@ public class ConsumerReport {
 		this.refunded = refunded;
 	}
 
-	public Double getInvoiceAmt() {
-		return invoiceAmt;
+	public Double getExpenseAmt() {
+		return expenseAmt;
 	}
 
-	public void setInvoiceAmt(Double invoiceAmt) {
-		this.invoiceAmt = invoiceAmt;
+	public void setExpenseAmt(Double expenseAmt) {
+		this.expenseAmt = expenseAmt;
 	}
 
 	public Double getRefundAmt() {

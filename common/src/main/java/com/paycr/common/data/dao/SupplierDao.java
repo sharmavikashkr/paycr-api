@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.bean.SearchSupplierRequest;
+import com.paycr.common.bean.search.SearchSupplierRequest;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Supplier;
 import com.paycr.common.util.CommonUtil;

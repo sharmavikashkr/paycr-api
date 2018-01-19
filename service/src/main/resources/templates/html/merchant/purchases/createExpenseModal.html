@@ -52,13 +52,13 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">Order Params</div>
 								<div class="panel-body">
-									<div ng-class="(createExpenseForm.orderId.$valid)?'':'has-error'" class="form-group">
-										<label class="control-label">Order Id:</label>
-										<input ng-model="saveexpense.orderId" name="orderId" autocomplete="off" class="form-control" placeholder="Order Id" type="text" ng-pattern="patterns.paramNamePattern" required />
+									<div ng-class="(createExpenseForm.invoiceCode.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Invoice Code:</label>
+										<input ng-model="saveexpense.invoiceCode" name="invoiceCode" autocomplete="off" class="form-control" placeholder="Invoice Code" type="text" ng-pattern="patterns.paramNamePattern" required />
 									</div>
-									<div ng-class="(createExpenseForm.orderDate.$valid)?'':'has-error'" class="form-group">
-										<label class="control-label">Order Date:</label>
-										<md-datepicker onkeydown="return false" ng-model="saveexpense.orderDate" name="orderDate"></md-datepicker>
+									<div ng-class="(createExpenseForm.invoiceDate.$valid)?'':'has-error'" class="form-group">
+										<label class="control-label">Invoice Date:</label>
+										<md-datepicker onkeydown="return false" ng-model="saveexpense.invoiceDate" name="invoiceDate"></md-datepicker>
 									</div>
 								</div>
 							</div>

@@ -60,6 +60,14 @@
 											<input type="checkbox" ng-model="saveinvoice.neverExpire">&nbsp;<strong>Never</strong>
 										</div>
 									</div>
+									<hr>
+									<div class="col-xs-12">
+										<hr>
+										<div ng-class="(createInvoiceForm.invoiceDate.$valid)?'':'has-error'" class="form-group">
+											<label class="control-label">Invoice Date:</label>
+											<md-datepicker onkeydown="return false" ng-model="saveinvoice.invoiceDate" name="invoiceDate"></md-datepicker>
+										</div>
+									</div>
 								</div>
 							</div>
 							<div class="panel panel-default height">

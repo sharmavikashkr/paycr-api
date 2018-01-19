@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.DateFilter;
-import com.paycr.common.bean.SearchExpenseRequest;
+import com.paycr.common.bean.search.SearchExpenseRequest;
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
@@ -32,8 +32,8 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				squery.append(" i.expenseCode = :expenseCode AND");
 			}
-			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
-				squery.append(" i.orderId = :orderId AND");
+			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
+				squery.append(" i.invoiceCode = :invoiceCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
 				squery.append(" i.supplier.email = :email AND");
@@ -60,8 +60,8 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				query.setParameter("expenseCode", searchReq.getExpenseCode());
 			}
-			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
-				query.setParameter("orderId", searchReq.getOrderId());
+			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
+				query.setParameter("invoiceCode", searchReq.getInvoiceCode());
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
 				query.setParameter("email", searchReq.getEmail());
@@ -89,8 +89,8 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				squery.append(" i.expense.expenseCode = :expenseCode AND");
 			}
-			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
-				squery.append(" i.orderId = :orderId AND");
+			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
+				squery.append(" i.invoiceCode = :invoiceCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
 				squery.append(" i.expense.supplier.email = :email AND");
@@ -118,8 +118,8 @@ public class ExpenseDao {
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
 				query.setParameter("expenseCode", searchReq.getExpenseCode());
 			}
-			if (!CommonUtil.isEmpty(searchReq.getOrderId())) {
-				query.setParameter("orderId", searchReq.getOrderId());
+			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
+				query.setParameter("invoiceCode", searchReq.getInvoiceCode());
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
 				query.setParameter("email", searchReq.getEmail());
@@ -159,7 +159,7 @@ public class ExpenseDao {
 		if (CommonUtil.isNotNull(report.getPayMode())) {
 			squery.append(" p.pay_mode = :payMode AND");
 		}
-		squery.append(" p.created BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
 		squery.append(" GROUP BY s.name,s.email,s.mobile;");
 
 		Query query = em.createNativeQuery(squery.toString());

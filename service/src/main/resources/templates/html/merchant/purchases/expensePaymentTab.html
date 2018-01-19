@@ -74,7 +74,7 @@
 							<th>Payment Ref No</th>
 							<th>Amount</th>
 							<th>Pay Type</th>
-							<th class="hidden-xs">Created</th>
+							<th class="hidden-xs">Paid Date</th>
 						</tr>
 					</thead>
 					<tbody ng-repeat="payment in paymentResp.paymentList">
@@ -87,7 +87,7 @@
 							<td>{{payment.paymentRefNo}}</td>
 							<td><i class="fa fa-rupee"></i> {{payment.amount}}</td>
 							<td>{{payment.payType}}</td>
-							<td class="hidden-xs">{{payment.created | date:'dd-MM-yyyy HH:mm'}}</td>
+							<td class="hidden-xs">{{payment.paidDate | date:'dd-MM-yyyy'}}</td>
 						</tr>
 						<tr>
 							<td colspan="12" style="padding: 0px; border: 0px;">
@@ -109,7 +109,7 @@
 											<table class="table table-striped table-bordered table-responsive">
 												<thead>
 													<tr>
-														<th>Paid On</th>
+														<th>Created</th>
 														<th>Status</th>
 														<th>Pay Mode</th>
 														<th>Pay Method</th>
@@ -117,7 +117,7 @@
 												</thead>
 												<tbody>
 													<tr>
-														<td>{{payment.paidOn | date:'dd-MM-yyyy HH:mm'}}</td>
+														<td>{{payment.created | date:'dd-MM-yyyy HH:mm'}}</td>
 														<td>{{payment.status}}</td>
 														<td>{{payment.payMode}}</td>
 														<td>{{payment.method}}</td>

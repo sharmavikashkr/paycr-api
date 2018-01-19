@@ -55,7 +55,7 @@ public class AssetService {
 
 	public void newAsset(Asset asset, Merchant merchant, String createdBy) {
 		if (CommonUtil.isEmpty(asset.getName()) || CommonUtil.isNull(asset.getRate())
-				|| CommonUtil.isEmpty(asset.getCode())) {
+				|| CommonUtil.isEmpty(asset.getCode()) || CommonUtil.isNull(asset.getType())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
 		Asset exstingInvn = assetRepo.findByMerchantAndCode(merchant, asset.getCode());
@@ -82,6 +82,7 @@ public class AssetService {
 		exstInvn.setDescription(asset.getDescription());
 		exstInvn.setTax(asset.getTax());
 		exstInvn.setHsnsac(asset.getHsnsac());
+		exstInvn.setType(asset.getType());
 		assetRepo.save(exstInvn);
 	}
 

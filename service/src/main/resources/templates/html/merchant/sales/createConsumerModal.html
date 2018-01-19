@@ -45,6 +45,16 @@
 									</tr>
 									<tr>
 										<td>
+											<div class="form-group">
+												<label class="control-label">Consumer Type</label>
+												<select ng-model="newconsumer.type" class="form-control">
+													<option ng-repeat="consumerType in consumerTypes" ng-value="{{consumerType}}">{{consumerType}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
 											<div class="visible-lg-inline visible-md-inline visible-sm-inline visible-xs-inline" ng-repeat="conCat in newconsumer.conCats">
 												<label class="panel">{{conCat.name}} : {{conCat.value}}
 													<a class="btn btn-flat btn-danger btn-xs" title="remove category" ng-click="removeNewCategory($index)"><i class="fa fa-minus"></i></a>

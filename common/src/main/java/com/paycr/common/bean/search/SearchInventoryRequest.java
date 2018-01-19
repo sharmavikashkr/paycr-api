@@ -1,6 +1,6 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.search;
 
-public class SearchAssetRequest {
+public class SearchInventoryRequest {
 
 	private Integer merchant;
 	private String code;

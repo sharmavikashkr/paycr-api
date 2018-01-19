@@ -11,11 +11,7 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 		}
 		$http(req).then(function(response) {
 			$rootScope.statsResponse = response.data;
-			if($rootScope.statsResponse.dailyInvPayList.length > 0) {
-				$scope.loadCharts();				
-			} else {
-				$rootScope.hideSpinner = true;
-			}
+			$scope.loadCharts();				
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
@@ -67,23 +63,25 @@ app.controller('DashboardController', function($scope, $rootScope, $http,
 	        }],
 	        resize: true
 	    });
-		var areaData = [];
-		for(var dailyPay in $rootScope.statsResponse.dailyInvPayList) {
-			areaData.push({
-				period: $rootScope.statsResponse.dailyInvPayList[dailyPay].created,
-				paid: $rootScope.statsResponse.dailyInvPayList[dailyPay].salePaySum,
-				refund: $rootScope.statsResponse.dailyInvPayList[dailyPay].refundPaySum
-			});
+		if($rootScope.statsResponse.dailyInvPayList.length > 0) {
+			var areaData = [];
+			for(var dailyPay in $rootScope.statsResponse.dailyInvPayList) {
+				areaData.push({
+					period: $rootScope.statsResponse.dailyInvPayList[dailyPay].created,
+					paid: $rootScope.statsResponse.dailyInvPayList[dailyPay].salePaySum,
+					refund: $rootScope.statsResponse.dailyInvPayList[dailyPay].refundPaySum
+				});
+			}
+			Morris.Bar({
+		        element: 'per-day-bar',
+		        data: areaData,
+		        xkey: 'period',
+		        ykeys: ['paid', 'refund'],
+		        labels: ['paid', 'refund'],
+		        hideHover: 'auto',
+		        resize: true
+		    });
 		}
-		Morris.Bar({
-	        element: 'per-day-bar',
-	        data: areaData,
-	        xkey: 'period',
-	        ykeys: ['paid', 'refund'],
-	        labels: ['paid', 'refund'],
-	        hideHover: 'auto',
-	        resize: true
-	    });
 		$rootScope.hideSpinner = true;
 	}
 });

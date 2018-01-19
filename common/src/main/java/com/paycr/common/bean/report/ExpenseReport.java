@@ -1,18 +1,18 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.report;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 import com.paycr.common.type.Currency;
-import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
-public class InvoiceReport {
+public class ExpenseReport {
 
-	private Date created;
-	private String invoiceCode;
-	private InvoiceStatus invoiceStatus;
+	private Date paidDate;
+	private String expenseCode;
+	private ExpenseStatus expenseStatus;
 	private BigDecimal payAmount;
 	private BigDecimal tax;
 	private BigDecimal discount;
@@ -23,22 +23,6 @@ public class InvoiceReport {
 	private PayMode payMode;
 	private String payMethod;
 	private String payStatus;
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
-	}
 
 	public Currency getCurrency() {
 		return currency;
@@ -80,14 +64,6 @@ public class InvoiceReport {
 		this.payMethod = payMethod;
 	}
 
-	public InvoiceStatus getInvoiceStatus() {
-		return invoiceStatus;
-	}
-
-	public void setInvoiceStatus(InvoiceStatus invoiceStatus) {
-		this.invoiceStatus = invoiceStatus;
-	}
-
 	public BigDecimal getTax() {
 		return tax;
 	}
@@ -120,11 +96,35 @@ public class InvoiceReport {
 		this.payStatus = payStatus;
 	}
 
+	public String getExpenseCode() {
+		return expenseCode;
+	}
+
+	public void setExpenseCode(String expenseCode) {
+		this.expenseCode = expenseCode;
+	}
+
+	public ExpenseStatus getExpenseStatus() {
+		return expenseStatus;
+	}
+
+	public void setExpenseStatus(ExpenseStatus expenseStatus) {
+		this.expenseStatus = expenseStatus;
+	}
+
 	public BigDecimal getPayAmount() {
 		return payAmount;
 	}
 
 	public void setPayAmount(BigDecimal payAmount) {
 		this.payAmount = payAmount;
+	}
+
+	public Date getPaidDate() {
+		return paidDate;
+	}
+
+	public void setPaidDate(Date paidDate) {
+		this.paidDate = paidDate;
 	}
 }

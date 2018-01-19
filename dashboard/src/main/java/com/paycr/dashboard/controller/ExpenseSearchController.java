@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paycr.common.bean.SearchAssetRequest;
-import com.paycr.common.bean.SearchExpensePaymentRequest;
-import com.paycr.common.bean.SearchExpenseRequest;
-import com.paycr.common.bean.SearchSupplierRequest;
+import com.paycr.common.bean.search.SearchAssetRequest;
+import com.paycr.common.bean.search.SearchExpensePaymentRequest;
+import com.paycr.common.bean.search.SearchExpenseRequest;
+import com.paycr.common.bean.search.SearchSupplierRequest;
 import com.paycr.common.data.domain.Asset;
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.ExpensePayment;

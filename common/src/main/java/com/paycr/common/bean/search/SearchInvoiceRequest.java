@@ -1,4 +1,4 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.search;
 
 import java.math.BigDecimal;
 import java.util.Date;

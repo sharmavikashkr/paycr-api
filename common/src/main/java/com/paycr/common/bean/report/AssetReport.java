@@ -1,4 +1,4 @@
-package com.paycr.common.bean;
+package com.paycr.common.bean.report;
 
 import java.math.BigInteger;
 

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.admin.service.AdminSearchService;
-import com.paycr.common.bean.SearchMerchantRequest;
-import com.paycr.common.bean.SearchPromotionRequest;
-import com.paycr.common.bean.SearchSubsRequest;
+import com.paycr.common.bean.search.SearchMerchantRequest;
+import com.paycr.common.bean.search.SearchPromotionRequest;
+import com.paycr.common.bean.search.SearchSubsRequest;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Promotion;
 import com.paycr.common.data.domain.Subscription;

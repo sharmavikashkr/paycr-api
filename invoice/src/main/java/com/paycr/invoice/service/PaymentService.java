@@ -77,8 +77,8 @@ public class PaymentService {
 		mv.addObject("invoice", invoice);
 		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
-		mv.addObject("payAmount",
-				String.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100))));
+		mv.addObject("payAmount", String
+				.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100))));
 		return mv;
 	}
 
@@ -118,7 +118,7 @@ public class PaymentService {
 		PaymentSetting paymentSetting = merchant.getPaymentSetting();
 		InvoicePayment payment = new InvoicePayment();
 		payment.setCreated(timeNow);
-		payment.setPaidOn(timeNow);
+		payment.setPaidDate(timeNow);
 		payment.setInvoiceCode(invoice.getInvoiceCode());
 		payment.setMerchant(merchant);
 		payment.setPaymentRefNo(rzpPayId);
@@ -174,7 +174,7 @@ public class PaymentService {
 		if (!PayMode.PAYCR.equals(payment.getPayMode())) {
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
-			refPay.setPaidOn(timeNow);
+			refPay.setPaidDate(timeNow);
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(payment.getPaymentRefNo());
@@ -192,7 +192,7 @@ public class PaymentService {
 			Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
 			refPay.setAmount(amount);
 			refPay.setCreated(timeNow);
-			refPay.setPaidOn(timeNow);
+			refPay.setPaidDate(timeNow);
 			refPay.setInvoiceCode(invoice.getInvoiceCode());
 			refPay.setMerchant(merchant);
 			refPay.setPaymentRefNo(refund.get("id"));

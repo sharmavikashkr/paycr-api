@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
-import com.paycr.common.bean.ExpenseReport;
-import com.paycr.common.bean.SearchAssetRequest;
-import com.paycr.common.bean.SearchExpensePaymentRequest;
-import com.paycr.common.bean.SearchExpenseRequest;
-import com.paycr.common.bean.SearchSupplierRequest;
 import com.paycr.common.bean.Server;
+import com.paycr.common.bean.report.ExpenseReport;
+import com.paycr.common.bean.search.SearchAssetRequest;
+import com.paycr.common.bean.search.SearchExpensePaymentRequest;
+import com.paycr.common.bean.search.SearchExpenseRequest;
+import com.paycr.common.bean.search.SearchSupplierRequest;
 import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.dao.AssetDao;
@@ -80,7 +80,8 @@ public class ExpenseSearchService {
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
 				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedTo(
+				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -91,8 +92,10 @@ public class ExpenseSearchService {
 	public List<ExpensePayment> fetchPaymentList(SearchExpensePaymentRequest request) {
 		vaidateRequest(request);
 		validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(
+				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
+		request.setCreatedTo(
+				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (request.getMerchant() != null) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -106,7 +109,7 @@ public class ExpenseSearchService {
 		for (ExpensePayment payment : paymentList) {
 			Expense expense = expRepo.findByExpenseCode(payment.getExpenseCode());
 			ExpenseReport invReport = new ExpenseReport();
-			invReport.setCreated(payment.getCreated());
+			invReport.setPaidDate(payment.getPaidDate());
 			invReport.setExpenseCode(expense.getExpenseCode());
 			invReport.setExpenseStatus(expense.getStatus());
 			invReport.setPayAmount(expense.getPayAmount());
@@ -124,12 +127,12 @@ public class ExpenseSearchService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Created", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
+		records.add(new String[] { "Paid Date", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
 				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 		Iterator<ExpenseReport> it = invoiceReports.iterator();
 		while (it.hasNext()) {
 			ExpenseReport expr = it.next();
-			records.add(new String[] { expr.getCreated().toString(), expr.getExpenseCode(),
+			records.add(new String[] { expr.getPaidDate().toString(), expr.getExpenseCode(),
 					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
 					expr.getDiscount().toString(), expr.getAmount().toString(), expr.getCurrency().name(),
 					expr.getPaymentRefNo(), expr.getPayType().name(), expr.getPayMode().name(), expr.getPayMethod(),
