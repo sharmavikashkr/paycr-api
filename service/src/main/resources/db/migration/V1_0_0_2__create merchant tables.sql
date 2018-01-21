@@ -18,6 +18,17 @@ CREATE TABLE if not exists pc_merchant_custom_param (
     invoice_setting_id int REFERENCES pc_invoice_setting
 );
 
+CREATE TABLE if not exists pc_gst_setting (
+	id SERIAL PRIMARY KEY NOT NULL,
+	inv_created boolean NOT NULL,
+	inv_unpaid boolean NOT NULL,
+	inv_paid boolean NOT NULL,
+	inv_expired boolean NOT NULL,
+	inv_declined boolean NOT NULL,
+	exp_unpaid boolean NOT NULL,
+	exp_paid boolean NOT NULL
+);
+
 CREATE TABLE if not exists pc_merchant (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -31,6 +42,7 @@ CREATE TABLE if not exists pc_merchant (
     active boolean NOT NULL,
     payment_setting_id int REFERENCES pc_payment_setting,
 	invoice_setting_id int REFERENCES pc_invoice_setting,
+	gst_setting_id int REFERENCES pc_gst_setting,
 	address_id int REFERENCES pc_address
 );
 

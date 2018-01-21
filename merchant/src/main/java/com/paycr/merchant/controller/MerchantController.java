@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Address;
+import com.paycr.common.data.domain.GstSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
@@ -118,6 +119,20 @@ public class MerchantController {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			merSer.updateInvoiceSetting(merchant, invoiceSetting);
 			return merchant.getInvoiceSetting();
+		} catch (Exception ex) {
+			response.setStatus(HttpStatus.BAD_REQUEST_400);
+			response.addHeader("error_message", ex.getMessage());
+			return null;
+		}
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping("/gstsetting/update")
+	public GstSetting updateGstSetting(@RequestBody GstSetting gstSetting, HttpServletResponse response) {
+		try {
+			Merchant merchant = secSer.getMerchantForLoggedInUser();
+			merSer.updateGstSetting(merchant, gstSetting);
+			return merchant.getGstSetting();
 		} catch (Exception ex) {
 			response.setStatus(HttpStatus.BAD_REQUEST_400);
 			response.addHeader("error_message", ex.getMessage());

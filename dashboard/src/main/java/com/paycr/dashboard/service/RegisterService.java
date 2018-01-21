@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.OfflineSubscription;
+import com.paycr.common.data.domain.GstSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantUser;
@@ -94,6 +95,17 @@ public class RegisterService {
 		invoiceSetting.setEmailSubject("Invoice for your order");
 		invoiceSetting.setExpiryDays(7);
 		merchant.setInvoiceSetting(invoiceSetting);
+
+		GstSetting gstSetting = new GstSetting();
+		gstSetting.setExpPaid(true);
+		gstSetting.setExpUnpaid(true);
+		gstSetting.setInvCreated(true);
+		gstSetting.setInvDeclined(false);
+		gstSetting.setInvExpired(false);
+		gstSetting.setInvPaid(true);
+		gstSetting.setInvUnpaid(true);
+		merchant.setGstSetting(gstSetting);
+
 		merRepo.save(merchant);
 
 		PcUser user = new PcUser();

@@ -42,6 +42,9 @@ public class Merchant {
 	@OneToOne(cascade = CascadeType.ALL)
 	private PaymentSetting paymentSetting;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	private GstSetting gstSetting;
+
 	public Integer getId() {
 		return id;
 	}
@@ -148,5 +151,13 @@ public class Merchant {
 
 	public void setBanner(String banner) {
 		this.banner = banner;
+	}
+
+	public GstSetting getGstSetting() {
+		return gstSetting;
+	}
+
+	public void setGstSetting(GstSetting gstSetting) {
+		this.gstSetting = gstSetting;
 	}
 }

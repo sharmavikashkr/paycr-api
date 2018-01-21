@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Address;
+import com.paycr.common.data.domain.GstSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
@@ -101,6 +102,18 @@ public class MerchantService {
 		paySet.setRzpKeyId(updatedSetting.getRzpKeyId());
 		paySet.setRzpMerchantId(updatedSetting.getRzpMerchantId());
 		paySet.setRzpSecretId(updatedSetting.getRzpSecretId());
+		merRepo.save(merchant);
+	}
+
+	public void updateGstSetting(Merchant merchant, GstSetting newSet) {
+		GstSetting gstSet = merchant.getGstSetting();
+		gstSet.setExpPaid(newSet.isExpPaid());
+		gstSet.setExpUnpaid(newSet.isExpUnpaid());
+		gstSet.setInvCreated(newSet.isInvCreated());
+		gstSet.setInvDeclined(newSet.isInvDeclined());
+		gstSet.setInvExpired(newSet.isInvExpired());
+		gstSet.setInvPaid(newSet.isInvPaid());
+		gstSet.setInvUnpaid(newSet.isInvUnpaid());
 		merRepo.save(merchant);
 	}
 

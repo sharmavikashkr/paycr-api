@@ -5,10 +5,12 @@
 				<ul class="nav nav-tabs">
 					<li class="active" ng-if="user.access.admin"><a href="#accountTab" data-toggle="tab">Account</a></li>
 					<li ng-class="(user.access.admin)?'':'active'" ng-if="user.access.finance"><a href="#invoiceSettingTab" data-toggle="tab">Invoice Settings</a></li>
+					<li ng-if="user.access.finance"><a href="#gstSettingTab" data-toggle="tab">GST Settings</a></li>
 				</ul>
 				<div class="tab-content">
 			        <div ng-if="user.access.admin" id="accountTab" class="active tab-pane" ng-include="templateUrl('merchant','accountTab')"></div>
 			        <div ng-class="(user.access.admin)?'':'active'" ng-if="user.access.finance" id="invoiceSettingTab" class="tab-pane" ng-include="templateUrl('merchant','invoiceSettingTab')"></div>
+			        <div ng-if="user.access.finance" id="gstSettingTab" class="tab-pane" ng-include="templateUrl('merchant','gstSettingTab')"></div>
 				</div>
 			</div>
 		</div>
