@@ -9,18 +9,18 @@ import com.paycr.common.bean.TaxAmount;
 public class Gstr1B2B {
 
 	private String gstin;
-	private float invoiceNo;
+	private String invoiceNo;
 	private BigDecimal invoiceAmount;
 	private Date invoiceDate;
 	private String placeOfSupply;
 	private String supplyType;
 	private List<TaxAmount> taxAmount;
 
-	public float getInvoiceNo() {
+	public String getInvoiceNo() {
 		return invoiceNo;
 	}
 
-	public void setInvoiceNo(float invoiceNo) {
+	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
 

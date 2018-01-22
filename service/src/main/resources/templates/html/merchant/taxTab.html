@@ -1,0 +1,14 @@
+<div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="nav-tabs-custom tab-danger">
+				<ul class="nav nav-tabs">
+					<li class="active" ng-if="user.access.finance"><a href="#gstr1Tab" data-toggle="tab">GSTR1</a></li>
+				</ul>
+				<div class="tab-content">
+			        <div ng-if="user.access.finance" id="gstr1Tab" class="active tab-pane" ng-include="templateUrl('merchant','gstr1Tab')"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

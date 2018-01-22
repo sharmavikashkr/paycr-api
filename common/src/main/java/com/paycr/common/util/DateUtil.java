@@ -1,5 +1,6 @@
 package com.paycr.common.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,11 @@ public class DateUtil {
 	public static String getDefaultDate(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
 		return sdf.format(date);
+	}
+
+	public static Date parseDefaultDate(String dateStr) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+		return sdf.parse(dateStr);
 	}
 
 	public static String getDashboardDate(Date date) {

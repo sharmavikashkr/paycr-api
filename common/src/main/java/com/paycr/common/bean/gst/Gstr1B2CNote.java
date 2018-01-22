@@ -6,26 +6,17 @@ import java.util.List;
 
 import com.paycr.common.bean.TaxAmount;
 
-public class Gstr1B2BCDNote {
+public class Gstr1B2CNote {
 
-	private String gstin;
 	private String noteNo;
 	private Date noteDate;
-	private float invoiceNo;
+	private String invoiceNo;
 	private Date invoiceDate;
 	private String noteType;
 	private BigDecimal noteAmount;
 	private String supplyType;
 	private String noteReason;
 	private List<TaxAmount> taxAmount;
-
-	public String getGstin() {
-		return gstin;
-	}
-
-	public void setGstin(String gstin) {
-		this.gstin = gstin;
-	}
 
 	public String getNoteNo() {
 		return noteNo;
@@ -43,11 +34,11 @@ public class Gstr1B2BCDNote {
 		this.noteDate = noteDate;
 	}
 
-	public float getInvoiceNo() {
+	public String getInvoiceNo() {
 		return invoiceNo;
 	}
 
-	public void setInvoiceNo(float invoiceNo) {
+	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
 
