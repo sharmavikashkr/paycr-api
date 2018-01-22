@@ -70,7 +70,7 @@
 						<tr ng-class="(promotion.sent)?'success':'warning'" data-toggle="collapse" data-target="#prodetails-{{promotion.id}}" class="accordion-toggle">
 							<td>{{promotion.name}}</td>
 							<td>{{promotion.email}}</td>
-							<td class="hidden-xs">{{promotion.phone}}</td>
+							<td>{{promotion.phone}}</td>
 							<td class="hidden-xs">{{promotion.created | date:'dd-MM-yyyy HH:mm'}}</td>
 							<td class="hidden-xs">{{promotion.notified}}</td>
 						</tr>
@@ -88,11 +88,6 @@
 											<div class="box box-warning">
 												<div class="box-header with-border">
 													<h5 class="box-title">Address</h5>
-													<!-- <div class="box-tools pull-right">
-														<button ng-if="user.access.finance" ng-click="updateEditAddress('BILLING')" data-toggle="modal" data-target="#editConAddressModal" class="btn btn-flat btn-xs btn-warning" title="Edit Billing Address">
-															<i class="fa fa-pencil"></i>
-														</button>
-													</div> -->
 												</div>
 												<div class="box-body">
 													<p ng-if="promotion.address != null">
