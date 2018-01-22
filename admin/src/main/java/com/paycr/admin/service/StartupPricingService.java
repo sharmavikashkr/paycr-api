@@ -56,7 +56,7 @@ public class StartupPricingService {
 	}
 
 	public void createGstTaxMaster() {
-		TaxMaster gst = taxMRepo.findByName("GST");
+		TaxMaster gst = taxMRepo.findByNameAndValue("GST", 18f);
 		if (CommonUtil.isNotNull(gst)) {
 			return;
 		}
@@ -67,7 +67,7 @@ public class StartupPricingService {
 		gst.setValue(18F);
 		taxMRepo.save(gst);
 
-		TaxMaster sgst = taxMRepo.findByName("SGST");
+		TaxMaster sgst = taxMRepo.findByNameAndValue("SGST", 9f);
 		if (CommonUtil.isNotNull(sgst)) {
 			return;
 		}
@@ -80,7 +80,7 @@ public class StartupPricingService {
 		sgst.setTaxParent(gst);
 		taxMRepo.save(sgst);
 
-		TaxMaster cgst = taxMRepo.findByName("CGST");
+		TaxMaster cgst = taxMRepo.findByNameAndValue("CGST", 9f);
 		if (CommonUtil.isNotNull(cgst)) {
 			return;
 		}
@@ -92,6 +92,18 @@ public class StartupPricingService {
 		cgst.setChild(true);
 		cgst.setTaxParent(gst);
 		taxMRepo.save(cgst);
+
+		TaxMaster igst = taxMRepo.findByNameAndValue("IGST", 18f);
+		if (CommonUtil.isNotNull(igst)) {
+			return;
+		}
+		igst = new TaxMaster();
+		igst.setActive(true);
+		igst.setChild(false);
+		igst.setName("IGST");
+		igst.setValue(18F);
+		igst.setChild(false);
+		taxMRepo.save(igst);
 	}
 
 }
