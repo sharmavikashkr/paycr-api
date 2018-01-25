@@ -1,6 +1,7 @@
 package com.paycr.merchant.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,51 +41,32 @@ public class SupplierController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
 	public void newSupplier(@RequestBody Supplier supplier, HttpServletResponse response) {
-		try {
-			PcUser user = secSer.findLoggedInUser();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			supSer.newSupplier(supplier, merchant, user.getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		supSer.newSupplier(supplier, merchant, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/update/{supplierId}")
 	public void updateSupplier(@RequestBody Supplier supplier, @PathVariable Integer supplierId,
 			HttpServletResponse response) {
-		try {
-			supSer.updateSupplier(supplier, supplierId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		supSer.updateSupplier(supplier, supplierId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/address/update/{supplierId}")
 	public void updateSupplierAddress(@RequestBody Address address, @PathVariable Integer supplierId,
 			HttpServletResponse response) {
-		try {
-			supSer.updateSupplierAddress(address, supplierId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		supSer.updateSupplierAddress(address, supplierId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload", method = RequestMethod.POST)
-	public void uploadSuppliers(@RequestParam("suppliers") MultipartFile suppliers, HttpServletResponse response) {
-		try {
-			PcUser user = secSer.findLoggedInUser();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			supSer.uploadSuppliers(suppliers, merchant, user.getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+	public void uploadSuppliers(@RequestParam("suppliers") MultipartFile suppliers, HttpServletResponse response)
+			throws IOException {
+		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		supSer.uploadSuppliers(suppliers, merchant, user.getEmail());
 	}
 
 	@RequestMapping("/bulk/upload/format")
@@ -102,24 +83,12 @@ public class SupplierController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all", method = RequestMethod.GET)
 	public List<BulkSupplierUpload> uploadSuppliers(HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return supSer.getUploads(merchant);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		return supSer.getUploads(merchant);
 	}
 
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
-		try {
-			return supSer.downloadFile(filename);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) throws IOException {
+		return supSer.downloadFile(filename);
 	}
 }

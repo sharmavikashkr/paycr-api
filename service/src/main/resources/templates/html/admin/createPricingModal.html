@@ -71,9 +71,19 @@
 									</tr>
 									<tr>
 										<td>
-											<div ng-class="(createPricingForm.tax.$valid)?'':'has-error'" class="form-group">
-												<label class="control-label">Tax</label>
-												<select class="form-control" name="tax" ng-model="newpricing.tax">
+											<div ng-class="(createPricingForm.interstateTax.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Interstate Tax</label>
+												<select class="form-control" name="interstateTax" ng-model="newpricing.interstateTax">
+													<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<div ng-class="(createPricingForm.intrastateTax.$valid)?'':'has-error'" class="form-group">
+												<label class="control-label">Intrastate Tax</label>
+												<select class="form-control" name="intrastateTax" ng-model="newpricing.intrastateTax">
 													<option ng-repeat="tax in taxList" ng-value="tax">{{tax.name}} {{tax.value}}%</option>
 												</select>
 											</div>

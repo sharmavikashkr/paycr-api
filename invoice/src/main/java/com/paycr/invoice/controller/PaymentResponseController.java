@@ -19,8 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.exception.PaycrException;
-import com.paycr.common.util.Constants;
 import com.paycr.invoice.service.InvoiceService;
 import com.paycr.invoice.service.PaymentReceiptService;
 
@@ -40,19 +38,15 @@ public class PaymentResponseController {
 	@RequestMapping("/response/{invoiceCode}")
 	public ModelAndView successPage(@PathVariable String invoiceCode,
 			@RequestParam(value = "show", required = false) Boolean show) {
-		try {
-			Invoice invoice = invSer.getInvoice(invoiceCode);
-			Merchant merchant = invoice.getMerchant();
-			ModelAndView mv = new ModelAndView("html/inv-response");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("invoice", invoice);
-			mv.addObject("merchant", merchant);
-			show = (show != null) ? show : true;
-			mv.addObject("show", show);
-			return mv;
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Invoice not found");
-		}
+		Invoice invoice = invSer.getInvoice(invoiceCode);
+		Merchant merchant = invoice.getMerchant();
+		ModelAndView mv = new ModelAndView("html/inv-response");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		mv.addObject("invoice", invoice);
+		mv.addObject("merchant", merchant);
+		show = (show != null) ? show : true;
+		mv.addObject("show", show);
+		return mv;
 	}
 
 	@RequestMapping("/receipt/download/{invoiceCode}")

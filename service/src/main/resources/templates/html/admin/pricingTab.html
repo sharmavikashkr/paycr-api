@@ -19,7 +19,8 @@
 							<th class="text-center">Limit</th>
 							<th class="text-center">Type</th>
 							<th class="text-center hidden-xs">HSN/SAC</th>
-							<th class="text-center hidden-xs">Tax</th>
+							<th class="text-center hidden-xs">Interstate Tax</th>
+							<th class="text-center hidden-xs">Intrastate Tax</th>
 							<th class="text-center">Action</th>
 						</tr>
 					</thead>
@@ -32,7 +33,8 @@
 							<td>{{pricing.limit}}</td>
 							<td class="hidden-xs">{{pricing.type}}</td>
 							<td class="hidden-xs">{{pricing.hsnsac}}</td>
-							<td class="hidden-xs">{{pricing.tax.name}} {{pricing.tax.value}}%</td>
+							<td class="hidden-xs">{{pricing.interstateTax.name}} {{pricing.interstateTax.value}}%</td>
+							<td class="hidden-xs">{{pricing.intrastateTax.name}} {{pricing.intrastateTax.value}}%</td>
 							<td>
 								<button ng-if="pricing.type == 'CUSTOM'" ng-click="updatePricingMerchant(pricing)" data-toggle="modal" data-target="#addPricingMerchantModal" type="button" class="btn btn-info btn-xs">Merchants</button>
 								<button ng-if="pricing.active" ng-click="togglePricing(pricing.id)" type="button" class="btn btn-danger btn-xs">Deactivate</button>

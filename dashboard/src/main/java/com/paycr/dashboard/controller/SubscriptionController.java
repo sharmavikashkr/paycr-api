@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,24 +39,13 @@ public class SubscriptionController {
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
 	public Subscription getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
-		try {
-			return subsSer.getSubscription(pricingId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		return subsSer.getSubscription(pricingId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/new/offline")
 	public void offlineSubscription(@RequestBody OfflineSubscription offline, HttpServletResponse response) {
-		try {
-			subsSer.offlineSubscription(offline);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		subsSer.offlineSubscription(offline);
 	}
 
 	@RequestMapping(value = "/new/online", method = RequestMethod.GET)
@@ -72,23 +60,14 @@ public class SubscriptionController {
 	}
 
 	@RequestMapping(value = "/return", method = RequestMethod.POST)
-	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws IOException {
-		try {
-			Subscription subs = subsSer.purchase(formData);
-			response.sendRedirect("/subscription/response/" + subs.getSubscriptionCode());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws Exception {
+		Subscription subs = subsSer.purchase(formData);
+		response.sendRedirect("/subscription/response/" + subs.getSubscriptionCode());
 	}
 
 	@RequestMapping("/decline/{subscriptionCode}")
 	public void decline(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
-		try {
-			subsSer.decline(subscriptionCode);
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
+		subsSer.decline(subscriptionCode);
 		response.sendRedirect("/subscription/response/" + subscriptionCode);
 	}
 

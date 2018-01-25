@@ -2,7 +2,6 @@ package com.paycr.expense.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +23,7 @@ public class CreateExpenseController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public Expense single(@RequestBody Expense expense, HttpServletResponse response) {
-		try {
-			return crtExpSer.single(expense);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return crtExpSer.single(expense);
 	}
 
 }

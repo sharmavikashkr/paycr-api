@@ -1,16 +1,14 @@
 package com.paycr.dashboard.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,17 +42,11 @@ public class InvoiceSearchController {
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/invoice")
 	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request, HttpServletResponse response) {
-		List<Invoice> invoiceList = new ArrayList<>();
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			invoiceList = invSerSer.fetchInvoiceList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNotNull(merchant)) {
+			request.setMerchant(merchant.getId());
 		}
+		List<Invoice> invoiceList = invSerSer.fetchInvoiceList(request);
 		return invoiceList;
 	}
 
@@ -62,89 +54,63 @@ public class InvoiceSearchController {
 	@RequestMapping("/payment")
 	public List<InvoicePayment> searchPayments(@RequestBody SearchInvoicePaymentRequest request,
 			HttpServletResponse response) {
-		List<InvoicePayment> paymentList = new ArrayList<>();
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			paymentList = invSerSer.fetchPaymentList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNotNull(merchant)) {
+			request.setMerchant(merchant.getId());
 		}
+		List<InvoicePayment> paymentList = invSerSer.fetchPaymentList(request);
 		return paymentList;
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/consumer")
 	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request, HttpServletResponse response) {
-		Set<Consumer> consumerList = new HashSet<>();
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			consumerList = invSerSer.fetchConsumerList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNotNull(merchant)) {
+			request.setMerchant(merchant.getId());
 		}
+		Set<Consumer> consumerList = invSerSer.fetchConsumerList(request);
 		return consumerList;
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/download")
-	public void downloadPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			String csv = invSerSer.downloadPayments(request);
-			response.setContentType("text/csv");
-			byte[] data = csv.getBytes();
-			response.setHeader("Content-Disposition", "attachment; filename=\"payments.csv\"");
-			response.setContentType("text/csv;charset=utf-8");
-			InputStream is = new ByteArrayInputStream(data);
-			IOUtils.copy(is, response.getOutputStream());
-			response.setContentLength(data.length);
-			response.flushBuffer();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
+	public void downloadPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response)
+			throws IOException {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNotNull(merchant)) {
+			request.setMerchant(merchant.getId());
 		}
+		String csv = invSerSer.downloadPayments(request);
+		response.setContentType("text/csv");
+		byte[] data = csv.getBytes();
+		response.setHeader("Content-Disposition", "attachment; filename=\"payments.csv\"");
+		response.setContentType("text/csv;charset=utf-8");
+		InputStream is = new ByteArrayInputStream(data);
+		IOUtils.copy(is, response.getOutputStream());
+		response.setContentLength(data.length);
+		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/mail")
-	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			invSerSer.mailPayments(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
+	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response)
+			throws IOException {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNotNull(merchant)) {
+			request.setMerchant(merchant.getId());
 		}
+		invSerSer.mailPayments(request);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/inventory")
 	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request, HttpServletResponse response) {
-		List<Inventory> inventoryList = new ArrayList<>();
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			if (CommonUtil.isNotNull(merchant)) {
-				request.setMerchant(merchant.getId());
-			}
-			inventoryList = invSerSer.fetchInventoryList(request);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		if (CommonUtil.isNotNull(merchant)) {
+			request.setMerchant(merchant.getId());
 		}
+		List<Inventory> inventoryList = invSerSer.fetchInventoryList(request);
 		return inventoryList;
 	}
 

@@ -19,8 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.exception.PaycrException;
-import com.paycr.common.util.Constants;
 import com.paycr.merchant.service.SubscriptionResponseService;
 
 @RestController
@@ -37,17 +35,13 @@ public class SubscriptionResponseController {
 	public ModelAndView response(@PathVariable String subscriptionCode,
 			@RequestParam(value = "show", required = false) Boolean show, HttpServletResponse response)
 					throws IOException {
-		try {
-			ModelAndView mv = new ModelAndView("html/subs-response");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			Subscription subs = subsRespSer.getSubscriptionByCode(subscriptionCode);
-			mv.addObject("subs", subs);
-			show = (show != null) ? show : true;
-			mv.addObject("show", show);
-			return mv;
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Subscription not found");
-		}
+		ModelAndView mv = new ModelAndView("html/subs-response");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		Subscription subs = subsRespSer.getSubscriptionByCode(subscriptionCode);
+		mv.addObject("subs", subs);
+		show = (show != null) ? show : true;
+		mv.addObject("show", show);
+		return mv;
 	}
 
 	@RequestMapping(value = "/download/{subscriptionCode}", method = RequestMethod.GET)

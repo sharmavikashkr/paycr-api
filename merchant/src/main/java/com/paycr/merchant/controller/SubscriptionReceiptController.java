@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.paycr.common.exception.PaycrException;
-import com.paycr.common.util.Constants;
 import com.paycr.merchant.service.SubscriptionReceiptService;
 
 @RestController
@@ -29,21 +27,13 @@ public class SubscriptionReceiptController {
 
 	@RequestMapping(value = "/{subscriptionCode}", method = RequestMethod.GET)
 	public ModelAndView receipt(@PathVariable String subscriptionCode, HttpServletResponse response) {
-		try {
-			return subsRecSer.getSubscriptionReceipt(subscriptionCode);
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Subscription not found");
-		}
+		return subsRecSer.getSubscriptionReceipt(subscriptionCode);
 	}
 
 	@RequestMapping(value = "/pricing/{pricingId}", method = RequestMethod.GET)
-	public void getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
-		try {
-			String subsCode = subsRecSer.getPricingReceipt(pricingId);
-			response.sendRedirect("/subscription/receipt/" + subsCode);
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "Subscription not found");
-		}
+	public void getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) throws IOException {
+		String subsCode = subsRecSer.getPricingReceipt(pricingId);
+		response.sendRedirect("/subscription/receipt/" + subsCode);
 	}
 
 	@RequestMapping(value = "/download/{subscriptionCode}", method = RequestMethod.GET)

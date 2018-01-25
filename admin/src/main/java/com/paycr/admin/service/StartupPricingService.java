@@ -38,7 +38,8 @@ public class StartupPricingService {
 		welcomePri.setLimit(1000);
 		welcomePri.setType(PricingType.PUBLIC);
 		TaxMaster noTax = createNoTaxMaster();
-		welcomePri.setTax(noTax);
+		welcomePri.setInterstateTax(noTax);
+		welcomePri.setIntrastateTax(noTax);
 		priRepo.save(welcomePri);
 	}
 

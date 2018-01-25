@@ -1,6 +1,7 @@
 package com.paycr.merchant.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,38 +41,24 @@ public class AssetController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
 	public void newAsset(@RequestBody Asset asset, HttpServletResponse response) {
-		try {
-			PcUser user = secSer.findLoggedInUser();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			astSer.newAsset(asset, merchant, user.getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		astSer.newAsset(asset, merchant, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/update/{assetId}")
 	public void updateAsset(@RequestBody Asset asset, @PathVariable Integer assetId, HttpServletResponse response) {
-		try {
-			astSer.updateAsset(asset, assetId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		astSer.updateAsset(asset, assetId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload", method = RequestMethod.POST)
-	public void uploadAsset(@RequestParam("asset") MultipartFile asset, HttpServletResponse response) {
-		try {
-			PcUser user = secSer.findLoggedInUser();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			astSer.uploadAsset(asset, merchant, user.getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+	public void uploadAsset(@RequestParam("asset") MultipartFile asset, HttpServletResponse response)
+			throws IOException {
+		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		astSer.uploadAsset(asset, merchant, user.getEmail());
 	}
 
 	@RequestMapping("/bulk/upload/format")
@@ -89,36 +75,18 @@ public class AssetController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all", method = RequestMethod.GET)
 	public List<BulkAssetUpload> uploadAsset(HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return astSer.getUploads(merchant);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		return astSer.getUploads(merchant);
 	}
 
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
-		try {
-			return astSer.downloadFile(filename);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) throws IOException {
+		return astSer.downloadFile(filename);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/stats/{assetId}")
 	public AssetStats updateAsset(@PathVariable Integer assetId, HttpServletResponse response) {
-		try {
-			return astSer.getStats(assetId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return astSer.getStats(assetId);
 	}
 }

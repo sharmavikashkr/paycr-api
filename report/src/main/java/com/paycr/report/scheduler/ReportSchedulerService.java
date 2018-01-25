@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ import com.paycr.report.service.ReportService;
 
 @Service
 public class ReportSchedulerService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ReportSchedulerService.class);
 
 	@Autowired
 	private RecurringReportRepository recRepRepo;
@@ -81,8 +85,8 @@ public class ReportSchedulerService {
 				calendar.set(Calendar.MINUTE, 0);
 				recRep.setNextDate(calendar.getTime());
 				recRepRepo.save(recRep);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ex) {
+				logger.error("Execption while mailing RecurringReport : {} ", recRep.getId(), ex);
 			}
 		};
 	}

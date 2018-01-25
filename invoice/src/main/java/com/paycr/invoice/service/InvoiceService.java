@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.eclipse.jetty.http.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,12 +49,9 @@ import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.scheduler.InvoiceSchedulerService;
 import com.paycr.invoice.validation.NoteValidator;
-import com.razorpay.RazorpayException;
 
 @Service
 public class InvoiceService {
-
-	private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
 
 	@Autowired
 	private SecurityService secSer;
@@ -148,7 +142,7 @@ public class InvoiceService {
 		}
 	}
 
-	public void enquire(String invoiceCode) throws RazorpayException {
+	public void enquire(String invoiceCode) throws Exception {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) && !InvoiceStatus.PAID.equals(invoice.getStatus())
@@ -159,7 +153,7 @@ public class InvoiceService {
 		}
 	}
 
-	public void refund(BigDecimal amount, String invoiceCode) throws RazorpayException {
+	public void refund(BigDecimal amount, String invoiceCode) throws Exception {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
@@ -180,25 +174,20 @@ public class InvoiceService {
 		}
 	}
 
-	public void newNote(InvoiceNote note) {
+	public void newNote(InvoiceNote note) throws Exception {
 		Date timeNow = new Date();
-		try {
-			PcUser user = secSer.findLoggedInUser();
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			Invoice invoice = invRepo.findByInvoiceCode(note.getInvoiceCode());
-			note.setCreated(timeNow);
-			note.setCreatedBy(user.getEmail());
-			note.setMerchant(merchant);
-			noteValid.validate(note);
-			if (NoteType.CREDIT.equals(note.getNoteType()) && note.isRefundCreditNote()) {
-				refund(note.getPayAmount(), invoice.getInvoiceCode());
-			}
-			invoice.setNote(note);
-			invRepo.save(invoice);
-		} catch (Exception e) {
-			logger.error("Create credit note failed for invoice : {} ", note.getInvoiceCode(), e);
-			throw new PaycrException(HttpStatus.BAD_REQUEST_400, e.getMessage());
+		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		Invoice invoice = invRepo.findByInvoiceCode(note.getInvoiceCode());
+		note.setCreated(timeNow);
+		note.setCreatedBy(user.getEmail());
+		note.setMerchant(merchant);
+		noteValid.validate(note);
+		if (NoteType.CREDIT.equals(note.getNoteType()) && note.isRefundCreditNote()) {
+			refund(note.getPayAmount(), invoice.getInvoiceCode());
 		}
+		invoice.setNote(note);
+		invRepo.save(invoice);
 	}
 
 	public void markPaid(InvoicePayment payment) {

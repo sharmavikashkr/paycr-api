@@ -30,7 +30,6 @@ import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.Constants;
-import com.razorpay.RazorpayException;
 
 @Service
 public class ExpenseService {
@@ -54,7 +53,7 @@ public class ExpenseService {
 		return expRepo.findByExpenseCode(expenseCode);
 	}
 
-	public void refund(BigDecimal amount, String expenseCode) throws RazorpayException {
+	public void refund(BigDecimal amount, String expenseCode) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = expRepo.findByExpenseCodeAndMerchant(expenseCode, merchant);

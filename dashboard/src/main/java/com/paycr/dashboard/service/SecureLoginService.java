@@ -17,8 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.client.RestTemplateClient;
-import com.paycr.common.exception.PaycrException;
-import com.paycr.common.util.Constants;
 
 @Service
 public class SecureLoginService {
@@ -45,8 +43,8 @@ public class SecureLoginService {
 			logger.info("Secure OAUTH token generated for email : {}", email);
 			return response.getBody();
 		} catch (Exception ex) {
-			logger.error("Execption while generating secure OAUTH token email : {}", email, ex);
-			throw new PaycrException(Constants.FAILURE, "Something went wrong");
+			logger.error("Execption while generating secure OAUTH token email : {} ", email, ex);
+			throw ex;
 		}
 	}
 

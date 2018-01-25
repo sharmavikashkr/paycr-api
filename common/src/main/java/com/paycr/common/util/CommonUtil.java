@@ -10,17 +10,19 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
+import com.paycr.common.exception.PaycrException;
+
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class CommonUtil {
 
-	public static String base64Decode(String val) throws Exception {
+	public static String base64Decode(String val) throws PaycrException {
 		try {
 			byte[] decodedBytes = Base64.getDecoder().decode(val.getBytes());
 			return new String(decodedBytes, Charset.forName("UTF-8"));
 		} catch (Exception e) {
-			throw new Exception("Error while decoding string = " + val);
+			throw new PaycrException(Constants.FAILURE, "Error while decoding string = " + val);
 		}
 	}
 

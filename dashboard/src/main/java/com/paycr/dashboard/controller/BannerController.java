@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,34 +25,17 @@ public class BannerController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public void getUser(@RequestParam("banner") MultipartFile banner, HttpServletResponse response) {
-		try {
-			banSer.uploadBanner(banner);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+	public void getUser(@RequestParam("banner") MultipartFile banner, HttpServletResponse response) throws Exception {
+		banSer.uploadBanner(banner);
 	}
 
 	@RequestMapping("/admin/{bannerName:.+}")
-	public byte[] adminBanner(@PathVariable String bannerName, HttpServletResponse response) {
-		try {
-			return banSer.getAdminBanner(bannerName);
-		} catch (IOException ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+	public byte[] adminBanner(@PathVariable String bannerName, HttpServletResponse response) throws IOException {
+		return banSer.getAdminBanner(bannerName);
 	}
 
 	@RequestMapping("/merchant/{bannerName:.+}")
-	public byte[] merchantBanner(@PathVariable String bannerName, HttpServletResponse response) {
-		try {
-			return banSer.getMerchantBanner(bannerName);
-		} catch (IOException ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+	public byte[] merchantBanner(@PathVariable String bannerName, HttpServletResponse response) throws IOException {
+		return banSer.getMerchantBanner(bannerName);
 	}
 }

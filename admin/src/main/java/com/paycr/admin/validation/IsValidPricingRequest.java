@@ -43,9 +43,13 @@ public class IsValidPricingRequest implements RequestValidator<Pricing> {
 			throw new PaycrException(Constants.FAILURE,
 					"Duration must be greater than 50 days and limit/duration must be greater than 10");
 		}
-		if (CommonUtil.isNull(pricing.getTax())) {
+		if (CommonUtil.isNull(pricing.getInterstateTax())) {
 			TaxMaster noTax = taxMRepo.findByName("NO_TAX");
-			pricing.setTax(noTax);
+			pricing.setInterstateTax(noTax);
+		}
+		if (CommonUtil.isNull(pricing.getIntrastateTax())) {
+			TaxMaster noTax = taxMRepo.findByName("NO_TAX");
+			pricing.setIntrastateTax(noTax);
 		}
 		pricing.setRate(PricingRule.getPricingRate(pricing.getLimit(), pricing.getDuration()));
 		pricing.setCreated(new Date());

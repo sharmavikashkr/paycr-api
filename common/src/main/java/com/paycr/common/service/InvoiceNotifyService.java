@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -26,6 +28,8 @@ import freemarker.template.Configuration;
 
 @Service
 public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
+
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceNotifyService.class);
 
 	@Autowired
 	private SmsEngine smsEngine;
@@ -55,8 +59,8 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 			try {
 				sms.setMessage(getSms(invoiceNotify));
 				smsEngine.send(sms);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception ex) {
+				logger.error("Execption while generating sms body : {}", ex);
 			}
 		}
 		if (invoiceNotify.isSendEmail()) {
@@ -73,8 +77,8 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 					+ " to pay INR " + invoice.getPayAmount() + " towards " + merchant.getName());
 			try {
 				email.setMessage(getEmail(invoiceNotify));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception ex) {
+				logger.error("Execption while generating email body : {}", ex);
 			}
 			if (invoiceNotify.isEmailPdf()) {
 				try {
@@ -89,7 +93,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 					email.setFileName(fileName);
 					email.setFilePath(pdfPath);
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					logger.error("Execption while generating email pdf : {}", ex);
 				}
 			}
 			emailEngine.sendViaGmail(email);

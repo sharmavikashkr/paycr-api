@@ -8,6 +8,9 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import com.paycr.common.exception.PaycrException;
+import com.paycr.common.util.Constants;
+
 @Service
 public class CustomPreAuthUserDetailsService
 		implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
@@ -21,7 +24,7 @@ public class CustomPreAuthUserDetailsService
 			OAuth2Authentication oauth = tokenStore.readAuthentication(token.getName());
 			return (UserDetails) oauth.getUserAuthentication().getPrincipal();
 		} catch (Exception ex) {
-			return null;
+			throw new PaycrException(Constants.FAILURE, "401 Unauthorized");
 		}
 	}
 }

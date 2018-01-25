@@ -55,7 +55,8 @@
 								<td class="text-center">{{pricing.rate}}</td>
 								<td class="text-center col-sm-1 col-xs-2"><input class="form-control" ng-model="priceQuant[$index]" ng-init="priceQuant[$index] = 1" type="number" placeholder="Quantity" step="1" required></td>
 								<td class="text-center">
-									<a href="/subscription/new/online?pricing_id={{pricing.id}}&quantity={{priceQuant[$index]}}&access_token={{access_token}}" class="btn btn-xs btn-success" target="_blank">BUY</a>
+									<a ng-if="merchant.address == null" disabled title="Make sure your address is saved" class="btn btn-xs btn-success">BUY</a>
+									<a ng-if="merchant.address != null" href="/subscription/new/online?pricing_id={{pricing.id}}&quantity={{priceQuant[$index]}}&access_token={{access_token}}" class="btn btn-xs btn-success" title="Buy Subscription" target="_blank">BUY</a>
 								</td>
 							</tr>
 						</tbody>

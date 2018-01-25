@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import freemarker.template.Configuration;
 
 @Service
 public class PromotionNotifyService implements NotifyService<Promotion> {
+
+	private static final Logger logger = LoggerFactory.getLogger(PromotionNotifyService.class);
 
 	@Autowired
 	private EmailEngine emailEngine;
@@ -46,8 +50,8 @@ public class PromotionNotifyService implements NotifyService<Promotion> {
 		email.setSubject("Introducing PayCr!");
 		try {
 			email.setMessage(getEmail(promotion));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			logger.error("Execption while generating email : {}", ex);
 		}
 		emailEngine.sendViaGmail(email);
 		promotion.setSent(true);

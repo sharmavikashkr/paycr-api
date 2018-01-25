@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -24,6 +26,8 @@ import freemarker.template.Configuration;
 
 @Service
 public class AccessService {
+
+	private static final Logger logger = LoggerFactory.getLogger(AccessService.class);
 
 	@Autowired
 	private Company company;
@@ -62,8 +66,8 @@ public class AccessService {
 				"Hi, " + user.getName() + " please click on this link : " + resetUrl + " to reset your password");
 		try {
 			email.setMessage(getResetPassEmailBody(user, resetUrl));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			logger.error("Execption while generating email : {}", ex);
 		}
 		emailEngine.sendViaGmail(email);
 	}

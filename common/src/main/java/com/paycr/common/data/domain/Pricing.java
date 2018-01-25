@@ -39,7 +39,10 @@ public class Pricing {
 	private String hsnsac;
 
 	@ManyToOne
-	private TaxMaster tax;
+	private TaxMaster interstateTax;
+
+	@ManyToOne
+	private TaxMaster intrastateTax;
 
 	private boolean active;
 
@@ -111,14 +114,6 @@ public class Pricing {
 		this.hsnsac = hsnsac;
 	}
 
-	public TaxMaster getTax() {
-		return tax;
-	}
-
-	public void setTax(TaxMaster tax) {
-		this.tax = tax;
-	}
-
 	public PricingType getType() {
 		return type;
 	}
@@ -133,6 +128,22 @@ public class Pricing {
 
 	public void setLimit(int limit) {
 		this.limit = limit;
+	}
+
+	public TaxMaster getInterstateTax() {
+		return interstateTax;
+	}
+
+	public void setInterstateTax(TaxMaster interstateTax) {
+		this.interstateTax = interstateTax;
+	}
+
+	public TaxMaster getIntrastateTax() {
+		return intrastateTax;
+	}
+
+	public void setIntrastateTax(TaxMaster intrastateTax) {
+		this.intrastateTax = intrastateTax;
 	}
 
 }

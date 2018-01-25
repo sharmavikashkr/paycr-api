@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,12 +54,7 @@ public class CommonController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/timeline/new", method = RequestMethod.PUT)
 	public void addComment(@RequestBody Timeline timeline, HttpServletResponse response) {
-		try {
-			comSer.saveComment(timeline);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		comSer.saveComment(timeline);
 	}
 
 }

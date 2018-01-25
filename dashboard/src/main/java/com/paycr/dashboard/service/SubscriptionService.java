@@ -112,10 +112,26 @@ public class SubscriptionService {
 		Date timeNow = new Date();
 		Merchant merchant = merRepo.findOne(offline.getMerchantId());
 		Pricing pricing = priRepo.findOne(offline.getPricingId());
+		AdminSetting adset = adsetRepo.findAll().get(0);
 		Subscription subs = new Subscription();
+		if (CommonUtil.isNull(merchant.getAddress()) || CommonUtil.isEmpty(merchant.getAddress().getState())) {
+			if (!"NO_TAX".equalsIgnoreCase(pricing.getInterstateTax().getName())) {
+				throw new PaycrException(Constants.FAILURE, "Merchant needs to set Address to determine Tax");
+			} else {
+				subs.setTax(pricing.getInterstateTax());
+			}
+		} else {
+			if(CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
+				throw new PaycrException(Constants.FAILURE, "Admin needs to set Address to determine Tax");
+			}
+			if(adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
+				subs.setTax(pricing.getIntrastateTax());
+			} else {
+				subs.setTax(pricing.getInterstateTax());
+			}
+		}
 		BigDecimal total = pricing.getRate().multiply(new BigDecimal(offline.getQuantity()));
 		subs.setTotal(total);
-		subs.setTax(pricing.getTax());
 		BigDecimal payAmount = total
 				.add(total.multiply(new BigDecimal(subs.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
@@ -159,11 +175,26 @@ public class SubscriptionService {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}
 		Subscription subs = new Subscription();
+		if (CommonUtil.isNull(merchant.getAddress()) || CommonUtil.isEmpty(merchant.getAddress().getState())) {
+			if (!"NO_TAX".equalsIgnoreCase(pricing.getInterstateTax().getName())) {
+				throw new PaycrException(Constants.FAILURE, "Merchant needs to set Address to determine Tax");
+			} else {
+				subs.setTax(pricing.getInterstateTax());
+			}
+		} else {
+			if(CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
+				throw new PaycrException(Constants.FAILURE, "Something went wrong, please try again");
+			}
+			if(adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
+				subs.setTax(pricing.getIntrastateTax());
+			} else {
+				subs.setTax(pricing.getInterstateTax());
+			}
+		}
 		BigDecimal total = pricing.getRate().multiply(new BigDecimal(quantity));
 		subs.setTotal(total);
-		subs.setTax(pricing.getTax());
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(pricing.getTax().getValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(new BigDecimal(subs.getTax().getValue())).divide(new BigDecimal(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setPayMode(PayMode.PAYCR);
@@ -275,11 +306,11 @@ public class SubscriptionService {
 		asset.setDescription(subs.getPricing().getDescription());
 		asset.setHsnsac(subs.getPricing().getHsnsac());
 		asset.setRate(subs.getPricing().getRate());
-		asset.setTax(subs.getPricing().getTax());
+		asset.setTax(subs.getTax());
 		item.setAsset(asset);
 		item.setPrice(subs.getPayAmount());
 		item.setQuantity(subs.getQuantity());
-		item.setTax(subs.getPricing().getTax());
+		item.setTax(subs.getTax());
 		List<ExpenseItem> itemList = new ArrayList<ExpenseItem>();
 		itemList.add(item);
 		expense.setItems(itemList);

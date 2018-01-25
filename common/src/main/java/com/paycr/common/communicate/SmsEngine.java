@@ -3,6 +3,8 @@ package com.paycr.common.communicate;
 import java.net.URI;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,8 @@ import com.paycr.common.util.RestTemplateUtil;
 
 @Component
 public class SmsEngine {
+
+	private static final Logger logger = LoggerFactory.getLogger(SmsEngine.class);
 
 	@Value("${sms.textlocal.apiKey}")
 	private String textlocalApiKey;
@@ -41,6 +45,7 @@ public class SmsEngine {
 			RestTemplate rest = RestTemplateUtil.getRestTemplate(25, 25);
 			ResponseEntity<Map> resp = rest.exchange(URI.create(textlocalHost), HttpMethod.POST, input, Map.class);
 		} catch (Exception ex) {
+			logger.error("Execption while sending sms to : {} ", sms.getTo(), ex);
 		}
 	}
 }

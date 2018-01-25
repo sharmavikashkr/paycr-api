@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,58 +25,51 @@ import com.paycr.common.util.DateUtil;
 @Service
 public class GstService {
 
-	private static final Logger logger = LoggerFactory.getLogger(GstService.class);
-
 	@Autowired
 	private InvoiceRepository invRepo;
 
 	@Autowired
 	private TaxMasterRepository taxMRepo;
 
-	public Gstr1Report loadGstr1Report(Merchant merchant, String monthStr) {
+	public Gstr1Report loadGstr1Report(Merchant merchant, String monthStr) throws Exception {
 		Gstr1Report gstr1Report = new Gstr1Report();
-		try {
-			String month = monthStr.split("-")[0];
-			String year = monthStr.split("-")[1];
-			Date aDayInMonth = DateUtil.parseDefaultDate(year + "-" + month + "-15");
-			Date startOfMonth = DateUtil.getFirstDayOfMonth(aDayInMonth);
-			Date endOfMonth = DateUtil.getLastDayOfMonth(aDayInMonth);
-			List<InvoiceStatus> gstStatuses = new ArrayList<InvoiceStatus>();
-			GstSetting gstSet = merchant.getGstSetting();
-			if (gstSet.isInvCreated()) {
-				gstStatuses.add(InvoiceStatus.CREATED);
-			}
-			if (gstSet.isInvDeclined()) {
-				gstStatuses.add(InvoiceStatus.DECLINED);
-			}
-			if (gstSet.isInvExpired()) {
-				gstStatuses.add(InvoiceStatus.EXPIRED);
-			}
-			if (gstSet.isInvPaid()) {
-				gstStatuses.add(InvoiceStatus.PAID);
-			}
-			if (gstSet.isInvUnpaid()) {
-				gstStatuses.add(InvoiceStatus.UNPAID);
-			}
-			List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, startOfMonth,
-					endOfMonth);
-			List<Gstr1B2CLarge> b2cLarge = new ArrayList<Gstr1B2CLarge>();
-			for (Invoice invoice : invoiceList) {
-				Gstr1B2CLarge b2cLargeInv = new Gstr1B2CLarge();
-				b2cLargeInv.setInvoiceAmount(invoice.getPayAmount());
-				b2cLargeInv.setInvoiceDate(invoice.getInvoiceDate());
-				b2cLargeInv.setInvoiceNo(invoice.getInvoiceCode());
-				if (CommonUtil.isNotNull(invoice.getConsumer().getShippingAddress())) {
-					b2cLargeInv.setPlaceOfSupply(invoice.getConsumer().getShippingAddress().getState());
-				}
-				b2cLargeInv.setSupplyType("Inter-State");
-				b2cLargeInv.setTaxAmount(getTaxAmount(invoice));
-				b2cLarge.add(b2cLargeInv);
-			}
-			gstr1Report.setB2cLarge(b2cLarge);
-		} catch (Exception ex) {
-			logger.error("Exeption occured while generating GSTR1 ", ex);
+		String month = monthStr.split("-")[0];
+		String year = monthStr.split("-")[1];
+		Date aDayInMonth = DateUtil.parseDefaultDate(year + "-" + month + "-15");
+		Date startOfMonth = DateUtil.getFirstDayOfMonth(aDayInMonth);
+		Date endOfMonth = DateUtil.getLastDayOfMonth(aDayInMonth);
+		List<InvoiceStatus> gstStatuses = new ArrayList<InvoiceStatus>();
+		GstSetting gstSet = merchant.getGstSetting();
+		if (gstSet.isInvCreated()) {
+			gstStatuses.add(InvoiceStatus.CREATED);
 		}
+		if (gstSet.isInvDeclined()) {
+			gstStatuses.add(InvoiceStatus.DECLINED);
+		}
+		if (gstSet.isInvExpired()) {
+			gstStatuses.add(InvoiceStatus.EXPIRED);
+		}
+		if (gstSet.isInvPaid()) {
+			gstStatuses.add(InvoiceStatus.PAID);
+		}
+		if (gstSet.isInvUnpaid()) {
+			gstStatuses.add(InvoiceStatus.UNPAID);
+		}
+		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, startOfMonth, endOfMonth);
+		List<Gstr1B2CLarge> b2cLarge = new ArrayList<Gstr1B2CLarge>();
+		for (Invoice invoice : invoiceList) {
+			Gstr1B2CLarge b2cLargeInv = new Gstr1B2CLarge();
+			b2cLargeInv.setInvoiceAmount(invoice.getPayAmount());
+			b2cLargeInv.setInvoiceDate(invoice.getInvoiceDate());
+			b2cLargeInv.setInvoiceNo(invoice.getInvoiceCode());
+			if (CommonUtil.isNotNull(invoice.getConsumer().getShippingAddress())) {
+				b2cLargeInv.setPlaceOfSupply(invoice.getConsumer().getShippingAddress().getState());
+			}
+			b2cLargeInv.setSupplyType("Inter-State");
+			b2cLargeInv.setTaxAmount(getTaxAmount(invoice));
+			b2cLarge.add(b2cLargeInv);
+		}
+		gstr1Report.setB2cLarge(b2cLarge);
 		return gstr1Report;
 	}
 

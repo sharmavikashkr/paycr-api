@@ -2,7 +2,6 @@ package com.paycr.report.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,15 +23,9 @@ public class GstController {
 	private SecurityService secSer;
 
 	@RequestMapping("/gstr1/{month}")
-	public Gstr1Report gstr1(@PathVariable String month, HttpServletResponse httpResponse) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			return gstSer.loadGstr1Report(merchant, month);
-		} catch (Exception ex) {
-			httpResponse.setStatus(HttpStatus.BAD_REQUEST_400);
-			httpResponse.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+	public Gstr1Report gstr1(@PathVariable String month, HttpServletResponse httpResponse) throws Exception {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		return gstSer.loadGstr1Report(merchant, month);
 	}
 
 }

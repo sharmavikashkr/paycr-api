@@ -17,6 +17,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ import com.paycr.common.util.CommonUtil;
 
 @Component
 public class EmailEngine {
+
+	private static final Logger logger = LoggerFactory.getLogger(EmailEngine.class);
 
 	@Async
 	public void sendViaGmail(Email email) {
@@ -45,7 +49,8 @@ public class EmailEngine {
 			message.setFrom(new InternetAddress(email.getFrom(), email.getName()));
 			message.setContent(getContent(email));
 			Transport.send(message);
-		} catch (Exception e) {
+		} catch (Exception ex) {
+			logger.error("Execption while sending email to : {} ", email.getTo(), ex);
 		}
 	}
 

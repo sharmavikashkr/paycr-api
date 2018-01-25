@@ -62,7 +62,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		if(this.offlinesubs.pricing != null && this.offlinesubs.quantity != null) {
 			var total = parseFloat(this.offlinesubs.pricing.rate) * parseFloat(this.offlinesubs.quantity);
 			this.offlinesubs.total = total;
-			this.offlinesubs.payAmount = total + parseFloat((parseFloat($scope.offlinesubs.pricing.tax.value) * total) / 100);
+			this.offlinesubs.payAmount = total + parseFloat((parseFloat($scope.offlinesubs.pricing.interstateTax.value) * total) / 100);
 		}
 	}
 	$scope.createOfflineSubs = function(merchantId) {

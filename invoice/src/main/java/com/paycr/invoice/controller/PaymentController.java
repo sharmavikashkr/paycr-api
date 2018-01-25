@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.util.Constants;
 import com.paycr.invoice.service.PaymentService;
 
 @RestController
@@ -44,32 +43,21 @@ public class PaymentController {
 			@RequestParam("name") String name, @RequestParam("email") String email,
 			@RequestParam("mobile") String mobile, @RequestParam("signature") String signature,
 			HttpServletResponse response) throws IOException {
-		try {
-			invoiceCode = paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
-		}
+		invoiceCode = paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
 		response.sendRedirect("/" + invoiceCode);
 	}
 
 	@RequestMapping("/payment/decline/{invoiceCode}")
 	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
-		try {
-			paySer.decline(invoiceCode);
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
-		}
+		paySer.decline(invoiceCode);
 		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
 
 	@RequestMapping(value = "/payment/return/{invoiceCode}", method = RequestMethod.POST)
-	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws IOException {
+	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response)
+			throws IOException, Exception {
 		String invoiceCode = null;
-		try {
-			invoiceCode = paySer.purchase(formData);
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
-		}
+		invoiceCode = paySer.purchase(formData);
 		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
 }

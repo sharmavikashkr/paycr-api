@@ -1,6 +1,7 @@
 package com.paycr.invoice.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,135 +44,79 @@ public class InvoiceController {
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping(value = "/payments/{invoiceCode}", method = RequestMethod.GET)
 	public List<InvoicePayment> payments(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			return invSer.payments(invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return invSer.payments(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
 	public void expire(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			invSer.expire(invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		invSer.expire(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.POST)
 	public void notify(@PathVariable String invoiceCode, @RequestBody InvoiceNotify invoiceNotify,
 			HttpServletResponse response) {
-		try {
-			invSer.notify(invoiceCode, invoiceNotify);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		invSer.notify(invoiceCode, invoiceNotify);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
-	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			invSer.enquire(invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+	public void enquire(@PathVariable String invoiceCode, HttpServletResponse response) throws Exception {
+		invSer.enquire(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/refund", method = RequestMethod.POST)
 	public void refund(@RequestParam(value = "amount", required = true) BigDecimal amount,
-			@RequestParam(value = "invoiceCode", required = true) String invoiceCode, HttpServletResponse response) {
-		try {
-			invSer.refund(amount, invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+			@RequestParam(value = "invoiceCode", required = true) String invoiceCode, HttpServletResponse response)
+					throws Exception {
+		invSer.refund(amount, invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/note/new", method = RequestMethod.POST)
-	public void newNote(@RequestBody InvoiceNote note, HttpServletResponse response) {
-		try {
-			invSer.newNote(note);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+	public void newNote(@RequestBody InvoiceNote note, HttpServletResponse response) throws Exception {
+		invSer.newNote(note);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
 	public void markPaid(@RequestBody InvoicePayment payment, HttpServletResponse response) {
-		try {
-			invSer.markPaid(payment);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		invSer.markPaid(payment);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping(value = "/{invoiceCode}/attachment/new", method = RequestMethod.POST)
 	public void addAttachment(@PathVariable String invoiceCode, @RequestParam("attach") MultipartFile attach,
-			HttpServletResponse response) {
-		try {
-			invSer.saveAttach(invoiceCode, attach);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+			HttpServletResponse response) throws IOException {
+		invSer.saveAttach(invoiceCode, attach);
 	}
 
 	@RequestMapping(value = "/{invoiceCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
 	public void getAttachment(@PathVariable String invoiceCode, @PathVariable String attachName,
-			HttpServletResponse response) {
-		try {
-			byte[] data = invSer.getAttach(invoiceCode, attachName);
+			HttpServletResponse response) throws IOException {
+		byte[] data = invSer.getAttach(invoiceCode, attachName);
 
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
-			InputStream is = new ByteArrayInputStream(data);
-			IOUtils.copy(is, response.getOutputStream());
-			response.setContentLength(data.length);
-			response.flushBuffer();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
+		InputStream is = new ByteArrayInputStream(data);
+		IOUtils.copy(is, response.getOutputStream());
+		response.setContentLength(data.length);
+		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/recurr/new/{invoiceCode}", method = RequestMethod.POST)
 	public void recurr(@PathVariable String invoiceCode, @RequestBody RecurringInvoice recInv,
 			HttpServletResponse response) {
-		try {
-			PcUser user = secSer.findLoggedInUser();
-			invSer.recurr(invoiceCode, recInv, user.getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		PcUser user = secSer.findLoggedInUser();
+		invSer.recurr(invoiceCode, recInv, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/recurr/all/{invoiceCode}", method = RequestMethod.GET)
 	public List<RecurringInvoice> allRecurr(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			return invSer.allRecurr(invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return invSer.allRecurr(invoiceCode);
 	}
 
 	@RequestMapping("/bulk/upload/format")
@@ -189,36 +133,18 @@ public class InvoiceController {
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all/{invoiceCode}", method = RequestMethod.GET)
 	public List<BulkInvoiceUpload> uploadConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			return invSer.getUploads(invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return invSer.getUploads(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/categories/{invoiceCode}", method = RequestMethod.GET)
 	public List<BulkCategory> categoryConsumers(@PathVariable String invoiceCode, HttpServletResponse response) {
-		try {
-			return invSer.getCategories(invoiceCode);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return invSer.getCategories(invoiceCode);
 	}
 
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) {
-		try {
-			return invSer.downloadFile(filename);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) throws IOException {
+		return invSer.downloadFile(filename);
 	}
 
 }

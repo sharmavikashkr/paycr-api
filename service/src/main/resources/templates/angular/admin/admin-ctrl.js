@@ -32,15 +32,13 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 			$scope.server.isSuccess = true;
 			$scope.server.respStatus = "SUCCESS!";
 			$scope.server.respMsg = "operation successful";
-		} else if(data.status==401 || data.status==403) {
-			$scope.server.isSuccess = false;
-			$scope.server.respStatus = "FAILURE!";
-			$scope.server.respMsg = "unauthorized request";
-			$scope.logout();
 		} else {
 			$scope.server.isSuccess = false;
 			$scope.server.respStatus = "FAILURE!";
-			$scope.server.respMsg = data.headers('error_message');
+			$scope.server.respMsg = data.data.message;
+			if(data.status==401 || data.status==403) {
+				$scope.logout();
+			}
 		}
 	}
 	$scope.templateUrl = function(folder, page) {

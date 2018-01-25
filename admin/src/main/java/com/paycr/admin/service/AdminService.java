@@ -114,24 +114,19 @@ public class AdminService {
 	}
 
 	public void addPricingMerchant(Integer pricingId, Integer merchantId) {
-		try {
-			Pricing pricing = pricingRepo.findOne(pricingId);
-			Merchant merchant = merRepo.findOne(merchantId);
-			if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant)
-					|| PricingType.PUBLIC.equals(pricing.getType())) {
-				throw new PaycrException(Constants.FAILURE, "Invalid Request");
-			}
-			PricingMerchant priMerExt = priMerRepo.findByMerchantAndPricing(merchant, pricing);
-			if (CommonUtil.isNotNull(priMerExt)) {
-				throw new PaycrException(Constants.FAILURE, "Pricing already active for merchant");
-			}
-			priMerExt = new PricingMerchant();
-			priMerExt.setMerchant(merchant);
-			priMerExt.setPricing(pricing);
-			priMerRepo.save(priMerExt);
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
+		Pricing pricing = pricingRepo.findOne(pricingId);
+		Merchant merchant = merRepo.findOne(merchantId);
+		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
+		PricingMerchant priMerExt = priMerRepo.findByMerchantAndPricing(merchant, pricing);
+		if (CommonUtil.isNotNull(priMerExt)) {
+			throw new PaycrException(Constants.FAILURE, "Pricing already active for merchant");
+		}
+		priMerExt = new PricingMerchant();
+		priMerExt.setMerchant(merchant);
+		priMerExt.setPricing(pricing);
+		priMerRepo.save(priMerExt);
 	}
 
 	public List<Merchant> getMerchantForPricing(Integer pricingId) {
@@ -140,18 +135,13 @@ public class AdminService {
 	}
 
 	public void removePricingMerchant(Integer pricingId, Integer merchantId) {
-		try {
-			Pricing pricing = pricingRepo.findOne(pricingId);
-			Merchant merchant = merRepo.findOne(merchantId);
-			if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant)
-					|| PricingType.PUBLIC.equals(pricing.getType())) {
-				throw new PaycrException(Constants.FAILURE, "Invalid Request");
-			}
-			PricingMerchant priMer = priMerRepo.findByMerchantAndPricing(merchant, pricing);
-			priMerRepo.delete(priMer.getId());
-		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
+		Pricing pricing = pricingRepo.findOne(pricingId);
+		Merchant merchant = merRepo.findOne(merchantId);
+		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
+			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
+		PricingMerchant priMer = priMerRepo.findByMerchantAndPricing(merchant, pricing);
+		priMerRepo.delete(priMer.getId());
 
 	}
 

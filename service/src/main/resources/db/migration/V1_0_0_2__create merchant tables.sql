@@ -58,7 +58,8 @@ CREATE TABLE if not exists pc_pricing (
 	hsnsac varchar(10) DEFAULT NULL,
     duration int NOT NULL,
     active boolean NOT NULL,
-	tax_id int REFERENCES pc_tax_master
+	interstate_tax_id int REFERENCES pc_tax_master,
+	intrastate_tax_id int REFERENCES pc_tax_master
 );
 
 CREATE TABLE if not exists pc_pricing_merchant (

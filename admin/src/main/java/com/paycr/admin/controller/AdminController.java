@@ -7,7 +7,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,119 +70,65 @@ public class AdminController {
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting")
 	public AdminSetting getSetting(HttpServletResponse response) {
-		try {
-			return adminService.getSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return adminService.getSetting();
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/update")
 	public AdminSetting updateSetting(@RequestBody AdminSetting setting, HttpServletResponse response) {
-		try {
-			adminService.saveSetting(setting);
-			return adminService.getSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		adminService.saveSetting(setting);
+		return adminService.getSetting();
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/address/new")
 	public AdminSetting updateAddress(@RequestBody Address newAddr, HttpServletResponse response) {
-		try {
-			adminService.saveAddress(newAddr);
-			return adminService.getSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		adminService.saveAddress(newAddr);
+		return adminService.getSetting();
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/tax/new")
 	public void newTaxMaster(@RequestBody TaxMaster tax, HttpServletResponse response) {
-		try {
-			adminService.newTaxMaster(tax);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		adminService.newTaxMaster(tax);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/merchant/new")
 	public void newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
-		try {
-			registerService.createMerchant(merchant, secSer.findLoggedInUser().getEmail());
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		registerService.createMerchant(merchant, secSer.findLoggedInUser().getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/new")
 	public void createPricing(@RequestBody Pricing pricing, HttpServletResponse response) {
-		try {
-			adminService.createPricing(pricing);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		adminService.createPricing(pricing);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/toggle/{pricingId}")
 	public void togglePricing(@PathVariable Integer pricingId, HttpServletResponse response) {
-		try {
-			adminService.togglePricing(pricingId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		adminService.togglePricing(pricingId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping(value = "/pricing/merchant/add", method = RequestMethod.POST)
 	public void addPricingMerchant(@RequestParam("pricingId") Integer pricingId,
 			@RequestParam("merchantId") Integer merchantId, HttpServletResponse response) {
-		try {
-			adminService.addPricingMerchant(pricingId, merchantId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		adminService.addPricingMerchant(pricingId, merchantId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/merchants/{pricingId}")
 	public List<Merchant> getPricingMerchant(@PathVariable Integer pricingId, HttpServletResponse response) {
-		try {
-			return adminService.getMerchantForPricing(pricingId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
-		return null;
+		return adminService.getMerchantForPricing(pricingId);
 	}
-	
+
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping(value = "/pricing/merchant/remove", method = RequestMethod.POST)
 	public void removePricingMerchant(@RequestParam("pricingId") Integer pricingId,
 			@RequestParam("merchantId") Integer merchantId, HttpServletResponse response) {
-		try {
-			adminService.removePricingMerchant(pricingId, merchantId);
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-		}
+		adminService.removePricingMerchant(pricingId, merchantId);
 	}
 
 }

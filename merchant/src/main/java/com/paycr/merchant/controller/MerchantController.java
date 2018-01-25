@@ -6,7 +6,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,101 +70,59 @@ public class MerchantController {
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
 	@RequestMapping("/account/update")
 	public Merchant updateAccount(@RequestBody Merchant mer, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.updateAccount(merchant, mer);
-			return getMerchant();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.updateAccount(merchant, mer);
+		return getMerchant();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
 	@RequestMapping("/address/update")
 	public Merchant updateAddress(@RequestBody Address addr, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.updateAddress(merchant, addr);
-			return getMerchant();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.updateAddress(merchant, addr);
+		return getMerchant();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/paymentsetting/update")
 	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting,
 			HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.updatePaymentSetting(merchant, paymentSetting);
-			return merchant.getPaymentSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.updatePaymentSetting(merchant, paymentSetting);
+		return merchant.getPaymentSetting();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/invoicesetting/update")
 	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting,
 			HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.updateInvoiceSetting(merchant, invoiceSetting);
-			return merchant.getInvoiceSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.updateInvoiceSetting(merchant, invoiceSetting);
+		return merchant.getInvoiceSetting();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/gstsetting/update")
 	public GstSetting updateGstSetting(@RequestBody GstSetting gstSetting, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.updateGstSetting(merchant, gstSetting);
-			return merchant.getGstSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.updateGstSetting(merchant, gstSetting);
+		return merchant.getGstSetting();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/customParam/new")
 	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.newCustomParam(merchant, customParam);
-			return merchant.getInvoiceSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.newCustomParam(merchant, customParam);
+		return merchant.getInvoiceSetting();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/customParam/delete/{id}")
 	public InvoiceSetting deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
-		try {
-			Merchant merchant = secSer.getMerchantForLoggedInUser();
-			merSer.deleteCustomParam(merchant, id);
-			return merchant.getInvoiceSetting();
-		} catch (Exception ex) {
-			response.setStatus(HttpStatus.BAD_REQUEST_400);
-			response.addHeader("error_message", ex.getMessage());
-			return null;
-		}
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		merSer.deleteCustomParam(merchant, id);
+		return merchant.getInvoiceSetting();
 	}
 
 }

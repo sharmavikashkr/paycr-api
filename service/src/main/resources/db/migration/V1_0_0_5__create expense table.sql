@@ -5,7 +5,6 @@ CREATE TABLE if not exists pc_supplier (
     email varchar(50) NOT NULL,
     mobile varchar(15) NOT NULL,
     gstin varchar(50) DEFAULT NULL,
-    type varchar(15) NOT NULL,
     active boolean NOT NULL,
     created_by varchar(50) NOT NULL,
 	merchant_id int REFERENCES pc_merchant,
