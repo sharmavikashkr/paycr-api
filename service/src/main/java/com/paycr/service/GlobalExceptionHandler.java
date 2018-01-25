@@ -15,9 +15,9 @@ import com.paycr.common.exception.ApiErrorResponse;
 import com.paycr.common.exception.PaycrException;
 
 @RestControllerAdvice
-public class GlobalControllerExceptionHandler {
+public class GlobalExceptionHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 	@ExceptionHandler(value = { PaycrException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

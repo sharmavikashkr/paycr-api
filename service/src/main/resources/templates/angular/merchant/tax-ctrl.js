@@ -16,7 +16,6 @@ app.controller('TaxController', function($scope, $rootScope, $http, $cookies) {
 			$scope.loadB2BPage();
 			$scope.loadB2BNotePage();
 			$scope.loadB2CNotePage();
-			$scope.serverMessage(gstr1);
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
