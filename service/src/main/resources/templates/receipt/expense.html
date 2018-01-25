@@ -32,7 +32,7 @@
 					</div>
 				</#if>
 				<div class="col-sm-4 expense-col">
-					<b>Payment Due:</b> ${expense.orderDate?date}
+					<b>Payment Due:</b> ${expense.invoiceDate?date}
 				</div>
 			</div>
 			<hr>
@@ -146,7 +146,7 @@
 				</div>
 				<div class="col-xs-3"></div>
 				<div class="col-xs-6">
-					<u>Amount Due by ${expense.orderDate?date}</u>
+					<u>Amount Due by ${expense.invoiceDate?date}</u>
 					<div class="table-responsive">
 						<br>
 						<table class="table">
