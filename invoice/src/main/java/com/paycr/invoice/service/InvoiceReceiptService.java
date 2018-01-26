@@ -61,12 +61,13 @@ public class InvoiceReceiptService {
 				if (taxAmt == null) {
 					taxAmt = new TaxAmount();
 					taxAmt.setTax(itemTax);
-					taxAmt.setAmount(new BigDecimal(0));
+					taxAmt.setAmount(BigDecimal.ZERO);
 					taxes.add(taxAmt);
 				}
-				taxAmt.setAmount(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()))
-						.multiply(new BigDecimal(itemTax.getValue())).divide(new BigDecimal(100))
-						.setScale(2, BigDecimal.ROUND_HALF_UP));
+				taxAmt.setAmount(taxAmt.getAmount()
+						.add(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()))
+								.multiply(new BigDecimal(itemTax.getValue())).divide(new BigDecimal(100))
+								.setScale(2, BigDecimal.ROUND_HALF_UP)));
 			}
 		}
 		ModelAndView mv = new ModelAndView("receipt/invoice");
