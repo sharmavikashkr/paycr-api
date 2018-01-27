@@ -61,11 +61,14 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 				invoice.setInvoiceCode(invoiceCode);
 			} while (CommonUtil.isNotNull(invRepo.findByInvoiceCode(invoiceCode)));
 			invoice.setCreated(timeNow);
-			invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 			invoice.setNotices(null);
 			invoice.setNote(null);
 			invoice.setPayment(null);
 		}
+		if (invoice.getExpiresIn() <= 0) {
+			throw new PaycrException(Constants.FAILURE, "Improper invoice expiry");
+		}
+		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		if (CommonUtil.isNull(invoice.getShipping())) {
 			invoice.setShipping(new BigDecimal(0));
 		}
