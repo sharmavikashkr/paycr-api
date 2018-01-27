@@ -35,6 +35,12 @@ public class GstService {
 	@Autowired
 	private Gstr1B2CSmallService b2cSmallSer;
 
+	@Autowired
+	private Gstr1B2CNoteService b2cNoteSer;
+
+	@Autowired
+	private Gstr1B2BNoteService b2bNoteSer;
+
 	public Gstr1Report loadGstr1Report(Merchant merchant, String monthStr) throws Exception {
 		Gstr1Report gstr1Report = new Gstr1Report();
 		String month = monthStr.split("-")[0];
@@ -61,9 +67,11 @@ public class GstService {
 		}
 		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, startOfMonth, endOfMonth);
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, startOfMonth, endOfMonth);
-		gstr1Report.setB2cLarge(b2cLargeSer.collectB2CLargeInvList(invoiceList));
+		gstr1Report.setB2cLarge(b2cLargeSer.collectB2CLargeList(invoiceList));
 		gstr1Report.setB2cSmall(b2cSmallSer.collectB2CSmallList(invoiceList, noteList));
-		gstr1Report.setB2b(b2bSer.collectB2BInvList(invoiceList));
+		gstr1Report.setB2b(b2bSer.collectB2BList(invoiceList));
+		gstr1Report.setB2cNote(b2cNoteSer.collectB2CNoteList(noteList));
+		gstr1Report.setB2bNote(b2bNoteSer.collectB2BNoteList(noteList));
 		return gstr1Report;
 	}
 

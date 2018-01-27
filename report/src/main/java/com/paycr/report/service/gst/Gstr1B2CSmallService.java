@@ -25,7 +25,7 @@ public class Gstr1B2CSmallService {
 	@Autowired
 	private InvoiceRepository invRepo;
 
-	public List<Gstr1B2CSmall> collectB2CSmallList(List<Invoice> invoiceList, List<InvoiceNote> noteList) {
+	public List<Gstr1B2CSmall> collectB2CSmallList(List<Invoice> invoiceList, List<InvoiceNote> invNoteList) {
 		List<Invoice> largeInvList = invoiceList.stream()
 				.filter(t -> ((BigDecimal.valueOf(250000).compareTo(t.getTotalPrice()) >= 0)
 						&& CommonUtil.isEmpty(t.getConsumer().getGstin())))
@@ -47,6 +47,8 @@ public class Gstr1B2CSmallService {
 				}
 			}
 		}
+		List<InvoiceNote> noteList = invNoteList.stream().filter(t -> (CommonUtil.isEmpty(t.getConsumer().getGstin())))
+				.collect(Collectors.toList());
 		for (InvoiceNote note : noteList) {
 			if (invRepo.findByInvoiceCode(note.getInvoiceCode()).getTotalPrice()
 					.compareTo(BigDecimal.valueOf(250000)) <= 0) {

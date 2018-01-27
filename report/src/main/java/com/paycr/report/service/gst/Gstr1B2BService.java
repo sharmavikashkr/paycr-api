@@ -19,7 +19,7 @@ public class Gstr1B2BService {
 	@Autowired
 	private GstHelper gstHelp;
 
-	public List<Gstr1B2B> collectB2BInvList(List<Invoice> invoiceList) {
+	public List<Gstr1B2B> collectB2BList(List<Invoice> invoiceList) {
 		List<Invoice> b2bInvList = invoiceList.stream().filter(t -> (!CommonUtil.isEmpty(t.getConsumer().getGstin())))
 				.collect(Collectors.toList());
 		List<Gstr1B2B> b2bList = new ArrayList<Gstr1B2B>();
@@ -32,7 +32,7 @@ public class Gstr1B2BService {
 			if (CommonUtil.isNotNull(invoice.getConsumer().getShippingAddress())) {
 				b2bInv.setPlaceOfSupply(invoice.getConsumer().getShippingAddress().getState());
 			}
-			List<TaxAmount> taxAmtList = gstHelp.getTaxAmount(invoice);
+			List<TaxAmount> taxAmtList = gstHelp.getTaxAmount(invoice.getItems());
 			List<TaxAmount> igstList = taxAmtList.stream().filter(t -> t.getTax().getName().equals("IGST"))
 					.collect(Collectors.toList());
 			if (CommonUtil.isNull(igstList) || igstList.isEmpty()) {

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.bean.gst.Gstr1B2CSmall;
-import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.TaxMasterRepository;
@@ -22,9 +21,9 @@ public class GstHelper {
 	@Autowired
 	private TaxMasterRepository taxMRepo;
 
-	public List<TaxAmount> getTaxAmount(Invoice invoice) {
+	public List<TaxAmount> getTaxAmount(List<InvoiceItem> items) {
 		List<TaxAmount> taxes = new ArrayList<>();
-		for (InvoiceItem item : invoice.getItems()) {
+		for (InvoiceItem item : items) {
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			TaxMaster tax = item.getTax();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);

@@ -20,7 +20,7 @@ public class Gstr1B2CLargeService {
 	@Autowired
 	private GstHelper gstHelp;
 
-	public List<Gstr1B2CLarge> collectB2CLargeInvList(List<Invoice> invoiceList) {
+	public List<Gstr1B2CLarge> collectB2CLargeList(List<Invoice> invoiceList) {
 		List<Invoice> largeInvList = invoiceList.stream()
 				.filter(t -> ((BigDecimal.valueOf(250000).compareTo(t.getTotalPrice()) < 0)
 						&& CommonUtil.isEmpty(t.getConsumer().getGstin())))
@@ -34,7 +34,7 @@ public class Gstr1B2CLargeService {
 			if (CommonUtil.isNotNull(invoice.getConsumer().getShippingAddress())) {
 				b2cLargeInv.setPlaceOfSupply(invoice.getConsumer().getShippingAddress().getState());
 			}
-			List<TaxAmount> taxAmtList = gstHelp.getTaxAmount(invoice);
+			List<TaxAmount> taxAmtList = gstHelp.getTaxAmount(invoice.getItems());
 			List<TaxAmount> igstList = taxAmtList.stream().filter(t -> t.getTax().getName().equals("IGST"))
 					.collect(Collectors.toList());
 			if (CommonUtil.isNull(igstList) || igstList.isEmpty()) {

@@ -87,8 +87,8 @@ app.controller('TaxController', function($scope, $rootScope, $http, $cookies) {
 	$scope.loadB2CNotePage = function(page) {
 		var pageSize = 10;
 		$rootScope.gstr1ReportResp.b2cNote = {};
-		$rootScope.gstr1ReportResp.b2cNote = angular.copy($rootScope.gstr1Report.b2bNote);
-		$rootScope.gstr1ReportResp.b2cNote.splice(pageSize * page, $rootScope.gstr1Report.b2bNote.length - pageSize);
+		$rootScope.gstr1ReportResp.b2cNote = angular.copy($rootScope.gstr1Report.b2cNote);
+		$rootScope.gstr1ReportResp.b2cNote.splice(pageSize * page, $rootScope.gstr1Report.b2cNote.length - pageSize);
 		$rootScope.gstr1ReportResp.b2cNote.splice(0, pageSize * (page - 1));
 		$rootScope.gstr1ReportResp.b2cNote.page = page;
 		$rootScope.gstr1ReportResp.b2cNote.allPages = [];
