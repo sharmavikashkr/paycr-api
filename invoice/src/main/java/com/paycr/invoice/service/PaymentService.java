@@ -205,7 +205,7 @@ public class PaymentService {
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice refunded with amount : " + amount, true,
 				createdBy);
 		if ("captured".equals(payment.getStatus())) {
-			payNotSer.notify(payment);
+			payNotSer.notify(refPay);
 		}
 		return refPay;
 	}
