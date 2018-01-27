@@ -21,8 +21,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 	@Query("SELECT i from Invoice i WHERE i.consumer.email = ?1 OR i.consumer.mobile = ?2 ORDER BY i.id DESC")
 	public List<Invoice> findInvoicesForConsumer(String email, String mobile);
 
-	@Query("SELECT i from Invoice i WHERE i.status != 'PAID' AND i.status != 'EXPIRED' AND i.neverExpire = ?2 AND i.expiry < ?1")
-	public List<Invoice> findInvoicesToExpire(Date date, boolean neverExpire);
+	@Query("SELECT i from Invoice i WHERE i.status != 'PAID' AND i.status != 'EXPIRED' AND i.expiry < ?1")
+	public List<Invoice> findInvoicesToExpire(Date date);
 
 	@Query(value = "SELECT COUNT(i) as count, SUM(i.pay_amount) as sum FROM pc_invoice i WHERE i.status = ?1 AND "
 			+ "i.invoice_date BETWEEN ?2 AND ?3", nativeQuery = true)
