@@ -43,12 +43,12 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-8">
-							<div class="checkbox icheck">
+							<div class="checkbox icheck" id="termsCheck">
 								<input type="checkbox"> I have read the <a href="/terms" target="_blank">terms of use</a>
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<input type="submit" class="btn btn-success btn-block btn-flat" value="Register"/>
+							<input type="submit" id="registerBtn" class="btn btn-success btn-block btn-flat" value="Register" disabled/>
 						</div>
 					</div>
 				</form>
@@ -60,10 +60,16 @@
     <script src="${staticUrl}/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="${staticUrl}/plugins/iCheck/icheck.min.js"></script>
 	<script>
-		$(function() {
+		$(document).ready(function() {
 			$('input').iCheck({
 				checkboxClass : 'icheckbox_square-blue',
 				radioClass : 'iradio_square-blue'
+			});
+			$('input').on('ifChecked', function(event){
+				$('#registerBtn').attr('disabled', false);
+			});
+			$('input').on('ifUnchecked', function(event){
+				$('#registerBtn').attr('disabled', true);
 			});
 		});
 	</script>

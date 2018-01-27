@@ -44,6 +44,20 @@ public class AccessController {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
+	
+	@RequestMapping("/terms")
+	public ModelAndView terms() {
+		ModelAndView mv = new ModelAndView("html/terms");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		return mv;
+	}
+	
+	@RequestMapping("/policy")
+	public ModelAndView policy() {
+		ModelAndView mv = new ModelAndView("html/policy");
+		mv.addObject("staticUrl", company.getStaticUrl());
+		return mv;
+	}
 
 	@RequestMapping("/forgotPassword")
 	public ModelAndView forgotPasssword(@RequestParam(value = "error", required = false) String code) {
