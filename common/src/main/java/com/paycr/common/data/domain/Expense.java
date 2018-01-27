@@ -41,13 +41,16 @@ public class Expense {
 	private BigDecimal total;
 
 	@Column(precision = 10, scale = 2)
-	private BigDecimal payAmount;
+	private BigDecimal totalPrice;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal shipping;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
+
+	@Column(precision = 10, scale = 2)
+	private BigDecimal payAmount;
 
 	private boolean addItems;
 
@@ -80,9 +83,6 @@ public class Expense {
 
 	@Transient
 	private boolean update;
-
-	@Transient
-	private BigDecimal totalPrice;
 
 	public Integer getId() {
 		return id;

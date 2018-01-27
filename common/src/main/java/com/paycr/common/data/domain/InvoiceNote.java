@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.NoteType;
@@ -46,10 +45,13 @@ public class InvoiceNote implements Cloneable {
 	private BigDecimal total;
 
 	@Column(precision = 10, scale = 2)
-	private BigDecimal payAmount;
+	private BigDecimal totalPrice;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal adjustment;
+
+	@Column(precision = 10, scale = 2)
+	private BigDecimal payAmount;
 
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
@@ -61,9 +63,6 @@ public class InvoiceNote implements Cloneable {
 	private List<InvoiceItem> items;
 
 	private String createdBy;
-
-	@Transient
-	private BigDecimal totalPrice;
 
 	public Date getCreated() {
 		return created;

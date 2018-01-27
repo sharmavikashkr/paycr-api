@@ -103,9 +103,6 @@ public class InvoiceService {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
-		if (invoice.isNeverExpire()) {
-			throw new PaycrException(Constants.FAILURE, "Cannot be expired");
-		}
 		if (timeNow.compareTo(invoice.getExpiry()) < 0 && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
 			invoice.setExpiry(timeNow);
 			invoice.setStatus(InvoiceStatus.EXPIRED);

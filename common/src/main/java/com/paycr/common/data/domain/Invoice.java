@@ -46,13 +46,16 @@ public class Invoice implements Cloneable {
 	private BigDecimal total;
 
 	@Column(precision = 10, scale = 2)
-	private BigDecimal payAmount;
+	private BigDecimal totalPrice;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal shipping;
 
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
+
+	@Column(precision = 10, scale = 2)
+	private BigDecimal payAmount;
 
 	private boolean addItems;
 	private Date expiry;
@@ -91,8 +94,6 @@ public class Invoice implements Cloneable {
 
 	private int expiresIn;
 
-	private boolean neverExpire;
-
 	private Date updated;
 
 	private String updatedBy;
@@ -103,9 +104,6 @@ public class Invoice implements Cloneable {
 
 	@Transient
 	private boolean update;
-
-	@Transient
-	private BigDecimal totalPrice;
 
 	public Integer getId() {
 		return id;
@@ -285,14 +283,6 @@ public class Invoice implements Cloneable {
 
 	public void setUpdate(boolean update) {
 		this.update = update;
-	}
-
-	public boolean isNeverExpire() {
-		return neverExpire;
-	}
-
-	public void setNeverExpire(boolean neverExpire) {
-		this.neverExpire = neverExpire;
 	}
 
 	public Date getUpdated() {

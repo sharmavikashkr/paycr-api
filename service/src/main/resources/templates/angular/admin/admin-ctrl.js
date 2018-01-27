@@ -28,6 +28,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 	}
 	$scope.serverMessage = function(data) {
 		$scope.server.hideMessage = false;
+		$scope.server.respMsg = "";
 		if(data.status==200) {
 			$scope.server.isSuccess = true;
 			$scope.server.respStatus = "SUCCESS!";

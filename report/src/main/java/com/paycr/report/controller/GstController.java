@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paycr.common.bean.gst.Gstr1Report;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
-import com.paycr.report.service.GstService;
+import com.paycr.report.service.gst.GstService;
 
 @RestController
 @RequestMapping("/gst")
