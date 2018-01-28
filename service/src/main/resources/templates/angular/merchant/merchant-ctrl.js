@@ -97,20 +97,6 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 	$scope.fetchEnums = function() {
 		var req = {
 			method : 'GET',
-			url : "/enum/providers",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(providers) {
-			$rootScope.paramProviders = providers.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
 			url : "/enum/paymodes",
 			headers : {
 				"Authorization" : "Bearer "
@@ -147,104 +133,6 @@ app.controller('MerchantController', function($scope, $rootScope, $http, $cookie
 		}
 		$http(req).then(function(timeranges) {
 			$rootScope.timeRanges = timeranges.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/invoicestatuses",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(invoicestatuses) {
-			$rootScope.invoiceStatuses = invoicestatuses.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/expensestatuses",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(expensestatuses) {
-			$rootScope.expenseStatuses = expensestatuses.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/paytypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(paytypes) {
-			$rootScope.payTypes = paytypes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/invoicetypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(invoicetypes) {
-			$rootScope.invoiceTypes = invoicetypes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/recurrtypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(recurrtypes) {
-			$rootScope.recurrTypes = recurrtypes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/consumertypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(consumertypes) {
-			$rootScope.consumerTypes = consumertypes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/itemtypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(itemtypes) {
-			$rootScope.itemTypes = itemtypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

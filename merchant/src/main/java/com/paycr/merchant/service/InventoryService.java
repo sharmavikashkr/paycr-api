@@ -28,6 +28,7 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 
@@ -68,6 +69,7 @@ public class InventoryService {
 		inventory.setCreated(new Date());
 		inventory.setMerchant(merchant);
 		inventory.setCreatedBy(createdBy);
+		inventory.setType(ItemType.SERVICE);
 		inventory.setActive(true);
 		invnRepo.save(inventory);
 	}

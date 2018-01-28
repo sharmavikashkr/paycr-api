@@ -35,7 +35,8 @@
 								<div class="form-group">
 									<label class="control-label">Expense Status</label>
 									<select class="form-control" ng-model="searchExpenseReq.expenseStatus">
-										<option ng-repeat="expenseStatus in expenseStatuses" value="{{expenseStatus}}">{{expenseStatus}}</option>
+										<option value="UNPAID">Unpaid</option>
+										<option value="PAID">Paid</option>
 									</select>
 								</div>
 							</td>

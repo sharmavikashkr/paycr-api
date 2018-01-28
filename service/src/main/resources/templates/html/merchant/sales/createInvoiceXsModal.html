@@ -10,7 +10,9 @@
 				</div>
 				<div class="col-md-4">
 					<select class="form-control" ng-model="saveinvoice.invoiceType">
-						<option ng-repeat="invoiceType in invoiceTypes" value="{{invoiceType}}">{{invoiceType}}</option>
+						<option value="SINGLE">Single</option>
+						<option value="BULK">Bulk</option>
+						<option value="RECURRING">Recurring</option>
 					</select>
 				</div>
 			</div>

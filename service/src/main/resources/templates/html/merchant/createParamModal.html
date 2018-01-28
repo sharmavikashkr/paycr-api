@@ -24,7 +24,9 @@
 											<div class="form-group">
 												<label class="control-label" for="cus-provider">Provider</label>
 												<select class="form-control" ng-model="newparam.provider">
-													<option ng-repeat="provider in paramProviders" value="{{provider}}">{{provider}}</option>
+													<option value="OPTIONAL">Optional</option>
+													<option value="MERCHANT">Merchant</option>
+													<option value="CONSUMER">Consumer</option>
 												</select>
 											</div>
 										</td>

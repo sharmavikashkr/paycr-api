@@ -28,6 +28,7 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.ExpenseStatus;
+import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 
@@ -68,6 +69,7 @@ public class AssetService {
 		asset.setCreated(new Date());
 		asset.setMerchant(merchant);
 		asset.setCreatedBy(createdBy);
+		asset.setType(ItemType.SERVICE);
 		asset.setActive(true);
 		assetRepo.save(asset);
 	}

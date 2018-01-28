@@ -10,6 +10,7 @@ import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.type.ConsumerType;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
@@ -57,6 +58,7 @@ public class IsValidInvoiceConsumer implements RequestValidator<Invoice> {
 			if (consumer.getCreatedBy() == null) {
 				consumer.setCreatedBy(invoice.getCreatedBy());
 			}
+			consumer.setType(ConsumerType.CUSTOMER);
 			exstConsumer = consRepo.save(consumer);
 		}
 		invoice.setConsumer(exstConsumer);

@@ -82,20 +82,6 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		
 		var req = {
 			method : 'GET',
-			url : "/enum/pricingtypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(pricingtypes) {
-			$rootScope.pricingTypes = pricingtypes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
 			url : "/enum/timeranges",
 			headers : {
 				"Authorization" : "Bearer "
@@ -104,48 +90,6 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		}
 		$http(req).then(function(timeranges) {
 			$rootScope.timeRanges = timeranges.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/invoicestatuses",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(invoicestatuses) {
-			$rootScope.invoiceStatuses = invoicestatuses.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/paytypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(paytypes) {
-			$rootScope.payTypes = paytypes.data;
-		}, function(data) {
-			$scope.serverMessage(data);
-		});
-		
-		var req = {
-			method : 'GET',
-			url : "/enum/invoicetypes",
-			headers : {
-				"Authorization" : "Bearer "
-						+ $cookies.get("access_token")
-			}
-		}
-		$http(req).then(function(invoicetypes) {
-			$rootScope.invoiceTypes = invoicetypes.data;
 		}, function(data) {
 			$scope.serverMessage(data);
 		});

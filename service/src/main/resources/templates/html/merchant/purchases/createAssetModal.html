@@ -58,7 +58,8 @@
 											<div ng-class="(addItemForm.type.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Item Type</label>
 												<select ng-model="newasset.type" class="form-control" name="type" required>
-													<option ng-repeat="itemType in itemTypes" ng-value="{{itemType}}">{{itemType}}</option>
+													<option value="GOODS">Goods</option>
+													<option value="SERVICE">Service</option>
 												</select>
 											</div>
 										</td>

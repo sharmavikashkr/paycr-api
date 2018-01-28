@@ -7,7 +7,7 @@ CREATE TABLE if not exists pc_consumer (
     gstin varchar(50) DEFAULT NULL,
     email_on_pay BOOLEAN NOT NULL,
     email_on_refund BOOLEAN NOT NULL,
-    type varchar(15) DEFAULT NULL,
+    type varchar(15) NOT NULL,
     active boolean NOT NULL,
     created_by varchar(50) NOT NULL,
 	merchant_id int REFERENCES pc_merchant,
@@ -102,7 +102,7 @@ CREATE TABLE if not exists pc_inventory (
 	description varchar(255) DEFAULT NULL,
 	rate float NOT NULL,
 	created_by varchar(50) NOT NULL,
-	type varchar(15) DEFAULT NULL,
+	type varchar(15) NOT NULL,
 	active boolean NOT NULL,
 	tax_id int REFERENCES pc_tax_master,
     merchant_id int REFERENCES pc_merchant

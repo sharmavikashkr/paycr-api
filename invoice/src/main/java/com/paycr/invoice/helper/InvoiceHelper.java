@@ -16,6 +16,7 @@ import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.service.TimelineService;
+import com.paycr.common.type.ConsumerType;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.invoice.validation.IsValidInvoiceConsumer;
@@ -92,6 +93,7 @@ public class InvoiceHelper {
 	public void updateConsumer(Invoice invoice, Consumer consumer) {
 		consumer.setActive(true);
 		consumer.setCreated(new Date());
+		consumer.setType(ConsumerType.CUSTOMER);
 		invoice.setConsumer(consumer);
 		isValidConsumer.validate(invoice);
 		invRepo.save(invoice);

@@ -27,7 +27,9 @@
 								<div class="form-group">
 									<label class="control-label">Invoice Type</label>
 									<select class="form-control" ng-model="searchInvoiceReq.invoiceType">
-										<option ng-repeat="invoiceType in invoiceTypes" value="{{invoiceType}}">{{invoiceType}}</option>
+										<option value="SINGLE">Single</option>
+										<option value="BULK">Bulk</option>
+										<option value="RECURRING">Recurring</option>
 									</select>
 								</div>
 							</td>
@@ -45,7 +47,11 @@
 								<div class="form-group">
 									<label class="control-label">Invoice Status</label>
 									<select class="form-control" ng-model="searchInvoiceReq.invoiceStatus">
-										<option ng-repeat="invoiceStatus in invoiceStatuses" value="{{invoiceStatus}}">{{invoiceStatus}}</option>
+										<option value="CREATED">Created</option>
+										<option value="UNPAID">Unpaid</option>
+										<option value="DECLINED">Declined</option>
+										<option value="EXPIRED">Expired</option>
+										<option value="PAID">Paid</option>
 									</select>
 								</div>
 							</td>

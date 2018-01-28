@@ -32,6 +32,7 @@ import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.AddressType;
+import com.paycr.common.type.ConsumerType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.merchant.validation.ConsumerValidator;
@@ -70,6 +71,11 @@ public class ConsumerService {
 		consumer.setEmailOnPay(true);
 		consumer.setEmailOnRefund(true);
 		conVal.validate(consumer);
+		if (CommonUtil.isEmpty(consumer.getGstin())) {
+			consumer.setType(ConsumerType.CUSTOMER);
+		} else {
+			consumer.setType(ConsumerType.BUSINESS);
+		}
 		consumer.setActive(true);
 		consumer.setCreated(new Date());
 		consumer.setCreatedBy(createdBy);
@@ -84,6 +90,11 @@ public class ConsumerService {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+		}
+		if (ConsumerType.CUSTOMER.equals(consumer.getType()) && !CommonUtil.isEmpty(consumer.getGstin())) {
+			throw new PaycrException(Constants.FAILURE, "Consumer cannot have GSTIN");
+		} else if (ConsumerType.BUSINESS.equals(consumer.getType()) && CommonUtil.isEmpty(consumer.getGstin())) {
+			throw new PaycrException(Constants.FAILURE, "Please update GSTIN for Business");
 		}
 		exstCon.setGstin(consumer.getGstin());
 		exstCon.setActive(consumer.isActive());
@@ -193,7 +204,7 @@ public class ConsumerService {
 					con.setName(consumer[0].trim());
 					con.setEmail(consumer[1].trim());
 					con.setMobile(consumer[2].trim());
-					if (consumer.length > 3) {
+					if (consumer.length > 3 && !CommonUtil.isEmpty(consumer[3].trim())) {
 						con.setGstin(consumer[3].trim());
 					}
 					if (consumer.length > 4) {

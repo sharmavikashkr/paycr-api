@@ -15,6 +15,7 @@ import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.repository.InventoryRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
@@ -57,12 +58,14 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 		BigDecimal expPrice = item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()));
 		expPrice = expPrice
 				.add(expPrice.multiply(BigDecimal.valueOf(item.getTax().getValue())).divide(BigDecimal.valueOf(100)));
-		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP).equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
+		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
+				.equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}
 		Inventory inventory = invnRepo.findByMerchantAndCode(invoice.getMerchant(), item.getInventory().getCode());
 		if (CommonUtil.isNotNull(inventory)) {
-			if (!(inventory.getRate().setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(item.getInventory().getRate()) == 0
+			if (!(inventory.getRate().setScale(2, BigDecimal.ROUND_HALF_UP)
+					.compareTo(item.getInventory().getRate()) == 0
 					&& inventory.getName().equals(item.getInventory().getName()))) {
 				throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
 			}
@@ -78,11 +81,12 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 			inventory.setRate(item.getInventory().getRate());
 			inventory.setTax(item.getTax());
 			inventory.setCreatedBy(invoice.getCreatedBy());
+			inventory.setType(ItemType.SERVICE);
 			inventory.setActive(true);
 			invnRepo.save(inventory);
 		}
 		item.setInventory(inventory);
-		if(!invoice.isUpdate()) {
+		if (!invoice.isUpdate()) {
 			item.setId(null);
 		}
 	}

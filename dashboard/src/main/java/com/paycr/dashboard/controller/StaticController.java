@@ -17,16 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.type.ConsumerType;
-import com.paycr.common.type.ExpenseStatus;
-import com.paycr.common.type.InvoiceStatus;
-import com.paycr.common.type.InvoiceType;
-import com.paycr.common.type.ItemType;
-import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
-import com.paycr.common.type.PayType;
-import com.paycr.common.type.PricingType;
-import com.paycr.common.type.RecurrType;
 import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
@@ -78,11 +69,7 @@ public class StaticController {
 	@RequestMapping("/enum/{type}")
 	public List<String> getEnum(@PathVariable String type) {
 		List<String> enumList = new ArrayList<>();
-		if ("providers".equals(type)) {
-			for (ParamValueProvider provider : ParamValueProvider.values()) {
-				enumList.add(provider.name());
-			}
-		} else if ("paymodes".equals(type)) {
+		if ("paymodes".equals(type)) {
 			for (PayMode payMode : PayMode.values()) {
 				enumList.add(payMode.name());
 			}
@@ -100,41 +87,9 @@ public class StaticController {
 				enumList.add(UserType.OPERATIONS.name());
 				enumList.add(UserType.ADVISOR.name());
 			}
-		} else if ("pricingtypes".equals(type)) {
-			for (PricingType pricingType : PricingType.values()) {
-				enumList.add(pricingType.name());
-			}
 		} else if ("timeranges".equals(type)) {
 			for (TimeRange timeRange : TimeRange.values()) {
 				enumList.add(timeRange.name());
-			}
-		} else if ("paytypes".equals(type)) {
-			for (PayType payType : PayType.values()) {
-				enumList.add(payType.name());
-			}
-		} else if ("invoicestatuses".equals(type)) {
-			for (InvoiceStatus status : InvoiceStatus.values()) {
-				enumList.add(status.name());
-			}
-		} else if ("expensestatuses".equals(type)) {
-			for (ExpenseStatus status : ExpenseStatus.values()) {
-				enumList.add(status.name());
-			}
-		} else if ("invoicetypes".equals(type)) {
-			for (InvoiceType invType : InvoiceType.values()) {
-				enumList.add(invType.name());
-			}
-		} else if ("consumertypes".equals(type)) {
-			for (ConsumerType conType : ConsumerType.values()) {
-				enumList.add(conType.name());
-			}
-		} else if ("itemtypes".equals(type)) {
-			for (ItemType itemType : ItemType.values()) {
-				enumList.add(itemType.name());
-			}
-		} else if ("recurrtypes".equals(type)) {
-			for (RecurrType recType : RecurrType.values()) {
-				enumList.add(recType.name());
 			}
 		} else if ("reporttypes".equals(type)) {
 			for (ReportType repType : ReportType.values()) {

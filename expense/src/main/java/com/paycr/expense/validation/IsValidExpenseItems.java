@@ -15,6 +15,7 @@ import com.paycr.common.data.domain.ExpenseItem;
 import com.paycr.common.data.repository.AssetRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
@@ -81,6 +82,7 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 			asset.setHsnsac(item.getAsset().getHsnsac());
 			asset.setTax(item.getTax());
 			asset.setCreatedBy(expense.getCreatedBy());
+			asset.setType(ItemType.SERVICE);
 			asset.setActive(true);
 			asstRepo.save(asset);
 		}
