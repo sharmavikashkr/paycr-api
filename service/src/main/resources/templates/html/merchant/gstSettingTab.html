@@ -12,6 +12,18 @@
 				</div>
 				<div class="box-body">
 					<fieldset ng-disabled="!editTaxPrefs">
+						<h5>GSTR1 Filing Period</h5>
+						<table class="table table-striped table-bordered table-hover table-responsive">
+							<tr>
+								<td>Period</td>
+								<td>
+									<select class="form-control" ng-model="merchant.gstSetting.filingPeriod">
+										<option value="MONTHLY">Monthly</option>
+										<option value="QUARTERLY">Quarterly</option>
+									</select>
+								</td>
+							</tr>
+						</table>
 						<h5>Include invoices in GSTR1</h5>
 						<table class="table table-striped table-bordered table-hover table-responsive">
 							<tr>

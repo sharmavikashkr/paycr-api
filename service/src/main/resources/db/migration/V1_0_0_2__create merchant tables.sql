@@ -20,6 +20,7 @@ CREATE TABLE if not exists pc_merchant_custom_param (
 
 CREATE TABLE if not exists pc_gst_setting (
 	id SERIAL PRIMARY KEY NOT NULL,
+	filing_period varchar(10) NOT NULL,
 	inv_created boolean NOT NULL,
 	inv_unpaid boolean NOT NULL,
 	inv_paid boolean NOT NULL,

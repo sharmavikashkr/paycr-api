@@ -1,9 +1,15 @@
 app.controller('TaxController', function($scope, $rootScope, $http, $cookies) {
-	$scope.month = "01-2018";
-	$scope.loadGstr1Report = function(month) {
+	$rootScope.updateFilingPeriod = function() {
+		if($rootScope.merchant.gstSetting.filingPeriod == 'QUARTERLY') {
+			$scope.period = "01-03-2018";
+		} else {
+			$scope.period = "01-2018";
+		}
+	}
+	$scope.loadGstr1Report = function(period) {
 		var req = {
 			method : 'GET',
-			url : "/gst/gstr1/" + month,
+			url : "/gst/gstr1/" + period,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			}
@@ -99,5 +105,38 @@ app.controller('TaxController', function($scope, $rootScope, $http, $cookies) {
 		for (var i = 1; i <= noOfPages; i++) {
 			$rootScope.gstr1ReportResp.b2cNote.allPages.push(i);
 		}
+	}
+	$scope.downloadGstr1Report = function(period) {
+		var req = {
+			method : 'GET',
+			url : "/gst/gstr1/download/" + period,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			},
+			responseType: 'arraybuffer'
+		}
+		$http(req).then(function(content) {
+			var hiddenElement = document.createElement('a');
+			var blob = new Blob([content.data], {'type':"application/octet-stream"});
+			hiddenElement.href = URL.createObjectURL(blob);
+			hiddenElement.download = "GSTR1 Report - " + period + ".zip";
+			hiddenElement.click();
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
+	}
+	$scope.mailGstr1Report = function(period) {
+		var req = {
+			method : 'GET',
+			url : "/gst/gstr1/mail/" + period,
+			headers : {
+				"Authorization" : "Bearer " + $cookies.get("access_token")
+			}
+		}
+		$http(req).then(function(data) {
+			$scope.serverMessage(data);
+		}, function(data) {
+			$scope.serverMessage(data);
+		});
 	}
 });

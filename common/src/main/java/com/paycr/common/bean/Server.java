@@ -39,6 +39,9 @@ public class Server {
 	@Value("${payment.pdf.location}")
 	private String paymentLocation;
 
+	@Value("${merchant.gst.location}")
+	private String gstLocation;
+
 	@Value("${subscription.pdf.location}")
 	private String subscriptionLocation;
 
@@ -147,6 +150,14 @@ public class Server {
 
 	public void setBulkAssetLocation(String bulkAssetLocation) {
 		this.bulkAssetLocation = bulkAssetLocation;
+	}
+
+	public String getGstLocation() {
+		return gstLocation;
+	}
+
+	public void setGstLocation(String gstLocation) {
+		this.gstLocation = gstLocation;
 	}
 
 }

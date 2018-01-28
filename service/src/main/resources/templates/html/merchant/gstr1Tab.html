@@ -1,22 +1,29 @@
 <div ng-controller="TaxController">
 	<div class="panel-body" style="font-size:12px;">
 		<div class="row">
-			<div class="col-xs-6 col-sm-3">
-				<select class="form-control" ng-model="month">
-					<option value="11-2018">November, 2017</option>
-					<option value="12-2018">December, 2017</option>
+			<div ng-if="merchant.gstSetting.filingPeriod == 'MONTHLY'" class="col-xs-6 col-sm-3">
+				<select class="form-control" ng-model="period">
+					<option value="11-2017">November, 2017</option>
+					<option value="12-2017">December, 2017</option>
 					<option value="01-2018">January, 2018</option>
 					<option value="02-2018">February, 2018</option>
 					<option value="03-2018">March, 2018</option>
 				</select>
 			</div>
+			<div ng-if="merchant.gstSetting.filingPeriod == 'QUARTERLY'" class="col-xs-6 col-sm-3">
+				<select class="form-control" ng-model="period">
+					<option value="10-12-2017">October - December, 2017</option>
+					<option value="01-03-2018">January - March, 2018</option>
+					<option value="04-06-2018">April - June, 2018</option>
+				</select>
+			</div>
 			<div class="col-xs-2 col-sm-2">
-				<button class="btn btn-primary btn-sm" ng-click="loadGstr1Report(month)">Load</button>
+				<button class="btn btn-primary btn-sm" ng-click="loadGstr1Report(period)">Load</button>
 			</div>
 			<div class="col-xs-4 col-sm-2 pull-right">
 				<div class="pull-right">
-					<button title="Download" class="btn btn-flat btn-success btn-sm" ng-click="downloadGstr1Report(month)"><i class="fa fa-download"></i></button>
-					<button title="Mail" class="btn btn-flat btn-danger btn-sm" ng-click="mailGstr1Report(month)"><i class="fa fa-envelope"></i></button>
+					<button title="Download" class="btn btn-flat btn-success btn-sm" ng-click="downloadGstr1Report(period)"><i class="fa fa-download"></i></button>
+					<button title="Mail" class="btn btn-flat btn-danger btn-sm" ng-click="mailGstr1Report(period)"><i class="fa fa-envelope"></i></button>
 				</div>
 			</div>
 		</div>
@@ -39,7 +46,7 @@
 								</tr>
 							</thead>
 							<tbody id="itemBody">
-								<tr ng-repeat="b2cSmall in gstr1ReportResp.b2cSmall">
+								<tr class="bg-olive" ng-repeat="b2cSmall in gstr1ReportResp.b2cSmall">
 									<td>{{b2cSmall.gstRate}}</td>
 									<td>{{b2cSmall.taxableAmount}}</td>
 									<td>{{b2cSmall.cgstAmount}}</td>
@@ -72,7 +79,7 @@
 								</tr>
 							</thead>
 							<tbody id="itemBody">
-								<tr ng-repeat="b2cLarge in gstr1ReportResp.b2cLarge">
+								<tr class="bg-olive" ng-repeat="b2cLarge in gstr1ReportResp.b2cLarge">
 									<td>{{b2cLarge.invoiceNo}}</td>
 									<td>{{b2cLarge.invoiceAmount}}</td>
 									<td>{{b2cLarge.invoiceDate | date:'dd-MM-yyyy'}}</td>
@@ -107,7 +114,7 @@
 								</tr>
 							</thead>
 							<tbody id="itemBody">
-								<tr ng-repeat="b2b in gstr1ReportResp.b2b">
+								<tr class="bg-olive" ng-repeat="b2b in gstr1ReportResp.b2b">
 									<td>{{b2b.gstin}}</td>
 									<td>{{b2b.invoiceNo}}</td>
 									<td>{{b2b.invoiceAmount}}</td>
@@ -139,25 +146,21 @@
 									<th class="text-center">Note Date</th>
 									<th class="text-center">Note Type</th>
 									<th class="text-center">Invoice No</th>
-									<th class="text-center hidden-xs">Invoice Amount</th>
 									<th class="text-center hidden-xs">Invoice Date</th>
-									<th class="text-center hidden-xs">Place Of Supply</th>
 									<th class="text-center hidden-xs">Supply Type</th>
 									<th class="text-center hidden-xs">Note Reason</th>
 									<th class="text-center hidden-xs">Tax</th>
 								</tr>
 							</thead>
 							<tbody id="itemBody">
-								<tr ng-repeat="b2cNote in gstr1ReportResp.b2cNote">
+								<tr class="bg-olive" ng-repeat="b2cNote in gstr1ReportResp.b2cNote">
 									<td>{{b2cNote.gstin}}</td>
 									<td>{{b2cNote.noteNo}}</td>
 									<td>{{b2cNote.noteAmount}}</td>
 									<td>{{b2cNote.noteDate | date:'dd-MM-yyyy'}}</td>
 									<td>{{b2cNote.noteType}}</td>
 									<td>{{b2cNote.invoiceNo}}</td>
-									<td class="hidden-xs">{{b2cNote.invoiceAmount}}</td>
 									<td class="hidden-xs">{{b2cNote.invoiceDate | date:'dd-MM-yyyy'}}</td>
-									<td class="hidden-xs">{{b2cNote.placeOfSupply}}</td>
 									<td class="hidden-xs">{{b2cNote.supplyType}}</td>
 									<td class="hidden-xs">{{b2cNote.noteReason}}</td>
 									<td class="hidden-xs"><div ng-repeat="taxAmt in b2cNote.taxAmount">{{taxAmt.tax.name}} {{taxAmt.tax.value}}% - {{taxAmt.amount}}</div></td>
@@ -185,25 +188,21 @@
 									<th class="text-center">Note Date</th>
 									<th class="text-center">Note Type</th>
 									<th class="text-center">Invoice No</th>
-									<th class="text-center hidden-xs">Invoice Amount</th>
 									<th class="text-center hidden-xs">Invoice Date</th>
-									<th class="text-center hidden-xs">Place Of Supply</th>
 									<th class="text-center hidden-xs">Supply Type</th>
 									<th class="text-center hidden-xs">Note Reason</th>
 									<th class="text-center hidden-xs">Tax</th>
 								</tr>
 							</thead>
 							<tbody id="itemBody">
-								<tr ng-repeat="b2bNote in gstr1ReportResp.b2bNote">
+								<tr class="bg-olive" ng-repeat="b2bNote in gstr1ReportResp.b2bNote">
 									<td>{{b2bNote.gstin}}</td>
 									<td>{{b2bNote.noteNo}}</td>
 									<td>{{b2bNote.noteAmount}}</td>
 									<td>{{b2bNote.noteDate | date:'dd-MM-yyyy'}}</td>
 									<td>{{b2bNote.noteType}}</td>
 									<td>{{b2bNote.invoiceNo}}</td>
-									<td class="hidden-xs">{{b2bNote.invoiceAmount}}</td>
 									<td class="hidden-xs">{{b2bNote.invoiceDate | date:'dd-MM-yyyy'}}</td>
-									<td class="hidden-xs">{{b2bNote.placeOfSupply}}</td>
 									<td class="hidden-xs">{{b2bNote.supplyType}}</td>
 									<td class="hidden-xs">{{b2bNote.noteReason}}</td>
 									<td class="hidden-xs"><div ng-repeat="taxAmt in b2bNote.taxAmount">{{taxAmt.tax.name}} {{taxAmt.tax.value}}% - {{taxAmt.amount}}</div></td>

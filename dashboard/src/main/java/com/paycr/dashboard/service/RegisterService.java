@@ -24,6 +24,7 @@ import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.type.FilingPeriod;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
@@ -97,6 +98,7 @@ public class RegisterService {
 		merchant.setInvoiceSetting(invoiceSetting);
 
 		GstSetting gstSetting = new GstSetting();
+		gstSetting.setFilingPeriod(FilingPeriod.MONTHLY);
 		gstSetting.setExpPaid(true);
 		gstSetting.setExpUnpaid(true);
 		gstSetting.setInvCreated(true);

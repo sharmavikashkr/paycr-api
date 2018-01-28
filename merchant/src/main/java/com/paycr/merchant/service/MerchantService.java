@@ -107,6 +107,7 @@ public class MerchantService {
 
 	public void updateGstSetting(Merchant merchant, GstSetting newSet) {
 		GstSetting gstSet = merchant.getGstSetting();
+		gstSet.setFilingPeriod(newSet.getFilingPeriod());
 		gstSet.setExpPaid(newSet.isExpPaid());
 		gstSet.setExpUnpaid(newSet.isExpUnpaid());
 		gstSet.setInvCreated(newSet.isInvCreated());
