@@ -82,6 +82,8 @@ public class Gstr1Service {
 			Date aDayInLastMonth = DateUtil.parseDefaultDate(year + "-" + lstMonth + "-15");
 			end = DateUtil.getLastDayOfMonth(aDayInLastMonth);
 		}
+		start = DateUtil.getISTTimeInUTC(start);
+		end = DateUtil.getISTTimeInUTC(end);
 		List<InvoiceStatus> gstStatuses = new ArrayList<InvoiceStatus>();
 		GstSetting gstSet = merchant.getGstSetting();
 		if (gstSet.isInvCreated()) {
@@ -144,6 +146,18 @@ public class Gstr1Service {
 		String b2cLargeCsv = b2cLargeSer.getB2CLargeCsv(gstr1Report.getB2cLarge());
 		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2CLarge.csv";
 		addDateToZip(zos, b2cLargeCsv, csvFilePath, "B2CLarge.csv");
+
+		String b2cSmallCsv = b2cSmallSer.getB2CSmallCsv(gstr1Report.getB2cSmall());
+		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2CSmall.csv";
+		addDateToZip(zos, b2cSmallCsv, csvFilePath, "B2CSmall.csv");
+
+		String b2bNoteCsv = b2bNoteSer.getB2BNoteCsv(gstr1Report.getB2bNote());
+		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2BNote.csv";
+		addDateToZip(zos, b2bNoteCsv, csvFilePath, "B2BNote.csv");
+
+		String b2cNoteCsv = b2cNoteSer.getB2CNoteCsv(gstr1Report.getB2cNote());
+		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2CNote.csv";
+		addDateToZip(zos, b2cNoteCsv, csvFilePath, "B2CNote.csv");
 
 		zos.closeEntry();
 		zos.close();

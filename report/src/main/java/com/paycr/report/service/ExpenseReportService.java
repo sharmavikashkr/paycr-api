@@ -19,6 +19,8 @@ import com.paycr.common.data.domain.Report;
 import com.paycr.common.data.repository.ExpensePaymentRepository;
 import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.DateUtil;
+import com.paycr.report.helper.ReportHelper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -57,7 +59,7 @@ public class ExpenseReportService {
 		Iterator<ExpenseReport> it = expReport.iterator();
 		while (it.hasNext()) {
 			ExpenseReport expr = it.next();
-			records.add(new String[] { expr.getPaidDate().toString(), expr.getExpenseCode(),
+			records.add(new String[] { DateUtil.getUTCTimeInISTStr(expr.getPaidDate()), expr.getExpenseCode(),
 					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
 					expr.getDiscount().toString(), expr.getAmount().toString(), expr.getCurrency().name(),
 					expr.getPaymentRefNo(), expr.getPayType().name(), expr.getPayMode().name(), expr.getPayMethod(),

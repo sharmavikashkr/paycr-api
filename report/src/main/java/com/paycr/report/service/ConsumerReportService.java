@@ -15,6 +15,7 @@ import com.paycr.common.bean.report.ConsumerReport;
 import com.paycr.common.data.dao.InvoiceDao;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Report;
+import com.paycr.report.helper.ReportHelper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 

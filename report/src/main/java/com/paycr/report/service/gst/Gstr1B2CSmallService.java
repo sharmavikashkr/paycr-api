@@ -1,7 +1,10 @@
 package com.paycr.report.service.gst;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +18,8 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.NoteType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.report.helper.GstHelper;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 public class Gstr1B2CSmallService {
@@ -88,6 +93,23 @@ public class Gstr1B2CSmallService {
 			}
 		}
 		return b2cSmallList;
+	}
+
+	public String getB2CSmallCsv(List<Gstr1B2CSmall> b2cSmallReport) throws IOException {
+		StringWriter writer = new StringWriter();
+		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
+		List<String[]> records = new ArrayList<>();
+		records.add(new String[] { "Gst Rate", "Taxable Amount", "CGST Amount", "SGST Amount", "IGST Amount" });
+		Iterator<Gstr1B2CSmall> it = b2cSmallReport.iterator();
+		while (it.hasNext()) {
+			Gstr1B2CSmall b2bsr = it.next();
+			records.add(new String[] { String.valueOf(b2bsr.getGstRate()), b2bsr.getTaxableAmount().toString(),
+					b2bsr.getCgstAmount().toString(), b2bsr.getSgstAmount().toString(),
+					b2bsr.getIgstAmount().toString() });
+		}
+		csvWriter.writeAll(records);
+		csvWriter.close();
+		return writer.toString();
 	}
 
 }

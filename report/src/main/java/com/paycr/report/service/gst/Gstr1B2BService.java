@@ -14,6 +14,7 @@ import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.bean.gst.Gstr1B2B;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.GstHelper;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -66,7 +67,8 @@ public class Gstr1B2BService {
 						+ ",");
 			}
 			records.add(new String[] { b2br.getGstin(), b2br.getInvoiceNo(), b2br.getInvoiceAmount().toString(),
-					b2br.getInvoiceDate().toString(), b2br.getPlaceOfSupply(), b2br.getSupplyType(), sb.toString() });
+					DateUtil.getUTCTimeInISTStr(b2br.getInvoiceDate()), b2br.getPlaceOfSupply(), b2br.getSupplyType(),
+					sb.toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();

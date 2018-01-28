@@ -1,7 +1,10 @@
 package com.paycr.report.service.gst;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +17,10 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.GstHelper;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 public class Gstr1B2CNoteService {
@@ -53,6 +59,30 @@ public class Gstr1B2CNoteService {
 			}
 		}
 		return b2cNoteList;
+	}
+
+	public String getB2CNoteCsv(List<Gstr1B2CNote> b2cNoteReport) throws IOException {
+		StringWriter writer = new StringWriter();
+		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
+		List<String[]> records = new ArrayList<>();
+		records.add(new String[] { "Note No", "Note Date", "Invoice No", "Invoice Date", "Note Type", "Note Amount",
+				"Supply Type", "Note Reason", "Tax Amount" });
+		Iterator<Gstr1B2CNote> it = b2cNoteReport.iterator();
+		while (it.hasNext()) {
+			Gstr1B2CNote b2cnr = it.next();
+			StringBuilder sb = new StringBuilder();
+			for (TaxAmount taxAmt : b2cnr.getTaxAmount()) {
+				sb.append(taxAmt.getTax().getName() + " " + taxAmt.getTax().getValue() + " : " + taxAmt.getAmount()
+						+ ",");
+			}
+			records.add(new String[] { b2cnr.getNoteNo(), DateUtil.getUTCTimeInISTStr(b2cnr.getNoteDate()),
+					b2cnr.getInvoiceNo(), DateUtil.getUTCTimeInISTStr(b2cnr.getInvoiceDate()),
+					b2cnr.getNoteType().name(), b2cnr.getNoteAmount().toString(), b2cnr.getSupplyType(),
+					b2cnr.getNoteReason(), sb.toString() });
+		}
+		csvWriter.writeAll(records);
+		csvWriter.close();
+		return writer.toString();
 	}
 
 }

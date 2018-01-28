@@ -35,7 +35,6 @@ public class InvoiceNote implements Cloneable {
 	private NoteType noteType;
 
 	private String noteReason;
-
 	private boolean refundCreditNote;
 
 	@ManyToOne

@@ -19,6 +19,8 @@ import com.paycr.common.data.domain.Report;
 import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.DateUtil;
+import com.paycr.report.helper.ReportHelper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -57,7 +59,7 @@ public class InvoiceReportService {
 		Iterator<InvoiceReport> it = invReport.iterator();
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
-			records.add(new String[] { invr.getPaidDate().toString(), invr.getInvoiceCode(),
+			records.add(new String[] { DateUtil.getUTCTimeInISTStr(invr.getPaidDate()), invr.getInvoiceCode(),
 					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
 					invr.getDiscount().toString(), invr.getAmount().toString(), invr.getCurrency().name(),
 					invr.getPaymentRefNo(), invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod(),

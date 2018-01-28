@@ -73,6 +73,11 @@ public class DateUtil {
 		calendar.add(Calendar.MINUTE, 30);
 		return calendar.getTime();
 	}
+	
+	public static String getUTCTimeInISTStr(Date utcDate) {
+		Date date = getUTCTimeInIST(utcDate);
+		return getDefaultDateTime(date);
+	}
 
 	public static Date getStartOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
