@@ -70,10 +70,10 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		}
 		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		if (CommonUtil.isNull(invoice.getShipping())) {
-			invoice.setShipping(new BigDecimal(0));
+			invoice.setShipping(BigDecimal.ZERO);
 		}
 		if (CommonUtil.isNull(invoice.getDiscount())) {
-			invoice.setDiscount(new BigDecimal(0));
+			invoice.setDiscount(BigDecimal.ZERO);
 		}
 		if (CommonUtil.isNull(invoice.getInvoiceType())) {
 			invoice.setInvoiceType(InvoiceType.SINGLE);

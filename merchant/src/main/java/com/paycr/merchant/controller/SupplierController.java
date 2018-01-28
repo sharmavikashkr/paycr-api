@@ -1,14 +1,11 @@
 package com.paycr.merchant.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +37,7 @@ public class SupplierController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
-	public void newSupplier(@RequestBody Supplier supplier, HttpServletResponse response) {
+	public void newSupplier(@RequestBody Supplier supplier) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		supSer.newSupplier(supplier, merchant, user.getEmail());
@@ -48,22 +45,19 @@ public class SupplierController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/update/{supplierId}")
-	public void updateSupplier(@RequestBody Supplier supplier, @PathVariable Integer supplierId,
-			HttpServletResponse response) {
+	public void updateSupplier(@RequestBody Supplier supplier, @PathVariable Integer supplierId) {
 		supSer.updateSupplier(supplier, supplierId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/address/update/{supplierId}")
-	public void updateSupplierAddress(@RequestBody Address address, @PathVariable Integer supplierId,
-			HttpServletResponse response) {
+	public void updateSupplierAddress(@RequestBody Address address, @PathVariable Integer supplierId) {
 		supSer.updateSupplierAddress(address, supplierId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload", method = RequestMethod.POST)
-	public void uploadSuppliers(@RequestParam("suppliers") MultipartFile suppliers, HttpServletResponse response)
-			throws IOException {
+	public void uploadSuppliers(@RequestParam("suppliers") MultipartFile suppliers) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		supSer.uploadSuppliers(suppliers, merchant, user.getEmail());
@@ -74,21 +68,20 @@ public class SupplierController {
 		String content = "Name1,Email1,Mobile1,GSTIN1,Addr Line1,Addr Line2,city,district,state,pincode,country\r\nName2,Email2,Mobile2,GSTIN2,Addr Line1,Addr Line2,city,district,state,pincode,country";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkSupplier.csv\"");
 		response.setContentType("application/csv");
-		InputStream is = new ByteArrayInputStream(content.getBytes());
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(content.getBytes());
 		response.setContentLength(content.getBytes().length);
 		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all", method = RequestMethod.GET)
-	public List<BulkSupplierUpload> uploadSuppliers(HttpServletResponse response) {
+	public List<BulkSupplierUpload> uploadSuppliers() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		return supSer.getUploads(merchant);
 	}
 
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) throws IOException {
+	public byte[] downloadFile(@PathVariable String filename) throws IOException {
 		return supSer.downloadFile(filename);
 	}
 }

@@ -1,15 +1,12 @@
 package com.paycr.report.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +41,7 @@ public class ReportController {
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/new")
-	public void createReport(@RequestBody Report report, HttpServletResponse response) {
+	public void createReport(@RequestBody Report report) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		report.setMerchant(merchant);
 		report.setCreated(new Date());
@@ -53,7 +50,7 @@ public class ReportController {
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/load")
-	public List<?> loadInvoiceReport(@RequestBody Report report, HttpServletResponse response) {
+	public List<?> loadInvoiceReport(@RequestBody Report report) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		report.setMerchant(merchant);
 		List<?> reportData = repSer.loadReport(report, merchant);
@@ -62,7 +59,7 @@ public class ReportController {
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/delete/{reportId}")
-	public void deleteReport(@PathVariable Integer reportId, HttpServletResponse response) {
+	public void deleteReport(@PathVariable Integer reportId) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		repSer.deleteReport(reportId, merchant);
 	}
@@ -76,15 +73,14 @@ public class ReportController {
 		byte[] data = csv.getBytes();
 		response.setHeader("Content-Disposition", "attachment; filename=\"report.csv\"");
 		response.setContentType("text/csv;charset=utf-8");
-		InputStream is = new ByteArrayInputStream(data);
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(data);
 		response.setContentLength(data.length);
 		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/mail")
-	public void mailReport(@RequestBody Report report, HttpServletResponse response) throws IOException {
+	public void mailReport(@RequestBody Report report) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		List<String> mailTo = new ArrayList<>();
@@ -94,14 +90,14 @@ public class ReportController {
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/schedule/get")
-	public List<RecurringReportUser> getSchedule(HttpServletResponse response) {
+	public List<RecurringReportUser> getSchedule() {
 		PcUser user = secSer.findLoggedInUser();
 		return repSer.getSchedule(user);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/schedule/add/{reportId}")
-	public void addSchedule(@PathVariable Integer reportId, HttpServletResponse response) {
+	public void addSchedule(@PathVariable Integer reportId) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		repSer.addSchedule(reportId, merchant, user);
@@ -109,7 +105,7 @@ public class ReportController {
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
 	@RequestMapping("/schedule/remove/{recRepUserId}")
-	public void removeSchedule(@PathVariable Integer recRepUserId, HttpServletResponse response) {
+	public void removeSchedule(@PathVariable Integer recRepUserId) {
 		PcUser user = secSer.findLoggedInUser();
 		repSer.removeSchedule(recRepUserId, user);
 	}

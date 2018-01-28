@@ -1,7 +1,6 @@
 package com.paycr.service.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -20,7 +19,7 @@ public class CommonErrorController implements ErrorController {
 	private Company company;
 
 	@RequestMapping(value = PATH)
-	public ModelAndView error(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView error(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("html/errorpage");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("message", "Requested Resource is not found");

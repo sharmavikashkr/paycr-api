@@ -38,13 +38,13 @@ public class SubscriptionController {
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
-	public Subscription getSubscription(@PathVariable Integer pricingId, HttpServletResponse response) {
+	public Subscription getSubscription(@PathVariable Integer pricingId) {
 		return subsSer.getSubscription(pricingId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/new/offline")
-	public void offlineSubscription(@RequestBody OfflineSubscription offline, HttpServletResponse response) {
+	public void offlineSubscription(@RequestBody OfflineSubscription offline) {
 		subsSer.offlineSubscription(offline);
 	}
 

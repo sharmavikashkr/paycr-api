@@ -24,15 +24,15 @@ public class IsValidExpenseAmount implements RequestValidator<Expense> {
 		if (CommonUtil.isNull(expense.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
 		}
-		if (expense.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+		if (expense.getPayAmount().compareTo(BigDecimal.ZERO) <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount should be greated than 0");
 		}
 		if (expense.isAddItems()) {
-			BigDecimal totalRate = new BigDecimal(0);
-			BigDecimal totalPrice = new BigDecimal(0);
+			BigDecimal totalRate = BigDecimal.ZERO;
+			BigDecimal totalPrice = BigDecimal.ZERO;
 			for (ExpenseItem item : expense.getItems()) {
 				totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
-				totalRate = totalRate.add(item.getAsset().getRate().multiply(new BigDecimal(item.getQuantity())))
+				totalRate = totalRate.add(item.getAsset().getRate().multiply(BigDecimal.valueOf(item.getQuantity())))
 						.setScale(2, BigDecimal.ROUND_HALF_UP);
 			}
 			if (totalRate.compareTo(expense.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0

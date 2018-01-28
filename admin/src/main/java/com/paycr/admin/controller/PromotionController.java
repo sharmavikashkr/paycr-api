@@ -1,7 +1,5 @@
 package com.paycr.admin.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,13 +20,13 @@ public class PromotionController {
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/send")
-	public void sendPromotion(@RequestBody Promotion promotion, HttpServletResponse httpResponse) {
+	public void sendPromotion(@RequestBody Promotion promotion) {
 		promoSer.sendPromotion(promotion);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/notify/{promoId}")
-	public void notifyPromotion(@PathVariable Integer promoId, HttpServletResponse httpResponse) {
+	public void notifyPromotion(@PathVariable Integer promoId) {
 		promoSer.notify(promoId);
 	}
 

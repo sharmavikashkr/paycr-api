@@ -1,14 +1,11 @@
 package com.paycr.merchant.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +23,7 @@ public class SubscriptionReceiptController {
 	private SubscriptionReceiptService subsRecSer;
 
 	@RequestMapping(value = "/{subscriptionCode}", method = RequestMethod.GET)
-	public ModelAndView receipt(@PathVariable String subscriptionCode, HttpServletResponse response) {
+	public ModelAndView receipt(@PathVariable String subscriptionCode) {
 		return subsRecSer.getSubscriptionReceipt(subscriptionCode);
 	}
 
@@ -50,8 +47,7 @@ public class SubscriptionReceiptController {
 		response.setHeader("Content-Disposition",
 				"attachment; filename=\"SubscriptionReceipt-" + subscriptionCode + ".pdf\"");
 		response.setContentType("application/pdf");
-		InputStream is = new ByteArrayInputStream(bFile);
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(bFile);
 		response.setContentLength(bFile.length);
 		response.flushBuffer();
 	}

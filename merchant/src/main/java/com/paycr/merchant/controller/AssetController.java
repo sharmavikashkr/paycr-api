@@ -1,14 +1,11 @@
 package com.paycr.merchant.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +37,7 @@ public class AssetController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
-	public void newAsset(@RequestBody Asset asset, HttpServletResponse response) {
+	public void newAsset(@RequestBody Asset asset) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		astSer.newAsset(asset, merchant, user.getEmail());
@@ -48,14 +45,13 @@ public class AssetController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/update/{assetId}")
-	public void updateAsset(@RequestBody Asset asset, @PathVariable Integer assetId, HttpServletResponse response) {
+	public void updateAsset(@RequestBody Asset asset, @PathVariable Integer assetId) {
 		astSer.updateAsset(asset, assetId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload", method = RequestMethod.POST)
-	public void uploadAsset(@RequestParam("asset") MultipartFile asset, HttpServletResponse response)
-			throws IOException {
+	public void uploadAsset(@RequestParam("asset") MultipartFile asset) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		astSer.uploadAsset(asset, merchant, user.getEmail());
@@ -66,27 +62,26 @@ public class AssetController {
 		String content = "Code1,Name1,Rate1,HSN/SAC1,Description1\r\nCode2,Name2,Rate2,HSN/SAC2,Description2";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkAsset.csv\"");
 		response.setContentType("application/csv");
-		InputStream is = new ByteArrayInputStream(content.getBytes());
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(content.getBytes());
 		response.setContentLength(content.getBytes().length);
 		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all", method = RequestMethod.GET)
-	public List<BulkAssetUpload> uploadAsset(HttpServletResponse response) {
+	public List<BulkAssetUpload> uploadAsset() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		return astSer.getUploads(merchant);
 	}
 
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) throws IOException {
+	public byte[] downloadFile(@PathVariable String filename) throws IOException {
 		return astSer.downloadFile(filename);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/stats/{assetId}")
-	public AssetStats updateAsset(@PathVariable Integer assetId, HttpServletResponse response) {
+	public AssetStats updateAsset(@PathVariable Integer assetId) {
 		return astSer.getStats(assetId);
 	}
 }

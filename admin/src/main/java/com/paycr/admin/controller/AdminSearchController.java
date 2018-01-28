@@ -28,7 +28,7 @@ public class AdminSearchController {
 
 	@PreAuthorize(RoleUtil.PAYCR_AUTH)
 	@RequestMapping("/merchant")
-	public List<Merchant> searchMerchants(@RequestBody SearchMerchantRequest request, HttpServletResponse response) {
+	public List<Merchant> searchMerchants(@RequestBody SearchMerchantRequest request) {
 		List<Merchant> merchants = adminSerSer.fetchMerchantList(request);
 		return merchants;
 	}
@@ -43,7 +43,7 @@ public class AdminSearchController {
 
 	@PreAuthorize(RoleUtil.PAYCR_AUTH)
 	@RequestMapping("/promotion")
-	public List<Promotion> searchPromotion(@RequestBody SearchPromotionRequest request, HttpServletResponse response) {
+	public List<Promotion> searchPromotion(@RequestBody SearchPromotionRequest request) {
 		List<Promotion> promotions = adminSerSer.fetchPromotionList(request);
 		return promotions;
 	}

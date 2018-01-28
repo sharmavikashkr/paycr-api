@@ -24,14 +24,14 @@ public class IsValidNoteAmount implements RequestValidator<InvoiceNote> {
 		if (CommonUtil.isNull(note.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
 		}
-		if (note.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+		if (note.getPayAmount().compareTo(BigDecimal.ZERO) <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount should be greated than 0");
 		}
-		BigDecimal totalRate = new BigDecimal(0);
-		BigDecimal totalPrice = new BigDecimal(0);
+		BigDecimal totalRate = BigDecimal.ZERO;
+		BigDecimal totalPrice = BigDecimal.ZERO;
 		for (InvoiceItem item : note.getItems()) {
 			totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
-			totalRate = totalRate.add(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity())))
+			totalRate = totalRate.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity())))
 					.setScale(2, BigDecimal.ROUND_HALF_UP);
 		}
 		if (totalRate.compareTo(note.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0

@@ -52,10 +52,10 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 			expense.setCreated(timeNow);
 		}
 		if (CommonUtil.isNull(expense.getShipping())) {
-			expense.setShipping(new BigDecimal(0));
+			expense.setShipping(BigDecimal.ZERO);
 		}
 		if (CommonUtil.isNull(expense.getDiscount())) {
-			expense.setDiscount(new BigDecimal(0));
+			expense.setDiscount(BigDecimal.ZERO);
 		}
 		expense.setStatus(ExpenseStatus.UNPAID);
 	}

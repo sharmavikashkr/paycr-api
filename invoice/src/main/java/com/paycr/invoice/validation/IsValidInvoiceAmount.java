@@ -24,15 +24,15 @@ public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
 		if (CommonUtil.isNull(invoice.getPayAmount())) {
 			throw new PaycrException(Constants.FAILURE, "Amount cannot be null or blank");
 		}
-		if (invoice.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+		if (invoice.getPayAmount().compareTo(BigDecimal.ZERO) <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Amount should be greated than 0");
 		}
 		if (invoice.isAddItems()) {
-			BigDecimal totalRate = new BigDecimal(0);
-			BigDecimal totalPrice = new BigDecimal(0);
+			BigDecimal totalRate = BigDecimal.ZERO;
+			BigDecimal totalPrice = BigDecimal.ZERO;
 			for (InvoiceItem item : invoice.getItems()) {
 				totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
-				totalRate = totalRate.add(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity())))
+				totalRate = totalRate.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity())))
 						.setScale(2, BigDecimal.ROUND_HALF_UP);
 			}
 			if (totalRate.compareTo(invoice.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0

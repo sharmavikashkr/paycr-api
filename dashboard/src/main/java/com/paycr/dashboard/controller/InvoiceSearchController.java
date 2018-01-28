@@ -1,14 +1,11 @@
 package com.paycr.dashboard.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +38,7 @@ public class InvoiceSearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/invoice")
-	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request, HttpServletResponse response) {
+	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
@@ -64,7 +61,7 @@ public class InvoiceSearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/consumer")
-	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request, HttpServletResponse response) {
+	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
@@ -86,16 +83,14 @@ public class InvoiceSearchController {
 		byte[] data = csv.getBytes();
 		response.setHeader("Content-Disposition", "attachment; filename=\"payments.csv\"");
 		response.setContentType("text/csv;charset=utf-8");
-		InputStream is = new ByteArrayInputStream(data);
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(data);
 		response.setContentLength(data.length);
 		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/mail")
-	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response)
-			throws IOException {
+	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
@@ -105,7 +100,7 @@ public class InvoiceSearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/inventory")
-	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request, HttpServletResponse response) {
+	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());

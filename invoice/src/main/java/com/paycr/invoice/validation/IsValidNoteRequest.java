@@ -46,7 +46,7 @@ public class IsValidNoteRequest implements RequestValidator<InvoiceNote> {
 			note.setNoteCode(noteCode);
 		} while (CommonUtil.isNotNull(invRepo.findByNoteCode(noteCode)));
 		if (CommonUtil.isNull(note.getAdjustment())) {
-			note.setAdjustment(new BigDecimal(0));
+			note.setAdjustment(BigDecimal.ZERO);
 		}
 		note.setCreated(timeNow);
 		note.setConsumer(invoice.getConsumer());

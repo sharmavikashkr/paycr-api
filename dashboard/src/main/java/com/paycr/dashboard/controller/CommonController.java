@@ -2,8 +2,6 @@ package com.paycr.dashboard.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +51,7 @@ public class CommonController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/timeline/new", method = RequestMethod.PUT)
-	public void addComment(@RequestBody Timeline timeline, HttpServletResponse response) {
+	public void addComment(@RequestBody Timeline timeline) {
 		comSer.saveComment(timeline);
 	}
 

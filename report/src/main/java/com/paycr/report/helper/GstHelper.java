@@ -47,8 +47,8 @@ public class GstHelper {
 					taxes.add(taxAmt);
 				}
 				taxAmt.setAmount(taxAmt.getAmount()
-						.add(item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()))
-								.multiply(new BigDecimal(itemTax.getValue())).divide(new BigDecimal(100))
+						.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
+								.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
 								.setScale(2, BigDecimal.ROUND_HALF_UP)));
 			}
 		}
@@ -82,8 +82,8 @@ public class GstHelper {
 				itemTaxes.addAll(childTaxes);
 			}
 			for (TaxMaster itemTax : itemTaxes) {
-				BigDecimal taxAmt = item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()))
-						.multiply(new BigDecimal(itemTax.getValue())).divide(new BigDecimal(100))
+				BigDecimal taxAmt = item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
+						.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
 						.setScale(2, BigDecimal.ROUND_HALF_UP);
 				if (itemTax.getName().equals("SGST")) {
 					b2cSmallInv.setSgstAmount(b2cSmallInv.getSgstAmount().add(taxAmt));

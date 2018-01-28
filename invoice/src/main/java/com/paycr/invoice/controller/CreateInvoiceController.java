@@ -2,10 +2,6 @@ package com.paycr.invoice.controller;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +24,6 @@ import com.paycr.invoice.service.CreateInvoiceService;
 @RequestMapping("/invoice")
 public class CreateInvoiceController {
 
-	private static final Logger logger = LoggerFactory.getLogger(CreateInvoiceController.class);
-
 	@Autowired
 	private CreateInvoiceService crtInvSer;
 
@@ -38,30 +32,28 @@ public class CreateInvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public Invoice single(@RequestBody Invoice invoice, HttpServletResponse response) {
+	public Invoice single(@RequestBody Invoice invoice) {
 		return crtInvSer.single(invoice);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/child/{invoiceCode}", method = RequestMethod.POST)
-	public Invoice createChild(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq,
-			HttpServletResponse response) {
+	public Invoice createChild(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		return crtInvSer.createChild(invoiceCode, chldInvReq, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload/{invoiceCode}", method = RequestMethod.POST)
-	public void uploadConsumers(@PathVariable String invoiceCode, @RequestParam("consumers") MultipartFile consumers,
-			HttpServletResponse response) throws IOException {
+	public void uploadConsumers(@PathVariable String invoiceCode, @RequestParam("consumers") MultipartFile consumers)
+			throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		crtInvSer.uploadConsumers(invoiceCode, consumers, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/category/{invoiceCode}", method = RequestMethod.POST)
-	public void createCategory(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq,
-			HttpServletResponse response) {
+	public void createCategory(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		crtInvSer.createCategory(invoiceCode, chldInvReq, user.getEmail(), merchant);

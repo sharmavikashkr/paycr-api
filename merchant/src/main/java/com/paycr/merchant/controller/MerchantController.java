@@ -69,7 +69,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
 	@RequestMapping("/account/update")
-	public Merchant updateAccount(@RequestBody Merchant mer, HttpServletResponse response) {
+	public Merchant updateAccount(@RequestBody Merchant mer) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateAccount(merchant, mer);
 		return getMerchant();
@@ -77,7 +77,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
 	@RequestMapping("/address/update")
-	public Merchant updateAddress(@RequestBody Address addr, HttpServletResponse response) {
+	public Merchant updateAddress(@RequestBody Address addr) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateAddress(merchant, addr);
 		return getMerchant();
@@ -85,8 +85,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/paymentsetting/update")
-	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting,
-			HttpServletResponse response) {
+	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updatePaymentSetting(merchant, paymentSetting);
 		return merchant.getPaymentSetting();
@@ -94,8 +93,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/invoicesetting/update")
-	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting,
-			HttpServletResponse response) {
+	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateInvoiceSetting(merchant, invoiceSetting);
 		return merchant.getInvoiceSetting();
@@ -103,7 +101,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/gstsetting/update")
-	public GstSetting updateGstSetting(@RequestBody GstSetting gstSetting, HttpServletResponse response) {
+	public GstSetting updateGstSetting(@RequestBody GstSetting gstSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateGstSetting(merchant, gstSetting);
 		return merchant.getGstSetting();
@@ -111,7 +109,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/customParam/new")
-	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam, HttpServletResponse response) {
+	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.newCustomParam(merchant, customParam);
 		return merchant.getInvoiceSetting();
@@ -119,7 +117,7 @@ public class MerchantController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/customParam/delete/{id}")
-	public InvoiceSetting deleteCustomParam(@PathVariable Integer id, HttpServletResponse response) {
+	public InvoiceSetting deleteCustomParam(@PathVariable Integer id) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.deleteCustomParam(merchant, id);
 		return merchant.getInvoiceSetting();

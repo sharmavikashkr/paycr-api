@@ -69,65 +69,65 @@ public class AdminController {
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting")
-	public AdminSetting getSetting(HttpServletResponse response) {
+	public AdminSetting getSetting() {
 		return adminService.getSetting();
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/update")
-	public AdminSetting updateSetting(@RequestBody AdminSetting setting, HttpServletResponse response) {
+	public AdminSetting updateSetting(@RequestBody AdminSetting setting) {
 		adminService.saveSetting(setting);
 		return adminService.getSetting();
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/address/new")
-	public AdminSetting updateAddress(@RequestBody Address newAddr, HttpServletResponse response) {
+	public AdminSetting updateAddress(@RequestBody Address newAddr) {
 		adminService.saveAddress(newAddr);
 		return adminService.getSetting();
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/tax/new")
-	public void newTaxMaster(@RequestBody TaxMaster tax, HttpServletResponse response) {
+	public void newTaxMaster(@RequestBody TaxMaster tax) {
 		adminService.newTaxMaster(tax);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/merchant/new")
-	public void newMerchant(@RequestBody Merchant merchant, HttpServletResponse response) {
+	public void newMerchant(@RequestBody Merchant merchant) {
 		registerService.createMerchant(merchant, secSer.findLoggedInUser().getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/new")
-	public void createPricing(@RequestBody Pricing pricing, HttpServletResponse response) {
+	public void createPricing(@RequestBody Pricing pricing) {
 		adminService.createPricing(pricing);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/toggle/{pricingId}")
-	public void togglePricing(@PathVariable Integer pricingId, HttpServletResponse response) {
+	public void togglePricing(@PathVariable Integer pricingId) {
 		adminService.togglePricing(pricingId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping(value = "/pricing/merchant/add", method = RequestMethod.POST)
 	public void addPricingMerchant(@RequestParam("pricingId") Integer pricingId,
-			@RequestParam("merchantId") Integer merchantId, HttpServletResponse response) {
+			@RequestParam("merchantId") Integer merchantId) {
 		adminService.addPricingMerchant(pricingId, merchantId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/pricing/merchants/{pricingId}")
-	public List<Merchant> getPricingMerchant(@PathVariable Integer pricingId, HttpServletResponse response) {
+	public List<Merchant> getPricingMerchant(@PathVariable Integer pricingId) {
 		return adminService.getMerchantForPricing(pricingId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping(value = "/pricing/merchant/remove", method = RequestMethod.POST)
 	public void removePricingMerchant(@RequestParam("pricingId") Integer pricingId,
-			@RequestParam("merchantId") Integer merchantId, HttpServletResponse response) {
+			@RequestParam("merchantId") Integer merchantId) {
 		adminService.removePricingMerchant(pricingId, merchantId);
 	}
 

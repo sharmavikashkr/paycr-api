@@ -54,9 +54,9 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 		if (CommonUtil.isNull(item.getTax())) {
 			item.setTax(taxMRepo.findByName("NO_TAX"));
 		}
-		BigDecimal expPrice = item.getInventory().getRate().multiply(new BigDecimal(item.getQuantity()));
+		BigDecimal expPrice = item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()));
 		expPrice = expPrice
-				.add(expPrice.multiply(new BigDecimal(item.getTax().getValue())).divide(new BigDecimal(100)));
+				.add(expPrice.multiply(BigDecimal.valueOf(item.getTax().getValue())).divide(BigDecimal.valueOf(100)));
 		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP).equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
 			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
 		}

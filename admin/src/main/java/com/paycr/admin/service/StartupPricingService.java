@@ -34,7 +34,7 @@ public class StartupPricingService {
 		welcomePri.setDescription("Welcome Plan");
 		welcomePri.setDuration(90);
 		welcomePri.setName("WELCOME");
-		welcomePri.setRate(new BigDecimal(0));
+		welcomePri.setRate(BigDecimal.ZERO);
 		welcomePri.setLimit(1000);
 		welcomePri.setType(PricingType.PUBLIC);
 		TaxMaster noTax = createNoTaxMaster();

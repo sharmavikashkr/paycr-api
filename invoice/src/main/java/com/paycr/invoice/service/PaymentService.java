@@ -78,7 +78,7 @@ public class PaymentService {
 		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String
-				.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100))));
+				.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))));
 		return mv;
 	}
 
@@ -186,7 +186,7 @@ public class PaymentService {
 		} else {
 			PaymentSetting paymentSetting = merchant.getPaymentSetting();
 			RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
-			String refundAmount = String.valueOf(amount.multiply(new BigDecimal(100)));
+			String refundAmount = String.valueOf(amount.multiply(BigDecimal.valueOf(100)));
 			JSONObject refundRequest = new JSONObject();
 			refundRequest.put("amount", refundAmount);
 			Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);

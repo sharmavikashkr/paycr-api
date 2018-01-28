@@ -65,8 +65,8 @@ public class ExpenseReceiptService {
 					taxes.add(taxAmt);
 				}
 				taxAmt.setAmount(taxAmt.getAmount()
-						.add(item.getAsset().getRate().multiply(new BigDecimal(item.getQuantity()))
-								.multiply(new BigDecimal(itemTax.getValue())).divide(new BigDecimal(100))
+						.add(item.getAsset().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
+								.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
 								.setScale(2, BigDecimal.ROUND_HALF_UP)));
 			}
 		}

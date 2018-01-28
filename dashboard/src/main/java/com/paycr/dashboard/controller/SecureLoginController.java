@@ -2,8 +2,6 @@ package com.paycr.dashboard.controller;
 
 import java.util.LinkedHashMap;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,8 +17,7 @@ public class SecureLoginController {
 	private SecureLoginService secLoginService;
 
 	@RequestMapping(value = "/secure/login", method = RequestMethod.POST)
-	public LinkedHashMap secureLogin(@RequestParam("email") String email, @RequestParam("password") String password,
-			HttpServletResponse response) {
+	public LinkedHashMap secureLogin(@RequestParam("email") String email, @RequestParam("password") String password) {
 		return secLoginService.secureLogin(email, password);
 	}
 

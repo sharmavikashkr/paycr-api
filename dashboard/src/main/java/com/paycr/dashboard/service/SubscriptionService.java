@@ -130,10 +130,10 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		}
-		BigDecimal total = pricing.getRate().multiply(new BigDecimal(offline.getQuantity()));
+		BigDecimal total = pricing.getRate().multiply(BigDecimal.valueOf(offline.getQuantity()));
 		subs.setTotal(total);
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(subs.getTax().getValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(BigDecimal.valueOf(subs.getTax().getValue())).divide(BigDecimal.valueOf(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setCreated(timeNow);
@@ -170,7 +170,7 @@ public class SubscriptionService {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
 		AdminSetting adset = adsetRepo.findAll().get(0);
-		if (!pricing.isActive() || new BigDecimal(0).compareTo(pricing.getRate()) > -1 || quantity == null
+		if (!pricing.isActive() || BigDecimal.ZERO.compareTo(pricing.getRate()) > -1 || quantity == null
 				|| quantity <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}
@@ -191,10 +191,10 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		}
-		BigDecimal total = pricing.getRate().multiply(new BigDecimal(quantity));
+		BigDecimal total = pricing.getRate().multiply(BigDecimal.valueOf(quantity));
 		subs.setTotal(total);
 		BigDecimal payAmount = total
-				.add(total.multiply(new BigDecimal(subs.getTax().getValue())).divide(new BigDecimal(100)));
+				.add(total.multiply(BigDecimal.valueOf(subs.getTax().getValue())).divide(BigDecimal.valueOf(100)));
 		subs.setPayAmount(payAmount);
 		subs.setCurrency(Currency.INR);
 		subs.setPayMode(PayMode.PAYCR);
@@ -219,7 +219,7 @@ public class SubscriptionService {
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
 		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());
-		mv.addObject("payAmount", String.valueOf(subs.getPayAmount().multiply(new BigDecimal(100))));
+		mv.addObject("payAmount", String.valueOf(subs.getPayAmount().multiply(BigDecimal.valueOf(100))));
 		return mv;
 	}
 
@@ -280,7 +280,7 @@ public class SubscriptionService {
 	}
 
 	private void addToExpense(Merchant merchant, Subscription subs) {
-		if (subs.getPayAmount().compareTo(new BigDecimal(0)) <= 0) {
+		if (subs.getPayAmount().compareTo(BigDecimal.ZERO) <= 0) {
 			return;
 		}
 		String createdBy = "SYSTEM";
@@ -297,8 +297,8 @@ public class SubscriptionService {
 		expense.setPayAmount(subs.getPayAmount());
 		expense.setTotal(subs.getTotal());
 		expense.setTotalPrice(subs.getPayAmount());
-		expense.setShipping(new BigDecimal(0));
-		expense.setDiscount(new BigDecimal(0));
+		expense.setShipping(BigDecimal.ZERO);
+		expense.setDiscount(BigDecimal.ZERO);
 		ExpenseItem item = new ExpenseItem();
 		Asset asset = new Asset();
 		asset.setCode(subs.getPricing().getCode());

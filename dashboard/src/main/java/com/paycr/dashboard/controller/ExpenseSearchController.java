@@ -1,14 +1,11 @@
 package com.paycr.dashboard.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +38,7 @@ public class ExpenseSearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/expense")
-	public List<Expense> searchExpenses(@RequestBody SearchExpenseRequest request, HttpServletResponse response) {
+	public List<Expense> searchExpenses(@RequestBody SearchExpenseRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
@@ -75,16 +72,14 @@ public class ExpenseSearchController {
 		byte[] data = csv.getBytes();
 		response.setHeader("Content-Disposition", "attachment; filename=\"payments.csv\"");
 		response.setContentType("text/csv;charset=utf-8");
-		InputStream is = new ByteArrayInputStream(data);
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(data);
 		response.setContentLength(data.length);
 		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/payment/mail")
-	public void mailPayments(@RequestBody SearchExpensePaymentRequest request, HttpServletResponse response)
-			throws IOException {
+	public void mailPayments(@RequestBody SearchExpensePaymentRequest request) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
@@ -94,7 +89,7 @@ public class ExpenseSearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/supplier")
-	public Set<Supplier> searchSuppliers(@RequestBody SearchSupplierRequest request, HttpServletResponse response) {
+	public Set<Supplier> searchSuppliers(@RequestBody SearchSupplierRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
@@ -105,7 +100,7 @@ public class ExpenseSearchController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/asset")
-	public List<Asset> searchAsset(@RequestBody SearchAssetRequest request, HttpServletResponse response) {
+	public List<Asset> searchAsset(@RequestBody SearchAssetRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());

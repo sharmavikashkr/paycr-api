@@ -2,8 +2,6 @@ package com.paycr.dashboard.controller;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,17 +23,17 @@ public class BannerController {
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public void getUser(@RequestParam("banner") MultipartFile banner, HttpServletResponse response) throws Exception {
+	public void getUser(@RequestParam("banner") MultipartFile banner) throws Exception {
 		banSer.uploadBanner(banner);
 	}
 
 	@RequestMapping("/admin/{bannerName:.+}")
-	public byte[] adminBanner(@PathVariable String bannerName, HttpServletResponse response) throws IOException {
+	public byte[] adminBanner(@PathVariable String bannerName) throws IOException {
 		return banSer.getAdminBanner(bannerName);
 	}
 
 	@RequestMapping("/merchant/{bannerName:.+}")
-	public byte[] merchantBanner(@PathVariable String bannerName, HttpServletResponse response) throws IOException {
+	public byte[] merchantBanner(@PathVariable String bannerName) throws IOException {
 		return banSer.getMerchantBanner(bannerName);
 	}
 }

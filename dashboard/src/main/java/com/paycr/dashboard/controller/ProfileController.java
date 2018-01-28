@@ -1,7 +1,5 @@
 package com.paycr.dashboard.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,7 +32,7 @@ public class ProfileController {
 	private SecurityService secSer;
 
 	@RequestMapping("/update/address")
-	public void updateAddress(@RequestBody Address address, HttpServletResponse response) {
+	public void updateAddress(@RequestBody Address address) {
 		PcUser user = secSer.findLoggedInUser();
 		userService.saveAddress(user, address);
 	}
@@ -42,7 +40,7 @@ public class ProfileController {
 	@RequestMapping(value = "/change/password", method = RequestMethod.POST)
 	public void changePassword(@RequestParam(value = "oldPass", required = true) String oldPass,
 			@RequestParam(value = "newPass", required = true) String newPass,
-			@RequestParam(value = "retypePass", required = true) String retypePass, HttpServletResponse response) {
+			@RequestParam(value = "retypePass", required = true) String retypePass) {
 		PcUser user = secSer.findLoggedInUser();
 		if (!newPass.equals(retypePass)) {
 			throw new PaycrException(Constants.FAILURE, "Wrong Password Retyped");

@@ -1,14 +1,11 @@
 package com.paycr.expense.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +30,6 @@ public class ExpenseReceiptController {
 	public void downloadReceipt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String expenseCode) throws Exception {
 		File pdfFile = expRecSer.downloadPdf(expenseCode);
-
 		FileInputStream fis = null;
 		byte[] bFile = new byte[(int) pdfFile.length()];
 		fis = new FileInputStream(pdfFile);
@@ -42,8 +38,7 @@ public class ExpenseReceiptController {
 
 		response.setHeader("Content-Disposition", "attachment; filename=\"Expense-" + expenseCode + ".pdf\"");
 		response.setContentType("application/pdf");
-		InputStream is = new ByteArrayInputStream(bFile);
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(bFile);
 		response.setContentLength(bFile.length);
 		response.flushBuffer();
 	}

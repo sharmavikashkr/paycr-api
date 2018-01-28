@@ -1,14 +1,11 @@
 package com.paycr.merchant.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +37,7 @@ public class InventoryController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
-	public void newInventory(@RequestBody Inventory inventory, HttpServletResponse response) {
+	public void newInventory(@RequestBody Inventory inventory) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		invnSer.newInventory(inventory, merchant, user.getEmail());
@@ -48,15 +45,13 @@ public class InventoryController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/update/{inventoryId}")
-	public void updateInventory(@RequestBody Inventory inventory, @PathVariable Integer inventoryId,
-			HttpServletResponse response) {
+	public void updateInventory(@RequestBody Inventory inventory, @PathVariable Integer inventoryId) {
 		invnSer.updateInventory(inventory, inventoryId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/upload", method = RequestMethod.POST)
-	public void uploadInventory(@RequestParam("inventory") MultipartFile inventory, HttpServletResponse response)
-			throws IOException {
+	public void uploadInventory(@RequestParam("inventory") MultipartFile inventory) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		invnSer.uploadInventory(inventory, merchant, user.getEmail());
@@ -67,27 +62,26 @@ public class InventoryController {
 		String content = "Code1,Name1,Rate1,HSN/SAC1,Description1\r\nCode2,Name2,Rate2,HSN/SAC2,Description2";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkInventory.csv\"");
 		response.setContentType("application/csv");
-		InputStream is = new ByteArrayInputStream(content.getBytes());
-		IOUtils.copy(is, response.getOutputStream());
+		response.getOutputStream().write(content.getBytes());
 		response.setContentLength(content.getBytes().length);
 		response.flushBuffer();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/uploads/all", method = RequestMethod.GET)
-	public List<BulkInventoryUpload> uploadInventory(HttpServletResponse response) {
+	public List<BulkInventoryUpload> uploadInventory() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		return invnSer.getUploads(merchant);
 	}
 
 	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename, HttpServletResponse response) throws IOException {
+	public byte[] downloadFile(@PathVariable String filename) throws IOException {
 		return invnSer.downloadFile(filename);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/stats/{inventoryId}")
-	public InventoryStats updateInventory(@PathVariable Integer inventoryId, HttpServletResponse response) {
+	public InventoryStats updateInventory(@PathVariable Integer inventoryId) {
 		return invnSer.getStats(inventoryId);
 	}
 }
