@@ -47,7 +47,7 @@ public class IsValidExpenseSupplier implements RequestValidator<Expense> {
 			supplier.setMerchant(expense.getMerchant());
 			supplier.setActive(true);
 			supplier.setCreated(new Date());
-			if (supplier.getCreatedBy() == null) {
+			if (CommonUtil.isNull(supplier.getCreatedBy())) {
 				supplier.setCreatedBy(expense.getCreatedBy());
 			}
 			exstSupplier = supRepo.save(supplier);

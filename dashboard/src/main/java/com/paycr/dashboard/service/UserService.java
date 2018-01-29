@@ -65,7 +65,7 @@ public class UserService {
 			throw new PaycrException(Constants.FAILURE, "Invalid Address");
 		}
 		Address address = user.getAddress();
-		if (address == null) {
+		if (CommonUtil.isNull(address)) {
 			address = new Address();
 		}
 		address.setAddressLine1(addr.getAddressLine1());
@@ -161,7 +161,7 @@ public class UserService {
 		Date timeNow = new Date();
 		if (secSer.isMerchantUser()) {
 			List<PcUser> existingUsers = getUsers();
-			if (existingUsers != null && existingUsers.size() >= 10) {
+			if (CommonUtil.isNotEmpty(existingUsers) && existingUsers.size() >= 10) {
 				throw new PaycrException(Constants.FAILURE, "Not allowed to create more users");
 			}
 			user.setCreated(timeNow);

@@ -19,6 +19,7 @@ import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.PdfUtil;
 
 @Service
@@ -47,7 +48,7 @@ public class NoteReceiptService {
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			TaxMaster tax = item.getTax();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);
-			if (childTaxes == null || childTaxes.isEmpty()) {
+			if (CommonUtil.isEmpty(childTaxes)) {
 				itemTaxes.add(tax);
 			} else {
 				itemTaxes.addAll(childTaxes);
@@ -60,7 +61,7 @@ public class NoteReceiptService {
 						break;
 					}
 				}
-				if (taxAmt == null) {
+				if (CommonUtil.isNull(taxAmt)) {
 					taxAmt = new TaxAmount();
 					taxAmt.setTax(itemTax);
 					taxAmt.setAmount(BigDecimal.ZERO);

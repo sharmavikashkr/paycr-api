@@ -37,6 +37,7 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 
@@ -83,7 +84,7 @@ public class InvoiceSearchService {
 		request.setCreatedTo(
 				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
-		if (request.getMerchant() != null) {
+		if (CommonUtil.isNotNull(request.getMerchant())) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
 		return invDao.findInvoices(request, merchant);
@@ -97,7 +98,7 @@ public class InvoiceSearchService {
 		request.setCreatedTo(
 				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
-		if (request.getMerchant() != null) {
+		if (CommonUtil.isNotNull(request.getMerchant())) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
 		return invPayDao.findPayments(request, merchant);
@@ -106,7 +107,7 @@ public class InvoiceSearchService {
 	public Set<Consumer> fetchConsumerList(SearchConsumerRequest request) {
 		vaidateRequest(request);
 		Merchant merchant = null;
-		if (request.getMerchant() != null) {
+		if (CommonUtil.isNotNull(request.getMerchant())) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
 		return conDao.findConsumers(request, merchant);
@@ -180,20 +181,20 @@ public class InvoiceSearchService {
 	public List<Inventory> fetchInventoryList(SearchInventoryRequest request) {
 		vaidateRequest(request);
 		Merchant merchant = null;
-		if (request.getMerchant() != null) {
+		if (CommonUtil.isNotNull(request.getMerchant())) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
 		return invenDao.findInventory(request, merchant);
 	}
 
 	private void vaidateRequest(Object request) {
-		if (request == null) {
+		if (CommonUtil.isNull(request)) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
 		}
 	}
 
 	private void validateDates(Date from, Date to) {
-		if (from == null || to == null) {
+		if (CommonUtil.isNull(from) || CommonUtil.isNull(to)) {
 			throw new PaycrException(Constants.FAILURE, "From/To dates cannot be null");
 		}
 		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(from)));

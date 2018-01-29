@@ -12,6 +12,7 @@ import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.PdfUtil;
 
 @Service
@@ -31,7 +32,7 @@ public class SubscriptionResponseService {
 
 	public Subscription getSubscriptionByCode(String subscriptionCode) {
 		Subscription subs = subsRepo.findBySubscriptionCode(subscriptionCode);
-		if (subs == null) {
+		if (CommonUtil.isNull(subs)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Subscription not found");
 		}
 		return subs;

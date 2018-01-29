@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.merchant.service.SubscriptionResponseService;
 
 @RestController
@@ -35,7 +36,7 @@ public class SubscriptionResponseController {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		Subscription subs = subsRespSer.getSubscriptionByCode(subscriptionCode);
 		mv.addObject("subs", subs);
-		show = (show != null) ? show : true;
+		show = CommonUtil.isNotNull(show) ? show : true;
 		mv.addObject("show", show);
 		return mv;
 	}

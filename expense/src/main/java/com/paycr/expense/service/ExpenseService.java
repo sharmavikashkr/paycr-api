@@ -29,6 +29,7 @@ import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 
 @Service
@@ -113,7 +114,7 @@ public class ExpenseService {
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = getExpense(expenseCode);
 		List<ExpenseAttachment> attachments = expense.getAttachments();
-		if (attachments == null) {
+		if (CommonUtil.isNull(attachments)) {
 			attachments = new ArrayList<>();
 		}
 		if (attachments.size() >= 5) {

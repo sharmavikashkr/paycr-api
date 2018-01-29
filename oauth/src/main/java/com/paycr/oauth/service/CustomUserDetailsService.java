@@ -10,6 +10,7 @@ import com.paycr.common.data.domain.CustomUserDetails;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.service.UserRoleService;
+import com.paycr.common.util.CommonUtil;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -23,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		PcUser user = userRepo.findByEmail(email);
-		if (user != null) {
+		if (CommonUtil.isNotNull(user)) {
 			if (!user.isActive()) {
 				return null;
 			}

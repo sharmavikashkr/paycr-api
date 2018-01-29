@@ -18,6 +18,7 @@ import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 
 @Service
@@ -39,7 +40,7 @@ public class BannerService {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		File file = null;
 		String extension = validateBanner(banner);
-		if (merchant != null) {
+		if (CommonUtil.isNotNull(merchant)) {
 			String bannerName = merchant.getAccessKey() + extension;
 			file = new File(server.getMerchantLocation() + "banner/" + bannerName);
 			merchant.setBanner(bannerName);

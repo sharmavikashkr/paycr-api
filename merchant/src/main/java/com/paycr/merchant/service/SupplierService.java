@@ -82,7 +82,7 @@ public class SupplierService {
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> supplierList = csvReader.readAll();
 		csvReader.close();
-		if (supplierList == null || supplierList.isEmpty() || supplierList.size() > 200) {
+		if (CommonUtil.isEmpty(supplierList) || supplierList.size() > 200) {
 			String[] record = new String[1];
 			record[0] = "Min 1 and Max 200 suppliers can be uploaded";
 			writer.writeNext(record);
@@ -151,7 +151,7 @@ public class SupplierService {
 			throw new PaycrException(Constants.FAILURE, "Supplier not found");
 		}
 		Address address = supplier.getAddress();
-		if (address == null) {
+		if (CommonUtil.isNull(address)) {
 			address = new Address();
 		}
 		supplier.setAddress(address);

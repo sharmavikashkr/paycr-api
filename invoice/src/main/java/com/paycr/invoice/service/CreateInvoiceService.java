@@ -167,7 +167,7 @@ public class CreateInvoiceService {
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> consumerList = csvReader.readAll();
 		csvReader.close();
-		if (consumerList == null || consumerList.isEmpty() || consumerList.size() > 200) {
+		if (CommonUtil.isEmpty(consumerList) || consumerList.size() > 200) {
 			String[] record = new String[1];
 			record[0] = "Min 1 and Max 200 consumers can be uploaded";
 			writer.writeNext(record);
@@ -220,7 +220,7 @@ public class CreateInvoiceService {
 		buc.setInvoiceType(chldInvReq.getInvoiceType());
 		buc.setInvoiceCode(invoiceCode);
 		buc.setCreatedBy(createdBy);
-		if (chldInvReq.getConCatList() == null || chldInvReq.getConCatList().isEmpty()) {
+		if (CommonUtil.isEmpty(chldInvReq.getConCatList())) {
 			buc.setCategories("");
 			buc.setMessage("FAILURE : Empty category filter");
 		} else {

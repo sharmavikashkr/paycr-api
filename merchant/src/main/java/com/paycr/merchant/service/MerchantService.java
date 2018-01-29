@@ -34,9 +34,9 @@ public class MerchantService {
 				|| CommonUtil.isEmpty(addr.getCountry())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Address");
 		}
-		if (addr != null) {
+		if (CommonUtil.isNotNull(addr)) {
 			Address address = merchant.getAddress();
-			if (address == null) {
+			if (CommonUtil.isNull(address)) {
 				address = new Address();
 			}
 			address.setAddressLine1(addr.getAddressLine1());

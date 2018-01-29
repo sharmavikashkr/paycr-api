@@ -44,6 +44,7 @@ import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.NoteType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
@@ -110,7 +111,7 @@ public class InvoiceService {
 		}
 		if (InvoiceType.RECURRING.equals(invoice.getInvoiceType())) {
 			RecurringInvoice recInv = recInvRepo.findByInvoiceAndActive(invoice, true);
-			if (recInv != null) {
+			if (CommonUtil.isNotNull(recInv)) {
 				recInv.setActive(false);
 				recInvRepo.save(recInv);
 			}
@@ -143,7 +144,7 @@ public class InvoiceService {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) && !InvoiceStatus.PAID.equals(invoice.getStatus())
-				&& invoice.getPayment() != null) {
+				&& CommonUtil.isNotNull(invoice.getPayment())) {
 			payService.enquire(invoice);
 		} else {
 			throw new PaycrException(Constants.FAILURE, "Enquiry Not allowed");
@@ -211,7 +212,7 @@ public class InvoiceService {
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = getInvoice(invoiceCode);
 		List<InvoiceAttachment> attachments = invoice.getAttachments();
-		if (attachments == null) {
+		if (CommonUtil.isNull(attachments)) {
 			attachments = new ArrayList<>();
 		}
 		if (attachments.size() >= 5) {
@@ -243,11 +244,11 @@ public class InvoiceService {
 	@Transactional
 	public void recurr(String invoiceCode, RecurringInvoice recInv, String createdBy) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
-		if (invoice == null || !InvoiceType.RECURRING.equals(invoice.getInvoiceType())
+		if (CommonUtil.isNull(invoice) || !InvoiceType.RECURRING.equals(invoice.getInvoiceType())
 				|| InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid invoice");
 		}
-		if (recInv.getStartDate() == null) {
+		if (CommonUtil.isNull(recInv.getStartDate())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid start date");
 		}
 		recInv.setActive(true);
@@ -267,7 +268,7 @@ public class InvoiceService {
 			throw new PaycrException(Constants.FAILURE, "Cannot schedule from older date");
 		}
 		RecurringInvoice ext = recInvRepo.findByInvoiceAndActive(invoice, true);
-		if (ext != null) {
+		if (CommonUtil.isNotNull(ext)) {
 			ext.setActive(false);
 			recInvRepo.save(ext);
 		}

@@ -27,7 +27,7 @@ public class GstHelper {
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			TaxMaster tax = item.getTax();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);
-			if (childTaxes == null || childTaxes.isEmpty()) {
+			if (CommonUtil.isEmpty(childTaxes)) {
 				itemTaxes.add(tax);
 			} else {
 				itemTaxes.addAll(childTaxes);
@@ -40,7 +40,7 @@ public class GstHelper {
 						break;
 					}
 				}
-				if (taxAmt == null) {
+				if (CommonUtil.isNull(taxAmt)) {
 					taxAmt = new TaxAmount();
 					taxAmt.setTax(itemTax);
 					taxAmt.setAmount(BigDecimal.ZERO);
@@ -76,7 +76,7 @@ public class GstHelper {
 			b2cSmallInv.setTaxableAmount(b2cSmallInv.getTaxableAmount().add(item.getPrice()));
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);
-			if (childTaxes == null || childTaxes.isEmpty()) {
+			if (CommonUtil.isEmpty(childTaxes)) {
 				itemTaxes.add(tax);
 			} else {
 				itemTaxes.addAll(childTaxes);

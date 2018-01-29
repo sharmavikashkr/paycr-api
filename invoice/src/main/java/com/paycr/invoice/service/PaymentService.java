@@ -77,8 +77,8 @@ public class PaymentService {
 		mv.addObject("invoice", invoice);
 		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
-		mv.addObject("payAmount", String
-				.valueOf(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))));
+		mv.addObject("payAmount", String.valueOf(
+				invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))));
 		return mv;
 	}
 
@@ -96,7 +96,7 @@ public class PaymentService {
 			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
 		}
 		Date timeNow = new Date();
-		if (invoice.getExpiry() != null && invoice.getExpiry().before(timeNow)) {
+		if (invoice.getExpiry().before(timeNow)) {
 			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
 			throw new PaycrException(Constants.FAILURE, "This invoice has expired");

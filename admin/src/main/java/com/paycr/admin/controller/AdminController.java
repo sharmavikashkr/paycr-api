@@ -25,6 +25,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.RegisterService;
 
@@ -47,7 +48,7 @@ public class AdminController {
 	@RequestMapping("")
 	public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
-		if (request.getCookies() == null) {
+		if (CommonUtil.isNull(request.getCookies())) {
 			response.sendRedirect("/adminlogin");
 		}
 		for (Cookie cookie : request.getCookies()) {
@@ -55,7 +56,7 @@ public class AdminController {
 				token = cookie.getValue();
 			}
 		}
-		if (token == null) {
+		if (CommonUtil.isNull(token)) {
 			response.sendRedirect("/adminlogin");
 		}
 		boolean isAdmin = secSer.isPaycrUser(token);

@@ -16,6 +16,7 @@ import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Role;
+import com.paycr.common.util.CommonUtil;
 
 @Service
 public class SecurityService {
@@ -75,7 +76,7 @@ public class SecurityService {
 
 	public Merchant getMerchantForLoggedInUser(String token) {
 		PcUser user = findLoggedInUser(token);
-		if (user == null) {
+		if (CommonUtil.isNull(user)) {
 			return null;
 		}
 		String[] roles = userRoleService.getUserRoles(user);
@@ -90,7 +91,7 @@ public class SecurityService {
 
 	public boolean isPaycrUser(String token) {
 		PcUser user = findLoggedInUser(token);
-		if (user == null) {
+		if (CommonUtil.isNull(user)) {
 			return false;
 		}
 		String[] roles = userRoleService.getUserRoles(user);

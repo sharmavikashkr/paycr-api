@@ -97,7 +97,7 @@ public class SubscriptionService {
 
 	public Subscription getSubscriptionByCode(String subscriptionCode) {
 		Subscription subs = subsRepo.findBySubscriptionCode(subscriptionCode);
-		if (subs == null) {
+		if (CommonUtil.isNull(subs)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Subscription not found");
 		}
 		return subs;
@@ -121,10 +121,10 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		} else {
-			if(CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
+			if (CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
 				throw new PaycrException(Constants.FAILURE, "Admin needs to set Address to determine Tax");
 			}
-			if(adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
+			if (adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());
 			} else {
 				subs.setTax(pricing.getInterstateTax());
@@ -170,7 +170,7 @@ public class SubscriptionService {
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
 		AdminSetting adset = adsetRepo.findAll().get(0);
-		if (!pricing.isActive() || BigDecimal.ZERO.compareTo(pricing.getRate()) > -1 || quantity == null
+		if (!pricing.isActive() || BigDecimal.ZERO.compareTo(pricing.getRate()) > -1 || CommonUtil.isNull(quantity)
 				|| quantity <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Bad Request");
 		}
@@ -182,10 +182,10 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		} else {
-			if(CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
+			if (CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
 				throw new PaycrException(Constants.FAILURE, "Something went wrong, please try again");
 			}
-			if(adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
+			if (adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());
 			} else {
 				subs.setTax(pricing.getInterstateTax());

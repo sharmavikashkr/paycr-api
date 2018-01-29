@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -27,6 +28,7 @@ import com.paycr.common.data.repository.InvoiceNoteRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.FilingPeriod;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 
 @Service
@@ -102,6 +104,8 @@ public class Gstr1Service {
 			gstStatuses.add(InvoiceStatus.UNPAID);
 		}
 		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, start, end);
+		invoiceList = invoiceList.stream().filter(t -> CommonUtil.isNotEmpty(t.getItems()))
+				.collect(Collectors.toList());
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);
 		gstr1Report.setB2cLarge(b2cLargeSer.collectB2CLargeList(invoiceList));
 		gstr1Report.setB2cSmall(b2cSmallSer.collectB2CSmallList(invoiceList, noteList));

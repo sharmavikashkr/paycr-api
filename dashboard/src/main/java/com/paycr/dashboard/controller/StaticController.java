@@ -21,6 +21,7 @@ import com.paycr.common.type.PayMode;
 import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
 
 @RestController
@@ -34,7 +35,7 @@ public class StaticController {
 			@RequestParam("access_token") String accessToken, HttpServletRequest request, HttpServletResponse response)
 					throws IOException {
 		PcUser user = secSer.findLoggedInUser(accessToken);
-		if (user == null) {
+		if (CommonUtil.isNull(user)) {
 			response.sendRedirect("/login");
 		}
 		boolean isPaycr = secSer.isPaycrUser(accessToken);
@@ -52,7 +53,7 @@ public class StaticController {
 			@PathVariable String file, @RequestParam("access_token") String accessToken, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		PcUser user = secSer.findLoggedInUser(accessToken);
-		if (user == null) {
+		if (CommonUtil.isNull(user)) {
 			response.sendRedirect("/login");
 		}
 		boolean isPaycr = secSer.isPaycrUser(accessToken);

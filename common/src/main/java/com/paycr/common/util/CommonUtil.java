@@ -57,15 +57,15 @@ public class CommonUtil {
 	}
 
 	public static <T> boolean isNotEmpty(List<T> objList) {
-		return (isNotNull(objList) && (objList.size() > 0));
+		return (isNotNull(objList) && (!objList.isEmpty()));
 	}
 
 	public static <T> boolean isNotEmpty(Set<T> objList) {
-		return (isNotNull(objList) && (objList.size() > 0));
+		return (isNotNull(objList) && (!objList.isEmpty()));
 	}
 
 	public static <T> boolean isEmpty(List<T> objList) {
-		return (isNull(objList) || (objList.size() == 0));
+		return (isNull(objList) || (objList.isEmpty()));
 	}
 
 	public static String handleNull(String str) {

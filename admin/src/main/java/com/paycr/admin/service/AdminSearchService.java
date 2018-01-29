@@ -17,6 +17,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Promotion;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.exception.PaycrException;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 
@@ -63,13 +64,13 @@ public class AdminSearchService {
 	}
 
 	private void vaidateRequest(Object request) {
-		if (request == null) {
+		if (CommonUtil.isNull(request)) {
 			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
 		}
 	}
 
 	private void validateDates(Date from, Date to) {
-		if (from == null || to == null) {
+		if (CommonUtil.isNull(from) || CommonUtil.isNull(to)) {
 			throw new PaycrException(Constants.FAILURE, "From/To dates cannot be null");
 		}
 		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(from)));

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.invoice.service.InvoiceService;
 import com.paycr.invoice.service.PaymentReceiptService;
 
@@ -41,7 +42,7 @@ public class PaymentResponseController {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("invoice", invoice);
 		mv.addObject("merchant", merchant);
-		show = (show != null) ? show : true;
+		show = CommonUtil.isNotNull(show) ? show : true;
 		mv.addObject("show", show);
 		return mv;
 	}

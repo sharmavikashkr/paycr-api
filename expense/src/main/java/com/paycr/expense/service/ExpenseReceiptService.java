@@ -18,6 +18,7 @@ import com.paycr.common.data.domain.ExpenseItem;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.PdfUtil;
 
 @Service
@@ -45,7 +46,7 @@ public class ExpenseReceiptService {
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			TaxMaster tax = item.getTax();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);
-			if (childTaxes == null || childTaxes.isEmpty()) {
+			if (CommonUtil.isEmpty(childTaxes)) {
 				itemTaxes.add(tax);
 			} else {
 				itemTaxes.addAll(childTaxes);
@@ -58,7 +59,7 @@ public class ExpenseReceiptService {
 						break;
 					}
 				}
-				if (taxAmt == null) {
+				if (CommonUtil.isNull(taxAmt)) {
 					taxAmt = new TaxAmount();
 					taxAmt.setTax(itemTax);
 					taxAmt.setAmount(BigDecimal.ZERO);

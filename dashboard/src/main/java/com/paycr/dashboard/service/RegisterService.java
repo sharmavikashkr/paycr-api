@@ -28,6 +28,7 @@ import com.paycr.common.type.FilingPeriod;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
 import com.paycr.dashboard.validation.MerchantValidator;
@@ -73,7 +74,7 @@ public class RegisterService {
 		String accessKey = secretKey + secretKey.toLowerCase() + secretKey.toUpperCase();
 		do {
 			accessKey = RandomIdGenerator.generateAccessKey(accessKey.toCharArray());
-		} while (merRepo.findByAccessKey(accessKey) != null);
+		} while (CommonUtil.isNotNull(merRepo.findByAccessKey(accessKey)));
 		merchant.setAccessKey(accessKey);
 		merchant.setSecretKey(secretKey);
 		merchant.setCreated(timeNow);
@@ -142,7 +143,7 @@ public class RegisterService {
 		notiRepo.save(noti);
 
 		Pricing welcomePricing = pricingRepo.findByCodeAndActive("PPC-P-001", true);
-		if (welcomePricing == null) {
+		if (CommonUtil.isNull(welcomePricing)) {
 			return;
 		}
 		OfflineSubscription offSubs = new OfflineSubscription();

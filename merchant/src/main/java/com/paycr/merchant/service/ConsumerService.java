@@ -106,7 +106,7 @@ public class ConsumerService {
 
 	public List<ConsumerCategory> getCategories(Integer consumerId) {
 		Consumer consumer = conRepo.findOne(consumerId);
-		if (consumer == null) {
+		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
 		}
 		return conCatRepo.findByConsumer(consumer);
@@ -114,20 +114,19 @@ public class ConsumerService {
 
 	public void addCategory(Integer consumerId, ConsumerCategory conCat, Merchant merchant) {
 		Consumer consumer = conRepo.findOne(consumerId);
-		if (consumer == null) {
+		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
 		}
-		if (conCat.getName() == null || conCat.getName().isEmpty() || conCat.getValue() == null
-				|| conCat.getValue().isEmpty()) {
+		if (CommonUtil.isEmpty(conCat.getName()) || CommonUtil.isEmpty(conCat.getValue())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid category name/value");
 		}
 		ConsumerCategory exstConCat = conCatRepo.findByConsumerAndName(consumer, conCat.getName());
-		if (exstConCat != null) {
+		if (CommonUtil.isNotNull(exstConCat)) {
 			exstConCat.setValue(conCat.getValue());
 			conCatRepo.save(exstConCat);
 		} else {
 			consumer = conRepo.findOne(consumerId);
-			if (consumer.getConCats() != null && consumer.getConCats().size() >= 5) {
+			if (CommonUtil.isNotEmpty(consumer.getConCats()) && consumer.getConCats().size() >= 5) {
 				throw new PaycrException(Constants.FAILURE, "Only 5 categories per consumer allowed");
 			}
 			conCat.setConsumer(consumer);
@@ -137,10 +136,10 @@ public class ConsumerService {
 
 	public void deleteCategory(Integer consumerId, Integer conCatId, Merchant merchant) {
 		Consumer consumer = conRepo.findByMerchantAndId(merchant, consumerId);
-		if (consumer == null) {
+		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(Constants.FAILURE, "Consumer not found");
 		}
-		if (conCatRepo.findByConsumerAndId(consumer, conCatId) != null) {
+		if (CommonUtil.isNotNull(conCatRepo.findByConsumerAndId(consumer, conCatId))) {
 			conCatRepo.delete(conCatId);
 		}
 	}
@@ -186,7 +185,7 @@ public class ConsumerService {
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> consumerList = csvReader.readAll();
 		csvReader.close();
-		if (consumerList == null || consumerList.isEmpty() || consumerList.size() > 200) {
+		if (CommonUtil.isEmpty(consumerList) || consumerList.size() > 200) {
 			String[] record = new String[1];
 			record[0] = "Min 1 and Max 200 consumers can be uploaded";
 			writer.writeNext(record);
@@ -279,14 +278,14 @@ public class ConsumerService {
 		Address address = null;
 		if (AddressType.BILLING.equals(addr.getType())) {
 			address = consumer.getBillingAddress();
-			if (address == null) {
+			if (CommonUtil.isNull(address)) {
 				address = new Address();
 			}
 			consumer.setBillingAddress(address);
 
 		} else {
 			address = consumer.getShippingAddress();
-			if (address == null) {
+			if (CommonUtil.isNull(address)) {
 				address = new Address();
 			}
 			consumer.setShippingAddress(address);

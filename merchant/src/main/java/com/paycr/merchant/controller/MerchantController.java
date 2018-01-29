@@ -22,6 +22,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.merchant.service.MerchantService;
 
@@ -41,7 +42,7 @@ public class MerchantController {
 	@RequestMapping("")
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
-		if (request.getCookies() == null) {
+		if (CommonUtil.isNull(request.getCookies())) {
 			response.sendRedirect("/login");
 		}
 		for (Cookie cookie : request.getCookies()) {
@@ -49,11 +50,11 @@ public class MerchantController {
 				token = cookie.getValue();
 			}
 		}
-		if (token == null) {
+		if (CommonUtil.isNull(token)) {
 			response.sendRedirect("/login");
 		}
 		Merchant merchant = secSer.getMerchantForLoggedInUser(token);
-		if (merchant == null) {
+		if (CommonUtil.isNull(merchant)) {
 			response.sendRedirect("/login");
 		}
 		ModelAndView mv = new ModelAndView("html/merchant/merchant");

@@ -83,7 +83,7 @@ public class ReportService {
 	public List<Report> fetchReports(Merchant merchant) {
 		List<Report> commonReports = repRepo.findByMerchant(null);
 		List<Report> myReports = new ArrayList<>();
-		if (merchant != null) {
+		if (CommonUtil.isNotNull(merchant)) {
 			myReports = repRepo.findByMerchant(merchant);
 		}
 		commonReports.addAll(myReports);
@@ -100,11 +100,11 @@ public class ReportService {
 	}
 
 	public void deleteReport(Integer reportId, Merchant merchant) {
-		if (merchant == null) {
+		if (CommonUtil.isNull(merchant)) {
 			throw new PaycrException(Constants.FAILURE, "Report cannot be deleted");
 		}
 		Report report = repRepo.findByIdAndMerchant(reportId, merchant);
-		if (report == null) {
+		if (CommonUtil.isNull(report)) {
 			throw new PaycrException(Constants.FAILURE, "Report not found");
 		}
 		repRepo.delete(reportId);
@@ -123,11 +123,11 @@ public class ReportService {
 
 	public void addSchedule(Integer reportId, Merchant merchant, PcUser user) {
 		Report report = repRepo.findOne(reportId);
-		if (report == null) {
+		if (CommonUtil.isNull(report)) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Report");
 		}
 		RecurringReport recRep = recRepRepo.findByReportAndMerchant(report, merchant);
-		if (recRep == null) {
+		if (CommonUtil.isNull(recRep)) {
 			recRep = new RecurringReport();
 			recRep.setActive(true);
 			recRep.setMerchant(merchant);
@@ -162,7 +162,7 @@ public class ReportService {
 			throw new PaycrException(Constants.FAILURE, "Max 5 reports can be scheduled");
 		}
 		RecurringReportUser recRepUser = recRepUserRepo.findByRecurringReportAndPcUser(recRep, user);
-		if (recRepUser != null) {
+		if (CommonUtil.isNotNull(recRepUser)) {
 			throw new PaycrException(Constants.FAILURE, "Report already scheduled for you");
 		}
 		recRepUser = new RecurringReportUser();
@@ -173,7 +173,7 @@ public class ReportService {
 
 	public void removeSchedule(Integer recRepUserId, PcUser user) {
 		RecurringReportUser recRepUser = recRepUserRepo.findOne(recRepUserId);
-		if (recRepUser == null) {
+		if (CommonUtil.isNull(recRepUser)) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Request");
 		}
 		if (recRepUser.getPcUser().getId() == user.getId()) {
@@ -228,7 +228,7 @@ public class ReportService {
 		String repCsv = downloadReport(report, merchant);
 		DateFilter df = repHelp.getDateFilterInIST(report.getTimeRange());
 		String fileName = "";
-		if (merchant != null) {
+		if (CommonUtil.isNotNull(merchant)) {
 			fileName = merchant.getAccessKey() + " - " + report.getId() + ".csv";
 		} else {
 			fileName = "PAYCR - " + report.getId() + ".csv";
