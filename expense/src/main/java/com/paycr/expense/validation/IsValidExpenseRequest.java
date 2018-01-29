@@ -6,7 +6,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.repository.ExpenseRepository;
@@ -37,7 +36,7 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 		String expenseCode = expense.getExpenseCode();
 		if (expense.isUpdate()) {
 			Expense extExpense = expRepo.findByExpenseCode(expenseCode);
-			if (StringUtils.isEmpty(expenseCode) || CommonUtil.isNull(extExpense)) {
+			if (CommonUtil.isEmpty(expenseCode) || CommonUtil.isNull(extExpense)) {
 				throw new PaycrException(Constants.FAILURE, "Expense not found");
 			}
 			if (ExpenseStatus.PAID.equals(extExpense.getStatus())) {

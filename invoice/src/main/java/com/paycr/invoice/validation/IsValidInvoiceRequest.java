@@ -6,7 +6,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
@@ -40,7 +39,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		String invoiceCode = invoice.getInvoiceCode();
 		if (invoice.isUpdate()) {
 			Invoice extInvoice = invRepo.findByInvoiceCode(invoiceCode);
-			if (StringUtils.isEmpty(invoiceCode) || CommonUtil.isNull(extInvoice)) {
+			if (CommonUtil.isEmpty(invoiceCode) || CommonUtil.isNull(extInvoice)) {
 				throw new PaycrException(Constants.FAILURE, "Invoice not found");
 			}
 			if (!InvoiceType.SINGLE.equals(extInvoice.getInvoiceType())) {

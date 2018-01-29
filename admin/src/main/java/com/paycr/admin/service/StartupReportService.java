@@ -11,6 +11,7 @@ import com.paycr.common.data.domain.Report;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
+import com.paycr.common.util.CommonUtil;
 
 @Component
 public class StartupReportService {
@@ -19,7 +20,7 @@ public class StartupReportService {
 	private ReportRepository repRepo;
 
 	public void createMasterReports() {
-		if (!repRepo.findAll().isEmpty()) {
+		if (CommonUtil.isNotEmpty(repRepo.findAll())) {
 			return;
 		}
 		Date timeNow = new Date();

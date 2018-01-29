@@ -122,7 +122,7 @@ public class AssetService {
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> assetList = csvReader.readAll();
 		csvReader.close();
-		if (assetList == null || assetList.isEmpty() || assetList.size() > 200) {
+		if (CommonUtil.isEmpty(assetList) || assetList.size() > 200) {
 			String[] record = new String[1];
 			record[0] = "Min 1 and Max 200 asset can be uploaded";
 			writer.writeNext(record);

@@ -137,7 +137,7 @@ public class InventoryService {
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> inventoryList = csvReader.readAll();
 		csvReader.close();
-		if (inventoryList == null || inventoryList.isEmpty() || inventoryList.size() > 200) {
+		if (CommonUtil.isEmpty(inventoryList) || inventoryList.size() > 200) {
 			String[] record = new String[1];
 			record[0] = "Min 1 and Max 200 inventory can be uploaded";
 			writer.writeNext(record);

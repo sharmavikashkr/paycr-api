@@ -68,13 +68,6 @@ public class CommonUtil {
 		return (isNull(objList) || (objList.isEmpty()));
 	}
 
-	public static String handleNull(String str) {
-		if (str == null) {
-			str = "";
-		}
-		return str;
-	}
-
 	public static String formatTwoDecimalPlaces(double value) {
 		return new DecimalFormat("#0.00").format(value);
 	}

@@ -62,7 +62,7 @@ public class GstHelper {
 			Gstr1B2CSmall b2cSmallInv = null;
 			List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream().filter(t -> (t.getGstRate() == tax.getValue()))
 					.collect(Collectors.toList());
-			if (CommonUtil.isNull(exstB2CSmallFt) || exstB2CSmallFt.isEmpty()) {
+			if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 				b2cSmallInv = new Gstr1B2CSmall();
 				b2cSmallInv.setGstRate(tax.getValue());
 				b2cSmallInv.setCgstAmount(BigDecimal.ZERO);
