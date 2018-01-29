@@ -41,7 +41,7 @@ public class Gstr1B2CSmallService {
 			for (Gstr1B2CSmall taxBrk : taxbrkList) {
 				List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream()
 						.filter(t -> (t.getGstRate() == taxBrk.getGstRate())).collect(Collectors.toList());
-				if (CommonUtil.isNull(exstB2CSmallFt) || exstB2CSmallFt.isEmpty()) {
+				if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 					b2cSmallList.add(taxBrk);
 				} else {
 					Gstr1B2CSmall b2cSmallInv = exstB2CSmallFt.get(0);
@@ -62,7 +62,7 @@ public class Gstr1B2CSmallService {
 					List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream()
 							.filter(t -> (t.getGstRate() == taxBrk.getGstRate())).collect(Collectors.toList());
 					if (NoteType.DEBIT.equals(note.getNoteType())) {
-						if (CommonUtil.isNull(exstB2CSmallFt) || exstB2CSmallFt.isEmpty()) {
+						if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 							b2cSmallList.add(taxBrk);
 						} else {
 							Gstr1B2CSmall b2cSmallInv = exstB2CSmallFt.get(0);
@@ -72,7 +72,7 @@ public class Gstr1B2CSmallService {
 							b2cSmallInv.setIgstAmount(b2cSmallInv.getIgstAmount().add(taxBrk.getIgstAmount()));
 						}
 					} else {
-						if (CommonUtil.isNull(exstB2CSmallFt) || exstB2CSmallFt.isEmpty()) {
+						if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 							Gstr1B2CSmall creditTaxBrk = new Gstr1B2CSmall();
 							creditTaxBrk.setGstRate(taxBrk.getGstRate());
 							creditTaxBrk.setTaxableAmount(BigDecimal.valueOf(-1).multiply(taxBrk.getTaxableAmount()));

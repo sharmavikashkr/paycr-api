@@ -41,7 +41,7 @@ public class Gstr1B2BService {
 			List<TaxAmount> taxAmtList = gstHelp.getTaxAmount(invoice.getItems());
 			List<TaxAmount> igstList = taxAmtList.stream().filter(t -> t.getTax().getName().equals("IGST"))
 					.collect(Collectors.toList());
-			if (CommonUtil.isNull(igstList) || igstList.isEmpty()) {
+			if (CommonUtil.isEmpty(igstList)) {
 				b2bInv.setSupplyType("Intra-State");
 			} else {
 				b2bInv.setSupplyType("Inter-State");
