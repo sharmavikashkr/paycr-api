@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,12 @@ public class PaymentService {
 			mv.addObject("invoice", invoice);
 			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
 			return mv;
+		}
+		if (CommonUtil.isNull(merchant.getPaymentSetting())
+				|| CommonUtil.isEmpty(merchant.getPaymentSetting().getRzpMerchantId())
+				|| CommonUtil.isEmpty(merchant.getPaymentSetting().getRzpKeyId())
+				|| CommonUtil.isEmpty(merchant.getPaymentSetting().getRzpSecretId())) {
+			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Online Payment not available");
 		}
 		ModelAndView mv = new ModelAndView("html/payinvoice");
 		mv.addObject("staticUrl", company.getStaticUrl());
