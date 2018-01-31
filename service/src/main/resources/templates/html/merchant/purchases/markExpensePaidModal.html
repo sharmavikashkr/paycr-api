@@ -31,9 +31,9 @@
 									</tr>
 									<tr>
 										<td>
-											<div class="form-group">
+											<div ng-class="(markPaidForm.payMode.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Pay Mode</label>
-												<select class="form-control" name="payMode" ng-model="markpaid.payMode">
+												<select class="form-control" name="payMode" ng-model="markpaid.payMode" required>
 													<option ng-repeat="payMode in payModes" ng-if="payMode != 'PAYCR'" value="{{payMode}}" selected="selected">{{payMode}}</option>
 												</select>
 											</div>

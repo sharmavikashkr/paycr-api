@@ -16,7 +16,7 @@ app.controller('ExpensePaymentController', function($scope, $http, $rootScope,
 			data : $scope.searchPaymentReq
 		}
 		$http(req).then(function(payments) {
-			$rootScope.paymentList = payments.data;
+			$rootScope.expPaymentList = payments.data;
 			$scope.loadPaymentPage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -24,16 +24,16 @@ app.controller('ExpensePaymentController', function($scope, $http, $rootScope,
 	}
 	$scope.loadPaymentPage = function(page) {
 		var pageSize = 15;
-		$rootScope.paymentResp = {};
-		$rootScope.paymentResp.paymentList = angular
-				.copy($rootScope.paymentList);
-		$rootScope.paymentResp.paymentList.splice(pageSize * page,
-				$rootScope.paymentList.length - pageSize);
-		$rootScope.paymentResp.paymentList.splice(0, pageSize * (page - 1));
-		$rootScope.paymentResp.page = page;
-		$rootScope.paymentResp.allPages = [];
-		var noOfPages = $rootScope.paymentList.length / pageSize;
-		if ($rootScope.paymentList.length % pageSize != 0) {
+		$rootScope.expPaymentResp = {};
+		$rootScope.expPaymentResp.paymentList = angular
+				.copy($rootScope.expPaymentList);
+		$rootScope.expPaymentResp.paymentList.splice(pageSize * page,
+				$rootScope.expPaymentList.length - pageSize);
+		$rootScope.expPaymentResp.paymentList.splice(0, pageSize * (page - 1));
+		$rootScope.expPaymentResp.page = page;
+		$rootScope.expPaymentResp.allPages = [];
+		var noOfPages = $rootScope.expPaymentList.length / pageSize;
+		if ($rootScope.expPaymentList.length % pageSize != 0) {
 			noOfPages = noOfPages + 1;
 		}
 		for (var i = 1; i <= noOfPages; i++) {

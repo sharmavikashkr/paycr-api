@@ -16,7 +16,7 @@ app.controller('InvoicePaymentController', function($scope, $http, $rootScope,
 			data : $scope.searchPaymentReq
 		}
 		$http(req).then(function(payments) {
-			$rootScope.paymentList = payments.data;
+			$rootScope.invPaymentList = payments.data;
 			$scope.loadPaymentPage(1);
 		}, function(data) {
 			$scope.serverMessage(data);
@@ -24,20 +24,20 @@ app.controller('InvoicePaymentController', function($scope, $http, $rootScope,
 	}
 	$scope.loadPaymentPage = function(page) {
 		var pageSize = 15;
-		$rootScope.paymentResp = {};
-		$rootScope.paymentResp.paymentList = angular
-				.copy($rootScope.paymentList);
-		$rootScope.paymentResp.paymentList.splice(pageSize * page,
-				$rootScope.paymentList.length - pageSize);
-		$rootScope.paymentResp.paymentList.splice(0, pageSize * (page - 1));
-		$rootScope.paymentResp.page = page;
-		$rootScope.paymentResp.allPages = [];
-		var noOfPages = $rootScope.paymentList.length / pageSize;
-		if ($rootScope.paymentList.length % pageSize != 0) {
+		$rootScope.invPaymentResp = {};
+		$rootScope.invPaymentResp.paymentList = angular
+				.copy($rootScope.invPaymentList);
+		$rootScope.invPaymentResp.paymentList.splice(pageSize * page,
+				$rootScope.invPaymentList.length - pageSize);
+		$rootScope.invPaymentResp.paymentList.splice(0, pageSize * (page - 1));
+		$rootScope.invPaymentResp.page = page;
+		$rootScope.invPaymentResp.allPages = [];
+		var noOfPages = $rootScope.invPaymentList.length / pageSize;
+		if ($rootScope.invPaymentList.length % pageSize != 0) {
 			noOfPages = noOfPages + 1;
 		}
 		for (var i = 1; i <= noOfPages; i++) {
-			$rootScope.paymentResp.allPages.push(i);
+			$rootScope.invPaymentResp.allPages.push(i);
 		}
 	}
 	$scope.downloadCsv = function() {
