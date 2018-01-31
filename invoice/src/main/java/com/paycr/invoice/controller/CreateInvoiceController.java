@@ -2,6 +2,8 @@ package com.paycr.invoice.controller;
 
 import java.io.IOException;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,13 +34,13 @@ public class CreateInvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public Invoice single(@RequestBody Invoice invoice) {
+	public Invoice single(@Valid @RequestBody Invoice invoice) {
 		return crtInvSer.single(invoice);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/child/{invoiceCode}", method = RequestMethod.POST)
-	public Invoice createChild(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq) {
+	public Invoice createChild(@PathVariable String invoiceCode, @Valid @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		return crtInvSer.createChild(invoiceCode, chldInvReq, user.getEmail());
 	}
@@ -53,7 +55,7 @@ public class CreateInvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/bulk/category/{invoiceCode}", method = RequestMethod.POST)
-	public void createCategory(@PathVariable String invoiceCode, @RequestBody ChildInvoiceRequest chldInvReq) {
+	public void createCategory(@PathVariable String invoiceCode, @Valid @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		crtInvSer.createCategory(invoiceCode, chldInvReq, user.getEmail(), merchant);

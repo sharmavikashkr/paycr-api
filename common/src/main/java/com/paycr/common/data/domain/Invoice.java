@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.Currency;
@@ -40,11 +41,14 @@ public class Invoice implements Cloneable {
 	@Enumerated(EnumType.STRING)
 	private InvoiceType invoiceType;
 
+	@NotNull
 	private Date invoiceDate;
 
+	@NotNull
 	@Column(precision = 10, scale = 2)
 	private BigDecimal total;
 
+	@NotNull
 	@Column(precision = 10, scale = 2)
 	private BigDecimal totalPrice;
 
@@ -54,12 +58,14 @@ public class Invoice implements Cloneable {
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
 
+	@NotNull
 	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
 	private boolean addItems;
 	private Date expiry;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 

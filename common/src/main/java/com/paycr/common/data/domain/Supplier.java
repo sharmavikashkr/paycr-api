@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -22,9 +24,16 @@ public class Supplier {
 	private Integer id;
 
 	private Date created;
+
+	@NotEmpty
 	private String name;
+
+	@NotEmpty
 	private String email;
+
+	@NotEmpty
 	private String mobile;
+
 	private String gstin;
 
 	private boolean active;

@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.ConsumerType;
 
@@ -27,9 +29,16 @@ public class Consumer {
 	private Integer id;
 
 	private Date created;
+
+	@NotEmpty
 	private String name;
+
+	@NotEmpty
 	private String email;
+
+	@NotEmpty
 	private String mobile;
+
 	private String gstin;
 	private boolean emailOnPay;
 	private boolean emailOnRefund;

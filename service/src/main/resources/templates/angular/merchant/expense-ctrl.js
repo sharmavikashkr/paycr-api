@@ -31,7 +31,9 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.supplierList) {
 				var supplier = $rootScope.supplierList[index];
 				if(supplier.email == email){
-					this.saveexpense.supplier = angular.copy(supplier);
+					newsup.email = supplier.email;
+					newsup.mobile = supplier.mobile;
+					newsup.name = supplier.name;
 					break;
 				}
 			}
@@ -40,7 +42,9 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.supplierList) {
 				var supplier = $rootScope.supplierList[index];
 				if(supplier.mobile == mobile){
-					this.saveexpense.supplier = angular.copy(supplier);
+					newsup.email = supplier.email;
+					newsup.mobile = supplier.mobile;
+					newsup.name = supplier.name;
 					break;
 				}
 			}
@@ -49,7 +53,9 @@ app.controller('ExpenseController', function($scope, $http, $rootScope,
 			for(var index in $rootScope.supplierList) {
 				var supplier = $rootScope.supplierList[index];
 				if(supplier.name == name){
-					this.saveexpense.supplier = angular.copy(supplier);
+					newsup.email = supplier.email;
+					newsup.mobile = supplier.mobile;
+					newsup.name = supplier.name;
 					break;
 				}
 			}

@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.ExpenseStatus;
@@ -31,15 +33,21 @@ public class Expense {
 
 	private Date created;
 	private String expenseCode;
+
+	@NotNull
 	private String invoiceCode;
+
+	@NotNull
 	private Date invoiceDate;
 
 	@ManyToOne
 	private Merchant merchant;
 
+	@NotNull
 	@Column(precision = 10, scale = 2)
 	private BigDecimal total;
 
+	@NotNull
 	@Column(precision = 10, scale = 2)
 	private BigDecimal totalPrice;
 
@@ -49,14 +57,18 @@ public class Expense {
 	@Column(precision = 10, scale = 2)
 	private BigDecimal discount;
 
+	@NotNull
 	@Column(precision = 10, scale = 2)
 	private BigDecimal payAmount;
 
 	private boolean addItems;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 
+	@Valid
+	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Supplier supplier;
 

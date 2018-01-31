@@ -11,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.ItemType;
@@ -25,16 +28,22 @@ public class Inventory {
 
 	private Date created;
 
+	@NotEmpty
 	private String name;
+
+	@NotEmpty
 	private String code;
+
 	private String hsnsac;
 	private String description;
+
+	@NotNull
 	private BigDecimal rate;
 	private String createdBy;
 
 	@Enumerated(EnumType.STRING)
 	private ItemType type;
-	
+
 	private boolean active;
 
 	@ManyToOne

@@ -3,8 +3,8 @@ package com.paycr.merchant.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +37,7 @@ public class AssetController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
-	public void newAsset(@RequestBody Asset asset) {
+	public void newAsset(@Valid @RequestBody Asset asset) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		astSer.newAsset(asset, merchant, user.getEmail());
@@ -58,7 +58,7 @@ public class AssetController {
 	}
 
 	@RequestMapping("/bulk/upload/format")
-	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void downloadFormat(HttpServletResponse response) throws Exception {
 		String content = "Code1,Name1,Rate1,HSN/SAC1,Description1\r\nCode2,Name2,Rate2,HSN/SAC2,Description2";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkAsset.csv\"");
 		response.setContentType("application/csv");

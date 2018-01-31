@@ -2,6 +2,8 @@ package com.paycr.common.bean;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.ConsumerCategory;
 import com.paycr.common.data.domain.RecurringInvoice;
@@ -11,6 +13,8 @@ public class ChildInvoiceRequest {
 
 	private Consumer consumer;
 	private List<ConsumerCategory> conCatList;
+
+	@NotNull
 	private InvoiceType invoiceType;
 	private RecurringInvoice recInv;
 

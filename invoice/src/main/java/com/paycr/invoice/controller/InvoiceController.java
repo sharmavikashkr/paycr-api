@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +53,7 @@ public class InvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.POST)
-	public void notify(@PathVariable String invoiceCode, @RequestBody InvoiceNotify invoiceNotify) {
+	public void notify(@PathVariable String invoiceCode, @Valid @RequestBody InvoiceNotify invoiceNotify) {
 		invSer.notify(invoiceCode, invoiceNotify);
 	}
 
@@ -71,7 +72,7 @@ public class InvoiceController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/note/new", method = RequestMethod.POST)
-	public void newNote(@RequestBody InvoiceNote note) throws Exception {
+	public void newNote(@Valid @RequestBody InvoiceNote note) throws Exception {
 		invSer.newNote(note);
 	}
 

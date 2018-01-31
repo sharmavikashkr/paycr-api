@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,6 +21,8 @@ public class InvoiceItem {
 	private Integer id;
 
 	private int quantity;
+	
+	@NotNull
 	private BigDecimal price;
 
 	@ManyToOne

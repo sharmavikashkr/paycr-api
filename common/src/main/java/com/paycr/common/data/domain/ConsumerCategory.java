@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -21,7 +23,10 @@ public class ConsumerCategory {
 	@ManyToOne
 	private Consumer consumer;
 
+	@NotEmpty
 	private String name;
+
+	@NotEmpty
 	private String value;
 
 	public Consumer getConsumer() {

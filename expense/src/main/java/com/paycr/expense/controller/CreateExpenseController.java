@@ -1,5 +1,7 @@
 package com.paycr.expense.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +22,7 @@ public class CreateExpenseController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public Expense single(@RequestBody Expense expense) {
+	public Expense single(@Valid @RequestBody Expense expense) {
 		return crtExpSer.single(expense);
 	}
 

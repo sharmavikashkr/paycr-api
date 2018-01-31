@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -35,11 +34,10 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
-import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
+import com.paycr.common.util.PaycrUtil;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -77,8 +75,8 @@ public class InvoiceSearchService {
 	private EmailEngine emailEngine;
 
 	public List<Invoice> fetchInvoiceList(SearchInvoiceRequest request) {
-		vaidateRequest(request);
-		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		PaycrUtil.validateRequest(request);
+		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
 				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
 		request.setCreatedTo(
@@ -91,8 +89,8 @@ public class InvoiceSearchService {
 	}
 
 	public List<InvoicePayment> fetchPaymentList(SearchInvoicePaymentRequest request) {
-		vaidateRequest(request);
-		validateDates(request.getCreatedFrom(), request.getCreatedTo());
+		PaycrUtil.validateRequest(request);
+		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
 				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
 		request.setCreatedTo(
@@ -105,7 +103,7 @@ public class InvoiceSearchService {
 	}
 
 	public Set<Consumer> fetchConsumerList(SearchConsumerRequest request) {
-		vaidateRequest(request);
+		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
 			merchant = merRepo.findOne(request.getMerchant());
@@ -179,34 +177,12 @@ public class InvoiceSearchService {
 	}
 
 	public List<Inventory> fetchInventoryList(SearchInventoryRequest request) {
-		vaidateRequest(request);
+		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
 			merchant = merRepo.findOne(request.getMerchant());
 		}
 		return invenDao.findInventory(request, merchant);
-	}
-
-	private void vaidateRequest(Object request) {
-		if (CommonUtil.isNull(request)) {
-			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
-		}
-	}
-
-	private void validateDates(Date from, Date to) {
-		if (CommonUtil.isNull(from) || CommonUtil.isNull(to)) {
-			throw new PaycrException(Constants.FAILURE, "From/To dates cannot be null");
-		}
-		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(from)));
-		to = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(to)));
-		Calendar calTo = Calendar.getInstance();
-		calTo.setTime(to);
-		Calendar calFrom = Calendar.getInstance();
-		calFrom.setTime(from);
-		calFrom.add(Calendar.DAY_OF_YEAR, 90);
-		if (calFrom.before(calTo)) {
-			throw new PaycrException(Constants.FAILURE, "Search duration cannot be greater than 90 days");
-		}
 	}
 
 }

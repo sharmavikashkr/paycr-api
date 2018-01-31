@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ public class ConsumerController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/new")
-	public void newConsumer(@RequestBody Consumer consumer) {
+	public void newConsumer(@Valid @RequestBody Consumer consumer) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		conSer.newConsumer(consumer, merchant, user.getEmail());
@@ -53,13 +54,13 @@ public class ConsumerController {
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/address/update/{consumerId}")
-	public void updateConsumerAddress(@RequestBody Address address, @PathVariable Integer consumerId) {
+	public void updateConsumerAddress(@Valid @RequestBody Address address, @PathVariable Integer consumerId) {
 		conSer.updateConsumerAddress(address, consumerId);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping("/category/new/{consumerId}")
-	public void addCategory(@RequestBody ConsumerCategory conCat, @PathVariable Integer consumerId) {
+	public void addCategory(@Valid @RequestBody ConsumerCategory conCat, @PathVariable Integer consumerId) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		conSer.addCategory(consumerId, conCat, merchant);
 	}

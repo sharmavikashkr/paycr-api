@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -33,7 +35,11 @@ public class InvoiceNotify implements Serializable {
 	private boolean emailPdf;
 	private boolean ccMe;
 	private String ccEmail;
+
+	@NotEmpty
 	private String emailNote;
+
+	@NotEmpty
 	private String emailSubject;
 
 	public Integer getId() {
