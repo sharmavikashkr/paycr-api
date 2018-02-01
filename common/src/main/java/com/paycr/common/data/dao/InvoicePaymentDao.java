@@ -26,10 +26,10 @@ public class InvoicePaymentDao {
 			squery.append(" p.merchant = :merchant AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-			squery.append(" p.invoiceCode = :invoiceCode AND");
+			squery.append(" p.invoiceCode LIKE :invoiceCode AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-			squery.append(" p.paymentRefNo = :paymentRefNo AND");
+			squery.append(" p.paymentRefNo LIKE :paymentRefNo AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getPayType())) {
 			squery.append(" p.payType = :payType AND");
@@ -48,10 +48,10 @@ public class InvoicePaymentDao {
 			query.setParameter("merchant", merchant);
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-			query.setParameter("invoiceCode", searchReq.getInvoiceCode());
+			query.setParameter("invoiceCode", "%" + searchReq.getInvoiceCode() + "%");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-			query.setParameter("paymentRefNo", searchReq.getPaymentRefNo());
+			query.setParameter("paymentRefNo", "%" + searchReq.getPaymentRefNo() + "%");
 		}
 		if (!CommonUtil.isNull(searchReq.getPayType())) {
 			query.setParameter("payType", searchReq.getPayType());

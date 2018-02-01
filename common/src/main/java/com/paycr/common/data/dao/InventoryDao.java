@@ -31,7 +31,7 @@ public class InventoryDao {
 			squery.append(" i.code = :code AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
-			squery.append(" i.name = :name AND");
+			squery.append(" i.name LIKE :name AND");
 		}
 		squery.append(" i.id > 0 ORDER BY i.id DESC");
 
@@ -44,7 +44,7 @@ public class InventoryDao {
 			query.setParameter("code", searchReq.getCode());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
-			query.setParameter("name", searchReq.getName());
+			query.setParameter("name", "%" + searchReq.getName() + "%");
 		}
 		return query.getResultList();
 	}
@@ -54,8 +54,7 @@ public class InventoryDao {
 		StringBuilder squery = new StringBuilder("SELECT invn.code as code,invn.name as name,invn.rate as rate,"
 				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN ii.quantity ELSE 0 END) as saleQuantity,"
 				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN ii.price ELSE 0 END) as saleAmt FROM pc_inventory invn"
-				+ " JOIN pc_invoice_item ii ON ii.inventory_id = invn.id"
-				+ " JOIN pc_invoice i ON ii.invoice_id = i.id"
+				+ " JOIN pc_invoice_item ii ON ii.inventory_id = invn.id" + " JOIN pc_invoice i ON ii.invoice_id = i.id"
 				+ " JOIN pc_invoice_payment p ON i.invoice_code = p.invoice_code WHERE");
 		if (!CommonUtil.isNull(merchant)) {
 			squery.append(" i.merchant_id = :merchantId AND");

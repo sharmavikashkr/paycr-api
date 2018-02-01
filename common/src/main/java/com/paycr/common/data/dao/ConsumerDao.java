@@ -30,11 +30,14 @@ public class ConsumerDao {
 			if (!CommonUtil.isNull(merchant)) {
 				squery.append(" c.merchant = :merchant AND");
 			}
+			if (!CommonUtil.isEmpty(searchReq.getName())) {
+				squery.append(" c.name LIKE :name AND");
+			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" c.email = :email AND");
+				squery.append(" c.email LIKE :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" c.mobile = :mobile AND");
+				squery.append(" c.mobile LIKE :mobile AND");
 			}
 			squery.append(" c.id > 0 ORDER BY c.id DESC");
 
@@ -43,11 +46,14 @@ public class ConsumerDao {
 			if (!CommonUtil.isNull(merchant)) {
 				query.setParameter("merchant", merchant);
 			}
+			if (!CommonUtil.isEmpty(searchReq.getName())) {
+				query.setParameter("name", "%" + searchReq.getName() + "%");
+			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				query.setParameter("email", searchReq.getEmail());
+				query.setParameter("email", "%" + searchReq.getEmail() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				query.setParameter("mobile", searchReq.getMobile());
+				query.setParameter("mobile", "%" + searchReq.getMobile() + "%");
 			}
 			conSet.addAll(query.getResultList());
 		} else {
@@ -58,11 +64,14 @@ public class ConsumerDao {
 				if (!CommonUtil.isNull(merchant)) {
 					squery.append(" cc.consumer.merchant = :merchant AND");
 				}
+				if (!CommonUtil.isEmpty(searchReq.getName())) {
+					squery.append(" cc.consumer.name LIKE :name AND");
+				}
 				if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-					squery.append(" cc.consumer.email = :email AND");
+					squery.append(" cc.consumer.email LIKE :email AND");
 				}
 				if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-					squery.append(" cc.consumer.mobile = :mobile AND");
+					squery.append(" cc.consumer.mobile LIKE :mobile AND");
 				}
 				squery.append(" cc.consumer.id > 0 ORDER BY cc.consumer.id DESC");
 
@@ -73,11 +82,14 @@ public class ConsumerDao {
 				if (!CommonUtil.isNull(merchant)) {
 					query.setParameter("merchant", merchant);
 				}
+				if (!CommonUtil.isEmpty(searchReq.getName())) {
+					query.setParameter("name", "%" + searchReq.getName() + "%");
+				}
 				if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-					query.setParameter("email", searchReq.getEmail());
+					query.setParameter("email", "%" + searchReq.getEmail() + "%");
 				}
 				if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-					query.setParameter("mobile", searchReq.getMobile());
+					query.setParameter("mobile", "%" + searchReq.getMobile() + "%");
 				}
 				List<Consumer> conList = query.getResultList();
 				if (conSet.isEmpty()) {

@@ -31,7 +31,7 @@ public class SubscriptionDao {
 			squery.append(" s.payMode = :payMode AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getSubsCode())) {
-			squery.append(" s.subscriptionCode = :subsCode AND");
+			squery.append(" s.subscriptionCode LIKE :subsCode AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			squery.append(" s.created between :startDate AND :endDate AND");
@@ -50,7 +50,7 @@ public class SubscriptionDao {
 			query.setParameter("payMode", searchReq.getPayMode());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getSubsCode())) {
-			query.setParameter("subsCode", searchReq.getSubsCode());
+			query.setParameter("subsCode", "%" + searchReq.getSubsCode() + "%");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));

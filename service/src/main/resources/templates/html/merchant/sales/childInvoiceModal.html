@@ -38,8 +38,8 @@
 											<div class="form-group">
 												<label class="control-label">Recurr Every</label>
 												<select class="form-control" ng-model="childInvoiceReq.recInv.recurr">
-													<option value="WEEKLY">Weekly</option>
-													<option value="MONTHLY">Monthly</option>
+													<option value="WEEKLY">WEEKLY</option>
+													<option value="MONTHLY">MONTHLY</option>
 												</select>
 											</div>
 										</td>
@@ -119,7 +119,7 @@
 										<td>
 											<div ng-class="(childInvoiceForm.mobile.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Mobile</label>
-												<input class="form-control" ng-model="childInvoiceReq.consumer.mobile" list="mobile-auto-complete" ng-change="setConsumer(childInvoiceReq.consumer,'mobile')" name="mobile" autocomplete="off" type="text" placeholder="Mobile" ng-pattern="patterns.mobilePattern" required />
+												<input class="form-control" ng-model="childInvoiceReq.consumer.mobile" list="mobile-auto-complete" ng-change="setConsumer(childInvoiceReq.consumer,'MOBILE')" name="mobile" autocomplete="off" type="text" placeholder="Mobile" ng-pattern="patterns.mobilePattern" required />
 												<datalist id="mobile-auto-complete">
 													<option ng-repeat="consumer in consumerList" ng-if="consumer.active" ng-value="consumer.mobile">
 												</datalist>

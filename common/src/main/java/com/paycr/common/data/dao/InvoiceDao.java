@@ -30,19 +30,19 @@ public class InvoiceDao {
 				squery.append(" i.merchant = :merchant AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				squery.append(" i.invoiceCode = :invoiceCode AND");
+				squery.append(" i.invoiceCode LIKE :invoiceCode AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getInvoiceType())) {
 				squery.append(" i.invoiceType = :invoiceType AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())) {
-				squery.append(" i.parent.invoiceCode = :parentInvoiceCode AND");
+				squery.append(" i.parent.invoiceCode LIKE :parentInvoiceCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" i.consumer.email = :email AND");
+				squery.append(" i.consumer.email LIKE :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" i.consumer.mobile = :mobile AND");
+				squery.append(" i.consumer.mobile LIKE :mobile AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				squery.append(" i.payAmount = :amount AND");
@@ -61,19 +61,19 @@ public class InvoiceDao {
 				query.setParameter("merchant", merchant);
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				query.setParameter("invoiceCode", searchReq.getInvoiceCode());
+				query.setParameter("invoiceCode", "%" + searchReq.getInvoiceCode() + "%");
 			}
 			if (!CommonUtil.isNull(searchReq.getInvoiceType())) {
 				query.setParameter("invoiceType", searchReq.getInvoiceType());
 			}
 			if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())) {
-				query.setParameter("parentInvoiceCode", searchReq.getParentInvoiceCode());
+				query.setParameter("parentInvoiceCode", "%" + searchReq.getParentInvoiceCode() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				query.setParameter("email", searchReq.getEmail());
+				query.setParameter("email", "%" + searchReq.getEmail() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				query.setParameter("mobile", searchReq.getMobile());
+				query.setParameter("mobile", "%" + searchReq.getMobile() + "%");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				query.setParameter("amount", searchReq.getAmount());
@@ -93,19 +93,19 @@ public class InvoiceDao {
 				squery.append(" i.invoice.merchant = :merchant AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				squery.append(" i.invoice.invoiceCode = :invoiceCode AND");
+				squery.append(" i.invoice.invoiceCode LIKE :invoiceCode AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getInvoiceType())) {
 				squery.append(" i.invoice.invoiceType = :invoiceType AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())) {
-				squery.append(" i.invoice.parent.invoiceCode = :parentInvoiceCode AND");
+				squery.append(" i.invoice.parent.invoiceCode LIKE :parentInvoiceCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" i.invoice.consumer.email = :email AND");
+				squery.append(" i.invoice.consumer.email LIKE :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" i.invoice.consumer.mobile = :mobile AND");
+				squery.append(" i.invoice.consumer.mobile LIKE :mobile AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				squery.append(" i.invoice.payAmount = :amount AND");
@@ -125,19 +125,19 @@ public class InvoiceDao {
 				query.setParameter("merchant", merchant);
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				query.setParameter("invoiceCode", searchReq.getInvoiceCode());
+				query.setParameter("invoiceCode", "%" + searchReq.getInvoiceCode() + "%");
 			}
 			if (!CommonUtil.isNull(searchReq.getInvoiceType())) {
 				query.setParameter("invoiceType", searchReq.getInvoiceType());
 			}
 			if (!CommonUtil.isEmpty(searchReq.getParentInvoiceCode())) {
-				query.setParameter("parentInvoiceCode", searchReq.getParentInvoiceCode());
+				query.setParameter("parentInvoiceCode", "%" + searchReq.getParentInvoiceCode() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				query.setParameter("email", searchReq.getEmail());
+				query.setParameter("email", "%" + searchReq.getEmail() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				query.setParameter("mobile", searchReq.getMobile());
+				query.setParameter("mobile", "%" + searchReq.getMobile() + "%");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				query.setParameter("amount", searchReq.getAmount());

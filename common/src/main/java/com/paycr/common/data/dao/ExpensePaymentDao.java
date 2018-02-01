@@ -26,10 +26,10 @@ public class ExpensePaymentDao {
 			squery.append(" p.merchant = :merchant AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-			squery.append(" p.expenseCode = :expenseCode AND");
+			squery.append(" p.expenseCode LIKE :expenseCode AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-			squery.append(" p.paymentRefNo = :paymentRefNo AND");
+			squery.append(" p.paymentRefNo LIKE :paymentRefNo AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getPayType())) {
 			squery.append(" p.payType = :payType AND");
@@ -48,10 +48,10 @@ public class ExpensePaymentDao {
 			query.setParameter("merchant", merchant);
 		}
 		if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-			query.setParameter("expenseCode", searchReq.getExpenseCode());
+			query.setParameter("expenseCode", "%" + searchReq.getExpenseCode() + "%");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-			query.setParameter("paymentRefNo", searchReq.getPaymentRefNo());
+			query.setParameter("paymentRefNo", "%" + searchReq.getPaymentRefNo() + "%");
 		}
 		if (!CommonUtil.isNull(searchReq.getPayType())) {
 			query.setParameter("payType", searchReq.getPayType());

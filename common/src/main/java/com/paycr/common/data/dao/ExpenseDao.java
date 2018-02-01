@@ -30,16 +30,16 @@ public class ExpenseDao {
 				squery.append(" i.merchant = :merchant AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-				squery.append(" i.expenseCode = :expenseCode AND");
+				squery.append(" i.expenseCode LIKE :expenseCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				squery.append(" i.invoiceCode = :invoiceCode AND");
+				squery.append(" i.invoiceCode LIKE :invoiceCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" i.supplier.email = :email AND");
+				squery.append(" i.supplier.email LIKE :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" i.supplier.mobile = :mobile AND");
+				squery.append(" i.supplier.mobile LIKE :mobile AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				squery.append(" i.payAmount = :amount AND");
@@ -58,16 +58,16 @@ public class ExpenseDao {
 				query.setParameter("merchant", merchant);
 			}
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-				query.setParameter("expenseCode", searchReq.getExpenseCode());
+				query.setParameter("expenseCode", "%" + searchReq.getExpenseCode() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				query.setParameter("invoiceCode", searchReq.getInvoiceCode());
+				query.setParameter("invoiceCode", "%" + searchReq.getInvoiceCode() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				query.setParameter("email", searchReq.getEmail());
+				query.setParameter("email", "%" + searchReq.getEmail() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				query.setParameter("mobile", searchReq.getMobile());
+				query.setParameter("mobile", "%" + searchReq.getMobile() + "%");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				query.setParameter("amount", searchReq.getAmount());
@@ -87,16 +87,16 @@ public class ExpenseDao {
 				squery.append(" i.expense.merchant = :merchant AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-				squery.append(" i.expense.expenseCode = :expenseCode AND");
+				squery.append(" i.expense.expenseCode LIKE :expenseCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				squery.append(" i.invoiceCode = :invoiceCode AND");
+				squery.append(" i.invoiceCode LIKE :invoiceCode AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				squery.append(" i.expense.supplier.email = :email AND");
+				squery.append(" i.expense.supplier.email LIKE :email AND");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				squery.append(" i.expense.supplier.mobile = :mobile AND");
+				squery.append(" i.expense.supplier.mobile LIKE :mobile AND");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				squery.append(" i.expense.payAmount = :amount AND");
@@ -116,16 +116,16 @@ public class ExpenseDao {
 				query.setParameter("merchant", merchant);
 			}
 			if (!CommonUtil.isEmpty(searchReq.getExpenseCode())) {
-				query.setParameter("expenseCode", searchReq.getExpenseCode());
+				query.setParameter("expenseCode", "%" + searchReq.getExpenseCode() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getInvoiceCode())) {
-				query.setParameter("invoiceCode", searchReq.getInvoiceCode());
+				query.setParameter("invoiceCode", "%" + searchReq.getInvoiceCode() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-				query.setParameter("email", searchReq.getEmail());
+				query.setParameter("email", "%" + searchReq.getEmail() + "%");
 			}
 			if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-				query.setParameter("mobile", searchReq.getMobile());
+				query.setParameter("mobile", "%" + searchReq.getMobile() + "%");
 			}
 			if (!CommonUtil.isNull(searchReq.getAmount())) {
 				query.setParameter("amount", searchReq.getAmount());

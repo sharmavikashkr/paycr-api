@@ -31,7 +31,7 @@ public class AssetDao {
 			squery.append(" i.code = :code AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
-			squery.append(" i.name = :name AND");
+			squery.append(" i.name LIKE :name AND");
 		}
 		squery.append(" i.id > 0 ORDER BY i.id DESC");
 
@@ -44,7 +44,7 @@ public class AssetDao {
 			query.setParameter("code", searchReq.getCode());
 		}
 		if (!CommonUtil.isEmpty(searchReq.getName())) {
-			query.setParameter("name", searchReq.getName());
+			query.setParameter("name", "%" + searchReq.getName() + "%");
 		}
 		return query.getResultList();
 	}
@@ -54,8 +54,7 @@ public class AssetDao {
 		StringBuilder squery = new StringBuilder("SELECT ast.code as code,ast.name as name,ast.rate as rate,"
 				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN ei.quantity ELSE 0 END) as saleQuantity,"
 				+ "SUM(CASE WHEN p.pay_type = 'SALE' THEN ei.price ELSE 0 END) as saleAmt FROM pc_asset ast"
-				+ " JOIN pc_expense_item ei ON ei.asset_id = ast.id"
-				+ " JOIN pc_expense i ON ei.expense_id = i.id"
+				+ " JOIN pc_expense_item ei ON ei.asset_id = ast.id" + " JOIN pc_expense i ON ei.expense_id = i.id"
 				+ " JOIN pc_expense_payment p ON i.expense_code = p.expense_code WHERE");
 		if (!CommonUtil.isNull(merchant)) {
 			squery.append(" i.merchant_id = :merchantId AND");

@@ -28,6 +28,14 @@
 						<tr>
 							<td>
 								<div class="form-group">
+									<label class="control-label">Consumer Name</label>
+									<input class="form-control" ng-model="searchConsumerReq.name" placeholder="Name" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="form-group">
 									<label class="control-label">Consumer Email</label>
 									<input class="form-control" ng-model="searchConsumerReq.email" placeholder="name@email.com" />
 								</div>
@@ -185,8 +193,8 @@
 																	<td><strong>Consumer Type</strong></td>
 																	<td>
 																		<select ng-model="consumer.type" class="form-control">
-																			<option value="CUSTOMER">Customer</option>
-																			<option value="BUSINESS">Business</option>
+																			<option value="CUSTOMER">CUSTOMER</option>
+																			<option value="BUSINESS">BUSINESS</option>
 																		</select>
 																	</td>
 																</tr>

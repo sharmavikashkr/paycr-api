@@ -25,10 +25,10 @@ public class PromotionDao {
 			squery.append(" m.name LIKE :name AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-			squery.append(" m.email = :email AND");
+			squery.append(" m.email LIKE :email AND");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getPhone())) {
-			squery.append(" m.phone = :phone AND");
+			squery.append(" m.phone LIKE :phone AND");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			squery.append(" m.created between :startDate AND :endDate AND");
@@ -41,10 +41,10 @@ public class PromotionDao {
 			query.setParameter("name", "%" + searchReq.getName() + "%");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-			query.setParameter("email", searchReq.getEmail());
+			query.setParameter("email", "%" + searchReq.getEmail() + "%");
 		}
 		if (!CommonUtil.isEmpty(searchReq.getPhone())) {
-			query.setParameter("phone", searchReq.getPhone());
+			query.setParameter("phone", "%" + searchReq.getPhone() + "%");
 		}
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			query.setParameter("startDate", DateUtil.getStartOfDay(searchReq.getCreatedFrom()));

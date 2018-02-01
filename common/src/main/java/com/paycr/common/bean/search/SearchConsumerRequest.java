@@ -7,6 +7,7 @@ import com.paycr.common.data.domain.ConsumerCategory;
 public class SearchConsumerRequest {
 
 	private Integer merchant;
+	private String name;
 	private String email;
 	private String mobile;
 	private List<ConsumerCategory> conCatList;
@@ -41,5 +42,13 @@ public class SearchConsumerRequest {
 
 	public void setConCatList(List<ConsumerCategory> conCatList) {
 		this.conCatList = conCatList;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

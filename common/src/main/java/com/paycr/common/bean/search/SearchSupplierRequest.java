@@ -3,6 +3,7 @@ package com.paycr.common.bean.search;
 public class SearchSupplierRequest {
 
 	private Integer merchant;
+	private String name;
 	private String email;
 	private String mobile;
 
@@ -28,5 +29,13 @@ public class SearchSupplierRequest {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
