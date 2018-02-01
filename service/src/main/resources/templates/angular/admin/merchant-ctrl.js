@@ -2,7 +2,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 		$cookies) {
 	var dateNow = moment().toDate();
 	var dateStart = moment().subtract(30, 'day').toDate();
-	$scope.searchMerchantReq = {
+	$rootScope.searchMerchantReq = {
 		"createdFrom" : dateStart,
 		"createdTo" : dateNow
 	}
@@ -13,7 +13,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 			headers : {
 				"Authorization" : "Bearer " + $cookies.get("access_token")
 			},
-			data : $scope.searchMerchantReq
+			data : $rootScope.searchMerchantReq
 		}
 		$http(req).then(function(merchants) {
 			$rootScope.merchantList = merchants.data;
@@ -23,7 +23,7 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 			$scope.serverMessage(data);
 		});
 	}
-	$scope.loadMerchantPage = function(page) {
+	$rootScope.loadMerchantPage = function(page) {
 		var pageSize = 15;
 		$rootScope.merchantResp = {};
 		$rootScope.merchantResp.merchantList = angular
@@ -106,8 +106,8 @@ app.controller('MerchantController', function($scope, $rootScope, $http,
 				'hide');
 	}
 	$scope.clearMerchantSearch = function() {
-		$scope.searchMerchantReq.email = null;
-		$scope.searchMerchantReq.mobile = null;
-		$scope.searchMerchantReq.name = null;
+		$rootScope.searchMerchantReq.email = null;
+		$rootScope.searchMerchantReq.mobile = null;
+		$rootScope.searchMerchantReq.name = null;
 	}
 });

@@ -18,7 +18,6 @@ app.controller('PromotionController', function($scope, $rootScope, $http,
 		$http(req).then(function(promotions) {
 			$rootScope.promotionList = promotions.data;
 			$scope.loadPromotionPage(1);
-			$rootScope.loadAdminSetting();
 		}, function(data) {
 			$scope.serverMessage(data);
 		});
