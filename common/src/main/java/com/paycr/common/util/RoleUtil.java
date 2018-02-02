@@ -34,5 +34,8 @@ public class RoleUtil {
 			+ " or hasAuthority('ROLE_PAYCR_OPS')";
 
 	public static final String MERCHANT_OPS_AUTH = "hasAuthority('ROLE_MERCHANT') or hasAuthority('ROLE_MERCHANT_OPS')";
+	
+	public static final String PAYCR_ADVISOR_AUTH = "hasAuthority('ROLE_PAYCR') or hasAuthority('ROLE_PAYCR_SUPERVISOR')"
+			+ " or hasAuthority('ROLE_PAYCR_ADVISOR')";
 
 }

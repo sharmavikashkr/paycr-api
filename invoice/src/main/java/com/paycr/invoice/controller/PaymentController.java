@@ -18,6 +18,7 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.invoice.service.PaymentService;
 
 @RestController
+@RequestMapping("/payment")
 public class PaymentController {
 
 	@Autowired
@@ -44,16 +45,16 @@ public class PaymentController {
 			@RequestParam("mobile") String mobile, @RequestParam("signature") String signature,
 			HttpServletResponse response) throws IOException {
 		invoiceCode = paySer.updateConsumerAndPay(invoiceCode, name, email, mobile, signature);
-		response.sendRedirect("/" + invoiceCode);
+		response.sendRedirect("/payment/" + invoiceCode);
 	}
 
-	@RequestMapping("/payment/decline/{invoiceCode}")
+	@RequestMapping("/decline/{invoiceCode}")
 	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
 		paySer.decline(invoiceCode);
 		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
 
-	@RequestMapping(value = "/payment/return/{invoiceCode}", method = RequestMethod.POST)
+	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)
 	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response)
 			throws IOException, Exception {
 		String invoiceCode = null;

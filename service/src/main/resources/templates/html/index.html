@@ -965,12 +965,12 @@
 				<div class="contact-form">
 					<h3>Contact Info</h3>
 					<address>
-						<strong>Paycr, Inc.</strong><br> Sr Iriz Tower, Baner-Pashan
-						link road<br> Pune, Maharashtra 411015<br> <i
-							class="fa fa-phone"></i> 9970197591
+						<strong>Paycr, Inc.</strong><br>
+						<!-- Sr Iriz Tower, Baner-Pashan link road<br> -->
+						Pune, Maharashtra 411015<br>
+						<i class="fa fa-phone"></i> 9970197591
 					</address>
-					<form id="main-contact-form" name="contact-form" method="post"
-						action="#">
+					<form id="main-contact-form" name="contact-form" method="post" action="/contactUs/new">
 						<div class="form-group">
 							<input type="text" name="name" class="form-control" placeholder="Name" required>
 						</div>
@@ -983,6 +983,7 @@
 						<div class="form-group">
 							<textarea name="message" class="form-control" rows="8" placeholder="Message" required></textarea>
 						</div>
+						<input type="hidden" name="type" value="Website Contact"/>
 						<button type="submit" class="btn btn-warning">Send Message</button>
 					</form>
 				</div>

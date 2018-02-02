@@ -33,6 +33,7 @@
 	<script src="/angular/common/users-ctrl.js"></script>
 	<script src="/angular/admin/admin-setting-ctrl.js"></script>
 	<script src="/angular/admin/promotion-ctrl.js"></script>
+	<script src="/angular/admin/contactUs-ctrl.js"></script>
 	<script src="/angular/common/profile-ctrl.js"></script>
 	<style> 
 	.md-datepicker-calendar-pane{
@@ -54,6 +55,7 @@
 		    <div ng-if="user.access.supervisor" id="usersTab" class="tab-pane fade" ng-include="templateUrl('common','usersTab')"></div>
 		    <div ng-if="user.access.supervisor" id="settingsTab" class="tab-pane fade" ng-include="templateUrl('admin','adminSettingTab')"></div>
 		    <div ng-if="user.access.supervisor" id="promotionTab" class="tab-pane fade" ng-include="templateUrl('admin','promotionTab')"></div>
+		    <div ng-if="user.access.advisor" id="contactUsTab" class="tab-pane fade" ng-include="templateUrl('admin','contactUsTab')"></div>
         	<div id="profileTab" class="tab-pane fade" ng-include="templateUrl('common','profileTab')"></div>
     	</div>
     	<div ng-include="templateUrl('common','footer')"></div>

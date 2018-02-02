@@ -51,7 +51,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 
 	public void notify(InvoiceNotify invoiceNotify) {
 		Invoice invoice = invoiceNotify.getInvoice();
-		String invoiceUrl = company.getAppUrl() + "/" + invoice.getInvoiceCode();
+		String invoiceUrl = company.getAppUrl() + "/payment/" + invoice.getInvoiceCode();
 		Merchant merchant = invoice.getMerchant();
 		if (invoiceNotify.isSendSms()) {
 			Sms sms = new Sms();
@@ -107,7 +107,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 		templateProps.put("note", invoiceNotify.getEmailNote());
 		templateProps.put("baseUrl", company.getAppUrl());
 		templateProps.put("staticUrl", company.getStaticUrl());
-		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());
+		templateProps.put("invoiceUrl", company.getAppUrl() + "/payment/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/invoice_email.ftl"),
 				templateProps);
 	}
@@ -116,7 +116,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 		Invoice invoice = invoiceNotify.getInvoice();
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("invoice", invoice);
-		templateProps.put("invoiceUrl", company.getAppUrl() + "/" + invoice.getInvoiceCode());
+		templateProps.put("invoiceUrl", company.getAppUrl() + "/payment/" + invoice.getInvoiceCode());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("sms/invoice_sms.ftl"),
 				templateProps);
 	}
