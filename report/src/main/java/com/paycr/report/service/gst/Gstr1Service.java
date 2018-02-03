@@ -28,6 +28,7 @@ import com.paycr.common.data.repository.InvoiceNoteRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.FilingPeriod;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 
@@ -103,7 +104,7 @@ public class Gstr1Service {
 		if (gstSet.isInvUnpaid()) {
 			gstStatuses.add(InvoiceStatus.UNPAID);
 		}
-		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, start, end);
+		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, InvoiceType.SINGLE, start, end);
 		invoiceList = invoiceList.stream().filter(t -> CommonUtil.isNotEmpty(t.getItems()))
 				.collect(Collectors.toList());
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);

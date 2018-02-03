@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.type.InvoiceStatus;
+import com.paycr.common.type.InvoiceType;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
@@ -32,9 +33,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 			+ "i.status = ?2 AND i.invoice_date BETWEEN ?3 AND ?4", nativeQuery = true)
 	public List<Object[]> findCountAndSumForMerchant(Integer merchantId, String status, Date startDate, Date endDate);
 
-	@Query(value = "SELECT i FROM Invoice i WHERE i.merchant = ?1 AND i.status in ?2 AND i.invoiceDate BETWEEN ?3 AND ?4")
-	public List<Invoice> findInvoicesForMerchant(Merchant merchant, List<InvoiceStatus> statuses, Date startDate,
-			Date endDate);
+	@Query(value = "SELECT i FROM Invoice i WHERE i.merchant = ?1 AND i.status in ?2 AND invoiceType = ?3 AND i.invoiceDate BETWEEN ?4 AND ?5")
+	public List<Invoice> findInvoicesForMerchant(Merchant merchant, List<InvoiceStatus> statuses, InvoiceType type,
+			Date startDate, Date endDate);
 
 	@Query("SELECT i from Invoice i WHERE i.note.noteCode = ?1")
 	public Invoice findByNoteCode(String noteCode);

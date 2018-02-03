@@ -73,7 +73,8 @@ public class GstHelper {
 			} else {
 				b2cSmallInv = exstB2CSmallFt.get(0);
 			}
-			b2cSmallInv.setTaxableAmount(b2cSmallInv.getTaxableAmount().add(item.getPrice()));
+			b2cSmallInv.setTaxableAmount(b2cSmallInv.getTaxableAmount()
+					.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))));
 			List<TaxMaster> itemTaxes = new ArrayList<>();
 			List<TaxMaster> childTaxes = taxMRepo.findByParent(tax);
 			if (CommonUtil.isEmpty(childTaxes)) {
