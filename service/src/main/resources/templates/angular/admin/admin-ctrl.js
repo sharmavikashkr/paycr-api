@@ -20,7 +20,7 @@ function($scope, $rootScope, $http, $cookies, $timeout) {
 		"mobilePattern" : "\\d{10}",
 		"amountPattern" : "\\d{1,7}",
 		"numberPattern" : "\\d{1,5}",
-		"taxValuePattern" : "\\d{1,2}",
+		"taxValuePattern" : "\\d{1,2}(\.\\d{0,2})?",
 		"passPattern" : /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
 	}
 	$scope.dismissServerAlert = function() {

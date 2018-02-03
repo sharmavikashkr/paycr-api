@@ -23,7 +23,7 @@
 										<td>
 											<div ng-class="(newTaxForm.value.$valid)?'':'has-error'" class="form-group">
 												<label class="control-label">Value</label>
-												<input class="form-control" ng-model="newTax.value" name="value" type="number" placeholder="Tax Value" ng-pattern="patterns.taxValuePattern" required />
+												<input class="form-control" ng-model="newTax.value" name="value" type="number" step="0.1" placeholder="Tax Value" ng-pattern="patterns.taxValuePattern" required />
 											</div>
 										</td>
 									</tr>
