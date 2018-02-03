@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.type.NoteType;
+import com.paycr.common.type.SupplyType;
 
 public class Gstr1B2BNote {
 
@@ -15,8 +16,9 @@ public class Gstr1B2BNote {
 	private String invoiceNo;
 	private Date invoiceDate;
 	private NoteType noteType;
+	private BigDecimal taxableAmount;
 	private BigDecimal noteAmount;
-	private String supplyType;
+	private SupplyType supplyType;
 	private String noteReason;
 	private List<TaxAmount> taxAmount;
 
@@ -76,11 +78,11 @@ public class Gstr1B2BNote {
 		this.noteAmount = noteAmount;
 	}
 
-	public String getSupplyType() {
+	public SupplyType getSupplyType() {
 		return supplyType;
 	}
 
-	public void setSupplyType(String supplyType) {
+	public void setSupplyType(SupplyType supplyType) {
 		this.supplyType = supplyType;
 	}
 
@@ -98,6 +100,14 @@ public class Gstr1B2BNote {
 
 	public void setNoteReason(String noteReason) {
 		this.noteReason = noteReason;
+	}
+
+	public BigDecimal getTaxableAmount() {
+		return taxableAmount;
+	}
+
+	public void setTaxableAmount(BigDecimal taxableAmount) {
+		this.taxableAmount = taxableAmount;
 	}
 
 }

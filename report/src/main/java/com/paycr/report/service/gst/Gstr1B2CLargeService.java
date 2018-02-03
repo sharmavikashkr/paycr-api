@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.bean.gst.Gstr1B2CLarge;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.GstHelper;
@@ -34,6 +35,7 @@ public class Gstr1B2CLargeService {
 		List<Gstr1B2CLarge> b2cLargeList = new ArrayList<Gstr1B2CLarge>();
 		for (Invoice invoice : largeInvList) {
 			Gstr1B2CLarge b2cLargeInv = new Gstr1B2CLarge();
+			b2cLargeInv.setTaxableAmount(invoice.getTotal());
 			b2cLargeInv.setInvoiceAmount(invoice.getTotalPrice());
 			b2cLargeInv.setInvoiceDate(invoice.getInvoiceDate());
 			b2cLargeInv.setInvoiceNo(invoice.getInvoiceCode());
@@ -44,9 +46,9 @@ public class Gstr1B2CLargeService {
 			List<TaxAmount> igstList = taxAmtList.stream().filter(t -> t.getTax().getName().equals("IGST"))
 					.collect(Collectors.toList());
 			if (CommonUtil.isEmpty(igstList)) {
-				b2cLargeInv.setSupplyType("Intra-State");
+				b2cLargeInv.setSupplyType(SupplyType.INTRA);
 			} else {
-				b2cLargeInv.setSupplyType("Inter-State");
+				b2cLargeInv.setSupplyType(SupplyType.INTER);
 			}
 			b2cLargeInv.setTaxAmount(taxAmtList);
 			b2cLargeList.add(b2cLargeInv);
@@ -58,8 +60,8 @@ public class Gstr1B2CLargeService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Invoice No", "Invoice Amount", "Invoice Date", "Place Of Supply", "Supply Type",
-				"Tax Amount" });
+		records.add(new String[] { "Invoice No", "Taxable Amount", "Invoice Amount", "Invoice Date", "Place Of Supply",
+				"Supply Type", "Tax Amount" });
 		Iterator<Gstr1B2CLarge> it = b2cLargeReport.iterator();
 		while (it.hasNext()) {
 			Gstr1B2CLarge b2clr = it.next();
@@ -68,9 +70,9 @@ public class Gstr1B2CLargeService {
 				sb.append(taxAmt.getTax().getName() + " " + taxAmt.getTax().getValue() + " : " + taxAmt.getAmount()
 						+ ",");
 			}
-			records.add(new String[] { b2clr.getInvoiceNo(), b2clr.getInvoiceAmount().toString(),
-					DateUtil.getUTCTimeInISTStr(b2clr.getInvoiceDate()), b2clr.getPlaceOfSupply(),
-					b2clr.getSupplyType(), sb.toString() });
+			records.add(new String[] { b2clr.getInvoiceNo(), b2clr.getTaxableAmount().toString(),
+					b2clr.getInvoiceAmount().toString(), DateUtil.getUTCTimeInISTStr(b2clr.getInvoiceDate()),
+					b2clr.getPlaceOfSupply(), b2clr.getSupplyType().name(), sb.toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();

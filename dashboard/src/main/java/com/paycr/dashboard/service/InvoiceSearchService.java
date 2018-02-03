@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
@@ -151,6 +152,7 @@ public class InvoiceSearchService {
 		return writer.toString();
 	}
 
+	@Async
 	public void mailPayments(SearchInvoicePaymentRequest request) throws IOException {
 		PcUser user = secSer.findLoggedInUser();
 		Date timeNow = DateUtil.getUTCTimeInIST(new Date());

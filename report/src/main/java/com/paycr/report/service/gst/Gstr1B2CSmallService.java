@@ -40,7 +40,9 @@ public class Gstr1B2CSmallService {
 			List<Gstr1B2CSmall> taxbrkList = gstHelp.getTaxBreakup(invoice.getItems());
 			for (Gstr1B2CSmall taxBrk : taxbrkList) {
 				List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream()
-						.filter(t -> (t.getGstRate() == taxBrk.getGstRate())).collect(Collectors.toList());
+						.filter(t -> (t.getGstRate() == taxBrk.getGstRate()
+								&& taxBrk.getSupplyType().equals(t.getSupplyType())))
+						.collect(Collectors.toList());
 				if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 					b2cSmallList.add(taxBrk);
 				} else {
@@ -60,7 +62,9 @@ public class Gstr1B2CSmallService {
 				List<Gstr1B2CSmall> taxbrkList = gstHelp.getTaxBreakup(note.getItems());
 				for (Gstr1B2CSmall taxBrk : taxbrkList) {
 					List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream()
-							.filter(t -> (t.getGstRate() == taxBrk.getGstRate())).collect(Collectors.toList());
+							.filter(t -> (t.getGstRate() == taxBrk.getGstRate()
+									&& taxBrk.getSupplyType().equals(t.getSupplyType())))
+							.collect(Collectors.toList());
 					if (NoteType.DEBIT.equals(note.getNoteType())) {
 						if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 							b2cSmallList.add(taxBrk);
@@ -99,13 +103,14 @@ public class Gstr1B2CSmallService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Gst Rate", "Taxable Amount", "CGST Amount", "SGST Amount", "IGST Amount" });
+		records.add(new String[] { "Supply Type", "Gst Rate", "Taxable Amount", "CGST Amount", "SGST Amount",
+				"IGST Amount" });
 		Iterator<Gstr1B2CSmall> it = b2cSmallReport.iterator();
 		while (it.hasNext()) {
 			Gstr1B2CSmall b2bsr = it.next();
-			records.add(new String[] { String.valueOf(b2bsr.getGstRate()), b2bsr.getTaxableAmount().toString(),
-					b2bsr.getCgstAmount().toString(), b2bsr.getSgstAmount().toString(),
-					b2bsr.getIgstAmount().toString() });
+			records.add(new String[] { b2bsr.getSupplyType().name(), String.valueOf(b2bsr.getGstRate()),
+					b2bsr.getTaxableAmount().toString(), b2bsr.getCgstAmount().toString(),
+					b2bsr.getSgstAmount().toString(), b2bsr.getIgstAmount().toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();

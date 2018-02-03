@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.bean.gst.Gstr1B2B;
 import com.paycr.common.data.domain.Invoice;
+import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.GstHelper;
@@ -32,6 +33,7 @@ public class Gstr1B2BService {
 		for (Invoice invoice : b2bInvList) {
 			Gstr1B2B b2bInv = new Gstr1B2B();
 			b2bInv.setGstin(invoice.getConsumer().getGstin());
+			b2bInv.setTaxableAmount(invoice.getTotal());
 			b2bInv.setInvoiceAmount(invoice.getTotalPrice());
 			b2bInv.setInvoiceDate(invoice.getInvoiceDate());
 			b2bInv.setInvoiceNo(invoice.getInvoiceCode());
@@ -42,9 +44,9 @@ public class Gstr1B2BService {
 			List<TaxAmount> igstList = taxAmtList.stream().filter(t -> t.getTax().getName().equals("IGST"))
 					.collect(Collectors.toList());
 			if (CommonUtil.isEmpty(igstList)) {
-				b2bInv.setSupplyType("Intra-State");
+				b2bInv.setSupplyType(SupplyType.INTRA);
 			} else {
-				b2bInv.setSupplyType("Inter-State");
+				b2bInv.setSupplyType(SupplyType.INTER);
 			}
 			b2bInv.setTaxAmount(taxAmtList);
 			b2bList.add(b2bInv);
@@ -56,8 +58,8 @@ public class Gstr1B2BService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "GSTIN", "Invoice No", "Invoice Amount", "Invoice Date", "Place Of Supply",
-				"Supply Type", "Tax Amount" });
+		records.add(new String[] { "GSTIN", "Invoice No", "Taxable Amount", "Invoice Amount", "Invoice Date",
+				"Place Of Supply", "Supply Type", "Tax Amount" });
 		Iterator<Gstr1B2B> it = b2bReport.iterator();
 		while (it.hasNext()) {
 			Gstr1B2B b2br = it.next();
@@ -66,9 +68,9 @@ public class Gstr1B2BService {
 				sb.append(taxAmt.getTax().getName() + " " + taxAmt.getTax().getValue() + " : " + taxAmt.getAmount()
 						+ ",");
 			}
-			records.add(new String[] { b2br.getGstin(), b2br.getInvoiceNo(), b2br.getInvoiceAmount().toString(),
-					DateUtil.getUTCTimeInISTStr(b2br.getInvoiceDate()), b2br.getPlaceOfSupply(), b2br.getSupplyType(),
-					sb.toString() });
+			records.add(new String[] { b2br.getGstin(), b2br.getInvoiceNo(), b2br.getTaxableAmount().toString(),
+					b2br.getInvoiceAmount().toString(), DateUtil.getUTCTimeInISTStr(b2br.getInvoiceDate()),
+					b2br.getPlaceOfSupply(), b2br.getSupplyType().name(), sb.toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();

@@ -13,6 +13,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
@@ -104,7 +105,8 @@ public class Gstr1Service {
 		if (gstSet.isInvUnpaid()) {
 			gstStatuses.add(InvoiceStatus.UNPAID);
 		}
-		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, InvoiceType.SINGLE, start, end);
+		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, InvoiceType.SINGLE, start,
+				end);
 		invoiceList = invoiceList.stream().filter(t -> CommonUtil.isNotEmpty(t.getItems()))
 				.collect(Collectors.toList());
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);
@@ -122,6 +124,7 @@ public class Gstr1Service {
 		return IOUtils.toByteArray(fis);
 	}
 
+	@Async
 	public void mailGstr1Report(String recepient, Merchant merchant, String periodStr) throws Exception {
 		String fileName = "GSTR1 Report - " + periodStr + ".zip";
 		String filePath = getAssembledZipFilePath(merchant, periodStr);

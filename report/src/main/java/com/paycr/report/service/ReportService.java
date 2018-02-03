@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
@@ -224,6 +225,7 @@ public class ReportService {
 		return null;
 	}
 
+	@Async
 	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {
 		String repCsv = downloadReport(report, merchant);
 		DateFilter df = repHelp.getDateFilterInIST(report.getTimeRange());

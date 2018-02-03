@@ -13,6 +13,7 @@ import com.paycr.common.bean.gst.Gstr1B2CSmall;
 import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.TaxMasterRepository;
+import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 
 @Component
@@ -60,8 +61,16 @@ public class GstHelper {
 		for (InvoiceItem item : items) {
 			TaxMaster tax = item.getTax();
 			Gstr1B2CSmall b2cSmallInv = null;
-			List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream().filter(t -> (t.getGstRate() == tax.getValue()))
-					.collect(Collectors.toList());
+			List<Gstr1B2CSmall> exstB2CSmallFt = new ArrayList<>();
+			if (item.getTax().getName().equals("IGST")) {
+				exstB2CSmallFt = b2cSmallList.stream()
+						.filter(t -> ((t.getGstRate() == tax.getValue()) && t.getSupplyType().equals(SupplyType.INTER)))
+						.collect(Collectors.toList());
+			} else {
+				exstB2CSmallFt = b2cSmallList.stream()
+						.filter(t -> ((t.getGstRate() == tax.getValue()) && t.getSupplyType().equals(SupplyType.INTRA)))
+						.collect(Collectors.toList());
+			}
 			if (CommonUtil.isEmpty(exstB2CSmallFt)) {
 				b2cSmallInv = new Gstr1B2CSmall();
 				b2cSmallInv.setGstRate(tax.getValue());
@@ -88,10 +97,13 @@ public class GstHelper {
 						.setScale(2, BigDecimal.ROUND_HALF_UP);
 				if (itemTax.getName().equals("SGST")) {
 					b2cSmallInv.setSgstAmount(b2cSmallInv.getSgstAmount().add(taxAmt));
+					b2cSmallInv.setSupplyType(SupplyType.INTRA);
 				} else if (itemTax.getName().equals("CGST")) {
 					b2cSmallInv.setCgstAmount(b2cSmallInv.getCgstAmount().add(taxAmt));
+					b2cSmallInv.setSupplyType(SupplyType.INTRA);
 				} else if (itemTax.getName().equals("IGST")) {
 					b2cSmallInv.setIgstAmount(b2cSmallInv.getIgstAmount().add(taxAmt));
+					b2cSmallInv.setSupplyType(SupplyType.INTER);
 				}
 			}
 		}

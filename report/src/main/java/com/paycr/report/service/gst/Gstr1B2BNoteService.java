@@ -15,6 +15,7 @@ import com.paycr.common.bean.gst.Gstr1B2BNote;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.GstHelper;
@@ -43,15 +44,16 @@ public class Gstr1B2BNoteService {
 			b2bNote.setInvoiceNo(note.getInvoiceCode());
 			b2bNote.setInvoiceDate(invoice.getInvoiceDate());
 			b2bNote.setNoteType(note.getNoteType());
+			b2bNote.setTaxableAmount(note.getTotal());
 			b2bNote.setNoteAmount(note.getTotalPrice());
 			b2bNote.setNoteReason(note.getNoteReason());
 			List<TaxAmount> taxAmtList = gstHelp.getTaxAmount(note.getItems());
 			List<TaxAmount> igstList = taxAmtList.stream().filter(t -> t.getTax().getName().equals("IGST"))
 					.collect(Collectors.toList());
 			if (CommonUtil.isEmpty(igstList)) {
-				b2bNote.setSupplyType("Intra-State");
+				b2bNote.setSupplyType(SupplyType.INTRA);
 			} else {
-				b2bNote.setSupplyType("Inter-State");
+				b2bNote.setSupplyType(SupplyType.INTER);
 			}
 			b2bNote.setTaxAmount(taxAmtList);
 			b2bNoteList.add(b2bNote);
@@ -64,7 +66,7 @@ public class Gstr1B2BNoteService {
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
 		records.add(new String[] { "GSTIN", "Note No", "Note Date", "Invoice No", "Invoice Date", "Note Type",
-				"Note Amount", "Supply Type", "Note Reason", "Tax Amount" });
+				"Taxable Amount", "Note Amount", "Supply Type", "Note Reason", "Tax Amount" });
 		Iterator<Gstr1B2BNote> it = b2bNoteReport.iterator();
 		while (it.hasNext()) {
 			Gstr1B2BNote b2bnr = it.next();
@@ -76,7 +78,8 @@ public class Gstr1B2BNoteService {
 			records.add(new String[] { b2bnr.getGstin(), b2bnr.getNoteNo(),
 					DateUtil.getUTCTimeInISTStr(b2bnr.getNoteDate()), b2bnr.getInvoiceNo(),
 					DateUtil.getUTCTimeInISTStr(b2bnr.getInvoiceDate()), b2bnr.getNoteType().name(),
-					b2bnr.getNoteAmount().toString(), b2bnr.getSupplyType(), b2bnr.getNoteReason(), sb.toString() });
+					b2bnr.getTaxableAmount().toString(), b2bnr.getNoteAmount().toString(), b2bnr.getSupplyType().name(),
+					b2bnr.getNoteReason(), sb.toString() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();

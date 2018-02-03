@@ -5,14 +5,16 @@ import java.util.Date;
 import java.util.List;
 
 import com.paycr.common.bean.TaxAmount;
+import com.paycr.common.type.SupplyType;
 
 public class Gstr1B2CLarge {
 
 	private String invoiceNo;
+	private BigDecimal taxableAmount;
 	private BigDecimal invoiceAmount;
 	private Date invoiceDate;
 	private String placeOfSupply;
-	private String supplyType;
+	private SupplyType supplyType;
 	private List<TaxAmount> taxAmount;
 
 	public String getInvoiceNo() {
@@ -47,11 +49,11 @@ public class Gstr1B2CLarge {
 		this.placeOfSupply = placeOfSupply;
 	}
 
-	public String getSupplyType() {
+	public SupplyType getSupplyType() {
 		return supplyType;
 	}
 
-	public void setSupplyType(String supplyType) {
+	public void setSupplyType(SupplyType supplyType) {
 		this.supplyType = supplyType;
 	}
 
@@ -61,6 +63,14 @@ public class Gstr1B2CLarge {
 
 	public void setTaxAmount(List<TaxAmount> taxAmount) {
 		this.taxAmount = taxAmount;
+	}
+
+	public BigDecimal getTaxableAmount() {
+		return taxableAmount;
+	}
+
+	public void setTaxableAmount(BigDecimal taxableAmount) {
+		this.taxableAmount = taxableAmount;
 	}
 
 }
