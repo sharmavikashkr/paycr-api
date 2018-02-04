@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.OfflineSubscription;
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.GstSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.Merchant;
@@ -65,6 +66,9 @@ public class RegisterService {
 
 	@Autowired
 	private SubscriptionService subsService;
+
+	@Autowired
+	private NotifyService<Merchant> notifySer;
 
 	public void createMerchant(Merchant merchant, String createdBy) {
 		merValidator.validate(merchant);
@@ -154,6 +158,7 @@ public class RegisterService {
 		offSubs.setMethod(PayMode.CASH.name());
 		offSubs.setQuantity(1);
 		subsService.offlineSubscription(offSubs);
+		notifySer.notify(merchant);
 	}
 
 }
