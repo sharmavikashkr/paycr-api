@@ -1,4 +1,4 @@
-package com.paycr.dashboard.helper;
+package com.paycr.common.util;
 
 public class StateHelper {
 
