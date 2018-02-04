@@ -27,6 +27,8 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.dashboard.helper.StateHelper;
+import com.paycr.dashboard.validation.IsValidGstinRequest;
 import com.paycr.merchant.validation.SupplierValidator;
 
 import au.com.bytecode.opencsv.CSVParser;
@@ -49,11 +51,15 @@ public class SupplierService {
 	private SecurityService secSer;
 
 	@Autowired
+	private IsValidGstinRequest gstinValid;
+
+	@Autowired
 	private SupplierValidator conVal;
 
 	public void newSupplier(Supplier supplier, Merchant merchant, String createdBy) {
 		supplier.setMerchant(merchant);
 		conVal.validate(supplier);
+		gstinValid.validate(supplier.getGstin());
 		supplier.setActive(true);
 		supplier.setCreated(new Date());
 		supplier.setCreatedBy(createdBy);
@@ -68,6 +74,7 @@ public class SupplierService {
 		}
 		exstCon.setGstin(supplier.getGstin());
 		exstCon.setActive(supplier.isActive());
+		gstinValid.validate(supplier.getGstin());
 		conRepo.save(exstCon);
 	}
 
@@ -107,7 +114,7 @@ public class SupplierService {
 						billAddr.setAddressLine1(supplier[4].trim());
 						billAddr.setAddressLine2(supplier[5].trim());
 						billAddr.setCity(supplier[6].trim());
-						billAddr.setState(supplier[7].trim());
+						billAddr.setState(StateHelper.getStateForCode(supplier[7].trim()));
 						billAddr.setPincode(supplier[8].trim());
 						billAddr.setCountry(supplier[9].trim());
 						validateAddress(billAddr);

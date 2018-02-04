@@ -65,7 +65,9 @@ public class SupplierController {
 
 	@RequestMapping("/bulk/upload/format")
 	public void downloadFormat(HttpServletResponse response) throws Exception {
-		String content = "Name1,Email1,Mobile1,GSTIN1,Addr Line1,Addr Line2,city,district,state,pincode,country\r\nName2,Email2,Mobile2,GSTIN2,Addr Line1,Addr Line2,city,district,state,pincode,country";
+		String content = "Name1,Email1,Mobile1,GSTIN1,Addr Line1,Addr Line2,city,district,state code,pincode,country\r\n"
+				+ "Name2,Email2,Mobile2,GSTIN2,Addr Line1,Addr Line2,city,district,04,pincode,India"
+				+ "Name3,Email3,Mobile3,GSTIN3,Addr Line1,Addr Line2,city,district,27,pincode,India";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkSupplier.csv\"");
 		response.setContentType("application/csv");
 		response.getOutputStream().write(content.getBytes());

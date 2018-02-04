@@ -101,9 +101,9 @@ public class ConsumerController {
 
 	@RequestMapping("/bulk/upload/format")
 	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String content = "Name1*,Email1*,Mobile1*,GSTIN1,Category Name, Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,Bill State,Bill Pincode,Bill Country,YES(copyBillAddrToShipAddr)\r\n"
-				+ "Name2*,Email2*,Mobile2*,GSTIN2,Category Name,Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,Bill State,Bill Pincode,Bill Country,NO\r\n"
-				+ "Name3*,Email3*,Mobile3*,GSTIN3,Category Name,Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,Bill State,Bill Pincode,Bill Country,YES\r\n";
+		String content = "Name1*,Email1*,Mobile1*,GSTIN1,Category Name, Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,Bill State Code,Bill Pincode,Bill Country,YES(copyBillAddrToShipAddr)\r\n"
+				+ "Name2*,Email2*,Mobile2*,GSTIN2,Category Name,Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,04,Bill Pincode,India,NO\r\n"
+				+ "Name3*,Email3*,Mobile3*,GSTIN3,Category Name,Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,27,Bill Pincode,India,YES\r\n";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkConsumer.csv\"");
 		response.setContentType("application/csv");
 		response.getOutputStream().write(content.getBytes());

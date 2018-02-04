@@ -9,6 +9,55 @@
 				<form name="childInvoiceForm">
 					<div class="row">
 						<div class="col-md-12">
+							<h5>State Code check</h5>
+							<table class="table table-bordered table-responsive">
+								<tr>
+									<td>
+										<div class="form-group">
+											<select name="state" class="form-control" ng-model="statecheck" required>
+												<option value="" selected>-------Select State-------</option>
+												<option value="35">Andaman and Nicobar Islands</option>
+												<option value="37">Andhra Pradesh</option>
+												<option value="12">Arunachal Pradesh</option>
+												<option value="18">Assam</option>
+												<option value="10">Bihar</option>
+												<option value="04">Chandigarh</option>
+												<option value="22">Chhattisgarh</option>
+												<option value="26">Dadra and Nagar Haveli</option>
+												<option value="25">Daman and Diu</option>
+												<option value="07">Delhi</option>
+												<option value="30">Goa</option>
+												<option value="24">Gujarat</option>
+												<option value="06">Haryana</option>
+												<option value="02">Himachal Pradesh</option>
+												<option value="01">Jammu and Kashmir</option>
+												<option value="20">Jharkhand</option>
+												<option value="29">Karnataka</option>
+												<option value="32">Kerala</option>
+												<option value="31">Lakshadweep</option>
+												<option value="23">Madhya Pradesh</option>
+												<option value="27">Maharashtra</option>
+												<option value="14">Manipur</option>
+												<option value="17">Meghalaya</option>
+												<option value="15">Mizoram</option>
+												<option value="13">Nagaland</option>
+												<option value="21">Odisha</option>
+												<option value="34">Pondicherry</option>
+												<option value="03">Punjab</option>
+												<option value="08">Rajasthan</option>
+												<option value="11">Sikkim</option>
+												<option value="33">Tamil Nadu</option>
+												<option value="36">Telangana</option>
+												<option value="16">Tripura</option>
+												<option value="05">Uttaranchal</option>
+												<option value="09">Uttar Pradesh</option>
+												<option value="19">West Bengal</option>
+											</select>
+										</div>
+									</td>
+									<td><strong>{{statecheck}}</strong></td>
+								</tr>
+							</table>
 							<div class="form-group">
 								<label class="control-label">Upload Consumers (CSV): (<a href="/consumer/bulk/upload/format">Download format</a>)</label>
 								<input type="file" onchange="angular.element(this).scope().uploadConsumers(this.files)" accept=".csv" />

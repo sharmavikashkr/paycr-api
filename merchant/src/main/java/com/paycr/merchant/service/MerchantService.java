@@ -15,6 +15,7 @@ import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.dashboard.validation.IsValidGstinRequest;
 
 @Service
 public class MerchantService {
@@ -22,9 +23,13 @@ public class MerchantService {
 	@Autowired
 	private MerchantRepository merRepo;
 
+	@Autowired
+	private IsValidGstinRequest gstinValid;
+
 	public void updateAccount(Merchant merchant, Merchant mer) {
 		merchant.setName(mer.getName());
 		merchant.setGstin(mer.getGstin());
+		gstinValid.validate(mer.getGstin());
 		merRepo.save(merchant);
 	}
 

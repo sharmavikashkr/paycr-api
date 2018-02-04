@@ -35,6 +35,8 @@ import com.paycr.common.type.AddressType;
 import com.paycr.common.type.ConsumerType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.dashboard.helper.StateHelper;
+import com.paycr.dashboard.validation.IsValidGstinRequest;
 import com.paycr.merchant.validation.ConsumerValidator;
 
 import au.com.bytecode.opencsv.CSVParser;
@@ -63,6 +65,9 @@ public class ConsumerService {
 	private ConsumerValidator conVal;
 
 	@Autowired
+	private IsValidGstinRequest gstinValid;
+
+	@Autowired
 	private ConsumerDao conDao;
 
 	public void newConsumer(Consumer consumer, Merchant merchant, String createdBy) {
@@ -71,6 +76,7 @@ public class ConsumerService {
 		consumer.setEmailOnPay(true);
 		consumer.setEmailOnRefund(true);
 		conVal.validate(consumer);
+		gstinValid.validate(consumer.getGstin());
 		if (CommonUtil.isEmpty(consumer.getGstin())) {
 			consumer.setType(ConsumerType.CUSTOMER);
 		} else {
@@ -101,6 +107,7 @@ public class ConsumerService {
 		exstCon.setEmailOnPay(consumer.isEmailOnPay());
 		exstCon.setEmailOnRefund(consumer.isEmailOnRefund());
 		exstCon.setType(consumer.getType());
+		gstinValid.validate(consumer.getGstin());
 		conRepo.save(exstCon);
 	}
 
@@ -219,7 +226,7 @@ public class ConsumerService {
 						billAddr.setAddressLine1(consumer[6].trim());
 						billAddr.setAddressLine2(consumer[7].trim());
 						billAddr.setCity(consumer[8].trim());
-						billAddr.setState(consumer[9].trim());
+						billAddr.setState(StateHelper.getStateForCode(consumer[9].trim()));
 						billAddr.setPincode(consumer[10].trim());
 						billAddr.setCountry(consumer[11].trim());
 						validateAddress(billAddr);

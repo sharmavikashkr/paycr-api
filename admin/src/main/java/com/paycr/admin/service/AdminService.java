@@ -22,6 +22,7 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.PricingType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.Constants;
+import com.paycr.dashboard.validation.IsValidGstinRequest;
 
 @Service
 public class AdminService {
@@ -43,6 +44,9 @@ public class AdminService {
 
 	@Autowired
 	private TaxMasterRepository taxMRepo;
+
+	@Autowired
+	private IsValidGstinRequest gstinValid;
 
 	public void createPricing(Pricing pricing) {
 		pricingValidator.validate(pricing);
@@ -71,6 +75,7 @@ public class AdminService {
 		payset.setRzpMerchantId(setting.getPaymentSetting().getRzpMerchantId());
 		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());
 		payset.setRzpSecretId(setting.getPaymentSetting().getRzpSecretId());
+		gstinValid.validate(setting.getGstin());
 		adsetRepo.save(adset);
 	}
 
