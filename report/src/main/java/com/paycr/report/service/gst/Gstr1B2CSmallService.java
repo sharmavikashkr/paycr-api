@@ -6,12 +6,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.gst.Gstr1B2CSmall;
+import com.paycr.common.bean.gst.Gstr1Report;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -30,7 +34,9 @@ public class Gstr1B2CSmallService {
 	@Autowired
 	private InvoiceRepository invRepo;
 
-	public List<Gstr1B2CSmall> collectB2CSmallList(List<Invoice> invoiceList, List<InvoiceNote> invNoteList) {
+	@Async
+	public Future<Boolean> collectB2CSmallList(Gstr1Report gstr1Report, List<Invoice> invoiceList,
+			List<InvoiceNote> invNoteList) {
 		List<Invoice> largeInvList = invoiceList.stream()
 				.filter(t -> ((BigDecimal.valueOf(250000).compareTo(t.getTotalPrice()) >= 0)
 						&& CommonUtil.isEmpty(t.getConsumer().getGstin())))
@@ -96,7 +102,8 @@ public class Gstr1B2CSmallService {
 				}
 			}
 		}
-		return b2cSmallList;
+		gstr1Report.setB2cSmall(b2cSmallList);
+		return new AsyncResult<Boolean>(Boolean.TRUE);
 	}
 
 	public String getB2CSmallCsv(List<Gstr1B2CSmall> b2cSmallReport) throws IOException {

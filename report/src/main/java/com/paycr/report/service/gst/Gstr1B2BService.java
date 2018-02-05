@@ -5,13 +5,17 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.bean.gst.Gstr1B2B;
+import com.paycr.common.bean.gst.Gstr1Report;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
@@ -26,7 +30,8 @@ public class Gstr1B2BService {
 	@Autowired
 	private GstHelper gstHelp;
 
-	public List<Gstr1B2B> collectB2BList(List<Invoice> invoiceList) {
+	@Async
+	public Future<Boolean> collectB2BList(Gstr1Report gstr1Report, List<Invoice> invoiceList) {
 		List<Invoice> b2bInvList = invoiceList.stream().filter(t -> (!CommonUtil.isEmpty(t.getConsumer().getGstin())))
 				.collect(Collectors.toList());
 		List<Gstr1B2B> b2bList = new ArrayList<Gstr1B2B>();
@@ -51,7 +56,8 @@ public class Gstr1B2BService {
 			b2bInv.setTaxAmount(taxAmtList);
 			b2bList.add(b2bInv);
 		}
-		return b2bList;
+		gstr1Report.setB2b(b2bList);
+		return new AsyncResult<Boolean>(Boolean.TRUE);
 	}
 
 	public String getB2BCsv(List<Gstr1B2B> b2bReport) throws IOException {

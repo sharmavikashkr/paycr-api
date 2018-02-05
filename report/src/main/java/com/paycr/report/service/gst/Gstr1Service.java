@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -67,7 +68,6 @@ public class Gstr1Service {
 	private EmailEngine emailEngine;
 
 	public Gstr1Report loadGstr1Report(Merchant merchant, String periodStr) throws Exception {
-		Gstr1Report gstr1Report = new Gstr1Report();
 		Date start = null;
 		Date end = null;
 		String[] periodArr = periodStr.split("-");
@@ -110,11 +110,17 @@ public class Gstr1Service {
 		invoiceList = invoiceList.stream().filter(t -> CommonUtil.isNotEmpty(t.getItems()))
 				.collect(Collectors.toList());
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);
-		gstr1Report.setB2cLarge(b2cLargeSer.collectB2CLargeList(invoiceList));
-		gstr1Report.setB2cSmall(b2cSmallSer.collectB2CSmallList(invoiceList, noteList));
-		gstr1Report.setB2b(b2bSer.collectB2BList(invoiceList));
-		gstr1Report.setB2cNote(b2cNoteSer.collectB2CNoteList(noteList));
-		gstr1Report.setB2bNote(b2bNoteSer.collectB2BNoteList(noteList));
+		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
+		Gstr1Report gstr1Report = new Gstr1Report();
+		collectFutures.add(b2cLargeSer.collectB2CLargeList(gstr1Report, invoiceList));
+		collectFutures.add(b2cSmallSer.collectB2CSmallList(gstr1Report, invoiceList, noteList));
+		collectFutures.add(b2bSer.collectB2BList(gstr1Report, invoiceList));
+		collectFutures.add(b2cNoteSer.collectB2CNoteList(gstr1Report, noteList));
+		collectFutures.add(b2bNoteSer.collectB2BNoteList(gstr1Report, noteList));
+		for (Future<Boolean> collectFuture : collectFutures) {
+			while (!collectFuture.isDone() && !collectFuture.isCancelled()) {
+			}
+		}
 		return gstr1Report;
 	}
 
