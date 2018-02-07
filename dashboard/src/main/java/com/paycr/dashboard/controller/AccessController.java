@@ -124,7 +124,7 @@ public class AccessController {
 		userService.saveUser(user);
 		resetPassword.setStatus(ResetStatus.SUCCESS);
 		accessService.saveResetPassword(resetPassword);
-		httpResponse.sendRedirect(company.getWebUrl() + "/login");
+		httpResponse.sendRedirect(company.getWebUrl() + "/reset-success");
 	}
 
 	private boolean validateResetRequest(ResetPassword resetPassword) {
