@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ResetStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
@@ -38,28 +40,28 @@ public class AccessController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping("/")
+	// @RequestMapping("/")
 	public ModelAndView index() {
 		ModelAndView mv = new ModelAndView("html/index");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
-	
-	@RequestMapping("/terms")
+
+	// @RequestMapping("/terms")
 	public ModelAndView terms() {
 		ModelAndView mv = new ModelAndView("html/terms");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
-	
-	@RequestMapping("/policy")
+
+	// @RequestMapping("/policy")
 	public ModelAndView policy() {
 		ModelAndView mv = new ModelAndView("html/policy");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
 	}
 
-	@RequestMapping("/forgotPassword")
+	// @RequestMapping("/forgotPassword")
 	public ModelAndView forgotPasssword(@RequestParam(value = "error", required = false) String code) {
 		ModelAndView mv = new ModelAndView("html/forgot-password");
 		String message = "Enter Email to send reset password link";
@@ -78,80 +80,65 @@ public class AccessController {
 	}
 
 	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)
-	public void sendResetPassword(@RequestParam("email") String userEmail, HttpServletResponse response)
-			throws IOException {
+	public void sendResetPassword(@RequestParam("email") String userEmail) {
 		PcUser user = userService.getUserByEmail(userEmail);
 		Date timeNow = new Date();
 		if (CommonUtil.isNotNull(user)) {
 			Date yesterday = DateUtil.addDays(timeNow, -1);
 			if (accessService.findResetCount(userEmail, yesterday, timeNow) >= 3) {
-				response.sendRedirect("/forgotPassword?error=2");
+				throw new PaycrException(HttpStatus.BAD_REQUEST_400, "User not registered");
 			} else {
 				accessService.sendResetLink(user);
-				response.sendRedirect("/login");
 			}
 		} else {
-			response.sendRedirect("/forgotPassword?error=1");
+			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Reset already requested 3 times in 24 hours");
 		}
 	}
 
 	@RequestMapping("/resetPassword/{resetCode}")
-	public ModelAndView resetPasswordGet(@PathVariable String resetCode) {
+	public ModelAndView resetPasswordGet(@PathVariable String resetCode, HttpServletResponse httpResponse)
+			throws IOException {
 		ResetPassword resetPassword = accessService.getResetPassword(resetCode);
-		ModelAndView mvError = validateResetRequest(resetPassword);
-		if (CommonUtil.isNotNull(mvError)) {
-			return mvError;
+		if (!validateResetRequest(resetPassword)) {
+			httpResponse.sendRedirect(company.getWebUrl() + "/forgot-password");
 		}
 		resetPassword.setStatus(ResetStatus.INTITIATED);
 		accessService.saveResetPassword(resetPassword);
 		ModelAndView mv = new ModelAndView("html/reset-password");
 		mv.addObject("staticUrl", company.getStaticUrl());
+		mv.addObject("baseUrl", company.getWebUrl());
 		mv.addObject("email", resetPassword.getEmail());
 		mv.addObject("resetCode", resetCode);
 		return mv;
 	}
 
 	@RequestMapping(value = "/resetPassword/{resetCode}", method = RequestMethod.POST)
-	public ModelAndView resetPasswordPost(@PathVariable String resetCode, @RequestParam("password") String password) {
+	public void resetPasswordPost(@PathVariable String resetCode, @RequestParam("password") String password,
+			HttpServletResponse httpResponse) throws IOException {
 		ResetPassword resetPassword = accessService.getResetPassword(resetCode);
-		ModelAndView mvError = validateResetRequest(resetPassword);
-		if (CommonUtil.isNotNull(mvError)) {
-			return mvError;
+		if (!validateResetRequest(resetPassword)) {
+			httpResponse.sendRedirect(company.getWebUrl() + "/forgot-password");
 		}
 		PcUser user = userService.getUserByEmail(resetPassword.getEmail());
 		user.setPassword(bcPassEncode.encode(password));
 		userService.saveUser(user);
 		resetPassword.setStatus(ResetStatus.SUCCESS);
 		accessService.saveResetPassword(resetPassword);
-		ModelAndView mv = new ModelAndView("html/login");
-		mv.addObject("staticUrl", company.getStaticUrl());
-		return mv;
+		httpResponse.sendRedirect(company.getWebUrl() + "/login");
 	}
 
-	private ModelAndView validateResetRequest(ResetPassword resetPassword) {
+	private boolean validateResetRequest(ResetPassword resetPassword) {
 		if (CommonUtil.isNull(resetPassword)) {
-			ModelAndView mv = new ModelAndView("html/forgot-password");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("message", "Invalid reset password request");
-			mv.addObject("isError", true);
-			return mv;
+			return false;
 		}
 		Date dayAfterCreation = DateUtil.addDays(resetPassword.getCreated(), 1);
 		if (dayAfterCreation.compareTo(new Date()) <= 0) {
-			ModelAndView mv = new ModelAndView("html/forgot-password");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("message", "Reset link has expired");
-			mv.addObject("isError", true);
-			return mv;
+			return false;
 		}
 		if (ResetStatus.SUCCESS.equals(resetPassword.getStatus())) {
-			ModelAndView mv = new ModelAndView("html/forgot-password");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("message", "Reset link already used");
-			mv.addObject("isError", true);
-			return mv;
+			return false;
 		}
-		return null;
+		return true;
 	}
 
 }

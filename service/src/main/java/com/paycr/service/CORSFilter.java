@@ -26,7 +26,7 @@ public class CORSFilter implements Filter {
 		res.setHeader("Access-Control-Allow-Origin", "*");
 		res.setHeader("Access-Control-Allow-Methods", "*");
 		res.addHeader("Access-Control-Allow-Headers",
-				"Content-Type,Accept,X-Requested-With,accessKey,vaultSignature,signature,data,Authorization");
+				"Content-Type,Accept,X-Requested-With,accessKey,signature,data,Authorization");
 		chain.doFilter(request, response);
 	}
 

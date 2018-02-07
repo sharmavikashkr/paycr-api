@@ -1,5 +1,7 @@
 package com.paycr.dashboard.validation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -34,8 +36,8 @@ public class IsValidUserRequest implements RequestValidator<PcUser> {
 				|| match(user.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		PcUser extUser = userRepo.findByEmailOrMobile(user.getEmail(), user.getMobile());
-		if (CommonUtil.isNotNull(extUser)) {
+		List<PcUser> extUserList = userRepo.findByEmailOrMobile(user.getEmail(), user.getMobile());
+		if (CommonUtil.isNotEmpty(extUserList)) {
 			throw new PaycrException(Constants.FAILURE, "User already exists with this email/mobile");
 		}
 	}

@@ -45,7 +45,7 @@ public class AdminController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping("")
+	// @RequestMapping("")
 	public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
 		if (CommonUtil.isNull(request.getCookies())) {
@@ -66,6 +66,11 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView("html/admin/admin");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
+	}
+
+	@PreAuthorize(RoleUtil.PAYCR_AUTH)
+	@RequestMapping("/check")
+	public void check() {
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)

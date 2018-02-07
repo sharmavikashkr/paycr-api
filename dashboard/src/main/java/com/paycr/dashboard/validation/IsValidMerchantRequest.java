@@ -1,5 +1,7 @@
 package com.paycr.dashboard.validation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -35,8 +37,8 @@ public class IsValidMerchantRequest implements RequestValidator<Merchant> {
 				|| match(merchant.getName(), NAME_PATTERN))) {
 			throw new PaycrException(Constants.FAILURE, "Invalid values of params");
 		}
-		PcUser extUser = userRepo.findByEmailOrMobile(merchant.getEmail(), merchant.getMobile());
-		if (CommonUtil.isNotNull(extUser)) {
+		List<PcUser> extUserList = userRepo.findByEmailOrMobile(merchant.getEmail(), merchant.getMobile());
+		if (CommonUtil.isNotEmpty(extUserList)) {
 			throw new PaycrException(Constants.FAILURE, "User already exists with this email/mobile");
 		}
 	}

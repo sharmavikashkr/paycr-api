@@ -39,7 +39,7 @@ public class MerchantController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping("")
+	// @RequestMapping("")
 	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = null;
 		if (CommonUtil.isNull(request.getCookies())) {
@@ -60,6 +60,11 @@ public class MerchantController {
 		ModelAndView mv = new ModelAndView("html/merchant/merchant");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		return mv;
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@RequestMapping("/check")
+	public void check() {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)

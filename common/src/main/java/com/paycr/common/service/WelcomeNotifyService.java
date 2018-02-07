@@ -55,7 +55,7 @@ public class WelcomeNotifyService implements NotifyService<Merchant> {
 	public String getEmail(Merchant merchant) throws Exception {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("merchant", merchant);
-		templateProps.put("baseUrl", company.getAppUrl());
+		templateProps.put("baseUrl", company.getWebUrl());
 		templateProps.put("staticUrl", company.getStaticUrl());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/welcome_email.ftl"),
 				templateProps);

@@ -68,6 +68,7 @@ public class PaymentService {
 		if (InvoiceType.BULK.equals(invoice.getInvoiceType()) || CommonUtil.isNull(invoice.getConsumer())) {
 			ModelAndView mv = new ModelAndView("html/getconsumer");
 			mv.addObject("staticUrl", company.getStaticUrl());
+			mv.addObject("baseUrl", company.getWebUrl());
 			mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 			mv.addObject("invoice", invoice);
 			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
@@ -81,6 +82,7 @@ public class PaymentService {
 		}
 		ModelAndView mv = new ModelAndView("html/payinvoice");
 		mv.addObject("staticUrl", company.getStaticUrl());
+		mv.addObject("baseUrl", company.getWebUrl());
 		mv.addObject("invoice", invoice);
 		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());

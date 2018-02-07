@@ -34,6 +34,7 @@ public class PaymentController {
 		} catch (PaycrException pex) {
 			ModelAndView mv = new ModelAndView("html/errorpage");
 			mv.addObject("staticUrl", company.getStaticUrl());
+			mv.addObject("baseUrl", company.getWebUrl());
 			mv.addObject("message", pex.getMessage());
 			return mv;
 		}

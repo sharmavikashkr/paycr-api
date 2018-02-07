@@ -1,5 +1,7 @@
 package com.paycr.common.data.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,6 @@ public interface UserRepository extends JpaRepository<PcUser, Integer> {
 
 	public PcUser findByEmail(String email);
 
-	public PcUser findByEmailOrMobile(String email, String mobile);
+	public List<PcUser> findByEmailOrMobile(String email, String mobile);
 
 }

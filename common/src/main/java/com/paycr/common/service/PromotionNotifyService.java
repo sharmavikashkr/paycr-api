@@ -62,7 +62,7 @@ public class PromotionNotifyService implements NotifyService<Promotion> {
 	public String getEmail(Promotion promotion) throws Exception {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("promotion", promotion);
-		templateProps.put("baseUrl", company.getAppUrl());
+		templateProps.put("baseUrl", company.getWebUrl());
 		templateProps.put("staticUrl", company.getStaticUrl());
 		return FreeMarkerTemplateUtils
 				.processTemplateIntoString(fmConfiguration.getTemplate("email/promotion_email.ftl"), templateProps);

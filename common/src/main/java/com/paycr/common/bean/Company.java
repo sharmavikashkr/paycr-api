@@ -18,6 +18,9 @@ public class Company {
 	@Value("${company.app.url}")
 	private String appUrl;
 
+	@Value("${company.web.url}")
+	private String webUrl;
+
 	@Value("${company.static.url}")
 	private String staticUrl;
 
@@ -103,6 +106,14 @@ public class Company {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public String getWebUrl() {
+		return webUrl;
+	}
+
+	public void setWebUrl(String webUrl) {
+		this.webUrl = webUrl;
 	}
 
 }
