@@ -92,9 +92,10 @@ public class CreateInvoiceService {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		invoice.setMerchant(merchant);
-		invoice.setCreatedBy(user.getEmail());
 		if (invoice.isUpdate()) {
 			invoice.setUpdatedBy(user.getEmail());
+		} else {
+			invoice.setCreatedBy(user.getEmail());
 		}
 		invValidator.validate(invoice);
 		invRepo.save(invoice);

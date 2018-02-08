@@ -47,6 +47,10 @@ public class InvoiceCustomParam {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public Invoice getInvoice() {
 		return invoice;
 	}

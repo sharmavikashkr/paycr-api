@@ -174,7 +174,7 @@
                               <div style="background-color: transparent; width: 100% !important;">
                                  <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:20px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
                                     <div class="img-container center  autowidth " style="padding-right: 0px;  padding-left: 0px;">
-                                       <a href="${baseUrl}" target="_blank">
+                                       <a href="${webUrl}" target="_blank">
                                        <img class="center  autowidth " align="center" border="0" src="${staticUrl}/images/logo_new.png" alt="PayCr" title="PayCr" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;width: 100%;max-width: 94px" width="94">
                                        </a>
                                     </div>

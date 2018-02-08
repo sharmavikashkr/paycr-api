@@ -106,7 +106,7 @@ public class AccessController {
 		accessService.saveResetPassword(resetPassword);
 		ModelAndView mv = new ModelAndView("html/reset-password");
 		mv.addObject("staticUrl", company.getStaticUrl());
-		mv.addObject("baseUrl", company.getWebUrl());
+		mv.addObject("webUrl", company.getWebUrl());
 		mv.addObject("email", resetPassword.getEmail());
 		mv.addObject("resetCode", resetCode);
 		return mv;

@@ -40,6 +40,9 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 				icp.setParamValue("");
 			}
 			icp.setInvoice(invoice);
+			if (!invoice.isUpdate()) {
+				icp.setId(null);
+			}
 		}
 	}
 

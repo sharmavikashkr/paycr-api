@@ -78,7 +78,7 @@ public class PaymentNotifyService implements NotifyService<InvoicePayment> {
 	public String getEmail(InvoicePayment payment) throws Exception {
 		Map<String, Object> templateProps = new HashMap<>();
 		templateProps.put("payment", payment);
-		templateProps.put("baseUrl", company.getWebUrl());
+		templateProps.put("webUrl", company.getWebUrl());
 		templateProps.put("staticUrl", company.getStaticUrl());
 		if (PayType.SALE.equals(payment.getPayType())) {
 			templateProps.put("message", "Successful payment received for your invoice from");

@@ -41,6 +41,8 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			Invoice extInvoice = invRepo.findByInvoiceCode(invoiceCode);
 			if (CommonUtil.isEmpty(invoiceCode) || CommonUtil.isNull(extInvoice)) {
 				throw new PaycrException(Constants.FAILURE, "Invoice not found");
+			} else {
+				invoice.setId(extInvoice.getId());
 			}
 			if (!InvoiceType.SINGLE.equals(extInvoice.getInvoiceType())) {
 				throw new PaycrException(Constants.FAILURE, "Only Single invoices can be modified");
@@ -63,6 +65,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoice.setNotices(null);
 			invoice.setNote(null);
 			invoice.setPayment(null);
+			invoice.setStatus(InvoiceStatus.CREATED);
 		}
 		if (invoice.getExpiresIn() <= 0) {
 			throw new PaycrException(Constants.FAILURE, "Improper invoice expiry");
@@ -77,7 +80,6 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		if (CommonUtil.isNull(invoice.getInvoiceType())) {
 			invoice.setInvoiceType(InvoiceType.SINGLE);
 		}
-		invoice.setStatus(InvoiceStatus.CREATED);
 		if (CommonUtil.isNotNull(invoice.getNotices())) {
 			for (InvoiceNotify invNot : invoice.getNotices()) {
 				invNot.setInvoice(invoice);

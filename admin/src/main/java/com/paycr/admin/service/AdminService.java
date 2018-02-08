@@ -2,9 +2,12 @@ package com.paycr.admin.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.paycr.admin.validation.PricingValidator;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.AdminSetting;
@@ -26,6 +29,8 @@ import com.paycr.dashboard.validation.IsValidGstinRequest;
 
 @Service
 public class AdminService {
+
+	private static final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
 	@Autowired
 	private PricingValidator pricingValidator;
@@ -49,11 +54,13 @@ public class AdminService {
 	private IsValidGstinRequest gstinValid;
 
 	public void createPricing(Pricing pricing) {
+		logger.info("New Pricing : {}", new Gson().toJson(pricing));
 		pricingValidator.validate(pricing);
 		pricingRepo.save(pricing);
 	}
 
 	public void togglePricing(Integer pricingId) {
+		logger.info("Toggle Pricing id : {}", pricingId);
 		Pricing pri = pricingRepo.findOne(pricingId);
 		if (pri.isActive()) {
 			pri.setActive(false);
@@ -68,6 +75,7 @@ public class AdminService {
 	}
 
 	public void saveSetting(AdminSetting setting) {
+		logger.info("Save admin settings");
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		adset.setBanner(setting.getBanner());
 		adset.setGstin(setting.getGstin());
@@ -80,6 +88,7 @@ public class AdminService {
 	}
 
 	public void saveAddress(Address newAddr) {
+		logger.info("Save admin address : {}", new Gson().toJson(newAddr));
 		if (CommonUtil.isNull(newAddr) || CommonUtil.isEmpty(newAddr.getAddressLine1())
 				|| CommonUtil.isEmpty(newAddr.getCity()) || CommonUtil.isEmpty(newAddr.getState())
 				|| CommonUtil.isEmpty(newAddr.getPincode()) || CommonUtil.isEmpty(newAddr.getCountry())) {
@@ -101,6 +110,7 @@ public class AdminService {
 	}
 
 	public void newTaxMaster(TaxMaster tax) {
+		logger.info("New tax master : {}", new Gson().toJson(tax));
 		if (CommonUtil.isNull(tax) || CommonUtil.isNull(tax.getName()) || CommonUtil.isNull(tax.getValue())) {
 			throw new PaycrException(Constants.FAILURE, "Invalid Tax request");
 		}
@@ -119,6 +129,7 @@ public class AdminService {
 	}
 
 	public void addPricingMerchant(Integer pricingId, Integer merchantId) {
+		logger.info("Add pricing : {} for merchant : {}", pricingId, merchantId);
 		Pricing pricing = pricingRepo.findOne(pricingId);
 		Merchant merchant = merRepo.findOne(merchantId);
 		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
@@ -140,6 +151,7 @@ public class AdminService {
 	}
 
 	public void removePricingMerchant(Integer pricingId, Integer merchantId) {
+		logger.info("Remove pricing : {} for merchant : {}", pricingId, merchantId);
 		Pricing pricing = pricingRepo.findOne(pricingId);
 		Merchant merchant = merRepo.findOne(merchantId);
 		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {

@@ -34,8 +34,14 @@ public class PaymentController {
 		} catch (PaycrException pex) {
 			ModelAndView mv = new ModelAndView("html/errorpage");
 			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("baseUrl", company.getWebUrl());
+			mv.addObject("webUrl", company.getWebUrl());
 			mv.addObject("message", pex.getMessage());
+			return mv;
+		} catch (Exception ex) {
+			ModelAndView mv = new ModelAndView("html/errorpage");
+			mv.addObject("staticUrl", company.getStaticUrl());
+			mv.addObject("webUrl", company.getWebUrl());
+			mv.addObject("message", "Resource not found");
 			return mv;
 		}
 	}

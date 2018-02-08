@@ -43,7 +43,7 @@ public class SecureLoginService {
 			logger.info("Secure OAUTH token generated for email : {}", email);
 			return response.getBody();
 		} catch (Exception ex) {
-			logger.error("Execption while generating secure OAUTH token email : {} ", email, ex);
+			logger.error("Execption while generating secure OAUTH token for email : {} ", email, ex);
 			throw ex;
 		}
 	}

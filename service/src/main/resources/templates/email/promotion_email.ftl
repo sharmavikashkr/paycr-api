@@ -364,7 +364,7 @@ a[x-apple-data-detectors=true] {
 <div align="center" class="button-container center" style="padding-right: 10px; padding-left: 10px; padding-top:10px; padding-bottom:20px;">
   <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top:10px; padding-bottom:20px;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:37pt; v-text-anchor:middle; width:129pt;" arcsize="8%" strokecolor="#E99D7F" fillcolor="#E99D7F"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif; font-size:20px;"><![endif]-->
     <div style="color: #ffffff; background-color: #E99D7F; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; max-width: 172px; width: 132px;width: auto; border-top: 0px solid transparent; border-right: 0px solid transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; padding-top: 5px; padding-right: 20px; padding-bottom: 5px; padding-left: 20px; font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-border-alt: none;">
-      <a href="${baseUrl}/register" target="_blank" style="color:white;"><span style="line-height:24px;font-size:12px;"><span style="font-size: 20px; line-height: 40px;"><b>SIGNUP HERE</b></span></span></a>
+      <a href="${webUrl}/register" target="_blank" style="color:white;"><span style="line-height:24px;font-size:12px;"><span style="font-size: 20px; line-height: 40px;"><b>SIGNUP HERE</b></span></span></a>
     </div>
   <!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
 </div>
@@ -443,7 +443,7 @@ a[x-apple-data-detectors=true] {
                   
                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
 <div style="font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;line-height:150%;color:#84A8A5; padding-right: 0px; padding-left: 0px; padding-top: 10px; padding-bottom: 10px;">	
-	<div style="font-size:12px;line-height:18px;color:#84A8A5;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center"><a style="color:#84A8A5;text-decoration: underline;" href="${baseUrl}" target="_blank" rel="noopener noreferrer" data-mce-selected="1">﻿ Copyright © 2018 PayCr. All rights reserved.﻿</a></p></div>	
+	<div style="font-size:12px;line-height:18px;color:#84A8A5;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center"><a style="color:#84A8A5;text-decoration: underline;" href="${webUrl}" target="_blank" rel="noopener noreferrer" data-mce-selected="1">﻿ Copyright © 2018 PayCr. All rights reserved.﻿</a></p></div>	
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 

@@ -214,7 +214,7 @@ public class SubscriptionService {
 		subsRepo.save(subs);
 		ModelAndView mv = new ModelAndView("html/subscribe");
 		mv.addObject("staticUrl", company.getStaticUrl());
-		mv.addObject("baseUrl", company.getWebUrl());
+		mv.addObject("webUrl", company.getWebUrl());
 		mv.addObject("merchant", merchant);
 		mv.addObject("banner", company.getAppUrl() + "/banner/admin/" + adset.getBanner());
 		mv.addObject("pricing", pricing);

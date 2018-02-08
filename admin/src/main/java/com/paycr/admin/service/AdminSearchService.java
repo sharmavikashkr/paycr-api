@@ -2,9 +2,12 @@ package com.paycr.admin.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.paycr.common.bean.search.SearchMerchantRequest;
 import com.paycr.common.bean.search.SearchPromotionRequest;
 import com.paycr.common.bean.search.SearchSubsRequest;
@@ -19,6 +22,8 @@ import com.paycr.common.util.PaycrUtil;
 
 @Service
 public class AdminSearchService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(AdminSearchService.class);
 
 	@Autowired
 	private MerchantDao merDao;
@@ -30,6 +35,7 @@ public class AdminSearchService {
 	private PromotionDao promoDao;
 
 	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
+		logger.info("Search merchant started for request : {}",new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(

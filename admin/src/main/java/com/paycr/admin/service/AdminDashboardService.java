@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import com.paycr.common.type.PayType;
 @Service
 public class AdminDashboardService {
 
+	private static final Logger logger = LoggerFactory.getLogger(AdminDashboardService.class);
+
 	@Autowired
 	private InvoiceRepository invRepo;
 
@@ -26,6 +30,7 @@ public class AdminDashboardService {
 	private InvoicePaymentRepository payRepo;
 
 	public StatsResponse loadDashboard(String timeRange) {
+		logger.info("Load admin dashboard started for timerange : {}", timeRange);
 		Calendar calTo = Calendar.getInstance();
 		Calendar calFrom = Calendar.getInstance();
 		if ("LAST_WEEK".equalsIgnoreCase(timeRange)) {
@@ -77,6 +82,7 @@ public class AdminDashboardService {
 			dailyPayList.add(dp);
 		}
 		response.setDailyInvPayList(dailyPayList);
+		logger.info("Load admin dashboard ended for timerange : {}", timeRange);
 		return response;
 	}
 
