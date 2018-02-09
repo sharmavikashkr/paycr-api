@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,6 @@ import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.validation.InvoiceValidator;
 
@@ -116,10 +116,10 @@ public class CreateInvoiceService {
 	public Invoice createChild(String invoiceCode, ChildInvoiceRequest chldInvReq, String createdBy) {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Invoice");
 		}
 		if (InvoiceType.BULK.equals(chldInvReq.getInvoiceType())) {
-			throw new PaycrException(Constants.FAILURE, "InvoiceType BULK not supported for child invoices");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "InvoiceType BULK not supported for child invoices");
 		}
 		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode, chldInvReq.getInvoiceType(), createdBy);
 		Consumer consumer = chldInvReq.getConsumer();

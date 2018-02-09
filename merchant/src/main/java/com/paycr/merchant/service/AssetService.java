@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,6 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
@@ -57,11 +57,11 @@ public class AssetService {
 	public void newAsset(Asset asset, Merchant merchant, String createdBy) {
 		if (CommonUtil.isEmpty(asset.getName()) || CommonUtil.isNull(asset.getRate())
 				|| CommonUtil.isEmpty(asset.getCode()) || CommonUtil.isNull(asset.getType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		Asset exstingInvn = assetRepo.findByMerchantAndCode(merchant, asset.getCode());
 		if (!CommonUtil.isNull(exstingInvn)) {
-			throw new PaycrException(Constants.FAILURE, "Item with this code already exists");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Item with this code already exists");
 		}
 		if (CommonUtil.isNull(asset.getTax())) {
 			asset.setTax(taxMRepo.findByName("NO_TAX"));
@@ -78,7 +78,7 @@ public class AssetService {
 		Asset exstInvn = assetRepo.findOne(assetId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstInvn.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(Constants.FAILURE, "Asset not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Asset not found");
 		}
 		exstInvn.setActive(asset.isActive());
 		exstInvn.setDescription(asset.getDescription());

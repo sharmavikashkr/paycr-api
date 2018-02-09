@@ -46,6 +46,7 @@ public class AdminSearchService {
 	}
 
 	public List<Subscription> fetchSubsList(SearchSubsRequest request) {
+		logger.info("Search subscription started for request : {}",new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
@@ -56,6 +57,7 @@ public class AdminSearchService {
 	}
 
 	public List<Promotion> fetchPromotionList(SearchPromotionRequest request) {
+		logger.info("Search promotion started for request : {}",new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(

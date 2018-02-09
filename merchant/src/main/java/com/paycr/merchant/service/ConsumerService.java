@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,6 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.AddressType;
 import com.paycr.common.type.ConsumerType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.StateHelper;
 import com.paycr.dashboard.validation.IsValidGstinRequest;
 import com.paycr.merchant.validation.ConsumerValidator;
@@ -95,12 +95,12 @@ public class ConsumerService {
 		Consumer exstCon = conRepo.findOne(consumerId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		if (ConsumerType.CUSTOMER.equals(consumer.getType()) && !CommonUtil.isEmpty(consumer.getGstin())) {
-			throw new PaycrException(Constants.FAILURE, "Consumer cannot have GSTIN");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer cannot have GSTIN");
 		} else if (ConsumerType.BUSINESS.equals(consumer.getType()) && CommonUtil.isEmpty(consumer.getGstin())) {
-			throw new PaycrException(Constants.FAILURE, "Please update GSTIN for Business");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Please update GSTIN for Business");
 		}
 		exstCon.setGstin(consumer.getGstin());
 		exstCon.setActive(consumer.isActive());
@@ -114,7 +114,7 @@ public class ConsumerService {
 	public List<ConsumerCategory> getCategories(Integer consumerId) {
 		Consumer consumer = conRepo.findOne(consumerId);
 		if (CommonUtil.isNull(consumer)) {
-			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		return conCatRepo.findByConsumer(consumer);
 	}
@@ -122,10 +122,10 @@ public class ConsumerService {
 	public void addCategory(Integer consumerId, ConsumerCategory conCat, Merchant merchant) {
 		Consumer consumer = conRepo.findOne(consumerId);
 		if (CommonUtil.isNull(consumer)) {
-			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		if (CommonUtil.isEmpty(conCat.getName()) || CommonUtil.isEmpty(conCat.getValue())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid category name/value");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid category name/value");
 		}
 		ConsumerCategory exstConCat = conCatRepo.findByConsumerAndName(consumer, conCat.getName());
 		if (CommonUtil.isNotNull(exstConCat)) {
@@ -134,7 +134,7 @@ public class ConsumerService {
 		} else {
 			consumer = conRepo.findOne(consumerId);
 			if (CommonUtil.isNotEmpty(consumer.getConCats()) && consumer.getConCats().size() >= 5) {
-				throw new PaycrException(Constants.FAILURE, "Only 5 categories per consumer allowed");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Only 5 categories per consumer allowed");
 			}
 			conCat.setConsumer(consumer);
 			conCatRepo.save(conCat);
@@ -144,7 +144,7 @@ public class ConsumerService {
 	public void deleteCategory(Integer consumerId, Integer conCatId, Merchant merchant) {
 		Consumer consumer = conRepo.findByMerchantAndId(merchant, consumerId);
 		if (CommonUtil.isNull(consumer)) {
-			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		if (CommonUtil.isNotNull(conCatRepo.findByConsumerAndId(consumer, conCatId))) {
 			conCatRepo.delete(conCatId);
@@ -280,7 +280,7 @@ public class ConsumerService {
 		Consumer consumer = conRepo.findOne(consumerId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (consumer.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(Constants.FAILURE, "Consumer not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		Address address = null;
 		if (AddressType.BILLING.equals(addr.getType())) {
@@ -310,7 +310,7 @@ public class ConsumerService {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
 				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
 				|| CommonUtil.isEmpty(addr.getCountry())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
 		}
 	}
 }

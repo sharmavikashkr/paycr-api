@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,6 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.Role;
 import com.paycr.common.type.UserType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.dashboard.validation.UserValidator;
 
 @Service
@@ -62,7 +62,7 @@ public class UserService {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
 				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
 				|| CommonUtil.isEmpty(addr.getCountry())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
 		}
 		Address address = user.getAddress();
 		if (CommonUtil.isNull(address)) {
@@ -162,7 +162,7 @@ public class UserService {
 		if (secSer.isMerchantUser()) {
 			List<PcUser> existingUsers = getUsers();
 			if (CommonUtil.isNotEmpty(existingUsers) && existingUsers.size() >= 10) {
-				throw new PaycrException(Constants.FAILURE, "Not allowed to create more users");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Not allowed to create more users");
 			}
 			user.setCreated(timeNow);
 			user.setPassword(bcPassEncode.encode("password@123"));
@@ -217,7 +217,7 @@ public class UserService {
 		} else if (UserType.ADVISOR.equals(type)) {
 			return Role.ROLE_PAYCR_ADVISOR;
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Invalid User Type specified");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid User Type specified");
 		}
 	}
 
@@ -227,7 +227,7 @@ public class UserService {
 		} else if (UserType.OPERATIONS.equals(type)) {
 			return Role.ROLE_MERCHANT_OPS;
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Invalid User Type specified");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid User Type specified");
 		}
 	}
 

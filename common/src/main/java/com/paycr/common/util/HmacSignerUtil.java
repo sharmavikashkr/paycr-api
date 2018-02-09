@@ -4,6 +4,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.exception.PaycrException;
@@ -21,12 +22,12 @@ public class HmacSignerUtil {
 			mac.init(k);
 			signature = new Hex().encode(mac.doFinal(data.getBytes()));
 		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, ex.getMessage());
 		}
 		try {
 			return new String(signature, "UTF-8");
 		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, ex.getMessage());
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, ex.getMessage());
 		}
 	}
 

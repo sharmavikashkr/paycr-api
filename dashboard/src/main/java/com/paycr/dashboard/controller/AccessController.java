@@ -5,7 +5,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,12 +86,12 @@ public class AccessController {
 		if (CommonUtil.isNotNull(user)) {
 			Date yesterday = DateUtil.addDays(timeNow, -1);
 			if (accessService.findResetCount(userEmail, yesterday, timeNow) >= 3) {
-				throw new PaycrException(HttpStatus.BAD_REQUEST_400, "User not registered");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "User not registered");
 			} else {
 				accessService.sendResetLink(user);
 			}
 		} else {
-			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Reset already requested 3 times in 24 hours");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Reset already requested 3 times in 24 hours");
 		}
 	}
 

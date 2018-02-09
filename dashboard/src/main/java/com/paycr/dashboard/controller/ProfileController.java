@@ -1,5 +1,6 @@
 package com.paycr.dashboard.controller;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +14,6 @@ import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.UserService;
 
@@ -43,13 +43,13 @@ public class ProfileController {
 			@RequestParam(value = "retypePass", required = true) String retypePass) {
 		PcUser user = secSer.findLoggedInUser();
 		if (!newPass.equals(retypePass)) {
-			throw new PaycrException(Constants.FAILURE, "Wrong Password Retyped");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Wrong Password Retyped");
 		}
 		if (bcPassEncode.matches(oldPass, user.getPassword())) {
 			user.setPassword(bcPassEncode.encode(newPass));
 			userService.saveUser(user);
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Wrong Password Entered");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Wrong Password Entered");
 		}
 	}
 

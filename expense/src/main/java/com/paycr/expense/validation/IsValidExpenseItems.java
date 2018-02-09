@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
@@ -40,7 +40,7 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 				items.add(item);
 			}
 			if (items.size() < 1 || items.size() > 5) {
-				throw new PaycrException(Constants.FAILURE, "Min 1 and Max 5 Items expected");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Min 1 and Max 5 Items expected");
 			}
 			expense.setItems(items);
 		}
@@ -50,7 +50,7 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 		if (CommonUtil.isEmpty(item.getAsset().getName()) || CommonUtil.isNull(item.getAsset().getRate())
 				|| CommonUtil.isEmpty(item.getAsset().getCode()) || CommonUtil.isNull(item.getPrice())
 				|| 0 == item.getQuantity()) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Items entered");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Items entered");
 		}
 		if (CommonUtil.isNull(item.getTax())) {
 			item.setTax(taxMRepo.findByName("NO_TAX"));
@@ -60,16 +60,16 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 				.add(expPrice.multiply(BigDecimal.valueOf(item.getTax().getValue())).divide(BigDecimal.valueOf(100)));
 		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
 				.equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
-			throw new PaycrException(Constants.FAILURE, "rate * quantity != price");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "rate * quantity != price");
 		}
 		Asset asset = asstRepo.findByMerchantAndCode(expense.getMerchant(), item.getAsset().getCode());
 		if (CommonUtil.isNotNull(asset)) {
 			if (!(asset.getRate().setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(item.getAsset().getRate()) == 0
 					&& asset.getName().equals(item.getAsset().getName()))) {
-				throw new PaycrException(Constants.FAILURE, "Mismatch with existing item");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Mismatch with existing item");
 			}
 			if (!asset.isActive()) {
-				throw new PaycrException(Constants.FAILURE, "Inventory not active");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Inventory not active");
 			}
 		} else {
 			asset = new Asset();

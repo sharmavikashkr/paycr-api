@@ -1,5 +1,6 @@
 package com.paycr.oauth.setup;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +10,6 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.exception.PaycrException;
-import com.paycr.common.util.Constants;
 
 @Service
 public class CustomPreAuthUserDetailsService
@@ -24,7 +24,7 @@ public class CustomPreAuthUserDetailsService
 			OAuth2Authentication oauth = tokenStore.readAuthentication(token.getName());
 			return (UserDetails) oauth.getUserAuthentication().getPrincipal();
 		} catch (Exception ex) {
-			throw new PaycrException(Constants.FAILURE, "401 Unauthorized");
+			throw new PaycrException(HttpStatus.SC_UNAUTHORIZED, "401 Unauthorized");
 		}
 	}
 }

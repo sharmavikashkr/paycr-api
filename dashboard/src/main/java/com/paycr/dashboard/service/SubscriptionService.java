@@ -45,7 +45,6 @@ import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 import com.paycr.common.type.PricingStatus;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.PdfUtil;
@@ -116,13 +115,13 @@ public class SubscriptionService {
 		Subscription subs = new Subscription();
 		if (CommonUtil.isNull(merchant.getAddress()) || CommonUtil.isEmpty(merchant.getAddress().getState())) {
 			if (!"NO_TAX".equalsIgnoreCase(pricing.getInterstateTax().getName())) {
-				throw new PaycrException(Constants.FAILURE, "Merchant needs to set Address to determine Tax");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Merchant needs to set Address to determine Tax");
 			} else {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		} else {
 			if (CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
-				throw new PaycrException(Constants.FAILURE, "Admin needs to set Address to determine Tax");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Admin needs to set Address to determine Tax");
 			}
 			if (adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());
@@ -172,18 +171,18 @@ public class SubscriptionService {
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		if (!pricing.isActive() || BigDecimal.ZERO.compareTo(pricing.getRate()) > -1 || CommonUtil.isNull(quantity)
 				|| quantity <= 0) {
-			throw new PaycrException(Constants.FAILURE, "Bad Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Bad Request");
 		}
 		Subscription subs = new Subscription();
 		if (CommonUtil.isNull(merchant.getAddress()) || CommonUtil.isEmpty(merchant.getAddress().getState())) {
 			if (!"NO_TAX".equalsIgnoreCase(pricing.getInterstateTax().getName())) {
-				throw new PaycrException(Constants.FAILURE, "Merchant needs to set Address to determine Tax");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Merchant needs to set Address to determine Tax");
 			} else {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		} else {
 			if (CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
-				throw new PaycrException(Constants.FAILURE, "Something went wrong, please try again");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Something went wrong, please try again");
 			}
 			if (adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());

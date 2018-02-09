@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,6 @@ import com.paycr.common.type.NoteType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.scheduler.InvoiceSchedulerService;
@@ -136,7 +136,7 @@ public class InvoiceService {
 			tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,
 					user.getEmail());
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Notify Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Notify Not allowed");
 		}
 	}
 
@@ -147,7 +147,7 @@ public class InvoiceService {
 				&& CommonUtil.isNotNull(invoice.getPayment())) {
 			payService.enquire(invoice);
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Enquiry Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Enquiry Not allowed");
 		}
 	}
 
@@ -156,7 +156,7 @@ public class InvoiceService {
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || !InvoiceStatus.PAID.equals(invoice.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Refund Not allowed");
 		}
 		List<InvoicePayment> refunds = payRepo.findByInvoiceCodeAndPayType(invoice.getInvoiceCode(), PayType.REFUND);
 		BigDecimal refundAllowed = invoice.getPayAmount();
@@ -168,7 +168,7 @@ public class InvoiceService {
 		if (InvoiceStatus.PAID.equals(invoice.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
 			payService.refund(invoice, amount, user.getEmail());
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Refund Not allowed");
 		}
 	}
 
@@ -193,7 +193,7 @@ public class InvoiceService {
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
 		if (!InvoiceType.SINGLE.equals(invoice.getInvoiceType()) || InvoiceStatus.PAID.equals(invoice.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "Mark paid Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Mark paid Not allowed");
 		}
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
@@ -216,7 +216,7 @@ public class InvoiceService {
 			attachments = new ArrayList<>();
 		}
 		if (attachments.size() >= 5) {
-			throw new PaycrException(Constants.FAILURE, "Max 5 attachments allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 attachments allowed");
 		}
 		InvoiceAttachment attachment = new InvoiceAttachment();
 		attachment.setName(attach.getOriginalFilename());
@@ -246,10 +246,10 @@ public class InvoiceService {
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNull(invoice) || !InvoiceType.RECURRING.equals(invoice.getInvoiceType())
 				|| InvoiceStatus.EXPIRED.equals(invoice.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid invoice");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid invoice");
 		}
 		if (CommonUtil.isNull(recInv.getStartDate())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid start date");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid start date");
 		}
 		recInv.setActive(true);
 		recInv.setInvoice(invoice);
@@ -265,7 +265,7 @@ public class InvoiceService {
 		Date start = DateUtil.getStartOfDay(timeNow);
 		Date end = DateUtil.getEndOfDay(timeNow);
 		if (start.after(recInv.getStartDate())) {
-			throw new PaycrException(Constants.FAILURE, "Cannot schedule from older date");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Cannot schedule from older date");
 		}
 		RecurringInvoice ext = recInvRepo.findByInvoiceAndActive(invoice, true);
 		if (CommonUtil.isNotNull(ext)) {

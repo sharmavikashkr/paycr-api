@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,6 @@ import com.paycr.common.data.repository.SupplierRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.StateHelper;
 import com.paycr.dashboard.validation.IsValidGstinRequest;
 import com.paycr.merchant.validation.SupplierValidator;
@@ -70,7 +70,7 @@ public class SupplierService {
 		Supplier exstCon = conRepo.findOne(supplierId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(Constants.FAILURE, "Supplier not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Supplier not found");
 		}
 		exstCon.setGstin(supplier.getGstin());
 		exstCon.setActive(supplier.isActive());
@@ -155,7 +155,7 @@ public class SupplierService {
 		Supplier supplier = conRepo.findOne(supplierId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (supplier.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(Constants.FAILURE, "Supplier not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Supplier not found");
 		}
 		Address address = supplier.getAddress();
 		if (CommonUtil.isNull(address)) {
@@ -175,7 +175,7 @@ public class SupplierService {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
 				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
 				|| CommonUtil.isEmpty(addr.getCountry())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
 		}
 	}
 }

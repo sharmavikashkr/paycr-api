@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,6 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.ReportHelper;
 
@@ -95,18 +95,18 @@ public class ReportService {
 		isValidReport(report);
 		int exstRepSize = repRepo.findByMerchant(report.getMerchant()).size();
 		if (exstRepSize >= 10) {
-			throw new PaycrException(Constants.FAILURE, "Max 10 reports can be configured");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 10 reports can be configured");
 		}
 		repRepo.save(report);
 	}
 
 	public void deleteReport(Integer reportId, Merchant merchant) {
 		if (CommonUtil.isNull(merchant)) {
-			throw new PaycrException(Constants.FAILURE, "Report cannot be deleted");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report cannot be deleted");
 		}
 		Report report = repRepo.findByIdAndMerchant(reportId, merchant);
 		if (CommonUtil.isNull(report)) {
-			throw new PaycrException(Constants.FAILURE, "Report not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report not found");
 		}
 		repRepo.delete(reportId);
 	}
@@ -114,7 +114,7 @@ public class ReportService {
 	private void isValidReport(Report report) {
 		if (CommonUtil.isEmpty(report.getName()) || CommonUtil.isNull(report.getTimeRange())
 				|| CommonUtil.isNull(report.getReportType())) {
-			throw new PaycrException(Constants.FAILURE, "Mandatory params missing");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Mandatory params missing");
 		}
 	}
 
@@ -125,7 +125,7 @@ public class ReportService {
 	public void addSchedule(Integer reportId, Merchant merchant, PcUser user) {
 		Report report = repRepo.findOne(reportId);
 		if (CommonUtil.isNull(report)) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Report");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Report");
 		}
 		RecurringReport recRep = recRepRepo.findByReportAndMerchant(report, merchant);
 		if (CommonUtil.isNull(recRep)) {
@@ -160,11 +160,11 @@ public class ReportService {
 		}
 		int schedules = recRepUserRepo.findByPcUser(user).size();
 		if (schedules >= 5) {
-			throw new PaycrException(Constants.FAILURE, "Max 5 reports can be scheduled");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 reports can be scheduled");
 		}
 		RecurringReportUser recRepUser = recRepUserRepo.findByRecurringReportAndPcUser(recRep, user);
 		if (CommonUtil.isNotNull(recRepUser)) {
-			throw new PaycrException(Constants.FAILURE, "Report already scheduled for you");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report already scheduled for you");
 		}
 		recRepUser = new RecurringReportUser();
 		recRepUser.setRecurringReport(recRep);
@@ -175,12 +175,12 @@ public class ReportService {
 	public void removeSchedule(Integer recRepUserId, PcUser user) {
 		RecurringReportUser recRepUser = recRepUserRepo.findOne(recRepUserId);
 		if (CommonUtil.isNull(recRepUser)) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		if (recRepUser.getPcUser().getId() == user.getId()) {
 			recRepUserRepo.delete(recRepUser.getId());
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 	}
 

@@ -3,6 +3,7 @@ package com.paycr.expense.validation;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,6 @@ import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
 import com.paycr.common.validation.RequestValidator;
@@ -37,10 +37,10 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 		if (expense.isUpdate()) {
 			Expense extExpense = expRepo.findByExpenseCode(expenseCode);
 			if (CommonUtil.isEmpty(expenseCode) || CommonUtil.isNull(extExpense)) {
-				throw new PaycrException(Constants.FAILURE, "Expense not found");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Expense not found");
 			}
 			if (ExpenseStatus.PAID.equals(extExpense.getStatus())) {
-				throw new PaycrException(Constants.FAILURE, "Expense cannot be modified now");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Expense cannot be modified now");
 			}
 			expense.setUpdated(timeNow);
 		} else {

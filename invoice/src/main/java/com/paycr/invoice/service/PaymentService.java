@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
-import org.eclipse.jetty.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,6 @@ import com.paycr.common.type.ParamValueProvider;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.razorpay.RazorpayClient;
@@ -78,7 +77,7 @@ public class PaymentService {
 				|| CommonUtil.isEmpty(merchant.getPaymentSetting().getRzpMerchantId())
 				|| CommonUtil.isEmpty(merchant.getPaymentSetting().getRzpKeyId())
 				|| CommonUtil.isEmpty(merchant.getPaymentSetting().getRzpSecretId())) {
-			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Online Payment not available");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Online Payment not available");
 		}
 		ModelAndView mv = new ModelAndView("html/payinvoice");
 		mv.addObject("staticUrl", company.getStaticUrl());
@@ -93,22 +92,22 @@ public class PaymentService {
 
 	private void validate(Invoice invoice) {
 		if (CommonUtil.isNull(invoice)) {
-			throw new PaycrException(Constants.FAILURE, "Requested Resource is not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Requested Resource is not found");
 		}
 		if (InvoiceType.RECURRING.equals(invoice.getInvoiceType())) {
-			throw new PaycrException(Constants.FAILURE, "This invoice cannot be paid");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "This invoice cannot be paid");
 		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "This invoice is already paid");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "This invoice is already paid");
 		}
 		if (InvoiceStatus.EXPIRED.equals(invoice.getStatus()) && !InvoiceStatus.PAID.equals(invoice.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "This invoice has expired");
 		}
 		Date timeNow = new Date();
 		if (invoice.getExpiry().before(timeNow)) {
 			invoice.setStatus(InvoiceStatus.EXPIRED);
 			invRepo.save(invoice);
-			throw new PaycrException(Constants.FAILURE, "This invoice has expired");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "This invoice has expired");
 		}
 	}
 
@@ -230,11 +229,11 @@ public class PaymentService {
 	public String updateConsumerAndPay(String invoiceCode, String name, String email, String mobile, String signature) {
 		String genSig = hmacSigner.signWithSecretKey(invoiceCode, invoiceCode);
 		if (!genSig.equals(signature)) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Signature");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Signature");
 		}
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Invoice");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Invoice");
 		}
 		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode, InvoiceType.SINGLE, "Consumer");
 		Consumer consumer = new Consumer();

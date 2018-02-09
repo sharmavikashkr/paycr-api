@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,6 @@ import com.paycr.common.service.SecurityService;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.ItemType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 
 import au.com.bytecode.opencsv.CSVParser;
 import au.com.bytecode.opencsv.CSVReader;
@@ -57,11 +57,11 @@ public class InventoryService {
 	public void newInventory(Inventory inventory, Merchant merchant, String createdBy) {
 		if (CommonUtil.isEmpty(inventory.getName()) || CommonUtil.isNull(inventory.getRate())
 				|| CommonUtil.isEmpty(inventory.getCode()) || CommonUtil.isNull(inventory.getType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		Inventory exstingInvn = invnRepo.findByMerchantAndCode(merchant, inventory.getCode());
 		if (!CommonUtil.isNull(exstingInvn)) {
-			throw new PaycrException(Constants.FAILURE, "Item with this code already exists");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Item with this code already exists");
 		}
 		if (CommonUtil.isNull(inventory.getTax())) {
 			inventory.setTax(taxMRepo.findByName("NO_TAX"));
@@ -78,7 +78,7 @@ public class InventoryService {
 		Inventory exstInvn = invnRepo.findOne(inventoryId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstInvn.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(Constants.FAILURE, "Inventory not found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Inventory not found");
 		}
 		exstInvn.setActive(inventory.isActive());
 		exstInvn.setDescription(inventory.getDescription());

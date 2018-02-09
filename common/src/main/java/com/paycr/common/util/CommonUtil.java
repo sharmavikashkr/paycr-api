@@ -10,6 +10,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.http.HttpStatus;
+
 import com.paycr.common.exception.PaycrException;
 
 import au.com.bytecode.opencsv.CSVParser;
@@ -17,12 +19,21 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class CommonUtil {
 
+	public static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+	public static final String MOBILE_PATTERN = "^[7-9]{1}[0-9]{9}$";
+
+	public static final String NAME_PATTERN = "[a-zA-Z ]*";
+
+	public static final String GSTIN_PATTERN = "[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9a-zA-Z]{1}";
+
 	public static String base64Decode(String val) throws PaycrException {
 		try {
 			byte[] decodedBytes = Base64.getDecoder().decode(val.getBytes());
 			return new String(decodedBytes, Charset.forName("UTF-8"));
 		} catch (Exception e) {
-			throw new PaycrException(Constants.FAILURE, "Error while decoding string = " + val);
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Error while decoding string = " + val);
 		}
 	}
 
@@ -70,6 +81,13 @@ public class CommonUtil {
 
 	public static String formatTwoDecimalPlaces(double value) {
 		return new DecimalFormat("#0.00").format(value);
+	}
+
+	public static boolean match(String value, String pattern) {
+		if (CommonUtil.isNotNull(value)) {
+			return value.matches(pattern);
+		}
+		return true;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.paycr.invoice.validation;
 
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,6 @@ import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.PricingStatus;
-import com.paycr.common.util.Constants;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
@@ -47,7 +47,7 @@ public class IsValidInvoiceMerchantPricing implements RequestValidator<Invoice> 
 			merRepo.save(invoice.getMerchant());
 		}
 		if (noActivePlan) {
-			throw new PaycrException(Constants.FAILURE, "No active pricing plan found");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "No active pricing plan found");
 		}
 		invoice.setMerchantPricing(selectedMerPricing);
 	}

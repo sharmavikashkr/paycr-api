@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,6 @@ import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 
 @Service
 public class ExpenseService {
@@ -59,7 +59,7 @@ public class ExpenseService {
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = expRepo.findByExpenseCodeAndMerchant(expenseCode, merchant);
 		if (!ExpenseStatus.PAID.equals(expense.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Refund Not allowed");
 		}
 		List<ExpensePayment> refunds = payRepo.findByExpenseCodeAndPayType(expense.getExpenseCode(), PayType.REFUND);
 		BigDecimal refundAllowed = expense.getPayAmount();
@@ -86,7 +86,7 @@ public class ExpenseService {
 			tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense refunded with amount : " + amount,
 					true, user.getEmail());
 		} else {
-			throw new PaycrException(Constants.FAILURE, "Refund Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Refund Not allowed");
 		}
 	}
 
@@ -95,7 +95,7 @@ public class ExpenseService {
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = expRepo.findByExpenseCodeAndMerchant(payment.getExpenseCode(), merchant);
 		if (ExpenseStatus.PAID.equals(expense.getStatus())) {
-			throw new PaycrException(Constants.FAILURE, "Mark paid Not allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Mark paid Not allowed");
 		}
 		Date timeNow = new Date();
 		payment.setCreated(timeNow);
@@ -118,7 +118,7 @@ public class ExpenseService {
 			attachments = new ArrayList<>();
 		}
 		if (attachments.size() >= 5) {
-			throw new PaycrException(Constants.FAILURE, "Max 5 attachments allowed");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 attachments allowed");
 		}
 		ExpenseAttachment attachment = new ExpenseAttachment();
 		attachment.setName(attach.getOriginalFilename());

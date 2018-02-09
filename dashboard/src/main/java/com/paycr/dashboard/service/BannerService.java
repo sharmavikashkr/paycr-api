@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,6 @@ import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 
 @Service
 public class BannerService {
@@ -60,7 +60,7 @@ public class BannerService {
 	private String validateBanner(MultipartFile banner) {
 		String contentType = banner.getContentType().toLowerCase();
 		if (!contentType.contains("png") && !contentType.contains("jpeg")) {
-			throw new PaycrException(Constants.FAILURE, "Invalid banner file type");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid banner file type");
 		}
 		if (contentType.contains("png")) {
 			return ".png";

@@ -3,6 +3,7 @@ package com.paycr.invoice.validation;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.util.RandomIdGenerator;
@@ -40,19 +40,19 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 		if (invoice.isUpdate()) {
 			Invoice extInvoice = invRepo.findByInvoiceCode(invoiceCode);
 			if (CommonUtil.isEmpty(invoiceCode) || CommonUtil.isNull(extInvoice)) {
-				throw new PaycrException(Constants.FAILURE, "Invoice not found");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invoice not found");
 			} else {
 				invoice.setId(extInvoice.getId());
 			}
 			if (!InvoiceType.SINGLE.equals(extInvoice.getInvoiceType())) {
-				throw new PaycrException(Constants.FAILURE, "Only Single invoices can be modified");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Only Single invoices can be modified");
 			}
 			if (InvoiceStatus.EXPIRED.equals(extInvoice.getStatus())
 					|| InvoiceStatus.PAID.equals(extInvoice.getStatus())) {
-				throw new PaycrException(Constants.FAILURE, "Invoice cannot be modified now");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invoice cannot be modified now");
 			}
 			if (!invoice.getInvoiceType().equals(extInvoice.getInvoiceType())) {
-				throw new PaycrException(Constants.FAILURE, "Invoice type cannot be modified");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invoice type cannot be modified");
 			}
 			invoice.setParent(extInvoice.getParent());
 			invoice.setUpdated(timeNow);
@@ -68,7 +68,7 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoice.setStatus(InvoiceStatus.CREATED);
 		}
 		if (invoice.getExpiresIn() <= 0) {
-			throw new PaycrException(Constants.FAILURE, "Improper invoice expiry");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Improper invoice expiry");
 		}
 		invoice.setExpiry(DateUtil.getExpiry(timeNow, invoice.getExpiresIn()));
 		if (CommonUtil.isNull(invoice.getShipping())) {

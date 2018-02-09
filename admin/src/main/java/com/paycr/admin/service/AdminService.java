@@ -2,6 +2,7 @@ package com.paycr.admin.service;
 
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.PricingType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.dashboard.validation.IsValidGstinRequest;
 
 @Service
@@ -92,7 +92,7 @@ public class AdminService {
 		if (CommonUtil.isNull(newAddr) || CommonUtil.isEmpty(newAddr.getAddressLine1())
 				|| CommonUtil.isEmpty(newAddr.getCity()) || CommonUtil.isEmpty(newAddr.getState())
 				|| CommonUtil.isEmpty(newAddr.getPincode()) || CommonUtil.isEmpty(newAddr.getCountry())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
 		}
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		Address exstAddr = adset.getAddress();
@@ -112,15 +112,15 @@ public class AdminService {
 	public void newTaxMaster(TaxMaster tax) {
 		logger.info("New tax master : {}", new Gson().toJson(tax));
 		if (CommonUtil.isNull(tax) || CommonUtil.isNull(tax.getName()) || CommonUtil.isNull(tax.getValue())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Tax request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Tax request");
 		}
 		if (tax.isChild()) {
 			if (CommonUtil.isNull(tax.getParentTaxId())) {
-				throw new PaycrException(Constants.FAILURE, "Child tax must have a parent");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Child tax must have a parent");
 			}
 			TaxMaster parent = taxMRepo.findOne(tax.getParentTaxId());
 			if (CommonUtil.isNull(parent) || !parent.isActive()) {
-				throw new PaycrException(Constants.FAILURE, "Parent tax not found");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Parent tax not found");
 			}
 			tax.setTaxParent(parent);
 		}
@@ -133,11 +133,11 @@ public class AdminService {
 		Pricing pricing = pricingRepo.findOne(pricingId);
 		Merchant merchant = merRepo.findOne(merchantId);
 		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		PricingMerchant priMerExt = priMerRepo.findByMerchantAndPricing(merchant, pricing);
 		if (CommonUtil.isNotNull(priMerExt)) {
-			throw new PaycrException(Constants.FAILURE, "Pricing already active for merchant");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Pricing already active for merchant");
 		}
 		priMerExt = new PricingMerchant();
 		priMerExt.setMerchant(merchant);
@@ -155,7 +155,7 @@ public class AdminService {
 		Pricing pricing = pricingRepo.findOne(pricingId);
 		Merchant merchant = merRepo.findOne(merchantId);
 		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Request");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		PricingMerchant priMer = priMerRepo.findByMerchantAndPricing(merchant, pricing);
 		priMerRepo.delete(priMer.getId());

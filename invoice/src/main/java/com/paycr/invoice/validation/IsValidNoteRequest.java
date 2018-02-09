@@ -3,7 +3,7 @@ package com.paycr.invoice.validation;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import org.eclipse.jetty.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -32,10 +32,10 @@ public class IsValidNoteRequest implements RequestValidator<InvoiceNote> {
 		Date timeNow = new Date();
 		Invoice invoice = invRepo.findByInvoiceCode(note.getInvoiceCode());
 		if (CommonUtil.isNull(invoice)) {
-			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Invalid Invoice");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Invoice");
 		}
 		if (CommonUtil.isNotNull(invoice.getNote())) {
-			throw new PaycrException(HttpStatus.BAD_REQUEST_400, "Credit/Debit Note already processed for Invoice");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Credit/Debit Note already processed for Invoice");
 		}
 		String charset = hmacSigner.signWithSecretKey(note.getMerchant().getSecretKey(),
 				String.valueOf(timeNow.getTime()));

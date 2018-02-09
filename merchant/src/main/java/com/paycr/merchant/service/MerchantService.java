@@ -2,6 +2,7 @@ package com.paycr.merchant.service;
 
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,6 @@ import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.Constants;
 import com.paycr.dashboard.validation.IsValidGstinRequest;
 
 @Service
@@ -37,7 +37,7 @@ public class MerchantService {
 		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
 				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
 				|| CommonUtil.isEmpty(addr.getCountry())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Address");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
 		}
 		if (CommonUtil.isNotNull(addr)) {
 			Address address = merchant.getAddress();
@@ -60,14 +60,14 @@ public class MerchantService {
 		List<MerchantCustomParam> customParams = invoiceSetting.getCustomParams();
 		if (CommonUtil.isNull(customParam) || CommonUtil.isEmpty(customParam.getParamName())
 				|| CommonUtil.isNull(customParam.getProvider())) {
-			throw new PaycrException(Constants.FAILURE, "Invalid Custom Param");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Custom Param");
 		}
 		if (customParams.size() >= 10) {
-			throw new PaycrException(Constants.FAILURE, "Cannot configure more than 10 custom params");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Cannot configure more than 10 custom params");
 		}
 		for (MerchantCustomParam param : customParams) {
 			if (param.getParamName().equalsIgnoreCase(customParam.getParamName())) {
-				throw new PaycrException(Constants.FAILURE, "Custom Param already exists");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Custom Param already exists");
 			}
 		}
 		customParams.add(customParam);
@@ -88,7 +88,7 @@ public class MerchantService {
 			}
 		}
 		if (!found) {
-			throw new PaycrException(Constants.FAILURE, "Custom Param does not exists");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Custom Param does not exists");
 		}
 		merRepo.save(merchant);
 	}
