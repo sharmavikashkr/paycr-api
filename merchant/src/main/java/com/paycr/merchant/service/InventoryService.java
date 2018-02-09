@@ -39,6 +39,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Service
 public class InventoryService {
 
+	private int maxUploadSizeInMb = 5 * 1024 * 1024;
+
 	@Autowired
 	private InventoryRepository invnRepo;
 
@@ -129,6 +131,9 @@ public class InventoryService {
 	@Async
 	@Transactional
 	public void uploadInventory(MultipartFile inventoryFile, Merchant merchant, String createdBy) throws IOException {
+		if (maxUploadSizeInMb < inventoryFile.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
+		}
 		List<BulkInventoryUpload> bulkUploads = blkInvnUpldRepo.findByMerchant(merchant);
 		String fileName = merchant.getAccessKey() + "-" + bulkUploads.size() + ".csv";
 		String updatedCsv = server.getBulkInventoryLocation() + fileName;

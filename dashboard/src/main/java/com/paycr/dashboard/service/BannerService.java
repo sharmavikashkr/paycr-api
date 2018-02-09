@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,10 @@ import com.paycr.common.util.CommonUtil;
 @Service
 public class BannerService {
 
+	private static final Logger logger = LoggerFactory.getLogger(BannerService.class);
+
+	private int maxUploadSizeInMb = 2 * 1024 * 1024;
+
 	@Autowired
 	private SecurityService secSer;
 
@@ -37,6 +43,7 @@ public class BannerService {
 	private Server server;
 
 	public void uploadBanner(MultipartFile banner) throws Exception {
+		logger.info("Upload new banner request");
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		File file = null;
 		String extension = validateBanner(banner);
@@ -58,6 +65,9 @@ public class BannerService {
 	}
 
 	private String validateBanner(MultipartFile banner) {
+		if (maxUploadSizeInMb < banner.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
+		}
 		String contentType = banner.getContentType().toLowerCase();
 		if (!contentType.contains("png") && !contentType.contains("jpeg")) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid banner file type");

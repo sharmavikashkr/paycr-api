@@ -46,6 +46,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Service
 public class ConsumerService {
 
+	private int maxUploadSizeInMb = 5 * 1024 * 1024;
+
 	@Autowired
 	private ConsumerRepository conRepo;
 
@@ -183,12 +185,15 @@ public class ConsumerService {
 
 	@Async
 	@Transactional
-	public void uploadConsumers(MultipartFile consumers, Merchant merchant, String createdBy) throws IOException {
+	public void uploadConsumers(MultipartFile consumerFile, Merchant merchant, String createdBy) throws IOException {
+		if (maxUploadSizeInMb < consumerFile.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
+		}
 		List<BulkConsumerUpload> bulkUploads = blkConUpldRepo.findByMerchant(merchant);
 		String fileName = merchant.getAccessKey() + "-" + bulkUploads.size() + ".csv";
 		String updatedCsv = server.getBulkConsumerLocation() + fileName;
 		CSVWriter writer = new CSVWriter(new FileWriter(updatedCsv, true));
-		Reader reader = new InputStreamReader(consumers.getInputStream());
+		Reader reader = new InputStreamReader(consumerFile.getInputStream());
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> consumerList = csvReader.readAll();
 		csvReader.close();

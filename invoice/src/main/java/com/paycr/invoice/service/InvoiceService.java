@@ -53,6 +53,8 @@ import com.paycr.invoice.validation.NoteValidator;
 
 @Service
 public class InvoiceService {
+	
+	private int maxUploadSizeInMb = 2 * 1024 * 1024;
 
 	@Autowired
 	private SecurityService secSer;
@@ -209,6 +211,9 @@ public class InvoiceService {
 	}
 
 	public void saveAttach(String invoiceCode, MultipartFile attach) throws IOException {
+		if (maxUploadSizeInMb < attach.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
+		}
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = getInvoice(invoiceCode);
 		List<InvoiceAttachment> attachments = invoice.getAttachments();

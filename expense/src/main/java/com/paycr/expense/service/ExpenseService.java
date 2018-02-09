@@ -35,6 +35,8 @@ import com.paycr.common.util.CommonUtil;
 @Service
 public class ExpenseService {
 
+	private int maxUploadSizeInMb = 2 * 1024 * 1024;
+
 	@Autowired
 	private SecurityService secSer;
 
@@ -111,6 +113,9 @@ public class ExpenseService {
 	}
 
 	public void saveAttach(String expenseCode, MultipartFile attach) throws IOException {
+		if (maxUploadSizeInMb < attach.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
+		}
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = getExpense(expenseCode);
 		List<ExpenseAttachment> attachments = expense.getAttachments();

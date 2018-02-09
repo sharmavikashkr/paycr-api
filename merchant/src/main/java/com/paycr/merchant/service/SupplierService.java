@@ -38,6 +38,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Service
 public class SupplierService {
 
+	private int maxUploadSizeInMb = 5 * 1024 * 1024;
+
 	@Autowired
 	private SupplierRepository conRepo;
 
@@ -80,12 +82,15 @@ public class SupplierService {
 
 	@Async
 	@Transactional
-	public void uploadSuppliers(MultipartFile suppliers, Merchant merchant, String createdBy) throws IOException {
+	public void uploadSuppliers(MultipartFile supplierFile, Merchant merchant, String createdBy) throws IOException {
+		if (maxUploadSizeInMb < supplierFile.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
+		}
 		List<BulkSupplierUpload> bulkUploads = blkSupUpldRepo.findByMerchant(merchant);
 		String fileName = merchant.getAccessKey() + "-" + bulkUploads.size() + ".csv";
 		String updatedCsv = server.getBulkSupplierLocation() + fileName;
 		CSVWriter writer = new CSVWriter(new FileWriter(updatedCsv, true));
-		Reader reader = new InputStreamReader(suppliers.getInputStream());
+		Reader reader = new InputStreamReader(supplierFile.getInputStream());
 		CSVReader csvReader = new CSVReader(reader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 0);
 		List<String[]> supplierList = csvReader.readAll();
 		csvReader.close();

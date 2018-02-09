@@ -39,6 +39,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Service
 public class AssetService {
 
+	private int maxUploadSizeInMb = 5 * 1024 * 1024;
+
 	@Autowired
 	private AssetRepository assetRepo;
 
@@ -114,6 +116,9 @@ public class AssetService {
 	@Async
 	@Transactional
 	public void uploadAsset(MultipartFile assetFile, Merchant merchant, String createdBy) throws IOException {
+		if (maxUploadSizeInMb < assetFile.getSize()) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
+		}
 		List<BulkAssetUpload> bulkUploads = blkAssetUpldRepo.findByMerchant(merchant);
 		String fileName = merchant.getAccessKey() + "-" + bulkUploads.size() + ".csv";
 		String updatedCsv = server.getBulkAssetLocation() + fileName;
