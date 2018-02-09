@@ -81,11 +81,13 @@ public class BannerService {
 	}
 
 	public byte[] getAdminBanner(String bannerName) throws IOException {
+		logger.info("Get admin banner : {}", bannerName);
 		Path path = Paths.get(server.getAdminLocation() + bannerName);
 		return Files.readAllBytes(path);
 	}
 
 	public byte[] getMerchantBanner(String bannerName) throws IOException {
+		logger.info("Get merchant banner : {}", bannerName);
 		Path path = Paths.get(server.getMerchantLocation() + "banner/" + bannerName);
 		return Files.readAllBytes(path);
 	}

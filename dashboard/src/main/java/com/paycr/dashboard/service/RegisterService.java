@@ -5,10 +5,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.GstSetting;
@@ -36,6 +39,8 @@ import com.paycr.dashboard.validation.MerchantValidator;
 
 @Service
 public class RegisterService {
+
+	private static final Logger logger = LoggerFactory.getLogger(RegisterService.class);
 
 	@Autowired
 	private UserRepository userRepo;
@@ -71,6 +76,7 @@ public class RegisterService {
 	private NotifyService<Merchant> notifySer;
 
 	public void createMerchant(Merchant merchant, String createdBy) {
+		logger.info("Create merchant request : {}", new Gson().toJson(merchant));
 		merValidator.validate(merchant);
 		Date timeNow = new Date();
 		String secretKey = hmacSigner.signWithSecretKey(UUID.randomUUID().toString(),

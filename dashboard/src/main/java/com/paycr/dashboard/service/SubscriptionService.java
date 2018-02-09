@@ -10,10 +10,13 @@ import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.bean.Server;
@@ -54,6 +57,8 @@ import com.razorpay.RazorpayClient;
 
 @Service
 public class SubscriptionService {
+
+	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
 
 	@Autowired
 	private MerchantRepository merRepo;
@@ -108,6 +113,7 @@ public class SubscriptionService {
 	}
 
 	public void offlineSubscription(OfflineSubscription offline) {
+		logger.info("Offline subscription request : {}", new Gson().toJson(offline));
 		Date timeNow = new Date();
 		Merchant merchant = merRepo.findOne(offline.getMerchantId());
 		Pricing pricing = priRepo.findOne(offline.getPricingId());
@@ -166,6 +172,8 @@ public class SubscriptionService {
 	}
 
 	public ModelAndView onlineSubscription(Integer pricingId, Integer quantity, Merchant merchant) {
+		logger.info("Online subscription request for pricingId : {}, quantity : {} by merchant : {}", pricingId,
+				quantity, merchant.getId());
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
 		AdminSetting adset = adsetRepo.findAll().get(0);
@@ -224,6 +232,7 @@ public class SubscriptionService {
 	}
 
 	public Subscription purchase(Map<String, String> formData) throws Exception {
+		logger.info("Purchase response received for subscription : {}", new Gson().toJson(formData));
 		Date timeNow = new Date();
 		AdminSetting adset = adsetRepo.findAll().get(0);
 		String subsCode = null;
@@ -283,6 +292,7 @@ public class SubscriptionService {
 		if (subs.getPayAmount().compareTo(BigDecimal.ZERO) <= 0) {
 			return;
 		}
+		logger.info("Adding subscription : {} to expense for merchant : {}", subs.getId(), merchant.getId());
 		String createdBy = "SYSTEM";
 		Date timeNow = new Date();
 		AdminSetting adset = adsetRepo.findAll().get(0);
@@ -350,26 +360,29 @@ public class SubscriptionService {
 		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense marked paid", true, createdBy);
 	}
 
-	public File downloadPdf(String subscriptionCode) throws IOException {
-		String pdfPath = server.getSubscriptionLocation() + "/receipt" + subscriptionCode + ".pdf";
+	public File downloadPdf(String subsCode) throws IOException {
+		logger.info("Download subscription request for code : {}", subsCode);
+		String pdfPath = server.getSubscriptionLocation() + "/receipt" + subsCode + ".pdf";
 		File pdfFile = new File(pdfPath);
 		if (pdfFile.exists()) {
 			return pdfFile;
 		}
 		pdfFile.createNewFile();
-		pdfUtil.makePdf(company.getAppUrl() + "/subscription/receipt/" + subscriptionCode, pdfFile.getAbsolutePath());
+		pdfUtil.makePdf(company.getAppUrl() + "/subscription/receipt/" + subsCode, pdfFile.getAbsolutePath());
 		return pdfFile;
 	}
 
 	public void decline(String subsCode) {
+		logger.info("Decline subscription request for code : {}", subsCode);
 		Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
 		subs.setStatus("declined");
 		subsRepo.save(subs);
 	}
 
-	public ModelAndView getSubscriptionReceipt(String subscriptionCode) {
+	public ModelAndView getSubscriptionReceipt(String subsCode) {
+		logger.info("Receipt for subscription request for code : {}", subsCode);
 		AdminSetting adset = adsetRepo.findAll().get(0);
-		Subscription subs = getSubscriptionByCode(subscriptionCode);
+		Subscription subs = getSubscriptionByCode(subsCode);
 		ModelAndView mv = new ModelAndView("receipt/subscription");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("subs", subs);

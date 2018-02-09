@@ -10,9 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.report.ExpenseReport;
@@ -43,6 +46,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 public class ExpenseSearchService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ExpenseSearchService.class);
 
 	@Autowired
 	private SecurityService secSer;
@@ -75,6 +80,7 @@ public class ExpenseSearchService {
 	private EmailEngine emailEngine;
 
 	public List<Expense> fetchExpenseList(SearchExpenseRequest request) {
+		logger.info("Search expense request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
@@ -89,6 +95,7 @@ public class ExpenseSearchService {
 	}
 
 	public List<ExpensePayment> fetchPaymentList(SearchExpensePaymentRequest request) {
+		logger.info("Search expense payment request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
@@ -103,6 +110,7 @@ public class ExpenseSearchService {
 	}
 
 	public String downloadPayments(SearchExpensePaymentRequest request) throws IOException {
+		logger.info("Download expense payment request : {}", new Gson().toJson(request));
 		List<ExpensePayment> paymentList = fetchPaymentList(request);
 		List<ExpenseReport> invoiceReports = new ArrayList<>();
 		for (ExpensePayment payment : paymentList) {
@@ -143,6 +151,7 @@ public class ExpenseSearchService {
 	}
 
 	public void mailPayments(SearchExpensePaymentRequest request) throws IOException {
+		logger.info("Mail expense payment request : {}", new Gson().toJson(request));
 		PcUser user = secSer.findLoggedInUser();
 		Date timeNow = DateUtil.getUTCTimeInIST(new Date());
 		String repCsv = downloadPayments(request);
@@ -168,6 +177,7 @@ public class ExpenseSearchService {
 	}
 
 	public Set<Supplier> fetchSupplierList(SearchSupplierRequest request) {
+		logger.info("Search supplier request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
@@ -177,6 +187,7 @@ public class ExpenseSearchService {
 	}
 
 	public List<Asset> fetchAssetList(SearchAssetRequest request) {
+		logger.info("Search asset request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {

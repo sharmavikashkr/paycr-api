@@ -10,10 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.report.InvoiceReport;
@@ -44,6 +47,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 public class InvoiceSearchService {
+
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceSearchService.class);
 
 	@Autowired
 	private SecurityService secSer;
@@ -76,6 +81,7 @@ public class InvoiceSearchService {
 	private EmailEngine emailEngine;
 
 	public List<Invoice> fetchInvoiceList(SearchInvoiceRequest request) {
+		logger.info("Search invoice request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
@@ -90,6 +96,7 @@ public class InvoiceSearchService {
 	}
 
 	public List<InvoicePayment> fetchPaymentList(SearchInvoicePaymentRequest request) {
+		logger.info("Search invoice payment request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
 		request.setCreatedFrom(
@@ -104,6 +111,7 @@ public class InvoiceSearchService {
 	}
 
 	public Set<Consumer> fetchConsumerList(SearchConsumerRequest request) {
+		logger.info("Search consumer request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
@@ -113,6 +121,7 @@ public class InvoiceSearchService {
 	}
 
 	public String downloadPayments(SearchInvoicePaymentRequest request) throws IOException {
+		logger.info("Download invoice payment request : {}", new Gson().toJson(request));
 		List<InvoicePayment> paymentList = fetchPaymentList(request);
 		List<InvoiceReport> invoiceReports = new ArrayList<>();
 		for (InvoicePayment payment : paymentList) {
@@ -154,6 +163,7 @@ public class InvoiceSearchService {
 
 	@Async
 	public void mailPayments(SearchInvoicePaymentRequest request) throws IOException {
+		logger.info("Mail invoice payment request : {}", new Gson().toJson(request));
 		PcUser user = secSer.findLoggedInUser();
 		Date timeNow = DateUtil.getUTCTimeInIST(new Date());
 		String repCsv = downloadPayments(request);
@@ -179,6 +189,7 @@ public class InvoiceSearchService {
 	}
 
 	public List<Inventory> fetchInventoryList(SearchInventoryRequest request) {
+		logger.info("Search inventory request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {

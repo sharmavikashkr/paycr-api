@@ -62,11 +62,8 @@ public class AdminService {
 	public void togglePricing(Integer pricingId) {
 		logger.info("Toggle Pricing id : {}", pricingId);
 		Pricing pri = pricingRepo.findOne(pricingId);
-		if (pri.isActive()) {
-			pri.setActive(false);
-		} else {
-			pri.setActive(true);
-		}
+		pri.setActive(!pri.isActive());
+		pri.setActive(true);
 		pricingRepo.save(pri);
 	}
 
