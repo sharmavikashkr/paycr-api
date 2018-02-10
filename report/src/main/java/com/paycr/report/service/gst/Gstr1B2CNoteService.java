@@ -43,7 +43,7 @@ public class Gstr1B2CNoteService {
 		List<Gstr1B2CNote> b2cNoteList = new ArrayList<Gstr1B2CNote>();
 		for (InvoiceNote note : noteList) {
 			Invoice invoice = invRepo.findByInvoiceCode(note.getInvoiceCode());
-			if (invoice.getTotalPrice().compareTo(BigDecimal.valueOf(250000)) <= 0) {
+			if (BigDecimal.valueOf(250000).compareTo(invoice.getTotalPrice()) < 0) {
 				Gstr1B2CNote b2cNote = new Gstr1B2CNote();
 				b2cNote.setNoteNo(note.getNoteCode());
 				b2cNote.setNoteDate(note.getCreated());

@@ -63,8 +63,8 @@ public class Gstr1B2CSmallService {
 		List<InvoiceNote> noteList = invNoteList.stream().filter(t -> (CommonUtil.isEmpty(t.getConsumer().getGstin())))
 				.collect(Collectors.toList());
 		for (InvoiceNote note : noteList) {
-			if (invRepo.findByInvoiceCode(note.getInvoiceCode()).getTotalPrice()
-					.compareTo(BigDecimal.valueOf(250000)) <= 0) {
+			if (BigDecimal.valueOf(250000)
+					.compareTo(invRepo.findByInvoiceCode(note.getInvoiceCode()).getTotalPrice()) >= 0) {
 				List<Gstr1B2CSmall> taxbrkList = gstHelp.getTaxBreakup(note.getItems());
 				for (Gstr1B2CSmall taxBrk : taxbrkList) {
 					List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream()
