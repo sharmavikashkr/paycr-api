@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.ExpenseAttachment;
+import com.paycr.common.data.domain.ExpenseNote;
 import com.paycr.common.data.domain.ExpensePayment;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
@@ -28,9 +29,11 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.ExpenseStatus;
+import com.paycr.common.type.NoteType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.expense.validation.ExpenseNoteValidator;
 
 @Service
 public class ExpenseService {
@@ -45,6 +48,9 @@ public class ExpenseService {
 
 	@Autowired
 	private ExpensePaymentRepository payRepo;
+
+	@Autowired
+	private ExpenseNoteValidator noteValid;
 
 	@Autowired
 	private Server server;
@@ -70,7 +76,8 @@ public class ExpenseService {
 				refundAllowed = refundAllowed.subtract(refund.getAmount());
 			}
 		}
-		if (ExpenseStatus.PAID.equals(expense.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
+		if (ExpenseStatus.PAID.equals(expense.getStatus())
+				&& refundAllowed.setScale(2, BigDecimal.ROUND_HALF_DOWN).compareTo(amount) >= 0) {
 			Date timeNow = new Date();
 			ExpensePayment payment = expense.getPayment();
 			ExpensePayment refPay = new ExpensePayment();
@@ -110,6 +117,22 @@ public class ExpenseService {
 		expense.setStatus(ExpenseStatus.PAID);
 		expRepo.save(expense);
 		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE, "Expense marked paid", true, user.getEmail());
+	}
+
+	public void newNote(ExpenseNote note) {
+		Date timeNow = new Date();
+		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		Expense expense = expRepo.findByExpenseCode(note.getExpenseCode());
+		note.setCreated(timeNow);
+		note.setCreatedBy(user.getEmail());
+		note.setMerchant(merchant);
+		noteValid.validate(note);
+		if (NoteType.DEBIT.equals(note.getNoteType())) {
+			refund(note.getPayAmount(), expense.getExpenseCode());
+		}
+		expense.setNote(note);
+		expRepo.save(expense);
 	}
 
 	public void saveAttach(String expenseCode, MultipartFile attach) throws IOException {

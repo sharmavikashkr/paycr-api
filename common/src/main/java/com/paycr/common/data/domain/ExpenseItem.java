@@ -29,6 +29,10 @@ public class ExpenseItem {
 	@ManyToOne
 	private Expense expense;
 
+	@JsonIgnore
+	@ManyToOne
+	private ExpenseNote expenseNote;
+
 	@ManyToOne
 	private Asset asset;
 
@@ -74,6 +78,14 @@ public class ExpenseItem {
 
 	public void setAsset(Asset asset) {
 		this.asset = asset;
+	}
+
+	public ExpenseNote getExpenseNote() {
+		return expenseNote;
+	}
+
+	public void setExpenseNote(ExpenseNote expenseNote) {
+		this.expenseNote = expenseNote;
 	}
 
 }

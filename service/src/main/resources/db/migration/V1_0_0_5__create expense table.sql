@@ -25,6 +25,24 @@ CREATE TABLE if not exists pc_expense_payment (
 	merchant_id int REFERENCES pc_merchant
 );
 
+CREATE TABLE if not exists pc_expense_note (
+	id SERIAL PRIMARY KEY NOT NULL,
+	created timestamp NOT NULL,
+	expense_code varchar(20) NOT NULL,
+	note_code varchar(20) NOT NULL,
+	note_type varchar(20) NOT NULL,
+	note_date timestamp NOT NULL,
+	note_reason varchar(255) NOT NULL,
+	total float NOT NULL,
+	total_price float NOT NULL,
+	adjustment float NOT NULL,
+	pay_amount float NOT NULL,
+	currency varchar(10) NOT NULL,
+	merchant_id int REFERENCES pc_merchant,
+	supplier_id int REFERENCES pc_supplier,
+	created_by varchar(50) NOT NULL
+);
+
 CREATE TABLE if not exists pc_expense(
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
@@ -69,6 +87,7 @@ CREATE TABLE if not exists pc_expense_item (
 	quantity int NOT NULL,
 	price float NOT NULL,
     expense_id int REFERENCES pc_expense,
+    expense_note_id int REFERENCES pc_expense_note,
 	tax_id int REFERENCES pc_tax_master,
     asset_id int REFERENCES pc_asset
 );

@@ -84,6 +84,9 @@ public class Expense {
 	@OneToOne(cascade = CascadeType.ALL)
 	private ExpensePayment payment;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	private ExpenseNote note;
+
 	@Enumerated(EnumType.STRING)
 	private ExpenseStatus status;
 
@@ -274,5 +277,13 @@ public class Expense {
 
 	public void setInvoiceDate(Date invoiceDate) {
 		this.invoiceDate = invoiceDate;
+	}
+
+	public ExpenseNote getNote() {
+		return note;
+	}
+
+	public void setNote(ExpenseNote note) {
+		this.note = note;
 	}
 }

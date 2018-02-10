@@ -1,7 +1,6 @@
 package com.paycr.invoice.validation;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 import org.apache.http.HttpStatus;
 import org.springframework.core.annotation.Order;
@@ -15,9 +14,7 @@ import com.paycr.common.validation.RequestValidator;
 
 @Component
 @Order(2)
-public class IsValidNoteAmount implements RequestValidator<InvoiceNote> {
-
-	DecimalFormat df = new DecimalFormat("#.00");
+public class IsValidInvoiceNoteAmount implements RequestValidator<InvoiceNote> {
 
 	@Override
 	public void validate(InvoiceNote note) {

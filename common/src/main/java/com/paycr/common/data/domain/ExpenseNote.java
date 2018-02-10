@@ -23,18 +23,20 @@ import com.paycr.common.type.Currency;
 import com.paycr.common.type.NoteType;
 
 @Entity
-@Table(name = "pc_invoice_note")
-public class InvoiceNote implements Cloneable {
+@Table(name = "pc_expense_note")
+public class ExpenseNote implements Cloneable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private Date created;
+
+	@NotEmpty
 	private String noteCode;
 
 	@NotEmpty
-	private String invoiceCode;
+	private String expenseCode;
 
 	@NotNull
 	private Date noteDate;
@@ -45,8 +47,6 @@ public class InvoiceNote implements Cloneable {
 
 	@NotNull
 	private String noteReason;
-
-	private boolean refundCreditNote;
 
 	@ManyToOne
 	private Merchant merchant;
@@ -71,10 +71,10 @@ public class InvoiceNote implements Cloneable {
 	private Currency currency;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Consumer consumer;
+	private Supplier supplier;
 
-	@OneToMany(mappedBy = "invoiceNote", cascade = CascadeType.ALL)
-	private List<InvoiceItem> items;
+	@OneToMany(mappedBy = "expenseNote", cascade = CascadeType.ALL)
+	private List<ExpenseItem> items;
 
 	private String createdBy;
 
@@ -92,14 +92,6 @@ public class InvoiceNote implements Cloneable {
 
 	public void setNoteCode(String noteCode) {
 		this.noteCode = noteCode;
-	}
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
 	}
 
 	public Merchant getMerchant() {
@@ -132,22 +124,6 @@ public class InvoiceNote implements Cloneable {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
-	}
-
-	public Consumer getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
-	}
-
-	public List<InvoiceItem> getItems() {
-		return items;
-	}
-
-	public void setItems(List<InvoiceItem> items) {
-		this.items = items;
 	}
 
 	public String getCreatedBy() {
@@ -194,20 +170,36 @@ public class InvoiceNote implements Cloneable {
 		this.noteReason = noteReason;
 	}
 
-	public boolean isRefundCreditNote() {
-		return refundCreditNote;
-	}
-
-	public void setRefundCreditNote(boolean refundCreditNote) {
-		this.refundCreditNote = refundCreditNote;
-	}
-
 	public Date getNoteDate() {
 		return noteDate;
 	}
 
 	public void setNoteDate(Date noteDate) {
 		this.noteDate = noteDate;
+	}
+
+	public String getExpenseCode() {
+		return expenseCode;
+	}
+
+	public void setExpenseCode(String expenseCode) {
+		this.expenseCode = expenseCode;
+	}
+
+	public List<ExpenseItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<ExpenseItem> items) {
+		this.items = items;
+	}
+
+	public Supplier getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
 	}
 
 }

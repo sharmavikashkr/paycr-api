@@ -21,7 +21,7 @@ import com.paycr.common.validation.RequestValidator;
 
 @Component
 @Order(1)
-public class IsValidNoteItems implements RequestValidator<InvoiceNote> {
+public class IsValidInvoiceNoteItems implements RequestValidator<InvoiceNote> {
 
 	@Autowired
 	private InventoryRepository invnRepo;

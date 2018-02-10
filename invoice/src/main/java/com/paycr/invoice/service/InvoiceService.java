@@ -49,11 +49,11 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.scheduler.InvoiceSchedulerService;
-import com.paycr.invoice.validation.NoteValidator;
+import com.paycr.invoice.validation.InvoiceNoteValidator;
 
 @Service
 public class InvoiceService {
-	
+
 	private int maxUploadSizeInMb = 2 * 1024 * 1024;
 
 	@Autowired
@@ -66,7 +66,7 @@ public class InvoiceService {
 	private InvoicePaymentRepository payRepo;
 
 	@Autowired
-	private NoteValidator noteValid;
+	private InvoiceNoteValidator noteValid;
 
 	@Autowired
 	private InvoiceHelper invHelp;
@@ -167,7 +167,8 @@ public class InvoiceService {
 				refundAllowed = refundAllowed.subtract(refund.getAmount());
 			}
 		}
-		if (InvoiceStatus.PAID.equals(invoice.getStatus()) && refundAllowed.compareTo(amount) >= 0) {
+		if (InvoiceStatus.PAID.equals(invoice.getStatus())
+				&& refundAllowed.setScale(2, BigDecimal.ROUND_HALF_DOWN).compareTo(amount) >= 0) {
 			payService.refund(invoice, amount, user.getEmail());
 		} else {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Refund Not allowed");

@@ -1,4 +1,4 @@
-package com.paycr.invoice.validation;
+package com.paycr.expense.validation;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.InvoiceNote;
-import com.paycr.common.data.repository.InvoiceRepository;
+import com.paycr.common.data.domain.Expense;
+import com.paycr.common.data.domain.ExpenseNote;
+import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.HmacSignerUtil;
@@ -19,23 +19,23 @@ import com.paycr.common.validation.RequestValidator;
 
 @Component
 @Order(0)
-public class IsValidNoteRequest implements RequestValidator<InvoiceNote> {
+public class IsValidExpenseNoteRequest implements RequestValidator<ExpenseNote> {
 
 	@Autowired
-	private InvoiceRepository invRepo;
+	private ExpenseRepository expRepo;
 
 	@Autowired
 	private HmacSignerUtil hmacSigner;
 
 	@Override
-	public void validate(InvoiceNote note) {
+	public void validate(ExpenseNote note) {
 		Date timeNow = new Date();
-		Invoice invoice = invRepo.findByInvoiceCode(note.getInvoiceCode());
-		if (CommonUtil.isNull(invoice)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Invoice");
+		Expense expense = expRepo.findByExpenseCode(note.getExpenseCode());
+		if (CommonUtil.isNull(expense)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Expense");
 		}
-		if (CommonUtil.isNotNull(invoice.getNote())) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Credit/Debit Note already processed for Invoice");
+		if (CommonUtil.isNotNull(expense.getNote())) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Credit/Debit Note already processed for Expense");
 		}
 		String charset = hmacSigner.signWithSecretKey(note.getMerchant().getSecretKey(),
 				String.valueOf(timeNow.getTime()));
@@ -44,12 +44,12 @@ public class IsValidNoteRequest implements RequestValidator<InvoiceNote> {
 		do {
 			noteCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 			note.setNoteCode(noteCode);
-		} while (CommonUtil.isNotNull(invRepo.findByNoteCode(noteCode)));
+		} while (CommonUtil.isNotNull(expRepo.findByNoteCode(noteCode)));
 		if (CommonUtil.isNull(note.getAdjustment())) {
 			note.setAdjustment(BigDecimal.ZERO);
 		}
 		note.setCreated(timeNow);
-		note.setConsumer(invoice.getConsumer());
+		note.setSupplier(expense.getSupplier());
 	}
 
 }

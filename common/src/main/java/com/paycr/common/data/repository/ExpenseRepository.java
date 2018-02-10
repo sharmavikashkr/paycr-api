@@ -28,4 +28,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 			+ "e.status = ?2 AND e.invoice_date BETWEEN ?3 AND ?4", nativeQuery = true)
 	public List<Object[]> findCountAndSumForMerchant(Integer merchantId, String status, Date startDate, Date endDate);
 
+	@Query("SELECT i from Expense i WHERE i.note.noteCode = ?1")
+	public Expense findByNoteCode(String noteCode);
+
 }

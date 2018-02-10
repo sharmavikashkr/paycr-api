@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.paycr.common.data.domain.ExpenseNote;
 import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.domain.Merchant;
 
 @Repository
-public interface InvoiceNoteRepository extends JpaRepository<InvoiceNote, Integer> {
+public interface ExpenseNoteRepository extends JpaRepository<ExpenseNote, Integer> {
 
-	@Query(value = "SELECT i FROM InvoiceNote i WHERE i.merchant = ?1 AND i.noteDate BETWEEN ?2 AND ?3")
+	@Query(value = "SELECT i FROM ExpenseNote i WHERE i.merchant = ?1 AND i.noteDate BETWEEN ?2 AND ?3")
 	public List<InvoiceNote> findNotesForMerchant(Merchant merchant, Date startDate, Date endDate);
 
 }

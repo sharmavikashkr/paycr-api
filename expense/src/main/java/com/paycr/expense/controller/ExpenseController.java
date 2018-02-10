@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.data.domain.ExpenseNote;
 import com.paycr.common.data.domain.ExpensePayment;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.expense.service.ExpenseService;
@@ -44,6 +46,12 @@ public class ExpenseController {
 	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
 	public void markPaid(@RequestBody ExpensePayment payment) {
 		expSer.markPaid(payment);
+	}
+
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/note/new", method = RequestMethod.POST)
+	public void newNote(@Valid @RequestBody ExpenseNote note) {
+		expSer.newNote(note);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)

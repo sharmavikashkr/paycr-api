@@ -42,6 +42,7 @@ CREATE TABLE if not exists pc_invoice_note (
 	invoice_code varchar(20) NOT NULL,
 	note_code varchar(20) NOT NULL,
 	note_type varchar(20) NOT NULL,
+	note_date timestamp NOT NULL,
 	note_reason varchar(255) NOT NULL,
 	refund_credit_note boolean NOT NULL,
 	total float NOT NULL,

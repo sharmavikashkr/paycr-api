@@ -9,7 +9,7 @@ import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.validation.RequestValidator;
 
 @Service
-public class NoteValidator implements RequestValidator<InvoiceNote> {
+public class InvoiceNoteValidator implements RequestValidator<InvoiceNote> {
 
 	@Autowired
 	private List<RequestValidator<InvoiceNote>> rules;
