@@ -12,6 +12,7 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.DateFilter;
@@ -226,6 +227,7 @@ public class ReportService {
 	}
 
 	@Async
+	@Transactional
 	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {
 		String repCsv = downloadReport(report, merchant);
 		DateFilter df = repHelp.getDateFilterInIST(report.getTimeRange());

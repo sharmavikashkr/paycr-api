@@ -23,7 +23,7 @@ import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
-import com.paycr.report.helper.GstHelper;
+import com.paycr.report.helper.Gstr1Helper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -31,7 +31,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class Gstr1B2CNoteService {
 
 	@Autowired
-	private GstHelper gstHelp;
+	private Gstr1Helper gstHelp;
 
 	@Autowired
 	private InvoiceRepository invRepo;

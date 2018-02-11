@@ -84,7 +84,7 @@ public class ExpenseSearchController {
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
 		}
-		expSerSer.mailPayments(request);
+		expSerSer.mailPayments(request, secSer.findLoggedInUser());
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)

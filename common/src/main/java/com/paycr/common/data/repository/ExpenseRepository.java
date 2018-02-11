@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.type.ExpenseStatus;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
@@ -28,7 +29,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 			+ "e.status = ?2 AND e.invoice_date BETWEEN ?3 AND ?4", nativeQuery = true)
 	public List<Object[]> findCountAndSumForMerchant(Integer merchantId, String status, Date startDate, Date endDate);
 
-	@Query("SELECT i from Expense i WHERE i.note.noteCode = ?1")
+	@Query(value = "SELECT e FROM Expense e WHERE e.merchant = ?1 AND e.status in ?2 AND e.invoiceDate BETWEEN ?3 AND ?4")
+	public List<Expense> findExpensesForMerchant(Merchant merchant, List<ExpenseStatus> statuses, Date startDate,
+			Date endDate);
+
+	@Query("SELECT e from Expense e WHERE e.note.noteCode = ?1")
 	public Expense findByNoteCode(String noteCode);
 
 }

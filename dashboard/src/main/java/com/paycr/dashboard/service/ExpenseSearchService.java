@@ -13,7 +13,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
 import com.paycr.common.bean.Company;
@@ -37,7 +39,6 @@ import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.Supplier;
 import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.data.repository.MerchantRepository;
-import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.PaycrUtil;
@@ -48,9 +49,6 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class ExpenseSearchService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExpenseSearchService.class);
-
-	@Autowired
-	private SecurityService secSer;
 
 	@Autowired
 	private ExpenseDao expDao;
@@ -150,9 +148,10 @@ public class ExpenseSearchService {
 		return writer.toString();
 	}
 
-	public void mailPayments(SearchExpensePaymentRequest request) throws IOException {
+	@Async
+	@Transactional
+	public void mailPayments(SearchExpensePaymentRequest request, PcUser user) throws IOException {
 		logger.info("Mail expense payment request : {}", new Gson().toJson(request));
-		PcUser user = secSer.findLoggedInUser();
 		Date timeNow = DateUtil.getUTCTimeInIST(new Date());
 		String repCsv = downloadPayments(request);
 		String fileName = "Expense Payment - " + timeNow.getTime() + ".csv";

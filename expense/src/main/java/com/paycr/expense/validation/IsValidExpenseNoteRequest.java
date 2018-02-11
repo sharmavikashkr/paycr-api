@@ -14,7 +14,6 @@ import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.HmacSignerUtil;
-import com.paycr.common.util.RandomIdGenerator;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
@@ -40,11 +39,9 @@ public class IsValidExpenseNoteRequest implements RequestValidator<ExpenseNote> 
 		String charset = hmacSigner.signWithSecretKey(note.getMerchant().getSecretKey(),
 				String.valueOf(timeNow.getTime()));
 		charset += charset.toLowerCase() + charset.toUpperCase();
-		String noteCode = note.getNoteCode();
-		do {
-			noteCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
-			note.setNoteCode(noteCode);
-		} while (CommonUtil.isNotNull(expRepo.findByNoteCode(noteCode)));
+		if (CommonUtil.isNotNull(expRepo.findByNoteCode(note.getNoteCode()))) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Note with this code already exists");
+		}
 		if (CommonUtil.isNull(note.getAdjustment())) {
 			note.setAdjustment(BigDecimal.ZERO);
 		}

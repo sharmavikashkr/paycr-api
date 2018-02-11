@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -67,6 +69,7 @@ public class Gstr1Service {
 	@Autowired
 	private EmailEngine emailEngine;
 
+	@Transactional
 	public Gstr1Report loadGstr1Report(Merchant merchant, String periodStr) throws Exception {
 		Date start = null;
 		Date end = null;
@@ -131,6 +134,7 @@ public class Gstr1Service {
 	}
 
 	@Async
+	@Transactional
 	public void mailGstr1Report(String recepient, Merchant merchant, String periodStr) throws Exception {
 		String fileName = "GSTR1 Report - " + periodStr + ".zip";
 		String filePath = getAssembledZipFilePath(merchant, periodStr);

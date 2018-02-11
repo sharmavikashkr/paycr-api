@@ -17,7 +17,7 @@ import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 
 @Component
-public class GstHelper {
+public class Gstr1Helper {
 
 	@Autowired
 	private TaxMasterRepository taxMRepo;

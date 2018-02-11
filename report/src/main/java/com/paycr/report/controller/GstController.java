@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paycr.common.bean.gst.Gstr1Report;
+import com.paycr.common.bean.gst.Gstr2Report;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
 import com.paycr.report.service.gst.Gstr1Service;
+import com.paycr.report.service.gst.Gstr2Service;
 
 @RestController
 @RequestMapping("/gst")
@@ -19,6 +21,9 @@ public class GstController {
 
 	@Autowired
 	private Gstr1Service gstr1Ser;
+
+	@Autowired
+	private Gstr2Service gstr2Ser;
 
 	@Autowired
 	private SecurityService secSer;
@@ -45,6 +50,30 @@ public class GstController {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		gstr1Ser.mailGstr1Report(user.getEmail(), merchant, period);
+	}
+
+	@RequestMapping("/gstr2/{period}")
+	public Gstr2Report gstr2(@PathVariable String period) throws Exception {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		return gstr2Ser.loadGstr2Report(merchant, period);
+	}
+
+	@RequestMapping("/gstr2/download/{period}")
+	public void gstr2Download(@PathVariable String period, HttpServletResponse response) throws Exception {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		response.setHeader("Content-Disposition", "attachment; filename=\"GSTR2 Report - " + period + ".zip\"");
+		response.setContentType("application/zip");
+		byte[] content = gstr2Ser.downloadGstr2Report(merchant, period);
+		response.getOutputStream().write(content);
+		response.setContentLength(content.length);
+		response.flushBuffer();
+	}
+
+	@RequestMapping("/gstr2/mail/{period}")
+	public void gstr2Mail(@PathVariable String period) throws Exception {
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
+		gstr2Ser.mailGstr2Report(user.getEmail(), merchant, period);
 	}
 
 }

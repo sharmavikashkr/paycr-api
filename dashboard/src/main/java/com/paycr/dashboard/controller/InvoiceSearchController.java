@@ -95,7 +95,7 @@ public class InvoiceSearchController {
 		if (CommonUtil.isNotNull(merchant)) {
 			request.setMerchant(merchant.getId());
 		}
-		invSerSer.mailPayments(request);
+		invSerSer.mailPayments(request, secSer.findLoggedInUser());
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)

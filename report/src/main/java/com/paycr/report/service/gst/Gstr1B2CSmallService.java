@@ -21,7 +21,7 @@ import com.paycr.common.data.domain.InvoiceNote;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.type.NoteType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.report.helper.GstHelper;
+import com.paycr.report.helper.Gstr1Helper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -29,7 +29,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class Gstr1B2CSmallService {
 
 	@Autowired
-	private GstHelper gstHelp;
+	private Gstr1Helper gstHelp;
 
 	@Autowired
 	private InvoiceRepository invRepo;

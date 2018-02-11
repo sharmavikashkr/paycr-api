@@ -21,7 +21,7 @@ import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.type.SupplyType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
-import com.paycr.report.helper.GstHelper;
+import com.paycr.report.helper.Gstr1Helper;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -29,7 +29,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class Gstr1B2CLargeService {
 
 	@Autowired
-	private GstHelper gstHelp;
+	private Gstr1Helper gstHelp;
 
 	@Async
 	public Future<Boolean> collectB2CLargeList(Gstr1Report gstr1Report, List<Invoice> invoiceList) {
