@@ -1,5 +1,6 @@
 package com.paycr.common.util;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,6 +9,10 @@ import org.apache.http.HttpStatus;
 import com.paycr.common.exception.PaycrException;
 
 public class PaycrUtil {
+
+	public static BigDecimal getPricingRate(int limit, int duration) {
+		return BigDecimal.valueOf(((float) limit / duration) * 48.60).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
 
 	public static void validateRequest(Object request) {
 		if (CommonUtil.isNull(request)) {

@@ -13,7 +13,7 @@ import com.paycr.common.data.repository.PricingRepository;
 import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.PricingRule;
+import com.paycr.common.util.PaycrUtil;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
@@ -51,7 +51,7 @@ public class IsValidPricingRequest implements RequestValidator<Pricing> {
 			TaxMaster noTax = taxMRepo.findByName("NO_TAX");
 			pricing.setIntrastateTax(noTax);
 		}
-		pricing.setRate(PricingRule.getPricingRate(pricing.getLimit(), pricing.getDuration()));
+		pricing.setRate(PaycrUtil.getPricingRate(pricing.getLimit(), pricing.getDuration()));
 		pricing.setCreated(new Date());
 		pricing.setActive(true);
 	}

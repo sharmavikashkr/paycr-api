@@ -33,9 +33,6 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 	@Override
 	public void validate(Invoice invoice) {
 		Date timeNow = new Date();
-		String charset = hmacSigner.signWithSecretKey(invoice.getMerchant().getSecretKey(),
-				String.valueOf(timeNow.getTime()));
-		charset += charset.toLowerCase() + charset.toUpperCase();
 		String invoiceCode = invoice.getInvoiceCode();
 		if (invoice.isUpdate()) {
 			Invoice extInvoice = invRepo.findByInvoiceCode(invoiceCode);
@@ -57,6 +54,9 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoice.setParent(extInvoice.getParent());
 			invoice.setUpdated(timeNow);
 		} else {
+			String charset = hmacSigner.signWithSecretKey(invoice.getMerchant().getSecretKey(),
+					String.valueOf(timeNow.getTime()));
+			charset += charset.toLowerCase() + charset.toUpperCase();
 			do {
 				invoiceCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 				invoice.setInvoiceCode(invoiceCode);

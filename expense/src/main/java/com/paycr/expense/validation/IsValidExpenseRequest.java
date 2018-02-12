@@ -30,9 +30,6 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 	@Override
 	public void validate(Expense expense) {
 		Date timeNow = new Date();
-		String charset = hmacSigner.signWithSecretKey(expense.getMerchant().getSecretKey(),
-				String.valueOf(timeNow.getTime()));
-		charset += charset.toLowerCase() + charset.toUpperCase();
 		String expenseCode = expense.getExpenseCode();
 		if (expense.isUpdate()) {
 			Expense extExpense = expRepo.findByExpenseCode(expenseCode);
@@ -44,6 +41,12 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 			}
 			expense.setUpdated(timeNow);
 		} else {
+			if (!CommonUtil.match(expense.getInvoiceCode(), CommonUtil.INVOICE_CODE_PATTERN)) {
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid invoice code");
+			}
+			String charset = hmacSigner.signWithSecretKey(expense.getMerchant().getSecretKey(),
+					String.valueOf(timeNow.getTime()));
+			charset += charset.toLowerCase() + charset.toUpperCase();
 			do {
 				expenseCode = RandomIdGenerator.generateInvoiceCode(charset.toCharArray());
 				expense.setExpenseCode(expenseCode);

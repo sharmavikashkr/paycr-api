@@ -13,7 +13,6 @@ import com.paycr.common.data.domain.ExpenseNote;
 import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.common.util.HmacSignerUtil;
 import com.paycr.common.validation.RequestValidator;
 
 @Component
@@ -22,9 +21,6 @@ public class IsValidExpenseNoteRequest implements RequestValidator<ExpenseNote> 
 
 	@Autowired
 	private ExpenseRepository expRepo;
-
-	@Autowired
-	private HmacSignerUtil hmacSigner;
 
 	@Override
 	public void validate(ExpenseNote note) {
@@ -36,11 +32,11 @@ public class IsValidExpenseNoteRequest implements RequestValidator<ExpenseNote> 
 		if (CommonUtil.isNotNull(expense.getNote())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Credit/Debit Note already processed for Expense");
 		}
-		String charset = hmacSigner.signWithSecretKey(note.getMerchant().getSecretKey(),
-				String.valueOf(timeNow.getTime()));
-		charset += charset.toLowerCase() + charset.toUpperCase();
 		if (CommonUtil.isNotNull(expRepo.findByNoteCode(note.getNoteCode()))) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Note with this code already exists");
+		}
+		if (!CommonUtil.match(note.getNoteCode(), CommonUtil.INVOICE_CODE_PATTERN)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid note code");
 		}
 		if (CommonUtil.isNull(note.getAdjustment())) {
 			note.setAdjustment(BigDecimal.ZERO);

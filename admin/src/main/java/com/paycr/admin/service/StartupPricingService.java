@@ -32,7 +32,7 @@ public class StartupPricingService {
 		welcomePri.setActive(true);
 		welcomePri.setCreated(new Date());
 		welcomePri.setDescription("Welcome Plan");
-		welcomePri.setDuration(90);
+		welcomePri.setDuration(45);
 		welcomePri.setName("WELCOME");
 		welcomePri.setRate(BigDecimal.ZERO);
 		welcomePri.setLimit(1000);

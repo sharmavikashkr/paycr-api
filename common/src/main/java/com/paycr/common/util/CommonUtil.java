@@ -24,9 +24,11 @@ public class CommonUtil {
 
 	public static final String MOBILE_PATTERN = "^[7-9]{1}[0-9]{9}$";
 
-	public static final String NAME_PATTERN = "[a-zA-Z ]*";
+	public static final String NAME_PATTERN = "[a-zA-Z ]{1,50}";
 
 	public static final String GSTIN_PATTERN = "[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Z]{1}[0-9a-zA-Z]{1}";
+
+	public static final String INVOICE_CODE_PATTERN = "[a-zA-Z0-9-/ ]{3,16}";
 
 	public static String base64Decode(String val) throws PaycrException {
 		try {
