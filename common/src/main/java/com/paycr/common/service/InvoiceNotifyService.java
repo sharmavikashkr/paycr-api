@@ -58,7 +58,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 			sms.setTo(invoice.getConsumer().getMobile());
 			try {
 				sms.setMessage(getSms(invoiceNotify));
-				smsEngine.send(sms);
+				smsEngine.sendViaSNS(sms);
 			} catch (Exception ex) {
 				logger.error("Execption while generating sms body : {}", ex);
 			}
