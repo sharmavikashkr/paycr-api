@@ -1,5 +1,6 @@
 package com.paycr.invoice.service;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.awss3.AwsS3Folder;
+import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.ChildInvoiceRequest;
 import com.paycr.common.bean.Server;
 import com.paycr.common.bean.search.SearchConsumerRequest;
@@ -81,6 +84,9 @@ public class CreateInvoiceService {
 
 	@Autowired
 	private Server server;
+	
+	@Autowired
+	private AwsS3Service awsS3Ser;
 
 	@Autowired
 	private BulkInvoiceUploadRepository bulkUpdRepo;
@@ -206,6 +212,7 @@ public class CreateInvoiceService {
 			writer.writeNext(record);
 		}
 		writer.close();
+		awsS3Ser.saveFile(AwsS3Folder.INVOICE, new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkInvoiceUpload bun = new BulkInvoiceUpload();
 		bun.setCreated(timeNow);

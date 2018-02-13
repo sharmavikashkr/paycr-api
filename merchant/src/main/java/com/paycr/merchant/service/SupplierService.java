@@ -1,12 +1,10 @@
 package com.paycr.merchant.service;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.awss3.AwsS3Folder;
+import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.BulkSupplierUpload;
@@ -48,6 +48,9 @@ public class SupplierService {
 
 	@Autowired
 	private Server server;
+
+	@Autowired
+	private AwsS3Service awsS3Ser;
 
 	@Autowired
 	private SecurityService secSer;
@@ -137,6 +140,7 @@ public class SupplierService {
 			writer.writeNext(record);
 		}
 		writer.close();
+		awsS3Ser.saveFile(AwsS3Folder.SUPPLIER, new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkSupplierUpload bcu = new BulkSupplierUpload();
 		bcu.setCreated(timeNow);
@@ -150,9 +154,8 @@ public class SupplierService {
 		return blkSupUpldRepo.findByMerchant(merchant);
 	}
 
-	public byte[] downloadFile(String filename) throws IOException {
-		Path path = Paths.get(server.getBulkSupplierLocation() + filename);
-		return Files.readAllBytes(path);
+	public byte[] downloadFile(String fileName) throws IOException {
+		return awsS3Ser.getFile(AwsS3Folder.SUPPLIER, fileName);
 	}
 
 	public void updateSupplierAddress(Address addr, Integer supplierId) {

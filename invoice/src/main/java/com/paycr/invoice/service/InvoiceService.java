@@ -1,12 +1,8 @@
 package com.paycr.invoice.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.awss3.AwsS3Folder;
+import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.BulkCategory;
@@ -47,6 +45,7 @@ import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
+import com.paycr.common.util.PaycrUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
 import com.paycr.invoice.scheduler.InvoiceSchedulerService;
 import com.paycr.invoice.validation.InvoiceNoteValidator;
@@ -79,6 +78,9 @@ public class InvoiceService {
 
 	@Autowired
 	private Server server;
+
+	@Autowired
+	private AwsS3Service awsS3Ser;
 
 	@Autowired
 	private InvoiceSchedulerService invSchSer;
@@ -224,6 +226,10 @@ public class InvoiceService {
 		if (attachments.size() >= 5) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 attachments allowed");
 		}
+		String attachName = invoiceCode + "-" + attach.getOriginalFilename();
+		File file = new File(server.getInvAttachLocation() + attachName);
+		PaycrUtil.saveFile(file, attach);
+		awsS3Ser.saveFile(AwsS3Folder.INV_ATTACH, file);
 		InvoiceAttachment attachment = new InvoiceAttachment();
 		attachment.setName(attach.getOriginalFilename());
 		attachment.setCreated(new Date());
@@ -231,20 +237,13 @@ public class InvoiceService {
 		attachment.setInvoice(invoice);
 		attachments.add(attachment);
 		invRepo.save(invoice);
-		String attachName = invoiceCode + "-" + attach.getOriginalFilename();
-		File file = null;
-		file = new File(server.getMerchantLocation() + "attachment/" + attachName);
-		FileOutputStream out = new FileOutputStream(file);
-		out.write(attach.getBytes());
-		out.close();
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE,
 				"Attachment saved : " + attach.getOriginalFilename(), true, user.getEmail());
 	}
 
 	public byte[] getAttach(String invoiceCode, String attachName) throws IOException {
 		attachName = invoiceCode + "-" + attachName;
-		Path path = Paths.get(server.getMerchantLocation() + "attachment/" + attachName);
-		return Files.readAllBytes(path);
+		return awsS3Ser.getFile(AwsS3Folder.INV_ATTACH, attachName);
 	}
 
 	@Transactional
@@ -295,9 +294,8 @@ public class InvoiceService {
 		return bulkUpdRepo.findByInvoiceCode(invoiceCode);
 	}
 
-	public byte[] downloadFile(String filename) throws IOException {
-		Path path = Paths.get(server.getBulkInvoiceLocation() + filename);
-		return Files.readAllBytes(path);
+	public byte[] downloadFile(String fileName) throws IOException {
+		return awsS3Ser.getFile(AwsS3Folder.INVOICE, fileName);
 	}
 
 	public List<InvoicePayment> payments(String invoiceCode) {

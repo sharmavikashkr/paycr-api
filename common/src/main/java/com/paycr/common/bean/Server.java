@@ -12,6 +12,12 @@ public class Server {
 	@Value("${merchant.banner.location}")
 	private String merchantLocation;
 
+	@Value("${invoice.attachment.location}")
+	private String invAttachLocation;
+
+	@Value("${expense.attachment.location}")
+	private String expAttachLocation;
+
 	@Value("${bulk.invoice.location}")
 	private String bulkInvoiceLocation;
 
@@ -158,6 +164,22 @@ public class Server {
 
 	public void setGstLocation(String gstLocation) {
 		this.gstLocation = gstLocation;
+	}
+
+	public String getInvAttachLocation() {
+		return invAttachLocation;
+	}
+
+	public void setInvAttachLocation(String invAttachLocation) {
+		this.invAttachLocation = invAttachLocation;
+	}
+
+	public String getExpAttachLocation() {
+		return expAttachLocation;
+	}
+
+	public void setExpAttachLocation(String expAttachLocation) {
+		this.expAttachLocation = expAttachLocation;
 	}
 
 }

@@ -1,13 +1,11 @@
 package com.paycr.merchant.service;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.awss3.AwsS3Folder;
+import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.AssetStats;
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Asset;
@@ -55,6 +55,9 @@ public class AssetService {
 
 	@Autowired
 	private Server server;
+
+	@Autowired
+	private AwsS3Service awsS3Ser;
 
 	public void newAsset(Asset asset, Merchant merchant, String createdBy) {
 		if (CommonUtil.isEmpty(asset.getName()) || CommonUtil.isNull(asset.getRate())
@@ -108,9 +111,8 @@ public class AssetService {
 		return blkAssetUpldRepo.findByMerchant(merchant);
 	}
 
-	public byte[] downloadFile(String filename) throws IOException {
-		Path path = Paths.get(server.getBulkAssetLocation() + filename);
-		return Files.readAllBytes(path);
+	public byte[] downloadFile(String fileName) throws IOException {
+		return awsS3Ser.getFile(AwsS3Folder.ASSET, fileName);
 	}
 
 	@Async
@@ -158,6 +160,7 @@ public class AssetService {
 			writer.writeNext(record);
 		}
 		writer.close();
+		awsS3Ser.saveFile(AwsS3Folder.INVENTORY, new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkAssetUpload bcu = new BulkAssetUpload();
 		bcu.setCreated(timeNow);

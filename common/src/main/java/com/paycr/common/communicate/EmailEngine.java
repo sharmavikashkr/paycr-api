@@ -19,16 +19,21 @@ import javax.mail.internet.MimeMultipart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import com.paycr.common.bean.AwsConfig;
 import com.paycr.common.util.CommonUtil;
 
 @Component
 public class EmailEngine {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmailEngine.class);
-	
+
+	@Autowired
+	private AwsConfig awsConfig;
+
 	@Async
 	public void sendViaGmail(Email email) {
 		Properties props = new Properties();
@@ -56,10 +61,6 @@ public class EmailEngine {
 
 	@Async
 	public void sendViaSES(Email email) {
-		final String SMTP_USERNAME = "AKIAICXSO45HJ2YWHP2A";
-		final String SMTP_PASSWORD = "AgebHanCAWBAW4WOvuRXHfIbeBIF6z6w8nBt9GbeFNOi";
-		final String HOST = "email-smtp.us-west-2.amazonaws.com";
-
 		Properties props = System.getProperties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.port", 587);
@@ -74,7 +75,7 @@ public class EmailEngine {
 			message.setFrom(new InternetAddress(email.getFrom(), email.getName()));
 			message.setContent(getContent(email));
 			Transport transport = session.getTransport();
-			transport.connect(HOST, SMTP_USERNAME, SMTP_PASSWORD);
+			transport.connect(awsConfig.getSmtpHost(), awsConfig.getSmtpUsername(), awsConfig.getSmtpPassword());
 			transport.sendMessage(message, message.getAllRecipients());
 		} catch (Exception ex) {
 			logger.error("Execption while sending email to : {} ", email.getTo(), ex);

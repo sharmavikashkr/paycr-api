@@ -1,12 +1,8 @@
 package com.paycr.expense.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.paycr.common.awss3.AwsS3Folder;
+import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
 import com.paycr.common.data.domain.Expense;
 import com.paycr.common.data.domain.ExpenseAttachment;
@@ -33,6 +31,7 @@ import com.paycr.common.type.NoteType;
 import com.paycr.common.type.ObjectType;
 import com.paycr.common.type.PayType;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.PaycrUtil;
 import com.paycr.expense.validation.ExpenseNoteValidator;
 
 @Service
@@ -54,6 +53,9 @@ public class ExpenseService {
 
 	@Autowired
 	private Server server;
+
+	@Autowired
+	private AwsS3Service awsS3Ser;
 
 	@Autowired
 	private TimelineService tlService;
@@ -148,6 +150,10 @@ public class ExpenseService {
 		if (attachments.size() >= 5) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 attachments allowed");
 		}
+		String attachName = expenseCode + "-" + attach.getOriginalFilename();
+		File file = new File(server.getExpAttachLocation() + attachName);
+		PaycrUtil.saveFile(file, attach);
+		awsS3Ser.saveFile(AwsS3Folder.INV_ATTACH, file);
 		ExpenseAttachment attachment = new ExpenseAttachment();
 		attachment.setName(attach.getOriginalFilename());
 		attachment.setCreated(new Date());
@@ -155,20 +161,14 @@ public class ExpenseService {
 		attachment.setExpense(expense);
 		attachments.add(attachment);
 		expRepo.save(expense);
-		String attachName = expenseCode + "-" + attach.getOriginalFilename();
-		File file = null;
-		file = new File(server.getMerchantLocation() + "attachment/" + attachName);
-		FileOutputStream out = new FileOutputStream(file);
-		out.write(attach.getBytes());
-		out.close();
+
 		tlService.saveToTimeline(expense.getId(), ObjectType.EXPENSE,
 				"Attachment saved : " + attach.getOriginalFilename(), true, user.getEmail());
 	}
 
 	public byte[] getAttach(String expenseCode, String attachName) throws IOException {
 		attachName = expenseCode + "-" + attachName;
-		Path path = Paths.get(server.getMerchantLocation() + "attachment/" + attachName);
-		return Files.readAllBytes(path);
+		return awsS3Ser.getFile(AwsS3Folder.EXP_ATTACH, attachName);
 	}
 
 	public List<ExpensePayment> payments(String expenseCode) {
