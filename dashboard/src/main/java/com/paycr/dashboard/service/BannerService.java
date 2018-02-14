@@ -53,7 +53,7 @@ public class BannerService {
 			String bannerName = merchant.getAccessKey() + extension;
 			file = new File(server.getMerchantLocation() + bannerName);
 			PaycrUtil.saveFile(file, banner);
-			awsS3Ser.saveFile(AwsS3Folder.MERCHANT, file);
+			awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.MERCHANT), file);
 			merchant.setBanner(bannerName);
 			merRepo.save(merchant);
 		} else {
@@ -88,9 +88,9 @@ public class BannerService {
 		return awsS3Ser.getFile(AwsS3Folder.ADMIN, bannerName);
 	}
 
-	public byte[] getMerchantBanner(String bannerName) throws IOException {
+	public byte[] getMerchantBanner(String accessKey, String bannerName) throws IOException {
 		logger.info("Get merchant banner : {}", bannerName);
-		return awsS3Ser.getFile(AwsS3Folder.MERCHANT, bannerName);
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.MERCHANT), bannerName);
 	}
 
 }

@@ -118,8 +118,8 @@ public class ConsumerController {
 		return conSer.getUploads(merchant);
 	}
 
-	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename) throws IOException {
-		return conSer.downloadFile(filename);
+	@RequestMapping(value = "/bulk/download/{accessKey}/{filename:.+}", method = RequestMethod.GET)
+	public byte[] downloadFile(@PathVariable String accessKey, @PathVariable String filename) throws IOException {
+		return conSer.downloadFile(accessKey, filename);
 	}
 }

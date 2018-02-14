@@ -83,7 +83,8 @@ public class PaymentService {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("webUrl", company.getWebUrl());
 		mv.addObject("invoice", invoice);
-		mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
+		mv.addObject("banner",
+				company.getAppUrl() + "/banner/merchant/" + merchant.getAccessKey() + "/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(
 				invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))));

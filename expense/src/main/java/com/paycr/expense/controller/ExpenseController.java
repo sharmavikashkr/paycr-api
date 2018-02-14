@@ -29,7 +29,7 @@ public class ExpenseController {
 	@Autowired
 	private ExpenseService expSer;
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/payments/{expenseCode}", method = RequestMethod.GET)
 	public List<ExpensePayment> payments(@PathVariable String expenseCode) {
 		return expSer.payments(expenseCode);
@@ -61,10 +61,10 @@ public class ExpenseController {
 		expSer.saveAttach(expenseCode, attach);
 	}
 
-	@RequestMapping(value = "/{expenseCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
-	public void getAttachment(@PathVariable String expenseCode, @PathVariable String attachName,
+	@RequestMapping(value = "/{accessKey}/{expenseCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
+	public void getAttachment(@PathVariable String accessKey, @PathVariable String expenseCode, @PathVariable String attachName,
 			HttpServletResponse response) throws IOException {
-		byte[] data = expSer.getAttach(expenseCode, attachName);
+		byte[] data = expSer.getAttach(accessKey, expenseCode, attachName);
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
 		response.getOutputStream().write(data);
 		response.setContentLength(data.length);

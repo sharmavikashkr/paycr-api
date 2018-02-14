@@ -126,8 +126,8 @@ public class InventoryService {
 		return blkInvnUpldRepo.findByMerchant(merchant);
 	}
 
-	public byte[] downloadFile(String fileName) throws IOException {
-		return awsS3Ser.getFile(AwsS3Folder.INVENTORY, fileName);
+	public byte[] downloadFile(String accessKey, String fileName) throws IOException {
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.INVENTORY), fileName);
 	}
 
 	@Async
@@ -175,7 +175,7 @@ public class InventoryService {
 			writer.writeNext(record);
 		}
 		writer.close();
-		awsS3Ser.saveFile(AwsS3Folder.INVENTORY, new File(updatedCsv));
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.INVENTORY)	, new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkInventoryUpload bcu = new BulkInventoryUpload();
 		bcu.setCreated(timeNow);

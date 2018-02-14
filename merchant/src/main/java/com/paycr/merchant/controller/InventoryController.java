@@ -75,9 +75,9 @@ public class InventoryController {
 		return invnSer.getUploads(merchant);
 	}
 
-	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename) throws IOException {
-		return invnSer.downloadFile(filename);
+	@RequestMapping(value = "/bulk/download/{accessKey}/{filename:.+}", method = RequestMethod.GET)
+	public byte[] downloadFile(@PathVariable String accessKey, @PathVariable String filename) throws IOException {
+		return invnSer.downloadFile(accessKey, filename);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)

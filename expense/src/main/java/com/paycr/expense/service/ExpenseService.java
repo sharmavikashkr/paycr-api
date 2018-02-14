@@ -142,6 +142,7 @@ public class ExpenseService {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
 		}
 		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Expense expense = getExpense(expenseCode);
 		List<ExpenseAttachment> attachments = expense.getAttachments();
 		if (CommonUtil.isNull(attachments)) {
@@ -153,7 +154,7 @@ public class ExpenseService {
 		String attachName = expenseCode + "-" + attach.getOriginalFilename();
 		File file = new File(server.getExpAttachLocation() + attachName);
 		PaycrUtil.saveFile(file, attach);
-		awsS3Ser.saveFile(AwsS3Folder.INV_ATTACH, file);
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.INV_ATTACH), file);
 		ExpenseAttachment attachment = new ExpenseAttachment();
 		attachment.setName(attach.getOriginalFilename());
 		attachment.setCreated(new Date());
@@ -166,9 +167,9 @@ public class ExpenseService {
 				"Attachment saved : " + attach.getOriginalFilename(), true, user.getEmail());
 	}
 
-	public byte[] getAttach(String expenseCode, String attachName) throws IOException {
+	public byte[] getAttach(String accessKey, String expenseCode, String attachName) throws IOException {
 		attachName = expenseCode + "-" + attachName;
-		return awsS3Ser.getFile(AwsS3Folder.EXP_ATTACH, attachName);
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.EXP_ATTACH), attachName);
 	}
 
 	public List<ExpensePayment> payments(String expenseCode) {

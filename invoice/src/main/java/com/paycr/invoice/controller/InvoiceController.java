@@ -89,10 +89,10 @@ public class InvoiceController {
 		invSer.saveAttach(invoiceCode, attach);
 	}
 
-	@RequestMapping(value = "/{invoiceCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
-	public void getAttachment(@PathVariable String invoiceCode, @PathVariable String attachName,
-			HttpServletResponse response) throws IOException {
-		byte[] data = invSer.getAttach(invoiceCode, attachName);
+	@RequestMapping(value = "/{accessKey}/{invoiceCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
+	public void getAttachment(@PathVariable String accessKey, @PathVariable String invoiceCode,
+			@PathVariable String attachName, HttpServletResponse response) throws IOException {
+		byte[] data = invSer.getAttach(accessKey, invoiceCode, attachName);
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
 		response.getOutputStream().write(data);
 		response.setContentLength(data.length);
@@ -134,9 +134,9 @@ public class InvoiceController {
 		return invSer.getCategories(invoiceCode);
 	}
 
-	@RequestMapping(value = "/bulk/download/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String filename) throws IOException {
-		return invSer.downloadFile(filename);
+	@RequestMapping(value = "/bulk/download/{accessKey}/{filename:.+}", method = RequestMethod.GET)
+	public byte[] downloadFile(@PathVariable String accessKey, @PathVariable String filename) throws IOException {
+		return invSer.downloadFile(accessKey, filename);
 	}
 
 }

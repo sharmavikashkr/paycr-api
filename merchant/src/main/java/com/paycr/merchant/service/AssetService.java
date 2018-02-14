@@ -111,8 +111,8 @@ public class AssetService {
 		return blkAssetUpldRepo.findByMerchant(merchant);
 	}
 
-	public byte[] downloadFile(String fileName) throws IOException {
-		return awsS3Ser.getFile(AwsS3Folder.ASSET, fileName);
+	public byte[] downloadFile(String accessKey, String fileName) throws IOException {
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.ASSET), fileName);
 	}
 
 	@Async
@@ -160,7 +160,7 @@ public class AssetService {
 			writer.writeNext(record);
 		}
 		writer.close();
-		awsS3Ser.saveFile(AwsS3Folder.INVENTORY, new File(updatedCsv));
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.INVENTORY), new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkAssetUpload bcu = new BulkAssetUpload();
 		bcu.setCreated(timeNow);

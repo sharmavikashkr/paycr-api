@@ -218,6 +218,7 @@ public class InvoiceService {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
 		}
 		PcUser user = secSer.findLoggedInUser();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = getInvoice(invoiceCode);
 		List<InvoiceAttachment> attachments = invoice.getAttachments();
 		if (CommonUtil.isNull(attachments)) {
@@ -229,7 +230,7 @@ public class InvoiceService {
 		String attachName = invoiceCode + "-" + attach.getOriginalFilename();
 		File file = new File(server.getInvAttachLocation() + attachName);
 		PaycrUtil.saveFile(file, attach);
-		awsS3Ser.saveFile(AwsS3Folder.INV_ATTACH, file);
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.INV_ATTACH), file);
 		InvoiceAttachment attachment = new InvoiceAttachment();
 		attachment.setName(attach.getOriginalFilename());
 		attachment.setCreated(new Date());
@@ -241,9 +242,9 @@ public class InvoiceService {
 				"Attachment saved : " + attach.getOriginalFilename(), true, user.getEmail());
 	}
 
-	public byte[] getAttach(String invoiceCode, String attachName) throws IOException {
+	public byte[] getAttach(String accessKey, String invoiceCode, String attachName) throws IOException {
 		attachName = invoiceCode + "-" + attachName;
-		return awsS3Ser.getFile(AwsS3Folder.INV_ATTACH, attachName);
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.INV_ATTACH), attachName);
 	}
 
 	@Transactional
@@ -294,8 +295,8 @@ public class InvoiceService {
 		return bulkUpdRepo.findByInvoiceCode(invoiceCode);
 	}
 
-	public byte[] downloadFile(String fileName) throws IOException {
-		return awsS3Ser.getFile(AwsS3Folder.INVOICE, fileName);
+	public byte[] downloadFile(String accessKey, String fileName) throws IOException {
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.INVOICE), fileName);
 	}
 
 	public List<InvoicePayment> payments(String invoiceCode) {

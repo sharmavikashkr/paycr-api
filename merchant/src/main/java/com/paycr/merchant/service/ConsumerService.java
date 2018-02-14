@@ -265,7 +265,7 @@ public class ConsumerService {
 			writer.writeNext(record);
 		}
 		writer.close();
-		awsS3Ser.saveFile(AwsS3Folder.CONSUMER, new File(updatedCsv));
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.CONSUMER), new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkConsumerUpload bcu = new BulkConsumerUpload();
 		bcu.setCreated(timeNow);
@@ -279,8 +279,8 @@ public class ConsumerService {
 		return blkConUpldRepo.findByMerchant(merchant);
 	}
 
-	public byte[] downloadFile(String fileName) throws IOException {
-		return awsS3Ser.getFile(AwsS3Folder.CONSUMER, fileName);
+	public byte[] downloadFile(String accessKey, String fileName) throws IOException {
+		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.CONSUMER), fileName);
 	}
 
 	public void updateConsumerAddress(Address addr, Integer consumerId) {

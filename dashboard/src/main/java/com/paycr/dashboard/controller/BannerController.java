@@ -32,8 +32,8 @@ public class BannerController {
 		return banSer.getAdminBanner(bannerName);
 	}
 
-	@RequestMapping("/merchant/{bannerName:.+}")
-	public byte[] merchantBanner(@PathVariable String bannerName) throws IOException {
-		return banSer.getMerchantBanner(bannerName);
+	@RequestMapping("/merchant/{accessKey}/{bannerName:.+}")
+	public byte[] merchantBanner(@PathVariable String accessKey, @PathVariable String bannerName) throws IOException {
+		return banSer.getMerchantBanner(accessKey, bannerName);
 	}
 }
