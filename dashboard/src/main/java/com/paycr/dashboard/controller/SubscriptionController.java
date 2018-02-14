@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.SubscriptionService;
 
@@ -53,9 +50,6 @@ public class SubscriptionController {
 			@RequestParam("pricing_id") Integer pricingId, @RequestParam("quantity") Integer quantity,
 			HttpServletRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser(accessToken);
-		if (CommonUtil.isNull(merchant)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "We do not recognize you");
-		}
 		return subsSer.onlineSubscription(pricingId, quantity, merchant);
 	}
 

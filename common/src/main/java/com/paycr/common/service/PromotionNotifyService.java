@@ -42,6 +42,7 @@ public class PromotionNotifyService implements NotifyService<Promotion> {
 	@Async
 	@Transactional
 	public void notify(Promotion promotion) {
+		logger.info("Sending promotion email to : {}", promotion.getEmail());
 		List<String> to = new ArrayList<>();
 		to.add(promotion.getEmail());
 		List<String> cc = new ArrayList<>();

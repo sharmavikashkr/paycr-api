@@ -15,8 +15,6 @@ import com.paycr.common.data.domain.Merchant;
 @Repository
 public interface ConsumerCategoryRepository extends JpaRepository<ConsumerCategory, Integer> {
 
-	public List<ConsumerCategory> findByConsumer(Consumer consumer);
-
 	@Query("SELECT DISTINCT cc.name FROM ConsumerCategory cc WHERE cc.consumer.merchant = ?1")
 	public List<String> findCategoriesForMerchant(Merchant merchant);
 

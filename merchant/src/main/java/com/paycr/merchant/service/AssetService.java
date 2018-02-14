@@ -10,12 +10,15 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.AssetStats;
@@ -39,6 +42,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Service
 public class AssetService {
 
+	private static final Logger logger = LoggerFactory.getLogger(AssetService.class);
+
 	private int maxUploadSizeInMb = 5 * 1024 * 1024;
 
 	@Autowired
@@ -60,6 +65,7 @@ public class AssetService {
 	private AwsS3Service awsS3Ser;
 
 	public void newAsset(Asset asset, Merchant merchant, String createdBy) {
+		logger.info("New Asset request : {}", new Gson().toJson(asset));
 		if (CommonUtil.isEmpty(asset.getName()) || CommonUtil.isNull(asset.getRate())
 				|| CommonUtil.isEmpty(asset.getCode()) || CommonUtil.isNull(asset.getType())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
@@ -80,6 +86,7 @@ public class AssetService {
 	}
 
 	public void updateAsset(Asset asset, Integer assetId) {
+		logger.info("Update Asset request : {}", new Gson().toJson(asset));
 		Asset exstInvn = assetRepo.findOne(assetId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstInvn.getMerchant().getId() != merchant.getId()) {
@@ -94,6 +101,7 @@ public class AssetService {
 	}
 
 	public AssetStats getStats(Integer assetId) {
+		logger.info("Get Asset stats : {}", assetId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		AssetStats response = new AssetStats();
 		List<Object[]> paidCounts = assetRepo.findCountAndSumForMerchant(merchant, assetId, ExpenseStatus.PAID);
@@ -108,16 +116,19 @@ public class AssetService {
 	}
 
 	public List<BulkAssetUpload> getUploads(Merchant merchant) {
+		logger.info("Get Asset uploads by : {}", merchant.getAccessKey());
 		return blkAssetUpldRepo.findByMerchant(merchant);
 	}
 
 	public byte[] downloadFile(String accessKey, String fileName) throws IOException {
+		logger.info("Download bulk asset file : {}", fileName);
 		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.ASSET), fileName);
 	}
 
 	@Async
 	@Transactional
 	public void uploadAsset(MultipartFile assetFile, Merchant merchant, String createdBy) throws IOException {
+		logger.info("Upload bulk asset : {}", assetFile.getName());
 		if (maxUploadSizeInMb < assetFile.getSize()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
 		}

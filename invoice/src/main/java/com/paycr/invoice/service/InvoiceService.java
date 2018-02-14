@@ -11,11 +11,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
@@ -52,6 +55,8 @@ import com.paycr.invoice.validation.InvoiceNoteValidator;
 
 @Service
 public class InvoiceService {
+
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceService.class);
 
 	private int maxUploadSizeInMb = 2 * 1024 * 1024;
 
@@ -104,6 +109,7 @@ public class InvoiceService {
 	}
 
 	public void expire(String invoiceCode) {
+		logger.info("Expire Invoice : {}", invoiceCode);
 		Date timeNow = new Date();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
@@ -124,6 +130,7 @@ public class InvoiceService {
 	}
 
 	public void notify(String invoiceCode, InvoiceNotify notify) {
+		logger.info("Notify Invoice : {} with request : {}", invoiceCode, new Gson().toJson(notify));
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
@@ -145,6 +152,7 @@ public class InvoiceService {
 	}
 
 	public void enquire(String invoiceCode) throws Exception {
+		logger.info("Enqire Invoice : {}", invoiceCode);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
 		if (InvoiceType.SINGLE.equals(invoice.getInvoiceType()) && !InvoiceStatus.PAID.equals(invoice.getStatus())
@@ -156,6 +164,7 @@ public class InvoiceService {
 	}
 
 	public void refund(BigDecimal amount, String invoiceCode) throws Exception {
+		logger.info("Refund Invoice : {} with amount : {}", invoiceCode, amount);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);
@@ -178,6 +187,7 @@ public class InvoiceService {
 	}
 
 	public void newNote(InvoiceNote note) throws Exception {
+		logger.info("New InvoiceNote request : {}", new Gson().toJson(note));
 		Date timeNow = new Date();
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -194,6 +204,7 @@ public class InvoiceService {
 	}
 
 	public void markPaid(InvoicePayment payment) {
+		logger.info("Mark paid Invoice request : {}", new Gson().toJson(payment));
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(payment.getInvoiceCode(), merchant);
@@ -214,6 +225,7 @@ public class InvoiceService {
 	}
 
 	public void saveAttach(String invoiceCode, MultipartFile attach) throws IOException {
+		logger.info("New Invoice : {} attachment : {}", invoiceCode, attach.getName());
 		if (maxUploadSizeInMb < attach.getSize()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
 		}
@@ -243,6 +255,7 @@ public class InvoiceService {
 	}
 
 	public byte[] getAttach(String accessKey, String invoiceCode, String attachName) throws IOException {
+		logger.info("Download Invoice attachment : {} by : {}", attachName, accessKey);
 		attachName = invoiceCode + "-" + attachName;
 		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.INV_ATTACH), attachName);
 	}
@@ -287,23 +300,28 @@ public class InvoiceService {
 	}
 
 	public List<RecurringInvoice> allRecurr(String invoiceCode) {
+		logger.info("All Invoice recurrence : {}", invoiceCode);
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		return recInvRepo.findByInvoice(invoice);
 	}
 
 	public List<BulkInvoiceUpload> getUploads(String invoiceCode) {
+		logger.info("All Invoice uploads : {}", invoiceCode);
 		return bulkUpdRepo.findByInvoiceCode(invoiceCode);
 	}
 
 	public byte[] downloadFile(String accessKey, String fileName) throws IOException {
+		logger.info("Download Invoice upload : {}", fileName);
 		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.INVOICE), fileName);
 	}
 
 	public List<InvoicePayment> payments(String invoiceCode) {
+		logger.info("All Invoice payment : {}", invoiceCode);
 		return payRepo.findByInvoiceCode(invoiceCode);
 	}
 
 	public List<BulkCategory> getCategories(String invoiceCode) {
+		logger.info("All category Invoices for bulk : {}", invoiceCode);
 		return bulkCatRepo.findByInvoiceCode(invoiceCode);
 	}
 

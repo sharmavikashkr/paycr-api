@@ -46,6 +46,7 @@ public class ResetPasswordNotifyService implements NotifyService<PcUser> {
 	private HmacSignerUtil hmacSigner;
 
 	public void notify(PcUser user) {
+		logger.info("Sending reset password link to : {}", user.getEmail());
 		List<String> to = new ArrayList<String>();
 		to.add(user.getEmail());
 		List<String> cc = new ArrayList<String>();

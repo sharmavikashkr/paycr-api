@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ import com.paycr.invoice.helper.InvoiceHelper;
 @Service
 public class InvoiceSchedulerService {
 
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceSchedulerService.class);
+
 	@Autowired
 	private RecurringInvoiceRepository recInvRepo;
 
@@ -48,6 +52,7 @@ public class InvoiceSchedulerService {
 
 	@Transactional
 	public void recurrInvoice() {
+		logger.info("Recurr Invoice scheduler started");
 		Date timeNow = new Date();
 		Date start = DateUtil.getStartOfDay(timeNow);
 		Date end = DateUtil.getEndOfDay(timeNow);
@@ -63,13 +68,16 @@ public class InvoiceSchedulerService {
 				exec.execute(processInvoice(recInv, childInvoice));
 			}
 		}
+		logger.info("Recurr Invoice scheduler ended");
 	}
 
 	@Transactional
 	public void expireInvoice() {
+		logger.info("Expire invoice scheduler started");
 		Date timeNow = new Date();
 		List<Invoice> expiredList = invRepo.findInvoicesToExpire(timeNow);
 		for (Invoice expInv : expiredList) {
+			logger.info("Expiring invoice : {}", expInv.getInvoiceCode());
 			expInv.setStatus(InvoiceStatus.EXPIRED);
 			tlService.saveToTimeline(expInv.getId(), ObjectType.INVOICE, "Invoice expired", true, "Scheduler");
 		}
@@ -78,6 +86,7 @@ public class InvoiceSchedulerService {
 
 	@Transactional
 	public Runnable processInvoice(RecurringInvoice recInv, Invoice childInvoice) {
+		logger.info("Processing recurr invoice : {}", recInv.getInvoice().getInvoiceCode());
 		return () -> {
 			InvoiceSetting invSetting = childInvoice.getMerchant().getInvoiceSetting();
 			InvoiceNotify invNot = new InvoiceNotify();

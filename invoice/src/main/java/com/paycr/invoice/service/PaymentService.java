@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,6 +40,8 @@ import com.razorpay.Refund;
 @Service
 public class PaymentService {
 
+	private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
+
 	@Autowired
 	private InvoiceRepository invRepo;
 
@@ -60,6 +64,7 @@ public class PaymentService {
 	private TimelineService tlService;
 
 	public ModelAndView payInvoice(String invoiceCode) {
+		logger.info("Invoice payment : {}", invoiceCode);
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice payment initiated", true, "Consumer");
 		Merchant merchant = invoice.getMerchant();
@@ -176,6 +181,7 @@ public class PaymentService {
 	}
 
 	public InvoicePayment refund(Invoice invoice, BigDecimal amount, String createdBy) throws RazorpayException {
+		logger.info("Refund Invoice : {}", invoice.getInvoiceCode());
 		Date timeNow = new Date();
 		InvoicePayment payment = invoice.getPayment();
 		Merchant merchant = invoice.getMerchant();
@@ -228,6 +234,7 @@ public class PaymentService {
 	}
 
 	public String updateConsumerAndPay(String invoiceCode, String name, String email, String mobile, String signature) {
+		logger.info("Update consumer for bulk Invoice : {}", invoiceCode);
 		String genSig = hmacSigner.signWithSecretKey(invoiceCode, invoiceCode);
 		if (!genSig.equals(signature)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Signature");

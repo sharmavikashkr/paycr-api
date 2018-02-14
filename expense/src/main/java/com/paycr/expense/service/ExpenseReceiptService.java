@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +26,8 @@ import com.paycr.common.util.PdfUtil;
 @Service
 public class ExpenseReceiptService {
 
+	private static final Logger logger = LoggerFactory.getLogger(ExpenseReceiptService.class);
+
 	@Autowired
 	private ExpenseRepository expRepo;
 
@@ -40,6 +44,7 @@ public class ExpenseReceiptService {
 	private PdfUtil pdfUtil;
 
 	public ModelAndView getReceiptModelAndView(String expenseCode) {
+		logger.info("Expense receipt : {}", expenseCode);
 		Expense expense = expRepo.findByExpenseCode(expenseCode);
 		List<TaxAmount> taxes = new ArrayList<>();
 		for (ExpenseItem item : expense.getItems()) {
@@ -79,6 +84,7 @@ public class ExpenseReceiptService {
 	}
 
 	public File downloadPdf(String expenseCode) throws IOException {
+		logger.info("Expense receipt download : {}", expenseCode);
 		String pdfPath = server.getExpenseLocation() + expenseCode + ".pdf";
 		File pdfFile = new File(pdfPath);
 		if (pdfFile.exists()) {

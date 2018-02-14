@@ -23,7 +23,7 @@ public class CommonErrorController implements ErrorController {
 		ModelAndView mv = new ModelAndView("html/errorpage");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("webUrl", company.getWebUrl());
-		mv.addObject("message", "Requested Resource is not found");
+		mv.addObject("message", "Requested Resource not found");
 		return mv;
 	}
 

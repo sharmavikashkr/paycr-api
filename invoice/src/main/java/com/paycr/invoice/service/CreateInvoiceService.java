@@ -11,12 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.ChildInvoiceRequest;
@@ -56,6 +59,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Service
 public class CreateInvoiceService {
 
+	private static final Logger logger = LoggerFactory.getLogger(CreateInvoiceService.class);
+
 	private int maxUploadSizeInMb = 5 * 1024 * 1024;
 
 	@Autowired
@@ -84,7 +89,7 @@ public class CreateInvoiceService {
 
 	@Autowired
 	private Server server;
-	
+
 	@Autowired
 	private AwsS3Service awsS3Ser;
 
@@ -98,6 +103,7 @@ public class CreateInvoiceService {
 	private TimelineService tlService;
 
 	public Invoice single(Invoice invoice) {
+		logger.info("Single Invoice request : {}", new Gson().toJson(invoice));
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		invoice.setMerchant(merchant);
@@ -123,6 +129,7 @@ public class CreateInvoiceService {
 
 	@Transactional
 	public Invoice createChild(String invoiceCode, ChildInvoiceRequest chldInvReq, String createdBy) {
+		logger.info("Child Invoice request : {}", invoiceCode);
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Invoice");
@@ -168,6 +175,7 @@ public class CreateInvoiceService {
 	@Async
 	@Transactional
 	public void uploadConsumers(String invoiceCode, MultipartFile consumerFile, String createdBy) throws IOException {
+		logger.info("Upload Invoice request : {}", invoiceCode);
 		if (maxUploadSizeInMb < consumerFile.getSize()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
 		}
@@ -227,6 +235,7 @@ public class CreateInvoiceService {
 	@Transactional
 	public void createCategory(String invoiceCode, ChildInvoiceRequest chldInvReq, String createdBy,
 			Merchant merchant) {
+		logger.info("Create category Invoices request : {}", invoiceCode);
 		Invoice parenInv = invRepo.findByInvoiceCode(invoiceCode);
 		Date timeNow = new Date();
 		BulkCategory buc = new BulkCategory();

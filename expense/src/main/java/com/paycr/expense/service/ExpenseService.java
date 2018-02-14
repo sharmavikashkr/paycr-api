@@ -8,10 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
@@ -36,6 +39,8 @@ import com.paycr.expense.validation.ExpenseNoteValidator;
 
 @Service
 public class ExpenseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ExpenseService.class);
 
 	private int maxUploadSizeInMb = 2 * 1024 * 1024;
 
@@ -65,6 +70,7 @@ public class ExpenseService {
 	}
 
 	public void refund(BigDecimal amount, String expenseCode) {
+		logger.info("Refund Expense : {} with amount : {}", expenseCode, amount);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = expRepo.findByExpenseCodeAndMerchant(expenseCode, merchant);
@@ -102,6 +108,7 @@ public class ExpenseService {
 	}
 
 	public void markPaid(ExpensePayment payment) {
+		logger.info("Mark paid Expense with payment : {}", new Gson().toJson(payment));
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Expense expense = expRepo.findByExpenseCodeAndMerchant(payment.getExpenseCode(), merchant);
@@ -122,6 +129,7 @@ public class ExpenseService {
 	}
 
 	public void newNote(ExpenseNote note) {
+		logger.info("New ExpenseNote request : {}", new Gson().toJson(note));
 		Date timeNow = new Date();
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -138,6 +146,7 @@ public class ExpenseService {
 	}
 
 	public void saveAttach(String expenseCode, MultipartFile attach) throws IOException {
+		logger.info("New Expense : {} attachment : {}", expenseCode, attach.getName());
 		if (maxUploadSizeInMb < attach.getSize()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 2MBs");
 		}
@@ -168,11 +177,13 @@ public class ExpenseService {
 	}
 
 	public byte[] getAttach(String accessKey, String expenseCode, String attachName) throws IOException {
+		logger.info("Download Expense attachment : {} by : {}", attachName, accessKey);
 		attachName = expenseCode + "-" + attachName;
 		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.EXP_ATTACH), attachName);
 	}
 
 	public List<ExpensePayment> payments(String expenseCode) {
+		logger.info("All Expense payments : {}", expenseCode);
 		return payRepo.findByExpenseCode(expenseCode);
 	}
 

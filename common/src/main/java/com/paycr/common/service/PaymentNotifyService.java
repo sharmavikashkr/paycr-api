@@ -45,6 +45,7 @@ public class PaymentNotifyService implements NotifyService<InvoicePayment> {
 	@Async
 	@Transactional
 	public void notify(InvoicePayment payment) {
+		logger.info("Sending payment notification for payment : {}", payment.getPaymentRefNo());
 		Invoice invoice = invRepo.findByInvoiceCode(payment.getInvoiceCode());
 		Consumer consumer = invoice.getConsumer();
 		if ((!consumer.isEmailOnPay() && PayType.SALE.equals(payment.getPayType()))

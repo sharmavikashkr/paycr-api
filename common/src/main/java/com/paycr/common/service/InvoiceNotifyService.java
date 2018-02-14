@@ -50,6 +50,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 	private PdfUtil pdfUtil;
 
 	public void notify(InvoiceNotify invoiceNotify) {
+		logger.info("Sending invoice notification for invoice : {}", invoiceNotify.getInvoice().getInvoiceCode());
 		Invoice invoice = invoiceNotify.getInvoice();
 		String invoiceUrl = company.getAppUrl() + "/payment/" + invoice.getInvoiceCode();
 		Merchant merchant = invoice.getMerchant();

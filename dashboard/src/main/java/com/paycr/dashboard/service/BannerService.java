@@ -84,12 +84,10 @@ public class BannerService {
 	}
 
 	public byte[] getAdminBanner(String bannerName) throws IOException {
-		logger.info("Get admin banner : {}", bannerName);
 		return awsS3Ser.getFile(AwsS3Folder.ADMIN, bannerName);
 	}
 
 	public byte[] getMerchantBanner(String accessKey, String bannerName) throws IOException {
-		logger.info("Get merchant banner : {}", bannerName);
 		return awsS3Ser.getFile(accessKey.concat("/").concat(AwsS3Folder.MERCHANT), bannerName);
 	}
 

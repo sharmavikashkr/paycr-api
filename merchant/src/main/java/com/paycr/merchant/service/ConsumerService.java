@@ -11,12 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
@@ -45,6 +48,8 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 public class ConsumerService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ConsumerService.class);
 
 	private int maxUploadSizeInMb = 5 * 1024 * 1024;
 
@@ -76,6 +81,7 @@ public class ConsumerService {
 	private ConsumerDao conDao;
 
 	public void newConsumer(Consumer consumer, Merchant merchant, String createdBy) {
+		logger.info("New Consumer request : {}", new Gson().toJson(consumer));
 		List<ConsumerCategory> conCats = consumer.getConCats();
 		consumer.setMerchant(merchant);
 		consumer.setEmailOnPay(true);
@@ -97,6 +103,7 @@ public class ConsumerService {
 	}
 
 	public void updateConsumer(Consumer consumer, Integer consumerId) {
+		logger.info("Update Consumer request : {}", new Gson().toJson(consumer));
 		Consumer exstCon = conRepo.findOne(consumerId);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
@@ -116,15 +123,8 @@ public class ConsumerService {
 		conRepo.save(exstCon);
 	}
 
-	public List<ConsumerCategory> getCategories(Integer consumerId) {
-		Consumer consumer = conRepo.findOne(consumerId);
-		if (CommonUtil.isNull(consumer)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
-		}
-		return conCatRepo.findByConsumer(consumer);
-	}
-
 	public void addCategory(Integer consumerId, ConsumerCategory conCat, Merchant merchant) {
+		logger.info("Add Consumer category : {} for consumer : {}", new Gson().toJson(conCat), consumerId);
 		Consumer consumer = conRepo.findOne(consumerId);
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
@@ -147,6 +147,7 @@ public class ConsumerService {
 	}
 
 	public void deleteCategory(Integer consumerId, Integer conCatId, Merchant merchant) {
+		logger.info("Delete Consumer category : {} for consumer : {}", conCatId, consumerId);
 		Consumer consumer = conRepo.findByMerchantAndId(merchant, consumerId);
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
@@ -169,6 +170,7 @@ public class ConsumerService {
 	@Async
 	@Transactional
 	public void updateConsumerCategory(UpdateConsumerRequest updateReq, Merchant merchant) {
+		logger.info("Bulk Update Consumer : {}", new Gson().toJson(updateReq));
 		Set<Consumer> consumerList = conDao.findConsumers(updateReq.getSearchReq(), merchant);
 		for (Consumer consumer : consumerList) {
 			consumer.setActive(updateReq.isActive());
@@ -189,6 +191,7 @@ public class ConsumerService {
 	@Async
 	@Transactional
 	public void uploadConsumers(MultipartFile consumerFile, Merchant merchant, String createdBy) throws IOException {
+		logger.info("Bulk Upload Consumer : {}", consumerFile.getName());
 		if (maxUploadSizeInMb < consumerFile.getSize()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Banner size limit 5MBs");
 		}
