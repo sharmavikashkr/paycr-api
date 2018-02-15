@@ -135,6 +135,7 @@
 							    data-theme.color="#3c8dbc"
 							></script>
 							<input type="hidden" value="${invoice.invoiceCode}" name="invoiceCode">
+							<input type="hidden" value="${signature}" name="signature">
 							<#list invoice.customParams as param>
                                 <input type="hidden" name="${param.paramName}" value="${param.paramValue}">
                             </#list>

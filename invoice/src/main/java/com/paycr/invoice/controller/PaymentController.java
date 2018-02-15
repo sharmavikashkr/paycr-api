@@ -31,17 +31,12 @@ public class PaymentController {
 	public ModelAndView payInvoice(@PathVariable(value = "invoiceCode") String invoiceCode) {
 		try {
 			return paySer.payInvoice(invoiceCode);
-		} catch (PaycrException pex) {
-			ModelAndView mv = new ModelAndView("html/errorpage");
-			mv.addObject("staticUrl", company.getStaticUrl());
-			mv.addObject("webUrl", company.getWebUrl());
-			mv.addObject("message", pex.getMessage());
-			return mv;
 		} catch (Exception ex) {
+			String message = (ex instanceof PaycrException) ? ex.getMessage() : "Resource not found";
 			ModelAndView mv = new ModelAndView("html/errorpage");
 			mv.addObject("staticUrl", company.getStaticUrl());
 			mv.addObject("webUrl", company.getWebUrl());
-			mv.addObject("message", "Resource not found");
+			mv.addObject("message", message);
 			return mv;
 		}
 	}

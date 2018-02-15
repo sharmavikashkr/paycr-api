@@ -75,7 +75,7 @@ public class PaymentService {
 			mv.addObject("webUrl", company.getWebUrl());
 			mv.addObject("banner", company.getAppUrl() + "/banner/merchant/" + merchant.getBanner());
 			mv.addObject("invoice", invoice);
-			mv.addObject("signature", hmacSigner.signWithSecretKey(invoice.getInvoiceCode(), invoice.getInvoiceCode()));
+			mv.addObject("signature", hmacSigner.signWithSecretKey(merchant.getSecretKey(), invoice.getInvoiceCode()));
 			return mv;
 		}
 		if (CommonUtil.isNull(merchant.getPaymentSetting())
@@ -88,6 +88,7 @@ public class PaymentService {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("webUrl", company.getWebUrl());
 		mv.addObject("invoice", invoice);
+		mv.addObject("signature", hmacSigner.signWithSecretKey(merchant.getSecretKey(), invoice.getInvoiceCode()));
 		mv.addObject("banner",
 				company.getAppUrl() + "/banner/merchant/" + merchant.getAccessKey() + "/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
@@ -121,8 +122,15 @@ public class PaymentService {
 		Date timeNow = new Date();
 		String rzpPayId = formData.get("razorpay_payment_id");
 		String invoiceCode = formData.get("invoiceCode");
+		String signature = formData.get("signature");
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		Merchant merchant = invoice.getMerchant();
+		if (!hmacSigner.signWithSecretKey(merchant.getSecretKey(), invoice.getInvoiceCode()).equals(signature)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Signature mismatch");
+		}
+		if (InvoiceStatus.PAID.equals(invoice.getStatus())) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invoice already paid");
+		}
 		for (InvoiceCustomParam param : invoice.getCustomParams()) {
 			if (ParamValueProvider.CONSUMER.equals(param.getProvider())) {
 				String paramValue = formData.get(param.getParamName());
@@ -235,13 +243,13 @@ public class PaymentService {
 
 	public String updateConsumerAndPay(String invoiceCode, String name, String email, String mobile, String signature) {
 		logger.info("Update consumer for bulk Invoice : {}", invoiceCode);
-		String genSig = hmacSigner.signWithSecretKey(invoiceCode, invoiceCode);
-		if (!genSig.equals(signature)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Signature");
-		}
 		Invoice invoice = invRepo.findByInvoiceCode(invoiceCode);
 		if (CommonUtil.isNull(invoice) || !InvoiceType.BULK.equals(invoice.getInvoiceType())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Invoice");
+		}
+		String genSig = hmacSigner.signWithSecretKey(invoice.getMerchant().getSecretKey(), invoiceCode);
+		if (!genSig.equals(signature)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Signature");
 		}
 		Invoice childInvoice = invHelp.prepareChildInvoice(invoiceCode, InvoiceType.SINGLE, "Consumer");
 		Consumer consumer = new Consumer();

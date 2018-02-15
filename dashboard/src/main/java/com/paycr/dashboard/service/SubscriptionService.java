@@ -198,6 +198,12 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		}
+		if (CommonUtil.isNull(adset.getPaymentSetting())
+				|| CommonUtil.isEmpty(adset.getPaymentSetting().getRzpMerchantId())
+				|| CommonUtil.isEmpty(adset.getPaymentSetting().getRzpKeyId())
+				|| CommonUtil.isEmpty(adset.getPaymentSetting().getRzpSecretId())) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Online Payment not available");
+		}
 		BigDecimal total = pricing.getRate().multiply(BigDecimal.valueOf(quantity));
 		subs.setTotal(total);
 		BigDecimal payAmount = total
@@ -226,6 +232,7 @@ public class SubscriptionService {
 		mv.addObject("banner", company.getAppUrl() + "/banner/admin/" + adset.getBanner());
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
+		mv.addObject("signature", hmacSigner.signWithSecretKey(merchant.getSecretKey(), subsCode));
 		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(subs.getPayAmount().multiply(BigDecimal.valueOf(100))));
 		return mv;
@@ -235,16 +242,19 @@ public class SubscriptionService {
 		logger.info("Purchase response received for subscription : {}", new Gson().toJson(formData));
 		Date timeNow = new Date();
 		AdminSetting adset = adsetRepo.findAll().get(0);
-		String subsCode = null;
 		ModelAndView mv = new ModelAndView("html/subs-response");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		String rzpPayId = formData.get("razorpay_payment_id");
-		subsCode = formData.get("subsCode");
+		String subsCode = formData.get("subsCode");
+		String signature = formData.get("signature");
 		Subscription subs = subsRepo.findBySubscriptionCode(subsCode);
 		if ("captured".equals(subs.getStatus())) {
 			return subs;
 		}
 		Merchant merchant = subs.getMerchant();
+		if (!hmacSigner.signWithSecretKey(merchant.getSecretKey(), subsCode).equals(signature)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Signature mismatch");
+		}
 		Pricing pricing = subs.getPricing();
 		RazorpayClient razorpay = new RazorpayClient(adset.getPaymentSetting().getRzpKeyId(),
 				adset.getPaymentSetting().getRzpSecretId());

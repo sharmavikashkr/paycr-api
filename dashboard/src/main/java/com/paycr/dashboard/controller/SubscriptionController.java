@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.SubscriptionService;
@@ -32,6 +34,9 @@ public class SubscriptionController {
 
 	@Autowired
 	private SubscriptionService subsSer;
+
+	@Autowired
+	private Company company;
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
@@ -50,7 +55,16 @@ public class SubscriptionController {
 			@RequestParam("pricing_id") Integer pricingId, @RequestParam("quantity") Integer quantity,
 			HttpServletRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser(accessToken);
-		return subsSer.onlineSubscription(pricingId, quantity, merchant);
+		try {
+			return subsSer.onlineSubscription(pricingId, quantity, merchant);
+		} catch (Exception ex) {
+			String message = (ex instanceof PaycrException) ? ex.getMessage() : "Resource not found";
+			ModelAndView mv = new ModelAndView("html/errorpage");
+			mv.addObject("staticUrl", company.getStaticUrl());
+			mv.addObject("webUrl", company.getWebUrl());
+			mv.addObject("message", message);
+			return mv;
+		}
 	}
 
 	@RequestMapping(value = "/return", method = RequestMethod.POST)
