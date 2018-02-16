@@ -13,8 +13,8 @@ import javax.persistence.Table;
 import com.paycr.common.type.InvoiceType;
 
 @Entity
-@Table(name = "pc_bulk_category")
-public class BulkCategory {
+@Table(name = "pc_bulk_flag")
+public class BulkFlag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +22,13 @@ public class BulkCategory {
 
 	private Date created;
 
-	private String categories;
+	private String flags;
 
 	@Enumerated(EnumType.STRING)
 	private InvoiceType invoiceType;
 
 	private String invoiceCode;
-	
+
 	private String message;
 
 	private String createdBy;
@@ -61,14 +61,6 @@ public class BulkCategory {
 		this.createdBy = createdBy;
 	}
 
-	public String getCategories() {
-		return categories;
-	}
-
-	public void setCategories(String categories) {
-		this.categories = categories;
-	}
-
 	public InvoiceType getInvoiceType() {
 		return invoiceType;
 	}
@@ -83,5 +75,13 @@ public class BulkCategory {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getFlags() {
+		return flags;
+	}
+
+	public void setFlags(String flags) {
+		this.flags = flags;
 	}
 }

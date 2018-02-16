@@ -15,10 +15,9 @@ CREATE TABLE if not exists pc_consumer (
 	shipping_address_id int REFERENCES pc_address
 );
 
-CREATE TABLE if not exists pc_consumer_category (
+CREATE TABLE if not exists pc_consumer_flag (
 	id SERIAL PRIMARY KEY NOT NULL,
 	name varchar(50) NOT NULL,
-	value varchar(50) NOT NULL,
     consumer_id int REFERENCES pc_consumer
 );
 

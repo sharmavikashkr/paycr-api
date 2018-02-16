@@ -3,7 +3,7 @@ package com.paycr.common.bean;
 import java.util.List;
 
 import com.paycr.common.bean.search.SearchConsumerRequest;
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 
 public class UpdateConsumerRequest {
 
@@ -11,7 +11,7 @@ public class UpdateConsumerRequest {
 	private boolean emailOnRefund;
 	private boolean active;
 	private boolean removeOldTags;
-	private List<ConsumerCategory> conCatList;
+	private List<ConsumerFlag> flagList;
 	private SearchConsumerRequest searchReq;
 
 	public boolean isEmailOnPay() {
@@ -54,11 +54,11 @@ public class UpdateConsumerRequest {
 		this.searchReq = searchReq;
 	}
 
-	public List<ConsumerCategory> getConCatList() {
-		return conCatList;
+	public List<ConsumerFlag> getFlagList() {
+		return flagList;
 	}
 
-	public void setConCatList(List<ConsumerCategory> conCatList) {
-		this.conCatList = conCatList;
+	public void setFlagList(List<ConsumerFlag> flagList) {
+		this.flagList = flagList;
 	}
 }

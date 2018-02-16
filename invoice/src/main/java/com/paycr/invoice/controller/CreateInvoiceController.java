@@ -54,11 +54,11 @@ public class CreateInvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/category/{invoiceCode}", method = RequestMethod.POST)
-	public void createCategory(@PathVariable String invoiceCode, @Valid @RequestBody ChildInvoiceRequest chldInvReq) {
+	@RequestMapping(value = "/bulk/flag/{invoiceCode}", method = RequestMethod.POST)
+	public void createFlag(@PathVariable String invoiceCode, @Valid @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		crtInvSer.createCategory(invoiceCode, chldInvReq, user.getEmail(), merchant);
+		crtInvSer.createFlag(invoiceCode, chldInvReq, user.getEmail(), merchant);
 	}
 
 }

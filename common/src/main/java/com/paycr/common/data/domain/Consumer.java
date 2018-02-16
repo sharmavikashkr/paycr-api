@@ -50,7 +50,7 @@ public class Consumer {
 	private String createdBy;
 
 	@OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL)
-	private List<ConsumerCategory> conCats;
+	private List<ConsumerFlag> flags;
 
 	@JsonIgnore
 	@ManyToOne
@@ -154,14 +154,6 @@ public class Consumer {
 		this.emailOnRefund = emailOnRefund;
 	}
 
-	public List<ConsumerCategory> getConCats() {
-		return conCats;
-	}
-
-	public void setConCats(List<ConsumerCategory> conCats) {
-		this.conCats = conCats;
-	}
-
 	public String getGstin() {
 		return gstin;
 	}
@@ -176,6 +168,14 @@ public class Consumer {
 
 	public void setType(ConsumerType type) {
 		this.type = type;
+	}
+
+	public List<ConsumerFlag> getFlags() {
+		return flags;
+	}
+
+	public void setFlags(List<ConsumerFlag> flags) {
+		this.flags = flags;
 	}
 
 }

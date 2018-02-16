@@ -6,10 +6,10 @@ CREATE TABLE if not exists pc_bulk_invoice_upload (
     invoice_code varchar(20) NOT NULL
 );
 
-CREATE TABLE if not exists pc_bulk_category (
+CREATE TABLE if not exists pc_bulk_flag (
 	id SERIAL PRIMARY KEY NOT NULL,
 	created timestamp NOT NULL,
-	categories varchar(255) NOT NULL,
+	flags varchar(255) NOT NULL,
 	invoice_type  varchar(10) NOT NULL,
 	created_by varchar(50) NOT NULL,
 	message varchar(255) NOT NULL,

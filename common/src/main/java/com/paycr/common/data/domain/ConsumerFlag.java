@@ -12,8 +12,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "pc_consumer_category")
-public class ConsumerCategory {
+@Table(name = "pc_consumer_flag")
+public class ConsumerFlag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,23 +26,12 @@ public class ConsumerCategory {
 	@NotEmpty
 	private String name;
 
-	@NotEmpty
-	private String value;
-
 	public Consumer getConsumer() {
 		return consumer;
 	}
 
 	public void setConsumer(Consumer consumer) {
 		this.consumer = consumer;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
 	}
 
 	public Integer getId() {

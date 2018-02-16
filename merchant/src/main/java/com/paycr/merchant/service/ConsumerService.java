@@ -28,10 +28,10 @@ import com.paycr.common.data.dao.ConsumerDao;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.BulkConsumerUpload;
 import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.repository.BulkConsumerUploadRepository;
-import com.paycr.common.data.repository.ConsumerCategoryRepository;
+import com.paycr.common.data.repository.ConsumerFlagRepository;
 import com.paycr.common.data.repository.ConsumerRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
@@ -57,7 +57,7 @@ public class ConsumerService {
 	private ConsumerRepository conRepo;
 
 	@Autowired
-	private ConsumerCategoryRepository conCatRepo;
+	private ConsumerFlagRepository flagRepo;
 
 	@Autowired
 	private BulkConsumerUploadRepository blkConUpldRepo;
@@ -82,7 +82,7 @@ public class ConsumerService {
 
 	public void newConsumer(Consumer consumer, Merchant merchant, String createdBy) {
 		logger.info("New Consumer request : {}", new Gson().toJson(consumer));
-		List<ConsumerCategory> conCats = consumer.getConCats();
+		List<ConsumerFlag> flags = consumer.getFlags();
 		consumer.setMerchant(merchant);
 		consumer.setEmailOnPay(true);
 		consumer.setEmailOnRefund(true);
@@ -97,8 +97,8 @@ public class ConsumerService {
 		consumer.setCreated(new Date());
 		consumer.setCreatedBy(createdBy);
 		conRepo.save(consumer);
-		for (ConsumerCategory conCat : conCats) {
-			addCategory(consumer.getId(), conCat, merchant);
+		for (ConsumerFlag flag : flags) {
+			addFlag(consumer.getId(), flag, merchant);
 		}
 	}
 
@@ -110,7 +110,7 @@ public class ConsumerService {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		if (ConsumerType.CUSTOMER.equals(consumer.getType()) && !CommonUtil.isEmpty(consumer.getGstin())) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer cannot have GSTIN");
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "GSTIN holder needs to be of type Business");
 		} else if (ConsumerType.BUSINESS.equals(consumer.getType()) && CommonUtil.isEmpty(consumer.getGstin())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Please update GSTIN for Business");
 		}
@@ -123,53 +123,45 @@ public class ConsumerService {
 		conRepo.save(exstCon);
 	}
 
-	public void addCategory(Integer consumerId, ConsumerCategory conCat, Merchant merchant) {
-		logger.info("Add Consumer category : {} for consumer : {}", new Gson().toJson(conCat), consumerId);
+	public void addFlag(Integer consumerId, ConsumerFlag flag, Merchant merchant) {
+		logger.info("Add Consumer flag : {} for consumer : {}", new Gson().toJson(flag), consumerId);
 		Consumer consumer = conRepo.findOne(consumerId);
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
-		if (CommonUtil.isEmpty(conCat.getName()) || CommonUtil.isEmpty(conCat.getValue())) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid category name/value");
+		if (CommonUtil.isEmpty(flag.getName())) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid flag name");
 		}
-		ConsumerCategory exstConCat = conCatRepo.findByConsumerAndName(consumer, conCat.getName());
-		if (CommonUtil.isNotNull(exstConCat)) {
-			exstConCat.setValue(conCat.getValue());
-			conCatRepo.save(exstConCat);
-		} else {
+		ConsumerFlag exstFlag = flagRepo.findByConsumerAndName(consumer, flag.getName());
+		if (!CommonUtil.isNotNull(exstFlag)) {
 			consumer = conRepo.findOne(consumerId);
-			if (CommonUtil.isNotEmpty(consumer.getConCats()) && consumer.getConCats().size() >= 5) {
-				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Only 5 categories per consumer allowed");
+			if (CommonUtil.isNotEmpty(consumer.getFlags()) && consumer.getFlags().size() >= 5) {
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Only 5 flags per consumer allowed");
 			}
-			conCat.setConsumer(consumer);
-			conCatRepo.save(conCat);
+			flag.setConsumer(consumer);
+			flagRepo.save(flag);
 		}
 	}
 
-	public void deleteCategory(Integer consumerId, Integer conCatId, Merchant merchant) {
-		logger.info("Delete Consumer category : {} for consumer : {}", conCatId, consumerId);
+	public void deleteFlag(Integer consumerId, Integer conCatId, Merchant merchant) {
+		logger.info("Delete Consumer flag : {} for consumer : {}", conCatId, consumerId);
 		Consumer consumer = conRepo.findByMerchantAndId(merchant, consumerId);
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
-		if (CommonUtil.isNotNull(conCatRepo.findByConsumerAndId(consumer, conCatId))) {
-			conCatRepo.delete(conCatId);
+		if (CommonUtil.isNotNull(flagRepo.findByConsumerAndId(consumer, conCatId))) {
+			flagRepo.delete(conCatId);
 		}
 	}
 
-	public List<String> getCategories() {
+	public List<String> getFlags() {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		return conCatRepo.findCategoriesForMerchant(merchant);
-	}
-
-	public List<String> getCategoryValues(String category) {
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		return conCatRepo.findValuesForCategory(merchant, category);
+		return flagRepo.findFlagsForMerchant(merchant);
 	}
 
 	@Async
 	@Transactional
-	public void updateConsumerCategory(UpdateConsumerRequest updateReq, Merchant merchant) {
+	public void updateConsumerFlag(UpdateConsumerRequest updateReq, Merchant merchant) {
 		logger.info("Bulk Update Consumer : {}", new Gson().toJson(updateReq));
 		Set<Consumer> consumerList = conDao.findConsumers(updateReq.getSearchReq(), merchant);
 		for (Consumer consumer : consumerList) {
@@ -177,13 +169,12 @@ public class ConsumerService {
 			consumer.setEmailOnPay(updateReq.isEmailOnPay());
 			consumer.setEmailOnRefund(updateReq.isEmailOnRefund());
 			if (updateReq.isRemoveOldTags()) {
-				conCatRepo.deleteForConsumer(consumer);
+				flagRepo.deleteForConsumer(consumer);
 			}
-			for (ConsumerCategory conCat : updateReq.getConCatList()) {
-				ConsumerCategory newConCat = new ConsumerCategory();
-				newConCat.setName(conCat.getName());
-				newConCat.setValue(conCat.getValue());
-				addCategory(consumer.getId(), newConCat, merchant);
+			for (ConsumerFlag flag : updateReq.getFlagList()) {
+				ConsumerFlag newFlag = new ConsumerFlag();
+				newFlag.setName(flag.getName());
+				addFlag(consumer.getId(), newFlag, merchant);
 			}
 		}
 	}
@@ -214,8 +205,8 @@ public class ConsumerService {
 				record[i] = consumer[i];
 			}
 			String reason = "Invalid format";
-			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 6 || consumer.length == 12
-					|| consumer.length == 13) {
+			if (consumer.length == 3 || consumer.length == 4 || consumer.length == 5 || consumer.length == 11
+					|| consumer.length == 12) {
 				try {
 					Consumer con = new Consumer();
 					con.setName(consumer[0].trim());
@@ -225,33 +216,32 @@ public class ConsumerService {
 						con.setGstin(consumer[3].trim());
 					}
 					if (consumer.length > 4) {
-						ConsumerCategory conCat = new ConsumerCategory();
+						ConsumerFlag conCat = new ConsumerFlag();
 						conCat.setName(consumer[4].trim());
-						conCat.setValue(consumer[5].trim());
-						List<ConsumerCategory> conCats = new ArrayList<ConsumerCategory>();
-						conCats.add(conCat);
-						con.setConCats(conCats);
+						List<ConsumerFlag> flags = new ArrayList<ConsumerFlag>();
+						flags.add(conCat);
+						con.setFlags(flags);
 					}
-					if (consumer.length > 6) {
+					if (consumer.length > 5) {
 						Address billAddr = new Address();
-						billAddr.setAddressLine1(consumer[6].trim());
-						billAddr.setAddressLine2(consumer[7].trim());
-						billAddr.setCity(consumer[8].trim());
-						billAddr.setState(StateHelper.getStateForCode(consumer[9].trim()));
-						billAddr.setPincode(consumer[10].trim());
-						billAddr.setCountry(consumer[11].trim());
+						billAddr.setAddressLine1(consumer[5].trim());
+						billAddr.setAddressLine2(consumer[6].trim());
+						billAddr.setCity(consumer[7].trim());
+						billAddr.setState(StateHelper.getStateForCode(consumer[8].trim()));
+						billAddr.setPincode(consumer[9].trim());
+						billAddr.setCountry(consumer[10].trim());
 						validateAddress(billAddr);
 						con.setBillingAddress(billAddr);
 					}
-					if (consumer.length > 12) {
-						if ("YES".equalsIgnoreCase(consumer[12].trim())) {
+					if (consumer.length > 11) {
+						if ("YES".equalsIgnoreCase(consumer[11].trim())) {
 							Address shipAddr = new Address();
-							shipAddr.setAddressLine1(consumer[6].trim());
-							shipAddr.setAddressLine2(consumer[7].trim());
-							shipAddr.setCity(consumer[8].trim());
-							shipAddr.setState(consumer[9].trim());
-							shipAddr.setPincode(consumer[10].trim());
-							shipAddr.setCountry(consumer[11].trim());
+							shipAddr.setAddressLine1(consumer[5].trim());
+							shipAddr.setAddressLine2(consumer[6].trim());
+							shipAddr.setCity(consumer[7].trim());
+							shipAddr.setState(consumer[8].trim());
+							shipAddr.setPincode(consumer[9].trim());
+							shipAddr.setCountry(consumer[10].trim());
 							validateAddress(shipAddr);
 							con.setShippingAddress(shipAddr);
 						}

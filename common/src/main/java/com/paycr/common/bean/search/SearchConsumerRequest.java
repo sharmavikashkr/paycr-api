@@ -2,7 +2,7 @@ package com.paycr.common.bean.search;
 
 import java.util.List;
 
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 
 public class SearchConsumerRequest {
 
@@ -10,7 +10,7 @@ public class SearchConsumerRequest {
 	private String name;
 	private String email;
 	private String mobile;
-	private List<ConsumerCategory> conCatList;
+	private List<ConsumerFlag> flagList;
 
 	public Integer getMerchant() {
 		return merchant;
@@ -36,19 +36,19 @@ public class SearchConsumerRequest {
 		this.mobile = mobile;
 	}
 
-	public List<ConsumerCategory> getConCatList() {
-		return conCatList;
-	}
-
-	public void setConCatList(List<ConsumerCategory> conCatList) {
-		this.conCatList = conCatList;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<ConsumerFlag> getFlagList() {
+		return flagList;
+	}
+
+	public void setFlagList(List<ConsumerFlag> flagList) {
+		this.flagList = flagList;
 	}
 }

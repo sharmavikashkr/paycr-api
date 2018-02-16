@@ -21,7 +21,7 @@ import com.paycr.common.bean.UpdateConsumerRequest;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.BulkConsumerUpload;
 import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
@@ -59,36 +59,30 @@ public class ConsumerController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/category/new/{consumerId}")
-	public void addCategory(@Valid @RequestBody ConsumerCategory conCat, @PathVariable Integer consumerId) {
+	@RequestMapping("/flag/new/{consumerId}")
+	public void addFlag(@Valid @RequestBody ConsumerFlag flag, @PathVariable Integer consumerId) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		conSer.addCategory(consumerId, conCat, merchant);
+		conSer.addFlag(consumerId, flag, merchant);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/category/delete/{consumerId}/{conCatId}")
-	public void deleteCategory(@PathVariable Integer consumerId, @PathVariable Integer conCatId) {
+	@RequestMapping("/flag/delete/{consumerId}/{flagId}")
+	public void deleteFlag(@PathVariable Integer consumerId, @PathVariable Integer flagId) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		conSer.deleteCategory(consumerId, conCatId, merchant);
+		conSer.deleteFlag(consumerId, flagId, merchant);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping("/categories")
-	public List<String> getCategories() {
-		return conSer.getCategories();
-	}
-
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping("/category/{category}")
-	public List<String> getCategoryValues(@PathVariable String category) {
-		return conSer.getCategoryValues(category);
+	@RequestMapping("/flags")
+	public List<String> getFlags() {
+		return conSer.getFlags();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/update/category")
-	public void updateConsumerCategory(@RequestBody UpdateConsumerRequest updateReq) {
+	@RequestMapping("/update/flag")
+	public void updateConsumerFlag(@RequestBody UpdateConsumerRequest updateReq) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		conSer.updateConsumerCategory(updateReq, merchant);
+		conSer.updateConsumerFlag(updateReq, merchant);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
@@ -101,9 +95,9 @@ public class ConsumerController {
 
 	@RequestMapping("/bulk/upload/format")
 	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String content = "Name1*,Email1*,Mobile1*,GSTIN1,Category Name, Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,Bill State Code,Bill Pincode,Bill Country,YES(copyBillAddrToShipAddr)\r\n"
-				+ "Name2*,Email2*,Mobile2*,GSTIN2,Category Name,Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,04,Bill Pincode,India,NO\r\n"
-				+ "Name3*,Email3*,Mobile3*,GSTIN3,Category Name,Category Value,Bill Addr Line1,Bill Addr Line2,Bill City,27,Bill Pincode,India,YES\r\n";
+		String content = "Name1*,Email1*,Mobile1*,GSTIN1,Flag Name,Bill Addr Line1,Bill Addr Line2,Bill City,Bill State Code,Bill Pincode,Bill Country,YES(copyBillAddrToShipAddr)\r\n"
+				+ "Name2*,Email2*,Mobile2*,GSTIN2,Flag Name,Bill Addr Line1,Bill Addr Line2,Bill City,04,Bill Pincode,India,NO\r\n"
+				+ "Name3*,Email3*,Mobile3*,GSTIN3,Flag Name,Bill Addr Line1,Bill Addr Line2,Bill City,27,Bill Pincode,India,YES\r\n";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkConsumer.csv\"");
 		response.setContentType("application/csv");
 		response.getOutputStream().write(content.getBytes());

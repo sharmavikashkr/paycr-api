@@ -23,7 +23,7 @@ import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
 import com.paycr.common.communicate.NotifyService;
-import com.paycr.common.data.domain.BulkCategory;
+import com.paycr.common.data.domain.BulkFlag;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceAttachment;
@@ -33,7 +33,7 @@ import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
-import com.paycr.common.data.repository.BulkCategoryRepository;
+import com.paycr.common.data.repository.BulkFlagRepository;
 import com.paycr.common.data.repository.BulkInvoiceUploadRepository;
 import com.paycr.common.data.repository.InvoicePaymentRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
@@ -97,7 +97,7 @@ public class InvoiceService {
 	private BulkInvoiceUploadRepository bulkUpdRepo;
 
 	@Autowired
-	private BulkCategoryRepository bulkCatRepo;
+	private BulkFlagRepository bulkFlagRepo;
 
 	@Autowired
 	private TimelineService tlService;
@@ -320,9 +320,9 @@ public class InvoiceService {
 		return payRepo.findByInvoiceCode(invoiceCode);
 	}
 
-	public List<BulkCategory> getCategories(String invoiceCode) {
-		logger.info("All category Invoices for bulk : {}", invoiceCode);
-		return bulkCatRepo.findByInvoiceCode(invoiceCode);
+	public List<BulkFlag> getFlags(String invoiceCode) {
+		logger.info("All flags Invoices for bulk : {}", invoiceCode);
+		return bulkFlagRepo.findByInvoiceCode(invoiceCode);
 	}
 
 }

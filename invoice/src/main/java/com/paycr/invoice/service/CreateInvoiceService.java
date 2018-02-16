@@ -27,10 +27,10 @@ import com.paycr.common.bean.Server;
 import com.paycr.common.bean.search.SearchConsumerRequest;
 import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.dao.ConsumerDao;
-import com.paycr.common.data.domain.BulkCategory;
+import com.paycr.common.data.domain.BulkFlag;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceNotify;
 import com.paycr.common.data.domain.InvoiceSetting;
@@ -38,7 +38,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.RecurringInvoice;
-import com.paycr.common.data.repository.BulkCategoryRepository;
+import com.paycr.common.data.repository.BulkFlagRepository;
 import com.paycr.common.data.repository.BulkInvoiceUploadRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
@@ -97,7 +97,7 @@ public class CreateInvoiceService {
 	private BulkInvoiceUploadRepository bulkUpdRepo;
 
 	@Autowired
-	private BulkCategoryRepository bulkCatRepo;
+	private BulkFlagRepository bulkFlagRepo;
 
 	@Autowired
 	private TimelineService tlService;
@@ -233,41 +233,41 @@ public class CreateInvoiceService {
 
 	@Async
 	@Transactional
-	public void createCategory(String invoiceCode, ChildInvoiceRequest chldInvReq, String createdBy,
+	public void createFlag(String invoiceCode, ChildInvoiceRequest chldInvReq, String createdBy,
 			Merchant merchant) {
-		logger.info("Create category Invoices request : {}", invoiceCode);
+		logger.info("Create flag Invoices request : {}", invoiceCode);
 		Invoice parenInv = invRepo.findByInvoiceCode(invoiceCode);
 		Date timeNow = new Date();
-		BulkCategory buc = new BulkCategory();
-		buc.setCreated(timeNow);
-		buc.setInvoiceType(chldInvReq.getInvoiceType());
-		buc.setInvoiceCode(invoiceCode);
-		buc.setCreatedBy(createdBy);
-		if (CommonUtil.isEmpty(chldInvReq.getConCatList())) {
-			buc.setCategories("");
-			buc.setMessage("FAILURE : Empty category filter");
+		BulkFlag buf = new BulkFlag();
+		buf.setCreated(timeNow);
+		buf.setInvoiceType(chldInvReq.getInvoiceType());
+		buf.setInvoiceCode(invoiceCode);
+		buf.setCreatedBy(createdBy);
+		if (CommonUtil.isEmpty(chldInvReq.getFlagList())) {
+			buf.setFlags("");
+			buf.setMessage("FAILURE : Empty flag filter");
 		} else {
 			SearchConsumerRequest searchReq = new SearchConsumerRequest();
-			searchReq.setConCatList(chldInvReq.getConCatList());
+			searchReq.setFlagList(chldInvReq.getFlagList());
 			Set<Consumer> consumerSet = conDao.findConsumers(searchReq, merchant);
 			for (Consumer consumer : consumerSet) {
 				ChildInvoiceRequest chldInvReqNew = new ChildInvoiceRequest();
 				chldInvReqNew.setConsumer(consumer);
 				chldInvReqNew.setInvoiceType(chldInvReq.getInvoiceType());
-				chldInvReqNew.setConCatList(chldInvReq.getConCatList());
+				chldInvReqNew.setFlagList(chldInvReq.getFlagList());
 				chldInvReqNew.setRecInv(chldInvReq.getRecInv());
 				createChild(invoiceCode, chldInvReqNew, createdBy);
 			}
 			StringBuilder sb = new StringBuilder("");
-			for (ConsumerCategory conCat : chldInvReq.getConCatList()) {
-				sb.append(conCat.getName() + " : " + conCat.getValue() + ", ");
+			for (ConsumerFlag flag : chldInvReq.getFlagList()) {
+				sb.append(flag.getName() + ", ");
 			}
-			buc.setCategories(sb.toString());
-			buc.setMessage("SUCCESS");
-			tlService.saveToTimeline(parenInv.getId(), ObjectType.INVOICE, "Child invoices created for categories",
+			buf.setFlags(sb.toString());
+			buf.setMessage("SUCCESS");
+			tlService.saveToTimeline(parenInv.getId(), ObjectType.INVOICE, "Child invoices created for flags",
 					true, createdBy);
 		}
-		bulkCatRepo.save(buc);
+		bulkFlagRepo.save(buf);
 	}
 
 }

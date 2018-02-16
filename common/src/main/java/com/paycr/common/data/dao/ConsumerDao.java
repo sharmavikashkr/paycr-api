@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.search.SearchConsumerRequest;
 import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.util.CommonUtil;
 
@@ -25,7 +25,7 @@ public class ConsumerDao {
 
 	public Set<Consumer> findConsumers(SearchConsumerRequest searchReq, Merchant merchant) {
 		Set<Consumer> conSet = new LinkedHashSet<>();
-		if (searchReq.getConCatList().isEmpty()) {
+		if (searchReq.getFlagList().isEmpty()) {
 			StringBuilder squery = new StringBuilder("SELECT c FROM Consumer c WHERE");
 			if (!CommonUtil.isNull(merchant)) {
 				squery.append(" c.merchant = :merchant AND");
@@ -57,28 +57,26 @@ public class ConsumerDao {
 			}
 			conSet.addAll(query.getResultList());
 		} else {
-			for (ConsumerCategory concat : searchReq.getConCatList()) {
-				StringBuilder squery = new StringBuilder("SELECT cc.consumer FROM ConsumerCategory cc WHERE");
-				squery.append(" cc.name = :name AND");
-				squery.append(" cc.value = :value AND");
+			for (ConsumerFlag flag : searchReq.getFlagList()) {
+				StringBuilder squery = new StringBuilder("SELECT cf.consumer FROM ConsumerFlag cf WHERE");
+				squery.append(" cf.name = :name AND");
 				if (!CommonUtil.isNull(merchant)) {
-					squery.append(" cc.consumer.merchant = :merchant AND");
+					squery.append(" cf.consumer.merchant = :merchant AND");
 				}
 				if (!CommonUtil.isEmpty(searchReq.getName())) {
-					squery.append(" cc.consumer.name LIKE :name AND");
+					squery.append(" cf.consumer.name LIKE :name AND");
 				}
 				if (!CommonUtil.isEmpty(searchReq.getEmail())) {
-					squery.append(" cc.consumer.email LIKE :email AND");
+					squery.append(" cf.consumer.email LIKE :email AND");
 				}
 				if (!CommonUtil.isEmpty(searchReq.getMobile())) {
-					squery.append(" cc.consumer.mobile LIKE :mobile AND");
+					squery.append(" cf.consumer.mobile LIKE :mobile AND");
 				}
-				squery.append(" cc.consumer.id > 0 ORDER BY cc.consumer.id DESC");
+				squery.append(" cf.consumer.id > 0 ORDER BY cf.consumer.id DESC");
 
 				TypedQuery<Consumer> query = em.createQuery(squery.toString(), Consumer.class);
 
-				query.setParameter("name", concat.getName());
-				query.setParameter("value", concat.getValue());
+				query.setParameter("name", flag.getName());
 				if (!CommonUtil.isNull(merchant)) {
 					query.setParameter("merchant", merchant);
 				}

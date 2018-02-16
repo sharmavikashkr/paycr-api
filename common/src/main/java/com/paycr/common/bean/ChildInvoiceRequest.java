@@ -5,14 +5,14 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.ConsumerCategory;
+import com.paycr.common.data.domain.ConsumerFlag;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.type.InvoiceType;
 
 public class ChildInvoiceRequest {
 
 	private Consumer consumer;
-	private List<ConsumerCategory> conCatList;
+	private List<ConsumerFlag> flagList;
 
 	@NotNull
 	private InvoiceType invoiceType;
@@ -42,12 +42,11 @@ public class ChildInvoiceRequest {
 		this.recInv = recInv;
 	}
 
-	public List<ConsumerCategory> getConCatList() {
-		return conCatList;
+	public List<ConsumerFlag> getFlagList() {
+		return flagList;
 	}
 
-	public void setConCatList(List<ConsumerCategory> conCatList) {
-		this.conCatList = conCatList;
+	public void setFlagList(List<ConsumerFlag> flagList) {
+		this.flagList = flagList;
 	}
-
 }
