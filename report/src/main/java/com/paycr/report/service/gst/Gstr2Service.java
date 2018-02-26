@@ -119,7 +119,7 @@ public class Gstr2Service {
 		email.setMessage("GSTR2 Report - " + periodStr);
 		email.setFileName(fileName);
 		email.setFilePath(filePath);
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 
 	}
 

@@ -73,7 +73,7 @@ public class PaymentNotifyService implements NotifyService<InvoicePayment> {
 		} catch (Exception ex) {
 			logger.error("Execption while generating email : {}", ex);
 		}
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 	}
 
 	public String getEmail(InvoicePayment payment) throws Exception {

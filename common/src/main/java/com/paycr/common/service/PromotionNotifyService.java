@@ -54,7 +54,7 @@ public class PromotionNotifyService implements NotifyService<Promotion> {
 		} catch (Exception ex) {
 			logger.error("Execption while generating email : {}", ex);
 		}
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 		promotion.setSent(true);
 		promotion.setNotified(promotion.getNotified() + 1);
 		promoRepo.save(promotion);

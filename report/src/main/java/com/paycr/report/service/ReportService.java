@@ -255,7 +255,7 @@ public class ReportService {
 				+ DateUtil.getDashboardDate(df.getStartDate()) + " to " + DateUtil.getDashboardDate(df.getEndDate()));
 		email.setFileName(fileName);
 		email.setFilePath(filePath);
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 	}
 
 }

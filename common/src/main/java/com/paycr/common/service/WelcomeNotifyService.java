@@ -49,7 +49,7 @@ public class WelcomeNotifyService implements NotifyService<Merchant> {
 		} catch (Exception ex) {
 			logger.error("Execption while generating email : {}", ex);
 		}
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 	}
 
 	public String getEmail(Merchant merchant) throws Exception {

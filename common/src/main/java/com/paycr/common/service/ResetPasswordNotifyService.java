@@ -58,7 +58,7 @@ public class ResetPasswordNotifyService implements NotifyService<PcUser> {
 		} catch (Exception ex) {
 			logger.error("Execption while generating email : {}", ex);
 		}
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 	}
 
 	public String getEmail(PcUser user) throws Exception {

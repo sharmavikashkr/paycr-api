@@ -147,7 +147,7 @@ public class Gstr1Service {
 		email.setMessage("GSTR1 Report - " + periodStr);
 		email.setFileName(fileName);
 		email.setFilePath(filePath);
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 
 	}
 

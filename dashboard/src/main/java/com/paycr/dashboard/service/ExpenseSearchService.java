@@ -172,7 +172,7 @@ public class ExpenseSearchService {
 		email.setMessage("Expense Payment Report - " + DateUtil.getDefaultDateTime(timeNow));
 		email.setFileName(fileName);
 		email.setFilePath(filePath);
-		emailEngine.sendViaGmail(email);
+		emailEngine.sendViaSES(email);
 	}
 
 	public Set<Supplier> fetchSupplierList(SearchSupplierRequest request) {
