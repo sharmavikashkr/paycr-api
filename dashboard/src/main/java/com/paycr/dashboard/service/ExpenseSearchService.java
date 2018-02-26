@@ -113,35 +113,36 @@ public class ExpenseSearchService {
 		List<ExpenseReport> invoiceReports = new ArrayList<>();
 		for (ExpensePayment payment : paymentList) {
 			Expense expense = expRepo.findByExpenseCode(payment.getExpenseCode());
-			ExpenseReport invReport = new ExpenseReport();
-			invReport.setPaidDate(payment.getPaidDate());
-			invReport.setExpenseCode(expense.getExpenseCode());
-			invReport.setExpenseStatus(expense.getStatus());
-			invReport.setPayAmount(expense.getPayAmount());
-			invReport.setAmount(payment.getAmount());
-			invReport.setTax(expense.getPayAmount().add(expense.getDiscount()).subtract(expense.getTotal()));
-			invReport.setDiscount(expense.getDiscount());
-			invReport.setCurrency(expense.getCurrency());
-			invReport.setPaymentRefNo(payment.getPaymentRefNo());
-			invReport.setPayType(payment.getPayType());
-			invReport.setPayMode(payment.getPayMode());
-			invReport.setPayMethod(payment.getMethod());
-			invReport.setPayStatus(payment.getStatus());
-			invoiceReports.add(invReport);
+			ExpenseReport expReport = new ExpenseReport();
+			expReport.setPaidDate(payment.getPaidDate());
+			expReport.setExpenseCode(expense.getExpenseCode());
+			expReport.setExpenseStatus(expense.getStatus());
+			expReport.setPayAmount(expense.getPayAmount());
+			expReport.setAmount(payment.getAmount());
+			expReport.setTax(expense.getPayAmount().add(expense.getDiscount()).subtract(expense.getTotal()));
+			expReport.setShipping(expense.getShipping());
+			expReport.setDiscount(expense.getDiscount());
+			expReport.setCurrency(expense.getCurrency());
+			expReport.setPaymentRefNo(payment.getPaymentRefNo());
+			expReport.setPayType(payment.getPayType());
+			expReport.setPayMode(payment.getPayMode());
+			expReport.setPayMethod(payment.getMethod());
+			expReport.setPayStatus(payment.getStatus());
+			invoiceReports.add(expReport);
 		}
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Paid Date", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
-				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
+		records.add(new String[] { "Paid Date", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Shipping",
+				"Discount", "Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 		Iterator<ExpenseReport> it = invoiceReports.iterator();
 		while (it.hasNext()) {
 			ExpenseReport expr = it.next();
 			records.add(new String[] { expr.getPaidDate().toString(), expr.getExpenseCode(),
 					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
-					expr.getDiscount().toString(), expr.getAmount().toString(), expr.getCurrency().name(),
-					expr.getPaymentRefNo(), expr.getPayType().name(), expr.getPayMode().name(), expr.getPayMethod(),
-					expr.getPayStatus() });
+					expr.getShipping().toString(), expr.getDiscount().toString(), expr.getAmount().toString(),
+					expr.getCurrency().name(), expr.getPaymentRefNo(), expr.getPayType().name(),
+					expr.getPayMode().name(), expr.getPayMethod(), expr.getPayStatus() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();
