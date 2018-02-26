@@ -53,17 +53,17 @@ public class InvoiceReportService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Paid On", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Discount",
-				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
+		records.add(new String[] { "Paid On", "Invoice Code", "Invoice Status", "Invoice Amount", "Tax", "Shipping",
+				"Discount", "Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 
 		Iterator<InvoiceReport> it = invReport.iterator();
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
 			records.add(new String[] { DateUtil.getUTCTimeInISTStr(invr.getPaidDate()), invr.getInvoiceCode(),
 					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
-					invr.getDiscount().toString(), invr.getAmount().toString(), invr.getCurrency().name(),
-					invr.getPaymentRefNo(), invr.getPayType().name(), invr.getPayMode().name(), invr.getPayMethod(),
-					invr.getPayStatus() });
+					invr.getShipping().toString(), invr.getDiscount().toString(), invr.getAmount().toString(),
+					invr.getCurrency().name(), invr.getPaymentRefNo(), invr.getPayType().name(),
+					invr.getPayMode().name(), invr.getPayMethod(), invr.getPayStatus() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();
@@ -96,6 +96,7 @@ public class InvoiceReportService {
 			invReport.setPayAmount(invoice.getPayAmount());
 			invReport.setAmount(payment.getAmount());
 			invReport.setTax(invoice.getPayAmount().add(invoice.getDiscount()).subtract(invoice.getTotal()));
+			invReport.setShipping(invoice.getShipping());
 			invReport.setDiscount(invoice.getDiscount());
 			invReport.setCurrency(invoice.getCurrency());
 			invReport.setPaymentRefNo(payment.getPaymentRefNo());

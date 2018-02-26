@@ -53,17 +53,17 @@ public class ExpenseReportService {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = new CSVWriter(writer, ',', '\0');
 		List<String[]> records = new ArrayList<>();
-		records.add(new String[] { "Paid Date", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Discount",
-				"Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
+		records.add(new String[] { "Paid Date", "Expense Code", "Expense Status", "Expense Amount", "Tax", "Shipping",
+				"Discount", "Amount", "Currency", "PaymentRefNo", "Pay Type", "Pay Mode", "Pay Method", "Pay Status" });
 
 		Iterator<ExpenseReport> it = expReport.iterator();
 		while (it.hasNext()) {
 			ExpenseReport expr = it.next();
 			records.add(new String[] { DateUtil.getUTCTimeInISTStr(expr.getPaidDate()), expr.getExpenseCode(),
 					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
-					expr.getDiscount().toString(), expr.getAmount().toString(), expr.getCurrency().name(),
-					expr.getPaymentRefNo(), expr.getPayType().name(), expr.getPayMode().name(), expr.getPayMethod(),
-					expr.getPayStatus() });
+					expr.getShipping().toString(), expr.getDiscount().toString(), expr.getAmount().toString(),
+					expr.getCurrency().name(), expr.getPaymentRefNo(), expr.getPayType().name(),
+					expr.getPayMode().name(), expr.getPayMethod(), expr.getPayStatus() });
 		}
 		csvWriter.writeAll(records);
 		csvWriter.close();
@@ -88,16 +88,17 @@ public class ExpenseReportService {
 					.collect(Collectors.toList());
 		}
 		for (ExpensePayment payment : payments) {
-			Expense Expense = expRepo.findByExpenseCode(payment.getExpenseCode());
+			Expense expense = expRepo.findByExpenseCode(payment.getExpenseCode());
 			ExpenseReport expReport = new ExpenseReport();
 			expReport.setPaidDate(payment.getPaidDate());
-			expReport.setExpenseCode(Expense.getExpenseCode());
-			expReport.setExpenseStatus(Expense.getStatus());
-			expReport.setPayAmount(Expense.getPayAmount());
+			expReport.setExpenseCode(expense.getExpenseCode());
+			expReport.setExpenseStatus(expense.getStatus());
+			expReport.setPayAmount(expense.getPayAmount());
 			expReport.setAmount(payment.getAmount());
-			expReport.setTax(Expense.getPayAmount().add(Expense.getDiscount()).subtract(Expense.getTotal()));
-			expReport.setDiscount(Expense.getDiscount());
-			expReport.setCurrency(Expense.getCurrency());
+			expReport.setTax(expense.getPayAmount().add(expense.getDiscount()).subtract(expense.getTotal()));
+			expReport.setShipping(expense.getShipping());
+			expReport.setDiscount(expense.getDiscount());
+			expReport.setCurrency(expense.getCurrency());
 			expReport.setPaymentRefNo(payment.getPaymentRefNo());
 			expReport.setPayType(payment.getPayType());
 			expReport.setPayMode(payment.getPayMode());

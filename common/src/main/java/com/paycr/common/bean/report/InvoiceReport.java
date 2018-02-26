@@ -15,6 +15,7 @@ public class InvoiceReport {
 	private InvoiceStatus invoiceStatus;
 	private BigDecimal payAmount;
 	private BigDecimal tax;
+	private BigDecimal shipping;
 	private BigDecimal discount;
 	private BigDecimal amount;
 	private Currency currency;
@@ -126,5 +127,13 @@ public class InvoiceReport {
 
 	public void setPaidDate(Date paidDate) {
 		this.paidDate = paidDate;
+	}
+
+	public BigDecimal getShipping() {
+		return shipping;
+	}
+
+	public void setShipping(BigDecimal shipping) {
+		this.shipping = shipping;
 	}
 }
