@@ -97,7 +97,7 @@ public class InvoiceNotifyService implements NotifyService<InvoiceNotify> {
 					logger.error("Execption while generating email pdf : {}", ex);
 				}
 			}
-			emailEngine.sendViaGmail(email);
+			emailEngine.sendViaSES(email);
 		}
 	}
 

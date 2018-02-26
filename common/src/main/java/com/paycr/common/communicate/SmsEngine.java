@@ -38,6 +38,8 @@ public class SmsEngine {
 			String message = sms.getMessage();
 			String phoneNumber = "+91" + sms.getTo();
 			Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
+			smsAttributes.put("AWS.SNS.SMS.SMSType",
+					new MessageAttributeValue().withStringValue("Transactional").withDataType("String"));
 			PublishResult result = snsClient.publish(new PublishRequest().withMessage(message)
 					.withPhoneNumber(phoneNumber).withMessageAttributes(smsAttributes));
 			logger.info("SMS sent : {} with result : {}", new Gson().toJson(sms), new Gson().toJson(result));
