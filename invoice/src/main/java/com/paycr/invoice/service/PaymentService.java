@@ -209,8 +209,8 @@ public class PaymentService {
 		} else {
 			PaymentSetting paymentSetting = merchant.getPaymentSetting();
 			RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
-			String refundAmount = String
-					.valueOf(amount.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100)));
+			Integer refundAmount = amount.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))
+					.intValue();
 			JSONObject refundRequest = new JSONObject();
 			refundRequest.put("amount", refundAmount);
 			Refund refund = razorpay.Payments.refund(payment.getPaymentRefNo(), refundRequest);
