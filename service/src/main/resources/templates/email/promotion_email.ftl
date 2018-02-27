@@ -337,7 +337,6 @@ a[x-apple-data-detectors=true] {
 		<p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center"><span style="font-size: 24px; line-height: 36px;"><strong><span style="line-height: 36px; font-size: 24px;"><span style="line-height: 36px; font-size: 24px;">Hello ${promotion.name}<br></span></span></strong></span></p><p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center"><span style="font-size: 18px; line-height: 27px;">Greetings from PayCr!</span><br></p>
 		<p style="margin: 0;font-size: 12px;line-height: 18px;><span style="font-size: 18px; line-height: 27px;">We introduce you to the world of PayCr, an excellent new web based accounting tool which is GST ready.</span></p>
 		<p style="margin: 0;font-size: 12px;line-height: 18px;><span style="font-size: 18px; line-height: 27px;">PayCr takes care of your accounting needs while you can concentrate on what you are best at. PayCr does numerous tasks for you such and invoicing, creating bulk/recurring invoices, sending mails to payee, managing the record books, filing GST returns etc in few clicks.</span></p>
-		<p style="margin: 0;font-size: 12px;line-height: 18px;><span style="font-size: 18px; line-height: 27px;">We have selected your esteemed organization as our testing partner for this exciting tool.</span></p>
 	</div>	
 </div>
 <!--[if mso]></td></tr></table><![endif]-->

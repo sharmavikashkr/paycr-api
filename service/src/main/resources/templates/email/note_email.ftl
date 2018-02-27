@@ -186,7 +186,7 @@
                                  <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:20px; padding-bottom:20px; padding-right: 0px; padding-left: 0px;">
                                     <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:150%;color:#6E6F7A; padding-right: 10px; padding-left: 10px; padding-top: 20px; padding-bottom: 20px;">
                                        <div style="font-size:12px;line-height:18px;color:#6E6F7A;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                          <p style="margin: 0;font-size: 12px;line-height: 18px">Payment On : ${payment.paidDate?date}</p>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px">Note Date : ${note.noteDate?date}</p>
                                        </div>
                                     </div>
                                  </div>
@@ -203,10 +203,10 @@
                                  <div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:0px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
                                     <div style="font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;color:#ffffff; padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 30px;">
                                        <div style="font-size:12px;line-height:14px;color:#ffffff;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;">
-                                          <p style="margin: 0;font-size: 14px;line-height: 17px;text-align: center"><span style="font-size: 28px; line-height: 33px;">${message} <strong>${payment.merchant.name}</strong></span></p><br>
-                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Amount : <strong>${payment.amount}</strong></p><br>
-                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Invoice Id : <strong>${payment.invoiceCode}</strong></p><br>
-                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Payment Reference No : <strong>${payment.paymentRefNo}</strong></p>
+                                          <p style="margin: 0;font-size: 14px;line-height: 17px;text-align: center"><span style="font-size: 28px; line-height: 33px;">${message} <strong>${note.merchant.name}</strong></span></p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Amount : <strong>${note.payAmount}</strong></p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Invoice Id : <strong>${note.invoiceCode}</strong></p><br>
+                                          <p style="margin: 0;font-size: 12px;line-height: 18px;text-align: center;">Note Id : <strong>${note.noteCode}</strong></p>
                                        </div>
                                     </div>
                                  </div>

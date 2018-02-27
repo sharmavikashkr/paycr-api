@@ -42,6 +42,7 @@ public class Consumer {
 	private String gstin;
 	private boolean emailOnPay;
 	private boolean emailOnRefund;
+	private boolean emailNote;
 
 	@Enumerated(EnumType.STRING)
 	private ConsumerType type;
@@ -176,6 +177,14 @@ public class Consumer {
 
 	public void setFlags(List<ConsumerFlag> flags) {
 		this.flags = flags;
+	}
+
+	public boolean isEmailNote() {
+		return emailNote;
+	}
+
+	public void setEmailNote(boolean emailNote) {
+		this.emailNote = emailNote;
 	}
 
 }

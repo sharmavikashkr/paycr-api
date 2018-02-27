@@ -79,6 +79,9 @@ public class InvoiceService {
 	private NotifyService<InvoiceNotify> invNotSer;
 
 	@Autowired
+	private NotifyService<InvoiceNote> invNoteNotSer;
+
+	@Autowired
 	private PaymentService payService;
 
 	@Autowired
@@ -201,6 +204,9 @@ public class InvoiceService {
 		}
 		invoice.setNote(note);
 		invRepo.save(invoice);
+		if (note.getConsumer().isEmailNote()) {
+			invNoteNotSer.notify(note);
+		}
 	}
 
 	public void markPaid(InvoicePayment payment) {

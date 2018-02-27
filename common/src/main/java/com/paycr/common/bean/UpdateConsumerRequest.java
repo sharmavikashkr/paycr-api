@@ -9,6 +9,7 @@ public class UpdateConsumerRequest {
 
 	private boolean emailOnPay;
 	private boolean emailOnRefund;
+	private boolean emailNote;
 	private boolean active;
 	private boolean removeOldTags;
 	private List<ConsumerFlag> flagList;
@@ -60,5 +61,13 @@ public class UpdateConsumerRequest {
 
 	public void setFlagList(List<ConsumerFlag> flagList) {
 		this.flagList = flagList;
+	}
+
+	public boolean isEmailNote() {
+		return emailNote;
+	}
+
+	public void setEmailNote(boolean emailNote) {
+		this.emailNote = emailNote;
 	}
 }

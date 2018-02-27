@@ -27,9 +27,9 @@ public class NoteReceiptController {
 	}
 
 	@RequestMapping("/download/{noteCode}")
-	public void downloadReceipt(HttpServletRequest request, @PathVariable String NoteCode, HttpServletResponse response)
+	public void downloadReceipt(HttpServletRequest request, @PathVariable String noteCode, HttpServletResponse response)
 			throws Exception {
-		File pdfFile = noteRecSer.downloadPdf(NoteCode);
+		File pdfFile = noteRecSer.downloadPdf(noteCode);
 
 		FileInputStream fis = null;
 		byte[] bFile = new byte[(int) pdfFile.length()];
@@ -37,7 +37,7 @@ public class NoteReceiptController {
 		fis.read(bFile);
 		fis.close();
 
-		response.setHeader("Content-Disposition", "attachment; filename=\"Note-" + NoteCode + ".pdf\"");
+		response.setHeader("Content-Disposition", "attachment; filename=\"Note-" + noteCode + ".pdf\"");
 		response.setContentType("application/pdf");
 		response.getOutputStream().write(bFile);
 		response.setContentLength(bFile.length);

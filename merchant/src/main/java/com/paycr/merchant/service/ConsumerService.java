@@ -86,6 +86,7 @@ public class ConsumerService {
 		consumer.setMerchant(merchant);
 		consumer.setEmailOnPay(true);
 		consumer.setEmailOnRefund(true);
+		consumer.setEmailNote(true);
 		conVal.validate(consumer);
 		gstinValid.validate(consumer.getGstin());
 		if (CommonUtil.isEmpty(consumer.getGstin())) {
@@ -118,6 +119,7 @@ public class ConsumerService {
 		exstCon.setActive(consumer.isActive());
 		exstCon.setEmailOnPay(consumer.isEmailOnPay());
 		exstCon.setEmailOnRefund(consumer.isEmailOnRefund());
+		exstCon.setEmailNote(consumer.isEmailNote());
 		exstCon.setType(consumer.getType());
 		gstinValid.validate(consumer.getGstin());
 		conRepo.save(exstCon);
@@ -168,6 +170,7 @@ public class ConsumerService {
 			consumer.setActive(updateReq.isActive());
 			consumer.setEmailOnPay(updateReq.isEmailOnPay());
 			consumer.setEmailOnRefund(updateReq.isEmailOnRefund());
+			consumer.setEmailNote(updateReq.isEmailNote());
 			if (updateReq.isRemoveOldTags()) {
 				flagRepo.deleteForConsumer(consumer);
 			}

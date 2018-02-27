@@ -7,6 +7,7 @@ CREATE TABLE if not exists pc_consumer (
     gstin varchar(50) DEFAULT NULL,
     email_on_pay BOOLEAN NOT NULL,
     email_on_refund BOOLEAN NOT NULL,
+    email_note BOOLEAN NOT NULL,
     type varchar(15) NOT NULL,
     active boolean NOT NULL,
     created_by varchar(50) NOT NULL,
