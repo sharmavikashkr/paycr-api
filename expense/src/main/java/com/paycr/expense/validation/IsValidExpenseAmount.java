@@ -38,7 +38,8 @@ public class IsValidExpenseAmount implements RequestValidator<Expense> {
 			}
 		}
 		BigDecimal finalAmount = expense.getTotalPrice().add(expense.getShipping()).subtract(expense.getDiscount());
-		if (finalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(expense.getPayAmount()) != 0) {
+		if (finalAmount.setScale(2, BigDecimal.ROUND_HALF_UP)
+				.compareTo(expense.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Amount calculation mismatch");
 		}
 	}

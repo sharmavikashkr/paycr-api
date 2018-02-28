@@ -39,7 +39,8 @@ public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
 			}
 		}
 		BigDecimal finalAmount = invoice.getTotalPrice().add(invoice.getShipping()).subtract(invoice.getDiscount());
-		if (finalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).compareTo(invoice.getPayAmount()) != 0) {
+		if (finalAmount.setScale(2, BigDecimal.ROUND_HALF_UP)
+				.compareTo(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Amount calculation mismatch");
 		}
 	}

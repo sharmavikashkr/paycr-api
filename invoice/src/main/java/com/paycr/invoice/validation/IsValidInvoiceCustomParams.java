@@ -19,6 +19,9 @@ public class IsValidInvoiceCustomParams implements RequestValidator<Invoice> {
 
 	@Override
 	public void validate(Invoice invoice) {
+		if (CommonUtil.isNull(invoice.getCustomParams())) {
+			return;
+		}
 		List<MerchantCustomParam> merchantCustomParams = invoice.getMerchant().getInvoiceSetting().getCustomParams();
 		for (InvoiceCustomParam icp : invoice.getCustomParams()) {
 			if (!icp.isInclude()) {

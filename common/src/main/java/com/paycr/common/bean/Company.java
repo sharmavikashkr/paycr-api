@@ -15,6 +15,9 @@ public class Company {
 	@Value("${company.mobile}")
 	private String mobile;
 
+	@Value("${company.merchant.id}")
+	private Integer merchantId;
+
 	@Value("${company.app.url}")
 	private String appUrl;
 
@@ -114,6 +117,14 @@ public class Company {
 
 	public void setWebUrl(String webUrl) {
 		this.webUrl = webUrl;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
 	}
 
 }
