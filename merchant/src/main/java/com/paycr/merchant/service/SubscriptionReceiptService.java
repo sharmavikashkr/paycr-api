@@ -67,7 +67,6 @@ public class SubscriptionReceiptService {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("subs", subs);
 		mv.addObject("admin", paycr);
-		mv.addObject("company", company);
 		return mv;
 	}
 
