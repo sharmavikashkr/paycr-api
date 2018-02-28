@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.UserRole;
-import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.NotificationRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Role;
@@ -28,9 +26,6 @@ public class StartupAdminService {
 
 	@Autowired
 	private NotificationRepository notiRepo;
-
-	@Autowired
-	private AdminSettingRepository adsetRepo;
 
 	public void createSuperAdmin() {
 		Date timeNow = new Date();
@@ -66,11 +61,6 @@ public class StartupAdminService {
 		payset.setRzpMerchantId("");
 		payset.setRzpKeyId("");
 		payset.setRzpSecretId("");
-
-		AdminSetting adset = new AdminSetting();
-		adset.setPaymentSetting(payset);
-
-		adsetRepo.save(adset);
 	}
 
 }

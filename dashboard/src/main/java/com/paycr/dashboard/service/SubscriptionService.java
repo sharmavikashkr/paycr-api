@@ -18,13 +18,11 @@ import com.google.gson.Gson;
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.OfflineSubscription;
 import com.paycr.common.bean.Server;
-import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Notification;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.NotificationRepository;
@@ -69,9 +67,6 @@ public class SubscriptionService {
 	private NotificationRepository notiRepo;
 
 	@Autowired
-	private AdminSettingRepository adsetRepo;
-
-	@Autowired
 	private Server server;
 
 	@Autowired
@@ -98,7 +93,7 @@ public class SubscriptionService {
 		Date timeNow = new Date();
 		Merchant merchant = merRepo.findOne(offline.getMerchantId());
 		Pricing pricing = priRepo.findOne(offline.getPricingId());
-		AdminSetting adset = adsetRepo.findAll().get(0);
+		Merchant paycr = merRepo.findOne(company.getMerchantId());
 		Subscription subs = new Subscription();
 		if (CommonUtil.isNull(merchant.getAddress()) || CommonUtil.isEmpty(merchant.getAddress().getState())) {
 			if (!"NO_TAX".equalsIgnoreCase(pricing.getInterstateTax().getName())) {
@@ -107,10 +102,10 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		} else {
-			if (CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
+			if (CommonUtil.isNull(paycr.getAddress()) || CommonUtil.isEmpty(paycr.getAddress().getState())) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Admin needs to set Address to determine Tax");
 			}
-			if (adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
+			if (paycr.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());
 			} else {
 				subs.setTax(pricing.getInterstateTax());
@@ -158,7 +153,7 @@ public class SubscriptionService {
 				quantity, merchant.getId());
 		Date timeNow = new Date();
 		Pricing pricing = priRepo.findOne(pricingId);
-		AdminSetting adset = adsetRepo.findAll().get(0);
+		Merchant paycr = merRepo.findOne(company.getMerchantId());
 		if (!pricing.isActive() || BigDecimal.ZERO.compareTo(pricing.getRate()) > -1 || CommonUtil.isNull(quantity)
 				|| quantity <= 0) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Bad Request");
@@ -171,19 +166,19 @@ public class SubscriptionService {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		} else {
-			if (CommonUtil.isNull(adset.getAddress()) || CommonUtil.isEmpty(adset.getAddress().getState())) {
+			if (CommonUtil.isNull(paycr.getAddress()) || CommonUtil.isEmpty(paycr.getAddress().getState())) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Something went wrong, please try again");
 			}
-			if (adset.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
+			if (paycr.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());
 			} else {
 				subs.setTax(pricing.getInterstateTax());
 			}
 		}
-		if (CommonUtil.isNull(adset.getPaymentSetting())
-				|| CommonUtil.isEmpty(adset.getPaymentSetting().getRzpMerchantId())
-				|| CommonUtil.isEmpty(adset.getPaymentSetting().getRzpKeyId())
-				|| CommonUtil.isEmpty(adset.getPaymentSetting().getRzpSecretId())) {
+		if (CommonUtil.isNull(paycr.getPaymentSetting())
+				|| CommonUtil.isEmpty(paycr.getPaymentSetting().getRzpMerchantId())
+				|| CommonUtil.isEmpty(paycr.getPaymentSetting().getRzpKeyId())
+				|| CommonUtil.isEmpty(paycr.getPaymentSetting().getRzpSecretId())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Online Payment not available");
 		}
 		BigDecimal total = pricing.getRate().multiply(BigDecimal.valueOf(quantity));
@@ -211,11 +206,12 @@ public class SubscriptionService {
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("webUrl", company.getWebUrl());
 		mv.addObject("merchant", merchant);
-		mv.addObject("banner", company.getAppUrl() + "/banner/admin/" + adset.getBanner());
+		mv.addObject("banner",
+				company.getAppUrl() + "/banner/merchant/" + paycr.getAccessKey() + "/" + paycr.getBanner());
 		mv.addObject("pricing", pricing);
 		mv.addObject("subs", subs);
 		mv.addObject("signature", hmacSigner.signWithSecretKey(merchant.getSecretKey(), subsCode));
-		mv.addObject("rzpKeyId", adset.getPaymentSetting().getRzpKeyId());
+		mv.addObject("rzpKeyId", paycr.getPaymentSetting().getRzpKeyId());
 		mv.addObject("payAmount", String.valueOf(subs.getPayAmount().multiply(BigDecimal.valueOf(100))));
 		return mv;
 	}
@@ -223,7 +219,7 @@ public class SubscriptionService {
 	public Subscription purchase(Map<String, String> formData) throws Exception {
 		logger.info("Purchase response received for subscription : {}", new Gson().toJson(formData));
 		Date timeNow = new Date();
-		AdminSetting adset = adsetRepo.findAll().get(0);
+		Merchant paycr = merRepo.findOne(company.getMerchantId());
 		ModelAndView mv = new ModelAndView("html/subs-response");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		String rzpPayId = formData.get("razorpay_payment_id");
@@ -238,8 +234,8 @@ public class SubscriptionService {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Signature mismatch");
 		}
 		Pricing pricing = subs.getPricing();
-		RazorpayClient razorpay = new RazorpayClient(adset.getPaymentSetting().getRzpKeyId(),
-				adset.getPaymentSetting().getRzpSecretId());
+		RazorpayClient razorpay = new RazorpayClient(paycr.getPaymentSetting().getRzpKeyId(),
+				paycr.getPaymentSetting().getRzpSecretId());
 		com.razorpay.Payment rzpPayment = razorpay.Payments.fetch(rzpPayId);
 		JSONObject request = new JSONObject();
 		request.put("amount", rzpPayment.get("amount").toString());
@@ -302,12 +298,12 @@ public class SubscriptionService {
 
 	public ModelAndView getSubscriptionReceipt(String subsCode) {
 		logger.info("Receipt for subscription request for code : {}", subsCode);
-		AdminSetting adset = adsetRepo.findAll().get(0);
+		Merchant paycr = merRepo.findOne(company.getMerchantId());
 		Subscription subs = getSubscriptionByCode(subsCode);
 		ModelAndView mv = new ModelAndView("receipt/subscription");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("subs", subs);
-		mv.addObject("admin", adset);
+		mv.addObject("admin", paycr);
 		mv.addObject("company", company);
 		return mv;
 	}

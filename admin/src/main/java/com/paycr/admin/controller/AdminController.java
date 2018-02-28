@@ -21,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.admin.service.AdminService;
 import com.paycr.common.bean.Company;
-import com.paycr.common.data.domain.Address;
-import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.TaxMaster;
@@ -78,7 +76,7 @@ public class AdminController {
 		logger.info("Check if admin");
 	}
 
-	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
+	/*@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting")
 	public AdminSetting getSetting() {
 		return adminService.getSetting();
@@ -96,7 +94,7 @@ public class AdminController {
 	public AdminSetting updateAddress(@RequestBody Address newAddr) {
 		adminService.saveAddress(newAddr);
 		return adminService.getSetting();
-	}
+	}*/
 
 	@PreAuthorize(RoleUtil.PAYCR_ADMIN_AUTH)
 	@RequestMapping("/setting/tax/new")

@@ -6,15 +6,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Company {
 
-	@Value("${company.name}")
-	private String name;
-
-	@Value("${company.email}")
-	private String email;
-
-	@Value("${company.mobile}")
-	private String mobile;
-
 	@Value("${company.merchant.id}")
 	private Integer merchantId;
 
@@ -45,14 +36,6 @@ public class Company {
 
 	public void setAppUrl(String appUrl) {
 		this.appUrl = appUrl;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getContactName() {
@@ -93,22 +76,6 @@ public class Company {
 
 	public void setOauthUrl(String oauthUrl) {
 		this.oauthUrl = oauthUrl;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
 	}
 
 	public String getWebUrl() {

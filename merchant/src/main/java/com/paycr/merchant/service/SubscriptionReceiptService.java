@@ -10,11 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
-import com.paycr.common.data.domain.AdminSetting;
+import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantPricing;
 import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
+import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.SubscriptionRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
@@ -27,7 +27,7 @@ public class SubscriptionReceiptService {
 	private SubscriptionRepository subsRepo;
 
 	@Autowired
-	private AdminSettingRepository adsetRepo;
+	private MerchantRepository merRepo;
 
 	@Autowired
 	private MerchantPricingRepository merPriRepo;
@@ -61,12 +61,12 @@ public class SubscriptionReceiptService {
 	}
 
 	public ModelAndView getSubscriptionReceipt(String subscriptionCode) {
-		AdminSetting adset = adsetRepo.findAll().get(0);
+		Merchant paycr = merRepo.findOne(company.getMerchantId());
 		Subscription subs = getSubscriptionByCode(subscriptionCode);
 		ModelAndView mv = new ModelAndView("receipt/subscription");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		mv.addObject("subs", subs);
-		mv.addObject("admin", adset);
+		mv.addObject("admin", paycr);
 		mv.addObject("company", company);
 		return mv;
 	}

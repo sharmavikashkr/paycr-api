@@ -24,14 +24,6 @@ CREATE TABLE if not exists pc_payment_setting (
 	rzp_secret_id varchar(30) DEFAULT NULL
 );
 
-CREATE TABLE if not exists pc_admin_setting (
-	id SERIAL PRIMARY KEY NOT NULL,
-	gstin varchar(50) DEFAULT NULL,
-	banner varchar(20) DEFAULT NULL,
-	address_id int REFERENCES pc_address,
-	payment_setting_id int REFERENCES pc_payment_setting
-);
-
 CREATE TABLE if not exists pc_notification(
 	id SERIAL PRIMARY KEY NOT NULL,
 	merchant_id int DEFAULT NULL,

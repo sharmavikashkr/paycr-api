@@ -79,6 +79,8 @@ public class IsValidInvoiceItems implements RequestValidator<Invoice> {
 			inventory.setCode(item.getInventory().getCode());
 			inventory.setName(item.getInventory().getName());
 			inventory.setRate(item.getInventory().getRate());
+			inventory.setDescription(item.getInventory().getDescription());
+			inventory.setHsnsac(item.getInventory().getHsnsac());
 			inventory.setTax(item.getTax());
 			inventory.setCreatedBy(invoice.getCreatedBy());
 			inventory.setType(ItemType.SERVICE);

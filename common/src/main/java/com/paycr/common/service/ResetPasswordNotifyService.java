@@ -75,7 +75,7 @@ public class ResetPasswordNotifyService implements NotifyService<PcUser> {
 		Map<String, Object> templateProps = new HashMap<String, Object>();
 		templateProps.put("name", user.getName());
 		templateProps.put("resetUrl", resetUrl);
-		templateProps.put("companyName", company.getName());
+		templateProps.put("companyName", company.getContactName());
 		return FreeMarkerTemplateUtils.processTemplateIntoString(fmConfiguration.getTemplate("email/reset_email.ftl"),
 				templateProps);
 	}

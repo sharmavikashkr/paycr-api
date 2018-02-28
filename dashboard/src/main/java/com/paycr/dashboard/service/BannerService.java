@@ -13,13 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.paycr.common.awss3.AwsS3Folder;
 import com.paycr.common.awss3.AwsS3Service;
 import com.paycr.common.bean.Server;
-import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.PaycrUtil;
 
 @Service
@@ -31,9 +28,6 @@ public class BannerService {
 
 	@Autowired
 	private SecurityService secSer;
-
-	@Autowired
-	private AdminSettingRepository adsetRepo;
 
 	@Autowired
 	private MerchantRepository merRepo;
@@ -49,22 +43,13 @@ public class BannerService {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		File file = null;
 		String extension = validateBanner(banner);
-		if (CommonUtil.isNotNull(merchant)) {
-			String bannerName = merchant.getAccessKey() + extension;
-			file = new File(server.getMerchantLocation() + bannerName);
-			PaycrUtil.saveFile(file, banner);
-			awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.MERCHANT), file);
-			merchant.setBanner(bannerName);
-			merRepo.save(merchant);
-		} else {
-			AdminSetting adset = adsetRepo.findAll().get(0);
-			String bannerName = "paycr" + extension;
-			file = new File(server.getAdminLocation() + "paycr" + extension);
-			PaycrUtil.saveFile(file, banner);
-			awsS3Ser.saveFile(AwsS3Folder.ADMIN, file);
-			adset.setBanner(bannerName);
-			adsetRepo.save(adset);
-		}
+		String bannerName = merchant.getAccessKey() + extension;
+		file = new File(server.getMerchantLocation() + bannerName);
+		PaycrUtil.saveFile(file, banner);
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.MERCHANT), file);
+		merchant.setBanner(bannerName);
+		merRepo.save(merchant);
+
 	}
 
 	private String validateBanner(MultipartFile banner) {
@@ -81,10 +66,6 @@ public class BannerService {
 			return ".jpg";
 		}
 		return null;
-	}
-
-	public byte[] getAdminBanner(String bannerName) throws IOException {
-		return awsS3Ser.getFile(AwsS3Folder.ADMIN, bannerName);
 	}
 
 	public byte[] getMerchantBanner(String accessKey, String bannerName) throws IOException {

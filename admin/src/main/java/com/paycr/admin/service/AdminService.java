@@ -10,14 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.paycr.admin.validation.PricingValidator;
-import com.paycr.common.data.domain.Address;
-import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.domain.Pricing;
 import com.paycr.common.data.domain.PricingMerchant;
 import com.paycr.common.data.domain.TaxMaster;
-import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.PricingMerchantRepository;
 import com.paycr.common.data.repository.PricingRepository;
@@ -25,7 +21,6 @@ import com.paycr.common.data.repository.TaxMasterRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.PricingType;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.dashboard.validation.IsValidGstinRequest;
 
 @Service
 public class AdminService {
@@ -45,13 +40,7 @@ public class AdminService {
 	private MerchantRepository merRepo;
 
 	@Autowired
-	private AdminSettingRepository adsetRepo;
-
-	@Autowired
 	private TaxMasterRepository taxMRepo;
-
-	@Autowired
-	private IsValidGstinRequest gstinValid;
 
 	public void createPricing(Pricing pricing) {
 		logger.info("New Pricing : {}", new Gson().toJson(pricing));
@@ -65,45 +54,6 @@ public class AdminService {
 		pri.setActive(!pri.isActive());
 		pri.setActive(true);
 		pricingRepo.save(pri);
-	}
-
-	public AdminSetting getSetting() {
-		return adsetRepo.findAll().get(0);
-	}
-
-	public void saveSetting(AdminSetting setting) {
-		logger.info("Save admin settings");
-		AdminSetting adset = adsetRepo.findAll().get(0);
-		adset.setBanner(setting.getBanner());
-		adset.setGstin(setting.getGstin());
-		PaymentSetting payset = adset.getPaymentSetting();
-		payset.setRzpMerchantId(setting.getPaymentSetting().getRzpMerchantId());
-		payset.setRzpKeyId(setting.getPaymentSetting().getRzpKeyId());
-		payset.setRzpSecretId(setting.getPaymentSetting().getRzpSecretId());
-		gstinValid.validate(setting.getGstin());
-		adsetRepo.save(adset);
-	}
-
-	public void saveAddress(Address newAddr) {
-		logger.info("Save admin address : {}", new Gson().toJson(newAddr));
-		if (CommonUtil.isNull(newAddr) || CommonUtil.isEmpty(newAddr.getAddressLine1())
-				|| CommonUtil.isEmpty(newAddr.getCity()) || CommonUtil.isEmpty(newAddr.getState())
-				|| CommonUtil.isEmpty(newAddr.getPincode()) || CommonUtil.isEmpty(newAddr.getCountry())) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
-		}
-		AdminSetting adset = adsetRepo.findAll().get(0);
-		Address exstAddr = adset.getAddress();
-		if (CommonUtil.isNull(exstAddr)) {
-			exstAddr = new Address();
-		}
-		exstAddr.setAddressLine1(newAddr.getAddressLine1());
-		exstAddr.setAddressLine2(newAddr.getAddressLine2());
-		exstAddr.setCity(newAddr.getCity());
-		exstAddr.setState(newAddr.getState());
-		exstAddr.setPincode(newAddr.getPincode());
-		exstAddr.setCountry(newAddr.getCountry());
-		adset.setAddress(exstAddr);
-		adsetRepo.save(adset);
 	}
 
 	public void newTaxMaster(TaxMaster tax) {

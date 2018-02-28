@@ -17,7 +17,7 @@
 						<a href="${resetUrl}" target="_blank" class="btn btn-info pull-right" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: inline-block;padding: 6px 12px;margin-bottom: 20px;font-size: 14px;font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;border-radius: 4px;color: #fff;background-color: #5bc0de;border-color: #46b8da;">Reset Password</a><br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 						<a href="${resetUrl}" target="_blank">${resetUrl}</a><br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 						<p>This link will expire in 24 hours. Please use it by then.</p><br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
-						<p>Thanks,</p>
+						<p>Regards,</p>
 						<p>${companyName}</p>
 					</div>
 				</div>

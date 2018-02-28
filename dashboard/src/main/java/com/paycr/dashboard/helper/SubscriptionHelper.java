@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Address;
-import com.paycr.common.data.domain.AdminSetting;
 import com.paycr.common.data.domain.Asset;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Expense;
@@ -27,7 +26,6 @@ import com.paycr.common.data.domain.InvoicePayment;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.Subscription;
 import com.paycr.common.data.domain.Supplier;
-import com.paycr.common.data.repository.AdminSettingRepository;
 import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantRepository;
@@ -66,9 +64,6 @@ public class SubscriptionHelper {
 	private InvoiceValidator invVal;
 
 	@Autowired
-	private AdminSettingRepository adsetRepo;
-
-	@Autowired
 	private Company company;
 
 	@Async
@@ -81,7 +76,7 @@ public class SubscriptionHelper {
 		Merchant merchant = merRepo.findOne(merchantId);
 		String createdBy = "SYSTEM";
 		Date timeNow = new Date();
-		AdminSetting adset = adsetRepo.findAll().get(0);
+		Merchant paycr = merRepo.findOne(company.getMerchantId());
 		Expense expense = new Expense();
 		expense.setAddItems(true);
 		expense.setCreated(timeNow);
@@ -111,18 +106,18 @@ public class SubscriptionHelper {
 		itemList.add(item);
 		expense.setItems(itemList);
 		Supplier supplier = new Supplier();
-		supplier.setName(company.getName());
-		supplier.setEmail(company.getEmail());
-		supplier.setMobile(company.getMobile());
-		supplier.setGstin(adset.getGstin());
-		if (CommonUtil.isNotNull(adset.getAddress())) {
+		supplier.setName(paycr.getName());
+		supplier.setEmail(paycr.getEmail());
+		supplier.setMobile(paycr.getMobile());
+		supplier.setGstin(paycr.getGstin());
+		if (CommonUtil.isNotNull(paycr.getAddress())) {
 			Address addr = new Address();
-			addr.setAddressLine1(adset.getAddress().getAddressLine1());
-			addr.setAddressLine2(adset.getAddress().getAddressLine2());
-			addr.setCity(adset.getAddress().getCity());
-			addr.setState(adset.getAddress().getState());
-			addr.setPincode(adset.getAddress().getPincode());
-			addr.setCountry(adset.getAddress().getCountry());
+			addr.setAddressLine1(paycr.getAddress().getAddressLine1());
+			addr.setAddressLine2(paycr.getAddress().getAddressLine2());
+			addr.setCity(paycr.getAddress().getCity());
+			addr.setState(paycr.getAddress().getState());
+			addr.setPincode(paycr.getAddress().getPincode());
+			addr.setCountry(paycr.getAddress().getCountry());
 			supplier.setAddress(addr);
 		}
 		expense.setSupplier(supplier);
@@ -216,7 +211,7 @@ public class SubscriptionHelper {
 		invPay.setMethod(subs.getMethod());
 		invPay.setPaymentRefNo(subs.getPaymentRefNo());
 		invPay.setPayMode(subs.getPayMode());
-		invPay.setMerchant(merchant);
+		invPay.setMerchant(paycr);
 		invoice.setPayment(invPay);
 		invoice.setStatus(InvoiceStatus.PAID);
 		invRepo.save(invoice);

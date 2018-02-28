@@ -21,15 +21,10 @@ public class BannerController {
 	@Autowired
 	private BannerService banSer;
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public void getUser(@RequestParam("banner") MultipartFile banner) throws Exception {
 		banSer.uploadBanner(banner);
-	}
-
-	@RequestMapping("/admin/{bannerName:.+}")
-	public byte[] adminBanner(@PathVariable String bannerName) throws IOException {
-		return banSer.getAdminBanner(bannerName);
 	}
 
 	@RequestMapping("/merchant/{accessKey}/{bannerName:.+}")
