@@ -34,7 +34,7 @@ public class StartupAdminService {
 		}
 		PcUser user = new PcUser();
 		user.setCreated(timeNow);
-		user.setName("Paycr Admin");
+		user.setName("PayCr Admin");
 		user.setEmail("admin@paycr.in");
 		user.setPassword(new BCryptPasswordEncoder().encode("password@123"));
 		user.setMobile("9999999999");
@@ -52,7 +52,7 @@ public class StartupAdminService {
 		Notification noti = new Notification();
 		noti.setUserId(user.getId());
 		noti.setMessage("Hope you manage the product well :)");
-		noti.setSubject("Welcome to Paycr");
+		noti.setSubject("Welcome to PayCr");
 		noti.setCreated(timeNow);
 		noti.setRead(false);
 		notiRepo.save(noti);

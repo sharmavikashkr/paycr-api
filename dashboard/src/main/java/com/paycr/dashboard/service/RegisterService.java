@@ -147,7 +147,7 @@ public class RegisterService {
 		Notification noti = new Notification();
 		noti.setMerchantId(merchant.getId());
 		noti.setMessage("Happy Invoicing..");
-		noti.setSubject("Welcome to Paycr");
+		noti.setSubject("Welcome to PayCr");
 		noti.setCreated(timeNow);
 		noti.setRead(false);
 		notiRepo.save(noti);
