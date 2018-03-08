@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,9 @@ public class Gstr2Service {
 	private Gstr2B2BRNoteService b2bRNoteSer;
 
 	@Autowired
+	private Gstr2NilService nilSer;
+
+	@Autowired
 	private Company company;
 
 	@Autowired
@@ -83,15 +87,22 @@ public class Gstr2Service {
 			gstStatuses.add(ExpenseStatus.PAID);
 		}
 		List<Expense> expenseList = expRepo.findExpensesForMerchant(merchant, gstStatuses, start, end);
-		expenseList = expenseList.stream().filter(t -> CommonUtil.isNotEmpty(t.getItems()))
+		List<Expense> gstList = expenseList.stream()
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0))
 				.collect(Collectors.toList());
 		List<ExpenseNote> noteList = expNoteRepo.findNotesForMerchant(merchant, start, end);
 		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
 		Gstr2Report gstr2Report = new Gstr2Report();
-		collectFutures.add(b2bUrSer.collectB2BUrList(gstr2Report, expenseList));
-		collectFutures.add(b2bRSer.collectB2BRList(gstr2Report, expenseList));
+		collectFutures.add(b2bUrSer.collectB2BUrList(gstr2Report, gstList));
+		collectFutures.add(b2bRSer.collectB2BRList(gstr2Report, gstList));
 		collectFutures.add(b2bUrNoteSer.collectB2BUrNoteList(gstr2Report, noteList));
 		collectFutures.add(b2bRNoteSer.collectB2BRNoteList(gstr2Report, noteList));
+		List<Expense> nonGstList = expenseList.stream()
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0))
+				.collect(Collectors.toList());
+		collectFutures.add(nilSer.collectNilList(gstr2Report, nonGstList));
 		for (Future<Boolean> collectFuture : collectFutures) {
 			while (!collectFuture.isDone() && !collectFuture.isCancelled()) {
 			}
@@ -144,6 +155,10 @@ public class Gstr2Service {
 		String b2bUrNoteCsv = b2bUrNoteSer.getB2BUrNoteCsv(gstr2Report.getB2bUrNote());
 		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2BURNote.csv";
 		addDateToZip(zos, b2bUrNoteCsv, csvFilePath, "B2BURNote.csv");
+
+		String nilCsv = nilSer.getNilCsv(gstr2Report.getNil());
+		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " Nil.csv";
+		addDateToZip(zos, nilCsv, csvFilePath, "Nil.csv");
 
 		zos.closeEntry();
 		zos.close();

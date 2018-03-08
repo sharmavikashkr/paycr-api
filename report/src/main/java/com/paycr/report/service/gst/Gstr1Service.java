@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +62,9 @@ public class Gstr1Service {
 	private Gstr1B2BNoteService b2bNoteSer;
 
 	@Autowired
+	private Gstr1NilService nilSer;
+
+	@Autowired
 	private Company company;
 
 	@Autowired
@@ -110,16 +114,23 @@ public class Gstr1Service {
 		}
 		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, InvoiceType.SINGLE, start,
 				end);
-		invoiceList = invoiceList.stream().filter(t -> CommonUtil.isNotEmpty(t.getItems()))
+		List<Invoice> gstList = invoiceList.stream()
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0))
 				.collect(Collectors.toList());
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);
 		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
 		Gstr1Report gstr1Report = new Gstr1Report();
-		collectFutures.add(b2cLargeSer.collectB2CLargeList(gstr1Report, invoiceList));
-		collectFutures.add(b2cSmallSer.collectB2CSmallList(gstr1Report, invoiceList, noteList));
-		collectFutures.add(b2bSer.collectB2BList(gstr1Report, invoiceList));
+		collectFutures.add(b2cLargeSer.collectB2CLargeList(gstr1Report, gstList));
+		collectFutures.add(b2cSmallSer.collectB2CSmallList(gstr1Report, gstList, noteList));
+		collectFutures.add(b2bSer.collectB2BList(gstr1Report, gstList));
 		collectFutures.add(b2cNoteSer.collectB2CNoteList(gstr1Report, noteList));
 		collectFutures.add(b2bNoteSer.collectB2BNoteList(gstr1Report, noteList));
+		List<Invoice> nonGstList = invoiceList.stream()
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0))
+				.collect(Collectors.toList());
+		collectFutures.add(nilSer.collectNilList(gstr1Report, nonGstList));
 		for (Future<Boolean> collectFuture : collectFutures) {
 			while (!collectFuture.isDone() && !collectFuture.isCancelled()) {
 			}
@@ -176,6 +187,10 @@ public class Gstr1Service {
 		String b2cNoteCsv = b2cNoteSer.getB2CNoteCsv(gstr1Report.getB2cNote());
 		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2CNote.csv";
 		addDateToZip(zos, b2cNoteCsv, csvFilePath, "B2CNote.csv");
+		
+		String nilCsv = nilSer.getNilCsv(gstr1Report.getNil());
+		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " Nil.csv";
+		addDateToZip(zos, nilCsv, csvFilePath, "Nil.csv");
 
 		zos.closeEntry();
 		zos.close();

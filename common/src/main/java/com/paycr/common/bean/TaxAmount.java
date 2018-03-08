@@ -9,6 +9,8 @@ public class TaxAmount {
 	private TaxMaster tax;
 
 	private BigDecimal amount;
+	
+	private BigDecimal taxableAmount;
 
 	public TaxMaster getTax() {
 		return tax;
@@ -24,6 +26,14 @@ public class TaxAmount {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public BigDecimal getTaxableAmount() {
+		return taxableAmount;
+	}
+
+	public void setTaxableAmount(BigDecimal taxableAmount) {
+		this.taxableAmount = taxableAmount;
 	}
 
 }

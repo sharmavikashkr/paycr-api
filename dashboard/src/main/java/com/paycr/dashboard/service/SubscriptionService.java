@@ -167,7 +167,7 @@ public class SubscriptionService {
 			}
 		} else {
 			if (CommonUtil.isNull(paycr.getAddress()) || CommonUtil.isEmpty(paycr.getAddress().getState())) {
-				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Something went wrong, please try again");
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Online Payment not available");
 			}
 			if (paycr.getAddress().getState().equalsIgnoreCase(merchant.getAddress().getState())) {
 				subs.setTax(pricing.getIntrastateTax());

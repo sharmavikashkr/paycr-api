@@ -37,12 +37,12 @@ public class Gstr1B2CSmallService {
 	@Async
 	public Future<Boolean> collectB2CSmallList(Gstr1Report gstr1Report, List<Invoice> invoiceList,
 			List<InvoiceNote> invNoteList) {
-		List<Invoice> largeInvList = invoiceList.stream()
+		List<Invoice> smallInvList = invoiceList.stream()
 				.filter(t -> ((BigDecimal.valueOf(250000).compareTo(t.getTotalPrice()) >= 0)
 						&& CommonUtil.isEmpty(t.getConsumer().getGstin())))
 				.collect(Collectors.toList());
 		List<Gstr1B2CSmall> b2cSmallList = new ArrayList<Gstr1B2CSmall>();
-		for (Invoice invoice : largeInvList) {
+		for (Invoice invoice : smallInvList) {
 			List<Gstr1B2CSmall> taxbrkList = gstHelp.getTaxBreakup(invoice.getItems());
 			for (Gstr1B2CSmall taxBrk : taxbrkList) {
 				List<Gstr1B2CSmall> exstB2CSmallFt = b2cSmallList.stream()

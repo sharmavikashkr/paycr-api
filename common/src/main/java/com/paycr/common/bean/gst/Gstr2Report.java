@@ -9,6 +9,7 @@ public class Gstr2Report {
 	private List<Gstr2B2BUR> b2bUr;
 	private List<Gstr2B2BRNote> b2bRNote;
 	private List<Gstr2B2BURNote> b2bUrNote;
+	private List<Gstr2Nil> nil;
 
 	public Gstr2Report() {
 		super();
@@ -16,6 +17,7 @@ public class Gstr2Report {
 		b2bUr = new ArrayList<>();
 		b2bRNote = new ArrayList<>();
 		b2bUrNote = new ArrayList<>();
+		nil = new ArrayList<>();
 	}
 
 	public List<Gstr2B2BR> getB2bR() {
@@ -48,6 +50,14 @@ public class Gstr2Report {
 
 	public void setB2bUrNote(List<Gstr2B2BURNote> b2bUrNote) {
 		this.b2bUrNote = b2bUrNote;
+	}
+
+	public List<Gstr2Nil> getNil() {
+		return nil;
+	}
+
+	public void setNil(List<Gstr2Nil> nil) {
+		this.nil = nil;
 	}
 
 }

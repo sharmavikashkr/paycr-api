@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.bean.gst.Gstr1B2CSmall;
+import com.paycr.common.bean.gst.Gstr1Nil;
+import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceItem;
 import com.paycr.common.data.domain.TaxMaster;
 import com.paycr.common.data.repository.TaxMasterRepository;
@@ -51,6 +53,8 @@ public class Gstr1Helper {
 						.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
 								.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
 								.setScale(2, BigDecimal.ROUND_HALF_UP)));
+				taxAmt.setTaxableAmount(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
+						.setScale(2, BigDecimal.ROUND_HALF_UP));
 			}
 		}
 		return taxes;
@@ -62,7 +66,8 @@ public class Gstr1Helper {
 			TaxMaster tax = item.getTax();
 			Gstr1B2CSmall b2cSmallInv = null;
 			List<Gstr1B2CSmall> exstB2CSmallFt = new ArrayList<>();
-			if (item.getTax().getName().equals("IGST")) {
+			if (item.getTax().getName().equals("IGST") || item.getTax().getName().equals("EXEMPT IGST")
+					|| item.getTax().getName().equals("NON IGST")) {
 				exstB2CSmallFt = b2cSmallList.stream()
 						.filter(t -> ((t.getGstRate() == tax.getValue()) && t.getSupplyType().equals(SupplyType.INTER)))
 						.collect(Collectors.toList());
@@ -104,10 +109,58 @@ public class Gstr1Helper {
 				} else if (itemTax.getName().equals("IGST")) {
 					b2cSmallInv.setIgstAmount(b2cSmallInv.getIgstAmount().add(taxAmt));
 					b2cSmallInv.setSupplyType(SupplyType.INTER);
+				} else if (itemTax.getName().equals("EXEMPT IGST")) {
+					b2cSmallInv.setSupplyType(SupplyType.INTER);
+				} else if (itemTax.getName().equals("EXEMPT GST")) {
+					b2cSmallInv.setSupplyType(SupplyType.INTRA);
+				} else if (itemTax.getName().equals("NON IGST")) {
+					b2cSmallInv.setSupplyType(SupplyType.INTER);
+				} else if (itemTax.getName().equals("NON GST")) {
+					b2cSmallInv.setSupplyType(SupplyType.INTRA);
 				}
 			}
 		}
 		return b2cSmallList;
+	}
+
+	public void getSupplyBreakup(Invoice invoice, List<Gstr1Nil> nilList) {
+		List<TaxAmount> taxAmtList = getTaxAmount(invoice.getItems());
+		for (TaxAmount taxAmt : taxAmtList) {
+			SupplyType st = null;
+			Gstr1Nil nil = null;
+			if (CommonUtil.isEmpty(invoice.getConsumer().getGstin()) && taxAmt.getTax().getName().contains("IGST")) {
+				st = SupplyType.INTERB2C;
+			} else if (!CommonUtil.isEmpty(invoice.getConsumer().getGstin())
+					&& taxAmt.getTax().getName().contains("IGST")) {
+				st = SupplyType.INTERB2B;
+			} else if (CommonUtil.isEmpty(invoice.getConsumer().getGstin())
+					&& !taxAmt.getTax().getName().contains("IGST")) {
+				st = SupplyType.INTRAB2C;
+			} else if (!CommonUtil.isEmpty(invoice.getConsumer().getGstin())
+					&& !taxAmt.getTax().getName().contains("IGST")) {
+				st = SupplyType.INTRAB2B;
+			}
+			final SupplyType supType = st;
+			List<Gstr1Nil> exstNil = nilList.stream().filter(t -> (supType.equals(t.getSupplyType())))
+					.collect(Collectors.toList());
+			if (CommonUtil.isEmpty(exstNil)) {
+				nil = new Gstr1Nil();
+				nil.setSupplyType(supType);
+				nil.setExempted(BigDecimal.ZERO);
+				nil.setNilRated(BigDecimal.ZERO);
+				nil.setNonGst(BigDecimal.ZERO);
+				nilList.add(nil);
+			} else {
+				nil = exstNil.get(0);
+			}
+			if (taxAmt.getTax().getName().contains("EXEMPTED")) {
+				nil.setExempted(nil.getExempted().add(taxAmt.getTaxableAmount()));
+			} else if (taxAmt.getTax().getName().contains("NON")) {
+				nil.setNonGst(nil.getNonGst().add(taxAmt.getTaxableAmount()));
+			} else {
+				nil.setNilRated(nil.getNilRated().add(taxAmt.getTaxableAmount()));
+			}
+		}
 	}
 
 }
