@@ -24,6 +24,8 @@ public class InvoiceSetting {
 	private boolean emailPdf;
 	private boolean refundCreditNote;
 	private boolean ccMe;
+	private boolean autoRemind;
+	private int remindDays;
 	private int expiryDays;
 	private String emailNote;
 	private String emailSubject;
@@ -117,6 +119,22 @@ public class InvoiceSetting {
 
 	public void setRefundCreditNote(boolean refundCreditNote) {
 		this.refundCreditNote = refundCreditNote;
+	}
+
+	public boolean isAutoRemind() {
+		return autoRemind;
+	}
+
+	public void setAutoRemind(boolean autoRemind) {
+		this.autoRemind = autoRemind;
+	}
+
+	public int getRemindDays() {
+		return remindDays;
+	}
+
+	public void setRemindDays(int remindDays) {
+		this.remindDays = remindDays;
 	}
 
 }
