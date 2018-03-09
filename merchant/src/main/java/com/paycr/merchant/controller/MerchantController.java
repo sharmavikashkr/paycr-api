@@ -1,20 +1,12 @@
 package com.paycr.merchant.controller;
 
-import java.io.IOException;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.GstSetting;
 import com.paycr.common.data.domain.InvoiceSetting;
@@ -22,7 +14,6 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantCustomParam;
 import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.merchant.service.MerchantService;
 
@@ -35,32 +26,6 @@ public class MerchantController {
 
 	@Autowired
 	private MerchantService merSer;
-
-	@Autowired
-	private Company company;
-
-	// @RequestMapping("")
-	public ModelAndView dashboard(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String token = null;
-		if (CommonUtil.isNull(request.getCookies())) {
-			response.sendRedirect("/login");
-		}
-		for (Cookie cookie : request.getCookies()) {
-			if ("access_token".equals(cookie.getName())) {
-				token = cookie.getValue();
-			}
-		}
-		if (CommonUtil.isNull(token)) {
-			response.sendRedirect("/login");
-		}
-		Merchant merchant = secSer.getMerchantForLoggedInUser(token);
-		if (CommonUtil.isNull(merchant)) {
-			response.sendRedirect("/login");
-		}
-		ModelAndView mv = new ModelAndView("html/merchant/merchant");
-		mv.addObject("staticUrl", company.getStaticUrl());
-		return mv;
-	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@RequestMapping("/check")

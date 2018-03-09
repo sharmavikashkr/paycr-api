@@ -1,2 +1,0 @@
-https://www.npmjs.com/package/static-server
-nohup static-server -p 8000 -c "*" &

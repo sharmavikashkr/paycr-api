@@ -40,45 +40,6 @@ public class AccessController {
 	@Autowired
 	private Company company;
 
-	// @RequestMapping("/")
-	public ModelAndView index() {
-		ModelAndView mv = new ModelAndView("html/index");
-		mv.addObject("staticUrl", company.getStaticUrl());
-		return mv;
-	}
-
-	// @RequestMapping("/terms")
-	public ModelAndView terms() {
-		ModelAndView mv = new ModelAndView("html/terms");
-		mv.addObject("staticUrl", company.getStaticUrl());
-		return mv;
-	}
-
-	// @RequestMapping("/policy")
-	public ModelAndView policy() {
-		ModelAndView mv = new ModelAndView("html/policy");
-		mv.addObject("staticUrl", company.getStaticUrl());
-		return mv;
-	}
-
-	// @RequestMapping("/forgotPassword")
-	public ModelAndView forgotPasssword(@RequestParam(value = "error", required = false) String code) {
-		ModelAndView mv = new ModelAndView("html/forgot-password");
-		String message = "Enter Email to send reset password link";
-		boolean isError = false;
-		if ("1".equals(code)) {
-			message = "User not registered";
-			isError = true;
-		} else if ("2".equals(code)) {
-			message = "Reset already requested 3 times in 24 hours";
-			isError = true;
-		}
-		mv.addObject("staticUrl", company.getStaticUrl());
-		mv.addObject("message", message);
-		mv.addObject("isError", isError);
-		return mv;
-	}
-
 	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)
 	public void sendResetPassword(@RequestParam("email") String userEmail) {
 		PcUser user = userService.getUserByEmail(userEmail);
