@@ -679,7 +679,7 @@
                                                         <tbody>
                                                             <tr style="vertical-align: top">
                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                    <a href="https://www.facebook.com/" title="Facebook" target="_blank">
+                                                                    <a href="https://www.facebook.com/paycr/" title="Facebook" target="_blank">
           <img src="${staticUrl}/images/social/facebook.png" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
                                                                     <div style="line-height:5px;font-size:1px">&#160;</div>
@@ -692,7 +692,7 @@
                                                         <tbody>
                                                             <tr style="vertical-align: top">
                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                    <a href="https://twitter.com/" title="Twitter" target="_blank">
+                                                                    <a href="https://twitter.com/PayCr_in" title="Twitter" target="_blank">
           <img src="${staticUrl}/images/social/twitter.png" alt="Twitter" title="Twitter" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
                                                                     <div style="line-height:5px;font-size:1px">&#160;</div>
@@ -705,7 +705,7 @@
                                                         <tbody>
                                                             <tr style="vertical-align: top">
                                                                 <td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                    <a href="https://plus.google.com/" title="Google+" target="_blank">
+                                                                    <a href="https://plus.google.com/101211649450303937849" title="Google+" target="_blank">
           <img src="${staticUrl}/images/social/googleplus.png" alt="Google+" title="Google+" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
                                                                     <div style="line-height:5px;font-size:1px">&#160;</div>
