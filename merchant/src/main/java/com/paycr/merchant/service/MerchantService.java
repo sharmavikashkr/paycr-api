@@ -94,6 +94,11 @@ public class MerchantService {
 	}
 
 	public void updateInvoiceSetting(Merchant merchant, InvoiceSetting updatedSetting) {
+		if (updatedSetting.isAutoRemind()) {
+			if (updatedSetting.getRemindDays() < 1 || updatedSetting.getRemindDays() > 7) {
+				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Remind days must be between 1 and 7");
+			}
+		}
 		updatedSetting.setId(merchant.getInvoiceSetting().getId());
 		merchant.setInvoiceSetting(updatedSetting);
 		for (MerchantCustomParam mcp : updatedSetting.getCustomParams()) {

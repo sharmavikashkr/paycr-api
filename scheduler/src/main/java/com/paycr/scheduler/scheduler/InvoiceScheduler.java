@@ -22,4 +22,9 @@ public class InvoiceScheduler {
 		invSchSer.expireInvoice();
 	}
 
+	@Scheduled(cron = "${remind.invoice.cron}")
+	public void remindInvoice() {
+		invSchSer.remindInvoice();
+	}
+
 }
