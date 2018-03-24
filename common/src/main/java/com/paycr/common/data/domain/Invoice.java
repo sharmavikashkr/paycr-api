@@ -97,12 +97,10 @@ public class Invoice implements Cloneable {
 	private InvoiceStatus status;
 
 	private String createdBy;
-
 	private int expiresIn;
-
 	private Date updated;
-
 	private String updatedBy;
+	private boolean deleted;
 
 	@JsonIgnore
 	@ManyToOne
@@ -345,5 +343,13 @@ public class Invoice implements Cloneable {
 
 	public void setNote(InvoiceNote note) {
 		this.note = note;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

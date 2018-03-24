@@ -34,6 +34,12 @@ public class ExpenseController {
 	public List<ExpensePayment> payments(@PathVariable String expenseCode) {
 		return expSer.payments(expenseCode);
 	}
+	
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/delete/{expenseCode}", method = RequestMethod.GET)
+	public void delete(@PathVariable String expenseCode) {
+		expSer.delete(expenseCode);
+	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/refund", method = RequestMethod.POST)

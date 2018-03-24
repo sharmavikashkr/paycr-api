@@ -40,7 +40,7 @@ public class InvoicePaymentDao {
 		if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 			squery.append(" p.created between :startDate AND :endDate AND");
 		}
-		squery.append(" p.id > 0 ORDER BY p.id DESC");
+		squery.append(" p.deleted = FALSE AND p.id > 0 ORDER BY p.id DESC");
 
 		TypedQuery<InvoicePayment> query = em.createQuery(squery.toString(), InvoicePayment.class);
 

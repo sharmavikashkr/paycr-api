@@ -33,6 +33,7 @@ CREATE TABLE if not exists pc_invoice_payment (
 	method varchar(20) NOT NULL,
 	pay_mode varchar(20) NOT NULL,
 	pay_type varchar(10) NOT NULL,
+	deleted BOOLEAN NOT NULL,
 	merchant_id int REFERENCES pc_merchant
 );
 
@@ -50,6 +51,7 @@ CREATE TABLE if not exists pc_invoice_note (
 	adjustment float NOT NULL,
 	pay_amount float NOT NULL,
 	currency varchar(10) NOT NULL,
+	deleted BOOLEAN NOT NULL,
 	merchant_id int REFERENCES pc_merchant,
 	consumer_id int REFERENCES pc_consumer,
 	created_by varchar(50) NOT NULL
@@ -79,6 +81,7 @@ CREATE TABLE if not exists pc_invoice (
 	expires_in int NOT null,
 	updated timestamp DEFAULT NULL,
 	updated_by varchar(50) DEFAULT NULL,
+	deleted BOOLEAN NOT NULL,
 	parent_id int REFERENCES pc_invoice
 );
 

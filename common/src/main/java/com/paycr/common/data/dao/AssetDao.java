@@ -65,7 +65,7 @@ public class AssetDao {
 		if (CommonUtil.isNotNull(report.getPayMode())) {
 			squery.append(" p.pay_mode = :payMode AND");
 		}
-		squery.append(" p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" p.deleted = FALSE AND p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
 		squery.append(" GROUP BY ast.code,ast.name,ast.rate;");
 
 		Query query = em.createNativeQuery(squery.toString());

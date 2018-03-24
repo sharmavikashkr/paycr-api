@@ -44,6 +44,8 @@ public class ExpensePayment {
 
 	@Enumerated(EnumType.STRING)
 	private PayMode payMode;
+	
+	private boolean deleted;
 
 	public Integer getId() {
 		return id;
@@ -127,6 +129,14 @@ public class ExpensePayment {
 
 	public void setPaidDate(Date paidDate) {
 		this.paidDate = paidDate;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

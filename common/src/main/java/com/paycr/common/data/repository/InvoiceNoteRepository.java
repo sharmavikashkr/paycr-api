@@ -13,7 +13,7 @@ import com.paycr.common.data.domain.Merchant;
 @Repository
 public interface InvoiceNoteRepository extends JpaRepository<InvoiceNote, Integer> {
 
-	@Query(value = "SELECT i FROM InvoiceNote i WHERE i.merchant = ?1 AND i.noteDate BETWEEN ?2 AND ?3")
+	@Query(value = "SELECT i FROM InvoiceNote i WHERE i.merchant = ?1 AND i.noteDate BETWEEN ?2 AND ?3 AND i.deleted = FALSE")
 	public List<InvoiceNote> findNotesForMerchant(Merchant merchant, Date startDate, Date endDate);
 
 }

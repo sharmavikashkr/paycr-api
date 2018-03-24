@@ -91,10 +91,9 @@ public class Expense {
 	private ExpenseStatus status;
 
 	private String createdBy;
-
 	private Date updated;
-
 	private String updatedBy;
+	private boolean deleted;
 
 	@Transient
 	private boolean update;
@@ -285,5 +284,13 @@ public class Expense {
 
 	public void setNote(ExpenseNote note) {
 		this.note = note;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

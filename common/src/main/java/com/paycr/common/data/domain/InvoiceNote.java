@@ -77,6 +77,7 @@ public class InvoiceNote implements Cloneable {
 	private List<InvoiceItem> items;
 
 	private String createdBy;
+	private boolean deleted;
 
 	public Date getCreated() {
 		return created;
@@ -208,6 +209,14 @@ public class InvoiceNote implements Cloneable {
 
 	public void setNoteDate(Date noteDate) {
 		this.noteDate = noteDate;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

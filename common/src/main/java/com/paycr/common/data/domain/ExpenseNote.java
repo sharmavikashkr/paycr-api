@@ -77,6 +77,7 @@ public class ExpenseNote implements Cloneable {
 	private List<ExpenseItem> items;
 
 	private String createdBy;
+	private boolean deleted;
 
 	public Date getCreated() {
 		return created;
@@ -200,6 +201,14 @@ public class ExpenseNote implements Cloneable {
 
 	public void setSupplier(Supplier supplier) {
 		this.supplier = supplier;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

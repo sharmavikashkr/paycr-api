@@ -22,6 +22,7 @@ CREATE TABLE if not exists pc_expense_payment (
 	method varchar(20) NOT NULL,
 	pay_mode varchar(20) NOT NULL,
 	pay_type varchar(10) NOT NULL,
+	deleted BOOLEAN NOT NULL,
 	merchant_id int REFERENCES pc_merchant
 );
 
@@ -38,6 +39,7 @@ CREATE TABLE if not exists pc_expense_note (
 	adjustment float NOT NULL,
 	pay_amount float NOT NULL,
 	currency varchar(10) NOT NULL,
+	deleted BOOLEAN NOT NULL,
 	merchant_id int REFERENCES pc_merchant,
 	supplier_id int REFERENCES pc_supplier,
 	created_by varchar(50) NOT NULL
@@ -63,7 +65,8 @@ CREATE TABLE if not exists pc_expense(
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
 	updated timestamp DEFAULT NULL,
-	updated_by varchar(50) DEFAULT NULL
+	updated_by varchar(50) DEFAULT NULL,
+	deleted BOOLEAN NOT NULL
 );
 
 

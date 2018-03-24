@@ -69,6 +69,28 @@ public class ExpenseService {
 		return expRepo.findByExpenseCode(expenseCode);
 	}
 
+	public void delete(String expenseCode) {
+		logger.info("Delete Expense : {}", expenseCode);
+		Date timeNow = new Date();
+		Merchant merchant = secSer.getMerchantForLoggedInUser();
+		PcUser user = secSer.findLoggedInUser();
+		Expense expense = expRepo.findByExpenseCodeAndMerchant(expenseCode, merchant);
+		if (CommonUtil.isNotNull(expense.getNote())) {
+			expense.getNote().setDeleted(true);
+		}
+		List<ExpensePayment> expPays = payRepo.findByExpenseCode(expense.getExpenseCode());
+		for (ExpensePayment expPay : expPays) {
+			expPay.setDeleted(true);
+		}
+		if (CommonUtil.isNotEmpty(expPays)) {
+			payRepo.save(expPays);
+		}
+		expense.setDeleted(true);
+		expense.setUpdated(timeNow);
+		expRepo.save(expense);
+		tlService.saveToTimeline(expense.getId(), ObjectType.INVOICE, "Expense deleted", true, user.getEmail());
+	}
+
 	public void refund(BigDecimal amount, String expenseCode) {
 		logger.info("Refund Expense : {} with amount : {}", expenseCode, amount);
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

@@ -50,7 +50,7 @@ public class ExpenseDao {
 			if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 				squery.append(" i.created between :startDate AND :endDate AND");
 			}
-			squery.append(" i.id > 0 ORDER BY i.id DESC");
+			squery.append(" i.deleted = FALSE AND i.id > 0 ORDER BY i.id DESC");
 
 			TypedQuery<Expense> query = em.createQuery(squery.toString(), Expense.class);
 
@@ -107,7 +107,7 @@ public class ExpenseDao {
 			if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 				squery.append(" i.expense.created between :startDate AND :endDate AND");
 			}
-			squery.append(" i.expense.id > 0 ORDER BY i.expense.id DESC");
+			squery.append(" i.deleted = FALSE AND i.expense.id > 0 ORDER BY i.expense.id DESC");
 
 			TypedQuery<Expense> query = em.createQuery(squery.toString(), Expense.class);
 
@@ -159,7 +159,7 @@ public class ExpenseDao {
 		if (CommonUtil.isNotNull(report.getPayMode())) {
 			squery.append(" p.pay_mode = :payMode AND");
 		}
-		squery.append(" p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" p.deleted = FALSE AND p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
 		squery.append(" GROUP BY s.name,s.email,s.mobile;");
 
 		Query query = em.createNativeQuery(squery.toString());

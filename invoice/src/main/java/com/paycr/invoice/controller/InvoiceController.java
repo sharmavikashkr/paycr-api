@@ -50,6 +50,12 @@ public class InvoiceController {
 	public void expire(@PathVariable String invoiceCode) {
 		invSer.expire(invoiceCode);
 	}
+	
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@RequestMapping(value = "/delete/{invoiceCode}", method = RequestMethod.GET)
+	public void delete(@PathVariable String invoiceCode) {
+		invSer.delete(invoiceCode);
+	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.POST)

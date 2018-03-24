@@ -65,7 +65,7 @@ public class InventoryDao {
 		if (CommonUtil.isNotNull(report.getPayMode())) {
 			squery.append(" p.pay_mode = :payMode AND");
 		}
-		squery.append(" p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
+		squery.append(" i.deleted = FALSE AND p.paid_date BETWEEN :start AND :end AND p.status in ('captured','refund')");
 		squery.append(" GROUP BY invn.code,invn.name,invn.rate;");
 
 		Query query = em.createNativeQuery(squery.toString());
