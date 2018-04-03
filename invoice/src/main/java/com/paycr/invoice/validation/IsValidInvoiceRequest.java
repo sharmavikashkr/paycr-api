@@ -66,6 +66,8 @@ public class IsValidInvoiceRequest implements RequestValidator<Invoice> {
 			invoice.setNote(null);
 			invoice.setPayment(null);
 			invoice.setStatus(InvoiceStatus.CREATED);
+			invoice.setUpdated(null);
+			invoice.setUpdatedBy(null);
 		}
 		if (invoice.getExpiresIn() <= 0) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Improper invoice expiry");

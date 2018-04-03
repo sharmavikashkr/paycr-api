@@ -52,6 +52,11 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 				expense.setExpenseCode(expenseCode);
 			} while (CommonUtil.isNotNull(expRepo.findByExpenseCode(expenseCode)));
 			expense.setCreated(timeNow);
+			expense.setNote(null);
+			expense.setPayment(null);
+			expense.setStatus(ExpenseStatus.UNPAID);
+			expense.setUpdated(null);
+			expense.setUpdatedBy(null);
 		}
 		if (CommonUtil.isNull(expense.getShipping())) {
 			expense.setShipping(BigDecimal.ZERO);
@@ -59,7 +64,6 @@ public class IsValidExpenseRequest implements RequestValidator<Expense> {
 		if (CommonUtil.isNull(expense.getDiscount())) {
 			expense.setDiscount(BigDecimal.ZERO);
 		}
-		expense.setStatus(ExpenseStatus.UNPAID);
 	}
 
 }

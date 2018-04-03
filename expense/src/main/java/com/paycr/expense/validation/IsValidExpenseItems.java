@@ -87,6 +87,9 @@ public class IsValidExpenseItems implements RequestValidator<Expense> {
 			asstRepo.save(asset);
 		}
 		item.setAsset(asset);
+		if (!expense.isUpdate()) {
+			item.setId(null);
+		}
 	}
 
 }
