@@ -19,6 +19,6 @@ public interface AssetRepository extends JpaRepository<Asset, Integer> {
 
 	@Query(value = "SELECT SUM(i.quantity) as count, SUM(i.asset.rate * i.quantity) as sum "
 			+ "FROM ExpenseItem i WHERE i.expense.merchant = ?1 AND i.asset.id = ?2 AND "
-			+ "i.expense.status = ?3", nativeQuery = false)
+			+ "i.expense.status = ?3 AND i.expense.deleted = FALSE", nativeQuery = false)
 	public List<Object[]> findCountAndSumForMerchant(Merchant merchant, Integer assetId, ExpenseStatus status);
 }
