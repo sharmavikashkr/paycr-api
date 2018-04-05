@@ -107,7 +107,7 @@ public class ExpenseDao {
 			if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 				squery.append(" i.expense.created between :startDate AND :endDate AND");
 			}
-			squery.append(" i.deleted = FALSE AND i.expense.id > 0 ORDER BY i.expense.id DESC");
+			squery.append(" i.expense.deleted = FALSE AND i.expense.id > 0 ORDER BY i.expense.id DESC");
 
 			TypedQuery<Expense> query = em.createQuery(squery.toString(), Expense.class);
 

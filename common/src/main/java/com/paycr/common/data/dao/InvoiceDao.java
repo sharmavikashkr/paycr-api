@@ -116,7 +116,7 @@ public class InvoiceDao {
 			if (!CommonUtil.isNull(searchReq.getCreatedFrom())) {
 				squery.append(" i.invoice.created between :startDate AND :endDate AND");
 			}
-			squery.append(" i.deleted = FALSE AND i.invoice.id > 0 ORDER BY i.invoice.id DESC");
+			squery.append(" i.invoice.deleted = FALSE AND i.invoice.id > 0 ORDER BY i.invoice.id DESC");
 
 			TypedQuery<Invoice> query = em.createQuery(squery.toString(), Invoice.class);
 
