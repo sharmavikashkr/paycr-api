@@ -40,6 +40,11 @@ public class AccessController {
 	@Autowired
 	private Company company;
 
+	@RequestMapping("/healthCheck")
+	public String healthCheck() {
+		return "SUCCESS";
+	}
+
 	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)
 	public void sendResetPassword(@RequestParam("email") String userEmail) {
 		PcUser user = userService.getUserByEmail(userEmail);

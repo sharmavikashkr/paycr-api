@@ -31,12 +31,14 @@ public class ProfileController {
 	@Autowired
 	private SecurityService secSer;
 
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/update/address")
 	public void updateAddress(@RequestBody Address address) {
 		PcUser user = secSer.findLoggedInUser();
 		userService.saveAddress(user, address);
 	}
 
+	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping(value = "/change/password", method = RequestMethod.POST)
 	public void changePassword(@RequestParam(value = "oldPass", required = true) String oldPass,
 			@RequestParam(value = "newPass", required = true) String newPass,
