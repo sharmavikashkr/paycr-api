@@ -131,7 +131,7 @@ public class InvoiceService {
 		}
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Invoice expired", true, user.getEmail());
 	}
-	
+
 	public void delete(String invoiceCode) {
 		logger.info("Delete Invoice : {}", invoiceCode);
 		Date timeNow = new Date();
@@ -142,10 +142,10 @@ public class InvoiceService {
 			invoice.getNote().setDeleted(true);
 		}
 		List<InvoicePayment> invPays = payRepo.findByInvoiceCode(invoice.getInvoiceCode());
-		for(InvoicePayment invPay : invPays) {
+		for (InvoicePayment invPay : invPays) {
 			invPay.setDeleted(true);
 		}
-		if(CommonUtil.isNotEmpty(invPays)) {
+		if (CommonUtil.isNotEmpty(invPays)) {
 			payRepo.save(invPays);
 		}
 		invoice.setDeleted(true);
@@ -156,6 +156,9 @@ public class InvoiceService {
 
 	public void notify(String invoiceCode, InvoiceNotify notify) {
 		logger.info("Notify Invoice : {} with request : {}", invoiceCode, new Gson().toJson(notify));
+		if (!notify.isSendEmail() && !notify.isSendSms()) {
+			return;
+		}
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		PcUser user = secSer.findLoggedInUser();
 		Invoice invoice = invRepo.findByInvoiceCodeAndMerchant(invoiceCode, merchant);

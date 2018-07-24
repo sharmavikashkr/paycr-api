@@ -14,7 +14,7 @@ import com.paycr.common.type.PayType;
 @Repository
 public interface InvoicePaymentRepository extends JpaRepository<InvoicePayment, Integer> {
 
-	@Query("SELECT p from InvoicePayment p WHERE p.deleted = FALSE")
+	@Query("SELECT p from InvoicePayment p WHERE p.invoiceCode = ?1 AND p.deleted = FALSE")
 	public List<InvoicePayment> findByInvoiceCode(String invoiceCode);
 
 	@Query("SELECT p from InvoicePayment p WHERE p.invoiceCode = ?1 AND p.payType = ?2 AND p.deleted = FALSE")
