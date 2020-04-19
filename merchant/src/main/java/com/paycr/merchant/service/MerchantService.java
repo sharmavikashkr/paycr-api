@@ -26,32 +26,25 @@ public class MerchantService {
 	@Autowired
 	private IsValidGstinRequest gstinValid;
 
-	public void updateAccount(Merchant merchant, Merchant mer) {
-		merchant.setName(mer.getName());
-		merchant.setGstin(mer.getGstin());
-		gstinValid.validate(mer.getGstin());
+	public void updateAccount(Merchant merchant, String name, String gstin) {
+		merchant.setName(name);
+		merchant.setGstin(gstin);
+		gstinValid.validate(gstin);
 		merRepo.save(merchant);
 	}
 
 	public void updateAddress(Merchant merchant, Address addr) {
-		if (CommonUtil.isNull(addr) || CommonUtil.isEmpty(addr.getAddressLine1()) || CommonUtil.isEmpty(addr.getCity())
-				|| CommonUtil.isEmpty(addr.getState()) || CommonUtil.isEmpty(addr.getPincode())
-				|| CommonUtil.isEmpty(addr.getCountry())) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Address");
+		Address address = merchant.getAddress();
+		if (CommonUtil.isNull(address)) {
+			address = new Address();
 		}
-		if (CommonUtil.isNotNull(addr)) {
-			Address address = merchant.getAddress();
-			if (CommonUtil.isNull(address)) {
-				address = new Address();
-			}
-			address.setAddressLine1(addr.getAddressLine1());
-			address.setAddressLine2(addr.getAddressLine2());
-			address.setCity(addr.getCity());
-			address.setState(addr.getState());
-			address.setCountry(addr.getCountry());
-			address.setPincode(addr.getPincode());
-			merchant.setAddress(address);
-		}
+		address.setAddressLine1(addr.getAddressLine1());
+		address.setAddressLine2(addr.getAddressLine2());
+		address.setCity(addr.getCity());
+		address.setState(addr.getState());
+		address.setCountry(addr.getCountry());
+		address.setPincode(addr.getPincode());
+		merchant.setAddress(address);
 		merRepo.save(merchant);
 	}
 

@@ -17,6 +17,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_invoice_payment")
 public class InvoicePayment {
@@ -46,97 +49,5 @@ public class InvoicePayment {
 	private PayMode payMode;
 
 	private boolean deleted;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getPaymentRefNo() {
-		return paymentRefNo;
-	}
-
-	public void setPaymentRefNo(String paymentRefNo) {
-		this.paymentRefNo = paymentRefNo;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public String getMethod() {
-		return method;
-	}
-
-	public void setMethod(String method) {
-		this.method = method;
-	}
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
-	}
-
-	public PayMode getPayMode() {
-		return payMode;
-	}
-
-	public void setPayMode(PayMode payMode) {
-		this.payMode = payMode;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
-	public PayType getPayType() {
-		return payType;
-	}
-
-	public void setPayType(PayType payType) {
-		this.payType = payType;
-	}
-
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
-	}
-
-	public Date getPaidDate() {
-		return paidDate;
-	}
-
-	public void setPaidDate(Date paidDate) {
-		this.paidDate = paidDate;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 
 }

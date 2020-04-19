@@ -13,6 +13,9 @@ import javax.persistence.Table;
 
 import com.paycr.common.type.ResetStatus;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_reset_password")
 public class ResetPassword implements Serializable {
@@ -29,41 +32,5 @@ public class ResetPassword implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	private ResetStatus status;
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public String getResetCode() {
-		return resetCode;
-	}
-
-	public void setResetCode(String resetCode) {
-		this.resetCode = resetCode;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public ResetStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(ResetStatus status) {
-		this.status = status;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 }

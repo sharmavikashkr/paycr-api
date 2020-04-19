@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_pricing_merchant")
 public class PricingMerchant {
@@ -20,25 +23,5 @@ public class PricingMerchant {
 
 	@ManyToOne
 	private Pricing pricing;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
-	}
-
-	public Pricing getPricing() {
-		return pricing;
-	}
-
-	public void setPricing(Pricing pricing) {
-		this.pricing = pricing;
-	}
 
 }

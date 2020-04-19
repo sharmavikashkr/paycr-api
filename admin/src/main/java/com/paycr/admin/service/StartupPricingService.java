@@ -75,7 +75,7 @@ public class StartupPricingService {
 			sgst9.setName("SGST");
 			sgst9.setValue(9F);
 			sgst9.setChild(true);
-			sgst9.setTaxParent(gst18);
+			sgst9.setParent(gst18);
 			taxMRepo.save(sgst9);
 		}
 
@@ -87,7 +87,7 @@ public class StartupPricingService {
 			cgst9.setName("CGST");
 			cgst9.setValue(9F);
 			cgst9.setChild(true);
-			cgst9.setTaxParent(gst18);
+			cgst9.setParent(gst18);
 			taxMRepo.save(cgst9);
 		}
 
@@ -120,7 +120,7 @@ public class StartupPricingService {
 			sgst6.setName("SGST");
 			sgst6.setValue(6F);
 			sgst6.setChild(true);
-			sgst6.setTaxParent(gst12);
+			sgst6.setParent(gst12);
 			taxMRepo.save(sgst6);
 		}
 
@@ -132,7 +132,7 @@ public class StartupPricingService {
 			cgst6.setName("CGST");
 			cgst6.setValue(6F);
 			cgst6.setChild(true);
-			cgst6.setTaxParent(gst12);
+			cgst6.setParent(gst12);
 			taxMRepo.save(cgst6);
 		}
 
@@ -165,7 +165,7 @@ public class StartupPricingService {
 			sgst14.setName("SGST");
 			sgst14.setValue(14F);
 			sgst14.setChild(true);
-			sgst14.setTaxParent(gst28);
+			sgst14.setParent(gst28);
 			taxMRepo.save(sgst14);
 		}
 
@@ -177,7 +177,7 @@ public class StartupPricingService {
 			cgst14.setName("CGST");
 			cgst14.setValue(14F);
 			cgst14.setChild(true);
-			cgst14.setTaxParent(gst28);
+			cgst14.setParent(gst28);
 			taxMRepo.save(cgst14);
 		}
 
@@ -210,7 +210,7 @@ public class StartupPricingService {
 			sgst2d5.setName("SGST");
 			sgst2d5.setValue(2.5F);
 			sgst2d5.setChild(true);
-			sgst2d5.setTaxParent(gst5);
+			sgst2d5.setParent(gst5);
 			taxMRepo.save(sgst2d5);
 		}
 
@@ -222,7 +222,7 @@ public class StartupPricingService {
 			cgst2d5.setName("CGST");
 			cgst2d5.setValue(2.5F);
 			cgst2d5.setChild(true);
-			cgst2d5.setTaxParent(gst5);
+			cgst2d5.setParent(gst5);
 			taxMRepo.save(cgst2d5);
 		}
 

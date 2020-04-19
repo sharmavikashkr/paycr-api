@@ -13,9 +13,12 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Data;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.RecurrType;
 
+@Data
 @Entity
 @Table(name = "pc_recurring_invoice")
 public class RecurringInvoice {
@@ -40,69 +43,5 @@ public class RecurringInvoice {
 	@JsonIgnore
 	@ManyToOne
 	private Invoice invoice;
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public RecurrType getRecurr() {
-		return recurr;
-	}
-
-	public void setRecurr(RecurrType recurr) {
-		this.recurr = recurr;
-	}
-
-	public int getTotal() {
-		return total;
-	}
-
-	public void setTotal(int total) {
-		this.total = total;
-	}
-
-	public Date getNextDate() {
-		return nextDate;
-	}
-
-	public void setNextDate(Date nextDate) {
-		this.nextDate = nextDate;
-	}
-
-	public Invoice getInvoice() {
-		return invoice;
-	}
-
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public int getRemaining() {
-		return remaining;
-	}
-
-	public void setRemaining(int remaining) {
-		this.remaining = remaining;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 
 }

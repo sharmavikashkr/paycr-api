@@ -12,6 +12,9 @@ import javax.persistence.Table;
 
 import com.paycr.common.type.ObjectType;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_timeline")
 public class Timeline {
@@ -25,62 +28,10 @@ public class Timeline {
 
 	@Enumerated(EnumType.STRING)
 	private ObjectType objectType;
-	
+
 	private boolean internal;
 
 	private String message;
 	private String createdBy;
-
-	public Integer getObjectId() {
-		return objectId;
-	}
-
-	public void setObjectId(Integer objectId) {
-		this.objectId = objectId;
-	}
-
-	public ObjectType getObjectType() {
-		return objectType;
-	}
-
-	public void setObjectType(ObjectType objectType) {
-		this.objectType = objectType;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public boolean isInternal() {
-		return internal;
-	}
-
-	public void setInternal(boolean internal) {
-		this.internal = internal;
-	}
 
 }

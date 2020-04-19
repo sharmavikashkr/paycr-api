@@ -12,6 +12,9 @@ import javax.persistence.Table;
 
 import com.paycr.common.type.InvoiceType;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_bulk_flag")
 public class BulkFlag {
@@ -33,55 +36,4 @@ public class BulkFlag {
 
 	private String createdBy;
 
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public InvoiceType getInvoiceType() {
-		return invoiceType;
-	}
-
-	public void setInvoiceType(InvoiceType invoiceType) {
-		this.invoiceType = invoiceType;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getFlags() {
-		return flags;
-	}
-
-	public void setFlags(String flags) {
-		this.flags = flags;
-	}
 }

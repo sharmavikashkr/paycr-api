@@ -9,6 +9,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_recurring_report_user")
 public class RecurringReportUser {
@@ -23,25 +26,5 @@ public class RecurringReportUser {
 	@JsonIgnore
 	@ManyToOne
 	private PcUser pcUser;
-
-	public RecurringReport getRecurringReport() {
-		return recurringReport;
-	}
-
-	public void setRecurringReport(RecurringReport recurringReport) {
-		this.recurringReport = recurringReport;
-	}
-
-	public PcUser getPcUser() {
-		return pcUser;
-	}
-
-	public void setPcUser(PcUser pcUser) {
-		this.pcUser = pcUser;
-	}
-
-	public Integer getId() {
-		return id;
-	}
 
 }

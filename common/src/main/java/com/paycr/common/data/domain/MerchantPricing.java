@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.PricingStatus;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_merchant_pricing")
 public class MerchantPricing {
@@ -43,81 +46,5 @@ public class MerchantPricing {
 	private Subscription subscription;
 
 	private int useCount;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
-	}
-
-	public Pricing getPricing() {
-		return pricing;
-	}
-
-	public void setPricing(Pricing pricing) {
-		this.pricing = pricing;
-	}
-
-	public PricingStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(PricingStatus status) {
-		this.status = status;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Subscription getSubscription() {
-		return subscription;
-	}
-
-	public void setSubscription(Subscription subscription) {
-		this.subscription = subscription;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public int getUseCount() {
-		return useCount;
-	}
-
-	public void setUseCount(int useCount) {
-		this.useCount = useCount;
-	}
 
 }

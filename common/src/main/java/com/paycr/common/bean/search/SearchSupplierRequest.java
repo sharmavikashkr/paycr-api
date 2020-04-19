@@ -1,5 +1,8 @@
 package com.paycr.common.bean.search;
 
+import lombok.Data;
+
+@Data
 public class SearchSupplierRequest {
 
 	private Integer merchant;
@@ -7,35 +10,4 @@ public class SearchSupplierRequest {
 	private String email;
 	private String mobile;
 
-	public Integer getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Integer merchant) {
-		this.merchant = merchant;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

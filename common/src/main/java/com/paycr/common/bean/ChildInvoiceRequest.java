@@ -9,6 +9,9 @@ import com.paycr.common.data.domain.ConsumerFlag;
 import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.type.InvoiceType;
 
+import lombok.Data;
+
+@Data
 public class ChildInvoiceRequest {
 
 	private Consumer consumer;
@@ -18,35 +21,4 @@ public class ChildInvoiceRequest {
 	private InvoiceType invoiceType;
 	private RecurringInvoice recInv;
 
-	public Consumer getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
-	}
-
-	public InvoiceType getInvoiceType() {
-		return invoiceType;
-	}
-
-	public void setInvoiceType(InvoiceType invoiceType) {
-		this.invoiceType = invoiceType;
-	}
-
-	public RecurringInvoice getRecInv() {
-		return recInv;
-	}
-
-	public void setRecInv(RecurringInvoice recInv) {
-		this.recInv = recInv;
-	}
-
-	public List<ConsumerFlag> getFlagList() {
-		return flagList;
-	}
-
-	public void setFlagList(List<ConsumerFlag> flagList) {
-		this.flagList = flagList;
-	}
 }

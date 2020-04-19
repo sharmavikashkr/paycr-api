@@ -3,6 +3,9 @@ package com.paycr.common.bean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.Data;
+
+@Data
 @Configuration
 public class Company {
 
@@ -29,69 +32,5 @@ public class Company {
 
 	@Value("${company.contact.password}")
 	private String contactPassword;
-
-	public String getAppUrl() {
-		return appUrl;
-	}
-
-	public void setAppUrl(String appUrl) {
-		this.appUrl = appUrl;
-	}
-
-	public String getContactName() {
-		return contactName;
-	}
-
-	public void setContactName(String contactName) {
-		this.contactName = contactName;
-	}
-
-	public String getContactEmail() {
-		return contactEmail;
-	}
-
-	public void setContactEmail(String contactEmail) {
-		this.contactEmail = contactEmail;
-	}
-
-	public String getContactPassword() {
-		return contactPassword;
-	}
-
-	public void setContactPassword(String contactPassword) {
-		this.contactPassword = contactPassword;
-	}
-
-	public String getStaticUrl() {
-		return staticUrl;
-	}
-
-	public void setStaticUrl(String staticUrl) {
-		this.staticUrl = staticUrl;
-	}
-
-	public String getOauthUrl() {
-		return oauthUrl;
-	}
-
-	public void setOauthUrl(String oauthUrl) {
-		this.oauthUrl = oauthUrl;
-	}
-
-	public String getWebUrl() {
-		return webUrl;
-	}
-
-	public void setWebUrl(String webUrl) {
-		this.webUrl = webUrl;
-	}
-
-	public Integer getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
-	}
 
 }

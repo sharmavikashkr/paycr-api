@@ -11,6 +11,9 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_expense_item")
 public class ExpenseItem {
@@ -35,61 +38,4 @@ public class ExpenseItem {
 
 	@ManyToOne
 	private Asset asset;
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-	public TaxMaster getTax() {
-		return tax;
-	}
-
-	public void setTax(TaxMaster tax) {
-		this.tax = tax;
-	}
-
-	public Expense getExpense() {
-		return expense;
-	}
-
-	public void setExpense(Expense expense) {
-		this.expense = expense;
-	}
-
-	public Asset getAsset() {
-		return asset;
-	}
-
-	public void setAsset(Asset asset) {
-		this.asset = asset;
-	}
-
-	public ExpenseNote getExpenseNote() {
-		return expenseNote;
-	}
-
-	public void setExpenseNote(ExpenseNote expenseNote) {
-		this.expenseNote = expenseNote;
-	}
-
 }

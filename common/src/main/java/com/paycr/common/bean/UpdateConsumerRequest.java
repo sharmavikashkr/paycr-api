@@ -5,6 +5,9 @@ import java.util.List;
 import com.paycr.common.bean.search.SearchConsumerRequest;
 import com.paycr.common.data.domain.ConsumerFlag;
 
+import lombok.Data;
+
+@Data
 public class UpdateConsumerRequest {
 
 	private boolean emailOnPay;
@@ -15,59 +18,4 @@ public class UpdateConsumerRequest {
 	private List<ConsumerFlag> flagList;
 	private SearchConsumerRequest searchReq;
 
-	public boolean isEmailOnPay() {
-		return emailOnPay;
-	}
-
-	public void setEmailOnPay(boolean emailOnPay) {
-		this.emailOnPay = emailOnPay;
-	}
-
-	public boolean isEmailOnRefund() {
-		return emailOnRefund;
-	}
-
-	public void setEmailOnRefund(boolean emailOnRefund) {
-		this.emailOnRefund = emailOnRefund;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public boolean isRemoveOldTags() {
-		return removeOldTags;
-	}
-
-	public void setRemoveOldTags(boolean removeOldTags) {
-		this.removeOldTags = removeOldTags;
-	}
-
-	public SearchConsumerRequest getSearchReq() {
-		return searchReq;
-	}
-
-	public void setSearchReq(SearchConsumerRequest searchReq) {
-		this.searchReq = searchReq;
-	}
-
-	public List<ConsumerFlag> getFlagList() {
-		return flagList;
-	}
-
-	public void setFlagList(List<ConsumerFlag> flagList) {
-		this.flagList = flagList;
-	}
-
-	public boolean isEmailNote() {
-		return emailNote;
-	}
-
-	public void setEmailNote(boolean emailNote) {
-		this.emailNote = emailNote;
-	}
 }

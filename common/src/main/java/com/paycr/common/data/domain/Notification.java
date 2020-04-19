@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_notification")
 public class Notification implements Serializable {
@@ -30,61 +33,5 @@ public class Notification implements Serializable {
 
 	@Transient
 	private String createdStr;
-
-	public Integer getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public String getSubject() {
-		return subject;
-	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public boolean isRead() {
-		return read;
-	}
-
-	public void setRead(boolean read) {
-		this.read = read;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public String getCreatedStr() {
-		return createdStr;
-	}
-
-	public void setCreatedStr(String createdStr) {
-		this.createdStr = createdStr;
-	}
 
 }

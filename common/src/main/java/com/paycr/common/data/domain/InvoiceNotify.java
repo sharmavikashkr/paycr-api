@@ -12,8 +12,11 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import lombok.Data;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Data
 @Entity
 @Table(name = "pc_invoice_notify")
 public class InvoiceNotify implements Serializable {
@@ -41,81 +44,5 @@ public class InvoiceNotify implements Serializable {
 
 	@NotEmpty
 	private String emailSubject;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public Invoice getInvoice() {
-		return invoice;
-	}
-
-	public void setInvoice(Invoice invoice) {
-		this.invoice = invoice;
-	}
-
-	public boolean isSendEmail() {
-		return sendEmail;
-	}
-
-	public void setSendEmail(boolean sendEmail) {
-		this.sendEmail = sendEmail;
-	}
-
-	public boolean isSendSms() {
-		return sendSms;
-	}
-
-	public void setSendSms(boolean sendSms) {
-		this.sendSms = sendSms;
-	}
-
-	public boolean isEmailPdf() {
-		return emailPdf;
-	}
-
-	public void setEmailPdf(boolean emailPdf) {
-		this.emailPdf = emailPdf;
-	}
-
-	public String getEmailNote() {
-		return emailNote;
-	}
-
-	public void setEmailNote(String emailNote) {
-		this.emailNote = emailNote;
-	}
-
-	public String getEmailSubject() {
-		return emailSubject;
-	}
-
-	public void setEmailSubject(String emailSubject) {
-		this.emailSubject = emailSubject;
-	}
-
-	public boolean isCcMe() {
-		return ccMe;
-	}
-
-	public void setCcMe(boolean ccMe) {
-		this.ccMe = ccMe;
-	}
-
-	public String getCcEmail() {
-		return ccEmail;
-	}
-
-	public void setCcEmail(String ccEmail) {
-		this.ccEmail = ccEmail;
-	}
 
 }

@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paycr.common.type.Role;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "pc_user_role")
 public class UserRole {
@@ -26,25 +29,5 @@ public class UserRole {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
-	public PcUser getPcUser() {
-		return pcUser;
-	}
-
-	public void setPcUser(PcUser pcUser) {
-		this.pcUser = pcUser;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public Integer getId() {
-		return id;
-	}
 
 }

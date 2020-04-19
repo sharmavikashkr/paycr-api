@@ -11,8 +11,11 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Data;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Data
 @Entity
 @Table(name = "pc_recurring_report")
 public class RecurringReport {
@@ -34,49 +37,5 @@ public class RecurringReport {
 	@JsonIgnore
 	@ManyToOne
 	private Merchant merchant;
-
-	public Report getReport() {
-		return report;
-	}
-
-	public void setReport(Report report) {
-		this.report = report;
-	}
-
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public Date getNextDate() {
-		return nextDate;
-	}
-
-	public void setNextDate(Date nextDate) {
-		this.nextDate = nextDate;
-	}
 
 }

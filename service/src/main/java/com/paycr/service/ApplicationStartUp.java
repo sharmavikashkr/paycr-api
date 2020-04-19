@@ -1,16 +1,16 @@
 package com.paycr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 import com.paycr.admin.service.StartupAdminService;
 import com.paycr.admin.service.StartupPricingService;
 import com.paycr.admin.service.StartupReportService;
 
 @Component
-public class ApplicationStartUp implements ApplicationListener<ContextRefreshedEvent> {
+public class ApplicationStartUp {
 
 	@Autowired
 	private StartupAdminService startupAdminService;
@@ -21,8 +21,9 @@ public class ApplicationStartUp implements ApplicationListener<ContextRefreshedE
 	@Autowired
 	private StartupReportService startupReportService;
 
-	@Override
-	public void onApplicationEvent(final ContextRefreshedEvent event) {
+	@PostConstruct
+	public void onApplicationEvent() {
+		System.out.println("baah!!");
 		startupAdminService.createSuperAdmin();
 		startupPricingService.createWelcomePricing();
 		startupPricingService.createGstTaxMaster();

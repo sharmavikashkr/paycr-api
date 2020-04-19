@@ -2,10 +2,17 @@ package com.paycr.merchant.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.GstSetting;
@@ -28,34 +35,34 @@ public class MerchantController {
 	private MerchantService merSer;
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping("/check")
+	@GetMapping("/check")
 	public void check() {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping("/get")
+	@GetMapping("/get")
 	public Merchant getMerchant() {
 		return secSer.getMerchantForLoggedInUser();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
-	@RequestMapping("/account/update")
-	public Merchant updateAccount(@RequestBody Merchant mer) {
+	@PostMapping("/account/update")
+	public Merchant updateAccount(@RequestParam String name, @RequestParam String gstin) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		merSer.updateAccount(merchant, mer);
+		merSer.updateAccount(merchant, name, gstin);
 		return getMerchant();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
-	@RequestMapping("/address/update")
-	public Merchant updateAddress(@RequestBody Address addr) {
+	@PostMapping("/address/update")
+	public Merchant updateAddress(@Valid @RequestBody Address addr) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateAddress(merchant, addr);
 		return getMerchant();
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/paymentsetting/update")
+	@PostMapping("/paymentsetting/update")
 	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updatePaymentSetting(merchant, paymentSetting);
@@ -63,7 +70,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/invoicesetting/update")
+	@PostMapping("/invoicesetting/update")
 	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateInvoiceSetting(merchant, invoiceSetting);
@@ -71,7 +78,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/gstsetting/update")
+	@PostMapping("/gstsetting/update")
 	public GstSetting updateGstSetting(@RequestBody GstSetting gstSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateGstSetting(merchant, gstSetting);
@@ -79,7 +86,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/customParam/new")
+	@PutMapping("/customParam/new")
 	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.newCustomParam(merchant, customParam);
@@ -87,7 +94,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping("/customParam/delete/{id}")
+	@DeleteMapping("/customParam/delete/{id}")
 	public InvoiceSetting deleteCustomParam(@PathVariable Integer id) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.deleteCustomParam(merchant, id);

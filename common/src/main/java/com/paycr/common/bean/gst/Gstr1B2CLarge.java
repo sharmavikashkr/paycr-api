@@ -7,6 +7,9 @@ import java.util.List;
 import com.paycr.common.bean.TaxAmount;
 import com.paycr.common.type.SupplyType;
 
+import lombok.Data;
+
+@Data
 public class Gstr1B2CLarge {
 
 	private String invoiceNo;
@@ -16,61 +19,5 @@ public class Gstr1B2CLarge {
 	private String placeOfSupply;
 	private SupplyType supplyType;
 	private List<TaxAmount> taxAmount;
-
-	public String getInvoiceNo() {
-		return invoiceNo;
-	}
-
-	public void setInvoiceNo(String invoiceNo) {
-		this.invoiceNo = invoiceNo;
-	}
-
-	public BigDecimal getInvoiceAmount() {
-		return invoiceAmount;
-	}
-
-	public void setInvoiceAmount(BigDecimal invoiceAmount) {
-		this.invoiceAmount = invoiceAmount;
-	}
-
-	public Date getInvoiceDate() {
-		return invoiceDate;
-	}
-
-	public void setInvoiceDate(Date invoiceDate) {
-		this.invoiceDate = invoiceDate;
-	}
-
-	public String getPlaceOfSupply() {
-		return placeOfSupply;
-	}
-
-	public void setPlaceOfSupply(String placeOfSupply) {
-		this.placeOfSupply = placeOfSupply;
-	}
-
-	public SupplyType getSupplyType() {
-		return supplyType;
-	}
-
-	public void setSupplyType(SupplyType supplyType) {
-		this.supplyType = supplyType;
-	}
-
-	public List<TaxAmount> getTaxAmount() {
-		return taxAmount;
-	}
-
-	public void setTaxAmount(List<TaxAmount> taxAmount) {
-		this.taxAmount = taxAmount;
-	}
-
-	public BigDecimal getTaxableAmount() {
-		return taxableAmount;
-	}
-
-	public void setTaxableAmount(BigDecimal taxableAmount) {
-		this.taxableAmount = taxableAmount;
-	}
 
 }

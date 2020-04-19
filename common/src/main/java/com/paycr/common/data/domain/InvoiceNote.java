@@ -19,9 +19,12 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import lombok.Data;
+
 import com.paycr.common.type.Currency;
 import com.paycr.common.type.NoteType;
 
+@Data
 @Entity
 @Table(name = "pc_invoice_note")
 public class InvoiceNote implements Cloneable {
@@ -78,145 +81,5 @@ public class InvoiceNote implements Cloneable {
 
 	private String createdBy;
 	private boolean deleted;
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
-	public String getNoteCode() {
-		return noteCode;
-	}
-
-	public void setNoteCode(String noteCode) {
-		this.noteCode = noteCode;
-	}
-
-	public String getInvoiceCode() {
-		return invoiceCode;
-	}
-
-	public void setInvoiceCode(String invoiceCode) {
-		this.invoiceCode = invoiceCode;
-	}
-
-	public Merchant getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(Merchant merchant) {
-		this.merchant = merchant;
-	}
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-	public BigDecimal getPayAmount() {
-		return payAmount;
-	}
-
-	public void setPayAmount(BigDecimal payAmount) {
-		this.payAmount = payAmount;
-	}
-
-	public Currency getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	}
-
-	public Consumer getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
-	}
-
-	public List<InvoiceItem> getItems() {
-		return items;
-	}
-
-	public void setItems(List<InvoiceItem> items) {
-		this.items = items;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public BigDecimal getTotalPrice() {
-		return totalPrice;
-	}
-
-	public void setTotalPrice(BigDecimal totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public BigDecimal getAdjustment() {
-		return adjustment;
-	}
-
-	public void setAdjustment(BigDecimal adjustment) {
-		this.adjustment = adjustment;
-	}
-
-	public NoteType getNoteType() {
-		return noteType;
-	}
-
-	public void setNoteType(NoteType noteType) {
-		this.noteType = noteType;
-	}
-
-	public String getNoteReason() {
-		return noteReason;
-	}
-
-	public void setNoteReason(String noteReason) {
-		this.noteReason = noteReason;
-	}
-
-	public boolean isRefundCreditNote() {
-		return refundCreditNote;
-	}
-
-	public void setRefundCreditNote(boolean refundCreditNote) {
-		this.refundCreditNote = refundCreditNote;
-	}
-
-	public Date getNoteDate() {
-		return noteDate;
-	}
-
-	public void setNoteDate(Date noteDate) {
-		this.noteDate = noteDate;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 
 }

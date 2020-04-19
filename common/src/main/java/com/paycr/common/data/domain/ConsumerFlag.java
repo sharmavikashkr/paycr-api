@@ -9,8 +9,11 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import lombok.Data;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Data
 @Entity
 @Table(name = "pc_consumer_flag")
 public class ConsumerFlag {
@@ -25,25 +28,4 @@ public class ConsumerFlag {
 
 	@NotEmpty
 	private String name;
-
-	public Consumer getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(Consumer consumer) {
-		this.consumer = consumer;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 }

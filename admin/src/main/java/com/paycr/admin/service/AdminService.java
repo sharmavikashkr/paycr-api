@@ -69,7 +69,7 @@ public class AdminService {
 			if (CommonUtil.isNull(parent) || !parent.isActive()) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Parent tax not found");
 			}
-			tax.setTaxParent(parent);
+			tax.setParent(parent);
 		}
 		tax.setActive(true);
 		taxMRepo.save(tax);
