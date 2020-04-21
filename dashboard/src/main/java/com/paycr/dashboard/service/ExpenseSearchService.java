@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -87,7 +88,10 @@ public class ExpenseSearchService {
 				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return expDao.findExpenses(request, merchant);
 	}
@@ -102,7 +106,10 @@ public class ExpenseSearchService {
 				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return expPayDao.findPayments(request, merchant);
 	}
@@ -181,7 +188,10 @@ public class ExpenseSearchService {
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return conDao.findSuppliers(request, merchant);
 	}
@@ -191,7 +201,10 @@ public class ExpenseSearchService {
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return assetDao.findAsset(request, merchant);
 	}

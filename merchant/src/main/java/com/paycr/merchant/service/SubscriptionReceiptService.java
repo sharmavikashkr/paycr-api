@@ -61,7 +61,7 @@ public class SubscriptionReceiptService {
 	}
 
 	public ModelAndView getSubscriptionReceipt(String subscriptionCode) {
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		Subscription subs = getSubscriptionByCode(subscriptionCode);
 		ModelAndView mv = new ModelAndView("receipt/subscription");
 		mv.addObject("staticUrl", company.getStaticUrl());
@@ -71,7 +71,7 @@ public class SubscriptionReceiptService {
 	}
 
 	public String getPricingReceipt(Integer pricingId) {
-		MerchantPricing merPricing = merPriRepo.findOne(pricingId);
+		MerchantPricing merPricing = merPriRepo.findById(pricingId).get();
 		return merPricing.getSubscription().getSubscriptionCode();
 	}
 }

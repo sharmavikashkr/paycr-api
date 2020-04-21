@@ -135,7 +135,7 @@ public class UserService {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			List<MerchantUser> merUsers = merUserRepo.findByMerchantId(merchant.getId());
 			for (MerchantUser merUser : merUsers) {
-				PcUser myUser = userRepo.findOne(merUser.getUserId());
+				PcUser myUser = userRepo.findById(merUser.getUserId()).get();
 				if (!UserType.ADMIN.equals(myUser.getUserType())) {
 					myUsers.add(myUser);
 				}
@@ -202,7 +202,7 @@ public class UserService {
 	}
 
 	public void toggleUser(Integer userId) {
-		PcUser user = userRepo.findOne(userId);
+		PcUser user = userRepo.findById(userId).get();
 		if (getUsers().contains(user)) {
 			user.setActive(!user.isActive());
 			userRepo.save(user);

@@ -55,7 +55,7 @@ public class PromotionService {
 
 	public void notify(Integer promoId) {
 		logger.info("Re-notify promotion for promoId : {}", promoId);
-		Promotion promotion = promoRepo.findOne(promoId);
+		Promotion promotion = promoRepo.findById(promoId).get();
 		if (CommonUtil.isNull(promotion)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid request");
 		}

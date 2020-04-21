@@ -50,7 +50,7 @@ public class AdminService {
 
 	public void togglePricing(Integer pricingId) {
 		logger.info("Toggle Pricing id : {}", pricingId);
-		Pricing pri = pricingRepo.findOne(pricingId);
+		Pricing pri = pricingRepo.findById(pricingId).get();
 		pri.setActive(!pri.isActive());
 		pri.setActive(true);
 		pricingRepo.save(pri);
@@ -65,7 +65,7 @@ public class AdminService {
 			if (CommonUtil.isNull(tax.getParentTaxId())) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Child tax must have a parent");
 			}
-			TaxMaster parent = taxMRepo.findOne(tax.getParentTaxId());
+			TaxMaster parent = taxMRepo.findById(tax.getParentTaxId()).get();
 			if (CommonUtil.isNull(parent) || !parent.isActive()) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Parent tax not found");
 			}
@@ -77,8 +77,8 @@ public class AdminService {
 
 	public void addPricingMerchant(Integer pricingId, Integer merchantId) {
 		logger.info("Add pricing : {} for merchant : {}", pricingId, merchantId);
-		Pricing pricing = pricingRepo.findOne(pricingId);
-		Merchant merchant = merRepo.findOne(merchantId);
+		Pricing pricing = pricingRepo.findById(pricingId).get();
+		Merchant merchant = merRepo.findById(merchantId).get();
 		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
@@ -93,19 +93,19 @@ public class AdminService {
 	}
 
 	public List<Merchant> getMerchantForPricing(Integer pricingId) {
-		Pricing pricing = pricingRepo.findOne(pricingId);
+		Pricing pricing = pricingRepo.findById(pricingId).get();
 		return priMerRepo.findMerchantsForPricing(pricing);
 	}
 
 	public void removePricingMerchant(Integer pricingId, Integer merchantId) {
 		logger.info("Remove pricing : {} for merchant : {}", pricingId, merchantId);
-		Pricing pricing = pricingRepo.findOne(pricingId);
-		Merchant merchant = merRepo.findOne(merchantId);
+		Pricing pricing = pricingRepo.findById(pricingId).get();
+		Merchant merchant = merRepo.findById(merchantId).get();
 		if (CommonUtil.isNull(pricing) || CommonUtil.isNull(merchant) || PricingType.PUBLIC.equals(pricing.getType())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		PricingMerchant priMer = priMerRepo.findByMerchantAndPricing(merchant, pricing);
-		priMerRepo.delete(priMer.getId());
+		priMerRepo.deleteById(priMer.getId());
 
 	}
 

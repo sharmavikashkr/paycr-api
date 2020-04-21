@@ -74,7 +74,7 @@ public class StartupReportService {
 		astRep.setTimeRange(TimeRange.LAST_MONTH);
 		repList.add(astRep);
 
-		repRepo.save(repList);
+		repRepo.saveAll(repList);
 	}
 
 }

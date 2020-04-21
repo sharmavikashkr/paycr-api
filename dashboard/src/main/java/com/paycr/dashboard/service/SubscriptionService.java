@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
@@ -84,16 +85,16 @@ public class SubscriptionService {
 	}
 
 	public Subscription getSubscription(Integer pricingId) {
-		MerchantPricing merPricing = merPriRepo.findOne(pricingId);
-		return merPricing.getSubscription();
+		Optional<MerchantPricing> merPricingOpt = merPriRepo.findById(pricingId);
+		return merPricingOpt.isPresent() ? merPricingOpt.get().getSubscription() : null;
 	}
 
 	public void offlineSubscription(OfflineSubscription offline) {
 		logger.info("Offline subscription request : {}", new Gson().toJson(offline));
 		Date timeNow = new Date();
-		Merchant merchant = merRepo.findOne(offline.getMerchantId());
-		Pricing pricing = priRepo.findOne(offline.getPricingId());
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Merchant merchant = merRepo.findById(offline.getMerchantId()).get();
+		Pricing pricing = priRepo.findById(offline.getPricingId()).get();
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		Subscription subs = new Subscription();
 		if (CommonUtil.isNull(merchant.getAddress()) || CommonUtil.isEmpty(merchant.getAddress().getState())) {
 			if (!"NO_TAX".equalsIgnoreCase(pricing.getInterstateTax().getName())) {
@@ -152,8 +153,8 @@ public class SubscriptionService {
 		logger.info("Online subscription request for pricingId : {}, quantity : {} by merchant : {}", pricingId,
 				quantity, merchant.getId());
 		Date timeNow = new Date();
-		Pricing pricing = priRepo.findOne(pricingId);
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Pricing pricing = priRepo.findById(pricingId).get();
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		if (!pricing.isActive() || BigDecimal.ZERO.compareTo(pricing.getRate()) > -1 || CommonUtil.isNull(quantity)
 				|| quantity <= 0) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Bad Request");
@@ -219,7 +220,7 @@ public class SubscriptionService {
 	public Subscription purchase(Map<String, String> formData) throws Exception {
 		logger.info("Purchase response received for subscription : {}", new Gson().toJson(formData));
 		Date timeNow = new Date();
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		ModelAndView mv = new ModelAndView("html/subs-response");
 		mv.addObject("staticUrl", company.getStaticUrl());
 		String rzpPayId = formData.get("razorpay_payment_id");
@@ -298,7 +299,7 @@ public class SubscriptionService {
 
 	public ModelAndView getSubscriptionReceipt(String subsCode) {
 		logger.info("Receipt for subscription request for code : {}", subsCode);
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		Subscription subs = getSubscriptionByCode(subsCode);
 		ModelAndView mv = new ModelAndView("receipt/subscription");
 		mv.addObject("staticUrl", company.getStaticUrl());

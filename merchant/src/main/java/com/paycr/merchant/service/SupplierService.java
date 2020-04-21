@@ -72,7 +72,7 @@ public class SupplierService {
 	}
 
 	public void updateSupplier(Supplier supplier, Integer supplierId) {
-		Supplier exstCon = conRepo.findOne(supplierId);
+		Supplier exstCon = conRepo.findById(supplierId).get();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Supplier not found");
@@ -160,7 +160,7 @@ public class SupplierService {
 
 	public void updateSupplierAddress(Address addr, Integer supplierId) {
 		validateAddress(addr);
-		Supplier supplier = conRepo.findOne(supplierId);
+		Supplier supplier = conRepo.findById(supplierId).get();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (supplier.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Supplier not found");

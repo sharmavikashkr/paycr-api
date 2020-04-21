@@ -146,7 +146,7 @@ public class InvoiceService {
 			invPay.setDeleted(true);
 		}
 		if (CommonUtil.isNotEmpty(invPays)) {
-			payRepo.save(invPays);
+			payRepo.saveAll(invPays);
 		}
 		invoice.setDeleted(true);
 		invoice.setUpdated(timeNow);

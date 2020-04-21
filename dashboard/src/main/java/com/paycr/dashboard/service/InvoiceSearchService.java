@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -87,7 +88,10 @@ public class InvoiceSearchService {
 				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return invDao.findInvoices(request, merchant);
 	}
@@ -102,7 +106,10 @@ public class InvoiceSearchService {
 				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return invPayDao.findPayments(request, merchant);
 	}
@@ -112,7 +119,10 @@ public class InvoiceSearchService {
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return conDao.findConsumers(request, merchant);
 	}
@@ -191,7 +201,10 @@ public class InvoiceSearchService {
 		PaycrUtil.validateRequest(request);
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
-			merchant = merRepo.findOne(request.getMerchant());
+			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
+			if (merOpt.isPresent()) {
+				merchant = merOpt.get();
+			}
 		}
 		return invenDao.findInventory(request, merchant);
 	}

@@ -2,6 +2,7 @@ package com.paycr.dashboard.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class ContactUsService {
 	}
 
 	public List<ContactUs> getContactUs(String email, String type, int page, boolean resolved) {
-		Pageable pagReq = new PageRequest(page, 20);
+		Pageable pagReq = PageRequest.of(page, 20);
 		if (CommonUtil.isEmpty(email) && CommonUtil.isEmpty(type)) {
 			return cntUsRepo.findLatest(resolved, pagReq);
 		} else if (CommonUtil.isEmpty(email)) {
@@ -45,9 +46,12 @@ public class ContactUsService {
 
 	public void toggle(Integer id) {
 		logger.info("Toggle contactUs : {}", id);
-		ContactUs cntUs = cntUsRepo.findOne(id);
-		cntUs.setResolved(!cntUs.isResolved());
-		cntUsRepo.save(cntUs);
+		Optional<ContactUs> cntUsOpt = cntUsRepo.findById(id);
+		if (cntUsOpt.isPresent()) {
+			ContactUs cntUs = cntUsOpt.get();
+			cntUs.setResolved(!cntUs.isResolved());
+			cntUsRepo.save(cntUs);
+		}
 	}
 
 }

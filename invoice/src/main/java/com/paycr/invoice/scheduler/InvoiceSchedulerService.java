@@ -82,7 +82,7 @@ public class InvoiceSchedulerService {
 			expInv.setStatus(InvoiceStatus.EXPIRED);
 			tlService.saveToTimeline(expInv.getId(), ObjectType.INVOICE, "Invoice expired", true, "Scheduler");
 		}
-		invRepo.save(expiredList);
+		invRepo.saveAll(expiredList);
 	}
 
 	@Transactional

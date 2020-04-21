@@ -1,6 +1,6 @@
 package com.paycr.scheduler;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

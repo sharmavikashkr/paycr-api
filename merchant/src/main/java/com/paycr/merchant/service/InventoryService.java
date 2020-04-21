@@ -80,7 +80,7 @@ public class InventoryService {
 	}
 
 	public void updateInventory(Inventory inventory, Integer inventoryId) {
-		Inventory exstInvn = invnRepo.findOne(inventoryId);
+		Inventory exstInvn = invnRepo.findById(inventoryId).get();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstInvn.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Inventory not found");

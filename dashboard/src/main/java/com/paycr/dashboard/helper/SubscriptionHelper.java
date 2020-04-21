@@ -73,10 +73,10 @@ public class SubscriptionHelper {
 			return;
 		}
 		logger.info("Adding subscription : {} to expense for merchant : {}", subs.getId(), merchantId);
-		Merchant merchant = merRepo.findOne(merchantId);
+		Merchant merchant = merRepo.findById(merchantId).get();
 		String createdBy = "SYSTEM";
 		Date timeNow = new Date();
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		Expense expense = new Expense();
 		expense.setAddItems(true);
 		expense.setCreated(timeNow);
@@ -148,8 +148,8 @@ public class SubscriptionHelper {
 			return;
 		}
 		logger.info("Adding subscription : {} to paycr invoice for merchant : {}", subs.getId(), merchantId);
-		Merchant merchant = merRepo.findOne(merchantId);
-		Merchant paycr = merRepo.findOne(company.getMerchantId());
+		Merchant merchant = merRepo.findById(merchantId).get();
+		Merchant paycr = merRepo.findById(company.getMerchantId()).get();
 		String createdBy = "SYSTEM";
 		Date timeNow = new Date();
 		Invoice invoice = new Invoice();

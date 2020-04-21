@@ -83,7 +83,7 @@ public class ExpenseService {
 			expPay.setDeleted(true);
 		}
 		if (CommonUtil.isNotEmpty(expPays)) {
-			payRepo.save(expPays);
+			payRepo.saveAll(expPays);
 		}
 		expense.setDeleted(true);
 		expense.setUpdated(timeNow);

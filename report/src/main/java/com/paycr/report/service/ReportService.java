@@ -109,7 +109,7 @@ public class ReportService {
 		if (CommonUtil.isNull(report)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report not found");
 		}
-		repRepo.delete(reportId);
+		repRepo.deleteById(reportId);
 	}
 
 	private void isValidReport(Report report) {
@@ -124,7 +124,7 @@ public class ReportService {
 	}
 
 	public void addSchedule(Integer reportId, Merchant merchant, PcUser user) {
-		Report report = repRepo.findOne(reportId);
+		Report report = repRepo.findById(reportId).get();
 		if (CommonUtil.isNull(report)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Report");
 		}
@@ -174,12 +174,12 @@ public class ReportService {
 	}
 
 	public void removeSchedule(Integer recRepUserId, PcUser user) {
-		RecurringReportUser recRepUser = recRepUserRepo.findOne(recRepUserId);
+		RecurringReportUser recRepUser = recRepUserRepo.findById(recRepUserId).get();
 		if (CommonUtil.isNull(recRepUser)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 		if (recRepUser.getPcUser().getId() == user.getId()) {
-			recRepUserRepo.delete(recRepUser.getId());
+			recRepUserRepo.deleteById(recRepUser.getId());
 		} else {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}

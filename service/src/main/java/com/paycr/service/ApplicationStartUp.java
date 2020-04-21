@@ -23,7 +23,6 @@ public class ApplicationStartUp {
 
 	@PostConstruct
 	public void onApplicationEvent() {
-		System.out.println("baah!!");
 		startupAdminService.createSuperAdmin();
 		startupPricingService.createWelcomePricing();
 		startupPricingService.createGstTaxMaster();

@@ -105,7 +105,7 @@ public class ConsumerService {
 
 	public void updateConsumer(Consumer consumer, Integer consumerId) {
 		logger.info("Update Consumer request : {}", new Gson().toJson(consumer));
-		Consumer exstCon = conRepo.findOne(consumerId);
+		Consumer exstCon = conRepo.findById(consumerId).get();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstCon.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
@@ -127,7 +127,7 @@ public class ConsumerService {
 
 	public void addFlag(Integer consumerId, ConsumerFlag flag, Merchant merchant) {
 		logger.info("Add Consumer flag : {} for consumer : {}", new Gson().toJson(flag), consumerId);
-		Consumer consumer = conRepo.findOne(consumerId);
+		Consumer consumer = conRepo.findById(consumerId).get();
 		if (CommonUtil.isNull(consumer)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
@@ -136,7 +136,7 @@ public class ConsumerService {
 		}
 		ConsumerFlag exstFlag = flagRepo.findByConsumerAndName(consumer, flag.getName());
 		if (!CommonUtil.isNotNull(exstFlag)) {
-			consumer = conRepo.findOne(consumerId);
+			consumer = conRepo.findById(consumerId).get();
 			if (CommonUtil.isNotEmpty(consumer.getFlags()) && consumer.getFlags().size() >= 5) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Only 5 flags per consumer allowed");
 			}
@@ -152,7 +152,7 @@ public class ConsumerService {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");
 		}
 		if (CommonUtil.isNotNull(flagRepo.findByConsumerAndId(consumer, conCatId))) {
-			flagRepo.delete(conCatId);
+			flagRepo.deleteById(conCatId);
 		}
 	}
 
@@ -281,7 +281,7 @@ public class ConsumerService {
 
 	public void updateConsumerAddress(Address addr, Integer consumerId) {
 		validateAddress(addr);
-		Consumer consumer = conRepo.findOne(consumerId);
+		Consumer consumer = conRepo.findById(consumerId).get();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (consumer.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Consumer not found");

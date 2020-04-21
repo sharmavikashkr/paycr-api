@@ -87,7 +87,7 @@ public class AssetService {
 
 	public void updateAsset(Asset asset, Integer assetId) {
 		logger.info("Update Asset request : {}", new Gson().toJson(asset));
-		Asset exstInvn = assetRepo.findOne(assetId);
+		Asset exstInvn = assetRepo.findById(assetId).get();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (exstInvn.getMerchant().getId() != merchant.getId()) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Asset not found");

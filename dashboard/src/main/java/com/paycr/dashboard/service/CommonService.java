@@ -62,7 +62,7 @@ public class CommonService {
 	}
 
 	public List<Notification> getNotifications() {
-		Pageable topFour = new PageRequest(0, 4);
+		Pageable topFour = PageRequest.of(0, 4);
 		if (secSer.isMerchantUser()) {
 			Merchant merchant = secSer.getMerchantForLoggedInUser();
 			return notiRepo.findByUserIdAndMerchantIdOrderByIdDesc(null, merchant.getId(), topFour);
