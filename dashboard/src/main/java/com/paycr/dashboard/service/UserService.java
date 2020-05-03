@@ -8,7 +8,7 @@ import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -45,7 +45,7 @@ public class UserService {
 	private SecurityService secSer;
 
 	@Autowired
-	private BCryptPasswordEncoder bcPassEncode;
+	private PasswordEncoder passEncoder;
 
 	@Autowired
 	private MerchantUserRepository merUserRepo;
@@ -171,7 +171,7 @@ public class UserService {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Not allowed to create more users");
 			}
 			user.setCreated(timeNow);
-			user.setPassword(bcPassEncode.encode("password@123"));
+			user.setPassword(passEncoder.encode("password@123"));
 			List<UserRole> userRoles = new ArrayList<UserRole>();
 			UserRole userRole = new UserRole();
 			userRole.setRole(getRoleForMerchantUserType(user.getUserType()));
@@ -189,7 +189,7 @@ public class UserService {
 			accessService.sendResetLink(user);
 		} else {
 			user.setCreated(timeNow);
-			user.setPassword(bcPassEncode.encode("password@123"));
+			user.setPassword(passEncoder.encode("password@123"));
 			List<UserRole> userRoles = new ArrayList<UserRole>();
 			UserRole userRole = new UserRole();
 			userRole.setRole(getRoleForAdminUserType(user.getUserType()));

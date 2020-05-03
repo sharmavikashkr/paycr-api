@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +14,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.transaction.Transactional;
-
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
@@ -34,6 +29,11 @@ import com.paycr.common.data.repository.ExpenseRepository;
 import com.paycr.common.type.ExpenseStatus;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 @Service
 public class Gstr2Service {
@@ -88,8 +88,8 @@ public class Gstr2Service {
 		}
 		List<Expense> expenseList = expRepo.findExpensesForMerchant(merchant, gstStatuses, start, end);
 		List<Expense> gstList = expenseList.stream()
-				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
-						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0))
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, RoundingMode.HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, RoundingMode.HALF_UP)) != 0))
 				.collect(Collectors.toList());
 		List<ExpenseNote> noteList = expNoteRepo.findNotesForMerchant(merchant, start, end);
 		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
@@ -99,8 +99,8 @@ public class Gstr2Service {
 		collectFutures.add(b2bUrNoteSer.collectB2BUrNoteList(gstr2Report, noteList));
 		collectFutures.add(b2bRNoteSer.collectB2BRNoteList(gstr2Report, noteList));
 		List<Expense> nonGstList = expenseList.stream()
-				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
-						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0))
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, RoundingMode.HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, RoundingMode.HALF_UP)) == 0))
 				.collect(Collectors.toList());
 		collectFutures.add(nilSer.collectNilList(gstr2Report, nonGstList));
 		for (Future<Boolean> collectFuture : collectFutures) {

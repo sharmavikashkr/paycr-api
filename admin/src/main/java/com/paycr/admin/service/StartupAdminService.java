@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.paycr.common.data.domain.Notification;
@@ -22,6 +22,9 @@ import com.paycr.common.util.CommonUtil;
 public class StartupAdminService {
 
 	@Autowired
+	private PasswordEncoder passEncoder;
+
+	@Autowired
 	private UserRepository userRepo;
 
 	@Autowired
@@ -36,7 +39,7 @@ public class StartupAdminService {
 		user.setCreated(timeNow);
 		user.setName("PayCr Admin");
 		user.setEmail("admin@paycr.in");
-		user.setPassword(new BCryptPasswordEncoder().encode("password@123"));
+		user.setPassword(passEncoder.encode("password@123"));
 		user.setMobile("9999999999");
 		user.setUserType(UserType.ADMIN);
 		user.setCreatedBy("SYSTEM");

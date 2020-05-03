@@ -3,6 +3,7 @@ package com.paycr.invoice.service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -207,7 +208,7 @@ public class InvoiceService {
 			}
 		}
 		if (InvoiceStatus.PAID.equals(invoice.getStatus())
-				&& refundAllowed.setScale(2, BigDecimal.ROUND_HALF_DOWN).compareTo(amount) >= 0) {
+				&& refundAllowed.setScale(2, RoundingMode.HALF_DOWN).compareTo(amount) >= 0) {
 			payService.refund(invoice, amount, user.getEmail());
 		} else {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Refund Not allowed");

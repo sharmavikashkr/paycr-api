@@ -1,0 +1,54 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    initialSize: 5
+    maxActive: 10
+    maxIdle: 5
+    minIdle: 2
+    password: C@rpe_d!em
+    removeAbandoned: true
+    url: jdbc:postgresql://localhost:5432/paycr
+    username: postgres
+  flyway:
+    baselineOnMigrate: true
+  freemarker:
+    suffix: .html
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:8080/userinfo
+
+company:
+  merchant:
+    id: 1
+  app:
+    url: http://localhost:9090
+  web:
+    url: http://localhost:4200
+  static:
+    url: http://localhost:4200
+  oauth:
+    url: http://localhost:8080
+  contact:
+    name: Paycr Noreply
+    email: noreply@paycr.in
+    password: C@rpe_d!em
+
+aws:
+  config:
+    accessKey: AKIAIYURUPFR4KJRO3TA
+    secretKey: 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
+  s3:
+    bucketName: pcalpha
+    domainUrl: https://s3.amazonaws.com
+  smtp:
+    host: email-smtp.us-east-1.amazonaws.com
+    password: AvVVjj0vllMRMJDskEzTZlFMQFuCCSJc7ki8u7A62oIO
+    username: AKIAI3UQNR4NOXAFILZQ
+
+wkhtmltopdf:
+  location: C:\Program Files\wkhtmltopdf\bin\

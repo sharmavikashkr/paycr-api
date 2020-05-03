@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -52,7 +52,7 @@ public class RegisterService {
 	private MerchantUserRepository merUserRepo;
 
 	@Autowired
-	private BCryptPasswordEncoder bcPassEncode;
+	private PasswordEncoder passEncoder;
 
 	@Autowired
 	private HmacSignerUtil hmacSigner;
@@ -125,7 +125,7 @@ public class RegisterService {
 		user.setCreated(timeNow);
 		user.setName("Admin");
 		user.setEmail(merchant.getEmail());
-		user.setPassword(bcPassEncode.encode("password@123"));
+		user.setPassword(passEncoder.encode("password@123"));
 		user.setMobile(merchant.getMobile());
 		user.setUserType(UserType.ADMIN);
 		user.setCreatedBy(createdBy);

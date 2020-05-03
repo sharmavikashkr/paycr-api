@@ -3,8 +3,12 @@ package com.paycr.dashboard.controller;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.paycr.common.bean.OfflineSubscription;
+import com.paycr.common.data.domain.Subscription;
+import com.paycr.common.util.RoleUtil;
+import com.paycr.dashboard.service.SubscriptionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,29 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.paycr.common.bean.Company;
-import com.paycr.common.bean.OfflineSubscription;
-import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.Subscription;
-import com.paycr.common.exception.PaycrException;
-import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.SubscriptionService;
 
 @RestController
 @RequestMapping("/subscription")
 public class SubscriptionController {
 
 	@Autowired
-	private SecurityService secSer;
-
-	@Autowired
 	private SubscriptionService subsSer;
-
-	@Autowired
-	private Company company;
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
 	@RequestMapping("/get/{pricingId}")
@@ -50,7 +38,7 @@ public class SubscriptionController {
 		subsSer.offlineSubscription(offline);
 	}
 
-	@RequestMapping(value = "/new/online", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/new/online", method = RequestMethod.GET)
 	public ModelAndView onlineSubscription(@RequestParam("access_token") String accessToken,
 			@RequestParam("pricing_id") Integer pricingId, @RequestParam("quantity") Integer quantity,
 			HttpServletRequest request) {
@@ -65,7 +53,7 @@ public class SubscriptionController {
 			mv.addObject("message", message);
 			return mv;
 		}
-	}
+	}*/
 
 	@RequestMapping(value = "/return", method = RequestMethod.POST)
 	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws Exception {

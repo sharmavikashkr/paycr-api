@@ -1,6 +1,7 @@
 package com.paycr.invoice.validation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.apache.http.HttpStatus;
 import org.springframework.core.annotation.Order;
@@ -28,19 +29,19 @@ public class IsValidInvoiceAmount implements RequestValidator<Invoice> {
 			BigDecimal totalRate = BigDecimal.ZERO;
 			BigDecimal totalPrice = BigDecimal.ZERO;
 			for (InvoiceItem item : invoice.getItems()) {
-				totalPrice = totalPrice.add(item.getPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
+				totalPrice = totalPrice.add(item.getPrice()).setScale(2, RoundingMode.HALF_UP);
 				totalRate = totalRate
 						.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity())))
-						.setScale(2, BigDecimal.ROUND_HALF_UP);
+						.setScale(2, RoundingMode.HALF_UP);
 			}
-			if (totalRate.compareTo(invoice.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0
-					|| totalPrice.compareTo(invoice.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
+			if (totalRate.compareTo(invoice.getTotal().setScale(2, RoundingMode.HALF_UP)) != 0
+					|| totalPrice.compareTo(invoice.getTotalPrice().setScale(2, RoundingMode.HALF_UP)) != 0) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Items do not amount to total");
 			}
 		}
 		BigDecimal finalAmount = invoice.getTotalPrice().add(invoice.getShipping()).subtract(invoice.getDiscount());
-		if (finalAmount.setScale(2, BigDecimal.ROUND_HALF_UP)
-				.compareTo(invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0) {
+		if (finalAmount.setScale(2, RoundingMode.HALF_UP)
+				.compareTo(invoice.getPayAmount().setScale(2, RoundingMode.HALF_UP)) != 0) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Amount calculation mismatch");
 		}
 	}

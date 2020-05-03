@@ -3,6 +3,7 @@ package com.paycr.expense.service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +108,7 @@ public class ExpenseService {
 			}
 		}
 		if (ExpenseStatus.PAID.equals(expense.getStatus())
-				&& refundAllowed.setScale(2, BigDecimal.ROUND_HALF_DOWN).compareTo(amount) >= 0) {
+				&& refundAllowed.setScale(2, RoundingMode.HALF_DOWN).compareTo(amount) >= 0) {
 			Date timeNow = new Date();
 			ExpensePayment payment = expense.getPayment();
 			ExpensePayment refPay = new ExpensePayment();

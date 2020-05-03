@@ -1,6 +1,7 @@
 package com.paycr.invoice.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Map;
 
@@ -92,8 +93,8 @@ public class PaymentService {
 		mv.addObject("banner",
 				company.getAppUrl() + "/banner/merchant/" + merchant.getAccessKey() + "/" + merchant.getBanner());
 		mv.addObject("rzpKeyId", merchant.getPaymentSetting().getRzpKeyId());
-		mv.addObject("payAmount", String.valueOf(
-				invoice.getPayAmount().setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))));
+		mv.addObject("payAmount", String
+				.valueOf(invoice.getPayAmount().setScale(2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))));
 		return mv;
 	}
 
@@ -209,7 +210,7 @@ public class PaymentService {
 		} else {
 			PaymentSetting paymentSetting = merchant.getPaymentSetting();
 			RazorpayClient razorpay = new RazorpayClient(paymentSetting.getRzpKeyId(), paymentSetting.getRzpSecretId());
-			Integer refundAmount = amount.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100))
+			Integer refundAmount = amount.setScale(2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100))
 					.intValue();
 			JSONObject refundRequest = new JSONObject();
 			refundRequest.put("amount", refundAmount);

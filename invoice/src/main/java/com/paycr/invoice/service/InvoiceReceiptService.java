@@ -3,6 +3,7 @@ package com.paycr.invoice.service;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class InvoiceReceiptService {
 				taxAmt.setAmount(taxAmt.getAmount()
 						.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
 								.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
-								.setScale(2, BigDecimal.ROUND_HALF_UP)));
+								.setScale(2, RoundingMode.HALF_UP)));
 			}
 		}
 		ModelAndView mv = new ModelAndView("receipt/invoice");

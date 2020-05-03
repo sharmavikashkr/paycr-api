@@ -1,0 +1,48 @@
+server:
+  port: 9090
+
+admin:
+  banner:
+    location: /opt/paycr/static/admin/
+
+bulk:
+  asset:
+    location: /opt/paycr/static/bulk/asset/
+  consumer:
+    location: /opt/paycr/static/bulk/consumer/
+  inventory:
+    location: /opt/paycr/static/bulk/inventory/
+  invoice:
+    location: /opt/paycr/static/bulk/invoice/
+  supplier:
+    location: /opt/paycr/static/bulk/supplier/
+
+expense:
+  attachment:
+    location: /opt/paycr/static/expattach/
+  pdf:
+    location: /opt/paycr/static/expense/
+
+invoice:
+  attachment:
+    location: /opt/paycr/static/invattach/
+  pdf:
+    location: /opt/paycr/static/invoice/
+
+merchant:
+  banner:
+    location: /opt/paycr/static/merchant/
+  gst:
+    location: /opt/paycr/static/gst/
+
+payment:
+  pdf:
+    location: /opt/paycr/static/payment/
+
+report:
+  pdf:
+    location: /opt/paycr/static/report/
+
+subscription:
+  pdf:
+    location: /opt/paycr/static/subscription/

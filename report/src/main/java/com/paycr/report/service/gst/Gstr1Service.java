@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +14,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.transaction.Transactional;
-
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.Server;
@@ -36,6 +31,11 @@ import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 @Service
 public class Gstr1Service {
@@ -115,8 +115,8 @@ public class Gstr1Service {
 		List<Invoice> invoiceList = invRepo.findInvoicesForMerchant(merchant, gstStatuses, InvoiceType.SINGLE, start,
 				end);
 		List<Invoice> gstList = invoiceList.stream()
-				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
-						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) != 0))
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, RoundingMode.HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, RoundingMode.HALF_UP)) != 0))
 				.collect(Collectors.toList());
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);
 		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
@@ -127,8 +127,8 @@ public class Gstr1Service {
 		collectFutures.add(b2cNoteSer.collectB2CNoteList(gstr1Report, noteList));
 		collectFutures.add(b2bNoteSer.collectB2BNoteList(gstr1Report, noteList));
 		List<Invoice> nonGstList = invoiceList.stream()
-				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, BigDecimal.ROUND_HALF_UP)
-						.compareTo(t.getTotalPrice().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0))
+				.filter(t -> (CommonUtil.isNotEmpty(t.getItems()) && t.getTotal().setScale(2, RoundingMode.HALF_UP)
+						.compareTo(t.getTotalPrice().setScale(2, RoundingMode.HALF_UP)) == 0))
 				.collect(Collectors.toList());
 		collectFutures.add(nilSer.collectNilList(gstr1Report, nonGstList));
 		for (Future<Boolean> collectFuture : collectFutures) {
@@ -187,7 +187,7 @@ public class Gstr1Service {
 		String b2cNoteCsv = b2cNoteSer.getB2CNoteCsv(gstr1Report.getB2cNote());
 		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " B2CNote.csv";
 		addDateToZip(zos, b2cNoteCsv, csvFilePath, "B2CNote.csv");
-		
+
 		String nilCsv = nilSer.getNilCsv(gstr1Report.getNil());
 		csvFilePath = server.getGstLocation() + merchant.getAccessKey() + " - " + periodStr + " Nil.csv";
 		addDateToZip(zos, nilCsv, csvFilePath, "Nil.csv");

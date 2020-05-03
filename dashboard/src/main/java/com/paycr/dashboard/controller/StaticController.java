@@ -1,19 +1,7 @@
 package com.paycr.dashboard.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
@@ -21,8 +9,13 @@ import com.paycr.common.type.PayMode;
 import com.paycr.common.type.ReportType;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.type.UserType;
-import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StaticController {
@@ -30,7 +23,7 @@ public class StaticController {
 	@Autowired
 	private SecurityService secSer;
 
-	@RequestMapping("/html/{folder}/{file}")
+	/*@RequestMapping("/html/{folder}/{file}")
 	public ModelAndView getTemplate(@PathVariable String folder, @PathVariable String file,
 			@RequestParam("access_token") String accessToken, HttpServletRequest request, HttpServletResponse response)
 					throws IOException {
@@ -64,7 +57,7 @@ public class StaticController {
 			response.sendRedirect("/adminlogin");
 		}
 		return new ModelAndView("html/" + folder + "/" + subfolder + "/" + file);
-	}
+	}*/
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
 	@RequestMapping("/enum/{type}")

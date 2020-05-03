@@ -1,6 +1,7 @@
 package com.paycr.report.helper;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,9 +53,9 @@ public class Gstr1Helper {
 				taxAmt.setAmount(taxAmt.getAmount()
 						.add(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
 								.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
-								.setScale(2, BigDecimal.ROUND_HALF_UP)));
+								.setScale(2, RoundingMode.HALF_UP)));
 				taxAmt.setTaxableAmount(item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
-						.setScale(2, BigDecimal.ROUND_HALF_UP));
+						.setScale(2, RoundingMode.HALF_UP));
 			}
 		}
 		return taxes;
@@ -99,7 +100,7 @@ public class Gstr1Helper {
 			for (TaxMaster itemTax : itemTaxes) {
 				BigDecimal taxAmt = item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()))
 						.multiply(BigDecimal.valueOf(itemTax.getValue())).divide(BigDecimal.valueOf(100))
-						.setScale(2, BigDecimal.ROUND_HALF_UP);
+						.setScale(2, RoundingMode.HALF_UP);
 				if (itemTax.getName().equals("SGST")) {
 					b2cSmallInv.setSgstAmount(b2cSmallInv.getSgstAmount().add(taxAmt));
 					b2cSmallInv.setSupplyType(SupplyType.INTRA);

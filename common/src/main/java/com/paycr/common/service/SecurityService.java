@@ -5,9 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.oauth2.provider.OAuth2Authentication;
-//import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import com.paycr.common.data.domain.Merchant;
@@ -31,37 +28,14 @@ public class SecurityService {
 	@Autowired
 	private MerchantRepository merRepo;
 
-	@Autowired
-	private UserRoleService userRoleService;
-
-	// @Autowired
-	// private TokenStore tokenStore;
-
 	public PcUser findLoggedInUser() {
-		Object userDetails = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (userDetails instanceof UserDetails) {
-			return userRepo.findByEmail(((UserDetails) userDetails).getUsername());
-		}
-		return null;
-	}
-
-	public PcUser findLoggedInUser(String token) {
-		try {
-			// OAuth2Authentication oauth =
-			// tokenStore.readAuthentication(tokenStore.readAccessToken(token));
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-					.getPrincipal();
-			// UserDetails userDetails = (UserDetails)
-			// oauth.getUserAuthentication().getPrincipal();
-			return userRepo.findByEmail(userDetails.getUsername());
-		} catch (Exception ex) {
-			return null;
-		}
+		String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return (username != null) ? userRepo.findByEmail(username) : null;
 	}
 
 	public boolean isMerchantUser() {
 		PcUser user = findLoggedInUser();
-		String[] roles = userRoleService.getUserRoles(user);
+		String[] roles = user.getUserRoles().stream().map(r -> r.getRole().name()).toArray(size -> new String[size]);
 		return (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name()));
@@ -69,7 +43,7 @@ public class SecurityService {
 
 	public Merchant getMerchantForLoggedInUser() {
 		PcUser user = findLoggedInUser();
-		String[] roles = userRoleService.getUserRoles(user);
+		String[] roles = user.getUserRoles().stream().map(r -> r.getRole().name()).toArray(size -> new String[size]);
 		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
@@ -80,28 +54,12 @@ public class SecurityService {
 		return null;
 	}
 
-	public Merchant getMerchantForLoggedInUser(String token) {
-		PcUser user = findLoggedInUser(token);
-		if (CommonUtil.isNull(user)) {
-			return null;
-		}
-		String[] roles = userRoleService.getUserRoles(user);
-		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
-			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
-			Optional<Merchant> merchantOpt = merRepo.findById(merUser.getMerchantId());
-			return merchantOpt.isPresent() ? merchantOpt.get() : null;
-		}
-		return null;
-	}
-
-	public boolean isPaycrUser(String token) {
-		PcUser user = findLoggedInUser(token);
+	public boolean isPaycrUser() {
+		PcUser user = findLoggedInUser();
 		if (CommonUtil.isNull(user)) {
 			return false;
 		}
-		String[] roles = userRoleService.getUserRoles(user);
+		String[] roles = user.getUserRoles().stream().map(r -> r.getRole().name()).toArray(size -> new String[size]);
 		return (Arrays.asList(roles).contains(Role.ROLE_PAYCR.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_SUPERVISOR.name())
 				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_FINANCE.name())

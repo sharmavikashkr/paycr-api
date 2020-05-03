@@ -1,6 +1,7 @@
 package com.paycr.invoice.validation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,14 +56,12 @@ public class IsValidInvoiceNoteItems implements RequestValidator<InvoiceNote> {
 		BigDecimal expPrice = item.getInventory().getRate().multiply(BigDecimal.valueOf(item.getQuantity()));
 		expPrice = expPrice
 				.add(expPrice.multiply(BigDecimal.valueOf(item.getTax().getValue())).divide(BigDecimal.valueOf(100)));
-		if (!item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
-				.equals(expPrice.setScale(2, BigDecimal.ROUND_HALF_UP))) {
+		if (!item.getPrice().setScale(2, RoundingMode.HALF_UP).equals(expPrice.setScale(2, RoundingMode.HALF_UP))) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "rate * quantity != price");
 		}
 		Inventory inventory = invnRepo.findByMerchantAndCode(note.getMerchant(), item.getInventory().getCode());
 		if (CommonUtil.isNotNull(inventory)) {
-			if (!(inventory.getRate().setScale(2, BigDecimal.ROUND_HALF_UP)
-					.compareTo(item.getInventory().getRate()) == 0
+			if (!(inventory.getRate().setScale(2, RoundingMode.HALF_UP).compareTo(item.getInventory().getRate()) == 0
 					&& inventory.getName().equals(item.getInventory().getName()))) {
 				throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Mismatch with existing item");
 			}

@@ -1,7 +1,9 @@
-package com.paycr.common.data.domain;
+package com.paycr.oauth.data.domain;
 
 import java.util.Collection;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -11,7 +13,10 @@ public class CustomUserDetails implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private String username;
+
+	@JsonIgnore
 	private String password;
+
 	private List<GrantedAuthority> grantedAuthorities;
 
 	public CustomUserDetails(String username, String password, String[] authorities) {

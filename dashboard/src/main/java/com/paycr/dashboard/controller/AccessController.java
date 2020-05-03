@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +29,7 @@ import com.paycr.dashboard.service.UserService;
 public class AccessController {
 
 	@Autowired
-	private BCryptPasswordEncoder bcPassEncode;
+	private PasswordEncoder passEncoder;
 
 	@Autowired
 	private AccessService accessService;
@@ -86,7 +86,7 @@ public class AccessController {
 			httpResponse.sendRedirect(company.getWebUrl() + "/forgot-password");
 		}
 		PcUser user = userService.getUserByEmail(resetPassword.getEmail());
-		user.setPassword(bcPassEncode.encode(password));
+		user.setPassword(passEncoder.encode(password));
 		userService.saveUser(user);
 		resetPassword.setStatus(ResetStatus.SUCCESS);
 		accessService.saveResetPassword(resetPassword);

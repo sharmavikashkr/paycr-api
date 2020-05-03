@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    initialSize: 5
+    maxActive: 10
+    maxIdle: 5
+    minIdle: 2
+    password: C@rpe_d!em
+    removeAbandoned: true
+    url: jdbc:postgresql://localhost:5432/paycr
+    username: postgres
+  flyway:
+    baselineOnMigrate: true
+  freemarker:
+    suffix: .html
+  jpa:
+    hibernate:
+      ddl-auto: update

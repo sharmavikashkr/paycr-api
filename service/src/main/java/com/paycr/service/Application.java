@@ -13,8 +13,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EntityScan(basePackages = { "com.paycr.common.data.domain" })
 @EnableJpaRepositories(basePackages = { "com.paycr.common.data.repository" })
 @EnableAsync
-@PropertySource(value = { "classpath:application.properties",
-		"classpath:${spring.profiles.active}.properties" }, ignoreResourceNotFound = true)
+@PropertySource(value = { "classpath:application.yml",
+		"classpath:application-${spring.profiles.active}.yml" }, ignoreResourceNotFound = true)
 @EnableSwagger2
 public class Application {
 
