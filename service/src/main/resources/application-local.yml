@@ -25,14 +25,11 @@ security:
 company:
   merchant:
     id: 1
-  app:
-    url: http://localhost:9090
-  web:
-    url: http://localhost:4200
-  static:
-    url: http://localhost:4200
-  oauth:
-    url: http://localhost:8080
+  url:
+    app: http://localhost:9090
+    web: http://localhost:4200
+    oauth: http://localhost:8080
+    static: http://localhost:4200
   contact:
     name: Paycr Noreply
     email: noreply@paycr.in

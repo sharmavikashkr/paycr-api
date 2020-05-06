@@ -16,3 +16,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+company:
+  merchant:
+    id: 1
+  url:
+    web: http://localhost:4200
+    oauth: http://localhost:8080
+  contact:
+    name: Paycr Noreply
+    email: noreply@paycr.in
+    password: C@rpe_d!em

@@ -1,9 +1,5 @@
 package com.paycr.service;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.support.ErrorPageFilter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -31,18 +27,5 @@ public class MvcConfig implements WebMvcConfigurer {
 				"/swagger-resources/configuration/security");
 		registry.addRedirectViewController("/api/swagger-resources", "/swagger-resources");
 	}
-
-	/*@Bean
-	public ErrorPageFilter errorPageFilter() {
-		return new ErrorPageFilter();
-	}
-
-	@Bean
-	public FilterRegistrationBean disableSpringBootErrorFilter(final ErrorPageFilter filter) {
-		final FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(filter);
-		filterRegistrationBean.setEnabled(false);
-		return filterRegistrationBean;
-	}*/
 
 }

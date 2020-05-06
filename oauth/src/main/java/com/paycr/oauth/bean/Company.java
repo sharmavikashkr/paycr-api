@@ -1,4 +1,4 @@
-package com.paycr.common.bean;
+package com.paycr.oauth.bean;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -9,20 +9,11 @@ import lombok.Data;
 @Configuration
 public class Company {
 
-	@Value("${company.merchant.id}")
-	private Integer merchantId;
-
-	@Value("${company.url.app}")
-	private String appUrl;
-
 	@Value("${company.url.web}")
 	private String webUrl;
 
 	@Value("${company.url.oauth}")
 	private String oauthUrl;
-
-	@Value("${company.url.static}")
-	private String staticUrl;
 
 	@Value("${company.contact.name}")
 	private String contactName;
