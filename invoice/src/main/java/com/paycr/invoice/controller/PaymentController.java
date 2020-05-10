@@ -5,17 +5,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.paycr.common.bean.Company;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.invoice.service.PaymentService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/payment")
@@ -27,7 +28,7 @@ public class PaymentController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping(value = "{invoiceCode}", method = RequestMethod.GET)
+	@GetMapping("{invoiceCode}")
 	public ModelAndView payInvoice(@PathVariable(value = "invoiceCode") String invoiceCode) {
 		try {
 			return paySer.payInvoice(invoiceCode);
@@ -41,7 +42,7 @@ public class PaymentController {
 		}
 	}
 
-	@RequestMapping(value = "/updateConsumerAndPay/{invoiceCode}", method = RequestMethod.POST)
+	@PostMapping("/updateConsumerAndPay/{invoiceCode}")
 	public void updateConsumerAndPay(@PathVariable(value = "invoiceCode") String invoiceCode,
 			@RequestParam("name") String name, @RequestParam("email") String email,
 			@RequestParam("mobile") String mobile, @RequestParam("signature") String signature,
@@ -50,13 +51,13 @@ public class PaymentController {
 		response.sendRedirect("/payment/" + invoiceCode);
 	}
 
-	@RequestMapping("/decline/{invoiceCode}")
+	@GetMapping("/decline/{invoiceCode}")
 	public void decline(@PathVariable String invoiceCode, HttpServletResponse response) throws IOException {
 		paySer.decline(invoiceCode);
 		response.sendRedirect("/payment/response/" + invoiceCode);
 	}
 
-	@RequestMapping(value = "/return/{invoiceCode}", method = RequestMethod.POST)
+	@PostMapping("/return/{invoiceCode}")
 	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response)
 			throws IOException, Exception {
 		String invoiceCode = null;

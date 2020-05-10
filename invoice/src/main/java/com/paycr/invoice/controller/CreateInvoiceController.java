@@ -7,9 +7,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,20 +33,20 @@ public class CreateInvoiceController {
 	private SecurityService secSer;
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	@PostMapping("/new")
 	public Invoice single(@Valid @RequestBody Invoice invoice) {
 		return crtInvSer.single(invoice);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/child/{invoiceCode}", method = RequestMethod.POST)
+	@PostMapping("/bulk/child/{invoiceCode}")
 	public Invoice createChild(@PathVariable String invoiceCode, @Valid @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		return crtInvSer.createChild(invoiceCode, chldInvReq, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/upload/{invoiceCode}", method = RequestMethod.POST)
+	@PostMapping("/bulk/upload/{invoiceCode}")
 	public void uploadConsumers(@PathVariable String invoiceCode, @RequestParam("consumers") MultipartFile consumers)
 			throws IOException {
 		PcUser user = secSer.findLoggedInUser();
@@ -54,7 +54,7 @@ public class CreateInvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/flag/{invoiceCode}", method = RequestMethod.POST)
+	@PostMapping("/bulk/flag/{invoiceCode}")
 	public void createFlag(@PathVariable String invoiceCode, @Valid @RequestBody ChildInvoiceRequest chldInvReq) {
 		PcUser user = secSer.findLoggedInUser();
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

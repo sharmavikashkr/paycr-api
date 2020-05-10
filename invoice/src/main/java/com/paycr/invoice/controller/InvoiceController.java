@@ -8,16 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.paycr.common.data.domain.BulkFlag;
 import com.paycr.common.data.domain.BulkInvoiceUpload;
 import com.paycr.common.data.domain.InvoiceNote;
@@ -28,6 +18,18 @@ import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.invoice.service.InvoiceService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/invoice")
@@ -40,65 +42,65 @@ public class InvoiceController {
 	private SecurityService secSer;
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping(value = "/payments/{invoiceCode}", method = RequestMethod.GET)
-	public List<InvoicePayment> payments(@PathVariable String invoiceCode) {
+	@GetMapping("/payments/{invoiceCode}")
+	public List<InvoicePayment> payments(@PathVariable final String invoiceCode) {
 		return invSer.payments(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/expire/{invoiceCode}", method = RequestMethod.GET)
-	public void expire(@PathVariable String invoiceCode) {
+	@GetMapping("/expire/{invoiceCode}")
+	public void expire(@PathVariable final String invoiceCode) {
 		invSer.expire(invoiceCode);
 	}
-	
+
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/delete/{invoiceCode}", method = RequestMethod.GET)
-	public void delete(@PathVariable String invoiceCode) {
+	@DeleteMapping("/delete/{invoiceCode}")
+	public void delete(@PathVariable final String invoiceCode) {
 		invSer.delete(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/notify/{invoiceCode}", method = RequestMethod.POST)
-	public void notify(@PathVariable String invoiceCode, @Valid @RequestBody InvoiceNotify invoiceNotify) {
+	@PostMapping("/notify/{invoiceCode}")
+	public void notify(@PathVariable final String invoiceCode, @Valid @RequestBody final InvoiceNotify invoiceNotify) {
 		invSer.notify(invoiceCode, invoiceNotify);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping(value = "/enquire/{invoiceCode}", method = RequestMethod.GET)
-	public void enquire(@PathVariable String invoiceCode) throws Exception {
+	@GetMapping("/enquire/{invoiceCode}")
+	public void enquire(@PathVariable final String invoiceCode) throws Exception {
 		invSer.enquire(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/refund", method = RequestMethod.POST)
-	public void refund(@RequestParam(value = "amount", required = true) BigDecimal amount,
-			@RequestParam(value = "invoiceCode", required = true) String invoiceCode) throws Exception {
+	@PostMapping("/refund")
+	public void refund(@RequestParam(value = "amount", required = true) final BigDecimal amount,
+			@RequestParam(value = "invoiceCode", required = true) final String invoiceCode) throws Exception {
 		invSer.refund(amount, invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/note/new", method = RequestMethod.POST)
-	public void newNote(@Valid @RequestBody InvoiceNote note) throws Exception {
+	@PostMapping("/note/new")
+	public void newNote(@Valid @RequestBody final InvoiceNote note) throws Exception {
 		invSer.newNote(note);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/markpaid", method = RequestMethod.POST)
-	public void markPaid(@RequestBody InvoicePayment payment) {
+	@PostMapping("/markpaid")
+	public void markPaid(@RequestBody final InvoicePayment payment) {
 		invSer.markPaid(payment);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
-	@RequestMapping(value = "/{invoiceCode}/attachment/new", method = RequestMethod.POST)
-	public void addAttachment(@PathVariable String invoiceCode, @RequestParam("attach") MultipartFile attach)
-			throws IOException {
+	@PostMapping("/{invoiceCode}/attachment/new")
+	public void addAttachment(@PathVariable final String invoiceCode,
+			@RequestParam("attach") final MultipartFile attach) throws IOException {
 		invSer.saveAttach(invoiceCode, attach);
 	}
 
-	@RequestMapping(value = "/{accessKey}/{invoiceCode}/attachment/{attachName:.+}", method = RequestMethod.GET)
-	public void getAttachment(@PathVariable String accessKey, @PathVariable String invoiceCode,
-			@PathVariable String attachName, HttpServletResponse response) throws IOException {
-		byte[] data = invSer.getAttach(accessKey, invoiceCode, attachName);
+	@GetMapping("/{accessKey}/{invoiceCode}/attachment/{attachName:.+}")
+	public void getAttachment(@PathVariable final String accessKey, @PathVariable final String invoiceCode,
+			@PathVariable final String attachName, final HttpServletResponse response) throws IOException {
+		final byte[] data = invSer.getAttach(accessKey, invoiceCode, attachName);
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + attachName + "\"");
 		response.getOutputStream().write(data);
 		response.setContentLength(data.length);
@@ -106,21 +108,22 @@ public class InvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/recurr/new/{invoiceCode}", method = RequestMethod.POST)
-	public void recurr(@PathVariable String invoiceCode, @RequestBody RecurringInvoice recInv) {
-		PcUser user = secSer.findLoggedInUser();
+	@PostMapping("/recurr/new/{invoiceCode}")
+	public void recurr(@PathVariable final String invoiceCode, @RequestBody final RecurringInvoice recInv) {
+		final PcUser user = secSer.findLoggedInUser();
 		invSer.recurr(invoiceCode, recInv, user.getEmail());
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/recurr/all/{invoiceCode}", method = RequestMethod.GET)
-	public List<RecurringInvoice> allRecurr(@PathVariable String invoiceCode) {
+	@GetMapping("/recurr/all/{invoiceCode}")
+	public List<RecurringInvoice> allRecurr(@PathVariable final String invoiceCode) {
 		return invSer.allRecurr(invoiceCode);
 	}
 
-	@RequestMapping("/bulk/upload/format")
-	public void downloadFormat(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String content = "Name1,Email1,Mobile1\r\nName2,Email2,Mobile2";
+	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@GetMapping("/bulk/upload/format")
+	public void downloadFormat(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+		final String content = "Name1,Email1,Mobile1\r\nName2,Email2,Mobile2";
 		response.setHeader("Content-Disposition", "attachment; filename=\"bulkInvoice.csv\"");
 		response.setContentType("application/csv");
 		response.getOutputStream().write(content.getBytes());
@@ -129,19 +132,20 @@ public class InvoiceController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/uploads/all/{invoiceCode}", method = RequestMethod.GET)
-	public List<BulkInvoiceUpload> uploadConsumers(@PathVariable String invoiceCode) {
+	@GetMapping("/bulk/uploads/all/{invoiceCode}")
+	public List<BulkInvoiceUpload> uploadConsumers(@PathVariable final String invoiceCode) {
 		return invSer.getUploads(invoiceCode);
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@RequestMapping(value = "/bulk/flags/{invoiceCode}", method = RequestMethod.GET)
-	public List<BulkFlag> bulkFlags(@PathVariable String invoiceCode) {
+	@GetMapping("/bulk/flags/{invoiceCode}")
+	public List<BulkFlag> bulkFlags(@PathVariable final String invoiceCode) {
 		return invSer.getFlags(invoiceCode);
 	}
 
-	@RequestMapping(value = "/bulk/download/{accessKey}/{filename:.+}", method = RequestMethod.GET)
-	public byte[] downloadFile(@PathVariable String accessKey, @PathVariable String filename) throws IOException {
+	@GetMapping("/bulk/download/{accessKey}/{filename:.+}")
+	public byte[] downloadFile(@PathVariable final String accessKey, @PathVariable final String filename)
+			throws IOException {
 		return invSer.downloadFile(accessKey, filename);
 	}
 

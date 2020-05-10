@@ -1,21 +1,22 @@
 package com.paycr.dashboard.controller;
 
-import org.apache.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.paycr.common.data.domain.Address;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.RoleUtil;
 import com.paycr.dashboard.service.UserService;
+
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @PreAuthorize(RoleUtil.ALL_AUTH)
@@ -32,14 +33,14 @@ public class ProfileController {
 	private SecurityService secSer;
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/update/address")
+	@PutMapping("/update/address")
 	public void updateAddress(@RequestBody Address address) {
 		PcUser user = secSer.findLoggedInUser();
 		userService.saveAddress(user, address);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping(value = "/change/password", method = RequestMethod.POST)
+	@PostMapping("/change/password")
 	public void changePassword(@RequestParam(value = "oldPass", required = true) String oldPass,
 			@RequestParam(value = "newPass", required = true) String newPass,
 			@RequestParam(value = "retypePass", required = true) String retypePass) {

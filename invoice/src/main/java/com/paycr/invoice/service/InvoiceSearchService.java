@@ -1,4 +1,4 @@
-package com.paycr.dashboard.service;
+package com.paycr.invoice.service;
 
 import java.io.File;
 import java.io.FileOutputStream;

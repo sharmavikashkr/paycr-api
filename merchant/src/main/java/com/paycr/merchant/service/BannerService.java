@@ -1,4 +1,4 @@
-package com.paycr.dashboard.service;
+package com.paycr.merchant.service;
 
 import java.io.File;
 import java.io.IOException;

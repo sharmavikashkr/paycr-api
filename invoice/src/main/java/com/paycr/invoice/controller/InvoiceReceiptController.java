@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,12 +22,12 @@ public class InvoiceReceiptController {
 	@Autowired
 	private InvoiceReceiptService invRecSer;
 
-	@RequestMapping("/{invoiceCode}")
+	@GetMapping("/{invoiceCode}")
 	public ModelAndView getReceipt(@PathVariable String invoiceCode) throws Exception {
 		return invRecSer.getReceiptModelAndView(invoiceCode);
 	}
 
-	@RequestMapping("/download/{invoiceCode}")
+	@GetMapping("/download/{invoiceCode}")
 	public void downloadReceipt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String invoiceCode) throws Exception {
 		File pdfFile = invRecSer.downloadPdf(invoiceCode);

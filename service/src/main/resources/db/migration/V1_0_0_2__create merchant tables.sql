@@ -43,9 +43,9 @@ CREATE TABLE if not exists pc_merchant (
     gstin varchar(50) DEFAULT NULL,
 	banner varchar(20) DEFAULT NULL,
     active boolean NOT NULL,
-    payment_setting_id int REFERENCES pc_payment_setting,
-	invoice_setting_id int REFERENCES pc_invoice_setting,
-	gst_setting_id int REFERENCES pc_gst_setting,
+    payment_setting_id int REFERENCES pc_payment_setting NOT NULL,
+	invoice_setting_id int REFERENCES pc_invoice_setting NOT NULL,
+	gst_setting_id int REFERENCES pc_gst_setting NOT NULL,
 	address_id int REFERENCES pc_address
 );
 
@@ -67,8 +67,8 @@ CREATE TABLE if not exists pc_pricing (
 
 CREATE TABLE if not exists pc_pricing_merchant (
 	id SERIAL PRIMARY KEY NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
-	pricing_id int REFERENCES pc_pricing
+	merchant_id int REFERENCES pc_merchant NOT NULL,
+	pricing_id int REFERENCES pc_pricing NOT NULL
 );
 
 CREATE TABLE if not exists pc_subscription(
@@ -83,9 +83,9 @@ CREATE TABLE if not exists pc_subscription(
 	payment_ref_no varchar(50) DEFAULT NULL,
 	status varchar(20) NOT NULL,
 	method varchar(20) DEFAULT NULL,
-	merchant_id int REFERENCES pc_merchant,
-	tax_id int REFERENCES pc_tax_master,
-    pricing_id int REFERENCES pc_pricing
+	merchant_id int REFERENCES pc_merchant NOT NULL,
+	tax_id int REFERENCES pc_tax_master NOT NULL,
+    pricing_id int REFERENCES pc_pricing NOT NULL
 );
 
 CREATE TABLE if not exists pc_merchant_pricing (
@@ -96,9 +96,9 @@ CREATE TABLE if not exists pc_merchant_pricing (
 	status varchar(20) NOT NULL,
 	quantity int NOT NULL,
 	use_count int NOT NULL,
-    merchant_id int REFERENCES pc_merchant,
-    pricing_id int REFERENCES pc_pricing,
-    subscription_id int REFERENCES pc_subscription
+    merchant_id int REFERENCES pc_merchant NOT NULL,
+    pricing_id int REFERENCES pc_pricing NOT NULL,
+    subscription_id int REFERENCES pc_subscription NOT NULL
 );
 
 CREATE TABLE if not exists pc_report(
@@ -110,5 +110,5 @@ CREATE TABLE if not exists pc_report(
 	report_type varchar(20) NOT NULL,
 	pay_type varchar(20) DEFAULT NULL,
 	pay_mode varchar(20) DEFAULT NULL,
-	merchant_id int REFERENCES pc_merchant
+	merchant_id int REFERENCES pc_merchant NOT NULL
 );

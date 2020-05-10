@@ -39,7 +39,7 @@ import com.paycr.common.type.AddressType;
 import com.paycr.common.type.ConsumerType;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.StateHelper;
-import com.paycr.dashboard.validation.IsValidGstinRequest;
+import com.paycr.merchant.validation.IsValidGstinRequest;
 import com.paycr.merchant.validation.ConsumerValidator;
 
 import au.com.bytecode.opencsv.CSVParser;

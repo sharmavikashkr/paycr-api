@@ -1,4 +1,4 @@
-package com.paycr.dashboard.validation;
+package com.paycr.merchant.validation;
 
 import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;

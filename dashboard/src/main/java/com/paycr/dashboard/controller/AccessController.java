@@ -5,16 +5,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.paycr.common.bean.Company;
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.data.domain.ResetPassword;
@@ -24,6 +14,16 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.dashboard.service.AccessService;
 import com.paycr.dashboard.service.UserService;
+
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class AccessController {
@@ -40,12 +40,7 @@ public class AccessController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping("/healthCheck")
-	public String healthCheck() {
-		return "SUCCESS";
-	}
-
-	@RequestMapping(value = "/sendResetPassword", method = RequestMethod.POST)
+	@PostMapping("/sendResetPassword")
 	public void sendResetPassword(@RequestParam("email") String userEmail) {
 		PcUser user = userService.getUserByEmail(userEmail);
 		Date timeNow = new Date();
@@ -61,7 +56,7 @@ public class AccessController {
 		}
 	}
 
-	@RequestMapping("/resetPassword/{resetCode}")
+	@GetMapping("/resetPassword/{resetCode}")
 	public ModelAndView resetPasswordGet(@PathVariable String resetCode, HttpServletResponse httpResponse)
 			throws IOException {
 		ResetPassword resetPassword = accessService.getResetPassword(resetCode);
@@ -78,7 +73,7 @@ public class AccessController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/resetPassword/{resetCode}", method = RequestMethod.POST)
+	@PostMapping("/resetPassword/{resetCode}")
 	public void resetPasswordPost(@PathVariable String resetCode, @RequestParam("password") String password,
 			HttpServletResponse httpResponse) throws IOException {
 		ResetPassword resetPassword = accessService.getResetPassword(resetCode);

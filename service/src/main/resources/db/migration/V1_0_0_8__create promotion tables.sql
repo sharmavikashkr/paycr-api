@@ -7,5 +7,5 @@ CREATE TABLE if not exists pc_promotion (
     created_by varchar(50) NOT NULL,
     sent boolean NOT NULL,
     notified int NOT NULL,
-    address_id int REFERENCES pc_address
+    address_id int REFERENCES pc_address NOT NULL
 );

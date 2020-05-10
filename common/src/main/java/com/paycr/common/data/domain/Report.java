@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.paycr.common.type.PayMode;
 import com.paycr.common.type.PayType;
@@ -45,5 +46,11 @@ public class Report {
 
 	@ManyToOne
 	private Merchant merchant;
+
+	@Transient
+	private boolean scheduled;
+
+	@Transient
+	private Schedule schedule;
 
 }

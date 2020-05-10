@@ -7,7 +7,7 @@ CREATE TABLE if not exists pc_supplier (
     gstin varchar(50) DEFAULT NULL,
     active boolean NOT NULL,
     created_by varchar(50) NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
+	merchant_id int REFERENCES pc_merchant NOT NULL,
 	address_id int REFERENCES pc_address
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE if not exists pc_expense_payment (
 	pay_mode varchar(20) NOT NULL,
 	pay_type varchar(10) NOT NULL,
 	deleted BOOLEAN NOT NULL,
-	merchant_id int REFERENCES pc_merchant
+	merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_expense_note (
@@ -40,8 +40,8 @@ CREATE TABLE if not exists pc_expense_note (
 	pay_amount float NOT NULL,
 	currency varchar(10) NOT NULL,
 	deleted BOOLEAN NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
-	supplier_id int REFERENCES pc_supplier,
+	merchant_id int REFERENCES pc_merchant NOT NULL,
+	supplier_id int REFERENCES pc_supplier NOT NULL,
 	created_by varchar(50) NOT NULL
 );
 
@@ -58,9 +58,9 @@ CREATE TABLE if not exists pc_expense(
 	pay_amount float NOT NULL,
 	add_items BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
-	supplier_id int REFERENCES pc_supplier,
-	merchant_pricing_id int REFERENCES pc_merchant_pricing,
+	merchant_id int REFERENCES pc_merchant NOT NULL,
+	supplier_id int REFERENCES pc_supplier NOT NULL,
+	merchant_pricing_id int REFERENCES pc_merchant_pricing NOT NULL,
 	payment_id int REFERENCES pc_expense_payment,
 	status varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
@@ -81,8 +81,8 @@ CREATE TABLE if not exists pc_asset (
 	created_by varchar(50) NOT NULL,
 	type varchar(15) NOT NULL,
 	active boolean NOT NULL,
-	tax_id int REFERENCES pc_tax_master,
-    merchant_id int REFERENCES pc_merchant
+	tax_id int REFERENCES pc_tax_master NOT NULL,
+    merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_expense_item (
@@ -91,8 +91,8 @@ CREATE TABLE if not exists pc_expense_item (
 	price float NOT NULL,
     expense_id int REFERENCES pc_expense,
     expense_note_id int REFERENCES pc_expense_note,
-	tax_id int REFERENCES pc_tax_master,
-    asset_id int REFERENCES pc_asset
+	tax_id int REFERENCES pc_tax_master NOT NULL,
+    asset_id int REFERENCES pc_asset NOT NULL
 );
 
 CREATE TABLE if not exists pc_expense_attachment (
@@ -100,5 +100,5 @@ CREATE TABLE if not exists pc_expense_attachment (
 	created timestamp NOT NULL,
 	name varchar(50) NOT NULL,
 	created_by varchar(50) NOT NULL,
-    expense_id int REFERENCES pc_expense
+    expense_id int REFERENCES pc_expense NOT NULL
 );

@@ -28,7 +28,7 @@ import com.paycr.common.exception.PaycrException;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.StateHelper;
-import com.paycr.dashboard.validation.IsValidGstinRequest;
+import com.paycr.merchant.validation.IsValidGstinRequest;
 import com.paycr.merchant.validation.SupplierValidator;
 
 import au.com.bytecode.opencsv.CSVParser;

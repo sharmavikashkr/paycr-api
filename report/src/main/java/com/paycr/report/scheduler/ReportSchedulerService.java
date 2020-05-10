@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.RecurringReport;
-import com.paycr.common.data.domain.RecurringReportUser;
+import com.paycr.common.data.domain.Schedule;
+import com.paycr.common.data.domain.ScheduleUser;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.RecurringReportRepository;
-import com.paycr.common.data.repository.RecurringReportUserRepository;
+import com.paycr.common.data.repository.ScheduleRepository;
+import com.paycr.common.data.repository.ScheduleUserRepository;
 import com.paycr.common.type.TimeRange;
 import com.paycr.common.util.DateUtil;
 import com.paycr.report.service.ReportService;
@@ -30,10 +30,10 @@ public class ReportSchedulerService {
 	private static final Logger logger = LoggerFactory.getLogger(ReportSchedulerService.class);
 
 	@Autowired
-	private RecurringReportRepository recRepRepo;
+	private ScheduleRepository scheduleRepo;
 
 	@Autowired
-	private RecurringReportUserRepository recRepUserRepo;
+	private ScheduleUserRepository scheduleUserRepo;
 
 	@Autowired
 	private ReportService repSer;
@@ -43,26 +43,26 @@ public class ReportSchedulerService {
 		Date timeNow = new Date();
 		Date start = DateUtil.getStartOfDay(timeNow);
 		Date end = DateUtil.getEndOfDay(timeNow);
-		List<RecurringReport> recRepList = recRepRepo.findTodaysRecurringReports(start, end);
+		List<Schedule> scheduleList = scheduleRepo.findTodaysSchedules(start, end);
 		ExecutorService exec = Executors.newFixedThreadPool(5);
-		for (RecurringReport recRep : recRepList) {
-			exec.execute(processReport(recRep));
-		}
+		scheduleList.forEach(s -> {
+			exec.execute(processReport(s));
+		});
 	}
 
-	public Runnable processReport(RecurringReport recRep) {
+	public Runnable processReport(Schedule schedule) {
 		return () -> {
-			Report report = recRep.getReport();
-			Merchant merchant = recRep.getMerchant();
+			Report report = schedule.getReport();
+			Merchant merchant = schedule.getMerchant();
 			try {
 				List<String> mailTo = new ArrayList<>();
-				List<RecurringReportUser> recRepUsers = recRepUserRepo.findByRecurringReport(recRep);
-				for (RecurringReportUser recRepUser : recRepUsers) {
-					mailTo.add(recRepUser.getPcUser().getEmail());
-				}
+				List<ScheduleUser> scheduleUsers = scheduleUserRepo.findBySchedule(schedule);
+				scheduleUsers.forEach(su -> {
+					mailTo.add(su.getPcUser().getEmail());
+				});
 				repSer.mailReport(report, merchant, mailTo);
 
-				Date nextDateInIST = DateUtil.getUTCTimeInIST(recRep.getNextDate());
+				Date nextDateInIST = DateUtil.getUTCTimeInIST(schedule.getNextDate());
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(nextDateInIST);
 				if (TimeRange.YESTERDAY.equals(report.getTimeRange())) {
@@ -83,10 +83,10 @@ public class ReportSchedulerService {
 				calendar.setTime(DateUtil.getISTTimeInUTC(nextDateInIST));
 				calendar.set(Calendar.HOUR_OF_DAY, 20);
 				calendar.set(Calendar.MINUTE, 0);
-				recRep.setNextDate(calendar.getTime());
-				recRepRepo.save(recRep);
+				schedule.setNextDate(calendar.getTime());
+				scheduleRepo.save(schedule);
 			} catch (IOException ex) {
-				logger.error("Execption while mailing RecurringReport : {} ", recRep.getId(), ex);
+				logger.error("Execption while mailing Schedule : {} ", schedule.getId(), ex);
 			}
 		};
 	}

@@ -13,7 +13,7 @@ CREATE TABLE if not exists pc_user (
 
 CREATE TABLE if not exists pc_user_role(
 	id SERIAL PRIMARY KEY NOT NULL,
-	pc_user int REFERENCES pc_user,
+	pc_user int REFERENCES pc_user NOT NULL,
 	role varchar(50) NOT NULL
 );
 

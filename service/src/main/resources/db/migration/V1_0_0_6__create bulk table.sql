@@ -21,7 +21,7 @@ CREATE TABLE if not exists pc_bulk_consumer_upload (
 	created timestamp NOT NULL,
 	file_name varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
-    merchant_id int REFERENCES pc_merchant
+    merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_bulk_inventory_upload (
@@ -29,7 +29,7 @@ CREATE TABLE if not exists pc_bulk_inventory_upload (
 	created timestamp NOT NULL,
 	file_name varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
-    merchant_id int REFERENCES pc_merchant
+    merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_bulk_supplier_upload (
@@ -37,7 +37,7 @@ CREATE TABLE if not exists pc_bulk_supplier_upload (
 	created timestamp NOT NULL,
 	file_name varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
-    merchant_id int REFERENCES pc_merchant
+    merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_bulk_asset_upload (
@@ -45,5 +45,5 @@ CREATE TABLE if not exists pc_bulk_asset_upload (
 	created timestamp NOT NULL,
 	file_name varchar(20) NOT NULL,
 	created_by varchar(50) NOT NULL,
-    merchant_id int REFERENCES pc_merchant
+    merchant_id int REFERENCES pc_merchant NOT NULL
 );

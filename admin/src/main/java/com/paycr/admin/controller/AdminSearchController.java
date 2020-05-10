@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,14 +28,14 @@ public class AdminSearchController {
 	private AdminSearchService adminSerSer;
 
 	@PreAuthorize(RoleUtil.PAYCR_AUTH)
-	@RequestMapping("/merchant")
+	@PostMapping("/merchant")
 	public List<Merchant> searchMerchants(@RequestBody SearchMerchantRequest request) {
 		List<Merchant> merchants = adminSerSer.fetchMerchantList(request);
 		return merchants;
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/subscription")
+	@PostMapping("/subscription")
 	public List<Subscription> searchSubscriptions(@RequestBody SearchSubsRequest request,
 			HttpServletResponse response) {
 		List<Subscription> subs = adminSerSer.fetchSubsList(request);
@@ -42,7 +43,7 @@ public class AdminSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_AUTH)
-	@RequestMapping("/promotion")
+	@PostMapping("/promotion")
 	public List<Promotion> searchPromotion(@RequestBody SearchPromotionRequest request) {
 		List<Promotion> promotions = adminSerSer.fetchPromotionList(request);
 		return promotions;

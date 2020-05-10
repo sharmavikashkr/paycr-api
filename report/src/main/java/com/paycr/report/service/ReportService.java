@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,11 @@ import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.RecurringReport;
-import com.paycr.common.data.domain.RecurringReportUser;
+import com.paycr.common.data.domain.Schedule;
+import com.paycr.common.data.domain.ScheduleUser;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.RecurringReportRepository;
-import com.paycr.common.data.repository.RecurringReportUserRepository;
+import com.paycr.common.data.repository.ScheduleRepository;
+import com.paycr.common.data.repository.ScheduleUserRepository;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ReportType;
@@ -47,10 +48,10 @@ public class ReportService {
 	private ReportRepository repRepo;
 
 	@Autowired
-	private RecurringReportRepository recRepRepo;
+	private ScheduleRepository scheduleRepo;
 
 	@Autowired
-	private RecurringReportUserRepository recRepUserRepo;
+	private ScheduleUserRepository scheduleUserRepo;
 
 	@Autowired
 	private ReportHelper repHelp;
@@ -82,13 +83,21 @@ public class ReportService {
 	@Autowired
 	private EmailEngine emailEngine;
 
-	public List<Report> fetchReports(Merchant merchant) {
+	public List<Report> fetchReports(Merchant merchant, PcUser user) {
 		List<Report> commonReports = repRepo.findByMerchant(null);
 		List<Report> myReports = new ArrayList<>();
 		if (CommonUtil.isNotNull(merchant)) {
 			myReports = repRepo.findByMerchant(merchant);
 		}
 		commonReports.addAll(myReports);
+		List<Schedule> Schedules = getSchedules(user);
+		Schedules.forEach(rr -> {
+			commonReports.forEach(r -> {
+				if (r.getId() == rr.getReport().getId()) {
+					r.setSchedule(rr);
+				}
+			});
+		});
 		return commonReports;
 	}
 
@@ -119,8 +128,8 @@ public class ReportService {
 		}
 	}
 
-	public List<RecurringReportUser> getSchedule(PcUser user) {
-		return recRepUserRepo.findByPcUser(user);
+	public List<Schedule> getSchedules(PcUser user) {
+		return scheduleUserRepo.findByPcUser(user).stream().map(rru -> rru.getSchedule()).collect(Collectors.toList());
 	}
 
 	public void addSchedule(Integer reportId, Merchant merchant, PcUser user) {
@@ -128,12 +137,16 @@ public class ReportService {
 		if (CommonUtil.isNull(report)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Report");
 		}
-		RecurringReport recRep = recRepRepo.findByReportAndMerchant(report, merchant);
-		if (CommonUtil.isNull(recRep)) {
-			recRep = new RecurringReport();
-			recRep.setActive(true);
-			recRep.setMerchant(merchant);
-			recRep.setReport(report);
+		ScheduleUser scheduleUser = scheduleUserRepo.findByUserAndReport(user, report);
+		if (CommonUtil.isNotNull(scheduleUser)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report already scheduled for you");
+		}
+		Schedule schedule = scheduleRepo.findByReportAndMerchant(report, merchant);
+		if (CommonUtil.isNull(schedule)) {
+			schedule = new Schedule();
+			schedule.setActive(true);
+			schedule.setMerchant(merchant);
+			schedule.setReport(report);
 			Date nextDateInIST = DateUtil.getUTCTimeInIST(new Date());
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(nextDateInIST);
@@ -155,31 +168,28 @@ public class ReportService {
 			calendar.setTime(DateUtil.getISTTimeInUTC(nextDateInIST));
 			calendar.set(Calendar.HOUR_OF_DAY, 20);
 			calendar.set(Calendar.MINUTE, 0);
-			recRep.setStartDate(calendar.getTime());
-			recRep.setNextDate(calendar.getTime());
-			recRepRepo.save(recRep);
+			schedule.setStartDate(calendar.getTime());
+			schedule.setNextDate(calendar.getTime());
+			scheduleRepo.save(schedule);
 		}
-		int schedules = recRepUserRepo.findByPcUser(user).size();
+		int schedules = scheduleUserRepo.findByPcUser(user).size();
 		if (schedules >= 5) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 reports can be scheduled");
 		}
-		RecurringReportUser recRepUser = recRepUserRepo.findByRecurringReportAndPcUser(recRep, user);
-		if (CommonUtil.isNotNull(recRepUser)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report already scheduled for you");
-		}
-		recRepUser = new RecurringReportUser();
-		recRepUser.setRecurringReport(recRep);
-		recRepUser.setPcUser(user);
-		recRepUserRepo.save(recRepUser);
+		scheduleUser = new ScheduleUser();
+		scheduleUser.setSchedule(schedule);
+		scheduleUser.setPcUser(user);
+		scheduleUserRepo.save(scheduleUser);
 	}
 
-	public void removeSchedule(Integer recRepUserId, PcUser user) {
-		RecurringReportUser recRepUser = recRepUserRepo.findById(recRepUserId).get();
-		if (CommonUtil.isNull(recRepUser)) {
+	public void removeSchedule(Integer reportId, PcUser user) {
+		Report report = repRepo.findById(reportId).get();
+		ScheduleUser scheduleUser = scheduleUserRepo.findByUserAndReport(user, report);
+		if (CommonUtil.isNull(scheduleUser)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
-		if (recRepUser.getPcUser().getId() == user.getId()) {
-			recRepUserRepo.deleteById(recRepUser.getId());
+		if (scheduleUser.getPcUser().getId() == user.getId()) {
+			scheduleUserRepo.deleteById(scheduleUser.getId());
 		} else {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}

@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.invoice.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.InvoiceSearchService;
+import com.paycr.invoice.service.InvoiceSearchService;
 
 @RestController
 @RequestMapping("/invoice/search")
@@ -37,7 +38,7 @@ public class InvoiceSearchController {
 	private InvoiceSearchService invSerSer;
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/invoice")
+	@PostMapping("/invoice")
 	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
@@ -48,7 +49,7 @@ public class InvoiceSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/payment")
+	@PostMapping("/payment")
 	public List<InvoicePayment> searchPayments(@RequestBody SearchInvoicePaymentRequest request,
 			HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -60,7 +61,7 @@ public class InvoiceSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/consumer")
+	@PostMapping("/consumer")
 	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
@@ -71,7 +72,7 @@ public class InvoiceSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/payment/download")
+	@PostMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response)
 			throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -89,7 +90,7 @@ public class InvoiceSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/payment/mail")
+	@PostMapping("/payment/mail")
 	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
@@ -99,7 +100,7 @@ public class InvoiceSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/inventory")
+	@PostMapping("/inventory")
 	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {

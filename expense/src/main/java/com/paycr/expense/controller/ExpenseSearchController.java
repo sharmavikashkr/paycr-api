@@ -1,4 +1,4 @@
-package com.paycr.dashboard.controller;
+package com.paycr.expense.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ import com.paycr.common.data.domain.Supplier;
 import com.paycr.common.service.SecurityService;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
-import com.paycr.dashboard.service.ExpenseSearchService;
+import com.paycr.expense.service.ExpenseSearchService;
 
 @RestController
 @RequestMapping("/expense/search")
@@ -37,7 +38,7 @@ public class ExpenseSearchController {
 	private ExpenseSearchService expSerSer;
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/expense")
+	@PostMapping("/expense")
 	public List<Expense> searchExpenses(@RequestBody SearchExpenseRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
@@ -48,7 +49,7 @@ public class ExpenseSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/payment")
+	@PostMapping("/payment")
 	public List<ExpensePayment> searchPayments(@RequestBody SearchExpensePaymentRequest request,
 			HttpServletResponse response) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -60,7 +61,7 @@ public class ExpenseSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/payment/download")
+	@PostMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchExpensePaymentRequest request, HttpServletResponse response)
 			throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -78,7 +79,7 @@ public class ExpenseSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/payment/mail")
+	@PostMapping("/payment/mail")
 	public void mailPayments(@RequestBody SearchExpensePaymentRequest request) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
@@ -88,7 +89,7 @@ public class ExpenseSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/supplier")
+	@PostMapping("/supplier")
 	public Set<Supplier> searchSuppliers(@RequestBody SearchSupplierRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {
@@ -99,7 +100,7 @@ public class ExpenseSearchController {
 	}
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/asset")
+	@PostMapping("/asset")
 	public List<Asset> searchAsset(@RequestBody SearchAssetRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		if (CommonUtil.isNotNull(merchant)) {

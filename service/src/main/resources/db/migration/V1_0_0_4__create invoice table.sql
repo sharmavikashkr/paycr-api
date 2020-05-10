@@ -11,7 +11,7 @@ CREATE TABLE if not exists pc_consumer (
     type varchar(15) NOT NULL,
     active boolean NOT NULL,
     created_by varchar(50) NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
+	merchant_id int REFERENCES pc_merchant NOT NULL,
 	billing_address_id int REFERENCES pc_address,
 	shipping_address_id int REFERENCES pc_address
 );
@@ -19,7 +19,7 @@ CREATE TABLE if not exists pc_consumer (
 CREATE TABLE if not exists pc_consumer_flag (
 	id SERIAL PRIMARY KEY NOT NULL,
 	name varchar(50) NOT NULL,
-    consumer_id int REFERENCES pc_consumer
+    consumer_id int REFERENCES pc_consumer NOT NULL
 );
 
 CREATE TABLE if not exists pc_invoice_payment (
@@ -34,7 +34,7 @@ CREATE TABLE if not exists pc_invoice_payment (
 	pay_mode varchar(20) NOT NULL,
 	pay_type varchar(10) NOT NULL,
 	deleted BOOLEAN NOT NULL,
-	merchant_id int REFERENCES pc_merchant
+	merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_invoice_note (
@@ -52,8 +52,8 @@ CREATE TABLE if not exists pc_invoice_note (
 	pay_amount float NOT NULL,
 	currency varchar(10) NOT NULL,
 	deleted BOOLEAN NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
-	consumer_id int REFERENCES pc_consumer,
+	merchant_id int REFERENCES pc_merchant NOT NULL,
+	consumer_id int REFERENCES pc_consumer NOT NULL,
 	created_by varchar(50) NOT NULL
 );
 
@@ -71,9 +71,9 @@ CREATE TABLE if not exists pc_invoice (
 	add_items BOOLEAN NOT NULL,
 	currency varchar(10) NOT NULL,
 	expiry timestamp NOT NULL,
-	merchant_id int REFERENCES pc_merchant,
-	consumer_id int REFERENCES pc_consumer,
-	merchant_pricing_id int REFERENCES pc_merchant_pricing,
+	merchant_id int REFERENCES pc_merchant NOT NULL,
+	consumer_id int REFERENCES pc_consumer NOT NULL,
+	merchant_pricing_id int REFERENCES pc_merchant_pricing NOT NULL,
 	payment_id int REFERENCES pc_invoice_payment,
 	note_id int REFERENCES pc_invoice_note,
 	status varchar(20) NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE if not exists pc_invoice_notify (
 	cc_email varchar(50) NOT NULL,
 	email_note varchar(50) NOT NULL,
 	email_subject varchar(50) NOT NULL,
-    invoice_id int REFERENCES pc_invoice
+    invoice_id int REFERENCES pc_invoice NOT NULL
 );
 
 CREATE TABLE if not exists pc_inventory (
@@ -108,8 +108,8 @@ CREATE TABLE if not exists pc_inventory (
 	created_by varchar(50) NOT NULL,
 	type varchar(15) NOT NULL,
 	active boolean NOT NULL,
-	tax_id int REFERENCES pc_tax_master,
-    merchant_id int REFERENCES pc_merchant
+	tax_id int REFERENCES pc_tax_master NOT NULL,
+    merchant_id int REFERENCES pc_merchant NOT NULL
 );
 
 CREATE TABLE if not exists pc_invoice_item (
@@ -118,8 +118,8 @@ CREATE TABLE if not exists pc_invoice_item (
 	price float NOT NULL,
     invoice_id int REFERENCES pc_invoice,
     invoice_note_id int REFERENCES pc_invoice_note,
-	tax_id int REFERENCES pc_tax_master,
-    inventory_id int REFERENCES pc_inventory
+	tax_id int REFERENCES pc_tax_master NOT NULL,
+    inventory_id int REFERENCES pc_inventory NOT NULL
 );
 
 CREATE TABLE if not exists pc_invoice_custom_param (
@@ -127,7 +127,7 @@ CREATE TABLE if not exists pc_invoice_custom_param (
 	param_name varchar(20) NOT NULL,
 	param_value varchar(50) DEFAULT NULL,
 	provider varchar(20) NOT NULL,
-    invoice_id int REFERENCES pc_invoice
+    invoice_id int REFERENCES pc_invoice NOT NULL
 );
 
 CREATE TABLE if not exists pc_invoice_attachment (
@@ -135,5 +135,5 @@ CREATE TABLE if not exists pc_invoice_attachment (
 	created timestamp NOT NULL,
 	name varchar(50) NOT NULL,
 	created_by varchar(50) NOT NULL,
-    invoice_id int REFERENCES pc_invoice
+    invoice_id int REFERENCES pc_invoice NOT NULL
 );

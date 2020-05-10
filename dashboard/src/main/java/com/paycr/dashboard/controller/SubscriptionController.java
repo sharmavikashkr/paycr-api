@@ -12,10 +12,11 @@ import com.paycr.dashboard.service.SubscriptionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,13 +28,13 @@ public class SubscriptionController {
 	private SubscriptionService subsSer;
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/get/{pricingId}")
+	@GetMapping("/get/{pricingId}")
 	public Subscription getSubscription(@PathVariable Integer pricingId) {
 		return subsSer.getSubscription(pricingId);
 	}
 
 	@PreAuthorize(RoleUtil.PAYCR_FINANCE_AUTH)
-	@RequestMapping("/new/offline")
+	@PostMapping("/new/offline")
 	public void offlineSubscription(@RequestBody OfflineSubscription offline) {
 		subsSer.offlineSubscription(offline);
 	}
@@ -55,13 +56,13 @@ public class SubscriptionController {
 		}
 	}*/
 
-	@RequestMapping(value = "/return", method = RequestMethod.POST)
+	@PostMapping("/return")
 	public void purchase(@RequestParam Map<String, String> formData, HttpServletResponse response) throws Exception {
 		Subscription subs = subsSer.purchase(formData);
 		response.sendRedirect("/subscription/response/" + subs.getSubscriptionCode());
 	}
 
-	@RequestMapping("/decline/{subscriptionCode}")
+	@GetMapping("/decline/{subscriptionCode}")
 	public void decline(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
 		subsSer.decline(subscriptionCode);
 		response.sendRedirect("/subscription/response/" + subscriptionCode);

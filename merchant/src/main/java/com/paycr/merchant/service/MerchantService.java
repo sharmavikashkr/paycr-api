@@ -15,7 +15,7 @@ import com.paycr.common.data.domain.PaymentSetting;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.util.CommonUtil;
-import com.paycr.dashboard.validation.IsValidGstinRequest;
+import com.paycr.merchant.validation.IsValidGstinRequest;
 
 @Service
 public class MerchantService {

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +34,7 @@ public class PaymentResponseController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping("/response/{invoiceCode}")
+	@GetMapping("/response/{invoiceCode}")
 	public ModelAndView successPage(@PathVariable String invoiceCode,
 			@RequestParam(value = "show", required = false) Boolean show) {
 		Invoice invoice = invSer.getInvoice(invoiceCode);
@@ -47,7 +48,7 @@ public class PaymentResponseController {
 		return mv;
 	}
 
-	@RequestMapping("/receipt/download/{invoiceCode}")
+	@GetMapping("/receipt/download/{invoiceCode}")
 	public void downloadReceipt(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String invoiceCode) throws Exception {
 		File pdfFile = payRecSer.downloadPdf(invoiceCode);

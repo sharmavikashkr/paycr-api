@@ -13,15 +13,15 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "pc_recurring_report_user")
-public class RecurringReportUser {
+@Table(name = "pc_schedule_user")
+public class ScheduleUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToOne
-	private RecurringReport recurringReport;
+	private Schedule schedule;
 
 	@JsonIgnore
 	@ManyToOne

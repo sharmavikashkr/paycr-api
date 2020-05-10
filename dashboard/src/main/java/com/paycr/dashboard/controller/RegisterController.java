@@ -1,13 +1,12 @@
 package com.paycr.dashboard.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.dashboard.service.RegisterService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RegisterController {
@@ -15,7 +14,7 @@ public class RegisterController {
 	@Autowired
 	private RegisterService registerService;
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@PostMapping("/register")
 	public void register(@RequestBody Merchant merchant) {
 		registerService.createMerchant(merchant, "SELF");
 	}

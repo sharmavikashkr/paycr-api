@@ -13,8 +13,8 @@ import com.paycr.common.util.RoleUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -60,7 +60,7 @@ public class StaticController {
 	}*/
 
 	@PreAuthorize(RoleUtil.ALL_AUTH)
-	@RequestMapping("/enum/{type}")
+	@GetMapping("/enum/{type}")
 	public List<String> getEnum(@PathVariable String type) {
 		List<String> enumList = new ArrayList<>();
 		if ("paymodes".equals(type)) {
