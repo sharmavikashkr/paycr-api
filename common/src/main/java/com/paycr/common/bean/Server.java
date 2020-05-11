@@ -9,49 +9,49 @@ import lombok.Data;
 @Configuration
 public class Server {
 
-	@Value("${admin.banner.location}")
+	@Value("${admin.location.banner}")
 	private String adminLocation;
 
-	@Value("${merchant.banner.location}")
+	@Value("${merchant.location.banner}")
 	private String merchantLocation;
 
-	@Value("${invoice.attachment.location}")
+	@Value("${invoice.location.attachment}")
 	private String invAttachLocation;
 
-	@Value("${expense.attachment.location}")
+	@Value("${expense.location.attachment}")
 	private String expAttachLocation;
 
-	@Value("${bulk.invoice.location}")
+	@Value("${bulk.location.invoice}")
 	private String bulkInvoiceLocation;
 
-	@Value("${bulk.consumer.location}")
+	@Value("${bulk.location.consumer}")
 	private String bulkConsumerLocation;
 
-	@Value("${bulk.supplier.location}")
+	@Value("${bulk.location.supplier}")
 	private String bulkSupplierLocation;
 
-	@Value("${bulk.inventory.location}")
+	@Value("${bulk.location.inventory}")
 	private String bulkInventoryLocation;
 
-	@Value("${bulk.asset.location}")
+	@Value("${bulk.location.asset}")
 	private String bulkAssetLocation;
 
-	@Value("${report.pdf.location}")
+	@Value("${report.location.pdf}")
 	private String reportLocation;
 
-	@Value("${invoice.pdf.location}")
+	@Value("${invoice.location.pdf}")
 	private String invoiceLocation;
 
-	@Value("${expense.pdf.location}")
+	@Value("${expense.location.pdf}")
 	private String expenseLocation;
 
-	@Value("${payment.pdf.location}")
+	@Value("${payment.location.pdf}")
 	private String paymentLocation;
 
-	@Value("${merchant.gst.location}")
+	@Value("${merchant.location.gst}")
 	private String gstLocation;
 
-	@Value("${subscription.pdf.location}")
+	@Value("${subscription.location.pdf}")
 	private String subscriptionLocation;
 
 	@Value("${wkhtmltopdf.location}")

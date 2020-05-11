@@ -58,27 +58,6 @@ public class DateUtil {
 		return calendar.getTime();
 	}
 
-	public static Date getISTTimeInUTC(Date istDate) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(istDate);
-		calendar.add(Calendar.HOUR_OF_DAY, -5);
-		calendar.add(Calendar.MINUTE, -30);
-		return calendar.getTime();
-	}
-
-	public static Date getUTCTimeInIST(Date utcDate) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(utcDate);
-		calendar.add(Calendar.HOUR_OF_DAY, 5);
-		calendar.add(Calendar.MINUTE, 30);
-		return calendar.getTime();
-	}
-	
-	public static String getUTCTimeInISTStr(Date utcDate) {
-		Date date = getUTCTimeInIST(utcDate);
-		return getDefaultDateTime(date);
-	}
-
 	public static Date getStartOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);

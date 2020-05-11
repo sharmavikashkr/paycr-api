@@ -35,8 +35,8 @@ public class PaycrUtil {
 		if (CommonUtil.isNull(from) || CommonUtil.isNull(to)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "From/To dates cannot be null");
 		}
-		from = DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(from)));
-		to = DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(to)));
+		from = DateUtil.getStartOfDay(from);
+		to = DateUtil.getEndOfDay(to);
 		Calendar calTo = Calendar.getInstance();
 		calTo.setTime(to);
 		Calendar calFrom = Calendar.getInstance();

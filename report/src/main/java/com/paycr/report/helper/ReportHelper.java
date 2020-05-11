@@ -12,10 +12,9 @@ import com.paycr.common.util.DateUtil;
 @Component
 public class ReportHelper {
 
-	public DateFilter getDateFilterInIST(TimeRange range) {
+	public DateFilter getDateFilter(TimeRange range) {
 		DateFilter dateFilter = null;
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(DateUtil.getUTCTimeInIST(new Date()));
 		if (TimeRange.YESTERDAY.equals(range)) {
 			Date aTimeYesterday = DateUtil.addDays(calendar.getTime(), -1);
 			Date start = DateUtil.getStartOfDay(aTimeYesterday);
@@ -43,9 +42,29 @@ public class ReportHelper {
 		return dateFilter;
 	}
 
-	public void setDateFilterInUTC(DateFilter dateFilter) {
-		dateFilter.setStartDate(DateUtil.getISTTimeInUTC(dateFilter.getStartDate()));
-		dateFilter.setEndDate(DateUtil.getISTTimeInUTC(dateFilter.getEndDate()));
+	public Calendar getNextDate(TimeRange timeRange) {
+		Date nextDate = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(nextDate);
+		if (TimeRange.YESTERDAY.equals(timeRange)) {
+			Date aTimeTomorrow = DateUtil.addDays(calendar.getTime(), 1);
+			nextDate = DateUtil.getStartOfDay(aTimeTomorrow);
+		} else if (TimeRange.LAST_WEEK.equals(timeRange)) {
+			Date aDayInNextWeek = DateUtil.addDays(calendar.getTime(), 7);
+			nextDate = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
+		} else if (TimeRange.LAST_MONTH.equals(timeRange)) {
+			calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+			Date aDayInNextMonth = DateUtil.addDays(calendar.getTime(), 35);
+			nextDate = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
+		} else if (TimeRange.LAST_YEAR.equals(timeRange)) {
+			calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH));
+			Date aDayInNextYear = DateUtil.addDays(calendar.getTime(), 100);
+			nextDate = DateUtil.getFirstDayOfYear(aDayInNextYear);
+		}
+		calendar.setTime(nextDate);
+		calendar.set(Calendar.HOUR_OF_DAY, 1);
+		calendar.set(Calendar.MINUTE, 0);
+		return calendar;
 	}
 
 }

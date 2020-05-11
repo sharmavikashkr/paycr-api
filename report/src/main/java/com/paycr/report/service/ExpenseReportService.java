@@ -38,8 +38,7 @@ public class ExpenseReportService {
 
 	public List<ExpenseReport> loadExpenseReport(Report report, Merchant merchant) {
 		List<ExpensePayment> allExpPayments = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
-		repHelp.setDateFilterInUTC(dateFilter);
+		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
 		if (CommonUtil.isNull(merchant)) {
 			allExpPayments.addAll(expPayRepo.findPaysForAdmin(dateFilter.getStartDate(), dateFilter.getEndDate()));
 		} else {
@@ -59,7 +58,7 @@ public class ExpenseReportService {
 		Iterator<ExpenseReport> it = expReport.iterator();
 		while (it.hasNext()) {
 			ExpenseReport expr = it.next();
-			records.add(new String[] { DateUtil.getUTCTimeInISTStr(expr.getPaidDate()), expr.getExpenseCode(),
+			records.add(new String[] { DateUtil.getDefaultDateTime(expr.getPaidDate()), expr.getExpenseCode(),
 					expr.getExpenseStatus().name(), expr.getPayAmount().toString(), expr.getTax().toString(),
 					expr.getShipping().toString(), expr.getDiscount().toString(), expr.getAmount().toString(),
 					expr.getCurrency().name(), expr.getPaymentRefNo(), expr.getPayType().name(),

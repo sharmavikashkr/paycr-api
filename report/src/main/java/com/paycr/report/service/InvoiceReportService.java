@@ -38,8 +38,7 @@ public class InvoiceReportService {
 
 	public List<InvoiceReport> loadInvoiceReport(Report report, Merchant merchant) {
 		List<InvoicePayment> allInvPayments = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
-		repHelp.setDateFilterInUTC(dateFilter);
+		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
 		if (CommonUtil.isNull(merchant)) {
 			allInvPayments.addAll(invPayRepo.findPaysForAdmin(dateFilter.getStartDate(), dateFilter.getEndDate()));
 		} else {
@@ -59,7 +58,7 @@ public class InvoiceReportService {
 		Iterator<InvoiceReport> it = invReport.iterator();
 		while (it.hasNext()) {
 			InvoiceReport invr = it.next();
-			records.add(new String[] { DateUtil.getUTCTimeInISTStr(invr.getPaidDate()), invr.getInvoiceCode(),
+			records.add(new String[] { DateUtil.getDefaultDateTime(invr.getPaidDate()), invr.getInvoiceCode(),
 					invr.getInvoiceStatus().name(), invr.getPayAmount().toString(), invr.getTax().toString(),
 					invr.getShipping().toString(), invr.getDiscount().toString(), invr.getAmount().toString(),
 					invr.getCurrency().name(), invr.getPaymentRefNo(), invr.getPayType().name(),

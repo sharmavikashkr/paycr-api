@@ -147,34 +147,17 @@ public class ReportService {
 			schedule.setActive(true);
 			schedule.setMerchant(merchant);
 			schedule.setReport(report);
-			Date nextDateInIST = DateUtil.getUTCTimeInIST(new Date());
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(nextDateInIST);
-			if (TimeRange.YESTERDAY.equals(report.getTimeRange())) {
-				Date aTimeTomorrow = DateUtil.addDays(calendar.getTime(), 1);
-				nextDateInIST = DateUtil.getStartOfDay(aTimeTomorrow);
-			} else if (TimeRange.LAST_WEEK.equals(report.getTimeRange())) {
-				Date aDayInNextWeek = DateUtil.addDays(calendar.getTime(), 7);
-				nextDateInIST = DateUtil.getFirstDayOfWeek(aDayInNextWeek);
-			} else if (TimeRange.LAST_MONTH.equals(report.getTimeRange())) {
-				calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-				Date aDayInNextMonth = DateUtil.addDays(calendar.getTime(), 35);
-				nextDateInIST = DateUtil.getFirstDayOfMonth(aDayInNextMonth);
-			} else if (TimeRange.LAST_YEAR.equals(report.getTimeRange())) {
-				calendar.set(Calendar.MONTH, calendar.getActualMaximum(Calendar.MONTH));
-				Date aDayInNextYear = DateUtil.addDays(calendar.getTime(), 100);
-				nextDateInIST = DateUtil.getFirstDayOfYear(aDayInNextYear);
-			}
-			calendar.setTime(DateUtil.getISTTimeInUTC(nextDateInIST));
-			calendar.set(Calendar.HOUR_OF_DAY, 20);
-			calendar.set(Calendar.MINUTE, 0);
-			schedule.setStartDate(calendar.getTime());
-			schedule.setNextDate(calendar.getTime());
+			schedule.setStartDate(new Date());
+			schedule.setNextDate(new Date());
 			scheduleRepo.save(schedule);
 		}
 		int schedules = scheduleUserRepo.findByPcUser(user).size();
 		if (schedules >= 5) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 reports can be scheduled");
+		}
+		if (schedule.getNextDate().before(new Date())) {
+			Calendar nextDateInUTC = repHelp.getNextDate(report.getTimeRange());
+			schedule.setNextDate(nextDateInUTC.getTime());
 		}
 		scheduleUser = new ScheduleUser();
 		scheduleUser.setSchedule(schedule);
@@ -240,7 +223,7 @@ public class ReportService {
 	@Transactional
 	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {
 		String repCsv = downloadReport(report, merchant);
-		DateFilter df = repHelp.getDateFilterInIST(report.getTimeRange());
+		DateFilter df = repHelp.getDateFilter(report.getTimeRange());
 		String fileName = "";
 		if (CommonUtil.isNotNull(merchant)) {
 			fileName = merchant.getAccessKey() + " - " + report.getId() + ".csv";

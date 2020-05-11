@@ -82,8 +82,8 @@ public class Gstr1B2BNoteService {
 						+ ",");
 			}
 			records.add(new String[] { b2bnr.getGstin(), b2bnr.getNoteNo(),
-					DateUtil.getUTCTimeInISTStr(b2bnr.getNoteDate()), b2bnr.getInvoiceNo(),
-					DateUtil.getUTCTimeInISTStr(b2bnr.getInvoiceDate()), b2bnr.getNoteType().name(),
+					DateUtil.getDefaultDateTime(b2bnr.getNoteDate()), b2bnr.getInvoiceNo(),
+					DateUtil.getDefaultDateTime(b2bnr.getInvoiceDate()), b2bnr.getNoteType().name(),
 					b2bnr.getTaxableAmount().toString(), b2bnr.getNoteAmount().toString(), b2bnr.getSupplyType().name(),
 					b2bnr.getNoteReason(), sb.toString() });
 		}

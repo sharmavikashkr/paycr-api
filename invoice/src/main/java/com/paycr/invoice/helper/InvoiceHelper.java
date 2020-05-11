@@ -1,24 +1,35 @@
 package com.paycr.invoice.helper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.paycr.common.communicate.NotifyService;
 import com.paycr.common.data.domain.Consumer;
 import com.paycr.common.data.domain.Invoice;
 import com.paycr.common.data.domain.InvoiceCustomParam;
 import com.paycr.common.data.domain.InvoiceItem;
+import com.paycr.common.data.domain.InvoiceNotify;
+import com.paycr.common.data.domain.InvoiceSetting;
 import com.paycr.common.data.domain.MerchantPricing;
+import com.paycr.common.data.domain.RecurringInvoice;
 import com.paycr.common.data.repository.InvoiceRepository;
 import com.paycr.common.data.repository.MerchantPricingRepository;
+import com.paycr.common.data.repository.RecurringInvoiceRepository;
 import com.paycr.common.service.TimelineService;
 import com.paycr.common.type.ConsumerType;
+import com.paycr.common.type.InvoiceStatus;
 import com.paycr.common.type.InvoiceType;
 import com.paycr.common.type.ObjectType;
+import com.paycr.common.type.RecurrType;
+import com.paycr.common.util.DateUtil;
 import com.paycr.invoice.validation.IsValidInvoiceConsumer;
 import com.paycr.invoice.validation.IsValidInvoiceMerchantPricing;
 import com.paycr.invoice.validation.IsValidInvoiceRequest;
@@ -30,7 +41,13 @@ public class InvoiceHelper {
 	private InvoiceRepository invRepo;
 
 	@Autowired
+	private RecurringInvoiceRepository recInvRepo;
+
+	@Autowired
 	private MerchantPricingRepository merPriRepo;
+
+	@Autowired
+	private NotifyService<InvoiceNotify> invNotSer;
 
 	@Autowired
 	private IsValidInvoiceRequest isValidRequest;
@@ -96,6 +113,51 @@ public class InvoiceHelper {
 		consumer.setType(ConsumerType.CUSTOMER);
 		invoice.setConsumer(consumer);
 		isValidConsumer.validate(invoice);
+		invRepo.save(invoice);
+	}
+
+	@Transactional
+	public Runnable processInvoice(RecurringInvoice recInv, Invoice childInvoice) {
+		return () -> {
+			notifyInvoice(childInvoice);
+			Date nextDate = recInv.getNextDate();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(nextDate);
+			if (RecurrType.WEEKLY.equals(recInv.getRecurr())) {
+				calendar.add(Calendar.DATE, 7);
+			} else {
+				calendar.add(Calendar.MONTH, 1);
+			}
+			calendar.setTime(DateUtil.getStartOfDay(calendar.getTime()));
+			calendar.set(Calendar.HOUR_OF_DAY, 22);
+			calendar.set(Calendar.MINUTE, 0);
+			recInv.setNextDate(calendar.getTime());
+			recInv.setRemaining(recInv.getRemaining() - 1);
+			recInvRepo.save(recInv);
+		};
+	}
+
+	public void notifyInvoice(Invoice invoice) {
+		InvoiceSetting invSetting = invoice.getMerchant().getInvoiceSetting();
+		InvoiceNotify invNot = new InvoiceNotify();
+		invNot.setCreated(new Date());
+		invNot.setInvoice(invoice);
+		invNot.setCcMe(invSetting.isCcMe());
+		invNot.setCcEmail(invoice.getCreatedBy());
+		invNot.setEmailNote(invSetting.getEmailNote());
+		invNot.setEmailSubject(invSetting.getEmailSubject());
+		invNot.setEmailPdf(invSetting.isEmailPdf());
+		invNot.setSendEmail(invSetting.isSendEmail());
+		invNot.setSendSms(invSetting.isSendSms());
+		invNotSer.notify(invNot);
+		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Notification sent to consumer", true,
+				"Scheduler");
+		ArrayList<InvoiceNotify> invNots = new ArrayList<>();
+		invNots.add(invNot);
+		invoice.setNotices(invNots);
+		if (InvoiceStatus.CREATED.equals(invoice.getStatus())) {
+			invoice.setStatus(InvoiceStatus.UNPAID);
+		}
 		invRepo.save(invoice);
 	}
 

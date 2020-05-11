@@ -82,10 +82,8 @@ public class ExpenseSearchService {
 		logger.info("Search expense request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(
-				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(
-				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(DateUtil.getStartOfDay(request.getCreatedFrom()));
+		request.setCreatedTo(DateUtil.getEndOfDay(request.getCreatedTo()));
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
 			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
@@ -100,10 +98,8 @@ public class ExpenseSearchService {
 		logger.info("Search expense payment request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(
-				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(
-				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(DateUtil.getStartOfDay(request.getCreatedFrom()));
+		request.setCreatedTo(DateUtil.getEndOfDay(request.getCreatedTo()));
 		Merchant merchant = null;
 		if (CommonUtil.isNotNull(request.getMerchant())) {
 			Optional<Merchant> merOpt = merRepo.findById(request.getMerchant());
@@ -160,7 +156,7 @@ public class ExpenseSearchService {
 	@Transactional
 	public void mailPayments(SearchExpensePaymentRequest request, PcUser user) throws IOException {
 		logger.info("Mail expense payment request : {}", new Gson().toJson(request));
-		Date timeNow = DateUtil.getUTCTimeInIST(new Date());
+		Date timeNow = new Date();
 		String repCsv = downloadPayments(request);
 		String fileName = "Expense Payment - " + timeNow.getTime() + ".csv";
 		String filePath = server.getPaymentLocation() + fileName;

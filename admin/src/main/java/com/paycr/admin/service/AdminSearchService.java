@@ -22,7 +22,7 @@ import com.paycr.common.util.PaycrUtil;
 
 @Service
 public class AdminSearchService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(AdminSearchService.class);
 
 	@Autowired
@@ -35,35 +35,29 @@ public class AdminSearchService {
 	private PromotionDao promoDao;
 
 	public List<Merchant> fetchMerchantList(SearchMerchantRequest request) {
-		logger.info("Search merchant started for request : {}",new Gson().toJson(request));
+		logger.info("Search merchant started for request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(
-				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(
-				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(DateUtil.getStartOfDay(request.getCreatedFrom()));
+		request.setCreatedTo(DateUtil.getEndOfDay(request.getCreatedTo()));
 		return merDao.findMerchants(request);
 	}
 
 	public List<Subscription> fetchSubsList(SearchSubsRequest request) {
-		logger.info("Search subscription started for request : {}",new Gson().toJson(request));
+		logger.info("Search subscription started for request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(
-				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(
-				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(DateUtil.getStartOfDay(request.getCreatedFrom()));
+		request.setCreatedTo(DateUtil.getEndOfDay(request.getCreatedTo()));
 		return subsDao.findSubscriptions(request);
 	}
 
 	public List<Promotion> fetchPromotionList(SearchPromotionRequest request) {
-		logger.info("Search promotion started for request : {}",new Gson().toJson(request));
+		logger.info("Search promotion started for request : {}", new Gson().toJson(request));
 		PaycrUtil.validateRequest(request);
 		PaycrUtil.validateDates(request.getCreatedFrom(), request.getCreatedTo());
-		request.setCreatedFrom(
-				DateUtil.getISTTimeInUTC(DateUtil.getStartOfDay(DateUtil.getUTCTimeInIST(request.getCreatedFrom()))));
-		request.setCreatedTo(
-				DateUtil.getISTTimeInUTC(DateUtil.getEndOfDay(DateUtil.getUTCTimeInIST(request.getCreatedTo()))));
+		request.setCreatedFrom(DateUtil.getStartOfDay(request.getCreatedFrom()));
+		request.setCreatedTo(DateUtil.getEndOfDay(request.getCreatedTo()));
 		return promoDao.findPromotions(request);
 	}
 

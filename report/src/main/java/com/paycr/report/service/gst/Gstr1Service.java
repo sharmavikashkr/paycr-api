@@ -93,8 +93,6 @@ public class Gstr1Service {
 			Date aDayInLastMonth = DateUtil.parseDefaultDate(year + "-" + lstMonth + "-15");
 			end = DateUtil.getLastDayOfMonth(aDayInLastMonth);
 		}
-		start = DateUtil.getISTTimeInUTC(start);
-		end = DateUtil.getISTTimeInUTC(end);
 		List<InvoiceStatus> gstStatuses = new ArrayList<InvoiceStatus>();
 		GstSetting gstSet = merchant.getGstSetting();
 		if (gstSet.isInvCreated()) {

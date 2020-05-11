@@ -77,7 +77,7 @@ public class Gstr1B2CLargeService {
 						+ ",");
 			}
 			records.add(new String[] { b2clr.getInvoiceNo(), b2clr.getTaxableAmount().toString(),
-					b2clr.getInvoiceAmount().toString(), DateUtil.getUTCTimeInISTStr(b2clr.getInvoiceDate()),
+					b2clr.getInvoiceAmount().toString(), DateUtil.getDefaultDateTime(b2clr.getInvoiceDate()),
 					b2clr.getPlaceOfSupply(), b2clr.getSupplyType().name(), sb.toString() });
 		}
 		csvWriter.writeAll(records);

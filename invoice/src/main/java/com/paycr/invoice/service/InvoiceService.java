@@ -51,7 +51,6 @@ import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.common.util.PaycrUtil;
 import com.paycr.invoice.helper.InvoiceHelper;
-import com.paycr.invoice.scheduler.InvoiceSchedulerService;
 import com.paycr.invoice.validation.InvoiceNoteValidator;
 
 @Service
@@ -90,9 +89,6 @@ public class InvoiceService {
 
 	@Autowired
 	private AwsS3Service awsS3Ser;
-
-	@Autowired
-	private InvoiceSchedulerService invSchSer;
 
 	@Autowired
 	private RecurringInvoiceRepository recInvRepo;
@@ -326,7 +322,7 @@ public class InvoiceService {
 		recInvRepo.save(recInv);
 		if (start.before(recInv.getStartDate()) && end.after(recInv.getStartDate())) {
 			Invoice childInvoice = invHelp.prepareChildInvoice(invoice.getInvoiceCode(), InvoiceType.SINGLE, createdBy);
-			exec.execute(invSchSer.processInvoice(recInv, childInvoice));
+			exec.execute(invHelp.processInvoice(recInv, childInvoice));
 		}
 		tlService.saveToTimeline(invoice.getId(), ObjectType.INVOICE, "Recurr setting added", true, createdBy);
 	}

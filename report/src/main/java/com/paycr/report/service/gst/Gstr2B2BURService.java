@@ -74,7 +74,7 @@ public class Gstr2B2BURService {
 						+ ",");
 			}
 			records.add(new String[] { b2urr.getInvoiceNo(), b2urr.getTaxableAmount().toString(),
-					b2urr.getInvoiceAmount().toString(), DateUtil.getUTCTimeInISTStr(b2urr.getInvoiceDate()),
+					b2urr.getInvoiceAmount().toString(), DateUtil.getDefaultDateTime(b2urr.getInvoiceDate()),
 					b2urr.getPlaceOfSupply(), b2urr.getSupplyType().name(), sb.toString() });
 		}
 		csvWriter.writeAll(records);

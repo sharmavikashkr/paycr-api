@@ -30,8 +30,7 @@ public class InventoryReportService {
 
 	public List<InventoryReport> loadInventoryReport(Report report, Merchant merchant) {
 		List<Object[]> dbReport = new ArrayList<>();
-		DateFilter dateFilter = repHelp.getDateFilterInIST(report.getTimeRange());
-		repHelp.setDateFilterInUTC(dateFilter);
+		DateFilter dateFilter = repHelp.getDateFilter(report.getTimeRange());
 		dbReport.addAll(invnDao.getInventoryReport(report, merchant, dateFilter));
 		return prepareInvnReport(dbReport);
 	}

@@ -80,8 +80,8 @@ public class Gstr2B2BURNoteService {
 				sb.append(taxAmt.getTax().getName() + " " + taxAmt.getTax().getValue() + " : " + taxAmt.getAmount()
 						+ ",");
 			}
-			records.add(new String[] { b2burnr.getNoteNo(), DateUtil.getUTCTimeInISTStr(b2burnr.getNoteDate()),
-					b2burnr.getInvoiceNo(), DateUtil.getUTCTimeInISTStr(b2burnr.getInvoiceDate()),
+			records.add(new String[] { b2burnr.getNoteNo(), DateUtil.getDefaultDateTime(b2burnr.getNoteDate()),
+					b2burnr.getInvoiceNo(), DateUtil.getDefaultDateTime(b2burnr.getInvoiceDate()),
 					b2burnr.getNoteType().name(), b2burnr.getTaxableAmount().toString(),
 					b2burnr.getNoteAmount().toString(), b2burnr.getSupplyType().name(), b2burnr.getNoteReason(),
 					sb.toString() });

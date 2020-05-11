@@ -76,8 +76,8 @@ public class Gstr2Service {
 		String month = periodArr[0];
 		String year = periodArr[1];
 		Date aDayInMonth = DateUtil.parseDefaultDate(year + "-" + month + "-15");
-		start = DateUtil.getISTTimeInUTC(DateUtil.getFirstDayOfMonth(aDayInMonth));
-		end = DateUtil.getISTTimeInUTC(DateUtil.getLastDayOfMonth(aDayInMonth));
+		start = DateUtil.getFirstDayOfMonth(aDayInMonth);
+		end = DateUtil.getLastDayOfMonth(aDayInMonth);
 		List<ExpenseStatus> gstStatuses = new ArrayList<ExpenseStatus>();
 		GstSetting gstSet = merchant.getGstSetting();
 		if (gstSet.isExpUnpaid()) {
