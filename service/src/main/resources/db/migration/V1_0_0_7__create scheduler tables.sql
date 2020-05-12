@@ -23,3 +23,12 @@ CREATE TABLE if not exists pc_schedule_user (
     schedule_id int REFERENCES pc_schedule NOT NULL,
     pc_user_id int REFERENCES pc_user NOT NULL
 );
+
+CREATE TABLE if not exists pc_schedule_history (
+	id SERIAL PRIMARY KEY NOT NULL,
+    schedule_id int REFERENCES pc_schedule NOT NULL,
+    from_date timestamp NOT NULL,
+	to_date timestamp NOT NULL,
+	created timestamp NOT NULL,
+	status varchar(15) NOT NULL
+);

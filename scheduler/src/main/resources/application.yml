@@ -50,3 +50,4 @@ cron:
     remind: 0 0 6 * * ?
   report:
     scheduler: 0 0 0 * * ?
+    reinit: 0 0 16 * * ?

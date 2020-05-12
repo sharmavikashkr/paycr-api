@@ -7,6 +7,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.paycr.common.data.domain.Merchant;
+import com.paycr.common.data.domain.PcUser;
+import com.paycr.common.data.domain.Report;
+import com.paycr.common.service.SecurityService;
+import com.paycr.common.util.RoleUtil;
+import com.paycr.report.service.ReportService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,14 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.domain.Schedule;
-import com.paycr.common.service.SecurityService;
-import com.paycr.common.util.RoleUtil;
-import com.paycr.report.service.ReportService;
 
 @RestController
 @RequestMapping("/reports")
@@ -92,28 +91,6 @@ public class ReportController {
 		final List<String> mailTo = new ArrayList<>();
 		mailTo.add(user.getEmail());
 		repSer.mailReport(report, merchant, mailTo);
-	}
-
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
-	@GetMapping("/schedule/get")
-	public List<Schedule> getSchedules() {
-		final PcUser user = secSer.findLoggedInUser();
-		return repSer.getSchedules(user);
-	}
-
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
-	@GetMapping("/schedule/add/{reportId}")
-	public void addSchedule(@PathVariable final Integer reportId) {
-		final Merchant merchant = secSer.getMerchantForLoggedInUser();
-		final PcUser user = secSer.findLoggedInUser();
-		repSer.addSchedule(reportId, merchant, user);
-	}
-
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
-	@DeleteMapping("/schedule/remove/{reportId}")
-	public void removeSchedule(@PathVariable final Integer reportId) {
-		final PcUser user = secSer.findLoggedInUser();
-		repSer.removeSchedule(reportId, user);
 	}
 
 }

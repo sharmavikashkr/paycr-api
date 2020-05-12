@@ -17,6 +17,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 	@Query("SELECT s FROM Schedule s WHERE active = true AND nextDate BETWEEN ?1 and ?2")
 	public List<Schedule> findTodaysSchedules(Date start, Date end);
 
+	@Query("SELECT s FROM Schedule s WHERE active = true AND nextDate < ?1")
+	public List<Schedule> findOldSchedules(Date today);
+
 	public Schedule findByReportAndMerchant(Report report, Merchant merchant);
 
 }

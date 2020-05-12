@@ -17,4 +17,9 @@ public class ReportScheduler {
 		repSchSer.recurrReports();
 	}
 
+	@Scheduled(cron = "${cron.report.reinit}")
+	public void reinitReport() {
+		repSchSer.reinitReports();
+	}
+
 }

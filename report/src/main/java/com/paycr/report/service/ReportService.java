@@ -4,16 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.paycr.common.bean.Company;
 import com.paycr.common.bean.DateFilter;
@@ -28,18 +19,20 @@ import com.paycr.common.communicate.Email;
 import com.paycr.common.communicate.EmailEngine;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.Schedule;
-import com.paycr.common.data.domain.ScheduleUser;
 import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.repository.ScheduleRepository;
-import com.paycr.common.data.repository.ScheduleUserRepository;
+import com.paycr.common.data.domain.Schedule;
 import com.paycr.common.data.repository.ReportRepository;
 import com.paycr.common.exception.PaycrException;
 import com.paycr.common.type.ReportType;
-import com.paycr.common.type.TimeRange;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.DateUtil;
 import com.paycr.report.helper.ReportHelper;
+
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReportService {
@@ -48,13 +41,10 @@ public class ReportService {
 	private ReportRepository repRepo;
 
 	@Autowired
-	private ScheduleRepository scheduleRepo;
-
-	@Autowired
-	private ScheduleUserRepository scheduleUserRepo;
-
-	@Autowired
 	private ReportHelper repHelp;
+
+	@Autowired
+	private ScheduleService schSer;
 
 	@Autowired
 	private InvoiceReportService invRepSer;
@@ -90,7 +80,7 @@ public class ReportService {
 			myReports = repRepo.findByMerchant(merchant);
 		}
 		commonReports.addAll(myReports);
-		List<Schedule> Schedules = getSchedules(user);
+		List<Schedule> Schedules = schSer.getSchedules(user);
 		Schedules.forEach(rr -> {
 			commonReports.forEach(r -> {
 				if (r.getId() == rr.getReport().getId()) {
@@ -125,56 +115,6 @@ public class ReportService {
 		if (CommonUtil.isEmpty(report.getName()) || CommonUtil.isNull(report.getTimeRange())
 				|| CommonUtil.isNull(report.getReportType())) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Mandatory params missing");
-		}
-	}
-
-	public List<Schedule> getSchedules(PcUser user) {
-		return scheduleUserRepo.findByPcUser(user).stream().map(rru -> rru.getSchedule()).collect(Collectors.toList());
-	}
-
-	public void addSchedule(Integer reportId, Merchant merchant, PcUser user) {
-		Report report = repRepo.findById(reportId).get();
-		if (CommonUtil.isNull(report)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Report");
-		}
-		ScheduleUser scheduleUser = scheduleUserRepo.findByUserAndReport(user, report);
-		if (CommonUtil.isNotNull(scheduleUser)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report already scheduled for you");
-		}
-		Schedule schedule = scheduleRepo.findByReportAndMerchant(report, merchant);
-		if (CommonUtil.isNull(schedule)) {
-			schedule = new Schedule();
-			schedule.setActive(true);
-			schedule.setMerchant(merchant);
-			schedule.setReport(report);
-			schedule.setStartDate(new Date());
-			schedule.setNextDate(new Date());
-			scheduleRepo.save(schedule);
-		}
-		int schedules = scheduleUserRepo.findByPcUser(user).size();
-		if (schedules >= 5) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Max 5 reports can be scheduled");
-		}
-		if (schedule.getNextDate().before(new Date())) {
-			Calendar nextDateInUTC = repHelp.getNextDate(report.getTimeRange());
-			schedule.setNextDate(nextDateInUTC.getTime());
-		}
-		scheduleUser = new ScheduleUser();
-		scheduleUser.setSchedule(schedule);
-		scheduleUser.setPcUser(user);
-		scheduleUserRepo.save(scheduleUser);
-	}
-
-	public void removeSchedule(Integer reportId, PcUser user) {
-		Report report = repRepo.findById(reportId).get();
-		ScheduleUser scheduleUser = scheduleUserRepo.findByUserAndReport(user, report);
-		if (CommonUtil.isNull(scheduleUser)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
-		}
-		if (scheduleUser.getPcUser().getId() == user.getId()) {
-			scheduleUserRepo.deleteById(scheduleUser.getId());
-		} else {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Request");
 		}
 	}
 
@@ -222,6 +162,9 @@ public class ReportService {
 	@Async
 	@Transactional
 	public void mailReport(Report report, Merchant merchant, List<String> mailTo) throws IOException {
+		if (CommonUtil.isEmpty(mailTo)) {
+			return;
+		}
 		String repCsv = downloadReport(report, merchant);
 		DateFilter df = repHelp.getDateFilter(report.getTimeRange());
 		String fileName = "";
