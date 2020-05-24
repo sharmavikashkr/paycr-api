@@ -1,7 +1,9 @@
 package com.paycr.dashboard.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.paycr.common.data.domain.PcUser;
 import com.paycr.common.service.SecurityService;
@@ -15,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/static")
 public class StaticController {
 
 	@Autowired
@@ -64,9 +68,7 @@ public class StaticController {
 	public List<String> getEnum(@PathVariable String type) {
 		List<String> enumList = new ArrayList<>();
 		if ("paymodes".equals(type)) {
-			for (PayMode payMode : PayMode.values()) {
-				enumList.add(payMode.name());
-			}
+			enumList = Arrays.stream(PayMode.values()).map(pm -> pm.name()).collect(Collectors.toList());
 		} else if ("usertypes".equals(type)) {
 			boolean isMerchant = secSer.isMerchantUser();
 			PcUser user = secSer.findLoggedInUser();
@@ -82,13 +84,9 @@ public class StaticController {
 				enumList.add(UserType.ADVISOR.name());
 			}
 		} else if ("timeranges".equals(type)) {
-			for (TimeRange timeRange : TimeRange.values()) {
-				enumList.add(timeRange.name());
-			}
+			enumList = Arrays.stream(TimeRange.values()).map(pm -> pm.name()).collect(Collectors.toList());
 		} else if ("reporttypes".equals(type)) {
-			for (ReportType repType : ReportType.values()) {
-				enumList.add(repType.name());
-			}
+			enumList = Arrays.stream(ReportType.values()).map(pm -> pm.name()).collect(Collectors.toList());
 		}
 		return enumList;
 	}

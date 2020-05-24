@@ -46,7 +46,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
-	@PostMapping("/account/update")
+	@PutMapping("/account/update")
 	public Merchant updateAccount(@RequestParam String name, @RequestParam String gstin) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateAccount(merchant, name, gstin);
@@ -54,7 +54,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_ADMIN_AUTH)
-	@PostMapping("/address/update")
+	@PutMapping("/address/update")
 	public Merchant updateAddress(@Valid @RequestBody Address addr) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateAddress(merchant, addr);
@@ -62,7 +62,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@PostMapping("/paymentsetting/update")
+	@PutMapping("/paymentsetting/update")
 	public PaymentSetting updatePaymentSetting(@RequestBody PaymentSetting paymentSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updatePaymentSetting(merchant, paymentSetting);
@@ -70,7 +70,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@PostMapping("/invoicesetting/update")
+	@PutMapping("/invoicesetting/update")
 	public InvoiceSetting updateInvoiceSetting(@RequestBody InvoiceSetting invoiceSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateInvoiceSetting(merchant, invoiceSetting);
@@ -78,7 +78,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@PostMapping("/gstsetting/update")
+	@PutMapping("/gstsetting/update")
 	public GstSetting updateGstSetting(@RequestBody GstSetting gstSetting) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.updateGstSetting(merchant, gstSetting);
@@ -86,7 +86,7 @@ public class MerchantController {
 	}
 
 	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
-	@PutMapping("/customParam/new")
+	@PostMapping("/customParam/new")
 	public InvoiceSetting newCustomParam(@RequestBody MerchantCustomParam customParam) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
 		merSer.newCustomParam(merchant, customParam);

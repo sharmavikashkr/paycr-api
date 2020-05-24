@@ -61,7 +61,7 @@ public class ReportSchedulerService {
 	}
 
 	@Transactional
-	public void reinitReports() {
+	public void reinitOldReports() {
 		Date today = DateUtil.getStartOfDay(new Date());
 		List<Schedule> scheduleList = scheduleRepo.findOldSchedules(today);
 		ExecutorService exec = Executors.newFixedThreadPool(5);

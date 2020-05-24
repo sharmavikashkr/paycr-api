@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.mail.search.IntegerComparisonTerm;
 import javax.transaction.Transactional;
 
 import com.paycr.common.bean.Company;
@@ -85,9 +86,35 @@ public class Gstr1Service {
 			start = DateUtil.getFirstDayOfMonth(aDayInMonth);
 			end = DateUtil.getLastDayOfMonth(aDayInMonth);
 		} else if (FilingPeriod.QUARTERLY.equals(merchant.getGstSetting().getFilingPeriod())) {
-			String fstMonth = periodArr[0];
-			String lstMonth = periodArr[1];
-			String year = periodArr[2];
+			final Integer month = Integer.parseInt(periodArr[0]);
+			final String year = periodArr[1];
+			String fstMonth = "", lstMonth = "";
+			switch (month) {
+				case 1:
+				case 2:
+				case 3:
+					fstMonth = "1";
+					lstMonth = "3";
+					break;
+				case 4:
+				case 5:
+				case 6:
+					fstMonth = "4";
+					lstMonth = "6";
+					break;
+				case 7:
+				case 8:
+				case 9:
+					fstMonth = "7";
+					lstMonth = "9";
+					break;
+				case 10:
+				case 11:
+				case 12:
+					fstMonth = "10";
+					lstMonth = "12";
+					break;
+			}
 			Date aDayInFirstMonth = DateUtil.parseDefaultDate(year + "-" + fstMonth + "-15");
 			start = DateUtil.getFirstDayOfMonth(aDayInFirstMonth);
 			Date aDayInLastMonth = DateUtil.parseDefaultDate(year + "-" + lstMonth + "-15");

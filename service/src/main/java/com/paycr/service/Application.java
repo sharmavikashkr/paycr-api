@@ -27,10 +27,10 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@PostConstruct
+	/*@PostConstruct
 	public void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("IST"));
 		System.out.println("Spring boot application running in IST timezone :" + new Date());
-	}
+	}*/
 
 }

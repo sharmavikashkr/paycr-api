@@ -19,7 +19,7 @@ public class ReportScheduler {
 
 	@Scheduled(cron = "${cron.report.reinit}")
 	public void reinitReport() {
-		repSchSer.reinitReports();
+		repSchSer.reinitOldReports();
 	}
 
 }

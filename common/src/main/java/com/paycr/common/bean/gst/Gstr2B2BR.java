@@ -20,5 +20,4 @@ public class Gstr2B2BR {
 	private String placeOfSupply;
 	private SupplyType supplyType;
 	private List<TaxAmount> taxAmount;
-
 }
