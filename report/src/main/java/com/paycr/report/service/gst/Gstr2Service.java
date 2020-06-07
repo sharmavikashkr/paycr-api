@@ -94,6 +94,7 @@ public class Gstr2Service {
 		List<ExpenseNote> noteList = expNoteRepo.findNotesForMerchant(merchant, start, end);
 		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
 		Gstr2Report gstr2Report = new Gstr2Report();
+		gstr2Report.setPeriod(DateUtil.getDashboardDate(start) + " - " + DateUtil.getDashboardDate(end));
 		collectFutures.add(b2bUrSer.collectB2BUrList(gstr2Report, gstList));
 		collectFutures.add(b2bRSer.collectB2BRList(gstr2Report, gstList));
 		collectFutures.add(b2bUrNoteSer.collectB2BUrNoteList(gstr2Report, noteList));

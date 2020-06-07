@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.mail.search.IntegerComparisonTerm;
 import javax.transaction.Transactional;
 
 import com.paycr.common.bean.Company;
@@ -146,6 +145,7 @@ public class Gstr1Service {
 		List<InvoiceNote> noteList = invNoteRepo.findNotesForMerchant(merchant, start, end);
 		List<Future<Boolean>> collectFutures = new ArrayList<Future<Boolean>>();
 		Gstr1Report gstr1Report = new Gstr1Report();
+		gstr1Report.setPeriod(DateUtil.getDashboardDate(start) + " - " + DateUtil.getDashboardDate(end));
 		collectFutures.add(b2cLargeSer.collectB2CLargeList(gstr1Report, gstList));
 		collectFutures.add(b2cSmallSer.collectB2CSmallList(gstr1Report, gstList, noteList));
 		collectFutures.add(b2bSer.collectB2BList(gstr1Report, gstList));

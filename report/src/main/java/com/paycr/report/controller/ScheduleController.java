@@ -35,7 +35,7 @@ public class ScheduleController {
 		return schSer.getSchedules(user);
 	}
 
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH + " && hasPermission('REPORT', #reportId)")
 	@GetMapping("/add/{reportId}")
 	public void addSchedule(@PathVariable final Integer reportId) {
 		final Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -43,14 +43,14 @@ public class ScheduleController {
 		schSer.addSchedule(reportId, merchant, user);
 	}
 
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH + " && hasPermission('REPORT', #reportId)")
 	@DeleteMapping("/remove/{reportId}")
 	public void removeSchedule(@PathVariable final Integer reportId) {
 		final PcUser user = secSer.findLoggedInUser();
 		schSer.removeSchedule(reportId, user);
 	}
 
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH + " && hasPermission('SCHEDULE', #scheduleId)")
 	@GetMapping("/history/{scheduleId}")
 	public List<ScheduleHistory> getScheduleHistory(@PathVariable final Integer scheduleId) {
 		return schSer.getScheduleHistories(scheduleId);

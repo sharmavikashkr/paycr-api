@@ -7,9 +7,9 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,7 +29,7 @@ public class SubscriptionResponseController {
 	@Autowired
 	private Company company;
 
-	@RequestMapping(value = "/{subscriptionCode}", method = RequestMethod.GET)
+	@GetMapping("/{subscriptionCode}")
 	public ModelAndView response(@PathVariable String subscriptionCode,
 			@RequestParam(value = "show", required = false) Boolean show) throws IOException {
 		ModelAndView mv = new ModelAndView("html/subs-response");
@@ -41,7 +41,7 @@ public class SubscriptionResponseController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/download/{subscriptionCode}", method = RequestMethod.GET)
+	@GetMapping("/download/{subscriptionCode}")
 	public void download(@PathVariable String subscriptionCode, HttpServletResponse response) throws IOException {
 		File pdfFile = subsRespSer.downloadPdf(subscriptionCode);
 		response.setContentType("application/pdf");

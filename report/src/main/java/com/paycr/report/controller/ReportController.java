@@ -60,11 +60,10 @@ public class ReportController {
 		return reportData;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)
+	@PreAuthorize(RoleUtil.ALL_OPS_AUTH + " && hasPermission('REPORT', #reportId)")
 	@DeleteMapping("/delete/{reportId}")
 	public void deleteReport(@PathVariable final Integer reportId) {
-		final Merchant merchant = secSer.getMerchantForLoggedInUser();
-		repSer.deleteReport(reportId, merchant);
+		repSer.deleteReport(reportId);
 	}
 
 	@PreAuthorize(RoleUtil.ALL_OPS_AUTH)

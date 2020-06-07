@@ -7,8 +7,8 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.http.HttpStatus;
 
@@ -69,15 +69,11 @@ public class CommonUtil {
 		return false;
 	}
 
-	public static <T> boolean isNotEmpty(List<T> objList) {
+	public static <T> boolean isNotEmpty(Collection<T> objList) {
 		return (isNotNull(objList) && (!objList.isEmpty()));
 	}
 
-	public static <T> boolean isNotEmpty(Set<T> objList) {
-		return (isNotNull(objList) && (!objList.isEmpty()));
-	}
-
-	public static <T> boolean isEmpty(List<T> objList) {
+	public static <T> boolean isEmpty(Collection<T> objList) {
 		return (isNull(objList) || (objList.isEmpty()));
 	}
 

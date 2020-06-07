@@ -45,11 +45,12 @@ public class ScheduleService {
 		return schUserRepo.findByPcUser(user).stream().map(rru -> rru.getSchedule()).collect(Collectors.toList());
 	}
 
+	public List<Schedule> getSchedulesForReport(Report report) {
+		return schRepo.findByReport(report);
+	}
+
 	public void addSchedule(Integer reportId, Merchant merchant, PcUser user) {
 		Report report = repRepo.findById(reportId).get();
-		if (CommonUtil.isNull(report)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Invalid Report");
-		}
 		ScheduleUser scheduleUser = schUserRepo.findByUserAndReport(user, report);
 		if (CommonUtil.isNotNull(scheduleUser)) {
 			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report already scheduled for you");

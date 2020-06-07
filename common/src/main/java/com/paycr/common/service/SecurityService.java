@@ -1,12 +1,14 @@
 package com.paycr.common.service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.ImmutableList;
 import com.paycr.common.data.domain.Merchant;
 import com.paycr.common.data.domain.MerchantUser;
 import com.paycr.common.data.domain.PcUser;
@@ -15,6 +17,7 @@ import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.UserRepository;
 import com.paycr.common.type.Role;
 import com.paycr.common.util.CommonUtil;
+import com.paycr.common.util.RoleUtil;
 
 @Service
 public class SecurityService {
@@ -36,18 +39,17 @@ public class SecurityService {
 	public boolean isMerchantUser() {
 		PcUser user = findLoggedInUser();
 		String[] roles = user.getUserRoles().stream().map(r -> r.getRole().name()).toArray(size -> new String[size]);
-		return (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name()));
+		List<String> roleList = Arrays.asList(roles);
+		return RoleUtil.MERCHANT_ROLES.stream().anyMatch(r -> roleList.contains(r));
 	}
 
 	public Merchant getMerchantForLoggedInUser() {
-		PcUser user = findLoggedInUser();
-		String[] roles = user.getUserRoles().stream().map(r -> r.getRole().name()).toArray(size -> new String[size]);
-		if (Arrays.asList(roles).contains(Role.ROLE_MERCHANT.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_FINANCE.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_MERCHANT_OPS.name())) {
+		if (isMerchantUser()) {
+			PcUser user = findLoggedInUser();
 			MerchantUser merUser = merUserRepo.findByUserId(user.getId());
+			if (CommonUtil.isNull(merUser)) {
+				return null;
+			}
 			Optional<Merchant> merchantOpt = merRepo.findById(merUser.getMerchantId());
 			return merchantOpt.isPresent() ? merchantOpt.get() : null;
 		}
@@ -60,10 +62,7 @@ public class SecurityService {
 			return false;
 		}
 		String[] roles = user.getUserRoles().stream().map(r -> r.getRole().name()).toArray(size -> new String[size]);
-		return (Arrays.asList(roles).contains(Role.ROLE_PAYCR.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_SUPERVISOR.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_FINANCE.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_OPS.name())
-				|| Arrays.asList(roles).contains(Role.ROLE_PAYCR_ADVISOR.name()));
+		List<String> roleList = Arrays.asList(roles);
+		return (RoleUtil.PAYCR_ROLES.stream().anyMatch(r -> roleList.contains(r)));
 	}
 }

@@ -22,4 +22,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
 	public Schedule findByReportAndMerchant(Report report, Merchant merchant);
 
+	public List<Schedule> findByReport(Report report);
+
 }

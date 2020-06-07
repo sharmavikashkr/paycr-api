@@ -31,19 +31,19 @@ public class ExpenseController {
 	@Autowired
 	private ExpenseService expSer;
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#expenseCode, 'EXPENSE', 'expenseCode')")
 	@GetMapping("/payments/{expenseCode}")
 	public List<ExpensePayment> payments(@PathVariable String expenseCode) {
 		return expSer.payments(expenseCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#expenseCode, 'EXPENSE', 'expenseCode')")
 	@DeleteMapping("/delete/{expenseCode}")
 	public void delete(@PathVariable String expenseCode) {
 		expSer.delete(expenseCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#expenseCode, 'EXPENSE', 'expenseCode')")
 	@PostMapping("/refund")
 	public void refund(@RequestParam(value = "amount", required = true) BigDecimal amount,
 			@RequestParam(value = "expenseCode", required = true) String expenseCode) {
@@ -62,13 +62,14 @@ public class ExpenseController {
 		expSer.newNote(note);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH + " && hasPermission(#expenseCode, 'EXPENSE', 'expenseCode')")
 	@PostMapping("/{expenseCode}/attachment/new")
 	public void addAttachment(@PathVariable String expenseCode, @RequestParam("attach") MultipartFile attach)
 			throws IOException {
 		expSer.saveAttach(expenseCode, attach);
 	}
 
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH + " && hasPermission(#expenseCode, 'EXPENSE', 'expenseCode')")
 	@GetMapping("/{accessKey}/{expenseCode}/attachment/{attachName:.+}")
 	public void getAttachment(@PathVariable String accessKey, @PathVariable String expenseCode,
 			@PathVariable String attachName, HttpServletResponse response) throws IOException {

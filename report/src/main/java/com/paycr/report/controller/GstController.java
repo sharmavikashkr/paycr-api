@@ -31,7 +31,7 @@ public class GstController {
 	@Autowired
 	private SecurityService secSer;
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH + " && #oauth2.hasScope('read') && #oauth2.hasPermission('read')")
 	@GetMapping("/gstr1/{period}")
 	public Gstr1Report gstr1(@PathVariable String period) throws Exception {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

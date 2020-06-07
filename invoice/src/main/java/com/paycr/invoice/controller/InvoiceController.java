@@ -41,37 +41,37 @@ public class InvoiceController {
 	@Autowired
 	private SecurityService secSer;
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.ALL_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/payments/{invoiceCode}")
 	public List<InvoicePayment> payments(@PathVariable final String invoiceCode) {
 		return invSer.payments(invoiceCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/expire/{invoiceCode}")
 	public void expire(@PathVariable final String invoiceCode) {
 		invSer.expire(invoiceCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@DeleteMapping("/delete/{invoiceCode}")
 	public void delete(@PathVariable final String invoiceCode) {
 		invSer.delete(invoiceCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@PostMapping("/notify/{invoiceCode}")
 	public void notify(@PathVariable final String invoiceCode, @Valid @RequestBody final InvoiceNotify invoiceNotify) {
 		invSer.notify(invoiceCode, invoiceNotify);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/enquire/{invoiceCode}")
 	public void enquire(@PathVariable final String invoiceCode) throws Exception {
 		invSer.enquire(invoiceCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@PostMapping("/refund")
 	public void refund(@RequestParam(value = "amount", required = true) final BigDecimal amount,
 			@RequestParam(value = "invoiceCode", required = true) final String invoiceCode) throws Exception {
@@ -90,13 +90,14 @@ public class InvoiceController {
 		invSer.markPaid(payment);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@PostMapping("/{invoiceCode}/attachment/new")
 	public void addAttachment(@PathVariable final String invoiceCode,
 			@RequestParam("attach") final MultipartFile attach) throws IOException {
 		invSer.saveAttach(invoiceCode, attach);
 	}
 
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/{accessKey}/{invoiceCode}/attachment/{attachName:.+}")
 	public void getAttachment(@PathVariable final String accessKey, @PathVariable final String invoiceCode,
 			@PathVariable final String attachName, final HttpServletResponse response) throws IOException {
@@ -107,20 +108,20 @@ public class InvoiceController {
 		response.flushBuffer();
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@PostMapping("/recurr/new/{invoiceCode}")
 	public void recurr(@PathVariable final String invoiceCode, @RequestBody final RecurringInvoice recInv) {
 		final PcUser user = secSer.findLoggedInUser();
 		invSer.recurr(invoiceCode, recInv, user.getEmail());
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/recurr/all/{invoiceCode}")
 	public List<RecurringInvoice> allRecurr(@PathVariable final String invoiceCode) {
 		return invSer.allRecurr(invoiceCode);
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@GetMapping("/bulk/upload/format")
 	public void downloadFormat(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
 		final String content = "Name1,Email1,Mobile1\r\nName2,Email2,Mobile2";
@@ -131,18 +132,19 @@ public class InvoiceController {
 		response.flushBuffer();
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/bulk/uploads/all/{invoiceCode}")
 	public List<BulkInvoiceUpload> uploadConsumers(@PathVariable final String invoiceCode) {
 		return invSer.getUploads(invoiceCode);
 	}
 
-	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH + " && hasPermission(#invoiceCode, 'INVOICE', 'invoiceCode')")
 	@GetMapping("/bulk/flags/{invoiceCode}")
 	public List<BulkFlag> bulkFlags(@PathVariable final String invoiceCode) {
 		return invSer.getFlags(invoiceCode);
 	}
 
+	@PreAuthorize(RoleUtil.MERCHANT_FINANCE_AUTH)
 	@GetMapping("/bulk/download/{accessKey}/{filename:.+}")
 	public byte[] downloadFile(@PathVariable final String accessKey, @PathVariable final String filename)
 			throws IOException {

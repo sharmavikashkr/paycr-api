@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Gstr1Report {
 
+	private String period;
 	private List<Gstr1B2CSmall> b2cSmall;
 	private List<Gstr1B2CLarge> b2cLarge;
 	private List<Gstr1B2B> b2b;

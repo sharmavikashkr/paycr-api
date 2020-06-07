@@ -81,10 +81,6 @@ public class InventoryService {
 
 	public void updateInventory(Inventory inventory, Integer inventoryId) {
 		Inventory exstInvn = invnRepo.findById(inventoryId).get();
-		Merchant merchant = secSer.getMerchantForLoggedInUser();
-		if (exstInvn.getMerchant().getId() != merchant.getId()) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Inventory not found");
-		}
 		exstInvn.setActive(inventory.isActive());
 		exstInvn.setDescription(inventory.getDescription());
 		exstInvn.setTax(inventory.getTax());
@@ -175,7 +171,7 @@ public class InventoryService {
 			writer.writeNext(record);
 		}
 		writer.close();
-		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.INVENTORY)	, new File(updatedCsv));
+		awsS3Ser.saveFile(merchant.getAccessKey().concat("/").concat(AwsS3Folder.INVENTORY), new File(updatedCsv));
 		Date timeNow = new Date();
 		BulkInventoryUpload bcu = new BulkInventoryUpload();
 		bcu.setCreated(timeNow);

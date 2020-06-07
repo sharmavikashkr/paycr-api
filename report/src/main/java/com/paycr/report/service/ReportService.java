@@ -100,13 +100,11 @@ public class ReportService {
 		repRepo.save(report);
 	}
 
-	public void deleteReport(Integer reportId, Merchant merchant) {
-		if (CommonUtil.isNull(merchant)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report cannot be deleted");
-		}
-		Report report = repRepo.findByIdAndMerchant(reportId, merchant);
-		if (CommonUtil.isNull(report)) {
-			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Report not found");
+	public void deleteReport(Integer reportId) {
+		Report report = repRepo.findById(reportId).get();
+		List<Schedule> schedules = schSer.getSchedulesForReport(report);
+		if (CommonUtil.isNotEmpty(schedules)) {
+			throw new PaycrException(HttpStatus.SC_BAD_REQUEST, "Schedules exist on the report. Cannot delete.");
 		}
 		repRepo.deleteById(reportId);
 	}
