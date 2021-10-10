@@ -9,20 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.paycr.common.data.domain.Merchant;
-import com.paycr.common.data.domain.MerchantUser;
-import com.paycr.common.data.domain.Asset;
-import com.paycr.common.data.domain.Consumer;
-import com.paycr.common.data.domain.Expense;
-import com.paycr.common.data.domain.Inventory;
-import com.paycr.common.data.domain.Invoice;
-import com.paycr.common.data.domain.PcUser;
-import com.paycr.common.data.domain.Report;
-import com.paycr.common.data.domain.Schedule;
-import com.paycr.common.data.domain.Supplier;
+import com.paycr.common.data.domain.*;
 import com.paycr.common.data.repository.MerchantRepository;
 import com.paycr.common.data.repository.MerchantUserRepository;
 import com.paycr.common.data.repository.UserRepository;
+import com.paycr.common.type.Role;
 import com.paycr.common.util.CommonUtil;
 import com.paycr.common.util.RoleUtil;
 
@@ -63,7 +54,7 @@ public class RolePermissionService {
             query.setParameter("merchant", merchant);
             query.setParameter(column, targetId);
             final Object result = query.getSingleResult();
-            return true;
+            return result != null;
         } catch (final Exception ex) {
             return false;
         }

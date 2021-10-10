@@ -37,7 +37,7 @@ public class InvoiceSearchController {
 	@Autowired
 	private InvoiceSearchService invSerSer;
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/invoice")
 	public List<Invoice> searchInvoices(@RequestBody SearchInvoiceRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -48,7 +48,7 @@ public class InvoiceSearchController {
 		return invoiceList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/payment")
 	public List<InvoicePayment> searchPayments(@RequestBody SearchInvoicePaymentRequest request,
 			HttpServletResponse response) {
@@ -60,7 +60,7 @@ public class InvoiceSearchController {
 		return paymentList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/consumer")
 	public Set<Consumer> searchConsumers(@RequestBody SearchConsumerRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -71,7 +71,7 @@ public class InvoiceSearchController {
 		return consumerList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchInvoicePaymentRequest request, HttpServletResponse response)
 			throws IOException {
@@ -89,7 +89,7 @@ public class InvoiceSearchController {
 		response.flushBuffer();
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/payment/mail")
 	public void mailPayments(@RequestBody SearchInvoicePaymentRequest request) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -99,7 +99,7 @@ public class InvoiceSearchController {
 		invSerSer.mailPayments(request, secSer.findLoggedInUser());
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/inventory")
 	public List<Inventory> searchInventory(@RequestBody SearchInventoryRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

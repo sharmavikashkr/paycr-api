@@ -37,7 +37,7 @@ public class ExpenseSearchController {
 	@Autowired
 	private ExpenseSearchService expSerSer;
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/expense")
 	public List<Expense> searchExpenses(@RequestBody SearchExpenseRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -48,7 +48,7 @@ public class ExpenseSearchController {
 		return expenseList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/payment")
 	public List<ExpensePayment> searchPayments(@RequestBody SearchExpensePaymentRequest request,
 			HttpServletResponse response) {
@@ -60,7 +60,7 @@ public class ExpenseSearchController {
 		return paymentList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/payment/download")
 	public void downloadPayments(@RequestBody SearchExpensePaymentRequest request, HttpServletResponse response)
 			throws IOException {
@@ -78,7 +78,7 @@ public class ExpenseSearchController {
 		response.flushBuffer();
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/payment/mail")
 	public void mailPayments(@RequestBody SearchExpensePaymentRequest request) throws IOException {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -88,7 +88,7 @@ public class ExpenseSearchController {
 		expSerSer.mailPayments(request, secSer.findLoggedInUser());
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/supplier")
 	public Set<Supplier> searchSuppliers(@RequestBody SearchSupplierRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();
@@ -99,7 +99,7 @@ public class ExpenseSearchController {
 		return supplierList;
 	}
 
-	@PreAuthorize(RoleUtil.ALL_AUTH)
+	@PreAuthorize(RoleUtil.MERCHANT_AUTH)
 	@PostMapping("/asset")
 	public List<Asset> searchAsset(@RequestBody SearchAssetRequest request) {
 		Merchant merchant = secSer.getMerchantForLoggedInUser();

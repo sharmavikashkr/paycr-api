@@ -42,7 +42,7 @@ public class ScheduleService {
 	private ReportHelper repHelp;
 
 	public List<Schedule> getSchedules(PcUser user) {
-		return schUserRepo.findByPcUser(user).stream().map(rru -> rru.getSchedule()).collect(Collectors.toList());
+		return schUserRepo.findByPcUser(user).stream().map(ScheduleUser::getSchedule).collect(Collectors.toList());
 	}
 
 	public List<Schedule> getSchedulesForReport(Report report) {
